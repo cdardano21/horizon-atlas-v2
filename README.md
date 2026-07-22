@@ -1,3 +1,9 @@
+# Horizon Atlas V2
+
+A premium AI-powered retirement and relocation platform built with Next.js, React, TypeScript, and Tailwind CSS.
+
+See the project vision and product roadmap in [VISION.md](VISION.md).
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
