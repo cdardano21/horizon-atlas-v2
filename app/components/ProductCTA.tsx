@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LAUNCH_CATALOG_SIZE } from "../lib/destinations";
 
 export default function ProductCTA() {
   return (
@@ -7,7 +8,7 @@ export default function ProductCTA() {
         <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
           <div>
             <p className="uppercase tracking-[0.35em] text-cyan-400">One-time search</p>
-            <h2 className="mt-4 text-5xl font-black text-white">Search 500 destinations once and get your top 10 destination matches.</h2>
+            <h2 className="mt-4 text-5xl font-black text-white">Search {LAUNCH_CATALOG_SIZE} destinations once and get your top 10 destination matches.</h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-400">
               Horizon Atlas evaluates every destination in the catalog against your Life Match priorities, then delivers the best 10 that fit your lifestyle, budget, climate, and safety preferences.
             </p>

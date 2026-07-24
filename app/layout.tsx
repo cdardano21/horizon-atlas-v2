@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { LAUNCH_CATALOG_SIZE } from "./lib/destinations";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Horizon Atlas | Life Match retirement search",
   description:
-    "Discover the best retirement destinations with a one-time Life Match search across 500 cities.",
+    `Discover the best retirement destinations with a one-time Life Match search across ${LAUNCH_CATALOG_SIZE} verified cities.`,
 };
 
 export default function RootLayout({

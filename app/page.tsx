@@ -12,7 +12,6 @@ import ResourceLinks from "./components/ResourceLinks";
 import Stats from "./components/Stats";
 import Testimonials from "./components/Testimonials";
 import WhyHorizon from "./components/WhyHorizon";
-import { destinations } from "./lib/destinations";
 
 export default function HomePage() {
   return (

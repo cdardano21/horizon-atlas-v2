@@ -1,26 +1,37 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Destination } from "../lib/destinations";
+import { getDestinationImageUrl, getFallbackDestinationImage } from "../lib/imageFallback";
 
 export default function DestinationGallery({ destination }: { destination: Destination }) {
   const images = destination.images;
+  const fallback = getFallbackDestinationImage(destination);
+  const galleryImages = images.length
+    ? images.map((image) => ({
+        ...image,
+        src: getDestinationImageUrl(image, destination),
+        alt: image.alt || destination.city,
+        caption: image.caption || destination.city,
+      }))
+    : [{ src: fallback, alt: destination.city, caption: destination.city }];
   const [activeIndex, setActiveIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchDelta, setTouchDelta] = useState(0);
-  const featuredImage = images[activeIndex] ?? images[0];
+  const featuredImage = galleryImages[activeIndex] ?? galleryImages[0];
 
   useEffect(() => {
     const interval = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % images.length);
+      setActiveIndex((current) => (current + 1) % galleryImages.length);
     }, 5200);
 
     return () => window.clearInterval(interval);
-  }, [images.length]);
+  }, [galleryImages.length]);
 
   const goToIndex = (index: number) => {
-    const nextIndex = index < 0 ? images.length - 1 : index >= images.length ? 0 : index;
+    const nextIndex = index < 0 ? galleryImages.length - 1 : index >= galleryImages.length ? 0 : index;
     setActiveIndex(nextIndex);
   };
 
@@ -62,10 +73,13 @@ export default function DestinationGallery({ destination }: { destination: Desti
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            <img
+            <Image
               key={featuredImage.src}
               src={featuredImage.src}
               alt={featuredImage.alt}
+              width={1600}
+              height={900}
+              sizes="(min-width: 1024px) 65vw, 100vw"
               className="h-[520px] w-full object-cover transition duration-500 ease-out hover:scale-105"
             />
 
@@ -94,9 +108,9 @@ export default function DestinationGallery({ destination }: { destination: Desti
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
-            {images.map((image, index) => (
+            {galleryImages.map((image, index) => (
               <button
-                key={image.src}
+                key={`${image.src}-${index}`}
                 type="button"
                 onClick={() => goToIndex(index)}
                 className={`overflow-hidden rounded-3xl border p-1 transition duration-300 ${
@@ -105,7 +119,14 @@ export default function DestinationGallery({ destination }: { destination: Desti
                     : "border-white/10"
                 }`}
               >
-                <img src={image.src} alt={image.alt} className="h-28 w-full object-cover" />
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  width={480}
+                  height={192}
+                  sizes="(min-width: 640px) 20vw, 30vw"
+                  className="h-28 w-full object-cover"
+                />
               </button>
             ))}
           </div>

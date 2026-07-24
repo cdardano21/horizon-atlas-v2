@@ -1,16 +1,17 @@
 import LifeMatchApp from "../components/LifeMatchApp";
-import { destinations } from "../lib/destinations";
+import { LAUNCH_CATALOG_SIZE } from "../lib/destinations";
+import { RETIREMENT_DNA_TOTAL_QUESTIONS } from "../lib/retirement-dna";
 
 export const metadata = {
   title: "Life Match | Horizon Atlas",
   description:
-    "Take the Horizon Atlas Life Match to identify the top 10 retirement destinations from 500 global locations.",
+    `Take the ${RETIREMENT_DNA_TOTAL_QUESTIONS}-question Horizon Atlas Retirement DNA assessment to identify the top 10 retirement destinations from ${LAUNCH_CATALOG_SIZE} verified global locations.`,
 };
 
 export default function LifeMatchPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-white">
-      <LifeMatchApp destinations={destinations} />
+      <LifeMatchApp />
     </main>
   );
 }

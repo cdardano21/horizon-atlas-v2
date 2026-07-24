@@ -1,14 +1,16 @@
+import { LAUNCH_CATALOG_SIZE } from "../lib/destinations";
+
 const plans = [
   {
-    name: "Horizon Match",
+    name: "Life Match",
     price: "$19.99",
     frequency: "one-time",
-    description: "One-time destination search across 500 places with 10 recommended matches that fit your priorities.",
+    description: `A single Life Match search across ${LAUNCH_CATALOG_SIZE} destinations with 10 custom matches tailored to your priorities.`,
     features: [
-      "Search the entire 500-destination catalog",
-      "Top 10 custom destination matches",
-      "AI-driven priority scoring",
-      "No subscription or monthly fee",
+      `Search the entire ${LAUNCH_CATALOG_SIZE}-destination catalog`,
+      "Top 10 personalized destination matches",
+      "Priority-based AI scoring",
+      "No subscription, no recurring fee",
     ],
     featured: true,
   },
@@ -22,10 +24,10 @@ export default function Pricing() {
           Pricing
         </p>
         <h2 className="mt-4 text-5xl font-black">
-          Plans built for every retirement journey
+          One-time Life Match access
         </h2>
         <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-400">
-          Choose the level of guidance that fits your needs, whether you want a quick match or a fully supported relocation plan.
+          Purchase a single Life Match search to unlock the full catalog and receive a shortlist of the 10 best destinations for your lifestyle.
         </p>
       </div>
 
