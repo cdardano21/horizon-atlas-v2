@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-26T17:51:16.629Z",
+  "generatedAt": "2026-07-26T18:30:45.927Z",
   "totalDestinations": 600,
-  "completedDestinations": 376,
-  "remainingDestinations": 224,
+  "completedDestinations": 415,
+  "remainingDestinations": 185,
   "manualReviewDestinations": [
     {
       "slug": "agios-nikolaos-greece",
@@ -1269,12 +1269,44 @@
       "articleTitle": "Sóller"
     },
     {
+      "slug": "sonoma-california-united-states",
+      "city": "Sonoma",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Sonoma"
+    },
+    {
       "slug": "split-croatia",
       "city": "Split",
       "country": "Croatia",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Split"
+    },
+    {
+      "slug": "spokane-valley-washington-united-states",
+      "city": "Spokane Valley",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Spokane Valley"
+    },
+    {
+      "slug": "steamboat-springs-colorado-united-states",
+      "city": "Steamboat Springs",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Steamboat Springs"
+    },
+    {
+      "slug": "stockton-california-united-states",
+      "city": "Stockton",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Stockton"
     },
     {
       "slug": "stresa-italy",
@@ -1285,6 +1317,22 @@
       "articleTitle": "Stresa"
     },
     {
+      "slug": "tacoma-washington-united-states",
+      "city": "Tacoma",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Tacoma"
+    },
+    {
+      "slug": "taipei-taiwan",
+      "city": "Taipei",
+      "country": "Taiwan",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Taipei"
+    },
+    {
       "slug": "takayama-japan",
       "city": "Takayama",
       "country": "Japan",
@@ -1293,12 +1341,44 @@
       "articleTitle": "Takayama"
     },
     {
+      "slug": "tallinn-estonia",
+      "city": "Tallinn",
+      "country": "Estonia",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Tallinn"
+    },
+    {
       "slug": "tallinn-other-europe",
       "city": "Tallinn",
       "country": "Other Europe",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Tallinn"
+    },
+    {
+      "slug": "taos-new-mexico-united-states",
+      "city": "Taos",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Taos"
+    },
+    {
+      "slug": "the-woodlands-texas-united-states",
+      "city": "The Woodlands",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "The Woodlands"
+    },
+    {
+      "slug": "toledo-ohio-united-states",
+      "city": "Toledo",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Toledo"
     },
     {
       "slug": "toledo-spain",
@@ -1333,6 +1413,14 @@
       "articleTitle": "Toyama Prefecture"
     },
     {
+      "slug": "turku-finland",
+      "city": "Turku",
+      "country": "Finland",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Turku"
+    },
+    {
       "slug": "ulcinj-montenegro",
       "city": "Ulcinj",
       "country": "Montenegro",
@@ -1355,6 +1443,54 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 2,
       "articleTitle": "Varenna"
+    },
+    {
+      "slug": "ventura-california-united-states",
+      "city": "Ventura",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Ventura"
+    },
+    {
+      "slug": "walla-walla-washington-united-states",
+      "city": "Walla Walla",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Walla Walla"
+    },
+    {
+      "slug": "washington-district-of-columbia-united-states",
+      "city": "Washington",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Washington"
+    },
+    {
+      "slug": "wichita-kansas-united-states",
+      "city": "Wichita",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Wichita"
+    },
+    {
+      "slug": "wilmington-delaware-united-states",
+      "city": "Wilmington (Delaware)",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": null
+    },
+    {
+      "slug": "york-united-kingdom",
+      "city": "York",
+      "country": "United Kingdom",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "York"
     }
   ],
   "batches": [
@@ -2349,6 +2485,73 @@
         "santa-ana-california-united-states",
         "santa-cruz-california-united-states",
         "santa-fe-new-mexico-united-states"
+      ]
+    },
+    {
+      "generatedAt": "2026-07-26T18:30:45.927Z",
+      "offset": 544,
+      "limit": 80,
+      "processedCount": 39,
+      "manualReviewCount": 17,
+      "processedSlugs": [
+        "santiago-chile",
+        "sarasota-florida-united-states",
+        "savannah-georgia-united-states",
+        "scottsdale-arizona-united-states",
+        "seattle-washington-united-states",
+        "sedona-arizona-united-states",
+        "seoul-south-korea",
+        "shreveport-louisiana-united-states",
+        "singapore-singapore",
+        "sioux-falls-south-dakota-united-states",
+        "south-lake-tahoe-california-united-states",
+        "spokane-washington-united-states",
+        "st-augustine-florida-united-states",
+        "st-louis-missouri-united-states",
+        "st-petersburg-florida-united-states",
+        "stockholm-sweden",
+        "sydney-australia",
+        "tampa-florida-united-states",
+        "tbilisi-georgia",
+        "tel-aviv-israel",
+        "the-hague-netherlands",
+        "trondheim-norway",
+        "truckee-california-united-states",
+        "tucson-arizona-united-states",
+        "tulsa-oklahoma-united-states",
+        "tunis-tunisia",
+        "tyler-texas-united-states",
+        "utrecht-netherlands",
+        "vail-colorado-united-states",
+        "valletta-malta",
+        "virginia-beach-virginia-united-states",
+        "waco-texas-united-states",
+        "warsaw-poland",
+        "wellington-new-zealand",
+        "west-palm-beach-florida-united-states",
+        "wilmington-north-carolina-united-states",
+        "winston-salem-north-carolina-united-states",
+        "wroclaw-poland",
+        "yerevan-armenia"
+      ],
+      "manualReviewSlugs": [
+        "sonoma-california-united-states",
+        "spokane-valley-washington-united-states",
+        "steamboat-springs-colorado-united-states",
+        "stockton-california-united-states",
+        "tacoma-washington-united-states",
+        "taipei-taiwan",
+        "tallinn-estonia",
+        "taos-new-mexico-united-states",
+        "the-woodlands-texas-united-states",
+        "toledo-ohio-united-states",
+        "turku-finland",
+        "ventura-california-united-states",
+        "walla-walla-washington-united-states",
+        "washington-district-of-columbia-united-states",
+        "wichita-kansas-united-states",
+        "wilmington-delaware-united-states",
+        "york-united-kingdom"
       ]
     }
   ]
