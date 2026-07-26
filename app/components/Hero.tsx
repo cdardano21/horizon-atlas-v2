@@ -45,12 +45,14 @@ export default function Hero() {
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
               <Link
                 href="/life-match"
+                data-testid="hero-cta-life-match"
                 className="inline-flex items-center justify-center rounded-full bg-[#f2d9ad] px-8 py-4 text-base font-semibold text-[#172427] shadow-[0_22px_42px_-20px_rgba(242,217,173,0.95)] transition hover:bg-[#f7e4c0]"
               >
                 Begin Life Match
               </Link>
               <Link
                 href="/destinations"
+                data-testid="hero-cta-explore-atlas"
                 className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-8 py-4 text-base font-semibold text-[#fefbf5] transition hover:border-[#f4dfbe] hover:bg-white/20"
               >
                 Explore the atlas

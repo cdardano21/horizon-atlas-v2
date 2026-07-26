@@ -4,21 +4,72 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Destination } from "../lib/destinations";
-import { getDestinationImageSequence } from "../lib/imageFallback";
+import type { ResourceRecord } from "../lib/destination-command-center";
+import { resolveSourceHref, sanitizeExternalSourceUrl } from "../lib/source-links";
 
-export default function DestinationGallery({ destination }: { destination: Destination }) {
-  const uniqueImageSet = getDestinationImageSequence(destination, 6);
-  const galleryImages = uniqueImageSet.map((src, index) => ({
-    src,
-    alt: destination.images[index]?.alt || `${destination.city} local view ${index + 1}`,
-    caption: destination.images[index]?.caption || `${destination.city} local view ${index + 1}`,
-  }));
+type GalleryResource = {
+  label: string;
+  href: string;
+};
+
+const resourceCategoryKeywords: Array<{ keywords: string[]; label: string }> = [
+  { keywords: ["airport", "aviation", "flight"], label: "Airport" },
+  { keywords: ["transit", "transport", "rail", "metro", "bus"], label: "Transit" },
+  { keywords: ["health", "hospital", "clinic", "medical"], label: "Healthcare" },
+  { keywords: ["rental", "rent", "housing", "real_estate", "property"], label: "Housing" },
+  { keywords: ["tax"], label: "Tax" },
+  { keywords: ["visa", "residen"], label: "Visa" },
+  { keywords: ["tourism", "official", "local"], label: "Official Guide" },
+  { keywords: ["youtube", "video"], label: "YouTube" },
+  { keywords: ["tiktok"], label: "TikTok" },
+];
+
+const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+
+const toGalleryResources = (records: ResourceRecord[] = []): GalleryResource[] => {
+  const selected: GalleryResource[] = [];
+  const seenLabels = new Set<string>();
+  const seenHrefs = new Set<string>();
+
+  for (const mapping of resourceCategoryKeywords) {
+    const match = records.find((record) => {
+      const haystack = normalize(`${record.category} ${record.title} ${record.description ?? ""}`);
+      return mapping.keywords.some((keyword) => haystack.includes(keyword));
+    });
+
+    if (!match) continue;
+    const safeUrl = sanitizeExternalSourceUrl(match.url);
+    const href = resolveSourceHref(safeUrl, [match.title, match.category, "official source"]);
+    if (seenHrefs.has(href)) continue;
+    if (seenLabels.has(mapping.label)) continue;
+
+    seenLabels.add(mapping.label);
+    seenHrefs.add(href);
+    selected.push({
+      label: mapping.label,
+      href,
+    });
+  }
+
+  return selected.slice(0, 8);
+};
+
+export default function DestinationGallery({ destination, resources: commandResources = [] }: { destination: Destination; resources?: ResourceRecord[] }) {
+  const galleryImages = destination.images
+    .filter((image) => Boolean(image.src && image.src.trim().length > 0))
+    .map((image, index) => ({
+      src: image.src,
+      alt: image.alt || `${destination.city} local view ${index + 1}`,
+      caption: image.caption || `${destination.city} local view ${index + 1}`,
+    }))
+    .slice(0, 6);
   const [activeIndex, setActiveIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchDelta, setTouchDelta] = useState(0);
   const featuredImage = galleryImages[activeIndex] ?? galleryImages[0];
 
   useEffect(() => {
+    if (galleryImages.length === 0) return;
     const interval = window.setInterval(() => {
       setActiveIndex((current) => (current + 1) % galleryImages.length);
     }, 5200);
@@ -52,18 +103,59 @@ export default function DestinationGallery({ destination }: { destination: Desti
     setTouchDelta(0);
   };
 
-  const resources = [
-    { label: "YouTube tours", href: `https://www.youtube.com/results?search_query=${encodeURIComponent(destination.city + " travel guide")}` },
-    { label: "TikTok clips", href: `https://www.tiktok.com/search?q=${encodeURIComponent(destination.city + " travel")}` },
-    { label: "Google Maps", href: `https://www.google.com/maps/search/${encodeURIComponent(destination.city)}` },
-    { label: "Official tourism", href: `https://www.google.com/search?q=${encodeURIComponent(destination.city + " tourism")}` },
+  const cityCountry = `${destination.city}, ${destination.country}`;
+  const toTestIdToken = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+  const galleryResources = [
+    { label: "Google Maps", href: `https://www.google.com/maps/search/${encodeURIComponent(cityCountry)}` },
+    { label: "Google Earth", href: `https://earth.google.com/web/search/${encodeURIComponent(cityCountry)}` },
+    ...toGalleryResources(commandResources),
   ];
+
+  if (galleryImages.length === 0) {
+    return (
+      <section className="mx-auto max-w-7xl px-8 py-20">
+        <div className="grid gap-8 lg:grid-cols-[1.4fr_0.8fr]">
+          <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(145deg,rgba(15,23,42,0.96),rgba(15,23,42,0.82))] p-8 shadow-xl shadow-slate-950/30">
+            <p className="uppercase tracking-[0.35em] text-cyan-400">Verified imagery pending</p>
+            <h2 className="mt-4 text-3xl font-black text-white">{cityCountry}</h2>
+            <p className="mt-4 max-w-2xl text-slate-300 leading-7">
+              We are still sourcing destination-specific photography that meets the authenticity threshold for publication. Until then, the gallery remains hidden instead of showing generic stock imagery.
+            </p>
+          </div>
+
+          <aside className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-xl shadow-slate-950/30">
+            <p className="uppercase tracking-[0.35em] text-cyan-400">Media & resources</p>
+            <h2 className="mt-4 text-3xl font-black text-white">Explore local media, tours, and relocation resources.</h2>
+            <div className="mt-8 space-y-4">
+              {galleryResources.map((resource) => (
+                <Link
+                  key={resource.label}
+                  href={resource.href}
+                  target="_blank"
+                  data-testid={`destination-resource-${toTestIdToken(resource.label)}`}
+                  className="block rounded-3xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-semibold text-slate-100 transition hover:border-cyan-400 hover:bg-slate-900"
+                >
+                  {resource.label}
+                </Link>
+              ))}
+            </div>
+          </aside>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="mx-auto max-w-7xl px-8 py-20">
       <div className="grid gap-8 lg:grid-cols-[1.4fr_0.8fr]">
         <div className="space-y-6">
           <div
+            data-testid="destination-gallery-carousel"
             className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/80 shadow-xl shadow-slate-950/30"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
@@ -89,6 +181,7 @@ export default function DestinationGallery({ destination }: { destination: Desti
               <button
                 type="button"
                 onClick={() => goToIndex(activeIndex - 1)}
+                data-testid="destination-gallery-prev"
                 className="pointer-events-auto rounded-full bg-slate-950/70 px-4 py-3 text-white transition hover:bg-slate-900"
               >
                 ‹
@@ -96,6 +189,7 @@ export default function DestinationGallery({ destination }: { destination: Desti
               <button
                 type="button"
                 onClick={() => goToIndex(activeIndex + 1)}
+                data-testid="destination-gallery-next"
                 className="pointer-events-auto rounded-full bg-slate-950/70 px-4 py-3 text-white transition hover:bg-slate-900"
               >
                 ›
@@ -132,15 +226,16 @@ export default function DestinationGallery({ destination }: { destination: Desti
           <p className="uppercase tracking-[0.35em] text-cyan-400">Media & resources</p>
           <h2 className="mt-4 text-3xl font-black text-white">Explore local media, tours, and relocation resources.</h2>
           <p className="mt-4 text-slate-400 leading-7">
-            Find curated links for YouTube, TikTok, maps, and destination guides to help you dive deeper into the city before you visit.
+            Browse published, destination-specific links from the command center records, plus direct map tools for orientation.
           </p>
 
           <div className="mt-8 space-y-4">
-            {resources.map((resource) => (
+            {galleryResources.map((resource) => (
               <Link
                 key={resource.label}
                 href={resource.href}
                 target="_blank"
+                data-testid={`destination-resource-${toTestIdToken(resource.label)}`}
                 className="block rounded-3xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-semibold text-slate-100 transition hover:border-cyan-400 hover:bg-slate-900"
               >
                 {resource.label}

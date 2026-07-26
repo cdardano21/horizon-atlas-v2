@@ -1,4 +1,5 @@
-import { destinations, type Destination } from "./destinations";
+import { enrichedDestinations } from "./destination-enrichment";
+import type { Destination } from "./destinations";
 
 const EXCLUDED_TAGS = new Set([
   "expansion-candidate",
@@ -6,11 +7,16 @@ const EXCLUDED_TAGS = new Set([
 ]);
 
 const hasExcludedTag = (destination: Destination): boolean => {
+  // Keep US catalog entries visible even when they are still marked as expansion candidates.
+  if (destination.country.toLowerCase() === "united states") {
+    return false;
+  }
+
   const tags = destination.tags?.map((tag) => tag.toLowerCase()) ?? [];
   return tags.some((tag) => EXCLUDED_TAGS.has(tag));
 };
 
-export const publicDestinations: Destination[] = destinations.filter((destination) => !hasExcludedTag(destination));
+export const publicDestinations: Destination[] = enrichedDestinations.filter((destination) => !hasExcludedTag(destination));
 
 export const publicDestinationSlugSet = new Set(publicDestinations.map((destination) => destination.slug));
 

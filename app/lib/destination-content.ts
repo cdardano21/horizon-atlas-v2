@@ -1,4 +1,5 @@
-import { type Destination, type DestinationMemberDetails, type DestinationRelocationProfile, destinations } from "./destinations";
+import { enrichedDestinations } from "./destination-enrichment";
+import { type Destination, type DestinationMemberDetails, type DestinationRelocationProfile } from "./destinations";
 import { isSupabaseConfigured, supabaseFetch } from "./supabase";
 
 type DestinationCatalogRow = {
@@ -85,13 +86,6 @@ const toDestinationFromCatalog = (
   mediaRows: DestinationMediaRow[],
 ): Destination => {
   const mediaImages = mapMediaToImages(mediaRows, row.city);
-  const heroUrl = row.hero_image_url ?? "";
-
-  const fallbackImage = {
-    src: heroUrl,
-    alt: `${row.city} destination view`,
-    caption: row.city,
-  };
 
   return {
     slug: row.slug,
@@ -107,7 +101,7 @@ const toDestinationFromCatalog = (
     climate: row.climate_summary ?? local?.climate ?? `Review local seasonality, humidity, and heat profile in ${row.city}.`,
     lifestyle: row.lifestyle_summary ?? local?.lifestyle ?? `Evaluate neighborhood character, rhythm, and long-stay fit in ${row.city}.`,
     transportation: row.transportation_summary ?? local?.transportation ?? fallbackTransportation(row.city, row.country),
-    images: mediaImages.length ? mediaImages : local?.images?.length ? local.images : [fallbackImage],
+    images: mediaImages.length ? mediaImages : local?.images?.length ? local.images : [],
     tags: local?.tags ?? [],
     memberDetails: row.metadata?.memberDetails ?? local?.memberDetails,
     relocationProfile: row.metadata?.relocationProfile ?? local?.relocationProfile,
@@ -124,7 +118,7 @@ const toMediaAssets = (rows: DestinationMediaRow[], city: string) =>
   }));
 
 export async function getDestinationContent(slug: string): Promise<DestinationContent | null> {
-  const local = destinations.find((item) => item.slug === slug);
+  const local = enrichedDestinations.find((item) => item.slug === slug);
 
   if (!isSupabaseConfigured()) {
     if (!local) return null;

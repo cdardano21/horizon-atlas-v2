@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import type { Destination } from "../lib/destinations";
 import { NO_VERIFIED_INFO, toConsumerCopy } from "../lib/consumer-copy";
 import { getDestinationIntelligence } from "../lib/destination-intelligence";
-import { getDestinationImageUrl } from "../lib/imageFallback";
+import { getDestinationImageUrl, hasVerifiedDestinationImage } from "../lib/imageFallback";
 import { getDestinationMemberDetails } from "../lib/member-details";
 import { useFavorites } from "./favorites";
 
@@ -113,20 +113,28 @@ export default function CompareClient({ destinations, initialSlugs }: CompareCli
         <div className="mt-5 grid gap-4 md:grid-cols-3">
           {selected.slice(0, 3).map((destination) => (
             <article key={`mood-${destination.slug}`} className="overflow-hidden rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.76)]">
-              <div className="relative h-44">
-                <Image
-                  src={getDestinationImageUrl(destination.images?.[0] ?? { src: "", alt: destination.city }, destination)}
-                  alt={destination.images?.[0]?.alt ?? destination.city}
-                  fill
-                  sizes="(min-width: 768px) 33vw, 100vw"
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#132022]/66 via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-[#f6e4c4]">{destination.country}</p>
+              {hasVerifiedDestinationImage(destination) ? (
+                <div className="relative h-44">
+                  <Image
+                    src={getDestinationImageUrl(destination.images?.[0] ?? { src: "", alt: destination.city }, destination)}
+                    alt={destination.images?.[0]?.alt ?? destination.city}
+                    fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#132022]/66 via-transparent to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <p className="text-xs uppercase tracking-[0.18em] text-[#f6e4c4]">{destination.country}</p>
+                    <p className="mt-1 text-lg font-semibold text-[#fff7e7]">{destination.city}</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex h-44 flex-col justify-end bg-[linear-gradient(135deg,#173336,#2b4748)] p-4">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-[#f6e4c4]">Imagery pending verification</p>
+                  <p className="mt-2 text-xs uppercase tracking-[0.18em] text-[#f6e4c4]">{destination.country}</p>
                   <p className="mt-1 text-lg font-semibold text-[#fff7e7]">{destination.city}</p>
                 </div>
-              </div>
+              )}
             </article>
           ))}
         </div>

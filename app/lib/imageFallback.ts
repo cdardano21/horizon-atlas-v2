@@ -1,6 +1,8 @@
 import type { Destination } from "./destinations";
 import { curatedCityImagesBySlug } from "./curatedCityImages";
 
+const TRUSTED_IMAGE_HOSTS = new Set(["upload.wikimedia.org", "commons.wikimedia.org"]);
+
 const fallbackImages = {
   beach: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80",
   mountains: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1600&q=80",
@@ -132,6 +134,23 @@ function isInvalidImageSource(src: string | null | undefined) {
   return featuredPhotoRegex.test(trimmed) || sourceUnsplashRegex.test(trimmed) || placeholderTokenRegex.test(trimmed);
 }
 
+function isVerifiedImageSource(src: string | null | undefined) {
+  if (!src || isInvalidImageSource(src)) return false;
+  const trimmed = src.trim();
+  if (!trimmed) return false;
+
+  // Local assets are authored and reviewed in-repo.
+  if (trimmed.startsWith("/")) return true;
+
+  try {
+    const parsed = new URL(trimmed);
+    if (parsed.protocol !== "https:") return false;
+    return TRUSTED_IMAGE_HOSTS.has(parsed.hostname.toLowerCase());
+  } catch {
+    return false;
+  }
+}
+
 function stableHash(value: string) {
   let hash = 0;
   for (let index = 0; index < value.length; index += 1) {
@@ -216,12 +235,12 @@ export function getFallbackDestinationImage(destination: Destination) {
 export function getDestinationImageSet(destination: Destination, minCount = 3) {
   const primaryImages = (destination.images ?? [])
     .map((image) => image?.src)
-    .filter((src): src is string => !isInvalidImageSource(src));
+    .filter((src): src is string => isVerifiedImageSource(src));
 
   const curatedPrimary = curatedCityImagesBySlug[destination.slug];
   const curatedVariants = curatedCityImageVariantsBySlug[destination.slug] ?? [];
   const cityScoped = cityScopedImageUrls(destination);
-  const combined = Array.from(new Set([...primaryImages, ...cityScoped]));
+  const combined = Array.from(new Set([...primaryImages, ...cityScoped.filter((src) => isVerifiedImageSource(src))]));
   const rotationSeed = stableHash(`${destination.slug}:${destination.city}:${destination.country}`);
 
   let ordered = primaryImages.length > 0 ? combined : rotate(combined, rotationSeed);
@@ -240,18 +259,11 @@ export function getDestinationImageSet(destination: Destination, minCount = 3) {
 
   if (ordered.length >= minCount) return ordered;
 
-  const expanded = Array.from(
-    new Set([
-      ...ordered,
-      fallbackImages.coastal,
-      fallbackImages.city,
-      fallbackImages.mountains,
-      fallbackImages.lake,
-      fallbackImages.default,
-    ]),
-  );
+  return ordered;
+}
 
-  return rotate(expanded, rotationSeed);
+export function hasVerifiedDestinationImage(destination: Destination) {
+  return getDestinationImageSet(destination, 1).length > 0;
 }
 
 export function getDestinationImageSequence(destination: Destination, count: number, startAt = 0) {
@@ -267,7 +279,7 @@ export function getDestinationImageSequence(destination: Destination, count: num
 }
 
 export function getDestinationImageUrl(image: { src: string; alt?: string }, destination: Destination, variant = 0) {
-  if (!isInvalidImageSource(image?.src)) {
+  if (isVerifiedImageSource(image?.src)) {
     return image.src;
   }
 
@@ -276,5 +288,10 @@ export function getDestinationImageUrl(image: { src: string; alt?: string }, des
     return uniqueSet[variant];
   }
 
-  return cityScopedImageUrl(destination, variant);
+  const cityScoped = cityScopedImageUrl(destination, variant);
+  if (isVerifiedImageSource(cityScoped)) {
+    return cityScoped;
+  }
+
+  return COSTA_DEL_SOL_HERO_IMAGE;
 }

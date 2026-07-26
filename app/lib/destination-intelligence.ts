@@ -132,16 +132,9 @@ const sum = (values: Array<number | undefined>): number | null => {
   return filtered.reduce((total, value) => total + value, 0);
 };
 
-const min = (values: Array<number | undefined>): number | null => {
-  const filtered = values.filter((value): value is number => typeof value === "number");
-  if (filtered.length === 0) return null;
-  return Math.min(...filtered);
-};
-
-const max = (values: Array<number | undefined>): number | null => {
-  const filtered = values.filter((value): value is number => typeof value === "number");
-  if (filtered.length === 0) return null;
-  return Math.max(...filtered);
+const ratio = (part: number, whole: number): number => {
+  if (whole <= 0) return 0;
+  return Math.max(0, Math.min(1, part / whole));
 };
 
 const formatMaybeNumber = (value: number | null, suffix = ""): string => (typeof value === "number" ? `${value}${suffix}` : "Unavailable");
@@ -177,6 +170,80 @@ const firstFactValue = (destination: Destination, label: string) => {
   return values.length > 0 ? values[0] : null;
 };
 
+const missingValueRegex = /^(unavailable|not published|no structured|no .* yet|see source references below|data pending)$/i;
+
+const isMissingValue = (value: string) => missingValueRegex.test(value.trim());
+
+const contextualFallbackValue = (
+  sectionTitle: string,
+  itemLabel: string,
+  destination: Destination,
+  scoreHints: { internet: number; walkability: number; food: number; safety: number },
+) => {
+  const city = destination.city;
+  const country = destination.country;
+  const label = itemLabel.toLowerCase();
+  const section = sectionTitle.toLowerCase();
+
+  if (section.includes("climate")) {
+    return `Verify month-level weather for ${city} before locking housing or scouting dates.`;
+  }
+  if (section.includes("cost")) {
+    return `Use live local listings and grocery baskets in ${city} to calibrate this line item.`;
+  }
+  if (section.includes("healthcare")) {
+    return `Shortlist named hospitals in ${city} and validate specialist wait times directly.`;
+  }
+  if (section.includes("transport")) {
+    return `Open map routes for ${city} and test airport + daily-errand travel time assumptions.`;
+  }
+  if (section.includes("lifestyle")) {
+    return `Audit this in ${city} by district; score trends are ${scoreHints.food >= 80 ? "strong" : "mixed"} for day-to-day fit.`;
+  }
+  if (section.includes("demographics")) {
+    return `Pull current municipal and national statistics for ${city} to confirm this signal.`;
+  }
+  if (section.includes("retirement")) {
+    return `Treat as planning-critical for ${country}; validate with current legal and tax advisers before decisions.`;
+  }
+  if (section.includes("housing")) {
+    return `Compare at least 3 neighborhoods in ${city} for rent, noise, slope, and walkability.`;
+  }
+  if (section.includes("dining")) {
+    return `Build a local short-list in ${city} from neighborhood-level sources, not citywide lists.`;
+  }
+  if (section.includes("practical")) {
+    return `Confirm this from city and national official portals for ${city}, ${country}.`;
+  }
+  if (section.includes("weather")) {
+    return `Validate monthly highs/lows and humidity for ${city} before seasonal planning.`;
+  }
+  if (section.includes("real estate")) {
+    return `Use active listings in ${city} to replace broad assumptions with street-level comps.`;
+  }
+  if (section.includes("families") || section.includes("internet")) {
+    return `Check this against your weekly routine in ${city}; current model indicates internet ${scoreHints.internet}/100 and walkability ${scoreHints.walkability}/100.`;
+  }
+  if (section.includes("neighborhood") || section.includes("day trips")) {
+    return `Prioritize district-level validation in ${city}; safety trend currently reads ${scoreHints.safety}/100.`;
+  }
+
+  if (label.includes("airport")) {
+    return `Validate the primary airport for ${city} and its year-round route depth.`;
+  }
+  if (label.includes("hospital") || label.includes("doctor")) {
+    return `Confirm healthcare providers in ${city} with direct facility sources.`;
+  }
+  if (label.includes("internet")) {
+    return `Verify fiber/mobile options in your shortlisted districts in ${city}.`;
+  }
+  if (label.includes("school")) {
+    return `Confirm school catchments and language tracks for neighborhoods you would actually choose in ${city}.`;
+  }
+
+  return `Validate this signal with current local sources for ${city}, ${country}.`;
+};
+
 export function getDestinationIntelligence(destination: Destination): DestinationIntelligence {
   const mapSearchUrl = `https://www.google.com/maps/search/${encodeURIComponent(`${destination.city}, ${destination.country}`)}`;
   const mapEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${destination.city}, ${destination.country}`)}&z=12&output=embed`;
@@ -200,24 +267,38 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
   const restaurantCount = details?.amenities?.restaurants;
   const englishSchoolCount = details?.amenities?.englishSchools;
   const hasHospitalData = Boolean(details?.hospitals?.length);
-  const hasAirportData = Boolean(details?.airports?.length);
   const airportFacts = groupedFactValues(destination, "Nearest airport");
   const healthcareFacts = groupedFactValues(destination, "Healthcare");
   const residencyFacts = groupedFactValues(destination, "Residency");
   const taxFacts = groupedFactValues(destination, "Tax");
+  const weatherRows = details?.monthlyWeather ?? [];
 
-  const scoreSafety = clampScore(78 + (safety ? 16 : 0));
-  const scoreHealthcare = clampScore(76 + (healthcare ? 15 : 0) + (hasHospitalData ? 5 : 0));
-  const scoreCost = clampScore(72 + (budgetFriendly ? 15 : 2));
-  const scoreWeather = clampScore(74 + (coastal ? 14 : 8));
-  const scoreGolf = clampScore(63 + (golfTag ? 18 : 3) + Math.min(14, golfCourseCount * 2));
-  const scoreBeaches = clampScore(64 + (coastal ? 24 : 5));
-  const scoreWalkability = clampScore(70 + (walkable ? 20 : 6));
-  const scoreFood = clampScore(72 + (cultural ? 16 : 6) + (typeof restaurantCount === "number" ? 4 : 0));
-  const scoreInternet = clampScore(73 + (digitalNomad ? 18 : 7));
-  const scoreRetirement = clampScore(77 + (healthcare ? 7 : 0) + (safety ? 5 : 0) + (budgetFriendly ? 5 : 0));
-  const scoreFamily = clampScore(72 + (family ? 15 : 4) + (typeof englishSchoolCount === "number" ? 6 : 0));
-  const scoreNomad = clampScore(73 + (digitalNomad ? 17 : 4) + (hasAirportData ? 4 : 0));
+  const totalFactRows = generatedDestinationCardFacts[destination.slug]?.facts?.length ?? 0;
+  const sourceBackedFactRows = (generatedDestinationCardFacts[destination.slug]?.facts ?? []).filter((fact) => Boolean(fact.sourceUrl)).length;
+  const climateDataPoints = weatherRows.length;
+  const housingSignalCount = Number(housingIsStrong) + Number(budgetFriendly);
+  const foodSignalCount = Number(typeof restaurantCount === "number") + Number(cultural);
+  const internetSignalCount = Number(digitalNomad) + Number(expat);
+
+  const healthcareEvidence = ratio((details?.hospitals?.length ?? 0) + healthcareFacts.length, 6);
+  const airportEvidence = ratio((details?.airports?.length ?? 0) + airportFacts.length, 6);
+  const climateEvidence = ratio(climateDataPoints, 12);
+  const retirementEvidence = ratio(residencyFacts.length + taxFacts.length, 6);
+  const sourceEvidence = ratio(sourceBackedFactRows, Math.max(4, totalFactRows));
+  const lifestyleEvidence = ratio(golfCourseCount + (typeof restaurantCount === "number" ? 1 : 0), 12);
+
+  const scoreSafety = clampScore(62 + (safety ? 16 : 0) + Math.round(sourceEvidence * 18));
+  const scoreHealthcare = clampScore(60 + (healthcare ? 12 : 0) + Math.round(healthcareEvidence * 24) + Math.round(sourceEvidence * 8));
+  const scoreCost = clampScore(60 + (budgetFriendly ? 10 : 0) + housingSignalCount * 6 + Math.round(sourceEvidence * 14));
+  const scoreWeather = clampScore(58 + (coastal ? 10 : 5) + Math.round(climateEvidence * 28));
+  const scoreGolf = clampScore(55 + (golfTag ? 16 : 0) + Math.min(20, golfCourseCount * 2) + Math.round(lifestyleEvidence * 6));
+  const scoreBeaches = clampScore(56 + (coastal ? 24 : 2) + Math.round(airportEvidence * 8));
+  const scoreWalkability = clampScore(58 + (walkable ? 20 : 3) + Math.round(sourceEvidence * 12));
+  const scoreFood = clampScore(58 + (cultural ? 16 : 4) + foodSignalCount * 5 + Math.round(sourceEvidence * 10));
+  const scoreInternet = clampScore(57 + internetSignalCount * 9 + Math.round(sourceEvidence * 12));
+  const scoreRetirement = clampScore(60 + (healthcare ? 6 : 0) + (safety ? 6 : 0) + Math.round(retirementEvidence * 18) + Math.round(sourceEvidence * 8));
+  const scoreFamily = clampScore(58 + (family ? 12 : 3) + (typeof englishSchoolCount === "number" ? 8 : 0) + Math.round(sourceEvidence * 10));
+  const scoreNomad = clampScore(57 + (digitalNomad ? 15 : 3) + Math.round(airportEvidence * 12) + Math.round(sourceEvidence * 8));
 
   const scoreAverage = Math.round(
     [
@@ -261,7 +342,6 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
     { category: "Digital Nomad", score: scoreNomad, context: "Combines connectivity, transport, and integration factors." },
   ];
 
-  const weatherRows = details?.monthlyWeather ?? [];
   const climateBestMonth = details?.bestMonths ?? (weatherRows.length > 0 ? "See monthly weather table" : "Unavailable");
   const climateAverageHigh = avg(weatherRows.map((row) => row.avgHighC));
   const climateAverageLow = avg(weatherRows.map((row) => row.avgLowC));
@@ -586,17 +666,38 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
 
   const comprehensiveSections = baseComprehensiveSections.map((section) => {
     const override = sectionOverrideByTitle.get(section.title.toLowerCase());
-    if (!override) return section;
+    const mergedSection = !override
+      ? section
+      : {
+        ...section,
+        summary: override.summary?.trim() || section.summary,
+        items: Array.isArray(override.items) && override.items.length > 0
+          ? override.items.map((item) => ({
+              label: item.label,
+              value: item.value,
+              note: item.note,
+            }))
+          : section.items,
+      };
+
     return {
-      ...section,
-      summary: override.summary?.trim() || section.summary,
-      items: Array.isArray(override.items) && override.items.length > 0
-        ? override.items.map((item) => ({
-            label: item.label,
-            value: item.value,
-            note: item.note,
-          }))
-        : section.items,
+      ...mergedSection,
+      items: mergedSection.items.map((item) => ({
+        ...item,
+        value: isMissingValue(item.value)
+          ? contextualFallbackValue(
+              mergedSection.title,
+              item.label,
+              destination,
+              {
+                internet: scoreInternet,
+                walkability: scoreWalkability,
+                food: scoreFood,
+                safety: scoreSafety,
+              },
+            )
+          : item.value,
+      })),
     };
   });
 

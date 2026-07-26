@@ -1,3 +1,4 @@
+import Link from "next/link";
 import RouteFrame from "../components/RouteFrame";
 import AdminCatalogManager from "../components/AdminCatalogManager";
 import { destinations } from "../lib/destinations";
@@ -133,6 +134,17 @@ export default async function AdminPage() {
                   {tableName}
                 </div>
               ))}
+            </div>
+
+            <div className="mt-6 rounded-3xl border border-cyan-400/30 bg-cyan-500/10 p-4">
+              <p className="text-xs uppercase tracking-[0.22em] text-cyan-200">Verification operations</p>
+              <p className="mt-2 text-sm leading-7 text-slate-300">Open the destination QA dashboard to review image confidence, external-link quality, missing fields, and manual-review queues.</p>
+              <Link
+                href="/admin/verification"
+                className="mt-3 inline-flex rounded-full border border-cyan-300/40 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100 transition hover:border-cyan-200 hover:text-white"
+              >
+                Open QA dashboard
+              </Link>
             </div>
           </div>
         </div>

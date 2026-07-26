@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { destinations } from "./destinations";
+import { enrichedDestinations } from "./destination-enrichment";
 import { getSupabaseConfig } from "./supabase";
 
 type ProfileUser = {
@@ -12,7 +12,7 @@ export type ProfileSnapshot = {
   authenticated: boolean;
   user: ProfileUser | null;
   favoriteSlugs: string[];
-  favoriteDestinations: typeof destinations;
+  favoriteDestinations: typeof enrichedDestinations;
 };
 
 export async function getProfileSnapshot(): Promise<ProfileSnapshot> {
@@ -69,7 +69,7 @@ export async function getProfileSnapshot(): Promise<ProfileSnapshot> {
       authenticated: true,
       user,
       favoriteSlugs,
-      favoriteDestinations: destinations.filter((destination) => favoriteSlugs.includes(destination.slug)),
+      favoriteDestinations: enrichedDestinations.filter((destination) => favoriteSlugs.includes(destination.slug)),
     };
   } catch {
     return {

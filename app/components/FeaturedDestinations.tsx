@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { sanitizeSummary, toConsumerCopy } from "../lib/consumer-copy";
 import { publicDestinations } from "../lib/public-destinations";
-import { getDestinationImageUrl } from "../lib/imageFallback";
+import { getDestinationImageUrl, hasVerifiedDestinationImage } from "../lib/imageFallback";
 import { resolveSourceHref, sanitizeExternalSourceUrl } from "../lib/source-links";
 import ExternalLinkIcon from "./ExternalLinkIcon";
 import FavoriteButton from "./FavoriteButton";
@@ -58,28 +58,39 @@ export default function FeaturedDestinations() {
 
           return (
           <article key={place.slug} className={`overflow-hidden rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.92)] shadow-[0_26px_54px_-36px_rgba(39,33,22,0.75)] transition duration-300 hover:-translate-y-1 hover:border-[rgba(31,95,99,0.42)] ${isLead ? "lg:col-span-6" : "lg:col-span-3"}`}>
-            <div className="relative h-64 overflow-hidden bg-slate-900/10">
-              <Image
-                src={getDestinationImageUrl(place.images[0] ?? { src: "", alt: place.city }, place)}
-                alt={place.images[0]?.alt || place.city}
-                fill
-                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                className="object-cover transition duration-500 hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#142224]/75 via-[#142224]/15 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-6 text-[#fffaf2]">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.24em] text-[#f8dfb4]">{isLead ? "Editor’s relocation pick" : "Featured city"}</p>
-                    <p className="text-xl font-semibold">{place.city}</p>
-                    <p className="text-sm text-[#f0e6d7]">{place.country}</p>
+            {hasVerifiedDestinationImage(place) ? (
+              <div className="relative h-64 overflow-hidden bg-slate-900/10">
+                <Image
+                  src={getDestinationImageUrl(place.images[0] ?? { src: "", alt: place.city }, place)}
+                  alt={place.images[0]?.alt || place.city}
+                  fill
+                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover transition duration-500 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#142224]/75 via-[#142224]/15 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-6 text-[#fffaf2]">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.24em] text-[#f8dfb4]">{isLead ? "Editor’s relocation pick" : "Featured city"}</p>
+                      <p className="text-xl font-semibold">{place.city}</p>
+                      <p className="text-sm text-[#f0e6d7]">{place.country}</p>
+                    </div>
+                    <span className="rounded-full bg-[rgba(242,217,173,0.28)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#fff5df]">
+                      {cardFacts.overallScore} overall
+                    </span>
                   </div>
-                  <span className="rounded-full bg-[rgba(242,217,173,0.28)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#fff5df]">
-                    {cardFacts.overallScore} overall
-                  </span>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="flex h-64 flex-col justify-end bg-[linear-gradient(130deg,#163233,#2e4a4b)] p-6 text-[#fffaf2]">
+                <p className="text-xs uppercase tracking-[0.24em] text-[#f8dfb4]">{isLead ? "Editor’s relocation pick" : "Featured city"}</p>
+                <p className="mt-2 text-xl font-semibold">{place.city}</p>
+                <p className="text-sm text-[#f0e6d7]">{place.country}</p>
+                <p className="mt-4 inline-block rounded-full bg-[rgba(242,217,173,0.15)] px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-[#f8dfb4]">
+                  Imagery pending verification
+                </p>
+              </div>
+            )}
             <div className="p-6">
               <p className="text-sm uppercase tracking-[0.25em] text-[var(--atlas-accent)]">{place.tags?.slice(0, 2).join(" • ")}</p>
               <p className="mt-4 text-xl font-semibold text-[var(--atlas-ink)]">{place.description}</p>

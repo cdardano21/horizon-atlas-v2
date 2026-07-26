@@ -1,6 +1,6 @@
 # Wave 1 Research Bundles
 
-Generated at: 2026-07-26T03:30:18.975Z
+Generated at: 2026-07-26T05:15:15.268Z
 Destinations: 30
 
 Plans ready for apply: 0/5

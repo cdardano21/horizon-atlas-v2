@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import FavoriteButton from "../../components/FavoriteButton";
 import DestinationGallery from "../../components/DestinationGallery";
 import DestinationStickyNav from "../../components/destination/DestinationStickyNav";
@@ -14,8 +13,6 @@ import { getDestinationContent } from "../../lib/destination-content";
 import { defaultMissingVerification, getDestinationCommandCenter } from "../../lib/destination-command-center";
 import type { CommandCenterData, NamedRecord, VerificationMeta } from "../../lib/destination-command-center";
 import { toConsumerCopy } from "../../lib/consumer-copy";
-import { getDestinationImageSequence, getDestinationImageSet, getDestinationImageUrl } from "../../lib/imageFallback";
-import { isPublicDestinationSlug } from "../../lib/public-destinations";
 import { resolveSourceHref, sanitizeExternalSourceUrl } from "../../lib/source-links";
 
 interface DestinationPageProps {
@@ -62,6 +59,7 @@ function hasNoVerifiedPlaceholder(value: string | null | undefined) {
   if (!value) return true;
   const normalized = value.toLowerCase();
   return normalized.includes("no verified")
+    || normalized.includes("editorial estimate from current destination records")
     || normalized.includes("source expansion underway")
     || normalized.includes("see source links below")
     || normalized.includes("not published");
@@ -369,6 +367,12 @@ function scoreTone(score: number | null) {
   return "border-amber-300/65 bg-amber-50 text-amber-950";
 }
 
+function confidenceWeight(level: VerificationMeta["confidenceLevel"] | undefined) {
+  if (level === "high") return 1;
+  if (level === "medium") return 0.7;
+  return 0.4;
+}
+
 function SectionHeading({
   eyebrow,
   title,
@@ -392,7 +396,7 @@ function ScenicBreakpoint({
   city,
   caption,
 }: {
-  imageUrl: string;
+  imageUrl: string | null;
   city: string;
   caption: string;
 }) {
@@ -400,13 +404,17 @@ function ScenicBreakpoint({
     <section className="mx-auto max-w-7xl px-8 py-8">
       <div className="relative overflow-hidden rounded-[2rem] border border-[var(--atlas-border)] shadow-[0_30px_70px_-35px_rgba(37,31,22,0.55)]">
         <div className="relative h-[280px] sm:h-[360px] lg:h-[420px]">
-          <Image
-            src={imageUrl}
-            alt={`${city} scenic view`}
-            fill
-            sizes="(min-width: 1280px) 1280px, 100vw"
-            className="object-cover"
-          />
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt={`${city} scenic view`}
+              fill
+              sizes="(min-width: 1280px) 1280px, 100vw"
+              className="object-cover"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(247,204,145,0.28),transparent_28%),radial-gradient(circle_at_80%_12%,rgba(31,95,99,0.24),transparent_26%),linear-gradient(135deg,#111f21_0%,#1f3437_50%,#44351d_100%)]" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#131f21]/70 via-[#131f21]/18 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
             <p className="text-xs uppercase tracking-[0.26em] text-[#f6dfb7]">Scouting lens</p>
@@ -558,10 +566,6 @@ function IntelligenceGuideSection({
 export default async function DestinationPage({ params }: DestinationPageProps) {
   const { slug } = await params;
 
-  if (!isPublicDestinationSlug(slug)) {
-    notFound();
-  }
-
   const command = await getDestinationCommandCenter(slug);
   const content = await getDestinationContent(slug);
 
@@ -577,11 +581,8 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
   }
 
   const destination = content.destination;
-  const destinationImageSet = getDestinationImageSet(destination, 4);
-  const destinationImageSequence = getDestinationImageSequence(destination, 3);
-  const heroImage = destinationImageSet[0]
-    ?? destinationImageSequence[0]
-    ?? getDestinationImageUrl(destination.images[0] ?? { src: "", alt: destination.city, caption: destination.city }, destination, 0);
+  const destinationImageSet = destination.images.filter((image) => Boolean(image.src && image.src.trim().length > 0));
+  const heroImage = destinationImageSet[0]?.src ?? null;
 
   const scorecard = command.scorecard;
   const quickMetrics = command.quickMetrics.slice(0, 10).map((metric) => ({
@@ -651,14 +652,20 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
   const conciseScorecard = scorecard.slice(0, 6);
   const conciseComprehensiveSections = comprehensiveSections.slice(0, 4);
   const coreQa = buildCoreRelocationQa(command);
+  const scoreRows = scorecard.filter((item) => typeof item.score === "number");
+  const scoreAverage = scoreRows.length > 0
+    ? Math.round(scoreRows.reduce((total, item) => total + (item.score ?? 0), 0) / scoreRows.length)
+    : null;
+  const evidenceWeightTotal = scoreRows.length > 0
+    ? scoreRows.reduce((total, item) => total + confidenceWeight(item.verification?.confidenceLevel), 0)
+    : 0;
+  const evidenceConfidencePct = scoreRows.length > 0
+    ? Math.round((evidenceWeightTotal / scoreRows.length) * 100)
+    : null;
   const storyTags = (destination.tags ?? []).slice(0, 6);
   const featuredResources = command.resources.slice(0, 3);
-  const scenicImagePrimary = destinationImageSet[1]
-    ?? destinationImageSequence[1]
-    ?? getDestinationImageUrl(destination.images[1] ?? destination.images[0] ?? { src: "", alt: destination.city, caption: destination.city }, destination, 1);
-  const scenicImageSecondary = destinationImageSet[2]
-    ?? destinationImageSequence[2]
-    ?? getDestinationImageUrl(destination.images[2] ?? destination.images[0] ?? { src: "", alt: destination.city, caption: destination.city }, destination, 2);
+  const scenicImagePrimary = destinationImageSet[1]?.src ?? null;
+  const scenicImageSecondary = destinationImageSet[2]?.src ?? null;
   const conciseQuickFacts = quickFacts.filter((fact) => !hasNoVerifiedPlaceholder(fact.value)).slice(0, 4);
   const visibleRapidAnswers = rapidAnswers.filter((item) => !hasNoVerifiedPlaceholder(item.answer));
   const visibleCoreQa = coreQa
@@ -671,14 +678,18 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_8%_8%,rgba(197,155,95,0.24),transparent_25%),radial-gradient(circle_at_92%_10%,rgba(31,95,99,0.13),transparent_30%),repeating-linear-gradient(135deg,rgba(255,255,255,0.16)_0px,rgba(255,255,255,0.16)_2px,transparent_2px,transparent_16px),linear-gradient(180deg,#f8f4ec_0%,#f4eee1_46%,#f8f3ea_100%)] text-[var(--atlas-ink)]">
       <section className="relative overflow-hidden border-b border-[rgba(57,52,42,0.14)] px-8 py-20">
-        <Image
-          src={heroImage}
-          alt={`${destination.city} hero image`}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
+        {heroImage ? (
+          <Image
+            src={heroImage}
+            alt={`${destination.city} hero image`}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(247,204,145,0.3),transparent_30%),radial-gradient(circle_at_80%_15%,rgba(31,95,99,0.24),transparent_28%),linear-gradient(135deg,#0f1e20_0%,#1d2d30_50%,#3b3125_100%)]" />
+        )}
         <div className="absolute inset-0 bg-gradient-to-r from-[#0f1e20]/84 via-[#132a2c]/62 to-[#453623]/33" />
         <div className="absolute inset-0 bg-[#0f1e20]/38" />
 
@@ -991,6 +1002,31 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
 
             <div className="space-y-6">
               <div className="rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.72)] p-6">
+                <p className="text-xs uppercase tracking-[0.28em] text-[var(--atlas-accent)]">How scores are calculated</p>
+                <div className="mt-4 space-y-3 text-sm leading-7 text-[var(--atlas-muted)]">
+                  <p>
+                    Composite score = mean of all published category scores on this page.
+                  </p>
+                  <p>
+                    Evidence confidence = average verification weight where High = 1.0, Medium = 0.7, and Low = 0.4.
+                  </p>
+                </div>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-[var(--atlas-border)] bg-white/75 p-3">
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--atlas-accent)]">Composite score</p>
+                    <p className="mt-1 text-xl font-semibold text-[var(--atlas-ink)]">{typeof scoreAverage === "number" ? `${scoreAverage}/100` : "Not published"}</p>
+                  </div>
+                  <div className="rounded-2xl border border-[var(--atlas-border)] bg-white/75 p-3">
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--atlas-accent)]">Evidence confidence</p>
+                    <p className="mt-1 text-xl font-semibold text-[var(--atlas-ink)]">{typeof evidenceConfidencePct === "number" ? `${evidenceConfidencePct}%` : "Not published"}</p>
+                  </div>
+                </div>
+                <p className="mt-4 text-xs leading-5 text-[var(--atlas-muted)]">
+                  Interpretation bands: 85+ strong fit, 75-84 moderate fit, below 75 needs closer district-level validation.
+                </p>
+              </div>
+
+              <div className="rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.72)] p-6">
                 <p className="text-xs uppercase tracking-[0.28em] text-[var(--atlas-accent)]">Highest-priority planning signals</p>
                 <div className="mt-4 space-y-3">
                   {planningSignals.slice(0, 3).map((signal) => (
@@ -1296,7 +1332,7 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
         </div>
 
         <div className="mt-8">
-          <DestinationGallery destination={destination} />
+          <DestinationGallery destination={destination} resources={command.resources} />
         </div>
       </section>
 

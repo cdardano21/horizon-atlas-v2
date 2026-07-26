@@ -18,10 +18,10 @@ All non-flagship scale should come from ingestion and normalization pipelines.
 
 ### Existing strengths
 
-- A staged ingestion pipeline already exists under [app/lib/data-engine](app/lib/data-engine):
+- A staged ingestion pipeline already exists under [app/lib/data-engine](../app/lib/data-engine):
   - adapters, source registry, scheduler, orchestrator, normalization, validation, and publisher modules.
-- Admin APIs already exist for import/review/publish under [app/api/admin/data-engine](app/api/admin/data-engine).
-- Destination rendering already separates structured command-center data and presentation in [app/lib/destination-command-center.ts](app/lib/destination-command-center.ts).
+- Admin APIs already exist for import/review/publish under [app/api/admin/data-engine](../app/api/admin/data-engine).
+- Destination rendering already separates structured command-center data and presentation in [app/lib/destination-command-center.ts](../app/lib/destination-command-center.ts).
 - A publish-review workflow exists (pending/approved/rejected) with run logs and error logs.
 
 ### Current gaps to close for true scale

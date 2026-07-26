@@ -12,6 +12,12 @@ const links = [
   { label: "About", href: "#contact" },
 ];
 
+const toTestIdToken = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -30,6 +36,7 @@ export default function Navbar() {
             <Link
               key={link.label}
               href={link.href}
+              data-testid={`navbar-link-${toTestIdToken(link.label)}`}
               className="text-sm font-semibold tracking-[0.08em] text-[var(--atlas-muted)] transition hover:text-[var(--atlas-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgba(248,244,236,0.78)]"
             >
               {link.label}
@@ -41,6 +48,7 @@ export default function Navbar() {
           <AuthStatus variant="desktop" />
           <button
             type="button"
+            data-testid="navbar-mobile-toggle"
             className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(57,52,42,0.16)] bg-[rgba(255,252,246,0.75)] text-[var(--atlas-accent)] transition hover:border-[rgba(31,95,99,0.42)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.38)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgba(248,244,236,0.78)] lg:hidden"
             aria-label="Toggle navigation"
             onClick={() => setIsOpen((current) => !current)}
@@ -56,13 +64,14 @@ export default function Navbar() {
       </div>
 
       {isOpen ? (
-        <div className="absolute inset-x-0 top-full z-40 border-t border-[rgba(57,52,42,0.12)] bg-[rgba(248,244,236,0.95)] py-4 backdrop-blur-xl lg:hidden">
+        <div data-testid="navbar-mobile-menu" className="absolute inset-x-0 top-full z-40 border-t border-[rgba(57,52,42,0.12)] bg-[rgba(248,244,236,0.95)] py-4 backdrop-blur-xl lg:hidden">
           <div className="mx-auto max-w-7xl px-6">
             <div className="flex flex-col gap-3">
               {links.map((link) => (
                 <Link
                   key={link.label}
                   href={link.href}
+                  data-testid={`navbar-mobile-link-${toTestIdToken(link.label)}`}
                   className="rounded-3xl border border-[rgba(57,52,42,0.14)] bg-[rgba(255,252,246,0.9)] px-4 py-3 text-sm font-semibold text-[var(--atlas-muted)] transition hover:border-[rgba(31,95,99,0.42)] hover:text-[var(--atlas-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgba(248,244,236,0.95)]"
                   onClick={() => setIsOpen(false)}
                 >

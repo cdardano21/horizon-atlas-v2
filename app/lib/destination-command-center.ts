@@ -1,11 +1,13 @@
 import { getDestinationContent } from "./destination-content";
 import { getDestinationIntelligence } from "./destination-intelligence";
 import type { DestinationIntelligence } from "./destination-intelligence";
+import { generatedDestinationCardFacts } from "./generated-destination-card-facts";
 import { generatedCommandCenterSeeds } from "./generated-command-center-seeds";
 import { isFlagshipDestination } from "./flagship-destinations";
 import { LOCAL_COMMAND_CENTER_SEEDS, type LocalCommandCenterSeed } from "./local-command-center-seeds";
 import { REGIONAL_COMMAND_CENTER_SEEDS } from "./regional-command-center-seeds";
 import type { Destination } from "./destinations";
+import { sanitizeExternalSourceUrl } from "./source-links";
 import { isSupabaseConfigured, supabaseFetch } from "./supabase";
 
 export type VerificationStatus = "verified" | "estimated" | "stale" | "in_progress";
@@ -176,21 +178,26 @@ const toNamedRecord = (row: Record<string, unknown>): NamedRecord => ({
   value1: typeof row.value_1 === "string" ? row.value_1 : null,
   value2: typeof row.value_2 === "string" ? row.value_2 : null,
   value3: typeof row.value_3 === "string" ? row.value_3 : null,
-  url: typeof row.url === "string" ? row.url : null,
+  url: sanitizeExternalSourceUrl(typeof row.url === "string" ? row.url : null),
   mapQuery: typeof row.map_query === "string" ? row.map_query : null,
   mapZoom: typeof row.map_zoom === "number" ? row.map_zoom : null,
   verification: verificationFromRow(row),
 });
 
-const toResourceRecord = (row: Record<string, unknown>): ResourceRecord => ({
-  id: typeof row.id === "string" ? row.id : crypto.randomUUID(),
-  title: typeof row.title === "string" ? row.title : "Untitled resource",
-  description: typeof row.description === "string" ? row.description : null,
-  url: typeof row.url === "string" ? row.url : "",
-  category: typeof row.category === "string" ? row.category : "general",
-  sourceType: typeof row.source_type === "string" ? row.source_type : null,
-  verifiedAt: typeof row.last_verified_at === "string" ? row.last_verified_at : null,
-});
+const toResourceRecord = (row: Record<string, unknown>): ResourceRecord | null => {
+  const sanitizedUrl = sanitizeExternalSourceUrl(typeof row.url === "string" ? row.url : null);
+  if (!sanitizedUrl) return null;
+
+  return {
+    id: typeof row.id === "string" ? row.id : crypto.randomUUID(),
+    title: typeof row.title === "string" ? row.title : "Untitled resource",
+    description: typeof row.description === "string" ? row.description : null,
+    url: sanitizedUrl,
+    category: typeof row.category === "string" ? row.category : "general",
+    sourceType: typeof row.source_type === "string" ? row.source_type : null,
+    verifiedAt: typeof row.last_verified_at === "string" ? row.last_verified_at : null,
+  };
+};
 
 const FOOD_RESOURCE_CATEGORIES = new Set([
   "food",
@@ -235,7 +242,7 @@ const toNamedResourceRecord = (row: Record<string, unknown>, fallbackPrefix: str
     name: title,
     subtitle: typeof row.description === "string" ? row.description : null,
     value1: typeof row.source_type === "string" ? row.source_type : null,
-    url: typeof row.url === "string" ? row.url : null,
+    url: sanitizeExternalSourceUrl(typeof row.url === "string" ? row.url : null),
     verification: verificationFromRow(row),
   };
 };
@@ -248,78 +255,30 @@ const fallbackVerification: VerificationMeta = {
   notes: "Generated from baseline destination intelligence while command-center records are being prepared.",
 };
 
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-const hasTag = (destination: Destination, tag: string): boolean =>
-  destination.tags?.some((entry) => entry.toLowerCase() === tag.toLowerCase()) ?? false;
-
-const searchUrl = (destination: Destination, topic: string): string =>
-  `https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} ${topic}`)}`;
-
-const climateProfile = (destination: Destination) => {
-  const coastal = hasTag(destination, "beach") || hasTag(destination, "coast") || hasTag(destination, "summer escape");
-  if (coastal) {
-    return {
-      winterHigh: 14,
-      summerHigh: 30,
-      winterLow: 8,
-      summerLow: 22,
-      seaOffset: 2,
-      rainfallBase: 35,
-      rainfallSwing: 20,
-    };
-  }
-
-  return {
-    winterHigh: 6,
-    summerHigh: 26,
-    winterLow: 0,
-    summerLow: 16,
-    seaOffset: 0,
-    rainfallBase: 45,
-    rainfallSwing: 15,
-  };
+const factCategory = (label: string): string => {
+  const normalized = label.toLowerCase();
+  if (normalized.includes("airport")) return "airport";
+  if (normalized.includes("health")) return "healthcare";
+  if (normalized.includes("resid") || normalized.includes("visa")) return "visa";
+  if (normalized.includes("tax")) return "tax";
+  return "official";
 };
 
-const buildSyntheticClimate = (destination: Destination, verification: VerificationMeta): MonthlyClimateRow[] => {
-  const profile = climateProfile(destination);
-  return monthNames.map((month, index) => {
-    const radians = ((index - 1) / 12) * Math.PI * 2;
-    const high = Math.round(((profile.summerHigh - profile.winterHigh) / 2) * Math.sin(radians) + ((profile.summerHigh + profile.winterHigh) / 2));
-    const low = Math.round(((profile.summerLow - profile.winterLow) / 2) * Math.sin(radians) + ((profile.summerLow + profile.winterLow) / 2));
-    const rainfall = Math.max(15, Math.round(profile.rainfallBase + profile.rainfallSwing * Math.cos(radians)));
-    const sunshine = Math.max(120, Math.round(210 + 85 * Math.sin(radians)));
-    const uv = Math.max(2, Math.min(10, Math.round(6 + 3 * Math.sin(radians))));
-    const seaTemp = profile.seaOffset > 0 ? Math.round(low + profile.seaOffset) : null;
+const factResourcesForDestination = (destination: Destination, verifiedAt: string | null): ResourceRecord[] => {
+  const facts = generatedDestinationCardFacts[destination.slug]?.facts ?? [];
 
-    return {
-      month,
-      avgHighC: high,
-      avgLowC: low,
-      rainfallMm: rainfall,
-      rainyDays: Math.max(3, Math.round(rainfall / 8)),
-      humidityPct: Math.max(45, Math.min(78, Math.round(64 + 8 * Math.cos(radians)))),
-      sunshineHours: sunshine,
-      uvIndex: uv,
-      seaTempC: seaTemp,
-      snowfallCm: low <= 1 ? Math.max(0, Math.round((2 - low) * 1.4)) : 0,
-      windKph: Math.max(8, Math.round(12 + 3 * Math.cos(radians))),
-      verification,
-    };
-  });
+  return facts
+    .filter((fact) => Boolean(fact.sourceUrl))
+    .map((fact, index) => ({
+      id: `${destination.slug}-fact-resource-${index + 1}`,
+      title: fact.label,
+      description: fact.value,
+      url: sanitizeExternalSourceUrl(fact.sourceUrl) ?? "",
+      category: factCategory(fact.label),
+      sourceType: "official_link",
+      verifiedAt,
+    }))
+    .filter((resource) => resource.url.length > 0);
 };
 
 const buildFallbackCommandCenterData = (
@@ -331,32 +290,9 @@ const buildFallbackCommandCenterData = (
 ): CommandCenterData => {
   const intelligence = getDestinationIntelligence(destination);
   const weatherRows = destination.memberDetails?.monthlyWeather ?? [];
-  const isCoastal = hasTag(destination, "beach") || hasTag(destination, "coast");
-  const isValue = hasTag(destination, "value");
-  const hospitalCount = destination.memberDetails?.hospitals?.length ?? 0;
-  const airportCount = destination.memberDetails?.airports?.length ?? 0;
-  const schoolCount = destination.memberDetails?.amenities?.schools ?? destination.memberDetails?.amenities?.englishSchools ?? 0;
-  const golfCount = (destination.memberDetails?.golf?.publicCourses ?? 0) + (destination.memberDetails?.golf?.privateCourses ?? 0);
-  const restaurantCount = destination.memberDetails?.amenities?.restaurants ?? 0;
-  const baselineMonthly = isValue ? 2100 : 2900;
-  const baselineHousing = isValue ? 950 : 1650;
 
-  const quickMetrics: CommandMetric[] = intelligence.quickFacts.map((fact) => ({
-    key: toMetricKey(fact.label),
-    label: fact.label,
-    value: fact.value,
-    displayValue: fact.value,
-    verification: fallbackVerification,
-  }));
-
-  const scorecard: ScorecardEntry[] = intelligence.livingHereScorecard.map((item, index) => ({
-    category: item.category,
-    score: item.score,
-    explanation: item.context,
-    underlyingMeasurements: index === 0 ? "Weighted relocation-fit baseline" : "Baseline model estimate",
-    personalizedWeight: null,
-    verification: fallbackVerification,
-  }));
+  const quickMetrics: CommandMetric[] = [];
+  const scorecard: ScorecardEntry[] = [];
 
   const monthlyClimateFromDetails: MonthlyClimateRow[] = weatherRows.map((row) => ({
     month: row.month,
@@ -373,72 +309,12 @@ const buildFallbackCommandCenterData = (
     verification: fallbackVerification,
   }));
 
-  const monthlyClimate: MonthlyClimateRow[] = monthlyClimateFromDetails.length > 0
-    ? monthlyClimateFromDetails
-    : buildSyntheticClimate(destination, fallbackVerification);
+  const monthlyClimate: MonthlyClimateRow[] = monthlyClimateFromDetails;
 
-  const scoreByCategory = new Map(scorecard.map((item) => [item.category.toLowerCase(), item]));
-  const scoreToMetric = (category: string, label: string, key: string): CommandMetric | null => {
-    const score = scoreByCategory.get(category.toLowerCase());
-    if (!score || typeof score.score !== "number") return null;
-    return {
-      key,
-      label,
-      value: String(score.score),
-      unit: "/100",
-      displayValue: `${score.score}/100`,
-      verification: fallbackVerification,
-    };
-  };
-
-  const costOfLiving = [
-    scoreToMetric("Cost of Living", "Cost of living fit", "cost_of_living_fit"),
-    scoreToMetric("Overall Match", "Overall relocation fit", "overall_relocation_fit"),
-  ].filter((item): item is CommandMetric => item !== null);
-
-  const housingMetrics = [
-    scoreToMetric("Overall Match", "Housing and ownership viability", "housing_viability"),
-    {
-      key: "indicative_monthly_rent",
-      label: "Indicative monthly rent",
-      value: String(baselineHousing),
-      unit: "EUR",
-      displayValue: `EUR ${baselineHousing.toLocaleString()} / month`,
-      verification: fallbackVerification,
-    },
-  ].filter((item): item is CommandMetric => item !== null);
-
-  if (!costOfLiving.some((item) => item.key === "estimated_monthly_budget")) {
-    costOfLiving.push({
-      key: "estimated_monthly_budget",
-      label: "Estimated monthly budget",
-      value: String(baselineMonthly),
-      unit: "EUR",
-      displayValue: `EUR ${baselineMonthly.toLocaleString()} / month`,
-      verification: fallbackVerification,
-    });
-  }
-
-  if (!costOfLiving.some((item) => item.key === "estimated_monthly_budget_couple")) {
-    const couple = Math.round(baselineMonthly * 1.55);
-    costOfLiving.push({
-      key: "estimated_monthly_budget_couple",
-      label: "Estimated monthly budget for two",
-      value: String(couple),
-      unit: "EUR",
-      displayValue: `EUR ${couple.toLocaleString()} / month`,
-      verification: fallbackVerification,
-    });
-  }
-
-  const safetyMetrics = [
-    scoreToMetric("Safety", "Safety score", "safety_score"),
-  ].filter((item): item is CommandMetric => item !== null);
-
-  const internetMetrics = [
-    scoreToMetric("Internet", "Internet score", "internet_score"),
-    scoreToMetric("Digital Nomad", "Digital nomad score", "digital_nomad_score"),
-  ].filter((item): item is CommandMetric => item !== null);
+  const costOfLiving: CommandMetric[] = [];
+  const housingMetrics: CommandMetric[] = [];
+  const safetyMetrics: CommandMetric[] = [];
+  const internetMetrics: CommandMetric[] = [];
 
   const healthcareFacilities: NamedRecord[] =
     destination.memberDetails?.hospitals?.map((hospital, index) => ({
@@ -451,32 +327,7 @@ const buildFallbackCommandCenterData = (
       verification: fallbackVerification,
     })) ?? [];
 
-  if (healthcareFacilities.length === 0) {
-    healthcareFacilities.push(
-      {
-        id: `${destination.slug}-healthcare-primary`,
-        name: `${destination.city} Regional Medical Center`,
-        subtitle: `Primary hospital cluster serving ${destination.city}`,
-        value1: "Emergency and specialist care",
-        value2: "Use source links to compare public and private options",
-        url: searchUrl(destination, "regional hospital emergency care"),
-        mapQuery: `${destination.city} hospital`,
-        mapZoom: 12,
-        verification: fallbackVerification,
-      },
-      {
-        id: `${destination.slug}-healthcare-secondary`,
-        name: `${destination.city} Family Care Network`,
-        subtitle: "Primary care and outpatient coverage",
-        value1: "Family medicine and routine diagnostics",
-        value2: "Cross-check insurers accepted by local providers",
-        url: searchUrl(destination, "primary care clinic network"),
-        mapQuery: `${destination.city} medical clinic`,
-        mapZoom: 12,
-        verification: fallbackVerification,
-      },
-    );
-  }
+  
 
   const airports: NamedRecord[] =
     destination.memberDetails?.airports?.map((airport, index) => ({
@@ -489,246 +340,18 @@ const buildFallbackCommandCenterData = (
       verification: fallbackVerification,
     })) ?? [];
 
-  if (airports.length === 0) {
-    airports.push({
-      id: `${destination.slug}-airport-primary`,
-      name: `${destination.city} International Gateway`,
-      subtitle: `Primary airport access for ${destination.city}`,
-      value1: airportCount > 0 ? `${airportCount} mapped airport connection${airportCount > 1 ? "s" : ""}` : "Scheduled regional and international service",
-      value2: "Review route depth and transfer timings",
-      url: searchUrl(destination, "international airport routes"),
-      mapQuery: `${destination.city} airport`,
-      mapZoom: 10,
-      verification: fallbackVerification,
-    });
-  }
+  const neighborhoods: NamedRecord[] = [];
+  const beaches: NamedRecord[] = [];
+  const recreationFacilities: NamedRecord[] = [];
+  const golfCourses: NamedRecord[] = [];
+  const foodSpots: NamedRecord[] = [];
+  const schools: NamedRecord[] = [];
+  const visaPrograms: NamedRecord[] = [];
+  const taxRules: NamedRecord[] = [];
+  const practicalInfo: NamedRecord[] = [];
 
-  const neighborhoods: NamedRecord[] = [
-    {
-      id: `${destination.slug}-neighborhood-core`,
-      name: `${destination.city} Central District`,
-      subtitle: "Walkable core with daily essentials",
-      value1: destination.lifestyle,
-      value2: "Good first pass for errands, cafes, and transit rhythm",
-      url: searchUrl(destination, "city center neighborhoods"),
-      mapQuery: `${destination.city} city center`,
-      mapZoom: 13,
-      verification: fallbackVerification,
-    },
-    {
-      id: `${destination.slug}-neighborhood-residential`,
-      name: `${destination.city} Residential Quarter`,
-      subtitle: "Long-stay housing and calmer streets",
-      value1: destination.overview,
-      value2: "Useful for budget and comfort tradeoff checks",
-      url: searchUrl(destination, "residential neighborhoods housing"),
-      mapQuery: `${destination.city} residential district`,
-      mapZoom: 13,
-      verification: fallbackVerification,
-    },
-    {
-      id: `${destination.slug}-neighborhood-lifestyle`,
-      name: isCoastal ? `${destination.city} Waterfront Zone` : `${destination.city} Lifestyle Corridor`,
-      subtitle: isCoastal ? "Coastal promenade and leisure strip" : "Dining, culture, and after-hours activity",
-      value1: destination.transportation,
-      value2: "Compare livability between daytime and evening patterns",
-      url: searchUrl(destination, isCoastal ? "waterfront district" : "cultural district nightlife"),
-      mapQuery: `${destination.city} ${isCoastal ? "waterfront" : "old town"}`,
-      mapZoom: 13,
-      verification: fallbackVerification,
-    },
-  ];
-
-  const beaches: NamedRecord[] = [
-    {
-      id: `${destination.slug}-beach-primary`,
-      name: isCoastal ? `${destination.city} Main Beachfront` : `${destination.city} Waterfront Park` ,
-      subtitle: isCoastal ? "Primary beach access corridor" : "Water-access recreation zone",
-      value1: isCoastal ? "Swimmable coastline and promenade" : "Riverfront, lakefront, or harbor walk",
-      value2: "Best used for morning and sunset routine checks",
-      url: searchUrl(destination, isCoastal ? "best beaches" : "waterfront park"),
-      mapQuery: `${destination.city} ${isCoastal ? "beach" : "waterfront"}`,
-      mapZoom: 12,
-      verification: fallbackVerification,
-    },
-    {
-      id: `${destination.slug}-beach-secondary`,
-      name: isCoastal ? `${destination.city} Scenic Coastline` : `${destination.city} Outdoor Escape Loop`,
-      subtitle: "Secondary weekend anchor",
-      value1: "Pair with nearby cafe and grocery route for realism",
-      value2: "Useful for quality-of-life pressure testing",
-      url: searchUrl(destination, "weekend outdoor activities"),
-      mapQuery: `${destination.city} scenic viewpoint`,
-      mapZoom: 11,
-      verification: fallbackVerification,
-    },
-  ];
-
-  const recreationFacilities: NamedRecord[] = [
-    {
-      id: `${destination.slug}-recreation-fitness`,
-      name: `${destination.city} Fitness and Sports Complex`,
-      subtitle: "Daily activity and wellness anchor",
-      value1: "Gyms, classes, and community sports programming",
-      value2: "Compare monthly membership options",
-      url: searchUrl(destination, "fitness center membership"),
-      mapQuery: `${destination.city} fitness center`,
-      mapZoom: 12,
-      verification: fallbackVerification,
-    },
-    {
-      id: `${destination.slug}-recreation-outdoor`,
-      name: `${destination.city} Outdoor Recreation Network`,
-      subtitle: "Parks, trails, and open-air activity",
-      value1: "Supports daily walking and low-friction routines",
-      value2: "Review lighting and safety after dusk",
-      url: searchUrl(destination, "parks trails recreation"),
-      mapQuery: `${destination.city} parks`,
-      mapZoom: 11,
-      verification: fallbackVerification,
-    },
-  ];
-
-  const golfCourses: NamedRecord[] = [
-    {
-      id: `${destination.slug}-golf-primary`,
-      name: `${destination.city} Golf Club Circuit`,
-      subtitle: golfCount > 0 ? `${golfCount} mapped public/private options` : "Local and regional golf options",
-      value1: "Review green fees, transport time, and membership terms",
-      value2: "Best evaluated with weekday tee availability",
-      url: searchUrl(destination, "golf courses green fees"),
-      mapQuery: `${destination.city} golf course`,
-      mapZoom: 11,
-      verification: fallbackVerification,
-    },
-  ];
-
-  const foodSpots: NamedRecord[] = [
-    {
-      id: `${destination.slug}-food-market`,
-      name: `${destination.city} Local Market District`,
-      subtitle: "Daily groceries and casual dining",
-      value1: restaurantCount > 0 ? `${restaurantCount.toLocaleString()} restaurants tracked in current dataset` : "Strong local food rotation potential",
-      value2: "Validate weekday lunch and dinner price range",
-      url: searchUrl(destination, "food market restaurants"),
-      mapQuery: `${destination.city} food market`,
-      mapZoom: 13,
-      verification: fallbackVerification,
-    },
-    {
-      id: `${destination.slug}-food-cafe`,
-      name: `${destination.city} Cafe and Bistro Corridor`,
-      subtitle: "Neighborhood cafe and remote-work options",
-      value1: "Good proxy for social rhythm and routine comfort",
-      value2: "Check opening hours by season",
-      url: searchUrl(destination, "best cafes local bistros"),
-      mapQuery: `${destination.city} cafe`,
-      mapZoom: 13,
-      verification: fallbackVerification,
-    },
-  ];
-
-  const schools: NamedRecord[] = [
-    {
-      id: `${destination.slug}-school-primary`,
-      name: `${destination.city} International and Local Schools`,
-      subtitle: schoolCount > 0 ? `${schoolCount.toLocaleString()} schools signaled in member data` : "Primary and secondary school options",
-      value1: "Review curriculum, language support, and admissions windows",
-      value2: "Compare commute duration from target neighborhoods",
-      url: searchUrl(destination, "international schools admissions"),
-      mapQuery: `${destination.city} schools`,
-      mapZoom: 12,
-      verification: fallbackVerification,
-    },
-  ];
-
-  const visaPrograms: NamedRecord[] = [
-    {
-      id: `${destination.slug}-visa-primary`,
-      name: `${destination.country} residency pathways for ${destination.city}`,
-      subtitle: "Long-stay and retirement route overview",
-      value1: "Confirm eligibility, income thresholds, and renewal cadence",
-      value2: "Cross-check appointment wait times before committing move dates",
-      url: searchUrl(destination, "official residency visa requirements"),
-      verification: fallbackVerification,
-    },
-  ];
-
-  const taxRules: NamedRecord[] = [
-    {
-      id: `${destination.slug}-tax-primary`,
-      name: `${destination.country} personal tax residency framework`,
-      subtitle: "Baseline tax planning signal",
-      value1: "Verify residency-day count and filing obligations",
-      value2: "Model pension, investment, and social-security treatment",
-      url: searchUrl(destination, "official tax residency rules"),
-      verification: fallbackVerification,
-    },
-  ];
-
-  const practicalInfo: NamedRecord[] = [
-    {
-      id: `${destination.slug}-practical-government`,
-      name: `${destination.city} municipal services portal`,
-      subtitle: "Official city services and resident guidance",
-      value1: "Use for utilities, permits, and local administration",
-      value2: "Cross-reference language availability for onboarding",
-      url: searchUrl(destination, "official city government services"),
-      verification: fallbackVerification,
-    },
-    {
-      id: `${destination.slug}-practical-orientation`,
-      name: `${destination.city} relocation orientation resources`,
-      subtitle: "Transit, neighborhoods, and daily logistics",
-      value1: "Shortlist checklists for first 90 days",
-      value2: "Validate banking, telecom, and healthcare setup sequence",
-      url: searchUrl(destination, "relocation guide resident checklist"),
-      verification: fallbackVerification,
-    },
-  ];
-
-  const resources: ResourceRecord[] = Object.entries(intelligence.resources)
-    .flatMap(([category, items]) => items.map((item, index) => ({
-      id: `${destination.slug}-${category}-${index + 1}`,
-      title: item.label,
-      description: item.note,
-      url: item.href,
-      category,
-      sourceType: "research_link",
-      verifiedAt: lastVerifiedAt,
-    })));
-
-  if (resources.length === 0) {
-    resources.push(
-      {
-        id: `${destination.slug}-resource-housing`,
-        title: `${destination.city} housing and rentals`,
-        description: "Housing listings and district-level pricing context",
-        url: searchUrl(destination, "housing rentals neighborhoods"),
-        category: "rentals",
-        sourceType: "search_link",
-        verifiedAt: lastVerifiedAt,
-      },
-      {
-        id: `${destination.slug}-resource-healthcare`,
-        title: `${destination.city} healthcare services`,
-        description: "Hospitals, clinics, and urgent care resources",
-        url: searchUrl(destination, "healthcare hospitals clinics"),
-        category: "healthcare",
-        sourceType: "search_link",
-        verifiedAt: lastVerifiedAt,
-      },
-      {
-        id: `${destination.slug}-resource-transport`,
-        title: `${destination.city} transit and airport access`,
-        description: "Airport and local mobility planning resources",
-        url: searchUrl(destination, "airport transit routes"),
-        category: "relocation",
-        sourceType: "search_link",
-        verifiedAt: lastVerifiedAt,
-      },
-    );
-  }
+  const factResources = factResourcesForDestination(destination, lastVerifiedAt);
+  const resources: ResourceRecord[] = factResources;
 
   return {
     source,
@@ -754,19 +377,10 @@ const buildFallbackCommandCenterData = (
     visaPrograms,
     taxRules,
     safetyMetrics,
-    foodMetrics: [
-      {
-        key: "restaurant_scene_strength",
-        label: "Restaurant scene strength",
-        value: String(Math.max(68, Math.min(96, 70 + Math.min(18, Math.round(restaurantCount / 120))))),
-        unit: "/100",
-        displayValue: `${Math.max(68, Math.min(96, 70 + Math.min(18, Math.round(restaurantCount / 120))))}/100`,
-        verification: fallbackVerification,
-      },
-    ],
+    foodMetrics: [],
     practicalInfo,
-    pros: intelligence.retirementAdvantages,
-    tradeoffs: intelligence.retirementTradeoffs,
+    pros: [],
+    tradeoffs: [],
     resources,
   };
 };
@@ -784,46 +398,200 @@ const mergeUnique = <T>(seedItems: T[] | undefined, baseItems: T[], getKey: (ite
   return merged;
 };
 
+const hasPublishedVerification = (verification?: VerificationMeta | null): boolean => {
+  const status = verification?.verificationStatus;
+  if (status !== "verified" && status !== "estimated" && status !== "stale") {
+    return false;
+  }
+
+  const hasSourceUrl = Boolean(sanitizeExternalSourceUrl(verification?.sourceUrl ?? null));
+  const hasSourceOrg = typeof verification?.sourceOrganization === "string" && verification.sourceOrganization.trim().length > 0;
+  return hasSourceUrl || hasSourceOrg;
+};
+
+const filterPublishedMetrics = (items?: CommandMetric[]): CommandMetric[] =>
+  (items ?? []).filter((item) => hasPublishedVerification(item.verification));
+
+const filterPublishedScorecard = (items?: ScorecardEntry[]): ScorecardEntry[] =>
+  (items ?? []).filter((item) => hasPublishedVerification(item.verification));
+
+const filterPublishedClimate = (items?: MonthlyClimateRow[]): MonthlyClimateRow[] =>
+  (items ?? []).filter((item) => hasPublishedVerification(item.verification));
+
+const filterPublishedNamedRecords = (items?: NamedRecord[]): NamedRecord[] =>
+  (items ?? []).filter((item) => {
+    if (!hasPublishedVerification(item.verification)) return false;
+    if (item.url && !sanitizeExternalSourceUrl(item.url)) return false;
+    return true;
+  });
+
+const filterPublishedResources = (items?: ResourceRecord[]): ResourceRecord[] =>
+  (items ?? [])
+    .map((item) => {
+      const sanitizedUrl = sanitizeExternalSourceUrl(item.url);
+      if (!sanitizedUrl) return null;
+      return {
+        ...item,
+        url: sanitizedUrl,
+      };
+    })
+    .filter((item): item is ResourceRecord => item !== null);
+
+const mergeWithSeedAuthority = <T>(
+  seedItems: T[] | undefined,
+  baseItems: T[],
+  getKey: (item: T) => string,
+  authoritativeMissing: boolean,
+): T[] => {
+  if (Array.isArray(seedItems)) {
+    return mergeUnique(seedItems, baseItems, getKey);
+  }
+  return authoritativeMissing ? [] : baseItems;
+};
+
 const applyLocalSeedOverride = (
   base: CommandCenterData,
   seed?: LocalCommandCenterSeed,
+  options?: { authoritativeMissing?: boolean },
 ): CommandCenterData => {
   if (!seed) return base;
 
-  const hasSeedQuickMetrics = Array.isArray(seed.quickMetrics) && seed.quickMetrics.length > 0;
-  const hasSeedScorecard = Array.isArray(seed.scorecard) && seed.scorecard.length > 0;
+  const authoritativeMissing = options?.authoritativeMissing ?? false;
+  const seedQuickMetrics = filterPublishedMetrics(seed.quickMetrics);
+  const seedScorecard = filterPublishedScorecard(seed.scorecard);
+
+  const baseQuickMetrics = filterPublishedMetrics(base.quickMetrics);
+  const baseScorecard = filterPublishedScorecard(base.scorecard);
+
+  const quickMetrics = seed.quickMetrics
+    ? seedQuickMetrics
+    : authoritativeMissing
+      ? []
+      : baseQuickMetrics;
+
+  const scorecard = seed.scorecard
+    ? seedScorecard
+    : authoritativeMissing
+      ? []
+      : baseScorecard;
 
   return {
     ...base,
     region: seed.region ?? base.region,
     lastVerifiedAt: seed.lastVerifiedAt ?? base.lastVerifiedAt,
     dataConfidence: seed.dataConfidence ?? base.dataConfidence,
-    quickMetrics: hasSeedQuickMetrics
-      ? [...(seed.quickMetrics ?? [])]
-      : base.quickMetrics,
-    scorecard: hasSeedScorecard
-      ? [...(seed.scorecard ?? [])]
-      : base.scorecard,
-    monthlyClimate: mergeUnique(seed.monthlyClimate, base.monthlyClimate, (item) => item.month.toLowerCase()),
-    costOfLiving: mergeUnique(seed.costOfLiving, base.costOfLiving, (item) => item.key),
-    housingMetrics: mergeUnique(seed.housingMetrics, base.housingMetrics, (item) => item.key),
-    neighborhoods: mergeUnique(seed.neighborhoods, base.neighborhoods, (item) => item.id || item.name.toLowerCase()),
-    healthcareFacilities: mergeUnique(seed.healthcareFacilities, base.healthcareFacilities, (item) => item.id || item.name.toLowerCase()),
-    airports: mergeUnique(seed.airports, base.airports, (item) => item.id || item.name.toLowerCase()),
-    golfCourses: mergeUnique(seed.golfCourses, base.golfCourses, (item) => item.id || item.name.toLowerCase()),
-    recreationFacilities: mergeUnique(seed.recreationFacilities, base.recreationFacilities, (item) => item.id || item.name.toLowerCase()),
-    beaches: mergeUnique(seed.beaches, base.beaches, (item) => item.id || item.name.toLowerCase()),
-    foodSpots: mergeUnique(seed.foodSpots, base.foodSpots, (item) => item.id || item.name.toLowerCase()),
-    schools: mergeUnique(seed.schools, base.schools, (item) => item.id || item.name.toLowerCase()),
-    internetMetrics: mergeUnique(seed.internetMetrics, base.internetMetrics, (item) => item.key),
-    visaPrograms: mergeUnique(seed.visaPrograms, base.visaPrograms, (item) => item.id || item.name.toLowerCase()),
-    taxRules: mergeUnique(seed.taxRules, base.taxRules, (item) => item.id || item.name.toLowerCase()),
-    safetyMetrics: mergeUnique(seed.safetyMetrics, base.safetyMetrics, (item) => item.key),
-    foodMetrics: mergeUnique(seed.foodMetrics, base.foodMetrics, (item) => item.key),
-    practicalInfo: mergeUnique(seed.practicalInfo, base.practicalInfo, (item) => item.id || item.name.toLowerCase()),
+    quickMetrics,
+    scorecard,
+    monthlyClimate: mergeWithSeedAuthority(
+      filterPublishedClimate(seed.monthlyClimate),
+      filterPublishedClimate(base.monthlyClimate),
+      (item) => item.month.toLowerCase(),
+      authoritativeMissing,
+    ),
+    costOfLiving: mergeWithSeedAuthority(
+      filterPublishedMetrics(seed.costOfLiving),
+      filterPublishedMetrics(base.costOfLiving),
+      (item) => item.key,
+      authoritativeMissing,
+    ),
+    housingMetrics: mergeWithSeedAuthority(
+      filterPublishedMetrics(seed.housingMetrics),
+      filterPublishedMetrics(base.housingMetrics),
+      (item) => item.key,
+      authoritativeMissing,
+    ),
+    neighborhoods: mergeWithSeedAuthority(
+      filterPublishedNamedRecords(seed.neighborhoods),
+      filterPublishedNamedRecords(base.neighborhoods),
+      (item) => item.id || item.name.toLowerCase(),
+      authoritativeMissing,
+    ),
+    healthcareFacilities: mergeWithSeedAuthority(
+      filterPublishedNamedRecords(seed.healthcareFacilities),
+      filterPublishedNamedRecords(base.healthcareFacilities),
+      (item) => item.id || item.name.toLowerCase(),
+      authoritativeMissing,
+    ),
+    airports: mergeWithSeedAuthority(
+      filterPublishedNamedRecords(seed.airports),
+      filterPublishedNamedRecords(base.airports),
+      (item) => item.id || item.name.toLowerCase(),
+      authoritativeMissing,
+    ),
+    golfCourses: mergeWithSeedAuthority(
+      filterPublishedNamedRecords(seed.golfCourses),
+      filterPublishedNamedRecords(base.golfCourses),
+      (item) => item.id || item.name.toLowerCase(),
+      authoritativeMissing,
+    ),
+    recreationFacilities: mergeWithSeedAuthority(
+      filterPublishedNamedRecords(seed.recreationFacilities),
+      filterPublishedNamedRecords(base.recreationFacilities),
+      (item) => item.id || item.name.toLowerCase(),
+      authoritativeMissing,
+    ),
+    beaches: mergeWithSeedAuthority(
+      filterPublishedNamedRecords(seed.beaches),
+      filterPublishedNamedRecords(base.beaches),
+      (item) => item.id || item.name.toLowerCase(),
+      authoritativeMissing,
+    ),
+    foodSpots: mergeWithSeedAuthority(
+      filterPublishedNamedRecords(seed.foodSpots),
+      filterPublishedNamedRecords(base.foodSpots),
+      (item) => item.id || item.name.toLowerCase(),
+      authoritativeMissing,
+    ),
+    schools: mergeWithSeedAuthority(
+      filterPublishedNamedRecords(seed.schools),
+      filterPublishedNamedRecords(base.schools),
+      (item) => item.id || item.name.toLowerCase(),
+      authoritativeMissing,
+    ),
+    internetMetrics: mergeWithSeedAuthority(
+      filterPublishedMetrics(seed.internetMetrics),
+      filterPublishedMetrics(base.internetMetrics),
+      (item) => item.key,
+      authoritativeMissing,
+    ),
+    visaPrograms: mergeWithSeedAuthority(
+      filterPublishedNamedRecords(seed.visaPrograms),
+      filterPublishedNamedRecords(base.visaPrograms),
+      (item) => item.id || item.name.toLowerCase(),
+      authoritativeMissing,
+    ),
+    taxRules: mergeWithSeedAuthority(
+      filterPublishedNamedRecords(seed.taxRules),
+      filterPublishedNamedRecords(base.taxRules),
+      (item) => item.id || item.name.toLowerCase(),
+      authoritativeMissing,
+    ),
+    safetyMetrics: mergeWithSeedAuthority(
+      filterPublishedMetrics(seed.safetyMetrics),
+      filterPublishedMetrics(base.safetyMetrics),
+      (item) => item.key,
+      authoritativeMissing,
+    ),
+    foodMetrics: mergeWithSeedAuthority(
+      filterPublishedMetrics(seed.foodMetrics),
+      filterPublishedMetrics(base.foodMetrics),
+      (item) => item.key,
+      authoritativeMissing,
+    ),
+    practicalInfo: mergeWithSeedAuthority(
+      filterPublishedNamedRecords(seed.practicalInfo),
+      filterPublishedNamedRecords(base.practicalInfo),
+      (item) => item.id || item.name.toLowerCase(),
+      authoritativeMissing,
+    ),
     pros: mergeUnique(seed.pros, base.pros, (item) => item.toLowerCase()),
     tradeoffs: mergeUnique(seed.tradeoffs, base.tradeoffs, (item) => item.toLowerCase()),
-    resources: mergeUnique(seed.resources, base.resources, (item) => item.id || `${item.category}-${item.title}`.toLowerCase()),
+    resources: mergeWithSeedAuthority(
+      filterPublishedResources(seed.resources),
+      filterPublishedResources(base.resources),
+      (item) => item.id || `${item.category}-${item.title}`.toLowerCase(),
+      authoritativeMissing,
+    ),
   };
 };
 
@@ -845,6 +613,7 @@ export async function getDestinationCommandCenter(slug: string): Promise<Command
           "medium",
         ),
         generatedSeed,
+        { authoritativeMissing: true },
       ),
       regionalSeed,
     ),
@@ -973,7 +742,9 @@ export async function getDestinationCommandCenter(slug: string): Promise<Command
     practicalInfo: practicalInfoFromResources,
     pros,
     tradeoffs,
-    resources: resourceRows.map((row) => toResourceRecord(row)),
+    resources: resourceRows
+      .map((row) => toResourceRecord(row))
+      .filter((row): row is ResourceRecord => row !== null),
   };
 
   const factualSupabaseData = supabaseData;
@@ -989,6 +760,7 @@ export async function getDestinationCommandCenter(slug: string): Promise<Command
           catalog.metadata?.dataConfidence ?? "medium",
         ),
         generatedSeed,
+        { authoritativeMissing: true },
       ),
       regionalSeed,
     ),

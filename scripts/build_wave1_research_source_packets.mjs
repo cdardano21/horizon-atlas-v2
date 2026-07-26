@@ -80,7 +80,6 @@ function monthlyClimateSources(city, country) {
 
 function costHousingSources(city, country) {
   const citySlug = encodeURIComponent(city);
-  const countrySlug = encodeURIComponent(country);
   return [
     {
       sourceName: "Numbeo Cost of Living",

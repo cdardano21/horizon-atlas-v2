@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { sanitizeSummary, toConsumerCopy } from "../lib/consumer-copy";
 import type { Destination } from "../lib/destinations";
-import { getDestinationImageUrl } from "../lib/imageFallback";
+import { getDestinationImageUrl, hasVerifiedDestinationImage } from "../lib/imageFallback";
 import { getDestinationMemberDetails, getMemberDetailHighlights } from "../lib/member-details";
 import { resolveSourceHref, sanitizeExternalSourceUrl } from "../lib/source-links";
 import ExternalLinkIcon from "./ExternalLinkIcon";
@@ -14,7 +14,42 @@ import { getDestinationCardFacts, getFactSourceDomain, getFactSourcePublisherUrl
 
 const normalize = (value: string) => value.toLowerCase().trim();
 
-const isMatch = (destination: Destination, query: string, tag: string[]) => {
+const queryAliasMap: Record<string, string[]> = {
+  affordable: ["value"],
+  cheap: ["value"],
+  budget: ["value"],
+  safe: ["safety"],
+  hospital: ["healthcare"],
+  hospitals: ["healthcare"],
+  walkable: ["walkability"],
+  walking: ["walkability"],
+  beach: ["beach", "coast"],
+  coast: ["coast", "beach"],
+  airport: ["airport access"],
+  airports: ["airport access"],
+  expat: ["expat-friendly"],
+  family: ["family"],
+  remote: ["digital nomad"],
+};
+
+const tokenizeQuery = (value: string) =>
+  value
+    .toLowerCase()
+    .split(/[^a-z0-9]+/g)
+    .map((token) => token.trim())
+    .filter((token) => token.length >= 2);
+
+const toTestIdToken = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+const getSearchScore = (destination: Destination, query: string, tags: string[]) => {
+  const normalizedTags = (destination.tags ?? []).map((tag) => normalize(tag));
+  const tagsMatch = tags.length === 0 || tags.every((selected) => normalizedTags.includes(normalize(selected)));
+  if (!tagsMatch) return null;
+
   const content = [
     destination.city,
     destination.country,
@@ -28,10 +63,54 @@ const isMatch = (destination: Destination, query: string, tag: string[]) => {
     .join(" ")
     .toLowerCase();
 
-  const queryIsMatch = query.length === 0 || query.split(" ").every((term) => content.includes(term));
-  const tagsMatch = tag.length === 0 || tag.every((selected) => destination.tags?.includes(selected));
+  const tokens = tokenizeQuery(query);
+  if (tokens.length === 0) {
+    return Math.max(0, destination.match);
+  }
 
-  return queryIsMatch && tagsMatch;
+  const city = normalize(destination.city);
+  const country = normalize(destination.country);
+
+  let matchedTokenCount = 0;
+  let score = Math.max(0, destination.match);
+
+  for (const token of tokens) {
+    let tokenScore = 0;
+
+    if (city === token) tokenScore += 30;
+    else if (city.includes(token)) tokenScore += 20;
+
+    if (country === token) tokenScore += 24;
+    else if (country.includes(token)) tokenScore += 14;
+
+    if (normalizedTags.some((tag) => tag === token)) {
+      tokenScore += 22;
+    } else if (normalizedTags.some((tag) => tag.includes(token) || token.includes(tag))) {
+      tokenScore += 12;
+    }
+
+    if (content.includes(token)) {
+      tokenScore += 8;
+    }
+
+    const aliases = queryAliasMap[token] ?? [];
+    if (aliases.some((alias) => normalizedTags.includes(alias))) {
+      tokenScore += 10;
+    }
+
+    if (tokenScore > 0) {
+      matchedTokenCount += 1;
+      score += tokenScore;
+    }
+  }
+
+  const requiredMatches = Math.max(1, Math.ceil(tokens.length * 0.6));
+  if (matchedTokenCount < requiredMatches) {
+    return null;
+  }
+
+  score += tags.length * 6;
+  return score;
 };
 
 export default function DestinationSearch({
@@ -52,13 +131,16 @@ export default function DestinationSearch({
     return Array.from(tags).sort();
   }, [destinations]);
 
-  const filteredDestinations = useMemo(
-    () =>
-      destinations.filter((destination) =>
-        isMatch(destination, normalize(query), activeTags),
-      ),
-    [destinations, query, activeTags],
-  );
+  const filteredDestinations = useMemo(() => {
+    return destinations
+      .map((destination) => ({
+        destination,
+        score: getSearchScore(destination, normalize(query), activeTags),
+      }))
+      .filter((item): item is { destination: Destination; score: number } => typeof item.score === "number")
+      .sort((left, right) => right.score - left.score)
+      .map((item) => item.destination);
+  }, [destinations, query, activeTags]);
 
   const visualResults = filteredDestinations.slice(0, 3);
 
@@ -108,6 +190,7 @@ export default function DestinationSearch({
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="e.g. beach, golf, low cost of living"
+              data-testid="destination-search-input"
               className="mt-4 w-full rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.9)] px-4 py-4 text-sm text-[var(--atlas-ink)] outline-none transition focus:border-[rgba(31,95,99,0.5)] sm:text-base"
             />
           </div>
@@ -117,6 +200,7 @@ export default function DestinationSearch({
               <button
                 type="button"
                 onClick={clearFilters}
+                data-testid="destination-filters-clear"
                 className="text-sm text-[var(--atlas-accent)] transition hover:text-[var(--atlas-accent-soft)]"
               >
                 Clear all
@@ -128,6 +212,7 @@ export default function DestinationSearch({
                   key={tag}
                   type="button"
                   onClick={() => toggleTag(tag)}
+                  data-testid={`destination-filter-${toTestIdToken(tag)}`}
                   className={`rounded-full border px-4 py-2 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgba(255,252,246,0.9)] ${activeTags.includes(tag)
                     ? "border-[rgba(31,95,99,0.5)] bg-[rgba(31,95,99,0.12)] text-[var(--atlas-accent)]"
                     : "border-[var(--atlas-border)] text-[var(--atlas-muted)] hover:border-[rgba(31,95,99,0.5)] hover:text-[var(--atlas-accent)]"
@@ -154,20 +239,28 @@ export default function DestinationSearch({
           ) : (
             visualResults.map((destination) => (
               <article key={`visual-${destination.slug}`} className="overflow-hidden rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.74)]">
-                <div className="relative h-48">
-                  <Image
-                    src={getDestinationImageUrl(destination.images?.[0] ?? { src: "", alt: destination.city }, destination)}
-                    alt={destination.images?.[0]?.alt ?? destination.city}
-                    fill
-                    sizes="(min-width: 768px) 33vw, 100vw"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#132022]/64 via-transparent to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <p className="text-xs uppercase tracking-[0.2em] text-[#f5e4c3]">{destination.country}</p>
+                {hasVerifiedDestinationImage(destination) ? (
+                  <div className="relative h-48">
+                    <Image
+                      src={getDestinationImageUrl(destination.images?.[0] ?? { src: "", alt: destination.city }, destination)}
+                      alt={destination.images?.[0]?.alt ?? destination.city}
+                      fill
+                      sizes="(min-width: 768px) 33vw, 100vw"
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#132022]/64 via-transparent to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                      <p className="text-xs uppercase tracking-[0.2em] text-[#f5e4c3]">{destination.country}</p>
+                      <p className="mt-1 text-lg font-semibold text-[#fff7e8]">{destination.city}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex h-48 flex-col justify-end bg-[linear-gradient(135deg,#173336,#294648)] p-4">
+                    <p className="text-[10px] uppercase tracking-[0.22em] text-[#f5e4c3]">Imagery pending verification</p>
+                    <p className="mt-2 text-xs uppercase tracking-[0.2em] text-[#f5e4c3]">{destination.country}</p>
                     <p className="mt-1 text-lg font-semibold text-[#fff7e8]">{destination.city}</p>
                   </div>
-                </div>
+                )}
               </article>
             ))
           )}
@@ -187,10 +280,10 @@ export default function DestinationSearch({
 
         <div className="rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.75)] p-6 shadow-lg shadow-[rgba(39,31,19,0.14)]">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-[var(--atlas-muted)]">
+            <p className="text-sm text-[var(--atlas-muted)]" data-testid="destination-results-count">
               Showing <span className="font-semibold text-[var(--atlas-ink)]">{filteredDestinations.length}</span> destinations matching your search.
             </p>
-            <p className="text-sm text-[var(--atlas-muted)]">
+            <p className="text-sm text-[var(--atlas-muted)]" data-testid="destination-active-filters">
               {activeTags.length > 0 ? `Active filters: ${activeTags.join(", ")}` : "No active filters"}
             </p>
           </div>
@@ -223,6 +316,7 @@ export default function DestinationSearch({
           <button
             type="button"
             onClick={clearFilters}
+            data-testid="destination-search-reset"
             className="atlas-button-secondary mt-5 px-5 py-2"
           >
             Reset search
@@ -232,17 +326,28 @@ export default function DestinationSearch({
 
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
         {filteredDestinations.map((destination) => (
-          <article key={destination.slug} className="overflow-hidden rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.92)] shadow-xl shadow-[rgba(42,34,24,0.2)] transition duration-300 hover:-translate-y-1 hover:border-[rgba(31,95,99,0.42)]">
-            <div className="relative h-56 overflow-hidden bg-slate-900/10">
-              <Image
-                src={getDestinationImageUrl(destination.images?.[0] ?? { src: "", alt: destination.city }, destination)}
-                alt={destination.images?.[0]?.alt ?? destination.city}
-                fill
-                sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
-                className="object-cover transition duration-500 hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#172426]/70 via-transparent to-transparent" />
-            </div>
+          <article
+            key={destination.slug}
+            data-testid={`destination-card-${destination.slug}`}
+            className="overflow-hidden rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.92)] shadow-xl shadow-[rgba(42,34,24,0.2)] transition duration-300 hover:-translate-y-1 hover:border-[rgba(31,95,99,0.42)]"
+          >
+            {hasVerifiedDestinationImage(destination) ? (
+              <div className="relative h-56 overflow-hidden bg-slate-900/10">
+                <Image
+                  src={getDestinationImageUrl(destination.images?.[0] ?? { src: "", alt: destination.city }, destination)}
+                  alt={destination.images?.[0]?.alt ?? destination.city}
+                  fill
+                  sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
+                  className="object-cover transition duration-500 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#172426]/70 via-transparent to-transparent" />
+              </div>
+            ) : (
+              <div className="flex h-56 flex-col justify-end border-b border-[var(--atlas-border)] bg-[linear-gradient(130deg,#173336,#2a4447)] p-4">
+                <p className="text-[10px] uppercase tracking-[0.23em] text-[#f5e4c3]">Imagery pending verification</p>
+                <p className="mt-2 text-sm font-semibold uppercase tracking-[0.16em] text-[#fff7e8]">{destination.city}</p>
+              </div>
+            )}
             <div className="p-6">
               {(() => {
                 const detailHighlights = getMemberDetailHighlights(destination);
@@ -348,6 +453,7 @@ export default function DestinationSearch({
               </div>
               <Link
                 href={`/destinations/${destination.slug}`}
+                data-testid={`destination-open-${destination.slug}`}
                 className="atlas-button-primary mt-8 px-5 py-2"
               >
                 Explore →

@@ -343,23 +343,6 @@ const japanKixVerification = verification(
   "2026-07-24",
 );
 
-const japanPoliceVerification = verification(
-  "https://www.npa.go.jp/english/index.html",
-  "National Police Agency of Japan",
-  "government_portal",
-  "high",
-  "verified",
-  "2026-07-24",
-);
-
-const japanFireDisasterVerification = verification(
-  "https://www.fdma.go.jp/en/",
-  "Fire and Disaster Management Agency (Japan)",
-  "government_portal",
-  "high",
-  "verified",
-  "2026-07-24",
-);
 
 const italyResidenceVerification = verification(
   "https://taxsummaries.pwc.com/italy/individual/residence",
@@ -415,14 +398,6 @@ const italyMalpensaVerification = verification(
   "2026-07-24",
 );
 
-const italyEmergencyVerification = verification(
-  "https://www.112.gov.it/en/",
-  "Italian Ministry of the Interior / NUE 112",
-  "government_portal",
-  "high",
-  "verified",
-  "2026-07-24",
-);
 
 const portugalResidenceVerification = verification(
   "https://taxsummaries.pwc.com/portugal/individual/residence",
@@ -658,15 +633,6 @@ const switzerlandPremiumsVerification = verification(
   "2026-07-24",
 );
 
-const switzerlandEmergencyVerification = verification(
-  "https://www.ch.ch/en/safety-and-justice/emergencies-and-danger/",
-  "ch.ch (Swiss authorities portal)",
-  "government_portal",
-  "high",
-  "verified",
-  "2026-07-24",
-);
-
 const sloveniaResidenceVerification = verification(
   "https://taxsummaries.pwc.com/slovenia/individual/residence",
   "PwC Worldwide Tax Summaries",
@@ -721,14 +687,6 @@ const sloveniaEmergencyVerification = verification(
   "2026-07-24",
 );
 
-const sloveniaPoliceEmergencyVerification = verification(
-  "https://www.policija.si/eng/contacts/police-emergency-telephone-number-113",
-  "Slovenian Police",
-  "government_portal",
-  "high",
-  "verified",
-  "2026-07-24",
-);
 
 const austriaResidenceVerification = verification(
   "https://www.bmi.gv.at/312_en/start.html",
@@ -1999,19 +1957,6 @@ const switzerlandHealthcareRows = [
     "Useful for budgeting before destination-level healthcare network choices.",
     "https://www.priminfo.admin.ch/",
     switzerlandPremiumsVerification,
-  ),
-];
-
-const switzerlandSafetyRows = [
-  row(
-    "switzerland-emergencies-and-danger",
-    "Swiss emergencies and danger guide",
-    "ch.ch emergency numbers reference",
-    "Official portal includes key emergency numbers and first-response orientation guidance.",
-    "Published baseline contacts include 144 ambulance, 117 police, 118 fire service, 145 poison control, and 112 pan-European emergency.",
-    "Use as a relocation-readiness baseline before municipality-specific safety planning.",
-    "https://www.ch.ch/en/safety-and-justice/emergencies-and-danger/",
-    switzerlandEmergencyVerification,
   ),
 ];
 

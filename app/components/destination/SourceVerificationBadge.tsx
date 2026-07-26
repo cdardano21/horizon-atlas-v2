@@ -15,7 +15,7 @@ function isSourceBacked(verification?: VerificationMeta | null) {
 function statusLabel(verification?: VerificationMeta | null) {
   const status = verification?.verificationStatus ?? "in_progress";
   if (status === "verified") return "Official source";
-  if (status === "estimated") return isSourceBacked(verification) ? "Source-backed estimate" : "Editorial estimate";
+  if (status === "estimated") return isSourceBacked(verification) ? "Source-backed estimate" : "Pending verification";
   if (status === "stale") return "Needs refresh";
   return "Context developing";
 }
