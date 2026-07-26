@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-26T16:55:03.200Z",
+  "generatedAt": "2026-07-26T17:51:16.629Z",
   "totalDestinations": 600,
-  "completedDestinations": 337,
-  "remainingDestinations": 263,
+  "completedDestinations": 376,
+  "remainingDestinations": 224,
   "manualReviewDestinations": [
     {
       "slug": "agios-nikolaos-greece",
@@ -725,12 +725,76 @@
       "articleTitle": "Matsumoto"
     },
     {
+      "slug": "medford-oregon-united-states",
+      "city": "Medford",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Medford"
+    },
+    {
+      "slug": "memphis-tennessee-united-states",
+      "city": "Memphis",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Memphis"
+    },
+    {
+      "slug": "merida-mexico",
+      "city": "Merida",
+      "country": "Mexico",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Merida"
+    },
+    {
+      "slug": "mesa-arizona-united-states",
+      "city": "Mesa",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 2,
+      "articleTitle": "Mesa"
+    },
+    {
+      "slug": "miami-florida-united-states",
+      "city": "Miami",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Miami"
+    },
+    {
       "slug": "miyazaki-japan",
       "city": "Miyazaki",
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Miyazaki"
+    },
+    {
+      "slug": "mobile-alabama-united-states",
+      "city": "Mobile",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Mobile"
+    },
+    {
+      "slug": "monterey-california-united-states",
+      "city": "Monterey",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Monterey, California"
+    },
+    {
+      "slug": "montgomery-alabama-united-states",
+      "city": "Montgomery",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Montgomery"
     },
     {
       "slug": "morioka-japan",
@@ -749,6 +813,22 @@
       "articleTitle": "Nantes"
     },
     {
+      "slug": "napa-california-united-states",
+      "city": "Napa",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Napa"
+    },
+    {
+      "slug": "naples-florida-united-states",
+      "city": "Naples",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Naples"
+    },
+    {
       "slug": "nazare-portugal",
       "city": "Nazaré",
       "country": "Portugal",
@@ -765,12 +845,52 @@
       "articleTitle": "Nerja"
     },
     {
+      "slug": "new-york-new-york-united-states",
+      "city": "New York",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "New York"
+    },
+    {
+      "slug": "newark-new-jersey-united-states",
+      "city": "Newark",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Newark"
+    },
+    {
+      "slug": "newport-rhode-island-united-states",
+      "city": "Newport",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Newport"
+    },
+    {
       "slug": "niigata-japan",
       "city": "Niigata",
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Niigata"
+    },
+    {
+      "slug": "norfolk-virginia-united-states",
+      "city": "Norfolk",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Norfolk"
+    },
+    {
+      "slug": "norman-oklahoma-united-states",
+      "city": "Norman",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Norman"
     },
     {
       "slug": "novigrad-croatia",
@@ -789,6 +909,14 @@
       "articleTitle": "Óbidos"
     },
     {
+      "slug": "ogden-utah-united-states",
+      "city": "Ogden",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Ogden"
+    },
+    {
       "slug": "oita-japan",
       "city": "Oita",
       "country": "Japan",
@@ -805,12 +933,52 @@
       "articleTitle": "Okayama"
     },
     {
+      "slug": "olympia-washington-united-states",
+      "city": "Olympia",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Olympia"
+    },
+    {
+      "slug": "orlando-florida-united-states",
+      "city": "Orlando",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Orlando"
+    },
+    {
+      "slug": "oslo-norway",
+      "city": "Oslo",
+      "country": "Norway",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Oslo"
+    },
+    {
+      "slug": "oxnard-california-united-states",
+      "city": "Oxnard",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "List of United States cities by population"
+    },
+    {
       "slug": "palermo-italy",
       "city": "Palermo",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Palermo"
+    },
+    {
+      "slug": "palm-desert-california-united-states",
+      "city": "Palm Desert",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 2,
+      "articleTitle": "Palm Desert, California"
     },
     {
       "slug": "pau-france",
@@ -829,6 +997,22 @@
       "articleTitle": "Perast"
     },
     {
+      "slug": "perth-australia",
+      "city": "Perth",
+      "country": "Australia",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Perth"
+    },
+    {
+      "slug": "phoenix-arizona-united-states",
+      "city": "Phoenix",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Phoenix"
+    },
+    {
       "slug": "pietra-ligure-italy",
       "city": "Pietra Ligure",
       "country": "Italy",
@@ -843,6 +1027,14 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Pietrasanta"
+    },
+    {
+      "slug": "plano-texas-united-states",
+      "city": "Plano",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Plano"
     },
     {
       "slug": "polignano-a-mare-italy",
@@ -861,12 +1053,68 @@
       "articleTitle": "Portimão"
     },
     {
+      "slug": "portland-oregon-united-states",
+      "city": "Portland",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Portland"
+    },
+    {
+      "slug": "prescott-arizona-united-states",
+      "city": "Prescott",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Prescott"
+    },
+    {
       "slug": "primosten-croatia",
       "city": "Primošten",
       "country": "Croatia",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Primošten"
+    },
+    {
+      "slug": "providence-rhode-island-united-states",
+      "city": "Providence",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Eye of Providence"
+    },
+    {
+      "slug": "provo-utah-united-states",
+      "city": "Provo",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Provo"
+    },
+    {
+      "slug": "queretaro-mexico",
+      "city": "Queretaro",
+      "country": "Mexico",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 2,
+      "articleTitle": "Querétaro"
+    },
+    {
+      "slug": "rapid-city-south-dakota-united-states",
+      "city": "Rapid City",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "List of United States rapid transit systems"
+    },
+    {
+      "slug": "redding-california-united-states",
+      "city": "Redding",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Redding"
     },
     {
       "slug": "reims-france",
@@ -885,6 +1133,30 @@
       "articleTitle": "Treaty of Riga"
     },
     {
+      "slug": "riverside-california-united-states",
+      "city": "Riverside",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Riverside"
+    },
+    {
+      "slug": "rochester-new-york-united-states",
+      "city": "Rochester",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Rochester"
+    },
+    {
+      "slug": "rockville-maryland-united-states",
+      "city": "Rockville",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Rockville"
+    },
+    {
       "slug": "saint-remy-de-provence-france",
       "city": "Saint-Rémy-de-Provence",
       "country": "France",
@@ -893,12 +1165,68 @@
       "articleTitle": "Saint-Rémy-de-Provence"
     },
     {
+      "slug": "salem-oregon-united-states",
+      "city": "Salem",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Salem"
+    },
+    {
       "slug": "salerno-italy",
       "city": "Salerno",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Salerno"
+    },
+    {
+      "slug": "san-diego-california-united-states",
+      "city": "San Diego",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "San Diego"
+    },
+    {
+      "slug": "san-jose-costa-rica",
+      "city": "San Jose",
+      "country": "Costa Rica",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "San José"
+    },
+    {
+      "slug": "san-marcos-texas-united-states",
+      "city": "San Marcos",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "San Marcos"
+    },
+    {
+      "slug": "santa-ana-california-united-states",
+      "city": "Santa Ana",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Santa Ana"
+    },
+    {
+      "slug": "santa-cruz-california-united-states",
+      "city": "Santa Cruz",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Santa Cruz"
+    },
+    {
+      "slug": "santa-fe-new-mexico-united-states",
+      "city": "Santa Fe",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Santa Fe"
     },
     {
       "slug": "santa-margherita-ligure-italy",
@@ -1930,6 +2258,97 @@
         "madison-wisconsin-united-states",
         "manchester-new-hampshire-united-states",
         "manchester-united-kingdom"
+      ]
+    },
+    {
+      "generatedAt": "2026-07-26T17:51:16.629Z",
+      "offset": 464,
+      "limit": 80,
+      "processedCount": 39,
+      "manualReviewCount": 41,
+      "processedSlugs": [
+        "medellin-colombia",
+        "melbourne-australia",
+        "mexico-city-mexico",
+        "milwaukee-wisconsin-united-states",
+        "minneapolis-minnesota-united-states",
+        "missoula-montana-united-states",
+        "montevideo-uruguay",
+        "munich-germany",
+        "muscat-oman",
+        "nairobi-kenya",
+        "nashville-tennessee-united-states",
+        "new-orleans-louisiana-united-states",
+        "newport-beach-california-united-states",
+        "oakland-california-united-states",
+        "oklahoma-city-oklahoma-united-states",
+        "omaha-nebraska-united-states",
+        "palm-springs-california-united-states",
+        "panama-city-panama",
+        "park-city-utah-united-states",
+        "paso-robles-california-united-states",
+        "penang-malaysia",
+        "pensacola-florida-united-states",
+        "philadelphia-pennsylvania-united-states",
+        "phuket-thailand",
+        "pittsburgh-pennsylvania-united-states",
+        "portland-maine-united-states",
+        "poznan-poland",
+        "raleigh-north-carolina-united-states",
+        "reno-nevada-united-states",
+        "reykjavik-iceland",
+        "richmond-virginia-united-states",
+        "rotterdam-netherlands",
+        "round-rock-texas-united-states",
+        "sacramento-california-united-states",
+        "salt-lake-city-utah-united-states",
+        "san-antonio-texas-united-states",
+        "san-jose-california-united-states",
+        "san-luis-obispo-california-united-states",
+        "santa-barbara-california-united-states"
+      ],
+      "manualReviewSlugs": [
+        "medford-oregon-united-states",
+        "memphis-tennessee-united-states",
+        "merida-mexico",
+        "mesa-arizona-united-states",
+        "miami-florida-united-states",
+        "mobile-alabama-united-states",
+        "monterey-california-united-states",
+        "montgomery-alabama-united-states",
+        "napa-california-united-states",
+        "naples-florida-united-states",
+        "new-york-new-york-united-states",
+        "newark-new-jersey-united-states",
+        "newport-rhode-island-united-states",
+        "norfolk-virginia-united-states",
+        "norman-oklahoma-united-states",
+        "ogden-utah-united-states",
+        "olympia-washington-united-states",
+        "orlando-florida-united-states",
+        "oslo-norway",
+        "oxnard-california-united-states",
+        "palm-desert-california-united-states",
+        "perth-australia",
+        "phoenix-arizona-united-states",
+        "plano-texas-united-states",
+        "portland-oregon-united-states",
+        "prescott-arizona-united-states",
+        "providence-rhode-island-united-states",
+        "provo-utah-united-states",
+        "queretaro-mexico",
+        "rapid-city-south-dakota-united-states",
+        "redding-california-united-states",
+        "riverside-california-united-states",
+        "rochester-new-york-united-states",
+        "rockville-maryland-united-states",
+        "salem-oregon-united-states",
+        "san-diego-california-united-states",
+        "san-jose-costa-rica",
+        "san-marcos-texas-united-states",
+        "santa-ana-california-united-states",
+        "santa-cruz-california-united-states",
+        "santa-fe-new-mexico-united-states"
       ]
     }
   ]
