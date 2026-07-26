@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-26T15:48:27.991Z",
+  "generatedAt": "2026-07-26T16:55:03.200Z",
   "totalDestinations": 600,
-  "completedDestinations": 286,
-  "remainingDestinations": 314,
+  "completedDestinations": 337,
+  "remainingDestinations": 263,
   "manualReviewDestinations": [
     {
       "slug": "agios-nikolaos-greece",
@@ -333,12 +333,36 @@
       "articleTitle": "Dinan"
     },
     {
+      "slug": "durham-north-carolina-united-states",
+      "city": "Durham",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Durham"
+    },
+    {
+      "slug": "edmond-oklahoma-united-states",
+      "city": "Edmond",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Edmond, Oklahoma"
+    },
+    {
       "slug": "ericeira-portugal",
       "city": "Ericeira",
       "country": "Portugal",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Ericeira"
+    },
+    {
+      "slug": "eugene-oregon-united-states",
+      "city": "Eugene",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Eugene"
     },
     {
       "slug": "faro-portugal",
@@ -349,6 +373,14 @@
       "articleTitle": "Faro"
     },
     {
+      "slug": "fayetteville-arkansas-united-states",
+      "city": "Fayetteville",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Fayetteville"
+    },
+    {
       "slug": "figueira-da-foz-portugal",
       "city": "Figueira da Foz",
       "country": "Portugal",
@@ -357,12 +389,44 @@
       "articleTitle": "Figueira da Foz"
     },
     {
+      "slug": "flagstaff-arizona-united-states",
+      "city": "Flagstaff",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Flagstaff"
+    },
+    {
+      "slug": "florianopolis-brazil",
+      "city": "Florianopolis",
+      "country": "Brazil",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Florianópolis"
+    },
+    {
+      "slug": "fort-worth-texas-united-states",
+      "city": "Fort Worth",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Fort Worth, Texas"
+    },
+    {
       "slug": "frigiliana-spain",
       "city": "Frigiliana",
       "country": "Spain",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Frigiliana"
+    },
+    {
+      "slug": "frisco-texas-united-states",
+      "city": "Frisco",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Frisco"
     },
     {
       "slug": "fuengirola-spain",
@@ -389,12 +453,68 @@
       "articleTitle": "Gdańsk"
     },
     {
+      "slug": "gilbert-arizona-united-states",
+      "city": "Gilbert",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Gilbert"
+    },
+    {
+      "slug": "glendale-arizona-united-states",
+      "city": "Glendale",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Glendale"
+    },
+    {
+      "slug": "gothenburg-sweden",
+      "city": "Gothenburg",
+      "country": "Sweden",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 2,
+      "articleTitle": "Gothenburg"
+    },
+    {
+      "slug": "grand-junction-colorado-united-states",
+      "city": "Grand Junction",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Grand Junction"
+    },
+    {
+      "slug": "greenville-south-carolina-united-states",
+      "city": "Greenville",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Greenville"
+    },
+    {
       "slug": "grenoble-france",
       "city": "Grenoble",
       "country": "France",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Grenoble"
+    },
+    {
+      "slug": "guadalajara-mexico",
+      "city": "Guadalajara",
+      "country": "Mexico",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Guadalajara"
+    },
+    {
+      "slug": "helena-montana-united-states",
+      "city": "Helena",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Helena"
     },
     {
       "slug": "hondarribia-spain",
@@ -421,12 +541,52 @@
       "articleTitle": "Ioannina"
     },
     {
+      "slug": "irvine-california-united-states",
+      "city": "Irvine",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Irvine"
+    },
+    {
+      "slug": "jackson-wyoming-united-states",
+      "city": "Jackson",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Jackson"
+    },
+    {
+      "slug": "jacksonville-florida-united-states",
+      "city": "Jacksonville",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Jacksonville, Florida"
+    },
+    {
+      "slug": "jakarta-indonesia",
+      "city": "Jakarta",
+      "country": "Indonesia",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Jakarta"
+    },
+    {
       "slug": "kagoshima-japan",
       "city": "Kagoshima",
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Kagoshima"
+    },
+    {
+      "slug": "kansas-city-missouri-united-states",
+      "city": "Kansas City",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Kansas City, Missouri"
     },
     {
       "slug": "kardamyli-greece",
@@ -437,12 +597,28 @@
       "articleTitle": "Kardamyli"
     },
     {
+      "slug": "kirkland-washington-united-states",
+      "city": "Kirkland",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Kirkland"
+    },
+    {
       "slug": "korcula-town-croatia",
       "city": "Korčula Town",
       "country": "Croatia",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Korčula"
+    },
+    {
+      "slug": "lafayette-louisiana-united-states",
+      "city": "Lafayette",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 2,
+      "articleTitle": "Visit of the Marquis de Lafayette to the United States"
     },
     {
       "slug": "lagos-portugal",
@@ -453,6 +629,22 @@
       "articleTitle": "Lagos"
     },
     {
+      "slug": "laredo-texas-united-states",
+      "city": "Laredo",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Laredo"
+    },
+    {
+      "slug": "leeds-united-kingdom",
+      "city": "Leeds",
+      "country": "United Kingdom",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Leeds"
+    },
+    {
       "slug": "levanto-italy",
       "city": "Levanto",
       "country": "Italy",
@@ -461,12 +653,36 @@
       "articleTitle": "Levanto"
     },
     {
+      "slug": "lincoln-nebraska-united-states",
+      "city": "Lincoln",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Lincoln"
+    },
+    {
       "slug": "llanes-spain",
       "city": "Llanes",
       "country": "Spain",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Llanes"
+    },
+    {
+      "slug": "louisville-kentucky-united-states",
+      "city": "Louisville",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Louisville, Kentucky"
+    },
+    {
+      "slug": "madison-wisconsin-united-states",
+      "city": "Madison",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Madison"
     },
     {
       "slug": "mahon-spain",
@@ -483,6 +699,22 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 2,
       "articleTitle": "Mali Lošinj"
+    },
+    {
+      "slug": "manchester-new-hampshire-united-states",
+      "city": "Manchester",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Manchester"
+    },
+    {
+      "slug": "manchester-united-kingdom",
+      "city": "Manchester",
+      "country": "United Kingdom",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Manchester"
     },
     {
       "slug": "matsumoto-japan",
@@ -1607,6 +1839,97 @@
         "corpus-christi-texas-united-states",
         "covington-kentucky-united-states",
         "des-moines-iowa-united-states"
+      ]
+    },
+    {
+      "generatedAt": "2026-07-26T16:55:03.200Z",
+      "offset": 384,
+      "limit": 80,
+      "processedCount": 51,
+      "manualReviewCount": 29,
+      "processedSlugs": [
+        "detroit-michigan-united-states",
+        "doha-qatar",
+        "dubai-united-arab-emirates",
+        "dublin-ireland",
+        "edinburgh-united-kingdom",
+        "el-paso-texas-united-states",
+        "encinitas-california-united-states",
+        "fargo-north-dakota-united-states",
+        "fort-collins-colorado-united-states",
+        "fort-lauderdale-florida-united-states",
+        "fort-myers-florida-united-states",
+        "fort-wayne-indiana-united-states",
+        "frankfurt-germany",
+        "fresno-california-united-states",
+        "galveston-texas-united-states",
+        "galway-ireland",
+        "gdansk-poland",
+        "ghent-belgium",
+        "glasgow-united-kingdom",
+        "greensboro-north-carolina-united-states",
+        "hamburg-germany",
+        "hanoi-vietnam",
+        "helsinki-finland",
+        "ho-chi-minh-city-vietnam",
+        "honolulu-hawaii-united-states",
+        "houston-texas-united-states",
+        "huntington-beach-california-united-states",
+        "huntsville-alabama-united-states",
+        "indianapolis-indiana-united-states",
+        "istanbul-turkey",
+        "jersey-city-new-jersey-united-states",
+        "jerusalem-israel",
+        "johannesburg-south-africa",
+        "kaunas-lithuania",
+        "key-west-florida-united-states",
+        "knoxville-tennessee-united-states",
+        "krakow-poland",
+        "kuala-lumpur-malaysia",
+        "la-jolla-california-united-states",
+        "laguna-beach-california-united-states",
+        "las-vegas-nevada-united-states",
+        "lexington-kentucky-united-states",
+        "lima-peru",
+        "long-beach-california-united-states",
+        "los-angeles-california-united-states",
+        "lubbock-texas-united-states",
+        "madeira-portugal",
+        "malmo-sweden",
+        "manila-philippines",
+        "marrakesh-morocco",
+        "mcallen-texas-united-states"
+      ],
+      "manualReviewSlugs": [
+        "durham-north-carolina-united-states",
+        "edmond-oklahoma-united-states",
+        "eugene-oregon-united-states",
+        "fayetteville-arkansas-united-states",
+        "flagstaff-arizona-united-states",
+        "florianopolis-brazil",
+        "fort-worth-texas-united-states",
+        "frisco-texas-united-states",
+        "gilbert-arizona-united-states",
+        "glendale-arizona-united-states",
+        "gothenburg-sweden",
+        "grand-junction-colorado-united-states",
+        "greenville-south-carolina-united-states",
+        "guadalajara-mexico",
+        "helena-montana-united-states",
+        "irvine-california-united-states",
+        "jackson-wyoming-united-states",
+        "jacksonville-florida-united-states",
+        "jakarta-indonesia",
+        "kansas-city-missouri-united-states",
+        "kirkland-washington-united-states",
+        "lafayette-louisiana-united-states",
+        "laredo-texas-united-states",
+        "leeds-united-kingdom",
+        "lincoln-nebraska-united-states",
+        "louisville-kentucky-united-states",
+        "madison-wisconsin-united-states",
+        "manchester-new-hampshire-united-states",
+        "manchester-united-kingdom"
       ]
     }
   ]
