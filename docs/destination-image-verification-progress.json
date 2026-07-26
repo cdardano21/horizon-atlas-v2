@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-26T15:32:01.051Z",
+  "generatedAt": "2026-07-26T15:48:27.991Z",
   "totalDestinations": 600,
-  "completedDestinations": 232,
-  "remainingDestinations": 368,
+  "completedDestinations": 286,
+  "remainingDestinations": 314,
   "manualReviewDestinations": [
     {
       "slug": "agios-nikolaos-greece",
@@ -29,12 +29,44 @@
       "articleTitle": "Altea"
     },
     {
+      "slug": "amarillo-texas-united-states",
+      "city": "Amarillo",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Amarillo"
+    },
+    {
+      "slug": "annapolis-maryland-united-states",
+      "city": "Annapolis",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Annapolis, Maryland"
+    },
+    {
       "slug": "aomori-japan",
       "city": "Aomori",
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Aomori"
+    },
+    {
+      "slug": "arlington-texas-united-states",
+      "city": "Arlington",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Arlington"
+    },
+    {
+      "slug": "asheville-north-carolina-united-states",
+      "city": "Asheville",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Asheville, North Carolina"
     },
     {
       "slug": "aveiro-portugal",
@@ -45,12 +77,36 @@
       "articleTitle": "Aveiro"
     },
     {
+      "slug": "bath-united-kingdom",
+      "city": "Bath",
+      "country": "United Kingdom",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "List of prime ministers of the United Kingdom by length of tenure"
+    },
+    {
       "slug": "begur-spain",
       "city": "Begur",
       "country": "Spain",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Begur"
+    },
+    {
+      "slug": "bellevue-washington-united-states",
+      "city": "Bellevue",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Bellevue"
+    },
+    {
+      "slug": "bellingham-washington-united-states",
+      "city": "Bellingham",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Bellingham"
     },
     {
       "slug": "belluno-italy",
@@ -69,12 +125,68 @@
       "articleTitle": "Beppu"
     },
     {
+      "slug": "bethesda-maryland-united-states",
+      "city": "Bethesda",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Bethesda"
+    },
+    {
+      "slug": "birmingham-alabama-united-states",
+      "city": "Birmingham",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Birmingham"
+    },
+    {
+      "slug": "breckenridge-colorado-united-states",
+      "city": "Breckenridge",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Breckenridge"
+    },
+    {
+      "slug": "brownsville-texas-united-states",
+      "city": "Brownsville",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Brownsville"
+    },
+    {
+      "slug": "buffalo-new-york-united-states",
+      "city": "Buffalo",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Buffalo"
+    },
+    {
+      "slug": "burlington-vermont-united-states",
+      "city": "Burlington",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Burlington"
+    },
+    {
       "slug": "camogli-italy",
       "city": "Camogli",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Camogli"
+    },
+    {
+      "slug": "carlsbad-california-united-states",
+      "city": "Carlsbad",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Carlsbad"
     },
     {
       "slug": "cartagena-spain",
@@ -93,6 +205,46 @@
       "articleTitle": "Cassis"
     },
     {
+      "slug": "chandler-arizona-united-states",
+      "city": "Chandler",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Chandler"
+    },
+    {
+      "slug": "charleston-south-carolina-united-states",
+      "city": "Charleston",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Charleston"
+    },
+    {
+      "slug": "charlotte-north-carolina-united-states",
+      "city": "Charlotte",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Charlotte"
+    },
+    {
+      "slug": "cincinnati-ohio-united-states",
+      "city": "Cincinnati",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Cincinnati"
+    },
+    {
+      "slug": "college-station-texas-united-states",
+      "city": "College Station",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "College Station"
+    },
+    {
       "slug": "collioure-france",
       "city": "Collioure",
       "country": "France",
@@ -101,12 +253,68 @@
       "articleTitle": "Collioure"
     },
     {
+      "slug": "colorado-springs-colorado-united-states",
+      "city": "Colorado Springs",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Colorado Springs, Colorado"
+    },
+    {
+      "slug": "columbia-south-carolina-united-states",
+      "city": "Columbia",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Washington, D.C."
+    },
+    {
+      "slug": "columbus-ohio-united-states",
+      "city": "Columbus",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Columbus"
+    },
+    {
       "slug": "cordoba-spain",
       "city": "Córdoba",
       "country": "Spain",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Córdoba"
+    },
+    {
+      "slug": "cork-ireland",
+      "city": "Cork",
+      "country": "Ireland",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Cork"
+    },
+    {
+      "slug": "corpus-christi-texas-united-states",
+      "city": "Corpus Christi",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Corpus Christi"
+    },
+    {
+      "slug": "covington-kentucky-united-states",
+      "city": "Covington",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Covington, Louisiana"
+    },
+    {
+      "slug": "des-moines-iowa-united-states",
+      "city": "Des Moines",
+      "country": "United States",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Des Moines, Iowa"
     },
     {
       "slug": "desenzano-del-garda-italy",
@@ -1308,6 +1516,97 @@
         "portimao-portugal",
         "tomar-portugal",
         "toyama-japan"
+      ]
+    },
+    {
+      "generatedAt": "2026-07-26T15:48:27.991Z",
+      "offset": 304,
+      "limit": 80,
+      "processedCount": 54,
+      "manualReviewCount": 26,
+      "processedSlugs": [
+        "alexandria-virginia-united-states",
+        "almaty-kazakhstan",
+        "amsterdam-netherlands",
+        "anaheim-california-united-states",
+        "anchorage-alaska-united-states",
+        "antalya-turkey",
+        "arlington-virginia-united-states",
+        "ashland-oregon-united-states",
+        "atlanta-georgia-united-states",
+        "auckland-new-zealand",
+        "aurora-colorado-united-states",
+        "austin-texas-united-states",
+        "bakersfield-california-united-states",
+        "baku-azerbaijan",
+        "bali-indonesia",
+        "baltimore-maryland-united-states",
+        "bangkok-thailand",
+        "baton-rouge-louisiana-united-states",
+        "belfast-united-kingdom",
+        "bend-oregon-united-states",
+        "berlin-germany",
+        "beverly-hills-california-united-states",
+        "bismarck-north-dakota-united-states",
+        "bogota-colombia",
+        "boise-idaho-united-states",
+        "boston-massachusetts-united-states",
+        "boulder-colorado-united-states",
+        "bozeman-montana-united-states",
+        "bratislava-slovakia",
+        "brisbane-australia",
+        "bristol-united-kingdom",
+        "bruges-belgium",
+        "brussels-belgium",
+        "budapest-hungary",
+        "buenos-aires-argentina",
+        "busan-south-korea",
+        "cape-town-south-africa",
+        "cary-north-carolina-united-states",
+        "casablanca-morocco",
+        "cebu-city-philippines",
+        "chattanooga-tennessee-united-states",
+        "cheyenne-wyoming-united-states",
+        "chiang-mai-thailand",
+        "chicago-illinois-united-states",
+        "christchurch-new-zealand",
+        "chula-vista-california-united-states",
+        "clearwater-florida-united-states",
+        "cleveland-ohio-united-states",
+        "cologne-germany",
+        "copenhagen-denmark",
+        "curitiba-brazil",
+        "da-nang-vietnam",
+        "dallas-texas-united-states",
+        "denver-colorado-united-states"
+      ],
+      "manualReviewSlugs": [
+        "amarillo-texas-united-states",
+        "annapolis-maryland-united-states",
+        "arlington-texas-united-states",
+        "asheville-north-carolina-united-states",
+        "bath-united-kingdom",
+        "bellevue-washington-united-states",
+        "bellingham-washington-united-states",
+        "bethesda-maryland-united-states",
+        "birmingham-alabama-united-states",
+        "breckenridge-colorado-united-states",
+        "brownsville-texas-united-states",
+        "buffalo-new-york-united-states",
+        "burlington-vermont-united-states",
+        "carlsbad-california-united-states",
+        "chandler-arizona-united-states",
+        "charleston-south-carolina-united-states",
+        "charlotte-north-carolina-united-states",
+        "cincinnati-ohio-united-states",
+        "college-station-texas-united-states",
+        "colorado-springs-colorado-united-states",
+        "columbia-south-carolina-united-states",
+        "columbus-ohio-united-states",
+        "cork-ireland",
+        "corpus-christi-texas-united-states",
+        "covington-kentucky-united-states",
+        "des-moines-iowa-united-states"
       ]
     }
   ]
