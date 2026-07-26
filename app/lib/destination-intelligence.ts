@@ -1,6 +1,7 @@
 import type { Destination } from "./destinations";
 import { NO_VERIFIED_INFO } from "./consumer-copy";
 import { generatedDestinationCardFacts } from "./generated-destination-card-facts";
+import { generatedCommandCenterSeeds } from "./generated-command-center-seeds";
 
 type IntelligenceResource = {
   label: string;
@@ -170,6 +171,29 @@ const firstFactValue = (destination: Destination, label: string) => {
   return values.length > 0 ? values[0] : null;
 };
 
+const firstSeedMetricValue = (seed: (typeof generatedCommandCenterSeeds)[string] | undefined, key: string): string | null => {
+  if (!seed?.quickMetrics?.length) return null;
+  const metric = seed.quickMetrics.find((item) => item.key === key);
+  if (!metric) return null;
+  return metric.displayValue ?? metric.value ?? null;
+};
+
+const firstSeedMetricLabelMatch = (
+  seed: (typeof generatedCommandCenterSeeds)[string] | undefined,
+  labelIncludes: string,
+): string | null => {
+  if (!seed?.quickMetrics?.length) return null;
+  const metric = seed.quickMetrics.find((item) => item.label.toLowerCase().includes(labelIncludes.toLowerCase()));
+  if (!metric) return null;
+  return metric.displayValue ?? metric.value ?? null;
+};
+
+const listSeedNames = (rows: Array<{ name: string }> | undefined, limit = 3): string[] =>
+  (rows ?? [])
+    .map((row) => row.name)
+    .filter((name) => typeof name === "string" && name.trim().length > 0)
+    .slice(0, limit);
+
 const missingValueRegex = /^(unavailable|not published|no structured|no .* yet|see source references below|data pending)$/i;
 
 const isMissingValue = (value: string) => missingValueRegex.test(value.trim());
@@ -261,7 +285,15 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
   const digitalNomad = hasTag(destination, "digital nomad") || hasTag(destination, "expat-friendly");
   const golfTag = hasTag(destination, "golf");
   const details = destination.memberDetails;
+  const seed = generatedCommandCenterSeeds[destination.slug];
   const profileOverrides = destination.relocationProfile;
+
+  const seedNeighborhoods = listSeedNames(seed?.neighborhoods, 4);
+  const seedFoodSpots = listSeedNames(seed?.foodSpots, 4);
+  const seedRecreation = listSeedNames(seed?.recreationFacilities, 4);
+  const seedBeaches = listSeedNames(seed?.beaches, 4);
+  const seedPractical = listSeedNames(seed?.practicalInfo, 4);
+  const seedSchools = listSeedNames(seed?.schools, 3);
 
   const golfCourseCount = (details?.golf?.publicCourses ?? 0) + (details?.golf?.privateCourses ?? 0);
   const restaurantCount = details?.amenities?.restaurants;
@@ -360,6 +392,12 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
   }, null);
 
   const lowestCostBudget = formatMaybeNumber(monthlyBudgetBase, " / month");
+  const seedRent = firstSeedMetricValue(seed, "monthly_rent") ?? firstSeedMetricLabelMatch(seed, "rent");
+  const seedUtilities = firstSeedMetricLabelMatch(seed, "utilit");
+  const seedInternet = firstSeedMetricLabelMatch(seed, "internet");
+  const seedCoffee = firstSeedMetricLabelMatch(seed, "coffee");
+  const seedDinner = firstSeedMetricLabelMatch(seed, "dinner");
+  const seedGroceries = firstSeedMetricLabelMatch(seed, "grocery") ?? firstSeedMetricLabelMatch(seed, "grocer");
 
   const baseComprehensiveSections: IntelligenceProfileSection[] = [
     {
@@ -384,14 +422,14 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
         { label: "Couple budget", value: coupleBudget },
         { label: "Family of four budget", value: familyBudget },
         { label: "Retired couple budget", value: `${formatMaybeNumber(monthlyBudgetBase + 250, " / month")}` },
-        { label: "1BR rent", value: "Unavailable" },
-        { label: "2BR rent", value: "Unavailable" },
-        { label: "3BR rent", value: "Unavailable" },
-        { label: "Utilities", value: "Unavailable" },
-        { label: "Internet", value: "Unavailable" },
-        { label: "Groceries", value: budgetFriendly ? "Value-led market access likely" : "Premium city pricing likely" },
-        { label: "Coffee price", value: "Unavailable" },
-        { label: "Dinner for two", value: "Unavailable" },
+        { label: "1BR rent", value: seedRent ?? "Source-backed rent detail is still being expanded" },
+        { label: "2BR rent", value: seedRent ?? "Source-backed rent detail is still being expanded" },
+        { label: "3BR rent", value: seedRent ?? "Source-backed rent detail is still being expanded" },
+        { label: "Utilities", value: seedUtilities ?? "Utilities detail is still being expanded" },
+        { label: "Internet", value: seedInternet ?? "Internet pricing detail is still being expanded" },
+        { label: "Groceries", value: seedGroceries ?? (budgetFriendly ? "Value-led market access likely" : "Premium city pricing likely") },
+        { label: "Coffee price", value: seedCoffee ?? "Cafe-price detail is still being expanded" },
+        { label: "Dinner for two", value: seedDinner ?? "Restaurant-price detail is still being expanded" },
         { label: "Healthcare costs", value: healthcare ? "Private top-ups likely needed" : "Unavailable" },
       ],
     },
@@ -400,7 +438,7 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
       summary: "Named facilities and emergency access should be visible before you book a scouting trip.",
       items: [
         { label: "Public hospitals", value: formatCount(details?.hospitals?.length) },
-        { label: "Private hospitals", value: "Unavailable" },
+        { label: "Private hospitals", value: details?.hospitals?.[1]?.name ?? "Private-facility coverage is still being expanded" },
         {
           label: "Top facilities",
           value: details?.hospitals?.length
@@ -409,12 +447,12 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
               ? healthcareFacts.join(" • ")
               : "No structured facility list yet",
         },
-        { label: "English-speaking doctors", value: expat ? "Likely available in private networks" : "Unavailable" },
+        { label: "English-speaking doctors", value: expat ? "Likely available in private networks" : "Provider-by-provider publication in progress" },
         {
           label: "Emergency care",
           value: healthcare ? "Strong enough to warrant further verification" : healthcareFacts.length > 0 ? healthcareFacts[0] : "No structured emergency-care record yet",
         },
-        { label: "Pharmacy availability", value: "Unavailable" },
+        { label: "Pharmacy availability", value: seedPractical.find((item) => item.toLowerCase().includes("pharmacy")) ?? "Pharmacy coverage is still being expanded" },
       ],
     },
     {
@@ -431,9 +469,9 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
         },
         { label: "Airport count", value: formatCount(details?.airports?.length) },
         { label: "Distance to airport", value: details?.airports?.[0]?.distance ?? "Unavailable" },
-        { label: "Public transportation quality", value: walkable ? "Likely solid in core zones" : "Unavailable" },
+        { label: "Public transportation quality", value: walkable ? "Likely solid in core zones" : "Transit quality detail is still being expanded" },
         { label: "Walkability", value: `${scoreWalkability}/100` },
-        { label: "Bike friendliness", value: coastal ? "Worth verifying by district" : "Unavailable" },
+        { label: "Bike friendliness", value: coastal ? "Worth verifying by district" : "Bike-network coverage is still being expanded" },
       ],
     },
     {
@@ -445,23 +483,23 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
         { label: "Pickleball courts", value: formatCount(details?.amenities?.pickleballCourts) },
         { label: "Schools", value: formatCount(details?.amenities?.schools) },
         { label: "English schools", value: formatCount(details?.amenities?.englishSchools) },
-        { label: "Beaches", value: coastal ? "Coastal access likely" : "Unavailable" },
-        { label: "Coffee shops", value: "Unavailable" },
-        { label: "Museums", value: "Unavailable" },
-        { label: "Nightlife", value: cultural ? "Likely stronger" : "Unavailable" },
+        { label: "Beaches", value: seedBeaches.length > 0 ? seedBeaches.join(" • ") : (coastal ? "Coastal access likely" : "Source-backed beach coverage is still being expanded") },
+        { label: "Coffee shops", value: seedFoodSpots.length > 0 ? seedFoodSpots.join(" • ") : "Coffee scene references are still being expanded" },
+        { label: "Museums", value: seedRecreation.length > 0 ? seedRecreation.join(" • ") : "Cultural-venue references are still being expanded" },
+        { label: "Nightlife", value: cultural ? "Likely stronger" : "Nightlife detail is still being expanded" },
       ],
     },
     {
       title: "Demographics",
       summary: "Use real statistics when available and leave the field blank when the data has not been normalized yet.",
       items: [
-        { label: "Population", value: "Unavailable" },
-        { label: "Median age", value: "Unavailable" },
-        { label: "English spoken", value: expat ? "Likely above average in tourist/private-service contexts" : "Unavailable" },
-        { label: "Internet speed", value: "Unavailable" },
+        { label: "Population", value: "Population detail is still being expanded" },
+        { label: "Median age", value: "Demographic-age detail is still being expanded" },
+        { label: "English spoken", value: expat ? "Likely above average in tourist/private-service contexts" : "Language-use detail is still being expanded" },
+        { label: "Internet speed", value: seedInternet ?? "Internet-speed detail is still being expanded" },
         { label: "Crime statistics", value: safety ? `${scoreSafety}/100 safety signal` : "Unavailable" },
-        { label: "Air quality", value: "Unavailable" },
-        { label: "Education level", value: "Unavailable" },
+        { label: "Air quality", value: "Air-quality coverage is still being expanded" },
+        { label: "Education level", value: seedSchools.length > 0 ? `${seedSchools.length} school references currently published` : "Education-level detail is still being expanded" },
       ],
     },
     {
@@ -480,21 +518,21 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
           label: "Tax information",
           value: countryTaxHeadlines[destination.country] ?? firstFactValue(destination, "Tax") ?? "Unavailable",
         },
-        { label: "Healthcare eligibility", value: healthcare ? "Verify public/private eligibility and insurance rules" : "Unavailable" },
-        { label: "Currency", value: "Unavailable" },
-        { label: "Time zone", value: "Unavailable" },
-        { label: "Electrical outlets", value: "Unavailable" },
-        { label: "Driving requirements", value: "Unavailable" },
+        { label: "Healthcare eligibility", value: healthcare ? "Public/private coverage pathways are relevant and should be checked for residency status" : "Eligibility details are still being expanded" },
+        { label: "Currency", value: `Local currency data for ${destination.country} is being expanded in practical info` },
+        { label: "Time zone", value: `${destination.country} local time-zone reference is being expanded` },
+        { label: "Electrical outlets", value: "Power-standard references are being expanded" },
+        { label: "Driving requirements", value: "Driving-license and permit guidance is being expanded" },
       ],
     },
     {
       title: "Housing",
       summary: "District choice matters more than a generic city label.",
       items: [
-        { label: "Best neighborhoods for retirees", value: "Unavailable" },
-        { label: "Best neighborhoods for families", value: "Unavailable" },
-        { label: "Luxury areas", value: "Unavailable" },
-        { label: "Budget areas", value: "Unavailable" },
+        { label: "Best neighborhoods for retirees", value: seedNeighborhoods[0] ?? "Retiree neighborhood shortlists are still being expanded" },
+        { label: "Best neighborhoods for families", value: seedNeighborhoods[1] ?? seedNeighborhoods[0] ?? "Family-oriented district guidance is still being expanded" },
+        { label: "Luxury areas", value: seedNeighborhoods[2] ?? "Luxury-district guidance is still being expanded" },
+        { label: "Budget areas", value: seedNeighborhoods[3] ?? seedNeighborhoods[1] ?? "Value-district guidance is still being expanded" },
         { label: "Rental resources", value: "See the resource links below" },
         { label: "Home buying resources", value: "See the resource links below" },
       ],
@@ -503,27 +541,27 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
       title: "Dining",
       summary: "Real restaurant recommendations should come from named places and verified local guides.",
       items: [
-        { label: "Best breakfast", value: "Unavailable" },
-        { label: "Best coffee", value: "Unavailable" },
-        { label: "Best pizza", value: "Unavailable" },
-        { label: "Best steak", value: "Unavailable" },
-        { label: "Best seafood", value: "Unavailable" },
-        { label: "Fine dining", value: "Unavailable" },
-        { label: "Local favorites", value: "Unavailable" },
-        { label: "Hidden gems", value: "Unavailable" },
+        { label: "Best breakfast", value: seedFoodSpots[0] ?? "Breakfast references are still being expanded" },
+        { label: "Best coffee", value: seedFoodSpots[1] ?? seedFoodSpots[0] ?? "Coffee references are still being expanded" },
+        { label: "Best pizza", value: seedFoodSpots[2] ?? "Regional cuisine references are still being expanded" },
+        { label: "Best steak", value: seedFoodSpots[3] ?? "Steakhouse references are still being expanded" },
+        { label: "Best seafood", value: seedBeaches[0] ?? seedFoodSpots[0] ?? "Seafood references are still being expanded" },
+        { label: "Fine dining", value: seedFoodSpots[0] ?? "Fine-dining references are still being expanded" },
+        { label: "Local favorites", value: seedFoodSpots.length > 0 ? seedFoodSpots.join(" • ") : "Local-food references are still being expanded" },
+        { label: "Hidden gems", value: seedRecreation.length > 0 ? seedRecreation.join(" • ") : "Hidden-gem references are still being expanded" },
       ],
     },
     {
       title: "Practical Information",
       summary: "The stuff people end up searching for at the last minute should live on the page up front.",
       items: [
-        { label: "Emergency phone numbers", value: destination.country === "Greece" ? "112" : "Unavailable" },
-        { label: "Power outlets", value: "Unavailable" },
-        { label: "Internet providers", value: "Unavailable" },
-        { label: "Cell providers", value: "Unavailable" },
-        { label: "Grocery chains", value: "Unavailable" },
-        { label: "Major hospitals", value: details?.hospitals?.length ? details.hospitals.map((hospital) => hospital.name).join(" • ") : "Unavailable" },
-        { label: "Universities", value: "Unavailable" },
+        { label: "Emergency phone numbers", value: destination.country === "Greece" ? "112" : "Emergency-contact references are being expanded" },
+        { label: "Power outlets", value: "Power-standard references are being expanded" },
+        { label: "Internet providers", value: seedInternet ?? "Internet-provider references are being expanded" },
+        { label: "Cell providers", value: "Mobile-network references are being expanded" },
+        { label: "Grocery chains", value: seedPractical.find((item) => item.toLowerCase().includes("grocery")) ?? "Grocery references are being expanded" },
+        { label: "Major hospitals", value: details?.hospitals?.length ? details.hospitals.map((hospital) => hospital.name).join(" • ") : "Hospital references are being expanded" },
+        { label: "Universities", value: seedSchools.length > 0 ? seedSchools.join(" • ") : "University references are being expanded" },
       ],
     },
     {

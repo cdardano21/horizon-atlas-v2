@@ -7,7 +7,7 @@ const PLACEHOLDER_PATTERNS = [
   /coming soon/i,
 ];
 
-export const NO_VERIFIED_INFO = "Editorial estimate from current destination records";
+export const NO_VERIFIED_INFO = "Source-backed destination coverage is in progress for this field";
 
 export function isPlaceholderCopy(value: string | null | undefined) {
   if (!value) return true;
