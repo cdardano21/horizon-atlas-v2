@@ -1394,6 +1394,13 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Ioannina_island.jpg/1280px-Ioannina_island.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Byzantine_museum_Ioannina.jpg/1280px-Byzantine_museum_Ioannina.jpg",
   ],
+  "irvine-california-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Irvine_City_Hall.jpg/1280px-Irvine_City_Hall.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Giant_Wheel_at_Irvine_Spectrum_Center.jpg/1280px-Giant_Wheel_at_Irvine_Spectrum_Center.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/RESIDENTIAL_DEVELOPMENT_IN_THE_IRVINE_RANCH_AREA_NEAR_NEWPORT_BEACH._THIS_DEVELOPMENT_IS_PART_OF_A_NEW_TOWN_OF_HIGH..._-_NARA_-_557438.jpg/1280px-RESIDENTIAL_DEVELOPMENT_IN_THE_IRVINE_RANCH_AREA_NEAR_NEWPORT_BEACH._THIS_DEVELOPMENT_IS_PART_OF_A_NEW_TOWN_OF_HIGH..._-_NARA_-_557438.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Irvine_Business_Complex.jpg/1280px-Irvine_Business_Complex.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Fountain_at_Irvine_Spectrum.jpg/1280px-Fountain_at_Irvine_Spectrum.jpg",
+  ],
   "istanbul-turkey": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Historical_peninsula_and_modern_skyline_of_Istanbul.jpg/1280px-Historical_peninsula_and_modern_skyline_of_Istanbul.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Istanbul_asv2020-02_img53_Maiden%27s_Tower.jpg/1280px-Istanbul_asv2020-02_img53_Maiden%27s_Tower.jpg",
@@ -1839,6 +1846,12 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/20171031_Malmo_Arena_0232_%2825463574977%29.jpg/1280px-20171031_Malmo_Arena_0232_%2825463574977%29.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Malmoexpressen_Malmo_Central_20140618_0005_%2814270129978%29.jpg/1280px-Malmoexpressen_Malmo_Central_20140618_0005_%2814270129978%29.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Moske_Malmo_2014Jun17_0002-3.jpg/1280px-Moske_Malmo_2014Jun17_0002-3.jpg",
+  ],
+  "manchester-new-hampshire-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Manchester%2C_New_Hampshire_skyline.jpg/1280px-Manchester%2C_New_Hampshire_skyline.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Manchester_City_Hall.JPG/1280px-Manchester_City_Hall.JPG",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Currier_Art_Museum%2C_Manchester%2C_NH_MG_2792.JPG/1280px-Currier_Art_Museum%2C_Manchester%2C_NH_MG_2792.JPG",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Skyline_of_Manchester%2C_New_Hampshire%2C_USA.jpg/1280px-Skyline_of_Manchester%2C_New_Hampshire%2C_USA.jpg",
   ],
   "manchester-united-kingdom": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Manchester_Town_Hall_from_Lloyd_St.jpg/1280px-Manchester_Town_Hall_from_Lloyd_St.jpg",
@@ -2777,6 +2790,11 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Union_76_Gas%2C_San_Luis_Obispo%2C_California_LCCN2017707559.tif/lossy-page1-500px-Union_76_Gas%2C_San_Luis_Obispo%2C_California_LCCN2017707559.tif.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/San_Luis_Obispo_Chamber_of_Commerce_-_San_Luis_Obispo%2C_California_%28cropped%29.jpg/1280px-San_Luis_Obispo_Chamber_of_Commerce_-_San_Luis_Obispo%2C_California_%28cropped%29.jpg",
   ],
+  "san-marcos-texas-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Texas_-_San_Marcos_-_NARA_-_68149814_%28cropped%29.jpg/1280px-Texas_-_San_Marcos_-_NARA_-_68149814_%28cropped%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Prime_Outlets_San_Marcos_Texas_Nima.JPG/1280px-Prime_Outlets_San_Marcos_Texas_Nima.JPG",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/08-10-26_-_San_Marcos_River%2C_San_Marcos%2C_TX%2C_USA_-_downstream_from_the_headwaters.jpg/1280px-08-10-26_-_San_Marcos_River%2C_San_Marcos%2C_TX%2C_USA_-_downstream_from_the_headwaters.jpg",
+  ],
   "san-sebastian-spain": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/San_Sebasti%C3%A1n_-_Ayuntamiento_10.jpg/1280px-San_Sebasti%C3%A1n_-_Ayuntamiento_10.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Playa_de_la_Concha%2C_San_Sebasti%C3%A1n_-_panoramio.jpg/1280px-Playa_de_la_Concha%2C_San_Sebasti%C3%A1n_-_panoramio.jpg",
@@ -2967,6 +2985,13 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/154_Monument_a_G.K._Chesterton%2C_pg._de_la_Ribera_%28Sitges%29.jpg/1280px-154_Monument_a_G.K._Chesterton%2C_pg._de_la_Ribera_%28Sitges%29.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/080_Monument_a_Facundo_Bacard%C3%AD%2C_de_Lorenzo_Quinn%2C_pg._de_la_Ribera_%28Sitges%29.jpg/1280px-080_Monument_a_Facundo_Bacard%C3%AD%2C_de_Lorenzo_Quinn%2C_pg._de_la_Ribera_%28Sitges%29.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Beach-Monastery-in-sitges.jpg/1280px-Beach-Monastery-in-sitges.jpg",
+  ],
+  "sonoma-california-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Sonoma_City_Hall_%28cropped%29.jpg/1280px-Sonoma_City_Hall_%28cropped%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/In_sonoma_town_%28cropped%29.jpg/1280px-In_sonoma_town_%28cropped%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Sonoma%2C_CA_USA_%287%29_%28cropped%29.jpg/1280px-Sonoma%2C_CA_USA_%287%29_%28cropped%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Sonoma_Mission%2C_Sonoma%2C_California_LCCN2013632632.tif/lossy-page1-1280px-Sonoma_Mission%2C_Sonoma%2C_California_LCCN2013632632.tif.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Sonoma_Plaza_west_lawn.jpg/1280px-Sonoma_Plaza_west_lawn.jpg",
   ],
   "sopot-other-europe": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Sopot_Molo_and_main_square_2024_aerial.jpg/1280px-Sopot_Molo_and_main_square_2024_aerial.jpg",
@@ -3469,6 +3494,13 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Warsaw_by_Sentinel-2%2C_2020-06-01.jpg/1280px-Warsaw_by_Sentinel-2%2C_2020-06-01.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Market_Square_Warsaw_%2822594p%29_%28cropped%29.jpg/1280px-Market_Square_Warsaw_%2822594p%29_%28cropped%29.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Palace_on_the_Water%2C_%C5%81azienki_Park%2C_Warsaw.jpg/1280px-Palace_on_the_Water%2C_%C5%81azienki_Park%2C_Warsaw.jpg",
+  ],
+  "washington-district-of-columbia-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/12-07-13-washington-by-RalfR-08.jpg/1280px-12-07-13-washington-by-RalfR-08.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/WashingtonNationalCathedralHighsmith15393v.jpg/1280px-WashingtonNationalCathedralHighsmith15393v.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Army_Headquarters_in_Washington_-_State%2C_War%2C_and_Navy_Building%2C_c._1888_%28cropped%29.jpg/1280px-Army_Headquarters_in_Washington_-_State%2C_War%2C_and_Navy_Building%2C_c._1888_%28cropped%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/2018.06.07_Capital_Pride_Heroes_Gala%2C_Washington%2C_DC_USA_02927_%2841954942214%29.jpg/1280px-2018.06.07_Capital_Pride_Heroes_Gala%2C_Washington%2C_DC_USA_02927_%2841954942214%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Jefferson_Memorial_Washington_April_2017_002.jpg/1280px-Jefferson_Memorial_Washington_April_2017_002.jpg",
   ],
   "wellington-new-zealand": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Wellington_Panorama_View.jpg/1280px-Wellington_Panorama_View.jpg",

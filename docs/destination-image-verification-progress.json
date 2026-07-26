@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-26T21:20:53.251Z",
+  "generatedAt": "2026-07-26T22:28:55.384Z",
   "totalDestinations": 600,
-  "completedDestinations": 522,
-  "remainingDestinations": 78,
+  "completedDestinations": 527,
+  "remainingDestinations": 73,
   "manualReviewDestinations": [
     {
       "slug": "agios-nikolaos-greece",
@@ -18,7 +18,7 @@
       "country": "Other Europe",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": null
+      "articleTitle": "Aspøya, Ålesund"
     },
     {
       "slug": "altea-spain",
@@ -57,8 +57,8 @@
       "city": "Belluno",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
-      "articleTitle": "Province of Belluno"
+      "candidateCount": 0,
+      "articleTitle": null
     },
     {
       "slug": "beppu-japan",
@@ -97,8 +97,8 @@
       "city": "College Station",
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "United States senior military college"
+      "candidateCount": 1,
+      "articleTitle": "College Station, Texas"
     },
     {
       "slug": "collioure-france",
@@ -130,7 +130,7 @@
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Lonato del Garda"
+      "articleTitle": null
     },
     {
       "slug": "edmond-oklahoma-united-states",
@@ -138,7 +138,7 @@
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Edmond, Oklahoma"
+      "articleTitle": null
     },
     {
       "slug": "ericeira-portugal",
@@ -162,7 +162,7 @@
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Flagstaff, Arizona"
+      "articleTitle": null
     },
     {
       "slug": "florianopolis-brazil",
@@ -225,16 +225,8 @@
       "city": "Hondarribia",
       "country": "Spain",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
-      "articleTitle": "Hondarribia"
-    },
-    {
-      "slug": "irvine-california-united-states",
-      "city": "Irvine",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Irvine, California"
+      "articleTitle": "Hondarribia"
     },
     {
       "slug": "jackson-wyoming-united-states",
@@ -249,7 +241,7 @@
       "city": "Kagoshima",
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
+      "candidateCount": 0,
       "articleTitle": "Kagoshima"
     },
     {
@@ -265,16 +257,16 @@
       "city": "Korčula Town",
       "country": "Croatia",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 2,
-      "articleTitle": "Korčula (town)"
+      "candidateCount": 0,
+      "articleTitle": null
     },
     {
       "slug": "lafayette-louisiana-united-states",
       "city": "Lafayette",
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": null
+      "candidateCount": 1,
+      "articleTitle": "Lafayette Parish, Louisiana"
     },
     {
       "slug": "laredo-texas-united-states",
@@ -317,14 +309,6 @@
       "articleTitle": "Mali Lošinj"
     },
     {
-      "slug": "manchester-new-hampshire-united-states",
-      "city": "Manchester",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": null
-    },
-    {
       "slug": "matsumoto-japan",
       "city": "Matsumoto",
       "country": "Japan",
@@ -361,7 +345,7 @@
       "city": "Newark",
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
+      "candidateCount": 0,
       "articleTitle": "Newark, California"
     },
     {
@@ -386,15 +370,15 @@
       "country": "Croatia",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
-      "articleTitle": "Novigrad, Zadar County"
+      "articleTitle": "Novigrad na Dobri"
     },
     {
       "slug": "oita-japan",
       "city": "Oita",
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
-      "articleTitle": "Crasus Dome Oita"
+      "candidateCount": 0,
+      "articleTitle": null
     },
     {
       "slug": "palm-desert-california-united-states",
@@ -434,7 +418,7 @@
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Plano, Texas"
+      "articleTitle": null
     },
     {
       "slug": "polignano-a-mare-italy",
@@ -517,14 +501,6 @@
       "articleTitle": "San José, Costa Rica"
     },
     {
-      "slug": "san-marcos-texas-united-states",
-      "city": "San Marcos",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
-      "articleTitle": "San Marcos River"
-    },
-    {
       "slug": "santa-cruz-california-united-states",
       "city": "Santa Cruz",
       "country": "United States",
@@ -537,8 +513,8 @@
       "city": "Santa Margherita Ligure",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
-      "articleTitle": "Nozarego"
+      "candidateCount": 0,
+      "articleTitle": null
     },
     {
       "slug": "siracusa-italy",
@@ -555,14 +531,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 2,
       "articleTitle": "Sóller"
-    },
-    {
-      "slug": "sonoma-california-united-states",
-      "city": "Sonoma",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Sonoma, California"
     },
     {
       "slug": "stresa-italy",
@@ -603,14 +571,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 2,
       "articleTitle": "Varenna"
-    },
-    {
-      "slug": "washington-district-of-columbia-united-states",
-      "city": "Washington",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": null
     },
     {
       "slug": "wichita-kansas-united-states",
@@ -2052,6 +2012,96 @@
         "prescott-arizona-united-states",
         "providence-rhode-island-united-states",
         "queretaro-mexico"
+      ]
+    },
+    {
+      "generatedAt": "2026-07-26T22:28:55.384Z",
+      "offset": 0,
+      "limit": 80,
+      "unresolvedOnly": true,
+      "processedCount": 5,
+      "manualReviewCount": 73,
+      "processedSlugs": [
+        "irvine-california-united-states",
+        "manchester-new-hampshire-united-states",
+        "san-marcos-texas-united-states",
+        "sonoma-california-united-states",
+        "washington-district-of-columbia-united-states"
+      ],
+      "manualReviewSlugs": [
+        "pietrasanta-italy",
+        "polignano-a-mare-italy",
+        "desenzano-del-garda-italy",
+        "aomori-japan",
+        "agios-nikolaos-greece",
+        "altea-spain",
+        "begur-spain",
+        "belluno-italy",
+        "beppu-japan",
+        "camogli-italy",
+        "cassis-france",
+        "collioure-france",
+        "ericeira-portugal",
+        "frigiliana-spain",
+        "fuengirola-spain",
+        "hondarribia-spain",
+        "kagoshima-japan",
+        "kardamyli-greece",
+        "levanto-italy",
+        "llanes-spain",
+        "mali-losinj-croatia",
+        "matsumoto-japan",
+        "nerja-spain",
+        "novigrad-croatia",
+        "perast-montenegro",
+        "pietra-ligure-italy",
+        "primosten-croatia",
+        "salerno-italy",
+        "santa-margherita-ligure-italy",
+        "saint-remy-de-provence-france",
+        "siracusa-italy",
+        "ulcinj-montenegro",
+        "figueira-da-foz-portugal",
+        "gdansk-other-europe",
+        "korcula-town-croatia",
+        "mahon-spain",
+        "morioka-japan",
+        "oita-japan",
+        "soller-spain",
+        "stresa-italy",
+        "uzes-france",
+        "varenna-italy",
+        "alesund-other-europe",
+        "bath-united-kingdom",
+        "breckenridge-colorado-united-states",
+        "college-station-texas-united-states",
+        "columbia-south-carolina-united-states",
+        "des-moines-iowa-united-states",
+        "edmond-oklahoma-united-states",
+        "flagstaff-arizona-united-states",
+        "florianopolis-brazil",
+        "glendale-arizona-united-states",
+        "gothenburg-sweden",
+        "grand-junction-colorado-united-states",
+        "jackson-wyoming-united-states",
+        "lafayette-louisiana-united-states",
+        "laredo-texas-united-states",
+        "merida-mexico",
+        "newark-new-jersey-united-states",
+        "norfolk-virginia-united-states",
+        "norman-oklahoma-united-states",
+        "palm-desert-california-united-states",
+        "plano-texas-united-states",
+        "prescott-arizona-united-states",
+        "providence-rhode-island-united-states",
+        "queretaro-mexico",
+        "redding-california-united-states",
+        "riverside-california-united-states",
+        "san-jose-costa-rica",
+        "santa-cruz-california-united-states",
+        "tacoma-washington-united-states",
+        "wichita-kansas-united-states",
+        "york-united-kingdom"
       ]
     }
   ]
