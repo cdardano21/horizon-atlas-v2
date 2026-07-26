@@ -50,6 +50,10 @@ describe("admin destination-by-id route", () => {
     cookieGetMock.mockReturnValue({ value: "token" });
 
     mockAdminAuthedFetch((url, init) => {
+      if (url.includes("/rest/v1/destinations_catalog?select=metadata&id=eq.dest_1&limit=1")) {
+        return jsonResponse({ status: 200, body: [{ metadata: null }] });
+      }
+
       if (url.includes("/rest/v1/destinations_catalog?id=eq.dest_1") && init?.method === "PATCH") {
         return jsonResponse({
           status: 200,
@@ -85,6 +89,10 @@ describe("admin destination-by-id route", () => {
     cookieGetMock.mockReturnValue({ value: "token" });
 
     mockAdminAuthedFetch((url, init) => {
+      if (url.includes("/rest/v1/destinations_catalog?select=metadata&id=eq.dest_1&limit=1")) {
+        return jsonResponse({ status: 200, body: [{ metadata: null }] });
+      }
+
       if (url.includes("/rest/v1/destinations_catalog?id=eq.dest_1") && init?.method === "PATCH") {
         return jsonResponse({ status: 422, body: { message: "invalid state transition" } });
       }

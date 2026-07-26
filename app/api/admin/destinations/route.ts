@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import type { DestinationMemberDetails, DestinationRelocationProfile } from "../../../lib/destinations";
 import { getSupabaseConfig, isSupabaseConfigured } from "../../../lib/supabase";
 
 type AuthUser = {
@@ -25,6 +26,10 @@ type DestinationRow = {
   tier: string;
   description: string | null;
   updated_at: string;
+  metadata?: {
+    relocationProfile?: DestinationRelocationProfile;
+    memberDetails?: DestinationMemberDetails;
+  } | null;
 };
 
 const normalizeSlug = (value: string) =>
@@ -86,7 +91,7 @@ export async function GET() {
 
     const { url, anonKey } = getSupabaseConfig();
     const destinationsResponse = await fetch(
-      `${url}/rest/v1/destinations_catalog?select=id,slug,city,country,status,tier,description,updated_at&order=updated_at.desc&limit=120`,
+      `${url}/rest/v1/destinations_catalog?select=id,slug,city,country,status,tier,description,updated_at,metadata&order=updated_at.desc&limit=120`,
       {
         headers: {
           apikey: anonKey,
@@ -170,6 +175,8 @@ export async function GET() {
         adminRole,
         destinations: destinations.map((destination) => ({
           ...destination,
+          relocationProfile: destination.metadata?.relocationProfile ?? null,
+          memberDetails: destination.metadata?.memberDetails ?? null,
           mediaCount: mediaCounts.get(destination.id) ?? 0,
           resourceCount: resourceCounts.get(destination.id) ?? 0,
           videoCount: videoCounts.get(destination.id) ?? 0,

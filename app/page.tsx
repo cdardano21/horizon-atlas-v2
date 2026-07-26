@@ -15,12 +15,12 @@ import WhyHorizon from "./components/WhyHorizon";
 
 export default function HomePage() {
   return (
-    <main className="min-h-full overflow-hidden bg-slate-950 text-white">
+    <main className="atlas-shell overflow-hidden bg-[radial-gradient(circle_at_8%_10%,rgba(197,155,95,0.2),transparent_26%),radial-gradient(circle_at_86%_4%,rgba(31,95,99,0.14),transparent_32%),repeating-linear-gradient(125deg,rgba(255,255,255,0.14)_0px,rgba(255,255,255,0.14)_2px,transparent_2px,transparent_20px),linear-gradient(180deg,rgba(248,244,236,1)_0%,rgba(244,237,224,0.92)_52%,rgba(248,243,234,1)_100%)]">
       <Navbar />
 
       <Hero />
 
-      <div className="border-y border-white/10 bg-slate-900/40">
+      <div className="atlas-soft-divider bg-[linear-gradient(180deg,rgba(255,250,240,0.9),rgba(247,238,223,0.7))]">
         <Stats />
       </div>
 

@@ -108,41 +108,48 @@ export default function LifeMatchApp() {
 
   return (
     <section id="life-match" className="mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:py-24">
-      <div className="mb-12 rounded-[2rem] border border-white/10 bg-slate-950/80 p-10 shadow-xl shadow-cyan-500/10 backdrop-blur-xl">
+      <div className="mb-12 rounded-[2rem] border border-[var(--atlas-border)] bg-[linear-gradient(145deg,rgba(255,252,246,0.97),rgba(247,238,222,0.9))] p-10 shadow-[var(--atlas-shadow)] backdrop-blur-xl">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div>
-            <p className="uppercase tracking-[0.35em] text-cyan-400">Retirement DNA</p>
-            <h1 className="mt-4 text-4xl font-black text-white sm:text-5xl">
+            <p className="atlas-kicker">Retirement DNA</p>
+            <h1 className="mt-4 text-4xl text-[var(--atlas-ink)] sm:text-5xl">
               A {RETIREMENT_DNA_TOTAL_QUESTIONS}-question relocation assessment across {LAUNCH_CATALOG_SIZE} destinations.
             </h1>
-            <p className="mt-5 text-lg leading-8 text-slate-400">
+            <p className="mt-5 text-lg leading-8 text-[var(--atlas-muted)]">
               Build a full retirement profile across budget, healthcare, safety, climate, social fit, and long-term stability. Horizon Atlas then ranks the best destinations for your exact pattern of priorities.
             </p>
             <div className="mt-8 flex flex-wrap gap-3 text-sm">
-              <span className="rounded-full bg-cyan-500/10 px-4 py-2 text-cyan-200">{RETIREMENT_DNA_TOTAL_QUESTIONS} scored questions</span>
-              <span className="rounded-full bg-white/5 px-4 py-2 text-slate-300">{LAUNCH_CATALOG_SIZE} destinations</span>
-              <span className="rounded-full bg-white/5 px-4 py-2 text-slate-300">10 ranked recommendations</span>
+              <span className="rounded-full bg-[rgba(31,95,99,0.12)] px-4 py-2 text-[var(--atlas-accent)]">{RETIREMENT_DNA_TOTAL_QUESTIONS} scored questions</span>
+              <span className="rounded-full bg-[rgba(255,255,255,0.75)] px-4 py-2 text-[var(--atlas-muted)]">{LAUNCH_CATALOG_SIZE} destinations</span>
+              <span className="rounded-full bg-[rgba(255,255,255,0.75)] px-4 py-2 text-[var(--atlas-muted)]">10 ranked recommendations</span>
+            </div>
+
+            <div className="mt-6 rounded-[1.5rem] border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.72)] px-5 py-4">
+              <p className="text-[11px] uppercase tracking-[0.24em] text-[var(--atlas-accent)]">Decision quality</p>
+              <p className="mt-2 text-sm leading-7 text-[var(--atlas-muted)]">
+                Treat each answer as a signal about how you want to live week after week, not as a test you need to get right.
+              </p>
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 text-slate-300">
-            <p className="text-sm uppercase tracking-[0.35em] text-cyan-400">Assessment flow</p>
+          <div className="rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,253,248,0.88)] p-8 text-[var(--atlas-muted)] shadow-[0_24px_48px_-34px_rgba(43,35,23,0.6)]">
+            <p className="text-sm uppercase tracking-[0.35em] text-[var(--atlas-accent)]">Assessment flow</p>
             <div className="mt-6 space-y-4 text-sm leading-7">
-              <div className="rounded-3xl bg-slate-950/80 p-4">
-                <p className="font-semibold text-white">1. Complete {totalSections} premium sections</p>
-                <p className="mt-2 text-slate-400">Financial fit, healthcare, safety, mobility, climate, community, and long-horizon readiness are all captured.</p>
+              <div className="rounded-3xl bg-[rgba(246,238,225,0.86)] p-4">
+                <p className="font-semibold text-[var(--atlas-ink)]">1. Complete {totalSections} premium sections</p>
+                <p className="mt-2 text-[var(--atlas-muted)]">Financial fit, healthcare, safety, mobility, climate, community, and long-horizon readiness are all captured.</p>
               </div>
-              <div className="rounded-3xl bg-slate-950/80 p-4">
-                <p className="font-semibold text-white">2. Score the full catalog</p>
-                <p className="mt-2 text-slate-400">The Retirement DNA engine weighs each dimension against every destination in the launch catalog.</p>
+              <div className="rounded-3xl bg-[rgba(246,238,225,0.86)] p-4">
+                <p className="font-semibold text-[var(--atlas-ink)]">2. Score the full catalog</p>
+                <p className="mt-2 text-[var(--atlas-muted)]">The Retirement DNA engine weighs each dimension against every destination in the launch catalog.</p>
               </div>
-              <div className="rounded-3xl bg-slate-950/80 p-4">
-                <p className="font-semibold text-white">3. Review strengths and tradeoffs</p>
-                <p className="mt-2 text-slate-400">Your results show where each city aligns with your priorities and where you may want to investigate further.</p>
+              <div className="rounded-3xl bg-[rgba(246,238,225,0.86)] p-4">
+                <p className="font-semibold text-[var(--atlas-ink)]">3. Review strengths and tradeoffs</p>
+                <p className="mt-2 text-[var(--atlas-muted)]">Your results show where each city aligns with your priorities and where you may want to investigate further.</p>
               </div>
             </div>
-            <div className="mt-8 rounded-3xl bg-white/5 p-5 text-sm text-slate-300">
-              <p className="font-semibold text-white">Drafts save locally while you work</p>
+            <div className="mt-8 rounded-3xl bg-[rgba(255,255,255,0.7)] p-5 text-sm text-[var(--atlas-muted)]">
+              <p className="font-semibold text-[var(--atlas-ink)]">Drafts save locally while you work</p>
               <p className="mt-3">You can move through the assessment in sections and come back without losing progress on this device.</p>
             </div>
           </div>
@@ -150,11 +157,17 @@ export default function LifeMatchApp() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-        <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8">
+        <div className="rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.86)] p-8 shadow-[0_24px_44px_-34px_rgba(39,31,20,0.55)]">
           <div>
-            <p className="text-sm uppercase tracking-[0.35em] text-cyan-400">Assessment sections</p>
-            <h2 className="mt-4 text-3xl font-bold text-white">Build a complete retirement decision profile.</h2>
-            <p className="mt-3 text-slate-400">Rate how important each statement is to your move. The engine uses those weights to rank destinations and explain the tradeoffs.</p>
+            <p className="text-sm uppercase tracking-[0.35em] text-[var(--atlas-accent)]">Assessment sections</p>
+            <h2 className="mt-4 text-4xl font-semibold text-[var(--atlas-ink)]">Build a complete retirement decision profile.</h2>
+            <p className="mt-3 text-[var(--atlas-muted)]">Rate how important each statement is to your move. The engine uses those weights to rank destinations and explain the tradeoffs.</p>
+
+            <div className="mt-5 rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.72)] px-5 py-4">
+              <p className="text-sm text-[var(--atlas-muted)]">
+                Progress: <span className="font-semibold text-[var(--atlas-ink)]">{profilePreview.answeredCount}</span> of {RETIREMENT_DNA_TOTAL_QUESTIONS} answered.
+              </p>
+            </div>
 
             <div className="mt-8 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
               {RETIREMENT_DNA_SECTIONS.map((section, index) => {
@@ -167,28 +180,28 @@ export default function LifeMatchApp() {
                     key={section.id}
                     type="button"
                     onClick={() => moveToSection(index, true)}
-                    className={`rounded-3xl border px-5 py-4 text-left transition ${isActive ? "border-cyan-400 bg-cyan-500/10" : "border-white/10 bg-slate-950/80 hover:border-cyan-400/50"}`}
+                    className={`rounded-3xl border px-5 py-4 text-left transition ${isActive ? "border-[rgba(31,95,99,0.45)] bg-[rgba(31,95,99,0.1)]" : "border-[var(--atlas-border)] bg-[rgba(255,255,255,0.65)] hover:border-[rgba(31,95,99,0.45)]"}`}
                   >
                     <div className="flex items-center justify-between gap-4">
-                      <p className="text-sm font-semibold text-white">{section.title}</p>
-                      <span className={`rounded-full px-3 py-1 text-xs ${isComplete ? "bg-emerald-500/15 text-emerald-300" : "bg-white/5 text-slate-400"}`}>
+                      <p className="text-sm font-semibold text-[var(--atlas-ink)]">{section.title}</p>
+                      <span className={`rounded-full px-3 py-1 text-xs ${isComplete ? "bg-emerald-500/15 text-emerald-700" : "bg-[rgba(255,255,255,0.7)] text-[var(--atlas-muted)]"}`}>
                         {sectionAnsweredCount}/{section.questions.length}
                       </span>
                     </div>
-                    <p className="mt-3 text-sm leading-6 text-slate-400">{section.description}</p>
+                    <p className="mt-3 text-sm leading-6 text-[var(--atlas-muted)]">{section.description}</p>
                   </button>
                 );
               })}
             </div>
 
-            <div ref={sectionHeaderRef} className="mt-10 rounded-[2rem] border border-white/10 bg-slate-950/80 p-8">
+            <div ref={sectionHeaderRef} className="mt-10 rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.76)] p-8">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                  <p className="text-sm uppercase tracking-[0.35em] text-cyan-400">Section {currentSectionIndex + 1} of {totalSections}</p>
-                  <h3 className="mt-3 text-2xl font-bold text-white">{currentSection.title}</h3>
-                  <p className="mt-3 max-w-3xl text-slate-400">{currentSection.description}</p>
+                  <p className="text-sm uppercase tracking-[0.35em] text-[var(--atlas-accent)]">Section {currentSectionIndex + 1} of {totalSections}</p>
+                  <h3 className="mt-3 text-3xl font-semibold text-[var(--atlas-ink)]">{currentSection.title}</h3>
+                  <p className="mt-3 max-w-3xl text-[var(--atlas-muted)]">{currentSection.description}</p>
                 </div>
-                <div className="rounded-full bg-white/5 px-4 py-2 text-sm text-slate-300">
+                <div className="rounded-full bg-[rgba(246,238,225,0.9)] px-4 py-2 text-sm text-[var(--atlas-muted)]">
                   {currentSectionAnsweredCount} of {currentSection.questions.length} answered
                 </div>
               </div>
@@ -200,15 +213,15 @@ export default function LifeMatchApp() {
                     ref={(node) => {
                       questionCardRefs.current[questionItem.id] = node;
                     }}
-                    className="rounded-3xl border border-white/10 bg-white/5 p-5"
+                    className="rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,253,248,0.82)] p-5"
                   >
                     <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                       <div className="max-w-3xl">
-                        <p className="text-xs uppercase tracking-[0.25em] text-cyan-400">Question {currentQuestionOffset + questionIndex + 1}</p>
-                        <h4 className="mt-2 text-lg font-semibold text-white">{questionItem.prompt}</h4>
-                        <p className="mt-2 text-sm leading-6 text-slate-400">{questionItem.helper}</p>
+                        <p className="text-xs uppercase tracking-[0.25em] text-[var(--atlas-accent)]">Question {currentQuestionOffset + questionIndex + 1}</p>
+                        <h4 className="mt-2 text-xl font-semibold text-[var(--atlas-ink)]">{questionItem.prompt}</h4>
+                        <p className="mt-2 text-sm leading-6 text-[var(--atlas-muted)]">{questionItem.helper}</p>
                       </div>
-                      <div className="rounded-2xl bg-slate-950/80 px-4 py-3 text-xs text-slate-300">
+                      <div className="rounded-2xl bg-[rgba(246,238,225,0.9)] px-4 py-3 text-xs text-[var(--atlas-muted)]">
                         {getDimensionDescription(questionItem.dimension)}
                       </div>
                     </div>
@@ -221,7 +234,7 @@ export default function LifeMatchApp() {
                             key={option.value}
                             type="button"
                             onClick={() => setAnswer(questionItem.id, option.value)}
-                            className={`rounded-2xl border px-4 py-4 text-left transition ${isActive ? "border-cyan-400 bg-cyan-500/15 text-cyan-100" : "border-white/10 bg-slate-950/80 text-slate-200 hover:border-cyan-400/50"}`}
+                            className={`rounded-2xl border px-4 py-4 text-left transition ${isActive ? "border-[rgba(31,95,99,0.5)] bg-[linear-gradient(145deg,rgba(31,95,99,0.14),rgba(31,95,99,0.08))] text-[var(--atlas-accent)]" : "border-[var(--atlas-border)] bg-[rgba(255,255,255,0.8)] text-[var(--atlas-ink)] hover:border-[rgba(31,95,99,0.45)]"}`}
                           >
                             <div className="text-xl font-bold">{option.shortLabel}</div>
                             <div className="mt-2 text-sm">{option.label}</div>
@@ -234,7 +247,7 @@ export default function LifeMatchApp() {
               </div>
 
               <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-[var(--atlas-muted)]">
                   {sectionIsComplete ? "Section complete. Move forward or review earlier answers." : "Answer every question in this section to keep the assessment balanced."}
                 </p>
                 <div className="flex flex-wrap gap-3">
@@ -242,7 +255,7 @@ export default function LifeMatchApp() {
                     type="button"
                     onClick={() => moveToSection(currentSectionIndex - 1, true)}
                     disabled={currentSectionIndex === 0}
-                    className="rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:border-cyan-400 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="rounded-full border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.75)] px-5 py-3 text-sm font-semibold text-[var(--atlas-muted)] transition hover:border-[rgba(31,95,99,0.45)] hover:text-[var(--atlas-accent)] disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     Previous section
                   </button>
@@ -250,7 +263,7 @@ export default function LifeMatchApp() {
                     type="button"
                     onClick={() => moveToSection(currentSectionIndex + 1, true)}
                     disabled={currentSectionIndex === totalSections - 1 || !sectionIsComplete}
-                    className="rounded-full border border-cyan-400 px-5 py-3 text-sm font-semibold text-cyan-300 transition hover:bg-cyan-400/10 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="rounded-full border border-[rgba(31,95,99,0.45)] px-5 py-3 text-sm font-semibold text-[var(--atlas-accent)] transition hover:bg-[rgba(31,95,99,0.08)] disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     Next section
                   </button>
@@ -260,42 +273,42 @@ export default function LifeMatchApp() {
           </div>
         </div>
 
-        <aside className="rounded-[2rem] border border-white/10 bg-slate-950/80 p-8 text-slate-300">
-          <p className="uppercase tracking-[0.35em] text-cyan-400">Retirement DNA profile</p>
+        <aside className="rounded-[2rem] border border-[var(--atlas-border)] bg-[linear-gradient(145deg,rgba(255,252,246,0.95),rgba(247,238,222,0.88))] p-8 text-[var(--atlas-muted)] shadow-[0_24px_46px_-34px_rgba(42,34,23,0.6)] lg:sticky lg:top-24 lg:self-start">
+          <p className="uppercase tracking-[0.35em] text-[var(--atlas-accent)]">Retirement DNA profile</p>
           <div className="mt-6 space-y-4">
-            <div className="rounded-3xl bg-slate-900/80 p-5">
-              <p className="text-sm text-slate-400">Completion</p>
-              <p className="mt-2 text-4xl font-black text-white">{profilePreview.completionPercent}%</p>
-              <p className="mt-2 text-sm text-slate-400">{profilePreview.answeredCount} of {RETIREMENT_DNA_TOTAL_QUESTIONS} questions answered</p>
+            <div className="rounded-3xl bg-[rgba(255,255,255,0.75)] p-5">
+              <p className="text-sm text-[var(--atlas-muted)]">Completion</p>
+              <p className="mt-2 text-4xl font-black text-[var(--atlas-accent)]">{profilePreview.completionPercent}%</p>
+              <p className="mt-2 text-sm text-[var(--atlas-muted)]">{profilePreview.answeredCount} of {RETIREMENT_DNA_TOTAL_QUESTIONS} questions answered</p>
             </div>
 
-            <div className="rounded-3xl bg-slate-900/80 p-5">
-              <p className="text-sm uppercase tracking-[0.25em] text-cyan-400">Top priorities so far</p>
+            <div className="rounded-3xl bg-[rgba(255,255,255,0.75)] p-5">
+              <p className="text-sm uppercase tracking-[0.25em] text-[var(--atlas-accent)]">Top priorities so far</p>
               <div className="mt-4 space-y-3">
                 {profilePreview.topPriorities.length === 0 ? (
-                  <p className="text-sm text-slate-400">Start answering to reveal your strongest decision drivers.</p>
+                  <p className="text-sm text-[var(--atlas-muted)]">Start answering to reveal your strongest decision drivers.</p>
                 ) : profilePreview.topPriorities.map((priority) => (
                   <div key={priority.id}>
                     <div className="flex items-center justify-between gap-4 text-sm">
-                      <span className="text-white">{priority.label}</span>
-                      <span className="text-cyan-300">{priority.score}</span>
+                      <span className="text-[var(--atlas-ink)]">{priority.label}</span>
+                      <span className="text-[var(--atlas-accent)]">{priority.score}</span>
                     </div>
-                    <div className="mt-2 h-2 rounded-full bg-white/5">
-                      <div className="h-2 rounded-full bg-cyan-400" style={{ width: `${priority.score}%` }} />
+                    <div className="mt-2 h-2 rounded-full bg-[rgba(31,95,99,0.12)]">
+                      <div className="h-2 rounded-full bg-[linear-gradient(90deg,#235f63,#3f8a86)]" style={{ width: `${priority.score}%` }} />
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="rounded-3xl bg-slate-900/80 p-5">
-              <p className="text-sm uppercase tracking-[0.25em] text-cyan-400">Derived match signals</p>
+            <div className="rounded-3xl bg-[rgba(255,255,255,0.75)] p-5">
+              <p className="text-sm uppercase tracking-[0.25em] text-[var(--atlas-accent)]">Derived match signals</p>
               {profilePreview.derivedTags.length === 0 ? (
-                <p className="mt-4 text-sm text-slate-400">No strong destination signals yet. They will appear as your priorities become clearer.</p>
+                <p className="mt-4 text-sm text-[var(--atlas-muted)]">No strong destination signals yet. They will appear as your priorities become clearer.</p>
               ) : (
                 <div className="mt-4 flex flex-wrap gap-2">
                   {profilePreview.derivedTags.map((tag) => (
-                    <span key={tag} className="rounded-full bg-white/5 px-3 py-2 text-xs uppercase tracking-[0.2em] text-slate-200">
+                    <span key={tag} className="rounded-full bg-[rgba(31,95,99,0.1)] px-3 py-2 text-xs uppercase tracking-[0.2em] text-[var(--atlas-accent)]">
                       {tag}
                     </span>
                   ))}
@@ -308,7 +321,7 @@ export default function LifeMatchApp() {
                 Assessment complete. Your full recommendation engine output is ready.
               </div>
             ) : (
-              <p className="text-sm text-slate-400">Complete every section for the full recommendation engine and explanation layer.</p>
+              <p className="text-sm text-[var(--atlas-muted)]">Complete every section for the full recommendation engine and explanation layer.</p>
             )}
           </div>
 
@@ -317,21 +330,21 @@ export default function LifeMatchApp() {
               type="button"
               onClick={goToResults}
               disabled={!assessmentIsComplete}
-              className={`rounded-full px-6 py-4 text-sm font-semibold transition ${assessmentIsComplete ? "bg-cyan-500 text-slate-950 hover:bg-cyan-400" : "cursor-not-allowed bg-white/5 text-slate-500"}`}
+              className={`rounded-full px-6 py-4 text-sm font-semibold transition ${assessmentIsComplete ? "bg-[linear-gradient(145deg,#235f63,#3f8a86)] text-[#f8f4ec] hover:brightness-105" : "cursor-not-allowed bg-[rgba(255,255,255,0.7)] text-[var(--atlas-muted)]"}`}
             >
               Generate my recommendations
             </button>
             <button
               type="button"
               onClick={resetAssessment}
-              className="rounded-full border border-white/10 bg-slate-900/80 px-6 py-4 text-sm font-semibold text-slate-100 transition hover:border-cyan-400"
+              className="rounded-full border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.75)] px-6 py-4 text-sm font-semibold text-[var(--atlas-muted)] transition hover:border-[rgba(31,95,99,0.45)] hover:text-[var(--atlas-accent)]"
             >
               Reset assessment
             </button>
           </div>
 
-          <div className="mt-10 rounded-3xl bg-slate-900/80 p-5 text-sm text-slate-400">
-            <p className="font-semibold text-white">Why this module is deeper</p>
+          <div className="mt-10 rounded-3xl bg-[rgba(255,255,255,0.75)] p-5 text-sm text-[var(--atlas-muted)]">
+            <p className="font-semibold text-[var(--atlas-ink)]">Why this module is deeper</p>
             <p className="mt-3">
               Instead of matching on a few tags, Horizon Atlas now builds a weighted retirement profile across 12 dimensions, then scores the destination catalog against that full profile.
             </p>

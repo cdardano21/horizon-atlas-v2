@@ -25,22 +25,30 @@ const stats = [
 
 export default function Stats() {
   return (
-    <section className="mx-auto max-w-7xl px-6 py-16 sm:px-8">
-      <div className="rounded-[2rem] border border-white/10 bg-slate-950/95 p-8 shadow-xl shadow-slate-950/10 backdrop-blur-xl">
+    <section className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
+      <div className="rounded-[2.2rem] border border-[var(--atlas-border)] bg-[linear-gradient(120deg,rgba(255,250,242,0.95),rgba(248,240,227,0.88))] p-8 shadow-[var(--atlas-shadow)] backdrop-blur-xl">
         <div className="mb-8 text-center">
-          <p className="uppercase tracking-[0.35em] text-cyan-400">Trusted by people planning their next chapter</p>
-          <p className="mt-4 text-3xl font-semibold text-slate-200 sm:text-4xl">
-            A premium destination search experience with proven results.
+          <p className="atlas-kicker">Trusted by people planning their next chapter</p>
+          <p className="mt-4 text-4xl font-semibold text-[var(--atlas-ink)] sm:text-5xl">
+            Travel-magazine wonder, relocation-grade clarity.
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
-            <div key={stat.label} className="rounded-3xl border border-white/10 bg-slate-950/70 p-6 text-center backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-cyan-400/30">
-              <p className="text-4xl font-black text-cyan-400">{stat.value}</p>
-              <p className="mt-4 text-sm font-semibold text-white">{stat.label}</p>
-              <p className="mt-3 text-sm leading-6 text-slate-400">{stat.description}</p>
+            <div key={stat.label} className="rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,253,247,0.88)] p-6 text-left shadow-[0_20px_45px_-35px_rgba(35,95,99,0.9)] transition hover:-translate-y-0.5 hover:border-[rgba(31,95,99,0.35)]">
+              <div className="mb-4 h-1 w-16 rounded-full bg-[linear-gradient(90deg,#235f63,#c59b5f)]" />
+              <p className="text-4xl font-black text-[var(--atlas-accent)]">{stat.value}</p>
+              <p className="mt-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--atlas-ink)]">{stat.label}</p>
+              <p className="mt-3 text-sm leading-6 text-[var(--atlas-muted)]">{stat.description}</p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-6 rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.62)] px-6 py-4">
+          <p className="text-xs uppercase tracking-[0.24em] text-[var(--atlas-accent)]">Why people stay with the process</p>
+          <p className="mt-2 text-sm leading-7 text-[var(--atlas-muted)]">
+            The platform combines emotional fit, practical constraints, and destination-specific evidence in one flow, so decisions feel grounded and personal.
+          </p>
         </div>
       </div>
     </section>

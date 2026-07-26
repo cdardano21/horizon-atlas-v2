@@ -1,4 +1,4 @@
-import { type Destination, type DestinationMemberDetails, destinations } from "./destinations";
+import { type Destination, type DestinationMemberDetails, type DestinationRelocationProfile, destinations } from "./destinations";
 import { isSupabaseConfigured, supabaseFetch } from "./supabase";
 
 type DestinationCatalogRow = {
@@ -14,7 +14,7 @@ type DestinationCatalogRow = {
   climate_summary: string | null;
   lifestyle_summary: string | null;
   transportation_summary: string | null;
-  metadata: { memberDetails?: DestinationMemberDetails } | null;
+  metadata: { memberDetails?: DestinationMemberDetails; relocationProfile?: DestinationRelocationProfile } | null;
 };
 
 type DestinationMediaRow = {
@@ -110,6 +110,7 @@ const toDestinationFromCatalog = (
     images: mediaImages.length ? mediaImages : local?.images?.length ? local.images : [fallbackImage],
     tags: local?.tags ?? [],
     memberDetails: row.metadata?.memberDetails ?? local?.memberDetails,
+    relocationProfile: row.metadata?.relocationProfile ?? local?.relocationProfile,
   };
 };
 

@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { Destination } from "../lib/destinations";
+import { resolveSourceHref, sanitizeExternalSourceUrl } from "../lib/source-links";
+import ExternalLinkIcon from "./ExternalLinkIcon";
+import { getDestinationCardFacts, getFactSourceDomain, getFactSourcePublisherUrl } from "./destinationCardFacts";
 import { buildCompareUrl, buildFavoritesShareUrl, saveFavoriteSlugs, useFavorites } from "./favorites";
 
 type StatusTone = "success" | "warning" | "error";
@@ -134,9 +137,62 @@ export default function FavoritesPanel({ destinations }: FavoritesPanelProps) {
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {favoriteDestinations.map((destination) => (
               <article key={destination.slug} className="rounded-3xl border border-white/10 bg-white/5 p-5">
-                <p className="text-sm uppercase tracking-[0.25em] text-cyan-400">{destination.country}</p>
-                <h3 className="mt-2 text-xl font-semibold text-white">{destination.city}</h3>
-                <p className="mt-3 text-sm text-slate-400">{destination.description}</p>
+                {(() => {
+                  const cardFacts = getDestinationCardFacts(destination);
+
+                  return (
+                    <>
+                      <p className="text-sm uppercase tracking-[0.25em] text-cyan-400">{destination.country}</p>
+                      <h3 className="mt-2 text-xl font-semibold text-white">{destination.city}</h3>
+                      <p className="mt-3 text-sm leading-6 text-slate-300">{cardFacts.summary}</p>
+                      <div className="mt-4 grid gap-2 text-xs">
+                        {cardFacts.facts.map((fact, index) => {
+                          const safeSourceUrl = sanitizeExternalSourceUrl(fact.sourceUrl);
+                          const sourceHref = resolveSourceHref(fact.sourceUrl, [fact.label, destination.city, destination.country]);
+                          const publisherUrl = safeSourceUrl ? getFactSourcePublisherUrl(safeSourceUrl) : null;
+                          const sourceDomain = safeSourceUrl ? getFactSourceDomain(safeSourceUrl) : "web search";
+
+                          return (
+                            <div key={`${fact.label}-${fact.value}-${index}`} className="rounded-xl bg-slate-950/80 px-3 py-2 text-slate-200">
+                              <p>{fact.label}: {fact.value}</p>
+                              {fact.sourceUrl ? (
+                                <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                                  <a href={sourceHref} target="_blank" rel="noopener noreferrer" aria-label={`Open source evidence for ${fact.label}`} title={`Open source evidence for ${fact.label}`} className="inline-flex items-center gap-1 rounded-full border border-transparent px-1 py-0.5 text-[11px] uppercase tracking-[0.2em] leading-none text-cyan-300 transition hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950">
+                                    <span className="inline-flex items-center gap-1">
+                                      {safeSourceUrl ? "Source" : "Source search"}
+                                      <ExternalLinkIcon className="h-2.5 w-2.5" />
+                                    </span>
+                                  </a>
+                                  {publisherUrl ? (
+                                    <a href={publisherUrl} target="_blank" rel="noopener noreferrer" aria-label={`Open publisher site ${sourceDomain}`} title={`Open publisher site ${sourceDomain}`} className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-2.5 py-1 text-[10px] uppercase tracking-[0.18em] leading-none text-cyan-200 transition hover:border-cyan-300 hover:text-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950">
+                                      <span className="inline-flex items-center gap-1">
+                                        {sourceDomain}
+                                        <ExternalLinkIcon className="h-2.5 w-2.5" />
+                                      </span>
+                                    </a>
+                                  ) : (
+                                    <span className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-2 py-0.5 text-[10px] uppercase tracking-[0.18em] text-cyan-200">
+                                      {sourceDomain}
+                                    </span>
+                                  )}
+                                </div>
+                              ) : null}
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="mt-4 space-y-2 rounded-2xl border border-white/10 bg-slate-950/70 p-3">
+                        <p className="text-[11px] uppercase tracking-[0.2em] text-cyan-300">Top score signals</p>
+                        {cardFacts.scoreSignals.map((score) => (
+                          <div key={score.category} className="flex items-center justify-between text-xs text-slate-200">
+                            <span>{score.category}</span>
+                            <span className="font-semibold text-cyan-200">{score.score}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  );
+                })()}
                 <div className="mt-4 flex flex-wrap gap-3">
                   <Link href={`/destinations/${destination.slug}`} className="text-sm font-semibold text-cyan-300 hover:text-cyan-200">
                     Open detail page

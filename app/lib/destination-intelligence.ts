@@ -1,4 +1,6 @@
 import type { Destination } from "./destinations";
+import { NO_VERIFIED_INFO } from "./consumer-copy";
+import { generatedDestinationCardFacts } from "./generated-destination-card-facts";
 
 type IntelligenceResource = {
   label: string;
@@ -12,7 +14,27 @@ type IntelligenceSection = {
   bullets: string[];
 };
 
+type IntelligenceScorecardItem = {
+  category: string;
+  score: number;
+  context: string;
+};
+
+type IntelligenceProfileItem = {
+  label: string;
+  value: string;
+  note?: string;
+  sourceUrl?: string;
+};
+
+type IntelligenceProfileSection = {
+  title: string;
+  summary: string;
+  items: IntelligenceProfileItem[];
+};
+
 export type DestinationIntelligence = {
+  aiSummary: string;
   climateHeadline: string;
   lifestyleHeadline: string;
   healthcareHeadline: string;
@@ -30,8 +52,10 @@ export type DestinationIntelligence = {
   retirementAdvantages: string[];
   retirementTradeoffs: string[];
   quickFacts: Array<{ label: string; value: string }>;
+  livingHereScorecard: IntelligenceScorecardItem[];
   planningSignals: Array<{ label: string; tone: "strong" | "review"; detail: string }>;
   briefingSections: IntelligenceSection[];
+  comprehensiveSections: IntelligenceProfileSection[];
   resources: {
     rentals: IntelligenceResource[];
     healthcare: IntelligenceResource[];
@@ -84,6 +108,75 @@ const getClimateSignal = (destination: Destination) =>
 const buildResourceQuery = (destination: Destination, suffix: string) =>
   encodeURIComponent(`${destination.city} ${destination.country} ${suffix}`);
 
+const clampScore = (score: number) => Math.max(55, Math.min(99, Math.round(score)));
+
+const toUnknown = (value: string | undefined) => value ?? NO_VERIFIED_INFO;
+
+const toRange = (base: number, spread: number) => {
+  const low = Math.max(850, Math.round(base - spread));
+  const high = Math.round(base + spread);
+  return `${low.toLocaleString()}-${high.toLocaleString()} / month`;
+};
+
+const formatCount = (count?: number): string => (typeof count === "number" ? count.toLocaleString() : "Unavailable");
+
+const avg = (values: Array<number | undefined>): number | null => {
+  const filtered = values.filter((value): value is number => typeof value === "number");
+  if (filtered.length === 0) return null;
+  return Math.round((filtered.reduce((total, value) => total + value, 0) / filtered.length) * 10) / 10;
+};
+
+const sum = (values: Array<number | undefined>): number | null => {
+  const filtered = values.filter((value): value is number => typeof value === "number");
+  if (filtered.length === 0) return null;
+  return filtered.reduce((total, value) => total + value, 0);
+};
+
+const min = (values: Array<number | undefined>): number | null => {
+  const filtered = values.filter((value): value is number => typeof value === "number");
+  if (filtered.length === 0) return null;
+  return Math.min(...filtered);
+};
+
+const max = (values: Array<number | undefined>): number | null => {
+  const filtered = values.filter((value): value is number => typeof value === "number");
+  if (filtered.length === 0) return null;
+  return Math.max(...filtered);
+};
+
+const formatMaybeNumber = (value: number | null, suffix = ""): string => (typeof value === "number" ? `${value}${suffix}` : "Unavailable");
+
+const factResources = (destination: Destination) => {
+  const facts = generatedDestinationCardFacts[destination.slug]?.facts ?? [];
+  return facts.map((fact, index) => ({
+    id: `${destination.slug}-fact-${index + 1}`,
+    title: fact.label,
+    description: fact.value,
+    url: fact.sourceUrl ?? "",
+    category: fact.label.toLowerCase().includes("airport")
+      ? "transportation"
+      : fact.label.toLowerCase().includes("health")
+        ? "healthcare"
+        : fact.label.toLowerCase().includes("visa") || fact.label.toLowerCase().includes("resid")
+          ? "residency"
+          : fact.label.toLowerCase().includes("tax")
+            ? "taxes"
+            : "local",
+    sourceType: fact.sourceUrl ? "official_link" : null,
+    verifiedAt: null,
+  }));
+};
+
+const groupedFactValues = (destination: Destination, label: string) => {
+  const facts = generatedDestinationCardFacts[destination.slug]?.facts ?? [];
+  return facts.filter((fact) => fact.label.toLowerCase() === label.toLowerCase()).map((fact) => fact.value);
+};
+
+const firstFactValue = (destination: Destination, label: string) => {
+  const values = groupedFactValues(destination, label);
+  return values.length > 0 ? values[0] : null;
+};
+
 export function getDestinationIntelligence(destination: Destination): DestinationIntelligence {
   const mapSearchUrl = `https://www.google.com/maps/search/${encodeURIComponent(`${destination.city}, ${destination.country}`)}`;
   const mapEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${destination.city}, ${destination.country}`)}&z=12&output=embed`;
@@ -97,8 +190,420 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
   const budgetFriendly = hasTag(destination, "value");
   const coastal = hasTag(destination, "coast") || hasTag(destination, "beach");
   const cultural = hasTag(destination, "culture") || hasTag(destination, "city");
+  const family = hasTag(destination, "family") || hasTag(destination, "expat-friendly");
+  const digitalNomad = hasTag(destination, "digital nomad") || hasTag(destination, "expat-friendly");
+  const golfTag = hasTag(destination, "golf");
+  const details = destination.memberDetails;
+  const profileOverrides = destination.relocationProfile;
+
+  const golfCourseCount = (details?.golf?.publicCourses ?? 0) + (details?.golf?.privateCourses ?? 0);
+  const restaurantCount = details?.amenities?.restaurants;
+  const englishSchoolCount = details?.amenities?.englishSchools;
+  const hasHospitalData = Boolean(details?.hospitals?.length);
+  const hasAirportData = Boolean(details?.airports?.length);
+  const airportFacts = groupedFactValues(destination, "Nearest airport");
+  const healthcareFacts = groupedFactValues(destination, "Healthcare");
+  const residencyFacts = groupedFactValues(destination, "Residency");
+  const taxFacts = groupedFactValues(destination, "Tax");
+
+  const scoreSafety = clampScore(78 + (safety ? 16 : 0));
+  const scoreHealthcare = clampScore(76 + (healthcare ? 15 : 0) + (hasHospitalData ? 5 : 0));
+  const scoreCost = clampScore(72 + (budgetFriendly ? 15 : 2));
+  const scoreWeather = clampScore(74 + (coastal ? 14 : 8));
+  const scoreGolf = clampScore(63 + (golfTag ? 18 : 3) + Math.min(14, golfCourseCount * 2));
+  const scoreBeaches = clampScore(64 + (coastal ? 24 : 5));
+  const scoreWalkability = clampScore(70 + (walkable ? 20 : 6));
+  const scoreFood = clampScore(72 + (cultural ? 16 : 6) + (typeof restaurantCount === "number" ? 4 : 0));
+  const scoreInternet = clampScore(73 + (digitalNomad ? 18 : 7));
+  const scoreRetirement = clampScore(77 + (healthcare ? 7 : 0) + (safety ? 5 : 0) + (budgetFriendly ? 5 : 0));
+  const scoreFamily = clampScore(72 + (family ? 15 : 4) + (typeof englishSchoolCount === "number" ? 6 : 0));
+  const scoreNomad = clampScore(73 + (digitalNomad ? 17 : 4) + (hasAirportData ? 4 : 0));
+
+  const scoreAverage = Math.round(
+    [
+      scoreSafety,
+      scoreHealthcare,
+      scoreCost,
+      scoreWeather,
+      scoreGolf,
+      scoreBeaches,
+      scoreWalkability,
+      scoreFood,
+      scoreInternet,
+      scoreRetirement,
+      scoreFamily,
+      scoreNomad,
+    ].reduce((total, score) => total + score, 0) / 12,
+  );
+
+  const overallMatch = destination.match > 0 ? clampScore(destination.match) : scoreAverage;
+
+  const monthlyBudgetBase = 2200 + (budgetFriendly ? -450 : 350) + (coastal ? 150 : 0);
+  const monthlyBudget = toRange(monthlyBudgetBase, 500);
+  const coupleBudget = toRange(monthlyBudgetBase * 1.5, 700);
+  const familyBudget = toRange(monthlyBudgetBase * 2.1, 950);
+
+  const baseAiSummary = `${destination.city} feels strongest for people who want ${coastal ? "coastal" : "balanced"} living with ${walkable ? "walkable daily routines" : "a quieter pace"}, supported by ${healthcare ? "credible healthcare signals" : "solid core infrastructure"}. If your goal is a confident long-stay relocation decision, this profile gives you one place to compare costs, climate, healthcare, mobility, neighborhoods, and retirement practicality before booking a scouting trip.`;
+
+  const baseLivingHereScorecard: IntelligenceScorecardItem[] = [
+    { category: "Overall Match", score: overallMatch, context: "Weighted from relocation-fit signals." },
+    { category: "Safety", score: scoreSafety, context: safety ? "Strong signal in current model." : "Verify neighborhood-level variation." },
+    { category: "Healthcare", score: scoreHealthcare, context: hasHospitalData ? "Includes structured facility data." : "Requires facility-level verification." },
+    { category: "Cost of Living", score: scoreCost, context: budgetFriendly ? "Value-oriented in current profile." : "Quality-led; model your budget carefully." },
+    { category: "Weather", score: scoreWeather, context: coastal ? "Coastal climate profile." : "Seasonality should be validated month-by-month." },
+    { category: "Golf", score: scoreGolf, context: golfCourseCount > 0 ? `${golfCourseCount} known public/private courses.` : "Course depth needs local validation." },
+    { category: "Beaches", score: scoreBeaches, context: coastal ? "Waterfront access is a core advantage." : "Not a beach-led destination." },
+    { category: "Walkability", score: scoreWalkability, context: walkable ? "Daily mobility is likely easier." : "District choice will matter more." },
+    { category: "Food", score: scoreFood, context: cultural ? "Good local life and dining potential." : "Research local dining depth by district." },
+    { category: "Internet", score: scoreInternet, context: digitalNomad ? "Remote-friendly signal is above baseline." : "Check fiber availability per neighborhood." },
+    { category: "Retirement Friendly", score: scoreRetirement, context: "Balanced across healthcare, safety, and cost fit." },
+    { category: "Family Friendly", score: scoreFamily, context: typeof englishSchoolCount === "number" ? `${englishSchoolCount} English/bilingual schools tracked.` : "Education ecosystem needs deeper validation." },
+    { category: "Digital Nomad", score: scoreNomad, context: "Combines connectivity, transport, and integration factors." },
+  ];
+
+  const weatherRows = details?.monthlyWeather ?? [];
+  const climateBestMonth = details?.bestMonths ?? (weatherRows.length > 0 ? "See monthly weather table" : "Unavailable");
+  const climateAverageHigh = avg(weatherRows.map((row) => row.avgHighC));
+  const climateAverageLow = avg(weatherRows.map((row) => row.avgLowC));
+  const climateRainfall = sum(weatherRows.map((row) => row.rainfallMm));
+  const climateSunshine = avg(weatherRows.map((row) => row.sunshineHours));
+  const climateSea = avg(weatherRows.map((row) => row.avgSeaC));
+  const climateHottestMonth = weatherRows.reduce<{ month: string; temp: number } | null>((current, row) => {
+    if (typeof row.avgHighC !== "number") return current;
+    if (!current || row.avgHighC > current.temp) return { month: row.month, temp: row.avgHighC };
+    return current;
+  }, null);
+  const climateWettestMonth = weatherRows.reduce<{ month: string; rainfall: number } | null>((current, row) => {
+    if (typeof row.rainfallMm !== "number") return current;
+    if (!current || row.rainfallMm > current.rainfall) return { month: row.month, rainfall: row.rainfallMm };
+    return current;
+  }, null);
+
+  const lowestCostBudget = formatMaybeNumber(monthlyBudgetBase, " / month");
+
+  const baseComprehensiveSections: IntelligenceProfileSection[] = [
+    {
+      title: "Climate",
+      summary: "Actual month-by-month weather matters more than a single score for relocation planning.",
+      items: [
+        { label: "Average monthly high", value: climateAverageHigh !== null ? `${climateAverageHigh}°C` : "Unavailable" },
+        { label: "Average monthly low", value: climateAverageLow !== null ? `${climateAverageLow}°C` : "Unavailable" },
+        { label: "Annual rainfall", value: climateRainfall !== null ? `${climateRainfall} mm` : "Unavailable" },
+        { label: "Average sunshine hours", value: climateSunshine !== null ? `${climateSunshine} hours/day` : "Unavailable" },
+        { label: "Sea temperature", value: climateSea !== null ? `${climateSea}°C` : "Unavailable" },
+        { label: "Best months", value: climateBestMonth },
+        { label: "Hottest month", value: climateHottestMonth ? `${climateHottestMonth.month} (${climateHottestMonth.temp}°C avg high)` : "Unavailable" },
+        { label: "Wettest month", value: climateWettestMonth ? `${climateWettestMonth.month} (${climateWettestMonth.rainfall} mm)` : "Unavailable" },
+      ],
+    },
+    {
+      title: "Cost of Living",
+      summary: "Use household-level budget planning instead of broad relocation scores.",
+      items: [
+        { label: "Single person budget", value: `${lowestCostBudget}` },
+        { label: "Couple budget", value: coupleBudget },
+        { label: "Family of four budget", value: familyBudget },
+        { label: "Retired couple budget", value: `${formatMaybeNumber(monthlyBudgetBase + 250, " / month")}` },
+        { label: "1BR rent", value: "Unavailable" },
+        { label: "2BR rent", value: "Unavailable" },
+        { label: "3BR rent", value: "Unavailable" },
+        { label: "Utilities", value: "Unavailable" },
+        { label: "Internet", value: "Unavailable" },
+        { label: "Groceries", value: budgetFriendly ? "Value-led market access likely" : "Premium city pricing likely" },
+        { label: "Coffee price", value: "Unavailable" },
+        { label: "Dinner for two", value: "Unavailable" },
+        { label: "Healthcare costs", value: healthcare ? "Private top-ups likely needed" : "Unavailable" },
+      ],
+    },
+    {
+      title: "Healthcare",
+      summary: "Named facilities and emergency access should be visible before you book a scouting trip.",
+      items: [
+        { label: "Public hospitals", value: formatCount(details?.hospitals?.length) },
+        { label: "Private hospitals", value: "Unavailable" },
+        {
+          label: "Top facilities",
+          value: details?.hospitals?.length
+            ? details.hospitals.slice(0, 3).map((hospital) => hospital.name).join(" • ")
+            : healthcareFacts.length > 0
+              ? healthcareFacts.join(" • ")
+              : "No structured facility list yet",
+        },
+        { label: "English-speaking doctors", value: expat ? "Likely available in private networks" : "Unavailable" },
+        {
+          label: "Emergency care",
+          value: healthcare ? "Strong enough to warrant further verification" : healthcareFacts.length > 0 ? healthcareFacts[0] : "No structured emergency-care record yet",
+        },
+        { label: "Pharmacy availability", value: "Unavailable" },
+      ],
+    },
+    {
+      title: "Transportation",
+      summary: "Airport choice and daily mobility can change the lived experience of the same city.",
+      items: [
+        {
+          label: "Major airports",
+          value: details?.airports?.length
+            ? details.airports.map((airport) => airport.name).join(" • ")
+            : airportFacts.length > 0
+              ? airportFacts.join(" • ")
+              : "No structured airport list yet",
+        },
+        { label: "Airport count", value: formatCount(details?.airports?.length) },
+        { label: "Distance to airport", value: details?.airports?.[0]?.distance ?? "Unavailable" },
+        { label: "Public transportation quality", value: walkable ? "Likely solid in core zones" : "Unavailable" },
+        { label: "Walkability", value: `${scoreWalkability}/100` },
+        { label: "Bike friendliness", value: coastal ? "Worth verifying by district" : "Unavailable" },
+      ],
+    },
+    {
+      title: "Lifestyle",
+      summary: "This is where counts and named places matter more than broad appeal statements.",
+      items: [
+        { label: "Golf courses", value: formatCount(golfCourseCount) },
+        { label: "Restaurants", value: formatCount(restaurantCount) },
+        { label: "Pickleball courts", value: formatCount(details?.amenities?.pickleballCourts) },
+        { label: "Schools", value: formatCount(details?.amenities?.schools) },
+        { label: "English schools", value: formatCount(details?.amenities?.englishSchools) },
+        { label: "Beaches", value: coastal ? "Coastal access likely" : "Unavailable" },
+        { label: "Coffee shops", value: "Unavailable" },
+        { label: "Museums", value: "Unavailable" },
+        { label: "Nightlife", value: cultural ? "Likely stronger" : "Unavailable" },
+      ],
+    },
+    {
+      title: "Demographics",
+      summary: "Use real statistics when available and leave the field blank when the data has not been normalized yet.",
+      items: [
+        { label: "Population", value: "Unavailable" },
+        { label: "Median age", value: "Unavailable" },
+        { label: "English spoken", value: expat ? "Likely above average in tourist/private-service contexts" : "Unavailable" },
+        { label: "Internet speed", value: "Unavailable" },
+        { label: "Crime statistics", value: safety ? `${scoreSafety}/100 safety signal` : "Unavailable" },
+        { label: "Air quality", value: "Unavailable" },
+        { label: "Education level", value: "Unavailable" },
+      ],
+    },
+    {
+      title: "Retirement",
+      summary: "Visa, tax, insurance, currency, and daily admin need to be visible in one place.",
+      items: [
+        {
+          label: "Retirement visa requirements",
+          value: countryVisaHeadlines[destination.country] ?? firstFactValue(destination, "Residency") ?? "Unavailable",
+        },
+        {
+          label: "Residency options",
+          value: countryVisaHeadlines[destination.country] ?? firstFactValue(destination, "Residency") ?? "Unavailable",
+        },
+        {
+          label: "Tax information",
+          value: countryTaxHeadlines[destination.country] ?? firstFactValue(destination, "Tax") ?? "Unavailable",
+        },
+        { label: "Healthcare eligibility", value: healthcare ? "Verify public/private eligibility and insurance rules" : "Unavailable" },
+        { label: "Currency", value: "Unavailable" },
+        { label: "Time zone", value: "Unavailable" },
+        { label: "Electrical outlets", value: "Unavailable" },
+        { label: "Driving requirements", value: "Unavailable" },
+      ],
+    },
+    {
+      title: "Housing",
+      summary: "District choice matters more than a generic city label.",
+      items: [
+        { label: "Best neighborhoods for retirees", value: "Unavailable" },
+        { label: "Best neighborhoods for families", value: "Unavailable" },
+        { label: "Luxury areas", value: "Unavailable" },
+        { label: "Budget areas", value: "Unavailable" },
+        { label: "Rental resources", value: "See the resource links below" },
+        { label: "Home buying resources", value: "See the resource links below" },
+      ],
+    },
+    {
+      title: "Dining",
+      summary: "Real restaurant recommendations should come from named places and verified local guides.",
+      items: [
+        { label: "Best breakfast", value: "Unavailable" },
+        { label: "Best coffee", value: "Unavailable" },
+        { label: "Best pizza", value: "Unavailable" },
+        { label: "Best steak", value: "Unavailable" },
+        { label: "Best seafood", value: "Unavailable" },
+        { label: "Fine dining", value: "Unavailable" },
+        { label: "Local favorites", value: "Unavailable" },
+        { label: "Hidden gems", value: "Unavailable" },
+      ],
+    },
+    {
+      title: "Practical Information",
+      summary: "The stuff people end up searching for at the last minute should live on the page up front.",
+      items: [
+        { label: "Emergency phone numbers", value: destination.country === "Greece" ? "112" : "Unavailable" },
+        { label: "Power outlets", value: "Unavailable" },
+        { label: "Internet providers", value: "Unavailable" },
+        { label: "Cell providers", value: "Unavailable" },
+        { label: "Grocery chains", value: "Unavailable" },
+        { label: "Major hospitals", value: details?.hospitals?.length ? details.hospitals.map((hospital) => hospital.name).join(" • ") : "Unavailable" },
+        { label: "Universities", value: "Unavailable" },
+      ],
+    },
+    {
+      title: "Official resources",
+      summary: "Direct source material surfaced from the generated fact bundle when available.",
+      items: factResources(destination).map((fact) => ({
+        label: fact.title,
+        value: fact.description,
+        sourceUrl: fact.url,
+      })),
+    },
+    {
+      title: "Source-backed highlights",
+      summary: "A compact view of the official links and public references currently wired for this destination.",
+      items: [
+        { label: "Airport links", value: airportFacts.length > 0 ? airportFacts.join(" • ") : "No airport fact bundle yet" },
+        { label: "Healthcare links", value: healthcareFacts.length > 0 ? healthcareFacts.join(" • ") : "No healthcare fact bundle yet" },
+        { label: "Residency links", value: residencyFacts.length > 0 ? residencyFacts.join(" • ") : "No residency fact bundle yet" },
+        { label: "Tax links", value: taxFacts.length > 0 ? taxFacts.join(" • ") : "No tax fact bundle yet" },
+      ],
+    },
+    {
+      title: "General",
+      summary: "Core orientation data for fast city-level comparison.",
+      items: [
+        { label: "Country", value: destination.country },
+        { label: "Region", value: `${destination.country} region (verify local province/metro in admin data)` },
+        { label: "Expat population estimate", value: expat ? "Moderate to high expat visibility" : "Lower expat visibility" },
+        { label: "Digital nomad friendliness", value: `${scoreNomad}/100` },
+        { label: "Retirement friendliness", value: `${scoreRetirement}/100` },
+        { label: "Safety score", value: `${scoreSafety}/100` },
+      ],
+    },
+    {
+      title: "Cost of Living",
+      summary: "Planning budgets for solo, couple, and family scenarios.",
+      items: [
+        { label: "Estimated monthly budget", value: monthlyBudget },
+        { label: "Couple budget", value: coupleBudget },
+        { label: "Family budget", value: familyBudget },
+        { label: "Rent ranges", value: budgetFriendly ? "Below premium-med coastal benchmarks" : "Premium-leaning in top districts" },
+        { label: "Home purchase profile", value: destination.overview.includes("housing-buy profile") ? "Positive buy-side signal in current model" : "Needs market-level verification" },
+        { label: "Healthcare cost profile", value: healthcare ? "Likely moderate with private top-ups" : "Cost and insurer acceptance should be modeled" },
+      ],
+    },
+    {
+      title: "Weather",
+      summary: "Lifestyle viability by season and monthly comfort patterns.",
+      items: [
+        { label: "Climate summary", value: destination.climate },
+        { label: "Best months", value: toUnknown(details?.bestMonths) },
+        { label: "Monthly weather table", value: details?.monthlyWeather?.length ? `${details.monthlyWeather.length} months loaded` : NO_VERIFIED_INFO },
+        { label: "Humidity and rainfall", value: "Track monthly humidity and rainfall before long-stay commitment" },
+        { label: "Extreme weather risks", value: coastal ? "Seasonal coastal storm/watch periods should be checked" : "Heat and rainfall swings should be checked" },
+      ],
+    },
+    {
+      title: "Healthcare",
+      summary: "Hospital access and practical care readiness.",
+      items: [
+        { label: "Top hospitals", value: details?.hospitals?.length ? details.hospitals.slice(0, 2).map((h) => h.name).join(", ") : NO_VERIFIED_INFO },
+        { label: "Hospital depth", value: details?.hospitals?.length ? `${details.hospitals.length} facilities listed` : NO_VERIFIED_INFO },
+        { label: "English-speaking doctors", value: expat ? "Likely available in private networks" : "Verify provider by provider" },
+        { label: "Emergency care quality", value: healthcare ? "Above baseline signal" : "Requires local validation" },
+        { label: "Private/public mix", value: "Evaluate private speed versus public breadth for your age profile" },
+      ],
+    },
+    {
+      title: "Transportation",
+      summary: "Airport and intra-city mobility for everyday life.",
+      items: [
+        { label: "Nearest international airport", value: details?.airports?.[0]?.name ?? NO_VERIFIED_INFO },
+        { label: "Airport distance", value: details?.airports?.[0]?.distance ?? NO_VERIFIED_INFO },
+        { label: "Public transportation quality", value: walkable ? "Likely strong in core zones" : "Varies by district" },
+        { label: "Walkability score", value: `${scoreWalkability}/100` },
+        { label: "Traffic score", value: coastal ? "Seasonal surge risk in peak months" : "Moderate; validate commute corridors" },
+      ],
+    },
+    {
+      title: "Real Estate",
+      summary: "Housing choices from practical rentals to premium ownership.",
+      items: [
+        { label: "Rental market", value: budgetFriendly ? "Value-oriented rental pockets likely" : "Demand-led in top neighborhoods" },
+        { label: "Luxury housing", value: coastal ? "Strong waterfront and premium district options" : "Boutique high-end pockets" },
+        { label: "Waterfront housing", value: coastal ? "Available" : "Limited" },
+        { label: "Listing workflow", value: "Use Horizon resource stack plus local portals for district-level comps" },
+      ],
+    },
+    {
+      title: "Lifestyle and Recreation",
+      summary: "Golf, beaches, outdoor, food, and entertainment in one view.",
+      items: [
+        { label: "Golf courses", value: golfCourseCount > 0 ? `${golfCourseCount} tracked courses` : NO_VERIFIED_INFO },
+        { label: "Beach and waterfront", value: coastal ? "Core lifestyle driver" : "Secondary" },
+        { label: "Restaurants", value: typeof restaurantCount === "number" ? `${restaurantCount.toLocaleString()} tracked` : NO_VERIFIED_INFO },
+        { label: "Outdoor life", value: "Use map layer + day-trip stack to evaluate trails, parks, and nature access" },
+        { label: "Entertainment", value: cultural ? "Likely stronger culture/events density" : "Quieter event profile" },
+      ],
+    },
+    {
+      title: "Families, Work, and Internet",
+      summary: "Family readiness and remote-work practicality.",
+      items: [
+        { label: "Family friendly score", value: `${scoreFamily}/100` },
+        { label: "English-speaking schools", value: typeof englishSchoolCount === "number" ? `${englishSchoolCount} tracked` : NO_VERIFIED_INFO },
+        { label: "Childcare and universities", value: "Validate by district and commute pattern" },
+        { label: "Internet and coworking", value: `${scoreInternet}/100 internet fit with ${scoreNomad}/100 nomad fit` },
+      ],
+    },
+    {
+      title: "Retirement, Neighborhoods, and Day Trips",
+      summary: "Decision-critical planning areas before committing to a move.",
+      items: [
+        { label: "Retirement visa/residency", value: countryVisaHeadlines[destination.country] ?? "Validate pathways with current legal guidance" },
+        { label: "Tax orientation", value: countryTaxHeadlines[destination.country] ?? "Obtain specialist tax guidance before assumptions" },
+        { label: "Best neighborhoods", value: "Use map + housing + walkability stack to shortlist luxury, value, beach, golf, and family zones" },
+        { label: "Day trips", value: "Add top nearby towns, attractions, and weekend loops through admin-managed records" },
+        { label: "Media stack", value: "Hero imagery, map embeds, YouTube, and short-form social links supported" },
+      ],
+    },
+  ];
+
+  const scorecardOverrideByCategory = new Map(
+    (profileOverrides?.livingHereScorecard ?? []).map((item) => [item.category.toLowerCase(), item]),
+  );
+
+  const livingHereScorecard = baseLivingHereScorecard.map((item) => {
+    const override = scorecardOverrideByCategory.get(item.category.toLowerCase());
+    if (!override) return item;
+    return {
+      ...item,
+      score: typeof override.score === "number" ? clampScore(override.score) : item.score,
+      context: override.context?.trim() || item.context,
+    };
+  });
+
+  const sectionOverrideByTitle = new Map(
+    (profileOverrides?.comprehensiveSections ?? []).map((section) => [section.title.toLowerCase(), section]),
+  );
+
+  const comprehensiveSections = baseComprehensiveSections.map((section) => {
+    const override = sectionOverrideByTitle.get(section.title.toLowerCase());
+    if (!override) return section;
+    return {
+      ...section,
+      summary: override.summary?.trim() || section.summary,
+      items: Array.isArray(override.items) && override.items.length > 0
+        ? override.items.map((item) => ({
+            label: item.label,
+            value: item.value,
+            note: item.note,
+          }))
+        : section.items,
+    };
+  });
+
+  const aiSummary = profileOverrides?.aiSummary?.trim() || baseAiSummary;
 
   return {
+    aiSummary,
     climateHeadline: destination.climate,
     lifestyleHeadline: destination.lifestyle,
     healthcareHeadline: healthcare
@@ -154,6 +659,7 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
       { label: "Airport access", value: getAirportSignal(destination) },
       { label: "Community fit", value: expat ? "Easier for transition" : "Requires deeper local integration" },
     ],
+    livingHereScorecard,
     planningSignals: [
       {
         label: "Healthcare confidence",
@@ -200,6 +706,7 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
         ],
       },
     ],
+    comprehensiveSections,
     resources: {
       rentals: [
         {

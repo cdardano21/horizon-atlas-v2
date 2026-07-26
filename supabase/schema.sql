@@ -429,3 +429,1016 @@ on public.destination_content_revisions
 for insert
 to authenticated
 with check (public.is_admin_user());
+
+create table if not exists public.data_sources (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid references public.destinations_catalog(id) on delete cascade,
+  category text not null,
+  source_name text not null,
+  source_url text,
+  source_organization text,
+  source_type text,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.data_verification_records (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  dataset_key text not null,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  source_url text,
+  source_organization text,
+  source_type text,
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (destination_id, dataset_key)
+);
+
+create table if not exists public.destination_core_metrics (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  metric_group text,
+  metric_key text not null,
+  metric_label text not null,
+  value_numeric numeric,
+  value_text text,
+  unit text,
+  display_value text,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (destination_id, metric_key)
+);
+
+create table if not exists public.destination_scores (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  category text not null,
+  score numeric,
+  explanation text,
+  underlying_measurements text,
+  personalized_weight numeric,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.destination_score_factors (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  score_category text not null,
+  factor_key text not null,
+  factor_label text not null,
+  factor_value text,
+  factor_weight numeric,
+  factor_note text,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.monthly_climate (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  month_index integer not null check (month_index between 1 and 12),
+  month_name text not null,
+  avg_high_c numeric,
+  avg_low_c numeric,
+  rainfall_mm numeric,
+  rainy_days numeric,
+  humidity_pct numeric,
+  sunshine_hours numeric,
+  uv_index numeric,
+  sea_temp_c numeric,
+  snowfall_cm numeric,
+  wind_kph numeric,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (destination_id, month_index)
+);
+
+create table if not exists public.cost_of_living_items (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  item_key text not null,
+  item_label text not null,
+  metric_group text,
+  value_numeric numeric,
+  value_text text,
+  unit text,
+  display_value text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (destination_id, item_key)
+);
+
+create table if not exists public.housing_market_metrics (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  metric_key text not null,
+  metric_label text not null,
+  value_numeric numeric,
+  value_text text,
+  unit text,
+  display_value text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (destination_id, metric_key)
+);
+
+create table if not exists public.neighborhoods (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  name text not null,
+  subtitle text,
+  value_1 text,
+  value_2 text,
+  value_3 text,
+  url text,
+  latitude numeric(9, 6),
+  longitude numeric(9, 6),
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.healthcare_facilities (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  name text not null,
+  subtitle text,
+  value_1 text,
+  value_2 text,
+  value_3 text,
+  url text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.healthcare_services (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  service_name text not null,
+  availability text,
+  notes text,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.airports (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  name text not null,
+  subtitle text,
+  value_1 text,
+  value_2 text,
+  value_3 text,
+  url text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.transportation_options (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  option_name text not null,
+  details text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.golf_courses (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  name text not null,
+  subtitle text,
+  value_1 text,
+  value_2 text,
+  value_3 text,
+  url text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.recreation_facilities (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  name text not null,
+  subtitle text,
+  value_1 text,
+  value_2 text,
+  value_3 text,
+  url text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.beaches (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  name text not null,
+  subtitle text,
+  value_1 text,
+  value_2 text,
+  value_3 text,
+  url text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.restaurants_or_food_metrics (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  metric_key text not null,
+  metric_label text not null,
+  value_numeric numeric,
+  value_text text,
+  unit text,
+  display_value text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (destination_id, metric_key)
+);
+
+create table if not exists public.schools (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  name text not null,
+  subtitle text,
+  value_1 text,
+  value_2 text,
+  value_3 text,
+  url text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.internet_metrics (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  metric_group text,
+  metric_key text not null,
+  metric_label text not null,
+  value_numeric numeric,
+  value_text text,
+  unit text,
+  display_value text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (destination_id, metric_key)
+);
+
+create table if not exists public.visa_programs (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  name text not null,
+  subtitle text,
+  value_1 text,
+  value_2 text,
+  value_3 text,
+  url text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.tax_rules (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  name text not null,
+  subtitle text,
+  value_1 text,
+  value_2 text,
+  value_3 text,
+  url text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.safety_metrics (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  metric_key text not null,
+  metric_label text not null,
+  value_numeric numeric,
+  value_text text,
+  unit text,
+  display_value text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (destination_id, metric_key)
+);
+
+create table if not exists public.destination_pros_cons (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  kind text not null check (kind in ('pro', 'tradeoff')),
+  statement text not null,
+  evidence_ref text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  source_type text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.destination_media (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  media_type text not null,
+  title text,
+  description text,
+  url text not null,
+  source_type text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.destination_resources (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  category text not null,
+  title text not null,
+  description text,
+  url text not null,
+  source_type text,
+  sort_order integer not null default 0,
+  source_url text,
+  source_organization text,
+  verification_status text not null default 'in_progress' check (verification_status in ('verified', 'estimated', 'stale', 'in_progress')),
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  last_verified_at timestamptz,
+  effective_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists idx_destination_core_metrics_destination on public.destination_core_metrics(destination_id, metric_group, metric_key);
+create index if not exists idx_destination_scores_destination on public.destination_scores(destination_id, category, sort_order);
+create index if not exists idx_destination_score_factors_destination on public.destination_score_factors(destination_id, score_category, factor_key);
+create index if not exists idx_monthly_climate_destination on public.monthly_climate(destination_id, month_index);
+create index if not exists idx_cost_of_living_items_destination on public.cost_of_living_items(destination_id, metric_group, sort_order);
+create index if not exists idx_housing_market_metrics_destination on public.housing_market_metrics(destination_id, metric_key, sort_order);
+create index if not exists idx_neighborhoods_destination on public.neighborhoods(destination_id, sort_order);
+create index if not exists idx_healthcare_facilities_destination on public.healthcare_facilities(destination_id, sort_order);
+create index if not exists idx_healthcare_services_destination on public.healthcare_services(destination_id, service_name);
+create index if not exists idx_airports_destination on public.airports(destination_id, sort_order);
+create index if not exists idx_transportation_options_destination on public.transportation_options(destination_id, sort_order);
+create index if not exists idx_golf_courses_destination on public.golf_courses(destination_id, sort_order);
+create index if not exists idx_recreation_facilities_destination on public.recreation_facilities(destination_id, sort_order);
+create index if not exists idx_beaches_destination on public.beaches(destination_id, sort_order);
+create index if not exists idx_restaurants_or_food_metrics_destination on public.restaurants_or_food_metrics(destination_id, metric_key, sort_order);
+create index if not exists idx_schools_destination on public.schools(destination_id, sort_order);
+create index if not exists idx_internet_metrics_destination on public.internet_metrics(destination_id, metric_key, sort_order);
+create index if not exists idx_visa_programs_destination on public.visa_programs(destination_id, sort_order);
+create index if not exists idx_tax_rules_destination on public.tax_rules(destination_id, sort_order);
+create index if not exists idx_safety_metrics_destination on public.safety_metrics(destination_id, metric_key, sort_order);
+create index if not exists idx_destination_pros_cons_destination on public.destination_pros_cons(destination_id, kind, sort_order);
+create index if not exists idx_destination_media_destination on public.destination_media(destination_id, media_type, sort_order);
+create index if not exists idx_destination_resources_destination on public.destination_resources(destination_id, category, sort_order);
+create index if not exists idx_data_sources_destination on public.data_sources(destination_id, category);
+create index if not exists idx_data_verification_records_destination on public.data_verification_records(destination_id, dataset_key);
+
+drop trigger if exists set_updated_at_data_sources on public.data_sources;
+create trigger set_updated_at_data_sources
+before update on public.data_sources
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_data_verification_records on public.data_verification_records;
+create trigger set_updated_at_data_verification_records
+before update on public.data_verification_records
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_destination_core_metrics on public.destination_core_metrics;
+create trigger set_updated_at_destination_core_metrics
+before update on public.destination_core_metrics
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_destination_scores on public.destination_scores;
+create trigger set_updated_at_destination_scores
+before update on public.destination_scores
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_destination_score_factors on public.destination_score_factors;
+create trigger set_updated_at_destination_score_factors
+before update on public.destination_score_factors
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_monthly_climate on public.monthly_climate;
+create trigger set_updated_at_monthly_climate
+before update on public.monthly_climate
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_cost_of_living_items on public.cost_of_living_items;
+create trigger set_updated_at_cost_of_living_items
+before update on public.cost_of_living_items
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_housing_market_metrics on public.housing_market_metrics;
+create trigger set_updated_at_housing_market_metrics
+before update on public.housing_market_metrics
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_neighborhoods on public.neighborhoods;
+create trigger set_updated_at_neighborhoods
+before update on public.neighborhoods
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_healthcare_facilities on public.healthcare_facilities;
+create trigger set_updated_at_healthcare_facilities
+before update on public.healthcare_facilities
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_healthcare_services on public.healthcare_services;
+create trigger set_updated_at_healthcare_services
+before update on public.healthcare_services
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_airports on public.airports;
+create trigger set_updated_at_airports
+before update on public.airports
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_transportation_options on public.transportation_options;
+create trigger set_updated_at_transportation_options
+before update on public.transportation_options
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_golf_courses on public.golf_courses;
+create trigger set_updated_at_golf_courses
+before update on public.golf_courses
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_recreation_facilities on public.recreation_facilities;
+create trigger set_updated_at_recreation_facilities
+before update on public.recreation_facilities
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_beaches on public.beaches;
+create trigger set_updated_at_beaches
+before update on public.beaches
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_restaurants_or_food_metrics on public.restaurants_or_food_metrics;
+create trigger set_updated_at_restaurants_or_food_metrics
+before update on public.restaurants_or_food_metrics
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_schools on public.schools;
+create trigger set_updated_at_schools
+before update on public.schools
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_internet_metrics on public.internet_metrics;
+create trigger set_updated_at_internet_metrics
+before update on public.internet_metrics
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_visa_programs on public.visa_programs;
+create trigger set_updated_at_visa_programs
+before update on public.visa_programs
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_tax_rules on public.tax_rules;
+create trigger set_updated_at_tax_rules
+before update on public.tax_rules
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_safety_metrics on public.safety_metrics;
+create trigger set_updated_at_safety_metrics
+before update on public.safety_metrics
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_destination_pros_cons on public.destination_pros_cons;
+create trigger set_updated_at_destination_pros_cons
+before update on public.destination_pros_cons
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_destination_media on public.destination_media;
+create trigger set_updated_at_destination_media
+before update on public.destination_media
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_destination_resources on public.destination_resources;
+create trigger set_updated_at_destination_resources
+before update on public.destination_resources
+for each row execute procedure public.set_updated_at();
+
+alter table public.data_sources enable row level security;
+alter table public.data_verification_records enable row level security;
+alter table public.destination_core_metrics enable row level security;
+alter table public.destination_scores enable row level security;
+alter table public.destination_score_factors enable row level security;
+alter table public.monthly_climate enable row level security;
+alter table public.cost_of_living_items enable row level security;
+alter table public.housing_market_metrics enable row level security;
+alter table public.neighborhoods enable row level security;
+alter table public.healthcare_facilities enable row level security;
+alter table public.healthcare_services enable row level security;
+alter table public.airports enable row level security;
+alter table public.transportation_options enable row level security;
+alter table public.golf_courses enable row level security;
+alter table public.recreation_facilities enable row level security;
+alter table public.beaches enable row level security;
+alter table public.restaurants_or_food_metrics enable row level security;
+alter table public.schools enable row level security;
+alter table public.internet_metrics enable row level security;
+alter table public.visa_programs enable row level security;
+alter table public.tax_rules enable row level security;
+alter table public.safety_metrics enable row level security;
+alter table public.destination_pros_cons enable row level security;
+alter table public.destination_media enable row level security;
+alter table public.destination_resources enable row level security;
+
+drop policy if exists "Published destination core metrics are viewable" on public.destination_core_metrics;
+create policy "Published destination core metrics are viewable"
+on public.destination_core_metrics
+for select
+to anon, authenticated
+using (
+  exists (
+    select 1 from public.destinations_catalog d
+    where d.id = destination_core_metrics.destination_id
+      and (d.status = 'published' or public.is_admin_user())
+  )
+);
+
+drop policy if exists "Admins manage destination core metrics" on public.destination_core_metrics;
+create policy "Admins manage destination core metrics"
+on public.destination_core_metrics
+for all
+to authenticated
+using (public.is_admin_user())
+with check (public.is_admin_user());
+
+drop policy if exists "Published destination scores are viewable" on public.destination_scores;
+create policy "Published destination scores are viewable"
+on public.destination_scores
+for select
+to anon, authenticated
+using (
+  exists (
+    select 1 from public.destinations_catalog d
+    where d.id = destination_scores.destination_id
+      and (d.status = 'published' or public.is_admin_user())
+  )
+);
+
+drop policy if exists "Admins manage destination scores" on public.destination_scores;
+create policy "Admins manage destination scores"
+on public.destination_scores
+for all
+to authenticated
+using (public.is_admin_user())
+with check (public.is_admin_user());
+
+drop policy if exists "Published destination score factors are viewable" on public.destination_score_factors;
+create policy "Published destination score factors are viewable"
+on public.destination_score_factors
+for select
+to anon, authenticated
+using (
+  exists (
+    select 1 from public.destinations_catalog d
+    where d.id = destination_score_factors.destination_id
+      and (d.status = 'published' or public.is_admin_user())
+  )
+);
+
+drop policy if exists "Admins manage destination score factors" on public.destination_score_factors;
+create policy "Admins manage destination score factors"
+on public.destination_score_factors
+for all
+to authenticated
+using (public.is_admin_user())
+with check (public.is_admin_user());
+
+do $$
+declare
+  table_name text;
+  public_tables text[] := array[
+    'monthly_climate',
+    'cost_of_living_items',
+    'housing_market_metrics',
+    'neighborhoods',
+    'healthcare_facilities',
+    'healthcare_services',
+    'airports',
+    'transportation_options',
+    'golf_courses',
+    'recreation_facilities',
+    'beaches',
+    'restaurants_or_food_metrics',
+    'schools',
+    'internet_metrics',
+    'visa_programs',
+    'tax_rules',
+    'safety_metrics',
+    'destination_pros_cons',
+    'destination_media',
+    'destination_resources',
+    'data_sources'
+  ];
+begin
+  foreach table_name in array public_tables loop
+    execute format('drop policy if exists "Published rows are viewable (%s)" on public.%I', table_name, table_name);
+    execute format(
+      'create policy "Published rows are viewable (%s)" on public.%I for select to anon, authenticated using (exists (select 1 from public.destinations_catalog d where d.id = %I.destination_id and (d.status = ''published'' or public.is_admin_user())))',
+      table_name,
+      table_name,
+      table_name
+    );
+
+    execute format('drop policy if exists "Admins manage rows (%s)" on public.%I', table_name, table_name);
+    execute format(
+      'create policy "Admins manage rows (%s)" on public.%I for all to authenticated using (public.is_admin_user()) with check (public.is_admin_user())',
+      table_name,
+      table_name
+    );
+  end loop;
+end $$;
+
+drop policy if exists "Admins manage data verification records" on public.data_verification_records;
+create policy "Admins manage data verification records"
+on public.data_verification_records
+for all
+to authenticated
+using (public.is_admin_user())
+with check (public.is_admin_user());
+
+create table if not exists public.data_engine_import_runs (
+  id uuid primary key default gen_random_uuid(),
+  category_key text not null,
+  source_key text not null,
+  trigger_type text not null default 'manual' check (trigger_type in ('manual', 'scheduled')),
+  status text not null default 'queued' check (status in ('queued', 'running', 'completed', 'failed')),
+  destination_count integer not null default 0,
+  raw_count integer not null default 0,
+  normalized_count integer not null default 0,
+  deduped_count integer not null default 0,
+  rejected_count integer not null default 0,
+  error_message text,
+  started_at timestamptz,
+  finished_at timestamptz,
+  triggered_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.data_engine_staged_records (
+  id uuid primary key default gen_random_uuid(),
+  run_id uuid not null references public.data_engine_import_runs(id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  destination_slug text not null,
+  category_key text not null,
+  source_key text not null,
+  source_record_id text not null,
+  observed_at timestamptz not null,
+  normalized_at timestamptz not null,
+  confidence_level text not null default 'low' check (confidence_level in ('high', 'medium', 'low')),
+  payload jsonb not null default '{}'::jsonb,
+  dedupe_key text not null,
+  record_hash text not null,
+  review_status text not null default 'pending' check (review_status in ('pending', 'approved', 'rejected')),
+  review_notes text,
+  reviewed_by uuid references auth.users(id) on delete set null,
+  reviewed_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (run_id, dedupe_key)
+);
+
+create table if not exists public.data_engine_publish_runs (
+  id uuid primary key default gen_random_uuid(),
+  import_run_id uuid references public.data_engine_import_runs(id) on delete set null,
+  category_key text not null,
+  status text not null default 'queued' check (status in ('queued', 'running', 'completed', 'failed')),
+  published_count integer not null default 0,
+  error_message text,
+  started_at timestamptz,
+  finished_at timestamptz,
+  triggered_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.data_engine_error_logs (
+  id uuid primary key default gen_random_uuid(),
+  run_id uuid references public.data_engine_import_runs(id) on delete set null,
+  publish_run_id uuid references public.data_engine_publish_runs(id) on delete set null,
+  category_key text,
+  source_key text,
+  destination_slug text,
+  error_code text not null,
+  error_message text not null,
+  details jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.data_engine_schedule_policies (
+  category_key text primary key,
+  is_enabled boolean not null default true,
+  source_key text,
+  min_interval_hours integer check (min_interval_hours is null or min_interval_hours > 0),
+  max_destinations_per_run integer check (
+    max_destinations_per_run is null or max_destinations_per_run > 0
+  ),
+  stale_after_hours integer check (stale_after_hours is null or stale_after_hours > 0),
+  notes text,
+  updated_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.data_engine_maintenance_actions (
+  id uuid primary key default gen_random_uuid(),
+  action_key text not null,
+  initiated_by uuid references auth.users(id) on delete set null,
+  category_key text,
+  source_key text,
+  dry_run boolean not null default true,
+  stale_after_hours integer,
+  stale_before_iso timestamptz,
+  stale_match_count integer not null default 0,
+  affected_count integer not null default 0,
+  notes text,
+  details jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists idx_data_engine_import_runs_status on public.data_engine_import_runs(status, created_at desc);
+create index if not exists idx_data_engine_import_runs_category on public.data_engine_import_runs(category_key, created_at desc);
+create index if not exists idx_data_engine_staged_records_review on public.data_engine_staged_records(review_status, category_key, created_at);
+create index if not exists idx_data_engine_staged_records_run on public.data_engine_staged_records(run_id, destination_slug);
+create index if not exists idx_data_engine_staged_records_destination on public.data_engine_staged_records(destination_id, category_key, observed_at desc);
+create index if not exists idx_data_engine_publish_runs_status on public.data_engine_publish_runs(status, created_at desc);
+create index if not exists idx_data_engine_error_logs_created on public.data_engine_error_logs(created_at desc);
+create index if not exists idx_data_engine_schedule_policies_enabled on public.data_engine_schedule_policies(is_enabled, category_key);
+create index if not exists idx_data_engine_maintenance_actions_created on public.data_engine_maintenance_actions(created_at desc);
+create index if not exists idx_data_engine_maintenance_actions_key on public.data_engine_maintenance_actions(action_key, created_at desc);
+
+drop trigger if exists set_updated_at_data_engine_import_runs on public.data_engine_import_runs;
+create trigger set_updated_at_data_engine_import_runs
+before update on public.data_engine_import_runs
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_data_engine_staged_records on public.data_engine_staged_records;
+create trigger set_updated_at_data_engine_staged_records
+before update on public.data_engine_staged_records
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_data_engine_publish_runs on public.data_engine_publish_runs;
+create trigger set_updated_at_data_engine_publish_runs
+before update on public.data_engine_publish_runs
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_data_engine_schedule_policies on public.data_engine_schedule_policies;
+create trigger set_updated_at_data_engine_schedule_policies
+before update on public.data_engine_schedule_policies
+for each row execute procedure public.set_updated_at();
+
+alter table public.data_engine_import_runs enable row level security;
+alter table public.data_engine_staged_records enable row level security;
+alter table public.data_engine_publish_runs enable row level security;
+alter table public.data_engine_error_logs enable row level security;
+alter table public.data_engine_schedule_policies enable row level security;
+alter table public.data_engine_maintenance_actions enable row level security;
+
+drop policy if exists "Admins manage data engine import runs" on public.data_engine_import_runs;
+create policy "Admins manage data engine import runs"
+on public.data_engine_import_runs
+for all
+to authenticated
+using (public.is_admin_user())
+with check (public.is_admin_user());
+
+drop policy if exists "Admins manage data engine staged records" on public.data_engine_staged_records;
+create policy "Admins manage data engine staged records"
+on public.data_engine_staged_records
+for all
+to authenticated
+using (public.is_admin_user())
+with check (public.is_admin_user());
+
+drop policy if exists "Admins manage data engine publish runs" on public.data_engine_publish_runs;
+create policy "Admins manage data engine publish runs"
+on public.data_engine_publish_runs
+for all
+to authenticated
+using (public.is_admin_user())
+with check (public.is_admin_user());
+
+drop policy if exists "Admins manage data engine error logs" on public.data_engine_error_logs;
+create policy "Admins manage data engine error logs"
+on public.data_engine_error_logs
+for all
+to authenticated
+using (public.is_admin_user())
+with check (public.is_admin_user());
+
+drop policy if exists "Admins manage data engine schedule policies" on public.data_engine_schedule_policies;
+create policy "Admins manage data engine schedule policies"
+on public.data_engine_schedule_policies
+for all
+to authenticated
+using (public.is_admin_user())
+with check (public.is_admin_user());
+
+drop policy if exists "Admins manage data engine maintenance actions" on public.data_engine_maintenance_actions;
+create policy "Admins manage data engine maintenance actions"
+on public.data_engine_maintenance_actions
+for all
+to authenticated
+using (public.is_admin_user())
+with check (public.is_admin_user());

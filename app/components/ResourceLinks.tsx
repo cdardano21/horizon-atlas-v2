@@ -24,11 +24,11 @@ const resourceLinks = [
 export default function ResourceLinks() {
   return (
     <section className="mx-auto max-w-7xl px-8 py-20">
-      <div className="rounded-[2rem] border border-white/10 bg-slate-950/80 p-10 shadow-xl shadow-cyan-500/10 backdrop-blur-xl">
+      <div className="rounded-[2rem] border border-[var(--atlas-border)] bg-[linear-gradient(125deg,rgba(255,252,245,0.95),rgba(248,241,230,0.85))] p-10 shadow-[var(--atlas-shadow)] backdrop-blur-xl">
         <div className="mb-10 text-center">
-          <p className="uppercase tracking-[0.35em] text-cyan-400">Research links</p>
-          <h2 className="mt-4 text-4xl font-black text-white">Explore destination media before you commit.</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-slate-400">
+          <p className="atlas-kicker">Research links</p>
+          <h2 className="mt-4 text-5xl text-[var(--atlas-ink)]">Explore destination media before you commit.</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-[var(--atlas-muted)]">
             Use curated video tours, TikTok inspiration, maps, and relocation guides to better understand what each place feels like.
           </p>
         </div>
@@ -40,11 +40,11 @@ export default function ResourceLinks() {
               href={link.href}
               target="_blank"
               rel="noreferrer"
-              className="group rounded-[1.75rem] border border-white/10 bg-slate-900/80 p-6 transition hover:border-cyan-400/60 hover:bg-slate-900"
+              className="group rounded-[1.75rem] border border-[var(--atlas-border)] bg-[rgba(255,253,247,0.86)] p-6 transition hover:-translate-y-1 hover:border-[rgba(31,95,99,0.42)]"
             >
-              <div className="text-sm uppercase tracking-[0.35em] text-cyan-400">{link.label}</div>
-              <p className="mt-4 text-lg font-semibold text-white">{link.description}</p>
-              <span className="mt-6 inline-flex text-sm font-semibold text-cyan-300 transition group-hover:text-cyan-200">
+              <div className="text-sm uppercase tracking-[0.35em] text-[var(--atlas-accent)]">{link.label}</div>
+              <p className="mt-4 text-lg font-semibold text-[var(--atlas-ink)]">{link.description}</p>
+              <span className="mt-6 inline-flex text-sm font-semibold text-[var(--atlas-accent)] transition group-hover:text-[var(--atlas-accent-soft)]">
                 Open link →
               </span>
             </a>

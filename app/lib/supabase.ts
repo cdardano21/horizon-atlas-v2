@@ -1,10 +1,10 @@
 const SUPABASE_URL = process.env.SUPABASE_URL?.replace(/\/$/, "") ?? "";
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY ?? "";
+const SUPABASE_PUBLISHABLE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_ANON_KEY ?? "";
 
 const requiredMessage =
-  "Missing Supabase environment variables. Set SUPABASE_URL and SUPABASE_ANON_KEY in your environment.";
+  "Missing Supabase environment variables. Set SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY (or legacy SUPABASE_ANON_KEY) in your environment.";
 
-export const hasSupabaseConfig = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+export const hasSupabaseConfig = Boolean(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
 
 export const getSupabaseConfig = () => {
   if (!hasSupabaseConfig) {
@@ -13,7 +13,7 @@ export const getSupabaseConfig = () => {
 
   return {
     url: SUPABASE_URL,
-    anonKey: SUPABASE_ANON_KEY,
+    anonKey: SUPABASE_PUBLISHABLE_KEY,
   };
 };
 

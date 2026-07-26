@@ -1,16 +1,27 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cormorant_Garamond, Manrope, IBM_Plex_Mono } from "next/font/google";
+import GlobalHomeLink from "./components/GlobalHomeLink";
 import { LAUNCH_CATALOG_SIZE } from "./lib/destinations";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const atlasSans = Manrope({
+  variable: "--font-atlas-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const atlasMono = IBM_Plex_Mono({
+  variable: "--font-atlas-mono",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500"],
+});
+
+const atlasDisplay = Cormorant_Garamond({
+  variable: "--font-atlas-display",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -27,9 +38,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${atlasSans.variable} ${atlasMono.variable} ${atlasDisplay.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col bg-[var(--atlas-canvas)] text-[var(--atlas-ink)]">
+        {children}
+        <GlobalHomeLink />
+      </body>
     </html>
   );
 }

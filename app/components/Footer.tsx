@@ -10,11 +10,11 @@ const links = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-slate-950/80 px-8 py-16 text-slate-300">
+    <footer className="border-t border-[var(--atlas-border)] bg-[linear-gradient(180deg,rgba(247,239,227,0.8),rgba(241,232,216,0.9))] px-8 py-16 text-[var(--atlas-muted)]">
       <div className="mx-auto flex max-w-7xl flex-col gap-10 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-2xl font-black text-white">Horizon Atlas</h2>
-          <p className="mt-3 max-w-md text-sm leading-6 text-slate-400">
+          <h2 className="text-3xl font-semibold text-[var(--atlas-ink)]">Horizon Atlas</h2>
+          <p className="mt-3 max-w-md text-sm leading-6 text-[var(--atlas-muted)]">
             Find the right retirement destination with data-driven guidance and AI-powered preference matching.
           </p>
         </div>
@@ -24,7 +24,7 @@ export default function Footer() {
             <Link
               key={link.label}
               href={link.href}
-              className="text-sm transition hover:text-cyan-300"
+              className="text-sm font-semibold uppercase tracking-[0.14em] transition hover:text-[var(--atlas-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgba(244,235,219,0.9)]"
             >
               {link.label}
             </Link>
@@ -32,7 +32,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto mt-10 max-w-7xl border-t border-white/10 pt-6 text-sm text-slate-500">
+      <div className="mx-auto mt-10 max-w-7xl border-t border-[var(--atlas-border)] pt-6 text-sm text-[var(--atlas-muted)]">
         © {new Date().getFullYear()} Horizon Atlas. All rights reserved.
       </div>
     </footer>

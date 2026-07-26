@@ -44,7 +44,7 @@ describe("admin destinations route", () => {
     cookieGetMock.mockReturnValue({ value: "token" });
 
     mockAdminAuthedFetch((url) => {
-      if (url.includes("/rest/v1/destinations_catalog?select=id,slug,city,country,status,tier,description,updated_at")) {
+      if (url.includes("/rest/v1/destinations_catalog?select=id,slug,city,country,status,tier,description,updated_at,metadata")) {
         return jsonResponse({
           body: [
             {
@@ -56,6 +56,7 @@ describe("admin destinations route", () => {
               tier: "launch",
               description: "Sun and sea",
               updated_at: "2026-07-20T00:00:00.000Z",
+              metadata: null,
             },
             {
               id: "dest_2",
@@ -66,6 +67,7 @@ describe("admin destinations route", () => {
               tier: "launch",
               description: "River city",
               updated_at: "2026-07-19T00:00:00.000Z",
+              metadata: null,
             },
           ],
         });
@@ -113,6 +115,9 @@ describe("admin destinations route", () => {
         tier: "launch",
         description: "Sun and sea",
         updated_at: "2026-07-20T00:00:00.000Z",
+        metadata: null,
+        relocationProfile: null,
+        memberDetails: null,
         mediaCount: 2,
         resourceCount: 1,
         videoCount: 0,
@@ -126,6 +131,9 @@ describe("admin destinations route", () => {
         tier: "launch",
         description: "River city",
         updated_at: "2026-07-19T00:00:00.000Z",
+        metadata: null,
+        relocationProfile: null,
+        memberDetails: null,
         mediaCount: 0,
         resourceCount: 1,
         videoCount: 1,

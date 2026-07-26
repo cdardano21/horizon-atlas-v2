@@ -1,7 +1,8 @@
 import Link from "next/link";
 import ResultsHistorySaver from "../components/ResultsHistorySaver";
 import RouteFrame from "../components/RouteFrame";
-import { destinations, type Destination } from "../lib/destinations";
+import type { Destination } from "../lib/destinations";
+import { publicDestinations } from "../lib/public-destinations";
 import { rankDestinationsForRetirementDna } from "../lib/recommendation-engine";
 import {
   computeRetirementDnaProfile,
@@ -46,8 +47,8 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
   const dnaPayload = parseDna(params?.dna);
   const dnaAnswers = dnaPayload ? deserializeRetirementDnaAnswers(dnaPayload) : {};
   const hasDnaAssessment = Object.keys(dnaAnswers).length > 0;
-  const dnaRanking = hasDnaAssessment ? rankDestinationsForRetirementDna(destinations, dnaAnswers) : null;
-  const fallbackRanking = [...destinations]
+  const dnaRanking = hasDnaAssessment ? rankDestinationsForRetirementDna(publicDestinations, dnaAnswers) : null;
+  const fallbackRanking = [...publicDestinations]
     .map((destination) => scoreDestination(destination, selectedTags))
     .sort((a, b) => b.score - a.score)
     .slice(0, 10);
@@ -60,10 +61,10 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
       title={hasDnaAssessment ? "Your best retirement matches across the Horizon Atlas catalog" : "Your best matches across the Horizon Atlas catalog"}
       description={
         hasDnaAssessment && profile
-          ? `Your ${profile.answeredCount}-answer Retirement DNA profile has been weighted against the full catalog of ${destinations.length} destinations to generate a recommendation set with strengths and tradeoffs.`
+          ? `Your ${profile.answeredCount}-answer Retirement DNA profile has been weighted against the full catalog of ${publicDestinations.length} destinations to generate a recommendation set with strengths and tradeoffs.`
           : selectedTags.length > 0
-            ? `Results are weighted around ${selectedTags.join(", ")} and ranked against the full catalog of ${destinations.length} destinations.`
-            : `No questionnaire tags were provided, so these are the strongest overall matches from the full catalog of ${destinations.length} destinations.`
+            ? `Results are weighted around ${selectedTags.join(", ")} and ranked against the full catalog of ${publicDestinations.length} destinations.`
+            : `No questionnaire tags were provided, so these are the strongest overall matches from the full catalog of ${publicDestinations.length} destinations.`
       }
       primaryAction={{ href: "/life-match", label: "Refine my questionnaire" }}
       secondaryAction={{ href: "/destinations", label: "Browse all destinations" }}

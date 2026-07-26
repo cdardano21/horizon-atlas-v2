@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import type { DestinationRelocationProfile } from "../../../../lib/destinations";
 import { getSupabaseConfig, isSupabaseConfigured } from "../../../../lib/supabase";
 
 type AuthUser = {
@@ -12,6 +13,7 @@ type DestinationUpdatePayload = {
   overview?: string;
   city?: string;
   country?: string;
+  relocationProfile?: DestinationRelocationProfile | null;
 };
 
 async function getAuthedAdmin() {
@@ -63,7 +65,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ desti
     }
 
     const payload = (await request.json()) as DestinationUpdatePayload;
-    const updates: Record<string, string | null> = {
+    const updates: Record<string, unknown> = {
       updated_by: user.id,
     };
 
@@ -75,6 +77,37 @@ export async function PATCH(request: Request, context: { params: Promise<{ desti
     if (payload.overview !== undefined) updates.overview = payload.overview.trim() || null;
 
     const { url, anonKey } = getSupabaseConfig();
+
+    if (payload.relocationProfile !== undefined) {
+      const existingResponse = await fetch(
+        `${url}/rest/v1/destinations_catalog?select=metadata&id=eq.${destinationId}&limit=1`,
+        {
+          headers: {
+            apikey: anonKey,
+            Authorization: `Bearer ${accessToken}`,
+          },
+          cache: "no-store",
+        },
+      );
+
+      if (!existingResponse.ok) {
+        return Response.json({ error: "Unable to load destination metadata." }, { status: existingResponse.status });
+      }
+
+      const existingRows = (await existingResponse.json()) as Array<{ metadata?: Record<string, unknown> | null }>;
+      const existingMetadata = existingRows[0]?.metadata && typeof existingRows[0].metadata === "object"
+        ? { ...existingRows[0].metadata }
+        : {};
+
+      if (payload.relocationProfile === null) {
+        delete existingMetadata.relocationProfile;
+      } else {
+        existingMetadata.relocationProfile = payload.relocationProfile;
+      }
+
+      updates.metadata = existingMetadata;
+    }
+
     const response = await fetch(`${url}/rest/v1/destinations_catalog?id=eq.${destinationId}`, {
       method: "PATCH",
       headers: {

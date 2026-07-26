@@ -4,19 +4,15 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Destination } from "../lib/destinations";
-import { getDestinationImageUrl, getFallbackDestinationImage } from "../lib/imageFallback";
+import { getDestinationImageSequence } from "../lib/imageFallback";
 
 export default function DestinationGallery({ destination }: { destination: Destination }) {
-  const images = destination.images;
-  const fallback = getFallbackDestinationImage(destination);
-  const galleryImages = images.length
-    ? images.map((image) => ({
-        ...image,
-        src: getDestinationImageUrl(image, destination),
-        alt: image.alt || destination.city,
-        caption: image.caption || destination.city,
-      }))
-    : [{ src: fallback, alt: destination.city, caption: destination.city }];
+  const uniqueImageSet = getDestinationImageSequence(destination, 6);
+  const galleryImages = uniqueImageSet.map((src, index) => ({
+    src,
+    alt: destination.images[index]?.alt || `${destination.city} local view ${index + 1}`,
+    caption: destination.images[index]?.caption || `${destination.city} local view ${index + 1}`,
+  }));
   const [activeIndex, setActiveIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchDelta, setTouchDelta] = useState(0);

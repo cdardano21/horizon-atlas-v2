@@ -1,5 +1,5 @@
 import RouteFrame from "../components/RouteFrame";
-import { destinations } from "../lib/destinations";
+import { publicDestinations } from "../lib/public-destinations";
 import { getProfileSnapshot } from "../lib/profile-data";
 import ProfileClient from "../components/ProfileClient";
 
@@ -15,7 +15,7 @@ export default async function ProfilePage() {
       secondaryAction={{ href: "/compare", label: "Compare cities" }}
     >
       <ProfileClient
-        destinations={destinations}
+        destinations={publicDestinations}
         profile={profile}
       />
     </RouteFrame>

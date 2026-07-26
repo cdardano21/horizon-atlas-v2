@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function LifeMatchPage() {
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
+    <main className="atlas-shell min-h-screen">
       <LifeMatchApp />
     </main>
   );
