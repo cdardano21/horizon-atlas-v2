@@ -1,4 +1,5 @@
 import { curatedCityImagesBySlug } from "./curatedCityImages";
+import { curatedCityImageGalleriesBySlug } from "./curatedCityImageGalleries";
 import { generatedCommandCenterSeeds } from "./generated-command-center-seeds";
 import { generatedDestinationCardFacts } from "./generated-destination-card-facts";
 import {
@@ -133,6 +134,15 @@ const countryTaxResource = (country: string) => {
 };
 
 const deriveImages = (destination: Destination): Destination["images"] => {
+  const verifiedGallery = curatedCityImageGalleriesBySlug[destination.slug] ?? [];
+  if (verifiedGallery.length > 0) {
+    return verifiedGallery.slice(0, 6).map((src, index) => ({
+      src,
+      alt: `${destination.city} destination view ${index + 1}`,
+      caption: `${destination.city}, ${destination.country}`,
+    }));
+  }
+
   const curated = curatedCityImagesBySlug[destination.slug];
   if (isValidImage(curated) && isTrustedImageSource(curated)) {
     return [{
