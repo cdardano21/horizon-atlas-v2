@@ -246,41 +246,48 @@ const deriveNarratives = (destination: Destination, seed: Seed | undefined, deta
   const rent = lookupQuickMetric(seed, "monthly_rent") ?? "Not published";
   const driScore = lookupQuickMetric(seed, "dri_score") ?? (scoreFromNarrative(destination.climate)?.toString() ?? "Not published");
   const confidence = lookupQuickMetric(seed, "confidence_pct") ?? "Not published";
-  const topNeighborhoods = (seed?.neighborhoods ?? []).slice(0, 2).map((item) => item.name).filter(Boolean);
+  const topNeighborhoods = (seed?.neighborhoods ?? []).slice(0, 3).map((item) => item.name).filter(Boolean);
+  const topWaterfront = (seed?.beaches ?? []).slice(0, 2).map((item) => item.name).filter(Boolean);
+  const topRecreation = (seed?.recreationFacilities ?? []).slice(0, 2).map((item) => item.name).filter(Boolean);
+  const topFood = (seed?.foodSpots ?? []).slice(0, 2).map((item) => item.name).filter(Boolean);
+
   const neighborhoodLine = topNeighborhoods.length > 0
-    ? `Start district validation with ${topNeighborhoods.join(" and ")}.`
+    ? `Most people feel the city best when they spend time in ${topNeighborhoods.join(", ")} before making housing decisions.`
     : summarizeNeighborhoods(seed, destination.city);
+
+  const lifestyleAnchor = topWaterfront[0] ?? topRecreation[0] ?? topFood[0] ?? destination.city;
+  const routineAnchor = topFood[0] ?? topNeighborhoods[0] ?? destination.city;
 
   const variant = stableHash(destination.slug) % 3;
 
   const descriptionOptions = [
-    `${destination.city} in ${destination.country} is profiled as a relocation candidate with source-linked cost, mobility, healthcare, and residency signals for retirement planning.`,
-    `${destination.city}, ${destination.country} is structured as a relocation guide focused on practical tradeoffs: housing, healthcare access, transport, and long-stay legal setup.`,
-    `${destination.city} relocation intelligence emphasizes repeatable daily living in ${destination.country}, backed by published records for budget, mobility, and planning risk checks.`,
+    `${destination.city} in ${destination.country} feels strongest when you treat it as a daily-living city first: morning walks, practical errands, healthcare access, and evenings in neighborhoods you would actually return to.`,
+    `${destination.city}, ${destination.country} works best for people who want a place with personality and repeatable routines, not just one-time highlights.`,
+    `${destination.city} is profiled as a long-stay destination where atmosphere and logistics both matter: neighborhood fit, healthcare confidence, transport flow, and realistic monthly spend.`,
   ];
 
   const overviewOptions = [
-    `${destination.city} currently tracks an estimated couple budget of ${budget} and indicative rent around ${rent}. ${neighborhoodLine} Visa framework: ${visaSummary}. Tax context: ${taxSummary}.`,
-    `For shortlist decisions, ${destination.city} is framed around ${budget} monthly for two and rent near ${rent}, then pressure-tested by neighborhood, healthcare, and mobility fit. Visa baseline: ${visaSummary}.`,
-    `${destination.city} combines quality-of-life upside with concrete planning checks: ${budget} for two, rent near ${rent}, and district-level scouting before commitment. Residency baseline: ${visaSummary}. Tax baseline: ${taxSummary}.`,
+    `A realistic couple baseline currently tracks near ${budget}, with indicative rent around ${rent}. ${neighborhoodLine} Residency context: ${visaSummary}. Tax context: ${taxSummary}.`,
+    `${destination.city} should be read as both lifestyle and logistics: about ${budget} monthly for two, rent near ${rent}, and district-by-district testing before commitment. Residency context: ${visaSummary}.`,
+    `The city combines character with practical decision points: roughly ${budget} for two, rent near ${rent}, and healthcare/transport checks that hold up on ordinary weekdays. Residency context: ${visaSummary}. Tax context: ${taxSummary}.`,
   ];
 
   const lifestyleOptions = [
-    `${destination.city} daily life should be judged by repeatable routines rather than postcard moments. Healthcare reference: ${healthcareSummary}. ${neighborhoodLine}`,
-    `${destination.city} lifestyle fit improves when you test grocery, clinic, pharmacy, and evening walk loops in real neighborhoods. Healthcare anchor: ${healthcareSummary}.`,
-    `The strongest version of ${destination.city} appears when district fit, healthcare practicality, and transport reliability hold up together. Healthcare signal: ${healthcareSummary}.`,
+    `A typical day in ${destination.city} works when your routine loops through places like ${routineAnchor} and still feels easy by week three, not just day one. Healthcare anchor: ${healthcareSummary}.`,
+    `${destination.city} rewards people who care about atmosphere and rhythm: coffee in the morning, a reliable daytime flow, then evenings around ${lifestyleAnchor}. Healthcare anchor: ${healthcareSummary}.`,
+    `The lived-in version of ${destination.city} comes from repeatability: groceries, pharmacies, clinic access, transit reliability, and social life that still feels right after the honeymoon week. Healthcare signal: ${healthcareSummary}.`,
   ];
 
   const transportationOptions = [
-    `${destination.city} mobility planning should start with ${airportSummary}, then validate district-level transit and drive-time assumptions before lease signing. Map baseline: https://www.google.com/maps/search/${encodeURIComponent(`${destination.city}, ${destination.country}`)}.`,
-    `Anchor travel assumptions in ${airportSummary} and test your likely weekly route stack in ${destination.city} before committing to a district. Map baseline: https://www.google.com/maps/search/${encodeURIComponent(`${destination.city}, ${destination.country}`)}.`,
-    `${destination.city} transport confidence depends on real route testing around ${airportSummary}, especially for healthcare access and airport transfer reliability. Map baseline: https://www.google.com/maps/search/${encodeURIComponent(`${destination.city}, ${destination.country}`)}.`,
+    `Travel reliability starts with ${airportSummary}, then expands into how easily you can move between home neighborhoods, healthcare, and your preferred daily anchors inside ${destination.city}.`,
+    `The practical transport test in ${destination.city} is less about one airport score and more about whether your weekly route stack stays efficient through all seasons. Airport anchor: ${airportSummary}.`,
+    `${destination.city} mobility confidence depends on smooth transfers to ${airportSummary}, plus dependable day-to-day movement between housing, healthcare, and social districts.`,
   ];
 
   return {
     description: descriptionOptions[variant],
     overview: `${overviewOptions[variant]} DRI signal: ${driScore} with confidence ${confidence}.`,
-    climate: `${destination.city} climate profile is tied to published monthly rows when available. ${climateLine} Best scouting window: ${details.bestMonths ?? "Not published"}.`,
+    climate: `${destination.city} climate should be read as a lived routine, not a single average. ${climateLine} Best scouting window: ${details.bestMonths ?? "Not published"}.`,
     lifestyle: lifestyleOptions[variant],
     transportation: transportationOptions[variant],
   };

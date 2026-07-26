@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Destination } from "../lib/destinations";
 import type { ResourceRecord } from "../lib/destination-command-center";
+import { COSTA_DEL_SOL_HERO_IMAGE, getDestinationImageUrl } from "../lib/imageFallback";
 import { resolveSourceHref, sanitizeExternalSourceUrl } from "../lib/source-links";
 
 type GalleryResource = {
@@ -120,12 +121,24 @@ export default function DestinationGallery({ destination, resources: commandReso
     return (
       <section className="mx-auto max-w-7xl px-8 py-20">
         <div className="grid gap-8 lg:grid-cols-[1.4fr_0.8fr]">
-          <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(145deg,rgba(15,23,42,0.96),rgba(15,23,42,0.82))] p-8 shadow-xl shadow-slate-950/30">
-            <p className="uppercase tracking-[0.35em] text-cyan-400">Verified imagery pending</p>
-            <h2 className="mt-4 text-3xl font-black text-white">{cityCountry}</h2>
-            <p className="mt-4 max-w-2xl text-slate-300 leading-7">
-              We are still sourcing destination-specific photography that meets the authenticity threshold for publication. Until then, the gallery remains hidden instead of showing generic stock imagery.
-            </p>
+          <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/80 shadow-xl shadow-slate-950/30">
+            <div className="relative h-[520px] w-full">
+              <Image
+                src={getDestinationImageUrl({ src: COSTA_DEL_SOL_HERO_IMAGE, alt: `${destination.city} editorial fallback` }, destination)}
+                alt={`${destination.city} editorial fallback view`}
+                fill
+                sizes="(min-width: 1024px) 65vw, 100vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#102128]/82 via-[#102128]/30 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-8">
+                <p className="uppercase tracking-[0.35em] text-cyan-300">Verified imagery pending</p>
+                <h2 className="mt-4 text-3xl font-black text-white">{cityCountry}</h2>
+                <p className="mt-4 max-w-2xl text-slate-200 leading-7">
+                  We are still validating destination-specific gallery coverage. This editorial fallback keeps the page visual while image-level verification continues.
+                </p>
+              </div>
+            </div>
           </div>
 
           <aside className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-xl shadow-slate-950/30">

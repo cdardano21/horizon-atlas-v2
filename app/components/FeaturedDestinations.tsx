@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { sanitizeSummary, toConsumerCopy } from "../lib/consumer-copy";
 import { publicDestinations } from "../lib/public-destinations";
-import { getDestinationImageUrl, hasVerifiedDestinationImage } from "../lib/imageFallback";
+import { COSTA_DEL_SOL_HERO_IMAGE, getDestinationImageUrl, hasVerifiedDestinationImage } from "../lib/imageFallback";
 import { resolveSourceHref, sanitizeExternalSourceUrl } from "../lib/source-links";
 import ExternalLinkIcon from "./ExternalLinkIcon";
 import FavoriteButton from "./FavoriteButton";
@@ -82,13 +82,23 @@ export default function FeaturedDestinations() {
                 </div>
               </div>
             ) : (
-              <div className="flex h-64 flex-col justify-end bg-[linear-gradient(130deg,#163233,#2e4a4b)] p-6 text-[#fffaf2]">
+              <div className="relative h-64 overflow-hidden bg-slate-900/10">
+                <Image
+                  src={getDestinationImageUrl({ src: COSTA_DEL_SOL_HERO_IMAGE, alt: `${place.city} editorial fallback` }, place)}
+                  alt={`${place.city} editorial fallback view`}
+                  fill
+                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover transition duration-500 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#142224]/78 via-[#142224]/18 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-6 text-[#fffaf2]">
                 <p className="text-xs uppercase tracking-[0.24em] text-[#f8dfb4]">{isLead ? "Editor’s relocation pick" : "Featured city"}</p>
                 <p className="mt-2 text-xl font-semibold">{place.city}</p>
                 <p className="text-sm text-[#f0e6d7]">{place.country}</p>
                 <p className="mt-4 inline-block rounded-full bg-[rgba(242,217,173,0.15)] px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-[#f8dfb4]">
                   Imagery pending verification
                 </p>
+                </div>
               </div>
             )}
             <div className="p-6">

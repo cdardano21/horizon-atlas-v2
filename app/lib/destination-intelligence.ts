@@ -186,62 +186,62 @@ const contextualFallbackValue = (
   const section = sectionTitle.toLowerCase();
 
   if (section.includes("climate")) {
-    return `Verify month-level weather for ${city} before locking housing or scouting dates.`;
+    return `${city} climate coverage is still being expanded with month-level rows for temperature, rainfall, and comfort seasonality.`;
   }
   if (section.includes("cost")) {
-    return `Use live local listings and grocery baskets in ${city} to calibrate this line item.`;
+    return `${city} cost coverage is partial today; this line will be upgraded with localized rent and basket pricing.`;
   }
   if (section.includes("healthcare")) {
-    return `Shortlist named hospitals in ${city} and validate specialist wait times directly.`;
+    return `${city} healthcare publication is in progress, including provider depth and specialist-access context.`;
   }
   if (section.includes("transport")) {
-    return `Open map routes for ${city} and test airport + daily-errand travel time assumptions.`;
+    return `${city} transport details are being expanded with airport routing and day-to-day mobility evidence.`;
   }
   if (section.includes("lifestyle")) {
-    return `Audit this in ${city} by district; score trends are ${scoreHints.food >= 80 ? "strong" : "mixed"} for day-to-day fit.`;
+    return `${city} lifestyle publication is still deepening; current district-level signal reads ${scoreHints.food >= 80 ? "strong" : "mixed"} for daily-fit potential.`;
   }
   if (section.includes("demographics")) {
-    return `Pull current municipal and national statistics for ${city} to confirm this signal.`;
+    return `${city} demographic indicators are being expanded with current municipal and national statistics.`;
   }
   if (section.includes("retirement")) {
-    return `Treat as planning-critical for ${country}; validate with current legal and tax advisers before decisions.`;
+    return `${country} retirement planning coverage is active for this field and will be expanded with policy-grade references.`;
   }
   if (section.includes("housing")) {
-    return `Compare at least 3 neighborhoods in ${city} for rent, noise, slope, and walkability.`;
+    return `${city} housing publication is being expanded with neighborhood-level rent and purchase context.`;
   }
   if (section.includes("dining")) {
-    return `Build a local short-list in ${city} from neighborhood-level sources, not citywide lists.`;
+    return `${city} dining coverage is still being curated by neighborhood and local scene anchors.`;
   }
   if (section.includes("practical")) {
-    return `Confirm this from city and national official portals for ${city}, ${country}.`;
+    return `${city} practical-info publication is active and being expanded with official city and national references.`;
   }
   if (section.includes("weather")) {
-    return `Validate monthly highs/lows and humidity for ${city} before seasonal planning.`;
+    return `${city} weather data publication is still expanding across monthly highs, lows, rainfall, and humidity.`;
   }
   if (section.includes("real estate")) {
-    return `Use active listings in ${city} to replace broad assumptions with street-level comps.`;
+    return `${city} real-estate coverage is being expanded with street-level listing context and neighborhood comps.`;
   }
   if (section.includes("families") || section.includes("internet")) {
-    return `Check this against your weekly routine in ${city}; current model indicates internet ${scoreHints.internet}/100 and walkability ${scoreHints.walkability}/100.`;
+    return `${city} family/work infrastructure coverage is in progress; current directional signal is internet ${scoreHints.internet}/100 and walkability ${scoreHints.walkability}/100.`;
   }
   if (section.includes("neighborhood") || section.includes("day trips")) {
-    return `Prioritize district-level validation in ${city}; safety trend currently reads ${scoreHints.safety}/100.`;
+    return `${city} neighborhood and day-trip coverage is still expanding; current safety trend reads ${scoreHints.safety}/100.`;
   }
 
   if (label.includes("airport")) {
-    return `Validate the primary airport for ${city} and its year-round route depth.`;
+    return `${city} airport route-depth details are being expanded for year-round access clarity.`;
   }
   if (label.includes("hospital") || label.includes("doctor")) {
-    return `Confirm healthcare providers in ${city} with direct facility sources.`;
+    return `${city} provider-level healthcare references are still being expanded for this field.`;
   }
   if (label.includes("internet")) {
-    return `Verify fiber/mobile options in your shortlisted districts in ${city}.`;
+    return `${city} connectivity coverage is still being expanded at the neighborhood level.`;
   }
   if (label.includes("school")) {
-    return `Confirm school catchments and language tracks for neighborhoods you would actually choose in ${city}.`;
+    return `${city} school and language-track coverage is still being expanded by district.`;
   }
 
-  return `Validate this signal with current local sources for ${city}, ${country}.`;
+  return `${city} source-backed coverage is still expanding for this signal.`;
 };
 
 export function getDestinationIntelligence(destination: Destination): DestinationIntelligence {
@@ -550,7 +550,7 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
       summary: "Core orientation data for fast city-level comparison.",
       items: [
         { label: "Country", value: destination.country },
-        { label: "Region", value: `${destination.country} region (verify local province/metro in admin data)` },
+        { label: "Region", value: `${destination.country} metro/province context is being expanded in the catalog.` },
         { label: "Expat population estimate", value: expat ? "Moderate to high expat visibility" : "Lower expat visibility" },
         { label: "Digital nomad friendliness", value: `${scoreNomad}/100` },
         { label: "Retirement friendliness", value: `${scoreRetirement}/100` },

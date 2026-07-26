@@ -247,6 +247,125 @@ const toNamedResourceRecord = (row: Record<string, unknown>, fallbackPrefix: str
   };
 };
 
+const TEMPLATE_COPY_REGEX =
+  /(search official source|verify month-level weather|airport access framework|review source links|use local listings|workbook citation|planning-grade|screening signal only|atlas shortlist feature|data verification in progress|source links below)/i;
+
+const cleanTemplateCopy = (raw: string | null | undefined, destination: Destination): string | null => {
+  if (!raw) return null;
+
+  let value = raw.trim();
+  if (!value) return null;
+
+  value = value
+    .replace(/Verification:\s*Planning-grade;?\s*verify before booking\.?/gi, "Source-backed estimate; confirm current conditions before major decisions.")
+    .replace(/Use source links below[^.]*\./gi, "Primary official references are linked for direct review.")
+    .replace(/Use local listings[^.]*\./gi, "Live local pricing references are still being expanded for this destination.")
+    .replace(/Verify month-level weather[^.]*\./gi, "Month-by-month weather publication is still being expanded for this destination.")
+    .replace(/Workbook citation for\s+[A-Za-z\-\s]+/gi, `${destination.city} source reference captured from published records`)
+    .replace(/Atlas shortlist feature/gi, `${destination.city} relocation signal`)
+    .replace(/Screening signal only;\s*not a named-school directory\.?/gi, "Indicator-level signal; review school-by-school options before enrollment decisions.")
+    .replace(/Data verification in progress/gi, "Published source coverage is currently in progress.")
+    .replace(/Review source links/gi, "Published source references")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
+  return value;
+};
+
+const cleanNamedRecordName = (name: string, destination: Destination): string => {
+  const normalized = name.trim();
+  if (!normalized) return `${destination.city} local reference`;
+
+  if (/airport access framework/i.test(normalized)) {
+    return `${destination.city} airport connectivity`;
+  }
+  if (/^visa\s*\/\s*stay framework$/i.test(normalized)) {
+    return `${destination.country} residency pathways`;
+  }
+  if (/international\s*\/\s*expat signal/i.test(normalized)) {
+    return `${destination.city} expat integration signal`;
+  }
+
+  return normalized;
+};
+
+const normalizeMetricForConsumer = (metric: CommandMetric, destination: Destination): CommandMetric => ({
+  ...metric,
+  label: cleanTemplateCopy(metric.label, destination) ?? metric.label,
+  value: cleanTemplateCopy(metric.value, destination) ?? metric.value,
+  displayValue: cleanTemplateCopy(metric.displayValue, destination) ?? metric.displayValue,
+});
+
+const normalizeNamedRecordForConsumer = (record: NamedRecord, destination: Destination): NamedRecord => ({
+  ...record,
+  name: cleanNamedRecordName(record.name, destination),
+  subtitle: cleanTemplateCopy(record.subtitle, destination) ?? record.subtitle,
+  value1: cleanTemplateCopy(record.value1, destination) ?? record.value1,
+  value2: cleanTemplateCopy(record.value2, destination) ?? record.value2,
+  value3: cleanTemplateCopy(record.value3, destination) ?? record.value3,
+  url: sanitizeExternalSourceUrl(record.url ?? null),
+});
+
+const normalizeResourceForConsumer = (resource: ResourceRecord, destination: Destination): ResourceRecord => {
+  const normalizedCategory = resource.category.replace(/[_-]+/g, " ").trim();
+  const autoTitle = /^source\s+\d+$/i.test(resource.title)
+    ? `${destination.city} ${normalizedCategory || "official"} reference`
+    : resource.title;
+
+  return {
+    ...resource,
+    title: cleanTemplateCopy(autoTitle, destination) ?? autoTitle,
+    description: cleanTemplateCopy(resource.description, destination) ?? resource.description,
+    url: sanitizeExternalSourceUrl(resource.url) ?? resource.url,
+  };
+};
+
+const normalizeListTextForConsumer = (items: string[], destination: Destination): string[] =>
+  items
+    .map((item) => cleanTemplateCopy(item, destination) ?? item)
+    .filter((item) => item.trim().length > 0)
+    .filter((item) => !TEMPLATE_COPY_REGEX.test(item));
+
+const normalizeCommandCenterForConsumer = (data: CommandCenterData): CommandCenterData => {
+  const destination = data.destination;
+
+  const removeVerificationStatusMetric = (metric: CommandMetric) =>
+    metric.key !== "verification_state" && !/verification status/i.test(metric.label);
+
+  return {
+    ...data,
+    quickMetrics: data.quickMetrics
+      .filter(removeVerificationStatusMetric)
+      .map((metric) => normalizeMetricForConsumer(metric, destination)),
+    scorecard: data.scorecard.map((item) => ({
+      ...item,
+      explanation: cleanTemplateCopy(item.explanation, destination) ?? item.explanation,
+      underlyingMeasurements: cleanTemplateCopy(item.underlyingMeasurements, destination) ?? item.underlyingMeasurements,
+    })),
+    costOfLiving: data.costOfLiving.map((metric) => normalizeMetricForConsumer(metric, destination)),
+    housingMetrics: data.housingMetrics.map((metric) => normalizeMetricForConsumer(metric, destination)),
+    internetMetrics: data.internetMetrics.map((metric) => normalizeMetricForConsumer(metric, destination)),
+    safetyMetrics: data.safetyMetrics.map((metric) => normalizeMetricForConsumer(metric, destination)),
+    foodMetrics: data.foodMetrics.map((metric) => normalizeMetricForConsumer(metric, destination)),
+    neighborhoods: data.neighborhoods.map((row) => normalizeNamedRecordForConsumer(row, destination)),
+    healthcareFacilities: data.healthcareFacilities.map((row) => normalizeNamedRecordForConsumer(row, destination)),
+    airports: data.airports.map((row) => normalizeNamedRecordForConsumer(row, destination)),
+    golfCourses: data.golfCourses.map((row) => normalizeNamedRecordForConsumer(row, destination)),
+    recreationFacilities: data.recreationFacilities.map((row) => normalizeNamedRecordForConsumer(row, destination)),
+    beaches: data.beaches.map((row) => normalizeNamedRecordForConsumer(row, destination)),
+    foodSpots: data.foodSpots.map((row) => normalizeNamedRecordForConsumer(row, destination)),
+    schools: data.schools.map((row) => normalizeNamedRecordForConsumer(row, destination)),
+    visaPrograms: data.visaPrograms.map((row) => normalizeNamedRecordForConsumer(row, destination)),
+    taxRules: data.taxRules.map((row) => normalizeNamedRecordForConsumer(row, destination)),
+    practicalInfo: data.practicalInfo.map((row) => normalizeNamedRecordForConsumer(row, destination)),
+    pros: normalizeListTextForConsumer(data.pros, destination),
+    tradeoffs: normalizeListTextForConsumer(data.tradeoffs, destination),
+    resources: data.resources
+      .map((resource) => normalizeResourceForConsumer(resource, destination))
+      .filter((resource) => sanitizeExternalSourceUrl(resource.url)),
+  };
+};
+
 const toMetricKey = (label: string) => label.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
 
 const fallbackVerification: VerificationMeta = {
@@ -621,7 +740,7 @@ export async function getDestinationCommandCenter(slug: string): Promise<Command
   );
 
   if (!isSupabaseConfigured()) {
-    return fallbackGenerated;
+    return normalizeCommandCenterForConsumer(fallbackGenerated);
   }
 
   const catalogRows = await safeFetchJson<DestinationCatalogRow>(
@@ -629,7 +748,7 @@ export async function getDestinationCommandCenter(slug: string): Promise<Command
   );
 
   const catalog = catalogRows[0];
-  if (!catalog?.id) return fallbackGenerated;
+  if (!catalog?.id) return normalizeCommandCenterForConsumer(fallbackGenerated);
 
   const destinationId = catalog.id;
 
@@ -769,7 +888,7 @@ export async function getDestinationCommandCenter(slug: string): Promise<Command
 
   const fallbackIfEmpty = <T>(current: T[], fallback: T[]): T[] => (current.length > 0 ? current : fallback);
 
-  return {
+  return normalizeCommandCenterForConsumer({
     ...factualSupabaseData,
     quickMetrics: fallbackIfEmpty(factualSupabaseData.quickMetrics, fallbackForDatasetGaps.quickMetrics),
     scorecard: fallbackIfEmpty(factualSupabaseData.scorecard, fallbackForDatasetGaps.scorecard),
@@ -796,7 +915,7 @@ export async function getDestinationCommandCenter(slug: string): Promise<Command
     dataConfidence: factualSupabaseData.quickMetrics.length > 0 || factualSupabaseData.scorecard.length > 0
       ? supabaseData.dataConfidence
       : fallbackForDatasetGaps.dataConfidence,
-  };
+  });
 }
 
 export const defaultMissingVerification = missingVerification;

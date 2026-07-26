@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { sanitizeSummary, toConsumerCopy } from "../lib/consumer-copy";
 import type { Destination } from "../lib/destinations";
-import { getDestinationImageUrl, hasVerifiedDestinationImage } from "../lib/imageFallback";
+import { COSTA_DEL_SOL_HERO_IMAGE, getDestinationImageUrl, hasVerifiedDestinationImage } from "../lib/imageFallback";
 import { getDestinationMemberDetails, getMemberDetailHighlights } from "../lib/member-details";
 import { resolveSourceHref, sanitizeExternalSourceUrl } from "../lib/source-links";
 import ExternalLinkIcon from "./ExternalLinkIcon";
@@ -255,10 +255,20 @@ export default function DestinationSearch({
                     </div>
                   </div>
                 ) : (
-                  <div className="flex h-48 flex-col justify-end bg-[linear-gradient(135deg,#173336,#294648)] p-4">
+                  <div className="relative h-48">
+                    <Image
+                      src={getDestinationImageUrl({ src: COSTA_DEL_SOL_HERO_IMAGE, alt: `${destination.city} editorial fallback` }, destination)}
+                      alt={`${destination.city} editorial fallback view`}
+                      fill
+                      sizes="(min-width: 768px) 33vw, 100vw"
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#132022]/72 via-transparent to-transparent" />
+                    <div className="absolute inset-x-0 bottom-0 p-4">
                     <p className="text-[10px] uppercase tracking-[0.22em] text-[#f5e4c3]">Imagery pending verification</p>
                     <p className="mt-2 text-xs uppercase tracking-[0.2em] text-[#f5e4c3]">{destination.country}</p>
                     <p className="mt-1 text-lg font-semibold text-[#fff7e8]">{destination.city}</p>
+                    </div>
                   </div>
                 )}
               </article>
