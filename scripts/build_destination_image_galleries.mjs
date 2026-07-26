@@ -11,10 +11,16 @@ function readArg(name, fallback) {
   return direct.slice(name.length + 3);
 }
 
+function readBoolArg(name, fallback = false) {
+  const raw = readArg(name, fallback ? "true" : "false");
+  return raw === "true" || raw === "1";
+}
+
 const batchSize = Number(readArg("limit", "60"));
 const batchOffset = Number(readArg("offset", "0"));
 const targetCount = Number(readArg("target", "5"));
 const minAccepted = Number(readArg("min", "3"));
+const unresolvedOnly = readBoolArg("unresolvedOnly", false);
 
 const baselinePath = resolve("docs/destination-quality-baseline.json");
 const curatedPrimaryPath = resolve("app/lib/curatedCityImages.ts");
@@ -62,6 +68,61 @@ const bannedTitleParts = [
 
 const cityTokenStopWords = new Set(["del", "de", "la", "le", "di", "da", "of", "the", "a"]);
 
+const nonPlaceTitleParts = [
+  "list of",
+  "history of",
+  "economy of",
+  "demographics of",
+  "culture of",
+  "transport in",
+  "massacre",
+  "battle",
+  "election",
+  "airport",
+  "airfield",
+  "university",
+  "cemetery",
+  "john ",
+];
+
+const nonPlaceDescriptionParts = [
+  "politician",
+  "singer",
+  "songwriter",
+  "actor",
+  "footballer",
+  "baseball player",
+  "basketball player",
+  "novelist",
+  "journalist",
+  "film",
+  "album",
+  "song",
+  "company",
+  "massacre",
+  "battle",
+];
+
+const placeIndicators = [
+  "city",
+  "town",
+  "village",
+  "municipality",
+  "capital",
+  "island",
+  "province",
+  "state",
+  "region",
+  "county",
+  "district",
+  "commune",
+  "harbor",
+  "harbour",
+  "port",
+  "resort",
+  "metropolitan",
+];
+
 const bucketKeywords = {
   waterfront: ["waterfront", "beach", "coast", "harbor", "harbour", "port", "marina", "bay", "river", "canal"],
   skyline: ["skyline", "panorama", "aerial", "cityscape", "view"],
@@ -71,6 +132,15 @@ const bucketKeywords = {
 
 function normalizeForCompare(value) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function slugify(value) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 async function fetchJson(url, timeoutMs = 25000, attempts = 4) {
@@ -198,9 +268,81 @@ function destinationCityTokens(destination) {
   return Array.from(new Set([normalized, ...parts.filter((part) => part.length >= 4)]));
 }
 
+function destinationCountryTokens(destination) {
+  const normalized = normalizeForCompare(destination.country);
+  if (!normalized || normalized === "other" || normalized === "unknown") {
+    return [];
+  }
+
+  const parts = normalized
+    .split(" ")
+    .map((item) => item.trim())
+    .filter((item) => item.length >= 4)
+    .filter((item) => !cityTokenStopWords.has(item));
+
+  return Array.from(new Set([normalized, ...parts]));
+}
+
+function destinationRegionTokens(destination) {
+  const citySlug = slugify(destination.city);
+  const countrySlug = slugify(destination.country);
+  const slug = destination.slug;
+
+  const cityPrefix = `${citySlug}-`;
+  const countrySuffix = `-${countrySlug}`;
+  if (!slug.startsWith(cityPrefix) || !slug.endsWith(countrySuffix)) {
+    return [];
+  }
+
+  const middle = slug.slice(cityPrefix.length, slug.length - countrySuffix.length);
+  if (!middle || middle === "other") return [];
+
+  const regionPhrase = middle.replace(/-/g, " ").trim();
+  const parts = middle
+    .split("-")
+    .filter((part) => part.length >= 4)
+    .filter((part) => !cityTokenStopWords.has(part));
+
+  return Array.from(new Set([regionPhrase, ...parts]));
+}
+
 function hasCityTokenMatch(destination, description) {
   const tokens = destinationCityTokens(destination);
   return tokens.some((token) => description.includes(token));
+}
+
+function containsAny(text, values) {
+  return values.some((value) => text.includes(value));
+}
+
+function isSummarySuitable(summary, destination) {
+  const title = normalizeForCompare(summary?.title ?? "");
+  const description = normalizeForCompare(summary?.description ?? "");
+  const extract = normalizeForCompare(summary?.extract ?? "");
+  const combined = `${title} ${description} ${extract}`.trim();
+
+  if (!combined) return false;
+  if (containsAny(title, nonPlaceTitleParts)) return false;
+  if (containsAny(description, nonPlaceDescriptionParts)) return false;
+
+  const cityTokens = destinationCityTokens(destination);
+  const hasCityEvidence = cityTokens.some((token) => combined.includes(token));
+  if (!hasCityEvidence) return false;
+
+  const countryTokens = destinationCountryTokens(destination);
+  if (countryTokens.length > 0) {
+    const hasCountryEvidence = countryTokens.some((token) => combined.includes(token));
+    if (!hasCountryEvidence) return false;
+  }
+
+  const regionTokens = destinationRegionTokens(destination);
+  if (regionTokens.length > 0) {
+    const hasRegionEvidence = regionTokens.some((token) => combined.includes(token));
+    if (!hasRegionEvidence) return false;
+  }
+
+  const hasPlaceSignal = placeIndicators.some((term) => description.includes(term));
+  return hasPlaceSignal;
 }
 
 function isImageAccepted(item, destination) {
@@ -267,15 +409,12 @@ async function resolveWikipediaTitle(destination) {
     `${city} (${country})`,
   ];
 
-  const countryToken = normalizeForCompare(country).split(" ")[0] || "";
-
   for (const title of titleCandidates) {
     const summaryUrl = `${WIKI_REST}/summary/${encodeURIComponent(title)}`;
     try {
       const summary = await fetchJson(summaryUrl);
-      const text = normalizeForCompare(`${summary.description ?? ""} ${summary.extract ?? ""}`);
       const articleTitle = summary.title ?? title;
-      if (!countryToken || text.includes(countryToken) || normalizeForCompare(articleTitle).includes(normalizeForCompare(city))) {
+      if (isSummarySuitable(summary, destination)) {
         return articleTitle;
       }
     } catch {
@@ -291,8 +430,7 @@ async function resolveWikipediaTitle(destination) {
       const title = row.title;
       try {
         const summary = await fetchJson(`${WIKI_REST}/summary/${encodeURIComponent(title)}`);
-        const text = normalizeForCompare(`${summary.description ?? ""} ${summary.extract ?? ""}`);
-        if (!countryToken || text.includes(countryToken)) {
+        if (isSummarySuitable(summary, destination)) {
           return title;
         }
       } catch {
@@ -399,7 +537,10 @@ async function main() {
   }
 
   const ranked = rankDestinations(destinationRows, curatedPrioritySlugs);
-  const batch = ranked.slice(batchOffset, batchOffset + batchSize);
+  const unresolvedRanked = unresolvedOnly
+    ? ranked.filter((destination) => !existingGalleries[destination.slug])
+    : ranked;
+  const batch = unresolvedRanked.slice(batchOffset, batchOffset + batchSize);
 
   if (batch.length === 0) {
     console.log("No destinations selected for this batch.");
@@ -450,7 +591,9 @@ async function main() {
   for (const item of manualReview) {
     previousManual.set(item.slug, item);
   }
-  progress.manualReviewDestinations = Array.from(previousManual.values()).sort((a, b) => a.slug.localeCompare(b.slug));
+  progress.manualReviewDestinations = Array.from(previousManual.values())
+    .filter((item) => !completedSet.has(item.slug))
+    .sort((a, b) => a.slug.localeCompare(b.slug));
 
   progress.batches = [
     ...(progress.batches ?? []),
@@ -458,6 +601,7 @@ async function main() {
       generatedAt: progress.generatedAt,
       offset: batchOffset,
       limit: batchSize,
+      unresolvedOnly,
       processedCount: processedSlugs.length,
       manualReviewCount: manualReview.length,
       processedSlugs,

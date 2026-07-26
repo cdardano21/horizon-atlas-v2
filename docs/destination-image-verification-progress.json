@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-26T18:30:45.927Z",
+  "generatedAt": "2026-07-26T19:03:08.146Z",
   "totalDestinations": 600,
-  "completedDestinations": 415,
-  "remainingDestinations": 185,
+  "completedDestinations": 444,
+  "remainingDestinations": 156,
   "manualReviewDestinations": [
     {
       "slug": "agios-nikolaos-greece",
@@ -10,15 +10,15 @@
       "country": "Greece",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Agios Nikolaos"
+      "articleTitle": null
     },
     {
       "slug": "alesund-other-europe",
       "city": "Ålesund",
       "country": "Other Europe",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
-      "articleTitle": "Svalbard"
+      "candidateCount": 0,
+      "articleTitle": null
     },
     {
       "slug": "altea-spain",
@@ -27,22 +27,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Altea"
-    },
-    {
-      "slug": "amarillo-texas-united-states",
-      "city": "Amarillo",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Amarillo"
-    },
-    {
-      "slug": "annapolis-maryland-united-states",
-      "city": "Annapolis",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Annapolis, Maryland"
     },
     {
       "slug": "aomori-japan",
@@ -58,23 +42,7 @@
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Arlington"
-    },
-    {
-      "slug": "asheville-north-carolina-united-states",
-      "city": "Asheville",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Asheville, North Carolina"
-    },
-    {
-      "slug": "aveiro-portugal",
-      "city": "Aveiro",
-      "country": "Portugal",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Aveiro"
+      "articleTitle": null
     },
     {
       "slug": "bath-united-kingdom",
@@ -82,31 +50,15 @@
       "country": "United Kingdom",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "List of prime ministers of the United Kingdom by length of tenure"
+      "articleTitle": null
     },
     {
       "slug": "begur-spain",
       "city": "Begur",
       "country": "Spain",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Begur"
-    },
-    {
-      "slug": "bellevue-washington-united-states",
-      "city": "Bellevue",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Bellevue"
-    },
-    {
-      "slug": "bellingham-washington-united-states",
-      "city": "Bellingham",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Bellingham"
+      "candidateCount": 2,
+      "articleTitle": "Begur, Spain"
     },
     {
       "slug": "belluno-italy",
@@ -114,7 +66,7 @@
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
-      "articleTitle": "Belluno"
+      "articleTitle": "Province of Belluno"
     },
     {
       "slug": "beppu-japan",
@@ -123,14 +75,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Beppu"
-    },
-    {
-      "slug": "bethesda-maryland-united-states",
-      "city": "Bethesda",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Bethesda"
     },
     {
       "slug": "birmingham-alabama-united-states",
@@ -177,8 +121,8 @@
       "city": "Camogli",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
-      "articleTitle": "Camogli"
+      "candidateCount": 0,
+      "articleTitle": null
     },
     {
       "slug": "carlsbad-california-united-states",
@@ -189,20 +133,12 @@
       "articleTitle": "Carlsbad"
     },
     {
-      "slug": "cartagena-spain",
-      "city": "Cartagena",
-      "country": "Spain",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 2,
-      "articleTitle": "Cartagena, Spain"
-    },
-    {
       "slug": "cassis-france",
       "city": "Cassis",
       "country": "France",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
-      "articleTitle": "Cassis"
+      "candidateCount": 0,
+      "articleTitle": null
     },
     {
       "slug": "chandler-arizona-united-states",
@@ -277,14 +213,6 @@
       "articleTitle": "Columbus"
     },
     {
-      "slug": "cordoba-spain",
-      "city": "Córdoba",
-      "country": "Spain",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Córdoba"
-    },
-    {
       "slug": "cork-ireland",
       "city": "Cork",
       "country": "Ireland",
@@ -321,16 +249,8 @@
       "city": "Desenzano del Garda",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
-      "articleTitle": "Desenzano del Garda"
-    },
-    {
-      "slug": "dinan-france",
-      "city": "Dinan",
-      "country": "France",
-      "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Dinan"
+      "articleTitle": null
     },
     {
       "slug": "durham-north-carolina-united-states",
@@ -353,7 +273,7 @@
       "city": "Ericeira",
       "country": "Portugal",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
+      "candidateCount": 2,
       "articleTitle": "Ericeira"
     },
     {
@@ -363,14 +283,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Eugene"
-    },
-    {
-      "slug": "faro-portugal",
-      "city": "Faro",
-      "country": "Portugal",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Faro"
     },
     {
       "slug": "fayetteville-arkansas-united-states",
@@ -385,7 +297,7 @@
       "city": "Figueira da Foz",
       "country": "Portugal",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
+      "candidateCount": 1,
       "articleTitle": "Figueira da Foz"
     },
     {
@@ -433,16 +345,8 @@
       "city": "Fuengirola",
       "country": "Spain",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
+      "candidateCount": 2,
       "articleTitle": "Fuengirola"
-    },
-    {
-      "slug": "fukuoka-japan",
-      "city": "Fukuoka",
-      "country": "Japan",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Fukuoka"
     },
     {
       "slug": "gdansk-other-europe",
@@ -450,7 +354,7 @@
       "country": "Other Europe",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Gdańsk"
+      "articleTitle": null
     },
     {
       "slug": "gilbert-arizona-united-states",
@@ -493,14 +397,6 @@
       "articleTitle": "Greenville"
     },
     {
-      "slug": "grenoble-france",
-      "city": "Grenoble",
-      "country": "France",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Grenoble"
-    },
-    {
       "slug": "guadalajara-mexico",
       "city": "Guadalajara",
       "country": "Mexico",
@@ -523,22 +419,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Hondarribia"
-    },
-    {
-      "slug": "honfleur-france",
-      "city": "Honfleur",
-      "country": "France",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Honfleur"
-    },
-    {
-      "slug": "ioannina-greece",
-      "city": "Ioannina",
-      "country": "Greece",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Ioannina"
     },
     {
       "slug": "irvine-california-united-states",
@@ -609,8 +489,8 @@
       "city": "Korčula Town",
       "country": "Croatia",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
-      "articleTitle": "Korčula"
+      "candidateCount": 0,
+      "articleTitle": "Korčula (town)"
     },
     {
       "slug": "lafayette-louisiana-united-states",
@@ -619,14 +499,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 2,
       "articleTitle": "Visit of the Marquis de Lafayette to the United States"
-    },
-    {
-      "slug": "lagos-portugal",
-      "city": "Lagos",
-      "country": "Portugal",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Lagos"
     },
     {
       "slug": "laredo-texas-united-states",
@@ -650,7 +522,7 @@
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Levanto"
+      "articleTitle": null
     },
     {
       "slug": "lincoln-nebraska-united-states",
@@ -665,7 +537,7 @@
       "city": "Llanes",
       "country": "Spain",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
+      "candidateCount": 2,
       "articleTitle": "Llanes"
     },
     {
@@ -722,7 +594,7 @@
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Matsumoto"
+      "articleTitle": null
     },
     {
       "slug": "medford-oregon-united-states",
@@ -763,14 +635,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Miami"
-    },
-    {
-      "slug": "miyazaki-japan",
-      "city": "Miyazaki",
-      "country": "Japan",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Miyazaki"
     },
     {
       "slug": "mobile-alabama-united-states",
@@ -829,14 +693,6 @@
       "articleTitle": "Naples"
     },
     {
-      "slug": "nazare-portugal",
-      "city": "Nazaré",
-      "country": "Portugal",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Nazaré"
-    },
-    {
       "slug": "nerja-spain",
       "city": "Nerja",
       "country": "Spain",
@@ -869,14 +725,6 @@
       "articleTitle": "Newport"
     },
     {
-      "slug": "niigata-japan",
-      "city": "Niigata",
-      "country": "Japan",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Niigata"
-    },
-    {
       "slug": "norfolk-virginia-united-states",
       "city": "Norfolk",
       "country": "United States",
@@ -901,14 +749,6 @@
       "articleTitle": "Novigrad, Zadar County"
     },
     {
-      "slug": "obidos-portugal",
-      "city": "Óbidos",
-      "country": "Portugal",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Óbidos"
-    },
-    {
       "slug": "ogden-utah-united-states",
       "city": "Ogden",
       "country": "United States",
@@ -922,7 +762,7 @@
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Oita"
+      "articleTitle": null
     },
     {
       "slug": "okayama-japan",
@@ -965,28 +805,12 @@
       "articleTitle": "List of United States cities by population"
     },
     {
-      "slug": "palermo-italy",
-      "city": "Palermo",
-      "country": "Italy",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Palermo"
-    },
-    {
       "slug": "palm-desert-california-united-states",
       "city": "Palm Desert",
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 2,
       "articleTitle": "Palm Desert, California"
-    },
-    {
-      "slug": "pau-france",
-      "city": "Pau",
-      "country": "France",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Pau"
     },
     {
       "slug": "perast-montenegro",
@@ -1017,16 +841,16 @@
       "city": "Pietra Ligure",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 2,
-      "articleTitle": "Pietra Ligure"
+      "candidateCount": 0,
+      "articleTitle": null
     },
     {
       "slug": "pietrasanta-italy",
       "city": "Pietrasanta",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
-      "articleTitle": "Pietrasanta"
+      "candidateCount": 0,
+      "articleTitle": null
     },
     {
       "slug": "plano-texas-united-states",
@@ -1043,14 +867,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Polignano a Mare"
-    },
-    {
-      "slug": "portimao-portugal",
-      "city": "Portimão",
-      "country": "Portugal",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Portimão"
     },
     {
       "slug": "portland-oregon-united-states",
@@ -1073,7 +889,7 @@
       "city": "Primošten",
       "country": "Croatia",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
+      "candidateCount": 0,
       "articleTitle": "Primošten"
     },
     {
@@ -1115,22 +931,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Redding"
-    },
-    {
-      "slug": "reims-france",
-      "city": "Reims",
-      "country": "France",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Reims"
-    },
-    {
-      "slug": "riga-other-europe",
-      "city": "Riga",
-      "country": "Other Europe",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Treaty of Riga"
     },
     {
       "slug": "riverside-california-united-states",
@@ -1234,15 +1034,7 @@
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
-      "articleTitle": "Santa Margherita Ligure"
-    },
-    {
-      "slug": "santander-spain",
-      "city": "Santander",
-      "country": "Spain",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Santander"
+      "articleTitle": "Nozarego"
     },
     {
       "slug": "segovia-spain",
@@ -1258,7 +1050,7 @@
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Siracusa"
+      "articleTitle": null
     },
     {
       "slug": "soller-spain",
@@ -1275,14 +1067,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Sonoma"
-    },
-    {
-      "slug": "split-croatia",
-      "city": "Split",
-      "country": "Croatia",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Split"
     },
     {
       "slug": "spokane-valley-washington-united-states",
@@ -1313,8 +1097,8 @@
       "city": "Stresa",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 2,
-      "articleTitle": "Stresa"
+      "candidateCount": 0,
+      "articleTitle": "Isola Bella (Lago Maggiore)"
     },
     {
       "slug": "tacoma-washington-united-states",
@@ -1338,20 +1122,12 @@
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Takayama"
+      "articleTitle": "Takayama, Gifu"
     },
     {
       "slug": "tallinn-estonia",
       "city": "Tallinn",
       "country": "Estonia",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Tallinn"
-    },
-    {
-      "slug": "tallinn-other-europe",
-      "city": "Tallinn",
-      "country": "Other Europe",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Tallinn"
@@ -1381,22 +1157,6 @@
       "articleTitle": "Toledo"
     },
     {
-      "slug": "toledo-spain",
-      "city": "Toledo",
-      "country": "Spain",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Toledo"
-    },
-    {
-      "slug": "tomar-portugal",
-      "city": "Tomar",
-      "country": "Portugal",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Tomar"
-    },
-    {
       "slug": "tours-france",
       "city": "Tours",
       "country": "France",
@@ -1409,8 +1169,8 @@
       "city": "Toyama",
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 2,
-      "articleTitle": "Toyama Prefecture"
+      "candidateCount": 0,
+      "articleTitle": null
     },
     {
       "slug": "turku-finland",
@@ -2552,6 +2312,98 @@
         "wichita-kansas-united-states",
         "wilmington-delaware-united-states",
         "york-united-kingdom"
+      ]
+    },
+    {
+      "generatedAt": "2026-07-26T19:03:08.146Z",
+      "offset": 0,
+      "limit": 80,
+      "unresolvedOnly": true,
+      "processedCount": 29,
+      "manualReviewCount": 51,
+      "processedSlugs": [
+        "santander-spain",
+        "aveiro-portugal",
+        "cordoba-spain",
+        "dinan-france",
+        "faro-portugal",
+        "fukuoka-japan",
+        "grenoble-france",
+        "honfleur-france",
+        "ioannina-greece",
+        "lagos-portugal",
+        "nazare-portugal",
+        "palermo-italy",
+        "obidos-portugal",
+        "split-croatia",
+        "miyazaki-japan",
+        "pau-france",
+        "reims-france",
+        "riga-other-europe",
+        "tallinn-other-europe",
+        "toledo-spain",
+        "niigata-japan",
+        "portimao-portugal",
+        "tomar-portugal",
+        "amarillo-texas-united-states",
+        "annapolis-maryland-united-states",
+        "asheville-north-carolina-united-states",
+        "bellevue-washington-united-states",
+        "bellingham-washington-united-states",
+        "bethesda-maryland-united-states"
+      ],
+      "manualReviewSlugs": [
+        "pietrasanta-italy",
+        "polignano-a-mare-italy",
+        "takayama-japan",
+        "desenzano-del-garda-italy",
+        "aomori-japan",
+        "agios-nikolaos-greece",
+        "altea-spain",
+        "begur-spain",
+        "belluno-italy",
+        "beppu-japan",
+        "camogli-italy",
+        "cassis-france",
+        "collioure-france",
+        "ericeira-portugal",
+        "frigiliana-spain",
+        "fuengirola-spain",
+        "hondarribia-spain",
+        "kagoshima-japan",
+        "kardamyli-greece",
+        "levanto-italy",
+        "llanes-spain",
+        "mali-losinj-croatia",
+        "matsumoto-japan",
+        "nantes-france",
+        "nerja-spain",
+        "novigrad-croatia",
+        "perast-montenegro",
+        "pietra-ligure-italy",
+        "primosten-croatia",
+        "salerno-italy",
+        "santa-margherita-ligure-italy",
+        "saint-remy-de-provence-france",
+        "siracusa-italy",
+        "ulcinj-montenegro",
+        "figueira-da-foz-portugal",
+        "gdansk-other-europe",
+        "korcula-town-croatia",
+        "mahon-spain",
+        "morioka-japan",
+        "oita-japan",
+        "okayama-japan",
+        "segovia-spain",
+        "soller-spain",
+        "stresa-italy",
+        "tours-france",
+        "uzes-france",
+        "varenna-italy",
+        "alesund-other-europe",
+        "toyama-japan",
+        "arlington-texas-united-states",
+        "bath-united-kingdom"
       ]
     }
   ]
