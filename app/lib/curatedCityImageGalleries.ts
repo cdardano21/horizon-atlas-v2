@@ -415,6 +415,13 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Edificio_BBVA_%28antiguo_Banco_de_Comercio%29%2C_Bilbao%2C_2017-07-23%2C_Tripleca%C3%B1a_retouched.jpg/1280px-Edificio_BBVA_%28antiguo_Banco_de_Comercio%29%2C_Bilbao%2C_2017-07-23%2C_Tripleca%C3%B1a_retouched.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Bilbao_-_Ria.jpg/1280px-Bilbao_-_Ria.jpg",
   ],
+  "birmingham-alabama-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Birmingham%2C_Alabama.jpg/1280px-Birmingham%2C_Alabama.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Birmingham_City_Hall_%28Alabama%29.jpg/1280px-Birmingham_City_Hall_%28Alabama%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Birmingham_Skyline.jpeg/1280px-Birmingham_Skyline.jpeg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/AT%26T_building%2C_Birmingham%2C_AL.jpg/1280px-AT%26T_building%2C_Birmingham%2C_AL.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Legion_Field_-_Birmingham%2C_Alabama.jpg/1280px-Legion_Field_-_Birmingham%2C_Alabama.jpg",
+  ],
   "bismarck-north-dakota-united-states": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Cathedral_of_the_Holy_Spirit_-_Bismarck%2C_ND.jpg/1280px-Cathedral_of_the_Holy_Spirit_-_Bismarck%2C_ND.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Bismarck_North_Dakota_Former_Governor%27s_Mansion.jpg/1280px-Bismarck_North_Dakota_Former_Governor%27s_Mansion.jpg",
@@ -558,6 +565,13 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Fachada_del_Teatro_Col%C3%B3n_en_Buenos_Aires%2C_Argentina.jpg/1280px-Fachada_del_Teatro_Col%C3%B3n_en_Buenos_Aires%2C_Argentina.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Congreso_Nacional_Buenos_Aires.jpg/1280px-Congreso_Nacional_Buenos_Aires.jpg",
   ],
+  "buffalo-new-york-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Buffalo%2C_NY_skyline.jpg/1280px-Buffalo%2C_NY_skyline.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Buffalo_Central_Terminal%2C_Paderewski_Drive%2C_Broadway-Fillmore%2C_Buffalo%2C_NY.jpg/1280px-Buffalo_Central_Terminal%2C_Paderewski_Drive%2C_Broadway-Fillmore%2C_Buffalo%2C_NY.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Buffalo_1813_%28cropped%29.jpg/1280px-Buffalo_1813_%28cropped%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Pan-American_Exposition%2C_Buffalo%2C_1901_%28cropped%29.jpg/1280px-Pan-American_Exposition%2C_Buffalo%2C_1901_%28cropped%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Thornberger_hoists_unloading_ore%2C_Lackawanna_ore_docks%2C_Buffalo%2C_N.Y._LC-D4-32179.jpg/1280px-Thornberger_hoists_unloading_ore%2C_Lackawanna_ore_docks%2C_Buffalo%2C_N.Y._LC-D4-32179.jpg",
+  ],
   "burgos-spain": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Burgos_city_view_facing_south_east.jpg/1280px-Burgos_city_view_facing_south_east.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Fachada_de_la_Catedral_de_Burgos.jpg/1280px-Fachada_de_la_Catedral_de_Burgos.jpg",
@@ -611,6 +625,11 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/1_carcassonne_aerial_2016.jpg/1280px-1_carcassonne_aerial_2016.jpg",
     "https://upload.wikimedia.org/wikipedia/en/thumb/7/77/The_ville_basse%2C_Carcassonne.jpg/1280px-The_ville_basse%2C_Carcassonne.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Carcassonne_Cite.jpg/1280px-Carcassonne_Cite.jpg",
+  ],
+  "carlsbad-california-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Leo_Carrillo_Ranch%2C_Carlsbad%2C_California_%2815473262218%29.jpg/1280px-Leo_Carrillo_Ranch%2C_Carlsbad%2C_California_%2815473262218%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Army_and_Navy_Academy_Carlsbad_2021_-_2_%28cropped_2%29.jpg/1280px-Army_and_Navy_Academy_Carlsbad_2021_-_2_%28cropped_2%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/2010-1026-CarlsbadSFDepot.jpg/1280px-2010-1026-CarlsbadSFDepot.jpg",
   ],
   "cartagena-spain": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Muralla_de_Carlos_III_%28Muralla_del_Mar%29.JPG/1280px-Muralla_de_Carlos_III_%28Muralla_del_Mar%29.JPG",
@@ -687,12 +706,31 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Gare_de_Chamonix_-_Mont-Blanc.JPG/1280px-Gare_de_Chamonix_-_Mont-Blanc.JPG",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Chamonix_panorama_Aiguille_du_Midi.jpeg/1280px-Chamonix_panorama_Aiguille_du_Midi.jpeg",
   ],
+  "chandler-arizona-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Neighborhoods_in_the_City_of_Chandler.jpg/1280px-Neighborhoods_in_the_City_of_Chandler.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Village_of_Gila_Springs%2C_Chandler%2C_Arizona.jpg/1280px-Village_of_Gila_Springs%2C_Chandler%2C_Arizona.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Chandler_Regional_Medical_Center.jpg/1280px-Chandler_Regional_Medical_Center.jpg",
+  ],
   "chania-greece": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Aerial_view_of_the_Old_Venetian_Harbour_in_Chania%2C_Greece.jpg/1280px-Aerial_view_of_the_Old_Venetian_Harbour_in_Chania%2C_Greece.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Venetian_shipyards%2C_Chania.jpg/1280px-Venetian_shipyards%2C_Chania.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Lighthouse_of_Chania_in_November.jpg/1280px-Lighthouse_of_Chania_in_November.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Alley_in_Chania%27s_old_town.jpg/1280px-Alley_in_Chania%27s_old_town.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Fountain_in_Chania%2C_Crete_002.jpg/1280px-Fountain_in_Chania%2C_Crete_002.jpg",
+  ],
+  "charleston-south-carolina-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/East_Battery_Street_Charleston_Aug2010.jpg/1280px-East_Battery_Street_Charleston_Aug2010.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Charleston-ColumbusSt-port-terminal.jpg/1280px-Charleston-ColumbusSt-port-terminal.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Pink-house-charleston-sc1.jpg/1280px-Pink-house-charleston-sc1.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/SouthBatteryCharleston1863.jpg/1280px-SouthBatteryCharleston1863.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Mills_House%2C_Charleston.%2C_1865_-_NARA_-_533131.tif/lossy-page1-1280px-Mills_House%2C_Charleston.%2C_1865_-_NARA_-_533131.tif.jpg",
+  ],
+  "charlotte-north-carolina-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Uptown_Charlotte_2018_taking_by_DJI_Phantom_4_pro.jpg/1280px-Uptown_Charlotte_2018_taking_by_DJI_Phantom_4_pro.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Dubois_Center_UNC_Charlotte_northeastern_face_July_2022.jpg/1280px-Dubois_Center_UNC_Charlotte_northeastern_face_July_2022.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Aerial_view_of_Bank_of_America_Stadium_in_Charlotte.jpg/1280px-Aerial_view_of_Bank_of_America_Stadium_in_Charlotte.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/North_Carolina_-_Charlotte_-_NARA_-_68146416_%28cropped%29.jpg/1280px-North_Carolina_-_Charlotte_-_NARA_-_68146416_%28cropped%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Saint_Peter_Catholic_Church_%28Charlotte%2C_North_Carolina%29_-_view_from_Mint_Museum.jpg/1280px-Saint_Peter_Catholic_Church_%28Charlotte%2C_North_Carolina%29_-_view_from_Mint_Museum.jpg",
   ],
   "chattanooga-tennessee-united-states": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Chattanooga%2C_Tennessee_%282023%29.jpg/1280px-Chattanooga%2C_Tennessee_%282023%29.jpg",
@@ -735,6 +773,13 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Chula_Vista%2C_CA%2C_USA_-_panoramio_%281%29.jpg/1280px-Chula_Vista%2C_CA%2C_USA_-_panoramio_%281%29.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/United_States_Training_Center_Chula_Vista.jpg/1280px-United_States_Training_Center_Chula_Vista.jpg",
   ],
+  "cincinnati-ohio-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Downtown_Cincinnati_viewed_from_Devou_Park_%28cropped%29.jpg/1280px-Downtown_Cincinnati_viewed_from_Devou_Park_%28cropped%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Renovated_Cincinnati_Music_Hall_2.jpg/1280px-Renovated_Cincinnati_Music_Hall_2.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Cincinnati_I.jpg/1280px-Cincinnati_I.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Cincinnati-in-1841.jpg/1280px-Cincinnati-in-1841.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Carew_Tower%2C_Cincinnati%2C_Ohio.jpg/1280px-Carew_Tower%2C_Cincinnati%2C_Ohio.jpg",
+  ],
   "clearwater-florida-united-states": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Clearwater_Beach%2C_Florida_%2835407253602%29.jpg/1280px-Clearwater_Beach%2C_Florida_%2835407253602%29.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Florida_-_Brandenton_through_Clearwater_-_NARA_-_23936571_%28cropped%29.jpg/1280px-Florida_-_Brandenton_through_Clearwater_-_NARA_-_23936571_%28cropped%29.jpg",
@@ -773,6 +818,20 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Kranh%C3%A4user_Cologne%2C_April_2018_-01.jpg/1280px-Kranh%C3%A4user_Cologne%2C_April_2018_-01.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Cologne_by_Sentinel-2%2C_2020-05-07.jpg/1280px-Cologne_by_Sentinel-2%2C_2020-05-07.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Cologne_-_Panoramic_Image_of_the_old_town_at_dusk.jpg/1280px-Cologne_-_Panoramic_Image_of_the_old_town_at_dusk.jpg",
+  ],
+  "colorado-springs-colorado-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Colorado_Springs%2C_Colorado_%28cropped%29.jpg/1280px-Colorado_Springs%2C_Colorado_%28cropped%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/ISS067-E-170859_Colorado_Springs_through_the_clouds.jpg/1280px-ISS067-E-170859_Colorado_Springs_through_the_clouds.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/President_Richard_Nixon_Gives_a_Commencement_Ceremony_Speech_at_Air_Force_Academy_in_Colorado_Springs_%28cropped%29.jpg/1280px-President_Richard_Nixon_Gives_a_Commencement_Ceremony_Speech_at_Air_Force_Academy_in_Colorado_Springs_%28cropped%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Colorado_Springs_Hot_Air_Balloon_Competition.jpg/1280px-Colorado_Springs_Hot_Air_Balloon_Competition.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Pulpit_Rock%2C_Colorado_Springs%2C_Colorado_%281%29.jpg/1280px-Pulpit_Rock%2C_Colorado_Springs%2C_Colorado_%281%29.jpg",
+  ],
+  "columbus-ohio-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Downtown_Columbus_View_from_Main_St_Bridge_-_edit1.jpg/1280px-Downtown_Columbus_View_from_Main_St_Bridge_-_edit1.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Ohio-Columbus-University-Hall-2017-10-21-001.jpg/1280px-Ohio-Columbus-University-Hall-2017-10-21-001.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Columbus%2C_Ohio_JJ_77b.jpg/1280px-Columbus%2C_Ohio_JJ_77b.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Columbus_at_night_01.jpg/1280px-Columbus_at_night_01.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Birds_eye_view_of_Columbus%2C_Ohio_LOC_84690606.jpg/1280px-Birds_eye_view_of_Columbus%2C_Ohio_LOC_84690606.jpg",
   ],
   "comillas-spain": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Vista_aerea_Comillas.jpg/1280px-Vista_aerea_Comillas.jpg",
@@ -814,12 +873,26 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/20140418_corfu290.JPG/1280px-20140418_corfu290.JPG",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/20100728_Corfu_island_old_town_panoramic_Greece.jpg/1280px-20100728_Corfu_island_old_town_panoramic_Greece.jpg",
   ],
+  "cork-ireland": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Cork_City_Hall01_2009-04-30.jpg/1280px-Cork_City_Hall01_2009-04-30.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Patrick_Street_Cork2.jpg/1280px-Patrick_Street_Cork2.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/The_Burning_of_Cork_%289713428703%29.jpg/1280px-The_Burning_of_Cork_%289713428703%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/RTE_Cork_City.jpg/1280px-RTE_Cork_City.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/St._Annes_Church%2C_Shandon%2C_Cork_City.jpg/1280px-St._Annes_Church%2C_Shandon%2C_Cork_City.jpg",
+  ],
   "cortona-italy": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cortona_%2892%29.jpg/1280px-Cortona_%2892%29.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/CortonaPortaGhibellinaBifora1.JPG/1280px-CortonaPortaGhibellinaBifora1.JPG",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Cortona_Camucia_Panorama_01.jpg/1280px-Cortona_Camucia_Panorama_01.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Cortona.Rathaus.20050927.jpg/1280px-Cortona.Rathaus.20050927.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Cortona%2C_porta_sant%27agostino.jpg/1280px-Cortona%2C_porta_sant%27agostino.jpg",
+  ],
+  "covington-kentucky-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Covington%2C_Kentucky.jpg/1280px-Covington%2C_Kentucky.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Covington_station_2018.jpg/1280px-Covington_station_2018.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/St._Mary_-_Covington_01.jpg/1280px-St._Mary_-_Covington_01.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/US_Courthouse_at_Covington.jpg/1280px-US_Courthouse_at_Covington.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Cincinnati_Skyline_and_Roebling_Bridge_from_Riverfront_Commons%2C_Covington%2C_KY_-_51400457956.jpg/1280px-Cincinnati_Skyline_and_Roebling_Bridge_from_Riverfront_Commons%2C_Covington%2C_KY_-_51400457956.jpg",
   ],
   "curitiba-brazil": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Vista_da_Torre_das_Merc%C3%AAs_em_Curitiba.jpg/1280px-Vista_da_Torre_das_Merc%C3%AAs_em_Curitiba.jpg",
@@ -897,6 +970,13 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Dubrovnik_1667.jpg/1280px-Dubrovnik_1667.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Narrow-Gauge-Railway_Dalmatinerbahn_Station-Dubrovnik_%282%29.jpg/1280px-Narrow-Gauge-Railway_Dalmatinerbahn_Station-Dubrovnik_%282%29.jpg",
   ],
+  "durham-north-carolina-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Skyline_Panorama_of_Durham%2C_North_Carolina.jpg/1280px-Skyline_Panorama_of_Durham%2C_North_Carolina.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Davidson_Building%2C_West_Campus%2C_Duke_University%2C_Durham%2C_NC_%2848961121177%29.jpg/1280px-Davidson_Building%2C_West_Campus%2C_Duke_University%2C_Durham%2C_NC_%2848961121177%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Duke_Memorial_United_Methodist_Church%2C_Durham%2C_NC_%2849140492242%29.jpg/1280px-Duke_Memorial_United_Methodist_Church%2C_Durham%2C_NC_%2849140492242%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/DPAC011_DPAC_-_Durham_Performing_Arts_Center_DiscoverDurham.jpg/1280px-DPAC011_DPAC_-_Durham_Performing_Arts_Center_DiscoverDurham.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/SKYL024_Old_Bull_Building_ATC_DiscoverDurham.jpg/1280px-SKYL024_Old_Bull_Building_ATC_DiscoverDurham.jpg",
+  ],
   "edinburgh-united-kingdom": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Skyline_of_Edinburgh.jpg/1280px-Skyline_of_Edinburgh.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Edinburgh_%2C_St_Giles%27_Cathedral_-_geograph.org.uk_-_6656568.jpg/1280px-Edinburgh_%2C_St_Giles%27_Cathedral_-_geograph.org.uk_-_6656568.jpg",
@@ -921,6 +1001,13 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Calle_papuecas_one_side_-_Estepona_Garden_of_the_Costa_del_Sol.jpg/1280px-Calle_papuecas_one_side_-_Estepona_Garden_of_the_Costa_del_Sol.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Atalaya_Golf_%26_Country_Club_en_Estepona.jpg/1280px-Atalaya_Golf_%26_Country_Club_en_Estepona.jpg",
   ],
+  "eugene-oregon-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Eugene_panorama_%28cropped%29.jpg/1280px-Eugene_panorama_%28cropped%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Lane_County_Farmers_Market%2C_Eugene_Oregon.jpg/1280px-Lane_County_Farmers_Market%2C_Eugene_Oregon.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Oregon_-_Eugene_-_NARA_-_68147382_%28cropped%29.jpg/1280px-Oregon_-_Eugene_-_NARA_-_68147382_%28cropped%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Snow_in_Eugene.JPG/1280px-Snow_in_Eugene.JPG",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Eugene_Homeless_Camp.jpg/1280px-Eugene_Homeless_Camp.jpg",
+  ],
   "evora-portugal": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/CATEDRAL_d%27_%C3%89VORA%2C_Portugal_%2816976233822%29_%28cropped%29.jpg/1280px-CATEDRAL_d%27_%C3%89VORA%2C_Portugal_%2816976233822%29_%28cropped%29.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Templo_romano_de_%C3%89vora_%2848812699836%29_%28cropped2%29.jpg/1280px-Templo_romano_de_%C3%89vora_%2848812699836%29_%28cropped2%29.jpg",
@@ -941,6 +1028,13 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Muralha_seiscentista_de_Faro.jpg/1280px-Muralha_seiscentista_de_Faro.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/A_speedboat_sets_out_across_the_bay_in_Faro_%2833704217143%29.jpg/1280px-A_speedboat_sets_out_across_the_bay_in_Faro_%2833704217143%29.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Faro_Portugal_2.jpg/1280px-Faro_Portugal_2.jpg",
+  ],
+  "fayetteville-arkansas-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Downtown_Fayetteville_from_Old_Main_001.jpg/1280px-Downtown_Fayetteville_from_Old_Main_001.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Fayetteville_May_2017_17_%28Walton_Arts_Center%29.jpg/1280px-Fayetteville_May_2017_17_%28Walton_Arts_Center%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Wilson_Park_castle_and_fountain%2C_Fayetteville%2C_Arkansas.jpg/1280px-Wilson_Park_castle_and_fountain%2C_Fayetteville%2C_Arkansas.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Headquarters_House%2C_Fayetteville%2C_Arkansas.jpg/1280px-Headquarters_House%2C_Fayetteville%2C_Arkansas.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Mount_Sequoyah_and_Fayetteville_from_University_of_Arkansas.jpg/1280px-Mount_Sequoyah_and_Fayetteville_from_University_of_Arkansas.jpg",
   ],
   "ferrara-italy": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Piazza_Trento_e_Trieste_-_Ex_Palazzo_della_Ragione%2C_Torre_Della_Vittoria_and_Cathedral_of_Ferrara._Ferrara%2C_Italy.jpg/1280px-Piazza_Trento_e_Trieste_-_Ex_Palazzo_della_Ragione%2C_Torre_Della_Vittoria_and_Cathedral_of_Ferrara._Ferrara%2C_Italy.jpg",
@@ -983,6 +1077,13 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Oakdale_west_from_Wayne.jpg/1280px-Oakdale_west_from_Wayne.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/The_landing_in_downtown_fort_wayne.jpg/1280px-The_landing_in_downtown_fort_wayne.jpg",
   ],
+  "fort-worth-texas-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Fort_Worth_Skyline.jpg/1280px-Fort_Worth_Skyline.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Fort_Worth_Stock_Yards_Entrance_Wiki_%281_of_1%29.jpg/1280px-Fort_Worth_Stock_Yards_Entrance_Wiki_%281_of_1%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Fort_Worth_Cultural_District_June_2016_13_%28Kimbell_Art_Museum%29.jpg/1280px-Fort_Worth_Cultural_District_June_2016_13_%28Kimbell_Art_Museum%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Fort_Worth_Intermodal_Transportation_Center_June_2016_7.jpg/1280px-Fort_Worth_Intermodal_Transportation_Center_June_2016_7.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Fort_Worth_June_2016_07_%28Fort_Worth_Transportation_Authority%29.jpg/1280px-Fort_Worth_June_2016_07_%28Fort_Worth_Transportation_Authority%29.jpg",
+  ],
   "frankfurt-germany": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Frankfurt_Main_August_2020_1.jpg/1280px-Frankfurt_Main_August_2020_1.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Frankfurt_Am_Main-St_Bartholomaeus-Ansicht_von_der_Untermainbruecke-20110328.jpg/1280px-Frankfurt_Am_Main-St_Bartholomaeus-Ansicht_von_der_Untermainbruecke-20110328.jpg",
@@ -996,6 +1097,13 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Fresno_station_2434_35_%28cropped2%29.JPG/1280px-Fresno_station_2434_35_%28cropped2%29.JPG",
     "https://upload.wikimedia.org/wikipedia/commons/b/b5/Fresno_County_Courthouse_%281885%29.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/The_Grand_1401%2C_Fresno%2C_CA_%28cropped%29.JPG/1280px-The_Grand_1401%2C_Fresno%2C_CA_%28cropped%29.JPG",
+  ],
+  "frisco-texas-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Frisco_Commons_June_2019_10.jpg/1280px-Frisco_Commons_June_2019_10.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Frisco_June_2019_25_%28Frisco_Discovery_Center%29.jpg/1280px-Frisco_June_2019_25_%28Frisco_Discovery_Center%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Frisco_Comerica_Center_-_IFL_Frisco_Fighters_vs_Duke_City_Gladiators_-_05_June_2021_-_001.jpg/1280px-Frisco_Comerica_Center_-_IFL_Frisco_Fighters_vs_Duke_City_Gladiators_-_05_June_2021_-_001.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/National_Soccer_Hall_of_Fame_-_Frisco_TX_-_June_2021_-_001.jpg/1280px-National_Soccer_Hall_of_Fame_-_Frisco_TX_-_June_2021_-_001.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Dr_Pepper_Ball_Park_Frisco_Tx.JPG/1280px-Dr_Pepper_Ball_Park_Frisco_Tx.JPG",
   ],
   "fukuoka-japan": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Fukuoka_Skyline_of_Seaside_Momochi.jpg/1280px-Fukuoka_Skyline_of_Seaside_Momochi.jpg",
@@ -1059,6 +1167,12 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/166_Casa_Jove-Labandera%2C_Museo_Casa_Natal_de_Jovellanos%2C_pl._Jovellanos_2_%28Cimavilla%2C_Gij%C3%B3n%29.jpg/1280px-166_Casa_Jove-Labandera%2C_Museo_Casa_Natal_de_Jovellanos%2C_pl._Jovellanos_2_%28Cimavilla%2C_Gij%C3%B3n%29.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Bomberos._Festival_A%C3%A9reo_Internacional_De_Gij%C3%B3n._Gij%C3%B3n_2016._%2828264061240%29.jpg/1280px-Bomberos._Festival_A%C3%A9reo_Internacional_De_Gij%C3%B3n._Gij%C3%B3n_2016._%2828264061240%29.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Puerto_de_Gij%C3%B3n.jpg/1280px-Puerto_de_Gij%C3%B3n.jpg",
+  ],
+  "gilbert-arizona-united-states": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Gilbert_Civic_Center.jpg/1280px-Gilbert_Civic_Center.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Gilbert_SW01.jpg/1280px-Gilbert_SW01.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Picture_of_lake_front_in_Val_Vista_Lakes_in_Gilbert%2C_Arizona%2C_USA.jpg/1280px-Picture_of_lake_front_in_Val_Vista_Lakes_in_Gilbert%2C_Arizona%2C_USA.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Downtown_Gilbert_-_SWC_Gilbert_%26_Page_-_2009-03-23.JPG/1280px-Downtown_Gilbert_-_SWC_Gilbert_%26_Page_-_2009-03-23.JPG",
   ],
   "girona-spain": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Girona_des_de_l_aire_edited.jpg/1280px-Girona_des_de_l_aire_edited.jpg",
@@ -1962,6 +2076,13 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Rain_clouds_forming_Nairobi.jpg/1280px-Rain_clouds_forming_Nairobi.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Kibera%2C_Nairobi_May_2007.jpg/1280px-Kibera%2C_Nairobi_May_2007.jpg",
   ],
+  "nantes-france": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Cour_int%C3%A9rieure_du_ch%C3%A2teau_des_ducs_de_Bretagne_%28Nantes%29_%287339052946%29.jpg/1280px-Cour_int%C3%A9rieure_du_ch%C3%A2teau_des_ducs_de_Bretagne_%28Nantes%29_%287339052946%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Nantes_passage_pommeraye.JPG/1280px-Nantes_passage_pommeraye.JPG",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Ile_de_Nantes.JPG/1280px-Ile_de_Nantes.JPG",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Confluence_of_Erdre_and_Loire%2C_Nantes%2C_France%2C_1890s.jpg/1280px-Confluence_of_Erdre_and_Loire%2C_Nantes%2C_France%2C_1890s.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Enceinte_gallo-romaine_Nantes_detail.jpg/1280px-Enceinte_gallo-romaine_Nantes_detail.jpg",
+  ],
   "napa-california-united-states": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/City_of_Napa_by_the_Napa_River_%28cropped%29.JPG/1280px-City_of_Napa_by_the_Napa_River_%28cropped%29.JPG",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/06817-Napa-1905-State_Hospital-Br%C3%BCck_%26_Sohn_Kunstverlag_%28cropped%29.jpg/1280px-06817-Napa-1905-State_Hospital-Br%C3%BCck_%26_Sohn_Kunstverlag_%28cropped%29.jpg",
@@ -2056,6 +2177,13 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Obidos_April_2009-4b.jpg/1280px-Obidos_April_2009-4b.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/%C3%93bidos%2C_Blick_auf_die_Santa_Maria.JPG/1280px-%C3%93bidos%2C_Blick_auf_die_Santa_Maria.JPG",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/%C3%93bidos_October_2014-6.jpg/1280px-%C3%93bidos_October_2014-6.jpg",
+  ],
+  "okayama-japan": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Okayama_Castle%2C_IMG_5839-5841_AutoAdaptive.jpg/1280px-Okayama_Castle%2C_IMG_5839-5841_AutoAdaptive.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Okayama_after_the_1945_air_raid.jpg/1280px-Okayama_after_the_1945_air_raid.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Okayama_Station_west_side_-_panoramio.jpg/1280px-Okayama_Station_west_side_-_panoramio.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Okayama_Station_2017-12-06_%2839422677582%29.jpg/1280px-Okayama_Station_2017-12-06_%2839422677582%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/250505_Kibitsu-jinja_Okayama_Japan03s3.jpg/1280px-250505_Kibitsu-jinja_Okayama_Japan03s3.jpg",
   ],
   "oklahoma-city-oklahoma-united-states": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Oklahoma_city_downtown.JPG/1280px-Oklahoma_city_downtown.JPG",
@@ -2679,6 +2807,13 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sedona_SW02.jpg/1280px-Sedona_SW02.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Vortex_panoramicview_sedona.jpg/1280px-Vortex_panoramicview_sedona.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/SedonaAirport.JPG/1280px-SedonaAirport.JPG",
+  ],
+  "segovia-spain": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Segovia_-_02.jpg/1280px-Segovia_-_02.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Alcazar_de_segovia_-_vistra_trasera.jpg/1280px-Alcazar_de_segovia_-_vistra_trasera.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Aqueduct_of_Segovia_02.jpg/1280px-Aqueduct_of_Segovia_02.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Catedral_de_Segovia_%2827166274932%29.jpg/1280px-Catedral_de_Segovia_%2827166274932%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/VistaSegovia1562.jpg/1280px-VistaSegovia1562.jpg",
   ],
   "sendai-japan": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Sendai_castle01s3872.jpg/1280px-Sendai_castle01s3872.jpg",

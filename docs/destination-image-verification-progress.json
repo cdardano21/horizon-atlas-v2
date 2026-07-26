@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-26T20:10:04.062Z",
+  "generatedAt": "2026-07-26T20:50:23.245Z",
   "totalDestinations": 600,
-  "completedDestinations": 490,
-  "remainingDestinations": 110,
+  "completedDestinations": 510,
+  "remainingDestinations": 90,
   "manualReviewDestinations": [
     {
       "slug": "agios-nikolaos-greece",
@@ -10,7 +10,7 @@
       "country": "Greece",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": null
+      "articleTitle": "Agios Nikolaos (municipality)"
     },
     {
       "slug": "alesund-other-europe",
@@ -65,7 +65,7 @@
       "city": "Belluno",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
+      "candidateCount": 0,
       "articleTitle": "Province of Belluno"
     },
     {
@@ -77,20 +77,12 @@
       "articleTitle": "Beppu"
     },
     {
-      "slug": "birmingham-alabama-united-states",
-      "city": "Birmingham",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Birmingham"
-    },
-    {
       "slug": "breckenridge-colorado-united-states",
       "city": "Breckenridge",
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Breckenridge"
+      "candidateCount": 2,
+      "articleTitle": "Breckenridge, Colorado"
     },
     {
       "slug": "brownsville-texas-united-states",
@@ -98,15 +90,7 @@
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Brownsville"
-    },
-    {
-      "slug": "buffalo-new-york-united-states",
-      "city": "Buffalo",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Buffalo"
+      "articleTitle": null
     },
     {
       "slug": "burlington-vermont-united-states",
@@ -114,7 +98,7 @@
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Burlington"
+      "articleTitle": null
     },
     {
       "slug": "camogli-italy",
@@ -125,14 +109,6 @@
       "articleTitle": null
     },
     {
-      "slug": "carlsbad-california-united-states",
-      "city": "Carlsbad",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Carlsbad"
-    },
-    {
       "slug": "cassis-france",
       "city": "Cassis",
       "country": "France",
@@ -141,44 +117,12 @@
       "articleTitle": null
     },
     {
-      "slug": "chandler-arizona-united-states",
-      "city": "Chandler",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Chandler"
-    },
-    {
-      "slug": "charleston-south-carolina-united-states",
-      "city": "Charleston",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Charleston"
-    },
-    {
-      "slug": "charlotte-north-carolina-united-states",
-      "city": "Charlotte",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Charlotte"
-    },
-    {
-      "slug": "cincinnati-ohio-united-states",
-      "city": "Cincinnati",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Cincinnati"
-    },
-    {
       "slug": "college-station-texas-united-states",
       "city": "College Station",
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "College Station"
+      "articleTitle": null
     },
     {
       "slug": "collioure-france",
@@ -189,36 +133,12 @@
       "articleTitle": "Collioure"
     },
     {
-      "slug": "colorado-springs-colorado-united-states",
-      "city": "Colorado Springs",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Colorado Springs, Colorado"
-    },
-    {
       "slug": "columbia-south-carolina-united-states",
       "city": "Columbia",
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Washington, D.C."
-    },
-    {
-      "slug": "columbus-ohio-united-states",
-      "city": "Columbus",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Columbus"
-    },
-    {
-      "slug": "cork-ireland",
-      "city": "Cork",
-      "country": "Ireland",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Cork"
+      "articleTitle": null
     },
     {
       "slug": "corpus-christi-texas-united-states",
@@ -226,15 +146,7 @@
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Corpus Christi"
-    },
-    {
-      "slug": "covington-kentucky-united-states",
-      "city": "Covington",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Covington, Louisiana"
+      "articleTitle": "Corpus Christi, Texas"
     },
     {
       "slug": "des-moines-iowa-united-states",
@@ -242,31 +154,23 @@
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Des Moines, Iowa"
+      "articleTitle": "Des Moines metropolitan area"
     },
     {
       "slug": "desenzano-del-garda-italy",
       "city": "Desenzano del Garda",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": null
-    },
-    {
-      "slug": "durham-north-carolina-united-states",
-      "city": "Durham",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Durham"
+      "candidateCount": 1,
+      "articleTitle": "Lonato del Garda"
     },
     {
       "slug": "edmond-oklahoma-united-states",
       "city": "Edmond",
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
-      "articleTitle": "Edmond, Oklahoma"
+      "candidateCount": 0,
+      "articleTitle": null
     },
     {
       "slug": "ericeira-portugal",
@@ -275,22 +179,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 2,
       "articleTitle": "Ericeira"
-    },
-    {
-      "slug": "eugene-oregon-united-states",
-      "city": "Eugene",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Eugene"
-    },
-    {
-      "slug": "fayetteville-arkansas-united-states",
-      "city": "Fayetteville",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Fayetteville"
     },
     {
       "slug": "figueira-da-foz-portugal",
@@ -306,7 +194,7 @@
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Flagstaff"
+      "articleTitle": "Flagstaff, Arizona"
     },
     {
       "slug": "florianopolis-brazil",
@@ -314,15 +202,7 @@
       "country": "Brazil",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Florianópolis"
-    },
-    {
-      "slug": "fort-worth-texas-united-states",
-      "city": "Fort Worth",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Fort Worth, Texas"
+      "articleTitle": null
     },
     {
       "slug": "frigiliana-spain",
@@ -331,14 +211,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Frigiliana"
-    },
-    {
-      "slug": "frisco-texas-united-states",
-      "city": "Frisco",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Frisco"
     },
     {
       "slug": "fuengirola-spain",
@@ -357,20 +229,12 @@
       "articleTitle": null
     },
     {
-      "slug": "gilbert-arizona-united-states",
-      "city": "Gilbert",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Gilbert"
-    },
-    {
       "slug": "glendale-arizona-united-states",
       "city": "Glendale",
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Glendale"
+      "candidateCount": 1,
+      "articleTitle": "Glendale, Arizona"
     },
     {
       "slug": "gothenburg-sweden",
@@ -433,7 +297,7 @@
       "city": "Korčula Town",
       "country": "Croatia",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
+      "candidateCount": 2,
       "articleTitle": "Korčula (town)"
     },
     {
@@ -525,14 +389,6 @@
       "articleTitle": "Morioka"
     },
     {
-      "slug": "nantes-france",
-      "city": "Nantes",
-      "country": "France",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Nantes"
-    },
-    {
       "slug": "nerja-spain",
       "city": "Nerja",
       "country": "Spain",
@@ -593,16 +449,8 @@
       "city": "Oita",
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": null
-    },
-    {
-      "slug": "okayama-japan",
-      "city": "Okayama",
-      "country": "Japan",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Okayama"
+      "candidateCount": 1,
+      "articleTitle": "Crasus Dome Oita"
     },
     {
       "slug": "palm-desert-california-united-states",
@@ -681,7 +529,7 @@
       "city": "Primošten",
       "country": "Croatia",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
+      "candidateCount": 1,
       "articleTitle": "Primošten"
     },
     {
@@ -765,14 +613,6 @@
       "articleTitle": "Nozarego"
     },
     {
-      "slug": "segovia-spain",
-      "city": "Segovia",
-      "country": "Spain",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Segovia"
-    },
-    {
       "slug": "siracusa-italy",
       "city": "Siracusa",
       "country": "Italy",
@@ -802,7 +642,7 @@
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Isola Bella (Lago Maggiore)"
+      "articleTitle": null
     },
     {
       "slug": "tacoma-washington-united-states",
@@ -818,7 +658,7 @@
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Takayama, Gifu"
+      "articleTitle": null
     },
     {
       "slug": "tours-france",
@@ -834,7 +674,7 @@
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": null
+      "articleTitle": "Himi, Toyama"
     },
     {
       "slug": "ulcinj-montenegro",
@@ -2124,6 +1964,98 @@
         "washington-district-of-columbia-united-states",
         "wichita-kansas-united-states",
         "york-united-kingdom"
+      ]
+    },
+    {
+      "generatedAt": "2026-07-26T20:50:23.245Z",
+      "offset": 0,
+      "limit": 80,
+      "unresolvedOnly": true,
+      "processedCount": 20,
+      "manualReviewCount": 60,
+      "processedSlugs": [
+        "nantes-france",
+        "okayama-japan",
+        "segovia-spain",
+        "birmingham-alabama-united-states",
+        "buffalo-new-york-united-states",
+        "carlsbad-california-united-states",
+        "chandler-arizona-united-states",
+        "charleston-south-carolina-united-states",
+        "charlotte-north-carolina-united-states",
+        "cincinnati-ohio-united-states",
+        "colorado-springs-colorado-united-states",
+        "columbus-ohio-united-states",
+        "cork-ireland",
+        "covington-kentucky-united-states",
+        "durham-north-carolina-united-states",
+        "eugene-oregon-united-states",
+        "fayetteville-arkansas-united-states",
+        "fort-worth-texas-united-states",
+        "frisco-texas-united-states",
+        "gilbert-arizona-united-states"
+      ],
+      "manualReviewSlugs": [
+        "pietrasanta-italy",
+        "polignano-a-mare-italy",
+        "takayama-japan",
+        "desenzano-del-garda-italy",
+        "aomori-japan",
+        "agios-nikolaos-greece",
+        "altea-spain",
+        "begur-spain",
+        "belluno-italy",
+        "beppu-japan",
+        "camogli-italy",
+        "cassis-france",
+        "collioure-france",
+        "ericeira-portugal",
+        "frigiliana-spain",
+        "fuengirola-spain",
+        "hondarribia-spain",
+        "kagoshima-japan",
+        "kardamyli-greece",
+        "levanto-italy",
+        "llanes-spain",
+        "mali-losinj-croatia",
+        "matsumoto-japan",
+        "nerja-spain",
+        "novigrad-croatia",
+        "perast-montenegro",
+        "pietra-ligure-italy",
+        "primosten-croatia",
+        "salerno-italy",
+        "santa-margherita-ligure-italy",
+        "saint-remy-de-provence-france",
+        "siracusa-italy",
+        "ulcinj-montenegro",
+        "figueira-da-foz-portugal",
+        "gdansk-other-europe",
+        "korcula-town-croatia",
+        "mahon-spain",
+        "morioka-japan",
+        "oita-japan",
+        "soller-spain",
+        "stresa-italy",
+        "tours-france",
+        "uzes-france",
+        "varenna-italy",
+        "alesund-other-europe",
+        "toyama-japan",
+        "arlington-texas-united-states",
+        "bath-united-kingdom",
+        "breckenridge-colorado-united-states",
+        "brownsville-texas-united-states",
+        "burlington-vermont-united-states",
+        "college-station-texas-united-states",
+        "columbia-south-carolina-united-states",
+        "corpus-christi-texas-united-states",
+        "des-moines-iowa-united-states",
+        "edmond-oklahoma-united-states",
+        "flagstaff-arizona-united-states",
+        "florianopolis-brazil",
+        "glendale-arizona-united-states",
+        "gothenburg-sweden"
       ]
     }
   ]
