@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-26T15:16:07.970Z",
+  "generatedAt": "2026-07-26T15:32:01.051Z",
   "totalDestinations": 600,
-  "completedDestinations": 182,
-  "remainingDestinations": 418,
+  "completedDestinations": 232,
+  "remainingDestinations": 368,
   "manualReviewDestinations": [
     {
       "slug": "agios-nikolaos-greece",
@@ -11,6 +11,14 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Agios Nikolaos"
+    },
+    {
+      "slug": "alesund-other-europe",
+      "city": "Ålesund",
+      "country": "Other Europe",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Svalbard"
     },
     {
       "slug": "altea-spain",
@@ -37,14 +45,6 @@
       "articleTitle": "Aveiro"
     },
     {
-      "slug": "bari-italy",
-      "city": "Bari",
-      "country": "Italy",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Bari"
-    },
-    {
       "slug": "begur-spain",
       "city": "Begur",
       "country": "Spain",
@@ -67,14 +67,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Beppu"
-    },
-    {
-      "slug": "besancon-france",
-      "city": "Besançon",
-      "country": "France",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Besançon"
     },
     {
       "slug": "camogli-italy",
@@ -153,7 +145,7 @@
       "city": "Figueira da Foz",
       "country": "Portugal",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
+      "candidateCount": 0,
       "articleTitle": "Figueira da Foz"
     },
     {
@@ -293,6 +285,22 @@
       "articleTitle": "Matsumoto"
     },
     {
+      "slug": "miyazaki-japan",
+      "city": "Miyazaki",
+      "country": "Japan",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Miyazaki"
+    },
+    {
+      "slug": "morioka-japan",
+      "city": "Morioka",
+      "country": "Japan",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Morioka"
+    },
+    {
       "slug": "nantes-france",
       "city": "Nantes",
       "country": "France",
@@ -317,6 +325,14 @@
       "articleTitle": "Nerja"
     },
     {
+      "slug": "niigata-japan",
+      "city": "Niigata",
+      "country": "Japan",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Niigata"
+    },
+    {
       "slug": "novigrad-croatia",
       "city": "Novigrad",
       "country": "Croatia",
@@ -333,12 +349,36 @@
       "articleTitle": "Óbidos"
     },
     {
+      "slug": "oita-japan",
+      "city": "Oita",
+      "country": "Japan",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Oita"
+    },
+    {
+      "slug": "okayama-japan",
+      "city": "Okayama",
+      "country": "Japan",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Okayama"
+    },
+    {
       "slug": "palermo-italy",
       "city": "Palermo",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Palermo"
+    },
+    {
+      "slug": "pau-france",
+      "city": "Pau",
+      "country": "France",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Pau"
     },
     {
       "slug": "perast-montenegro",
@@ -373,12 +413,36 @@
       "articleTitle": "Polignano a Mare"
     },
     {
+      "slug": "portimao-portugal",
+      "city": "Portimão",
+      "country": "Portugal",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Portimão"
+    },
+    {
       "slug": "primosten-croatia",
       "city": "Primošten",
       "country": "Croatia",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Primošten"
+    },
+    {
+      "slug": "reims-france",
+      "city": "Reims",
+      "country": "France",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Reims"
+    },
+    {
+      "slug": "riga-other-europe",
+      "city": "Riga",
+      "country": "Other Europe",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Treaty of Riga"
     },
     {
       "slug": "saint-remy-de-provence-france",
@@ -413,12 +477,28 @@
       "articleTitle": "Santander"
     },
     {
+      "slug": "segovia-spain",
+      "city": "Segovia",
+      "country": "Spain",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Segovia"
+    },
+    {
       "slug": "siracusa-italy",
       "city": "Siracusa",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Siracusa"
+    },
+    {
+      "slug": "soller-spain",
+      "city": "Sóller",
+      "country": "Spain",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 2,
+      "articleTitle": "Sóller"
     },
     {
       "slug": "split-croatia",
@@ -429,6 +509,14 @@
       "articleTitle": "Split"
     },
     {
+      "slug": "stresa-italy",
+      "city": "Stresa",
+      "country": "Italy",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 2,
+      "articleTitle": "Stresa"
+    },
+    {
       "slug": "takayama-japan",
       "city": "Takayama",
       "country": "Japan",
@@ -437,20 +525,44 @@
       "articleTitle": "Takayama"
     },
     {
-      "slug": "tavira-portugal",
-      "city": "Tavira",
+      "slug": "tallinn-other-europe",
+      "city": "Tallinn",
+      "country": "Other Europe",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Tallinn"
+    },
+    {
+      "slug": "toledo-spain",
+      "city": "Toledo",
+      "country": "Spain",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Toledo"
+    },
+    {
+      "slug": "tomar-portugal",
+      "city": "Tomar",
       "country": "Portugal",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Tavira"
+      "articleTitle": "Tomar"
     },
     {
-      "slug": "turin-italy",
-      "city": "Turin",
-      "country": "Italy",
+      "slug": "tours-france",
+      "city": "Tours",
+      "country": "France",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Turin"
+      "articleTitle": "Tours"
+    },
+    {
+      "slug": "toyama-japan",
+      "city": "Toyama",
+      "country": "Japan",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 2,
+      "articleTitle": "Toyama Prefecture"
     },
     {
       "slug": "ulcinj-montenegro",
@@ -461,20 +573,20 @@
       "articleTitle": "Ulcinj"
     },
     {
-      "slug": "vannes-france",
-      "city": "Vannes",
+      "slug": "uzes-france",
+      "city": "Uzès",
       "country": "France",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": "Vannes"
+      "articleTitle": "Uzès"
     },
     {
-      "slug": "zaragoza-spain",
-      "city": "Zaragoza",
-      "country": "Spain",
+      "slug": "varenna-italy",
+      "city": "Varenna",
+      "country": "Italy",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Zaragoza"
+      "candidateCount": 2,
+      "articleTitle": "Varenna"
     }
   ],
   "batches": [
@@ -1105,6 +1217,97 @@
         "gdansk-other-europe",
         "korcula-town-croatia",
         "mahon-spain"
+      ]
+    },
+    {
+      "generatedAt": "2026-07-26T15:32:01.051Z",
+      "offset": 224,
+      "limit": 80,
+      "processedCount": 50,
+      "manualReviewCount": 30,
+      "processedSlugs": [
+        "tavira-portugal",
+        "turin-italy",
+        "vannes-france",
+        "zaragoza-spain",
+        "bari-italy",
+        "besancon-france",
+        "modena-italy",
+        "monemvasia-greece",
+        "nagoya-japan",
+        "osijek-croatia",
+        "perpignan-france",
+        "prague-other-europe",
+        "preveza-greece",
+        "riva-del-garda-italy",
+        "ronda-spain",
+        "rouen-france",
+        "saint-malo-france",
+        "salamanca-spain",
+        "salzburg-austria",
+        "sesimbra-portugal",
+        "sete-france",
+        "sopot-other-europe",
+        "spoleto-italy",
+        "syros-greece",
+        "tarragona-spain",
+        "valladolid-spain",
+        "varazdin-croatia",
+        "vienna-austria",
+        "vilnius-other-europe",
+        "wrocaw-other-europe",
+        "zagreb-croatia",
+        "copenhagen-other-europe",
+        "helsinki-other-europe",
+        "stockholm-other-europe",
+        "carcassonne-france",
+        "hallstatt-austria",
+        "kavala-greece",
+        "klagenfurt-austria",
+        "kumamoto-japan",
+        "merano-italy",
+        "rhodes-town-greece",
+        "sintra-portugal",
+        "szentendre-other-europe",
+        "tartu-other-europe",
+        "udine-italy",
+        "budapest-other-europe",
+        "aarhus-denmark",
+        "abu-dhabi-united-arab-emirates",
+        "adelaide-australia",
+        "albuquerque-new-mexico-united-states"
+      ],
+      "manualReviewSlugs": [
+        "santa-margherita-ligure-italy",
+        "obidos-portugal",
+        "saint-remy-de-provence-france",
+        "siracusa-italy",
+        "split-croatia",
+        "ulcinj-montenegro",
+        "figueira-da-foz-portugal",
+        "gdansk-other-europe",
+        "korcula-town-croatia",
+        "mahon-spain",
+        "miyazaki-japan",
+        "morioka-japan",
+        "oita-japan",
+        "okayama-japan",
+        "pau-france",
+        "reims-france",
+        "riga-other-europe",
+        "segovia-spain",
+        "soller-spain",
+        "stresa-italy",
+        "tours-france",
+        "uzes-france",
+        "varenna-italy",
+        "tallinn-other-europe",
+        "toledo-spain",
+        "alesund-other-europe",
+        "niigata-japan",
+        "portimao-portugal",
+        "tomar-portugal",
+        "toyama-japan"
       ]
     }
   ]
