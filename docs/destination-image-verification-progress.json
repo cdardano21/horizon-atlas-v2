@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-26T14:51:05.919Z",
+  "generatedAt": "2026-07-26T15:16:07.970Z",
   "totalDestinations": 600,
-  "completedDestinations": 118,
-  "remainingDestinations": 482,
+  "completedDestinations": 182,
+  "remainingDestinations": 418,
   "manualReviewDestinations": [
     {
       "slug": "agios-nikolaos-greece",
@@ -37,6 +37,14 @@
       "articleTitle": "Aveiro"
     },
     {
+      "slug": "bari-italy",
+      "city": "Bari",
+      "country": "Italy",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Bari"
+    },
+    {
       "slug": "begur-spain",
       "city": "Begur",
       "country": "Spain",
@@ -59,6 +67,14 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Beppu"
+    },
+    {
+      "slug": "besancon-france",
+      "city": "Besançon",
+      "country": "France",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Besançon"
     },
     {
       "slug": "camogli-italy",
@@ -133,6 +149,14 @@
       "articleTitle": "Faro"
     },
     {
+      "slug": "figueira-da-foz-portugal",
+      "city": "Figueira da Foz",
+      "country": "Portugal",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Figueira da Foz"
+    },
+    {
       "slug": "frigiliana-spain",
       "city": "Frigiliana",
       "country": "Spain",
@@ -155,6 +179,14 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Fukuoka"
+    },
+    {
+      "slug": "gdansk-other-europe",
+      "city": "Gdańsk",
+      "country": "Other Europe",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Gdańsk"
     },
     {
       "slug": "grenoble-france",
@@ -205,6 +237,14 @@
       "articleTitle": "Kardamyli"
     },
     {
+      "slug": "korcula-town-croatia",
+      "city": "Korčula Town",
+      "country": "Croatia",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Korčula"
+    },
+    {
       "slug": "lagos-portugal",
       "city": "Lagos",
       "country": "Portugal",
@@ -227,6 +267,14 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Llanes"
+    },
+    {
+      "slug": "mahon-spain",
+      "city": "Mahón",
+      "country": "Spain",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Mahón"
     },
     {
       "slug": "mali-losinj-croatia",
@@ -277,6 +325,14 @@
       "articleTitle": "Novigrad, Zadar County"
     },
     {
+      "slug": "obidos-portugal",
+      "city": "Óbidos",
+      "country": "Portugal",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Óbidos"
+    },
+    {
       "slug": "palermo-italy",
       "city": "Palermo",
       "country": "Italy",
@@ -325,12 +381,28 @@
       "articleTitle": "Primošten"
     },
     {
+      "slug": "saint-remy-de-provence-france",
+      "city": "Saint-Rémy-de-Provence",
+      "country": "France",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Saint-Rémy-de-Provence"
+    },
+    {
       "slug": "salerno-italy",
       "city": "Salerno",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Salerno"
+    },
+    {
+      "slug": "santa-margherita-ligure-italy",
+      "city": "Santa Margherita Ligure",
+      "country": "Italy",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Santa Margherita Ligure"
     },
     {
       "slug": "santander-spain",
@@ -341,12 +413,68 @@
       "articleTitle": "Santander"
     },
     {
+      "slug": "siracusa-italy",
+      "city": "Siracusa",
+      "country": "Italy",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Siracusa"
+    },
+    {
+      "slug": "split-croatia",
+      "city": "Split",
+      "country": "Croatia",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Split"
+    },
+    {
       "slug": "takayama-japan",
       "city": "Takayama",
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Takayama"
+    },
+    {
+      "slug": "tavira-portugal",
+      "city": "Tavira",
+      "country": "Portugal",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Tavira"
+    },
+    {
+      "slug": "turin-italy",
+      "city": "Turin",
+      "country": "Italy",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Turin"
+    },
+    {
+      "slug": "ulcinj-montenegro",
+      "city": "Ulcinj",
+      "country": "Montenegro",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 2,
+      "articleTitle": "Ulcinj"
+    },
+    {
+      "slug": "vannes-france",
+      "city": "Vannes",
+      "country": "France",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Vannes"
+    },
+    {
+      "slug": "zaragoza-spain",
+      "city": "Zaragoza",
+      "country": "Spain",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Zaragoza"
     }
   ],
   "batches": [
@@ -886,6 +1014,97 @@
         "pietra-ligure-italy",
         "primosten-croatia",
         "salerno-italy"
+      ]
+    },
+    {
+      "generatedAt": "2026-07-26T15:16:07.970Z",
+      "offset": 160,
+      "limit": 80,
+      "processedCount": 64,
+      "manualReviewCount": 16,
+      "processedSlugs": [
+        "santa-cruz-de-tenerife-spain",
+        "sendai-japan",
+        "setubal-portugal",
+        "strasbourg-france",
+        "thessaloniki-greece",
+        "tokyo-japan",
+        "tossa-de-mar-spain",
+        "treviso-italy",
+        "trogir-croatia",
+        "vicenza-italy",
+        "vigo-spain",
+        "vila-real-de-santo-antonio-portugal",
+        "volos-greece",
+        "yokohama-japan",
+        "zurich-switzerland",
+        "sirmione-italy",
+        "antibes-france",
+        "avignon-france",
+        "bologna-italy",
+        "cadaques-spain",
+        "caminha-portugal",
+        "cavtat-croatia",
+        "chambery-france",
+        "colmar-france",
+        "dijon-france",
+        "innsbruck-austria",
+        "lausanne-switzerland",
+        "locarno-switzerland",
+        "lucerne-switzerland",
+        "lugano-switzerland",
+        "milan-italy",
+        "montpellier-france",
+        "nafpaktos-greece",
+        "naxos-town-greece",
+        "nice-france",
+        "padua-italy",
+        "ravenna-italy",
+        "rethymno-greece",
+        "sapporo-japan",
+        "siena-italy",
+        "toulon-france",
+        "trento-italy",
+        "viana-do-castelo-portugal",
+        "angra-do-heroismo-portugal",
+        "aosta-italy",
+        "arezzo-italy",
+        "arles-france",
+        "bergen-other-europe",
+        "bregenz-austria",
+        "brno-other-europe",
+        "burgos-spain",
+        "celje-slovenia",
+        "chamonix-france",
+        "clermont-ferrand-france",
+        "cortona-italy",
+        "genoa-italy",
+        "hvar-town-croatia",
+        "jerez-de-la-frontera-spain",
+        "krakow-other-europe",
+        "la-spezia-italy",
+        "leiria-portugal",
+        "leon-spain",
+        "linz-austria",
+        "loule-portugal"
+      ],
+      "manualReviewSlugs": [
+        "santa-margherita-ligure-italy",
+        "tavira-portugal",
+        "turin-italy",
+        "vannes-france",
+        "zaragoza-spain",
+        "bari-italy",
+        "obidos-portugal",
+        "saint-remy-de-provence-france",
+        "siracusa-italy",
+        "split-croatia",
+        "ulcinj-montenegro",
+        "besancon-france",
+        "figueira-da-foz-portugal",
+        "gdansk-other-europe",
+        "korcula-town-croatia",
+        "mahon-spain"
       ]
     }
   ]
