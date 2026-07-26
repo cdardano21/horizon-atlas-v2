@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-07-26T20:50:23.245Z",
+  "generatedAt": "2026-07-26T21:20:53.251Z",
   "totalDestinations": 600,
-  "completedDestinations": 510,
-  "remainingDestinations": 90,
+  "completedDestinations": 522,
+  "remainingDestinations": 78,
   "manualReviewDestinations": [
     {
       "slug": "agios-nikolaos-greece",
       "city": "Agios Nikolaos",
       "country": "Greece",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Agios Nikolaos (municipality)"
+      "candidateCount": 1,
+      "articleTitle": "Agios Nikolaos, Crete"
     },
     {
       "slug": "alesund-other-europe",
@@ -37,14 +37,6 @@
       "articleTitle": "Aomori"
     },
     {
-      "slug": "arlington-texas-united-states",
-      "city": "Arlington",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": null
-    },
-    {
       "slug": "bath-united-kingdom",
       "city": "Bath",
       "country": "United Kingdom",
@@ -65,7 +57,7 @@
       "city": "Belluno",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
+      "candidateCount": 1,
       "articleTitle": "Province of Belluno"
     },
     {
@@ -83,22 +75,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 2,
       "articleTitle": "Breckenridge, Colorado"
-    },
-    {
-      "slug": "brownsville-texas-united-states",
-      "city": "Brownsville",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": null
-    },
-    {
-      "slug": "burlington-vermont-united-states",
-      "city": "Burlington",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": null
     },
     {
       "slug": "camogli-italy",
@@ -122,7 +98,7 @@
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": null
+      "articleTitle": "United States senior military college"
     },
     {
       "slug": "collioure-france",
@@ -141,19 +117,11 @@
       "articleTitle": null
     },
     {
-      "slug": "corpus-christi-texas-united-states",
-      "city": "Corpus Christi",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Corpus Christi, Texas"
-    },
-    {
       "slug": "des-moines-iowa-united-states",
       "city": "Des Moines",
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
+      "candidateCount": 2,
       "articleTitle": "Des Moines metropolitan area"
     },
     {
@@ -161,7 +129,7 @@
       "city": "Desenzano del Garda",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 1,
+      "candidateCount": 0,
       "articleTitle": "Lonato del Garda"
     },
     {
@@ -170,7 +138,7 @@
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": null
+      "articleTitle": "Edmond, Oklahoma"
     },
     {
       "slug": "ericeira-portugal",
@@ -266,7 +234,7 @@
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
-      "articleTitle": null
+      "articleTitle": "Irvine, California"
     },
     {
       "slug": "jackson-wyoming-united-states",
@@ -333,14 +301,6 @@
       "articleTitle": "Llanes"
     },
     {
-      "slug": "madison-wisconsin-united-states",
-      "city": "Madison",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": null
-    },
-    {
       "slug": "mahon-spain",
       "city": "Mahón",
       "country": "Spain",
@@ -369,8 +329,8 @@
       "city": "Matsumoto",
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": null
+      "candidateCount": 2,
+      "articleTitle": "Matsumoto, Nagano"
     },
     {
       "slug": "merida-mexico",
@@ -395,14 +355,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 2,
       "articleTitle": "Nerja"
-    },
-    {
-      "slug": "new-york-new-york-united-states",
-      "city": "New York",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": null
     },
     {
       "slug": "newark-new-jersey-united-states",
@@ -437,14 +389,6 @@
       "articleTitle": "Novigrad, Zadar County"
     },
     {
-      "slug": "ogden-utah-united-states",
-      "city": "Ogden",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Ogden, Utah"
-    },
-    {
       "slug": "oita-japan",
       "city": "Oita",
       "country": "Japan",
@@ -467,14 +411,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 2,
       "articleTitle": "Perast"
-    },
-    {
-      "slug": "perth-australia",
-      "city": "Perth",
-      "country": "Australia",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Perth"
     },
     {
       "slug": "pietra-ligure-italy",
@@ -509,14 +445,6 @@
       "articleTitle": "Polignano a Mare"
     },
     {
-      "slug": "portland-oregon-united-states",
-      "city": "Portland",
-      "country": "United States",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": null
-    },
-    {
       "slug": "prescott-arizona-united-states",
       "city": "Prescott",
       "country": "United States",
@@ -537,7 +465,7 @@
       "city": "Providence",
       "country": "United States",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
+      "candidateCount": 2,
       "articleTitle": "North Providence, Rhode Island"
     },
     {
@@ -651,30 +579,6 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Tacoma-class frigate"
-    },
-    {
-      "slug": "takayama-japan",
-      "city": "Takayama",
-      "country": "Japan",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": null
-    },
-    {
-      "slug": "tours-france",
-      "city": "Tours",
-      "country": "France",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Tours"
-    },
-    {
-      "slug": "toyama-japan",
-      "city": "Toyama",
-      "country": "Japan",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Himi, Toyama"
     },
     {
       "slug": "ulcinj-montenegro",
@@ -2056,6 +1960,98 @@
         "florianopolis-brazil",
         "glendale-arizona-united-states",
         "gothenburg-sweden"
+      ]
+    },
+    {
+      "generatedAt": "2026-07-26T21:20:53.251Z",
+      "offset": 0,
+      "limit": 80,
+      "unresolvedOnly": true,
+      "processedCount": 12,
+      "manualReviewCount": 68,
+      "processedSlugs": [
+        "takayama-japan",
+        "tours-france",
+        "toyama-japan",
+        "arlington-texas-united-states",
+        "brownsville-texas-united-states",
+        "burlington-vermont-united-states",
+        "corpus-christi-texas-united-states",
+        "madison-wisconsin-united-states",
+        "new-york-new-york-united-states",
+        "ogden-utah-united-states",
+        "perth-australia",
+        "portland-oregon-united-states"
+      ],
+      "manualReviewSlugs": [
+        "pietrasanta-italy",
+        "polignano-a-mare-italy",
+        "desenzano-del-garda-italy",
+        "aomori-japan",
+        "agios-nikolaos-greece",
+        "altea-spain",
+        "begur-spain",
+        "belluno-italy",
+        "beppu-japan",
+        "camogli-italy",
+        "cassis-france",
+        "collioure-france",
+        "ericeira-portugal",
+        "frigiliana-spain",
+        "fuengirola-spain",
+        "hondarribia-spain",
+        "kagoshima-japan",
+        "kardamyli-greece",
+        "levanto-italy",
+        "llanes-spain",
+        "mali-losinj-croatia",
+        "matsumoto-japan",
+        "nerja-spain",
+        "novigrad-croatia",
+        "perast-montenegro",
+        "pietra-ligure-italy",
+        "primosten-croatia",
+        "salerno-italy",
+        "santa-margherita-ligure-italy",
+        "saint-remy-de-provence-france",
+        "siracusa-italy",
+        "ulcinj-montenegro",
+        "figueira-da-foz-portugal",
+        "gdansk-other-europe",
+        "korcula-town-croatia",
+        "mahon-spain",
+        "morioka-japan",
+        "oita-japan",
+        "soller-spain",
+        "stresa-italy",
+        "uzes-france",
+        "varenna-italy",
+        "alesund-other-europe",
+        "bath-united-kingdom",
+        "breckenridge-colorado-united-states",
+        "college-station-texas-united-states",
+        "columbia-south-carolina-united-states",
+        "des-moines-iowa-united-states",
+        "edmond-oklahoma-united-states",
+        "flagstaff-arizona-united-states",
+        "florianopolis-brazil",
+        "glendale-arizona-united-states",
+        "gothenburg-sweden",
+        "grand-junction-colorado-united-states",
+        "irvine-california-united-states",
+        "jackson-wyoming-united-states",
+        "lafayette-louisiana-united-states",
+        "laredo-texas-united-states",
+        "manchester-new-hampshire-united-states",
+        "merida-mexico",
+        "newark-new-jersey-united-states",
+        "norfolk-virginia-united-states",
+        "norman-oklahoma-united-states",
+        "palm-desert-california-united-states",
+        "plano-texas-united-states",
+        "prescott-arizona-united-states",
+        "providence-rhode-island-united-states",
+        "queretaro-mexico"
       ]
     }
   ]
