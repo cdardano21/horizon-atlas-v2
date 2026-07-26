@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-26T09:35:10.468Z",
+  "generatedAt": "2026-07-26T14:51:05.919Z",
   "totalDestinations": 600,
-  "completedDestinations": 68,
-  "remainingDestinations": 532,
+  "completedDestinations": 118,
+  "remainingDestinations": 482,
   "manualReviewDestinations": [
     {
       "slug": "agios-nikolaos-greece",
@@ -61,6 +61,14 @@
       "articleTitle": "Beppu"
     },
     {
+      "slug": "camogli-italy",
+      "city": "Camogli",
+      "country": "Italy",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Camogli"
+    },
+    {
       "slug": "cartagena-spain",
       "city": "Cartagena",
       "country": "Spain",
@@ -69,12 +77,228 @@
       "articleTitle": "Cartagena, Spain"
     },
     {
+      "slug": "cassis-france",
+      "city": "Cassis",
+      "country": "France",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Cassis"
+    },
+    {
+      "slug": "collioure-france",
+      "city": "Collioure",
+      "country": "France",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Collioure"
+    },
+    {
+      "slug": "cordoba-spain",
+      "city": "Córdoba",
+      "country": "Spain",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Córdoba"
+    },
+    {
       "slug": "desenzano-del-garda-italy",
       "city": "Desenzano del Garda",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Desenzano del Garda"
+    },
+    {
+      "slug": "dinan-france",
+      "city": "Dinan",
+      "country": "France",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Dinan"
+    },
+    {
+      "slug": "ericeira-portugal",
+      "city": "Ericeira",
+      "country": "Portugal",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Ericeira"
+    },
+    {
+      "slug": "faro-portugal",
+      "city": "Faro",
+      "country": "Portugal",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Faro"
+    },
+    {
+      "slug": "frigiliana-spain",
+      "city": "Frigiliana",
+      "country": "Spain",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Frigiliana"
+    },
+    {
+      "slug": "fuengirola-spain",
+      "city": "Fuengirola",
+      "country": "Spain",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Fuengirola"
+    },
+    {
+      "slug": "fukuoka-japan",
+      "city": "Fukuoka",
+      "country": "Japan",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Fukuoka"
+    },
+    {
+      "slug": "grenoble-france",
+      "city": "Grenoble",
+      "country": "France",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Grenoble"
+    },
+    {
+      "slug": "hondarribia-spain",
+      "city": "Hondarribia",
+      "country": "Spain",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Hondarribia"
+    },
+    {
+      "slug": "honfleur-france",
+      "city": "Honfleur",
+      "country": "France",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Honfleur"
+    },
+    {
+      "slug": "ioannina-greece",
+      "city": "Ioannina",
+      "country": "Greece",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Ioannina"
+    },
+    {
+      "slug": "kagoshima-japan",
+      "city": "Kagoshima",
+      "country": "Japan",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Kagoshima"
+    },
+    {
+      "slug": "kardamyli-greece",
+      "city": "Kardamyli",
+      "country": "Greece",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Kardamyli"
+    },
+    {
+      "slug": "lagos-portugal",
+      "city": "Lagos",
+      "country": "Portugal",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Lagos"
+    },
+    {
+      "slug": "levanto-italy",
+      "city": "Levanto",
+      "country": "Italy",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Levanto"
+    },
+    {
+      "slug": "llanes-spain",
+      "city": "Llanes",
+      "country": "Spain",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Llanes"
+    },
+    {
+      "slug": "mali-losinj-croatia",
+      "city": "Mali Lošinj",
+      "country": "Croatia",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 2,
+      "articleTitle": "Mali Lošinj"
+    },
+    {
+      "slug": "matsumoto-japan",
+      "city": "Matsumoto",
+      "country": "Japan",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Matsumoto"
+    },
+    {
+      "slug": "nantes-france",
+      "city": "Nantes",
+      "country": "France",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Nantes"
+    },
+    {
+      "slug": "nazare-portugal",
+      "city": "Nazaré",
+      "country": "Portugal",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Nazaré"
+    },
+    {
+      "slug": "nerja-spain",
+      "city": "Nerja",
+      "country": "Spain",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 2,
+      "articleTitle": "Nerja"
+    },
+    {
+      "slug": "novigrad-croatia",
+      "city": "Novigrad",
+      "country": "Croatia",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Novigrad, Zadar County"
+    },
+    {
+      "slug": "palermo-italy",
+      "city": "Palermo",
+      "country": "Italy",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 0,
+      "articleTitle": "Palermo"
+    },
+    {
+      "slug": "perast-montenegro",
+      "city": "Perast",
+      "country": "Montenegro",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 2,
+      "articleTitle": "Perast"
+    },
+    {
+      "slug": "pietra-ligure-italy",
+      "city": "Pietra Ligure",
+      "country": "Italy",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 2,
+      "articleTitle": "Pietra Ligure"
     },
     {
       "slug": "pietrasanta-italy",
@@ -91,6 +315,22 @@
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Polignano a Mare"
+    },
+    {
+      "slug": "primosten-croatia",
+      "city": "Primošten",
+      "country": "Croatia",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Primošten"
+    },
+    {
+      "slug": "salerno-italy",
+      "city": "Salerno",
+      "country": "Italy",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 1,
+      "articleTitle": "Salerno"
     },
     {
       "slug": "santander-spain",
@@ -555,6 +795,97 @@
         "begur-spain",
         "belluno-italy",
         "beppu-japan"
+      ]
+    },
+    {
+      "generatedAt": "2026-07-26T14:51:05.919Z",
+      "offset": 80,
+      "limit": 80,
+      "processedCount": 50,
+      "manualReviewCount": 30,
+      "processedSlugs": [
+        "bordeaux-france",
+        "budva-montenegro",
+        "cadiz-spain",
+        "cagliari-italy",
+        "catania-italy",
+        "chania-greece",
+        "comillas-spain",
+        "como-italy",
+        "corfu-town-greece",
+        "evora-portugal",
+        "ferrara-italy",
+        "florence-italy",
+        "funchal-portugal",
+        "geneva-switzerland",
+        "graz-austria",
+        "guimaraes-portugal",
+        "herceg-novi-montenegro",
+        "izola-slovenia",
+        "kurashiki-japan",
+        "kyoto-japan",
+        "la-rochelle-france",
+        "lake-garda-italy",
+        "las-palmas-spain",
+        "lecce-italy",
+        "logrono-spain",
+        "lyon-france",
+        "makarska-croatia",
+        "mantua-italy",
+        "marbella-spain",
+        "maribor-slovenia",
+        "menton-france",
+        "montreux-switzerland",
+        "nagasaki-japan",
+        "naha-japan",
+        "nara-japan",
+        "nimes-france",
+        "opatija-croatia",
+        "orvieto-italy",
+        "oviedo-spain",
+        "palma-de-mallorca-spain",
+        "pamplona-spain",
+        "parga-greece",
+        "parma-italy",
+        "patras-greece",
+        "perugia-italy",
+        "ponta-delgada-portugal",
+        "porec-croatia",
+        "pula-croatia",
+        "rapallo-italy",
+        "rome-italy"
+      ],
+      "manualReviewSlugs": [
+        "camogli-italy",
+        "cassis-france",
+        "collioure-france",
+        "cordoba-spain",
+        "dinan-france",
+        "ericeira-portugal",
+        "faro-portugal",
+        "frigiliana-spain",
+        "fuengirola-spain",
+        "fukuoka-japan",
+        "grenoble-france",
+        "hondarribia-spain",
+        "honfleur-france",
+        "ioannina-greece",
+        "kagoshima-japan",
+        "kardamyli-greece",
+        "lagos-portugal",
+        "levanto-italy",
+        "llanes-spain",
+        "mali-losinj-croatia",
+        "matsumoto-japan",
+        "nantes-france",
+        "nazare-portugal",
+        "nerja-spain",
+        "novigrad-croatia",
+        "palermo-italy",
+        "perast-montenegro",
+        "pietra-ligure-italy",
+        "primosten-croatia",
+        "salerno-italy"
       ]
     }
   ]
