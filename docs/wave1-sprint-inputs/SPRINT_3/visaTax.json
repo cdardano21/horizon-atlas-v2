@@ -1,0 +1,103 @@
+{
+  "generatedAt": "2026-07-26T03:30:19.199Z",
+  "sprint": "SPRINT_3",
+  "plan": "visaTax",
+  "inputSource": "docs/destination-expansion-wave1-visa-tax-input.json",
+  "categories": [
+    "visaPrograms",
+    "taxRules"
+  ],
+  "destinationCount": 10,
+  "destinations": [
+    {
+      "slug": "bath-united-kingdom",
+      "city": "Bath",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "bristol-united-kingdom",
+      "city": "Bristol",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "cork-ireland",
+      "city": "Cork",
+      "country": "Ireland",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "dublin-ireland",
+      "city": "Dublin",
+      "country": "Ireland",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "edinburgh-united-kingdom",
+      "city": "Edinburgh",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "galway-ireland",
+      "city": "Galway",
+      "country": "Ireland",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "glasgow-united-kingdom",
+      "city": "Glasgow",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "leeds-united-kingdom",
+      "city": "Leeds",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "manchester-united-kingdom",
+      "city": "Manchester",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "york-united-kingdom",
+      "city": "York",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    }
+  ]
+}

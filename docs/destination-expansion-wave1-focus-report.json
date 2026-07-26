@@ -1,0 +1,203 @@
+{
+  "generatedAt": "2026-07-26T03:30:19.907Z",
+  "status": "research-required",
+  "nextSuggestedSprint": "SPRINT_1",
+  "totals": {
+    "categories": 8,
+    "skippedEmptyArrays": 240,
+    "destinationCategoryUpdates": 0,
+    "validationErrorCount": 0
+  },
+  "topActions": [
+    {
+      "category": "airports",
+      "sprint": "SPRINT_1",
+      "plan": "healthAirports",
+      "extractFile": "docs/wave1-sprint-inputs/SPRINT_1/healthAirports.json",
+      "targetInputFile": "docs/destination-expansion-wave1-health-airports-input.json",
+      "skippedEmptyArrays": 30,
+      "updates": 0,
+      "validationErrors": 0,
+      "suggestedSlugs": [
+        "austin-texas-united-states",
+        "boston-massachusetts-united-states",
+        "charlotte-north-carolina-united-states",
+        "chicago-illinois-united-states",
+        "columbus-ohio-united-states"
+      ],
+      "commandSequence": [
+        "npm run expansion:wave1:sprintMerge",
+        "npm run expansion:wave1:sprintPartialApply",
+        "npm run expansion:wave1:preflightStrict"
+      ]
+    },
+    {
+      "category": "costOfLiving",
+      "sprint": "SPRINT_1",
+      "plan": "costHousing",
+      "extractFile": "docs/wave1-sprint-inputs/SPRINT_1/costHousing.json",
+      "targetInputFile": "docs/destination-expansion-wave1-cost-housing-input.json",
+      "skippedEmptyArrays": 30,
+      "updates": 0,
+      "validationErrors": 0,
+      "suggestedSlugs": [
+        "austin-texas-united-states",
+        "boston-massachusetts-united-states",
+        "charlotte-north-carolina-united-states",
+        "chicago-illinois-united-states",
+        "columbus-ohio-united-states"
+      ],
+      "commandSequence": [
+        "npm run expansion:wave1:sprintMerge",
+        "npm run expansion:wave1:sprintPartialApply",
+        "npm run expansion:wave1:preflightStrict"
+      ]
+    },
+    {
+      "category": "healthcareFacilities",
+      "sprint": "SPRINT_1",
+      "plan": "healthAirports",
+      "extractFile": "docs/wave1-sprint-inputs/SPRINT_1/healthAirports.json",
+      "targetInputFile": "docs/destination-expansion-wave1-health-airports-input.json",
+      "skippedEmptyArrays": 30,
+      "updates": 0,
+      "validationErrors": 0,
+      "suggestedSlugs": [
+        "austin-texas-united-states",
+        "boston-massachusetts-united-states",
+        "charlotte-north-carolina-united-states",
+        "chicago-illinois-united-states",
+        "columbus-ohio-united-states"
+      ],
+      "commandSequence": [
+        "npm run expansion:wave1:sprintMerge",
+        "npm run expansion:wave1:sprintPartialApply",
+        "npm run expansion:wave1:preflightStrict"
+      ]
+    },
+    {
+      "category": "housingMetrics",
+      "sprint": "SPRINT_1",
+      "plan": "costHousing",
+      "extractFile": "docs/wave1-sprint-inputs/SPRINT_1/costHousing.json",
+      "targetInputFile": "docs/destination-expansion-wave1-cost-housing-input.json",
+      "skippedEmptyArrays": 30,
+      "updates": 0,
+      "validationErrors": 0,
+      "suggestedSlugs": [
+        "austin-texas-united-states",
+        "boston-massachusetts-united-states",
+        "charlotte-north-carolina-united-states",
+        "chicago-illinois-united-states",
+        "columbus-ohio-united-states"
+      ],
+      "commandSequence": [
+        "npm run expansion:wave1:sprintMerge",
+        "npm run expansion:wave1:sprintPartialApply",
+        "npm run expansion:wave1:preflightStrict"
+      ]
+    },
+    {
+      "category": "monthlyClimate",
+      "sprint": "SPRINT_1",
+      "plan": "monthlyClimate",
+      "extractFile": "docs/wave1-sprint-inputs/SPRINT_1/monthlyClimate.json",
+      "targetInputFile": "docs/destination-expansion-wave1-monthly-climate-input.json",
+      "skippedEmptyArrays": 30,
+      "updates": 0,
+      "validationErrors": 0,
+      "suggestedSlugs": [
+        "austin-texas-united-states",
+        "boston-massachusetts-united-states",
+        "charlotte-north-carolina-united-states",
+        "chicago-illinois-united-states",
+        "columbus-ohio-united-states"
+      ],
+      "commandSequence": [
+        "npm run expansion:wave1:sprintMerge",
+        "npm run expansion:wave1:sprintPartialApply",
+        "npm run expansion:wave1:preflightStrict"
+      ]
+    }
+  ],
+  "categoryBacklog": [
+    {
+      "category": "airports",
+      "skippedEmptyArrays": 30,
+      "updates": 0,
+      "validationErrors": 0,
+      "plan": "healthAirports",
+      "extractFile": "docs/wave1-sprint-inputs/SPRINT_1/healthAirports.json",
+      "targetInputFile": "docs/destination-expansion-wave1-health-airports-input.json"
+    },
+    {
+      "category": "costOfLiving",
+      "skippedEmptyArrays": 30,
+      "updates": 0,
+      "validationErrors": 0,
+      "plan": "costHousing",
+      "extractFile": "docs/wave1-sprint-inputs/SPRINT_1/costHousing.json",
+      "targetInputFile": "docs/destination-expansion-wave1-cost-housing-input.json"
+    },
+    {
+      "category": "healthcareFacilities",
+      "skippedEmptyArrays": 30,
+      "updates": 0,
+      "validationErrors": 0,
+      "plan": "healthAirports",
+      "extractFile": "docs/wave1-sprint-inputs/SPRINT_1/healthAirports.json",
+      "targetInputFile": "docs/destination-expansion-wave1-health-airports-input.json"
+    },
+    {
+      "category": "housingMetrics",
+      "skippedEmptyArrays": 30,
+      "updates": 0,
+      "validationErrors": 0,
+      "plan": "costHousing",
+      "extractFile": "docs/wave1-sprint-inputs/SPRINT_1/costHousing.json",
+      "targetInputFile": "docs/destination-expansion-wave1-cost-housing-input.json"
+    },
+    {
+      "category": "monthlyClimate",
+      "skippedEmptyArrays": 30,
+      "updates": 0,
+      "validationErrors": 0,
+      "plan": "monthlyClimate",
+      "extractFile": "docs/wave1-sprint-inputs/SPRINT_1/monthlyClimate.json",
+      "targetInputFile": "docs/destination-expansion-wave1-monthly-climate-input.json"
+    },
+    {
+      "category": "practicalInfo",
+      "skippedEmptyArrays": 30,
+      "updates": 0,
+      "validationErrors": 0,
+      "plan": "practicalInfo",
+      "extractFile": "docs/wave1-sprint-inputs/SPRINT_1/practicalInfo.json",
+      "targetInputFile": null
+    },
+    {
+      "category": "taxRules",
+      "skippedEmptyArrays": 30,
+      "updates": 0,
+      "validationErrors": 0,
+      "plan": "visaTax",
+      "extractFile": "docs/wave1-sprint-inputs/SPRINT_1/visaTax.json",
+      "targetInputFile": null
+    },
+    {
+      "category": "visaPrograms",
+      "skippedEmptyArrays": 30,
+      "updates": 0,
+      "validationErrors": 0,
+      "plan": "visaTax",
+      "extractFile": "docs/wave1-sprint-inputs/SPRINT_1/visaTax.json",
+      "targetInputFile": null
+    }
+  ],
+  "sources": {
+    "partialApply": "docs/destination-expansion-wave1-sprint-partial-apply-report.json",
+    "sprintProgress": "docs/destination-expansion-wave1-sprint-progress.json",
+    "sprintPlan": "docs/destination-expansion-wave1-research-sprints.json",
+    "opsStatus": "docs/destination-expansion-wave1-ops-status.json"
+  }
+}

@@ -1,0 +1,517 @@
+{
+  "generatedAt": "2026-07-26T03:27:43.454Z",
+  "sprint": "SPRINT_1",
+  "plan": "visaTax",
+  "intent": "fill-template",
+  "notes": [
+    "Template rows are placeholders only. Replace values with sourced data before merge/apply.",
+    "Use additional rows where needed; keep unique keys/ids per destination-category.",
+    "Allowed confidenceLevel: low|medium|high.",
+    "Allowed verificationStatus: estimated|verified|stale|in_progress.",
+    "lastVerifiedAt must be YYYY-MM-DD."
+  ],
+  "targetWorkflow": [
+    "1. Fill this template with sourced values.",
+    "2. Copy category arrays into visaTax.json for the same sprint.",
+    "3. Run npm run expansion:wave1:sprintMerge.",
+    "4. Run npm run expansion:wave1:sprintPartialApply.",
+    "5. Run npm run expansion:wave1:preflightStrict."
+  ],
+  "destinationCount": 10,
+  "categories": [
+    "visaPrograms",
+    "taxRules"
+  ],
+  "destinations": [
+    {
+      "slug": "austin-texas-united-states",
+      "city": "Austin",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ],
+      "taxRules": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "boston-massachusetts-united-states",
+      "city": "Boston",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ],
+      "taxRules": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "charlotte-north-carolina-united-states",
+      "city": "Charlotte",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ],
+      "taxRules": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "chicago-illinois-united-states",
+      "city": "Chicago",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ],
+      "taxRules": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "columbus-ohio-united-states",
+      "city": "Columbus",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ],
+      "taxRules": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dallas-texas-united-states",
+      "city": "Dallas",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ],
+      "taxRules": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "denver-colorado-united-states",
+      "city": "Denver",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ],
+      "taxRules": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "fort-worth-texas-united-states",
+      "city": "Fort Worth",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ],
+      "taxRules": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "houston-texas-united-states",
+      "city": "Houston",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ],
+      "taxRules": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "indianapolis-indiana-united-states",
+      "city": "Indianapolis",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ],
+      "taxRules": [
+        {
+          "id": "",
+          "name": "",
+          "subtitle": "",
+          "value1": "",
+          "value2": "",
+          "value3": "",
+          "url": "",
+          "mapQuery": "",
+          "mapZoom": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    }
+  ]
+}

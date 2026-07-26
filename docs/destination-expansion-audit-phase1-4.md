@@ -1,0 +1,128 @@
+# Destination Expansion Audit + Proposal (Phases 1-4)
+
+- Existing catalog count: 300
+- Proposed additions: 300 (US: 200, International: 100)
+- Expected final total: 600
+- Duplicate slugs in proposal: 0
+
+## Existing Catalog Snapshot
+- Italy: 60
+- Spain: 49
+- France: 40
+- Japan: 30
+- Portugal: 29
+- Greece: 20
+- Croatia: 20
+- Other Europe: 17
+- Slovenia: 10
+- Switzerland: 10
+- Austria: 8
+- Montenegro: 7
+
+## Proposed Additions by Country
+- United States: 200
+- United Kingdom: 8
+- Poland: 5
+- Germany: 5
+- Australia: 5
+- Netherlands: 4
+- Mexico: 4
+- Ireland: 3
+- Belgium: 3
+- Sweden: 3
+- Thailand: 3
+- Vietnam: 3
+- New Zealand: 3
+- Denmark: 2
+- Norway: 2
+- Finland: 2
+- Turkey: 2
+- United Arab Emirates: 2
+- Israel: 2
+- Malaysia: 2
+- Indonesia: 2
+- Philippines: 2
+- South Korea: 2
+- South Africa: 2
+- Morocco: 2
+- Colombia: 2
+- Brazil: 2
+- Estonia: 1
+- Lithuania: 1
+- Hungary: 1
+- Slovakia: 1
+- Portugal: 1
+- Malta: 1
+- Iceland: 1
+- Qatar: 1
+- Oman: 1
+- Georgia: 1
+- Armenia: 1
+- Azerbaijan: 1
+- Kazakhstan: 1
+- Singapore: 1
+- Taiwan: 1
+- Kenya: 1
+- Tunisia: 1
+- Costa Rica: 1
+- Panama: 1
+- Peru: 1
+- Chile: 1
+- Argentina: 1
+- Uruguay: 1
+
+## Proposed U.S. Additions by State
+- California: 35
+- Texas: 22
+- Florida: 14
+- Arizona: 10
+- Washington: 9
+- Colorado: 9
+- North Carolina: 8
+- Oregon: 6
+- Virginia: 5
+- Ohio: 4
+- Tennessee: 4
+- Maryland: 4
+- Oklahoma: 4
+- Louisiana: 4
+- Alabama: 4
+- Utah: 4
+- New York: 3
+- New Mexico: 3
+- Kentucky: 3
+- South Carolina: 3
+- Montana: 3
+- Pennsylvania: 2
+- Indiana: 2
+- Nevada: 2
+- Wisconsin: 2
+- Missouri: 2
+- Georgia: 2
+- Nebraska: 2
+- New Jersey: 2
+- Wyoming: 2
+- South Dakota: 2
+- North Dakota: 2
+- Rhode Island: 2
+- Illinois: 1
+- District of Columbia: 1
+- Massachusetts: 1
+- Michigan: 1
+- Minnesota: 1
+- Kansas: 1
+- Hawaii: 1
+- Alaska: 1
+- Idaho: 1
+- Iowa: 1
+- Arkansas: 1
+- Delaware: 1
+- Maine: 1
+- Vermont: 1
+- New Hampshire: 1
+
+## Notes
+- No existing destination slugs were modified or replaced.
+- Proposal list excludes slugs found in app/lib/destinations.ts.
+- U.S. slugs include state token to avoid city-name collisions.
+- This file is proposal-only. Import requires tiered data enrichment pipeline for required core fields.

@@ -1,0 +1,103 @@
+{
+  "generatedAt": "2026-07-26T03:30:19.199Z",
+  "sprint": "SPRINT_3",
+  "plan": "costHousing",
+  "inputSource": "docs/destination-expansion-wave1-cost-housing-input.json",
+  "categories": [
+    "costOfLiving",
+    "housingMetrics"
+  ],
+  "destinationCount": 10,
+  "destinations": [
+    {
+      "slug": "bath-united-kingdom",
+      "city": "Bath",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "costOfLiving": [],
+      "housingMetrics": []
+    },
+    {
+      "slug": "bristol-united-kingdom",
+      "city": "Bristol",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "costOfLiving": [],
+      "housingMetrics": []
+    },
+    {
+      "slug": "cork-ireland",
+      "city": "Cork",
+      "country": "Ireland",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "costOfLiving": [],
+      "housingMetrics": []
+    },
+    {
+      "slug": "dublin-ireland",
+      "city": "Dublin",
+      "country": "Ireland",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "costOfLiving": [],
+      "housingMetrics": []
+    },
+    {
+      "slug": "edinburgh-united-kingdom",
+      "city": "Edinburgh",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "costOfLiving": [],
+      "housingMetrics": []
+    },
+    {
+      "slug": "galway-ireland",
+      "city": "Galway",
+      "country": "Ireland",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "costOfLiving": [],
+      "housingMetrics": []
+    },
+    {
+      "slug": "glasgow-united-kingdom",
+      "city": "Glasgow",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "costOfLiving": [],
+      "housingMetrics": []
+    },
+    {
+      "slug": "leeds-united-kingdom",
+      "city": "Leeds",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "costOfLiving": [],
+      "housingMetrics": []
+    },
+    {
+      "slug": "manchester-united-kingdom",
+      "city": "Manchester",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "costOfLiving": [],
+      "housingMetrics": []
+    },
+    {
+      "slug": "york-united-kingdom",
+      "city": "York",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "costOfLiving": [],
+      "housingMetrics": []
+    }
+  ]
+}

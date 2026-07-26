@@ -1,0 +1,321 @@
+{
+  "generatedAt": "2026-07-26T02:52:42.339Z",
+  "wave": "TIER_1",
+  "categories": [
+    "visaPrograms",
+    "taxRules"
+  ],
+  "destinationCount": 30,
+  "expectedRecordSchema": {
+    "visaPrograms": {
+      "id": "string (unique within destination/category)",
+      "name": "string",
+      "subtitle": "string|null",
+      "value1": "string|null",
+      "value2": "string|null",
+      "value3": "string|null",
+      "url": "string|null",
+      "mapQuery": "string|null",
+      "mapZoom": "number|null",
+      "verification": {
+        "sourceUrl": "https://...",
+        "sourceOrganization": "string",
+        "sourceType": "string",
+        "confidenceLevel": "low|medium|high",
+        "verificationStatus": "estimated|verified|stale|in_progress",
+        "lastVerifiedAt": "YYYY-MM-DD"
+      }
+    },
+    "taxRules": {
+      "id": "string (unique within destination/category)",
+      "name": "string",
+      "subtitle": "string|null",
+      "value1": "string|null",
+      "value2": "string|null",
+      "value3": "string|null",
+      "url": "string|null",
+      "mapQuery": "string|null",
+      "mapZoom": "number|null",
+      "verification": {
+        "sourceUrl": "https://...",
+        "sourceOrganization": "string",
+        "sourceType": "string",
+        "confidenceLevel": "low|medium|high",
+        "verificationStatus": "estimated|verified|stale|in_progress",
+        "lastVerifiedAt": "YYYY-MM-DD"
+      }
+    }
+  },
+  "destinations": [
+    {
+      "slug": "austin-texas-united-states",
+      "city": "Austin",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "boston-massachusetts-united-states",
+      "city": "Boston",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "charlotte-north-carolina-united-states",
+      "city": "Charlotte",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "chicago-illinois-united-states",
+      "city": "Chicago",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "columbus-ohio-united-states",
+      "city": "Columbus",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "dallas-texas-united-states",
+      "city": "Dallas",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "denver-colorado-united-states",
+      "city": "Denver",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "fort-worth-texas-united-states",
+      "city": "Fort Worth",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "houston-texas-united-states",
+      "city": "Houston",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "indianapolis-indiana-united-states",
+      "city": "Indianapolis",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "jacksonville-florida-united-states",
+      "city": "Jacksonville",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "los-angeles-california-united-states",
+      "city": "Los Angeles",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "new-york-new-york-united-states",
+      "city": "New York",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "philadelphia-pennsylvania-united-states",
+      "city": "Philadelphia",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "phoenix-arizona-united-states",
+      "city": "Phoenix",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "san-antonio-texas-united-states",
+      "city": "San Antonio",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "san-diego-california-united-states",
+      "city": "San Diego",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "san-jose-california-united-states",
+      "city": "San Jose",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "seattle-washington-united-states",
+      "city": "Seattle",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "washington-district-of-columbia-united-states",
+      "city": "Washington",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "bath-united-kingdom",
+      "city": "Bath",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "bristol-united-kingdom",
+      "city": "Bristol",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "cork-ireland",
+      "city": "Cork",
+      "country": "Ireland",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "dublin-ireland",
+      "city": "Dublin",
+      "country": "Ireland",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "edinburgh-united-kingdom",
+      "city": "Edinburgh",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "galway-ireland",
+      "city": "Galway",
+      "country": "Ireland",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "glasgow-united-kingdom",
+      "city": "Glasgow",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "leeds-united-kingdom",
+      "city": "Leeds",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "manchester-united-kingdom",
+      "city": "Manchester",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    },
+    {
+      "slug": "york-united-kingdom",
+      "city": "York",
+      "country": "United Kingdom",
+      "additionGroup": "INTERNATIONAL",
+      "sourceNotes": "",
+      "visaPrograms": [],
+      "taxRules": []
+    }
+  ]
+}

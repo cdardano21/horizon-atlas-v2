@@ -1,0 +1,2633 @@
+{
+  "generatedAt": "2026-07-26T03:27:43.155Z",
+  "sprint": "SPRINT_1",
+  "plan": "monthlyClimate",
+  "intent": "fill-template",
+  "notes": [
+    "Template rows are placeholders only. Replace values with sourced data before merge/apply.",
+    "Each destination should keep all 12 months in order.",
+    "Allowed confidenceLevel: low|medium|high.",
+    "Allowed verificationStatus: estimated|verified|stale|in_progress.",
+    "lastVerifiedAt must be YYYY-MM-DD."
+  ],
+  "targetWorkflow": [
+    "1. Fill this template with sourced values.",
+    "2. Copy monthlyClimate arrays into monthlyClimate.json for the same sprint.",
+    "3. Run npm run expansion:wave1:sprintMerge.",
+    "4. Run npm run expansion:wave1:sprintPartialApply.",
+    "5. Run npm run expansion:wave1:preflightStrict."
+  ],
+  "destinationCount": 10,
+  "destinations": [
+    {
+      "slug": "austin-texas-united-states",
+      "city": "Austin",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": [
+        {
+          "month": "January",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "February",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "March",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "April",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "May",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "June",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "July",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "August",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "September",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "October",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "November",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "December",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "boston-massachusetts-united-states",
+      "city": "Boston",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": [
+        {
+          "month": "January",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "February",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "March",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "April",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "May",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "June",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "July",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "August",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "September",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "October",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "November",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "December",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "charlotte-north-carolina-united-states",
+      "city": "Charlotte",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": [
+        {
+          "month": "January",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "February",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "March",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "April",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "May",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "June",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "July",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "August",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "September",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "October",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "November",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "December",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "chicago-illinois-united-states",
+      "city": "Chicago",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": [
+        {
+          "month": "January",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "February",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "March",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "April",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "May",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "June",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "July",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "August",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "September",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "October",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "November",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "December",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "columbus-ohio-united-states",
+      "city": "Columbus",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": [
+        {
+          "month": "January",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "February",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "March",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "April",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "May",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "June",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "July",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "August",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "September",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "October",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "November",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "December",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dallas-texas-united-states",
+      "city": "Dallas",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": [
+        {
+          "month": "January",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "February",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "March",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "April",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "May",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "June",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "July",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "August",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "September",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "October",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "November",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "December",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "denver-colorado-united-states",
+      "city": "Denver",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": [
+        {
+          "month": "January",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "February",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "March",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "April",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "May",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "June",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "July",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "August",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "September",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "October",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "November",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "December",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "fort-worth-texas-united-states",
+      "city": "Fort Worth",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": [
+        {
+          "month": "January",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "February",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "March",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "April",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "May",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "June",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "July",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "August",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "September",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "October",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "November",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "December",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "houston-texas-united-states",
+      "city": "Houston",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": [
+        {
+          "month": "January",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "February",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "March",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "April",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "May",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "June",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "July",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "August",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "September",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "October",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "November",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "December",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "indianapolis-indiana-united-states",
+      "city": "Indianapolis",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": [
+        {
+          "month": "January",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "February",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "March",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "April",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "May",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "June",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "July",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "August",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "September",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "October",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "November",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        },
+        {
+          "month": "December",
+          "avgHighC": null,
+          "avgLowC": null,
+          "rainfallMm": null,
+          "rainyDays": null,
+          "humidityPct": null,
+          "sunshineHours": null,
+          "uvIndex": null,
+          "seaTempC": null,
+          "snowfallCm": null,
+          "windKph": null,
+          "verification": {
+            "sourceUrl": "",
+            "sourceOrganization": "",
+            "sourceType": "",
+            "confidenceLevel": "",
+            "verificationStatus": "",
+            "lastVerifiedAt": ""
+          }
+        }
+      ]
+    }
+  ]
+}

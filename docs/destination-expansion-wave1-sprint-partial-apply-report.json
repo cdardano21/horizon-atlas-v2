@@ -1,0 +1,76 @@
+{
+  "generatedAt": "2026-07-26T03:30:19.550Z",
+  "sprintFilter": null,
+  "processedSprints": [
+    "SPRINT_1",
+    "SPRINT_2",
+    "SPRINT_3"
+  ],
+  "updates": [],
+  "validationErrors": [],
+  "bySprint": {
+    "SPRINT_1": {
+      "updates": 0,
+      "skippedEmptyArrays": 80,
+      "validationErrors": 0
+    },
+    "SPRINT_2": {
+      "updates": 0,
+      "skippedEmptyArrays": 80,
+      "validationErrors": 0
+    },
+    "SPRINT_3": {
+      "updates": 0,
+      "skippedEmptyArrays": 80,
+      "validationErrors": 0
+    }
+  },
+  "byCategory": {
+    "costOfLiving": {
+      "updates": 0,
+      "skippedEmptyArrays": 30,
+      "validationErrors": 0
+    },
+    "housingMetrics": {
+      "updates": 0,
+      "skippedEmptyArrays": 30,
+      "validationErrors": 0
+    },
+    "healthcareFacilities": {
+      "updates": 0,
+      "skippedEmptyArrays": 30,
+      "validationErrors": 0
+    },
+    "airports": {
+      "updates": 0,
+      "skippedEmptyArrays": 30,
+      "validationErrors": 0
+    },
+    "monthlyClimate": {
+      "updates": 0,
+      "skippedEmptyArrays": 30,
+      "validationErrors": 0
+    },
+    "practicalInfo": {
+      "updates": 0,
+      "skippedEmptyArrays": 30,
+      "validationErrors": 0
+    },
+    "visaPrograms": {
+      "updates": 0,
+      "skippedEmptyArrays": 30,
+      "validationErrors": 0
+    },
+    "taxRules": {
+      "updates": 0,
+      "skippedEmptyArrays": 30,
+      "validationErrors": 0
+    }
+  },
+  "totals": {
+    "sprintCount": 3,
+    "destinationCategoryUpdates": 0,
+    "skippedEmptyArrays": 240,
+    "validationErrorCount": 0
+  }
+}

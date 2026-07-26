@@ -1,0 +1,190 @@
+{
+  "generatedAt": "2026-07-26T03:30:18.759Z",
+  "wave": "TIER_1",
+  "plans": [
+    {
+      "name": "monthlyClimate",
+      "inputFile": "docs/destination-expansion-wave1-monthly-climate-input.json",
+      "exists": true,
+      "destinationCount": 30,
+      "categories": [
+        {
+          "category": "monthlyClimate",
+          "destinationsWithRecords": 0,
+          "destinationCoveragePct": 0,
+          "totalRecords": 0
+        }
+      ],
+      "overall": {
+        "destinationsFullyPopulated": 0,
+        "destinationsFullyPopulatedPct": 0,
+        "recordsTotal": 0,
+        "readyForApply": false
+      },
+      "blockers": [
+        "austin-texas-united-states: missing monthlyClimate",
+        "boston-massachusetts-united-states: missing monthlyClimate",
+        "charlotte-north-carolina-united-states: missing monthlyClimate",
+        "chicago-illinois-united-states: missing monthlyClimate",
+        "columbus-ohio-united-states: missing monthlyClimate",
+        "dallas-texas-united-states: missing monthlyClimate",
+        "denver-colorado-united-states: missing monthlyClimate",
+        "fort-worth-texas-united-states: missing monthlyClimate",
+        "houston-texas-united-states: missing monthlyClimate",
+        "indianapolis-indiana-united-states: missing monthlyClimate"
+      ]
+    },
+    {
+      "name": "costHousing",
+      "inputFile": "docs/destination-expansion-wave1-cost-housing-input.json",
+      "exists": true,
+      "destinationCount": 30,
+      "categories": [
+        {
+          "category": "costOfLiving",
+          "destinationsWithRecords": 0,
+          "destinationCoveragePct": 0,
+          "totalRecords": 0
+        },
+        {
+          "category": "housingMetrics",
+          "destinationsWithRecords": 0,
+          "destinationCoveragePct": 0,
+          "totalRecords": 0
+        }
+      ],
+      "overall": {
+        "destinationsFullyPopulated": 0,
+        "destinationsFullyPopulatedPct": 0,
+        "recordsTotal": 0,
+        "readyForApply": false
+      },
+      "blockers": [
+        "austin-texas-united-states: missing costOfLiving, housingMetrics",
+        "boston-massachusetts-united-states: missing costOfLiving, housingMetrics",
+        "charlotte-north-carolina-united-states: missing costOfLiving, housingMetrics",
+        "chicago-illinois-united-states: missing costOfLiving, housingMetrics",
+        "columbus-ohio-united-states: missing costOfLiving, housingMetrics",
+        "dallas-texas-united-states: missing costOfLiving, housingMetrics",
+        "denver-colorado-united-states: missing costOfLiving, housingMetrics",
+        "fort-worth-texas-united-states: missing costOfLiving, housingMetrics",
+        "houston-texas-united-states: missing costOfLiving, housingMetrics",
+        "indianapolis-indiana-united-states: missing costOfLiving, housingMetrics"
+      ]
+    },
+    {
+      "name": "healthAirports",
+      "inputFile": "docs/destination-expansion-wave1-health-airports-input.json",
+      "exists": true,
+      "destinationCount": 30,
+      "categories": [
+        {
+          "category": "healthcareFacilities",
+          "destinationsWithRecords": 0,
+          "destinationCoveragePct": 0,
+          "totalRecords": 0
+        },
+        {
+          "category": "airports",
+          "destinationsWithRecords": 0,
+          "destinationCoveragePct": 0,
+          "totalRecords": 0
+        }
+      ],
+      "overall": {
+        "destinationsFullyPopulated": 0,
+        "destinationsFullyPopulatedPct": 0,
+        "recordsTotal": 0,
+        "readyForApply": false
+      },
+      "blockers": [
+        "austin-texas-united-states: missing healthcareFacilities, airports",
+        "boston-massachusetts-united-states: missing healthcareFacilities, airports",
+        "charlotte-north-carolina-united-states: missing healthcareFacilities, airports",
+        "chicago-illinois-united-states: missing healthcareFacilities, airports",
+        "columbus-ohio-united-states: missing healthcareFacilities, airports",
+        "dallas-texas-united-states: missing healthcareFacilities, airports",
+        "denver-colorado-united-states: missing healthcareFacilities, airports",
+        "fort-worth-texas-united-states: missing healthcareFacilities, airports",
+        "houston-texas-united-states: missing healthcareFacilities, airports",
+        "indianapolis-indiana-united-states: missing healthcareFacilities, airports"
+      ]
+    },
+    {
+      "name": "visaTax",
+      "inputFile": "docs/destination-expansion-wave1-visa-tax-input.json",
+      "exists": true,
+      "destinationCount": 30,
+      "categories": [
+        {
+          "category": "visaPrograms",
+          "destinationsWithRecords": 0,
+          "destinationCoveragePct": 0,
+          "totalRecords": 0
+        },
+        {
+          "category": "taxRules",
+          "destinationsWithRecords": 0,
+          "destinationCoveragePct": 0,
+          "totalRecords": 0
+        }
+      ],
+      "overall": {
+        "destinationsFullyPopulated": 0,
+        "destinationsFullyPopulatedPct": 0,
+        "recordsTotal": 0,
+        "readyForApply": false
+      },
+      "blockers": [
+        "austin-texas-united-states: missing visaPrograms, taxRules",
+        "boston-massachusetts-united-states: missing visaPrograms, taxRules",
+        "charlotte-north-carolina-united-states: missing visaPrograms, taxRules",
+        "chicago-illinois-united-states: missing visaPrograms, taxRules",
+        "columbus-ohio-united-states: missing visaPrograms, taxRules",
+        "dallas-texas-united-states: missing visaPrograms, taxRules",
+        "denver-colorado-united-states: missing visaPrograms, taxRules",
+        "fort-worth-texas-united-states: missing visaPrograms, taxRules",
+        "houston-texas-united-states: missing visaPrograms, taxRules",
+        "indianapolis-indiana-united-states: missing visaPrograms, taxRules"
+      ]
+    },
+    {
+      "name": "practicalInfo",
+      "inputFile": "docs/destination-expansion-wave1-practical-info-input.json",
+      "exists": true,
+      "destinationCount": 30,
+      "categories": [
+        {
+          "category": "practicalInfo",
+          "destinationsWithRecords": 0,
+          "destinationCoveragePct": 0,
+          "totalRecords": 0
+        }
+      ],
+      "overall": {
+        "destinationsFullyPopulated": 0,
+        "destinationsFullyPopulatedPct": 0,
+        "recordsTotal": 0,
+        "readyForApply": false
+      },
+      "blockers": [
+        "austin-texas-united-states: missing practicalInfo",
+        "boston-massachusetts-united-states: missing practicalInfo",
+        "charlotte-north-carolina-united-states: missing practicalInfo",
+        "chicago-illinois-united-states: missing practicalInfo",
+        "columbus-ohio-united-states: missing practicalInfo",
+        "dallas-texas-united-states: missing practicalInfo",
+        "denver-colorado-united-states: missing practicalInfo",
+        "fort-worth-texas-united-states: missing practicalInfo",
+        "houston-texas-united-states: missing practicalInfo",
+        "indianapolis-indiana-united-states: missing practicalInfo"
+      ]
+    }
+  ],
+  "summary": {
+    "totalPlans": 5,
+    "readyPlansCount": 0,
+    "readyPlans": [],
+    "blockedPlansCount": 5
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "generatedAt": "2026-07-26T02:52:59.851Z",
+  "proposalScope": {
+    "total": 300,
+    "tiers": {
+      "TIER_1": {
+        "total": 30,
+        "ready": 0,
+        "partial": 0,
+        "pending": 30,
+        "readyPct": 0,
+        "avgReadinessScore": 0
+      },
+      "TIER_2": {
+        "total": 150,
+        "ready": 0,
+        "partial": 0,
+        "pending": 150,
+        "readyPct": 0,
+        "avgReadinessScore": 0
+      },
+      "TIER_3": {
+        "total": 120,
+        "ready": 0,
+        "partial": 0,
+        "pending": 120,
+        "readyPct": 0,
+        "avgReadinessScore": 0
+      }
+    },
+    "overall": {
+      "ready": 0,
+      "pending": 300,
+      "readyRatePct": 0,
+      "averageReadinessScore": 0
+    }
+  },
+  "coreCategoryCoverage": {
+    "monthlyClimate": {
+      "coveredDestinations": 0,
+      "coverageRate": 0
+    },
+    "costOfLiving": {
+      "coveredDestinations": 0,
+      "coverageRate": 0
+    },
+    "housingMetrics": {
+      "coveredDestinations": 0,
+      "coverageRate": 0
+    },
+    "healthcareFacilities": {
+      "coveredDestinations": 0,
+      "coverageRate": 0
+    },
+    "airports": {
+      "coveredDestinations": 0,
+      "coverageRate": 0
+    },
+    "visaPrograms": {
+      "coveredDestinations": 0,
+      "coverageRate": 0
+    },
+    "taxRules": {
+      "coveredDestinations": 0,
+      "coverageRate": 0
+    },
+    "practicalInfo": {
+      "coveredDestinations": 0,
+      "coverageRate": 0
+    }
+  },
+  "blockersByCategory": [
+    {
+      "category": "monthlyClimate",
+      "count": 300
+    },
+    {
+      "category": "costOfLiving",
+      "count": 300
+    },
+    {
+      "category": "housingMetrics",
+      "count": 300
+    },
+    {
+      "category": "healthcareFacilities",
+      "count": 300
+    },
+    {
+      "category": "airports",
+      "count": 300
+    },
+    {
+      "category": "visaPrograms",
+      "count": 300
+    },
+    {
+      "category": "taxRules",
+      "count": 300
+    },
+    {
+      "category": "practicalInfo",
+      "count": 300
+    }
+  ],
+  "queueStatus": {
+    "totalQueueItems": 300,
+    "waveCounts": {
+      "tier1": 30,
+      "tier2": 150,
+      "tier3": 120
+    },
+    "activeWave": "TIER_1",
+    "activeWaveDestinationCount": 30
+  }
+}

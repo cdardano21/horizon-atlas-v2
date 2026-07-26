@@ -1,0 +1,52 @@
+{
+  "generatedAt": "2026-07-26T03:30:18.299Z",
+  "extractsDir": "docs/wave1-sprint-inputs",
+  "planResults": [
+    {
+      "plan": "monthlyClimate",
+      "inputFile": "docs/destination-expansion-wave1-monthly-climate-input.json",
+      "destinationUpdates": 0,
+      "categoryUpdates": 0,
+      "skippedEmptyCategoryPayloads": 30,
+      "warnings": []
+    },
+    {
+      "plan": "costHousing",
+      "inputFile": "docs/destination-expansion-wave1-cost-housing-input.json",
+      "destinationUpdates": 0,
+      "categoryUpdates": 0,
+      "skippedEmptyCategoryPayloads": 60,
+      "warnings": []
+    },
+    {
+      "plan": "healthAirports",
+      "inputFile": "docs/destination-expansion-wave1-health-airports-input.json",
+      "destinationUpdates": 0,
+      "categoryUpdates": 0,
+      "skippedEmptyCategoryPayloads": 60,
+      "warnings": []
+    },
+    {
+      "plan": "visaTax",
+      "inputFile": "docs/destination-expansion-wave1-visa-tax-input.json",
+      "destinationUpdates": 0,
+      "categoryUpdates": 0,
+      "skippedEmptyCategoryPayloads": 60,
+      "warnings": []
+    },
+    {
+      "plan": "practicalInfo",
+      "inputFile": "docs/destination-expansion-wave1-practical-info-input.json",
+      "destinationUpdates": 0,
+      "categoryUpdates": 0,
+      "skippedEmptyCategoryPayloads": 30,
+      "warnings": []
+    }
+  ],
+  "totals": {
+    "plansProcessed": 5,
+    "destinationUpdates": 0,
+    "categoryUpdates": 0,
+    "skippedEmptyCategoryPayloads": 240
+  }
+}

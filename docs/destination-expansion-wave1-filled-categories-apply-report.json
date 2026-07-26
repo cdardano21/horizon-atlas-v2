@@ -1,0 +1,33 @@
+{
+  "generatedAt": "2026-07-26T03:30:19.699Z",
+  "attempted": [
+    {
+      "name": "monthlyClimate",
+      "status": "skipped",
+      "reason": "destination 'austin-texas-united-states' has empty 'monthlyClimate'"
+    },
+    {
+      "name": "costHousing",
+      "status": "skipped",
+      "reason": "destination 'austin-texas-united-states' has empty 'costOfLiving'"
+    },
+    {
+      "name": "healthAirports",
+      "status": "skipped",
+      "reason": "destination 'austin-texas-united-states' has empty 'healthcareFacilities'"
+    },
+    {
+      "name": "visaTax",
+      "status": "skipped",
+      "reason": "destination 'austin-texas-united-states' has empty 'visaPrograms'"
+    },
+    {
+      "name": "practicalInfo",
+      "status": "skipped",
+      "reason": "destination 'austin-texas-united-states' has empty 'practicalInfo'"
+    }
+  ],
+  "appliedCount": 0,
+  "skippedCount": 5,
+  "refreshTriggered": false
+}

@@ -4,6 +4,8 @@ A premium AI-powered retirement and relocation platform built with Next.js, Reac
 
 See the project vision and product roadmap in [VISION.md](VISION.md).
 
+Destination scaling architecture and ingestion strategy are documented in [docs/destination-data-engine-strategy.md](docs/destination-data-engine-strategy.md).
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -21,6 +23,32 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Command Center Data Pipeline
+
+Generate catalog-wide factual command-center seeds from the DRI workbooks:
+
+```bash
+npm run build:command-center-seeds
+```
+
+Generate normalized-table SQL for Supabase:
+
+```bash
+npm run build:command-center-sql
+```
+
+Apply the generated SQL directly to Supabase Postgres:
+
+```bash
+SUPABASE_DB_URL="postgresql://..." npm run apply:command-center-sql
+```
+
+Artifacts:
+
+- `app/lib/generated-command-center-seeds.ts`
+- `supabase/generated-command-center-seeds.json`
+- `supabase/generated-command-center-seed.sql`
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

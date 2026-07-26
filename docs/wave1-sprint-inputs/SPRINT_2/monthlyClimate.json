@@ -1,0 +1,92 @@
+{
+  "generatedAt": "2026-07-26T03:30:19.197Z",
+  "sprint": "SPRINT_2",
+  "plan": "monthlyClimate",
+  "inputSource": "docs/destination-expansion-wave1-monthly-climate-input.json",
+  "categories": [
+    "monthlyClimate"
+  ],
+  "destinationCount": 10,
+  "destinations": [
+    {
+      "slug": "jacksonville-florida-united-states",
+      "city": "Jacksonville",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": []
+    },
+    {
+      "slug": "los-angeles-california-united-states",
+      "city": "Los Angeles",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": []
+    },
+    {
+      "slug": "new-york-new-york-united-states",
+      "city": "New York",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": []
+    },
+    {
+      "slug": "philadelphia-pennsylvania-united-states",
+      "city": "Philadelphia",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": []
+    },
+    {
+      "slug": "phoenix-arizona-united-states",
+      "city": "Phoenix",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": []
+    },
+    {
+      "slug": "san-antonio-texas-united-states",
+      "city": "San Antonio",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": []
+    },
+    {
+      "slug": "san-diego-california-united-states",
+      "city": "San Diego",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": []
+    },
+    {
+      "slug": "san-jose-california-united-states",
+      "city": "San Jose",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": []
+    },
+    {
+      "slug": "seattle-washington-united-states",
+      "city": "Seattle",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": []
+    },
+    {
+      "slug": "washington-district-of-columbia-united-states",
+      "city": "Washington",
+      "country": "United States",
+      "additionGroup": "US",
+      "sourceNotes": "",
+      "monthlyClimate": []
+    }
+  ]
+}
