@@ -48,7 +48,19 @@ const bannedTitleParts = [
   "rail_map",
   "station_map",
   "airport_map",
+  ".gif",
+  ".webm",
+  "illustration",
+  "painting",
+  "portrait",
+  "postcard",
+  "stamp",
+  "coat",
+  "arms",
+  "diagram",
 ];
+
+const cityTokenStopWords = new Set(["del", "de", "la", "le", "di", "da", "of", "the", "a"]);
 
 const bucketKeywords = {
   waterfront: ["waterfront", "beach", "coast", "harbor", "harbour", "port", "marina", "bay", "river", "canal"],
@@ -175,6 +187,22 @@ function parseThumbWidth(url) {
   return Number(match[1]) || 0;
 }
 
+function destinationCityTokens(destination) {
+  const normalized = normalizeForCompare(destination.city);
+  const parts = normalized
+    .split(" ")
+    .map((item) => item.trim())
+    .filter((item) => item.length >= 3)
+    .filter((item) => !cityTokenStopWords.has(item));
+
+  return Array.from(new Set([normalized, ...parts.filter((part) => part.length >= 4)]));
+}
+
+function hasCityTokenMatch(destination, description) {
+  const tokens = destinationCityTokens(destination);
+  return tokens.some((token) => description.includes(token));
+}
+
 function isImageAccepted(item, destination) {
   if (!item || item.type !== "image") return false;
   if (!item.showInGallery) return false;
@@ -185,18 +213,15 @@ function isImageAccepted(item, destination) {
 
   const src = chooseBestSrcFromSrcSet(item.srcset);
   if (!src || !src.startsWith("https://upload.wikimedia.org/")) return false;
+  if (/\.png($|\?)/i.test(src)) return false;
 
   const thumbWidth = parseThumbWidth(src);
   if (thumbWidth > 0 && thumbWidth < 1000) return false;
 
-  const city = normalizeForCompare(destination.city);
-  const country = normalizeForCompare(destination.country);
   const description = normalizeForCompare(item.title || "");
 
-  if (description.includes(city) || description.includes(country)) return true;
-
-  // Keep non-city-token images from the city's own article if they pass gallery filters.
-  return true;
+  // Require direct city-token evidence in file metadata for destination-specific confidence.
+  return hasCityTokenMatch(destination, description);
 }
 
 function selectDiverseImages(items, target) {

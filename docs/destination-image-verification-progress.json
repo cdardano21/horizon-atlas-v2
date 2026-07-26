@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-26T09:30:02.401Z",
+  "generatedAt": "2026-07-26T09:35:10.468Z",
   "totalDestinations": 600,
-  "completedDestinations": 63,
-  "remainingDestinations": 537,
+  "completedDestinations": 68,
+  "remainingDestinations": 532,
   "manualReviewDestinations": [
     {
       "slug": "agios-nikolaos-greece",
@@ -25,7 +25,7 @@
       "city": "Aomori",
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
+      "candidateCount": 1,
       "articleTitle": "Aomori"
     },
     {
@@ -61,6 +61,14 @@
       "articleTitle": "Beppu"
     },
     {
+      "slug": "cartagena-spain",
+      "city": "Cartagena",
+      "country": "Spain",
+      "reason": "Only 0 verified images found automatically",
+      "candidateCount": 2,
+      "articleTitle": "Cartagena, Spain"
+    },
+    {
       "slug": "desenzano-del-garda-italy",
       "city": "Desenzano del Garda",
       "country": "Italy",
@@ -69,36 +77,12 @@
       "articleTitle": "Desenzano del Garda"
     },
     {
-      "slug": "lisbon-portugal",
-      "city": "Lisbon",
-      "country": "Portugal",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Lisbon"
-    },
-    {
-      "slug": "onomichi-japan",
-      "city": "Onomichi",
-      "country": "Japan",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Onomichi"
-    },
-    {
       "slug": "pietrasanta-italy",
       "city": "Pietrasanta",
       "country": "Italy",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 1,
       "articleTitle": "Pietrasanta"
-    },
-    {
-      "slug": "podgorica-montenegro",
-      "city": "Podgorica",
-      "country": "Montenegro",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Podgorica"
     },
     {
       "slug": "polignano-a-mare-italy",
@@ -117,28 +101,12 @@
       "articleTitle": "Santander"
     },
     {
-      "slug": "seville-spain",
-      "city": "Seville",
-      "country": "Spain",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Seville"
-    },
-    {
       "slug": "takayama-japan",
       "city": "Takayama",
       "country": "Japan",
       "reason": "Only 0 verified images found automatically",
       "candidateCount": 0,
       "articleTitle": "Takayama"
-    },
-    {
-      "slug": "verona-italy",
-      "city": "Verona",
-      "country": "Italy",
-      "reason": "Only 0 verified images found automatically",
-      "candidateCount": 0,
-      "articleTitle": "Verona"
     }
   ],
   "batches": [
@@ -490,6 +458,97 @@
         "bolzano-italy"
       ],
       "manualReviewSlugs": [
+        "agios-nikolaos-greece",
+        "altea-spain",
+        "aveiro-portugal",
+        "begur-spain",
+        "belluno-italy",
+        "beppu-japan"
+      ]
+    },
+    {
+      "generatedAt": "2026-07-26T09:35:10.468Z",
+      "offset": 0,
+      "limit": 80,
+      "processedCount": 67,
+      "manualReviewCount": 13,
+      "processedSlugs": [
+        "bergamo-italy",
+        "braga-portugal",
+        "girona-spain",
+        "kanazawa-japan",
+        "lucca-italy",
+        "nafplio-greece",
+        "piran-slovenia",
+        "porto-portugal",
+        "rovinj-croatia",
+        "sitges-spain",
+        "tivat-montenegro",
+        "trieste-italy",
+        "valencia-spain",
+        "verona-italy",
+        "alghero-italy",
+        "alicante-spain",
+        "cefalu-italy",
+        "coimbra-portugal",
+        "dubrovnik-croatia",
+        "hiroshima-japan",
+        "kalamata-greece",
+        "kamakura-japan",
+        "kobe-japan",
+        "koper-slovenia",
+        "kotor-montenegro",
+        "matera-italy",
+        "monopoli-italy",
+        "murcia-spain",
+        "onomichi-japan",
+        "podgorica-montenegro",
+        "sibenik-croatia",
+        "taormina-italy",
+        "zadar-croatia",
+        "estepona-spain",
+        "gijon-spain",
+        "hakodate-japan",
+        "kranj-slovenia",
+        "lake-bled-slovenia",
+        "ptuj-slovenia",
+        "radovljica-slovenia",
+        "rijeka-croatia",
+        "osaka-japan",
+        "olbia-italy",
+        "aix-en-provence-france",
+        "annecy-france",
+        "cascais-portugal",
+        "ljubljana-slovenia",
+        "malaga-spain",
+        "san-sebastian-spain",
+        "a-coruna-spain",
+        "aix-les-bains-france",
+        "albufeira-portugal",
+        "ascona-switzerland",
+        "asolo-italy",
+        "athens-greece",
+        "barcelona-spain",
+        "basel-switzerland",
+        "bassano-del-grappa-italy",
+        "bayonne-france",
+        "bern-switzerland",
+        "biarritz-france",
+        "bilbao-spain",
+        "bolzano-italy",
+        "granada-spain",
+        "madrid-spain",
+        "seville-spain",
+        "lisbon-portugal"
+      ],
+      "manualReviewSlugs": [
+        "pietrasanta-italy",
+        "santander-spain",
+        "polignano-a-mare-italy",
+        "takayama-japan",
+        "desenzano-del-garda-italy",
+        "aomori-japan",
+        "cartagena-spain",
         "agios-nikolaos-greece",
         "altea-spain",
         "aveiro-portugal",
