@@ -76,6 +76,17 @@ function formatList(items: string[]) {
   return `${items.slice(0, -1).join(", ")}, and ${items[items.length - 1]}`;
 }
 
+function isTemplateCopy(value: string | null | undefined) {
+  if (!value) return true;
+  const normalized = value.toLowerCase();
+  return normalized.includes("a tier ")
+    || normalized.includes("ranks strongly in the retirement-first")
+    || normalized.includes("standout scores for walkability")
+    || normalized.includes("verify before decision")
+    || normalized.includes("standard/unknown")
+    || normalized.includes("professional review needed");
+}
+
 function buildEditorialOverview(command: CommandCenterData) {
   const destination = command.destination;
   const tags = destination.tags ?? [];
@@ -83,13 +94,19 @@ function buildEditorialOverview(command: CommandCenterData) {
   const cultural = tags.includes("culture");
   const neighborhoods = summarizeRows(command.neighborhoods, 2);
   const recreation = summarizeRows([...command.beaches, ...command.recreationFacilities, ...command.golfCourses], 3);
-  const intro = coastal
+  const intro = !isTemplateCopy(destination.description)
+    ? destination.description
+    : coastal
     ? `Wake up in ${destination.city} with the water close enough to shape the pace of the day, not just the postcard.`
     : `Settle into ${destination.city} with the feeling that everyday life, not just sightseeing, is the real draw.`;
-  const follow = neighborhoods.length > 0
+  const follow = !isTemplateCopy(destination.overview)
+    ? destination.overview
+    : neighborhoods.length > 0
     ? `The most compelling version of life here starts in places like ${formatList(neighborhoods)}, then expands into a wider rhythm of ${recreation.length > 0 ? formatList(recreation) : "walks, errands, meals, and repeatable local routines"}.`
     : `${destination.city} becomes more interesting once you stop evaluating it as a checklist and start reading it as a place for recurring routines, familiar streets, and slower decisions.`;
-  const dek = cultural
+  const dek = !isTemplateCopy(destination.lifestyle)
+    ? destination.lifestyle
+    : cultural
     ? `${destination.city} blends local character, practical daily living, and relocation math into a destination that should feel more editorial than transactional.`
     : `${destination.city} works best when emotional fit and practical fit are evaluated together: daily rhythm, climate, housing, healthcare, and long-stay ease.`;
   const quote = command.intelligence.aiSummary || destination.lifestyle;
