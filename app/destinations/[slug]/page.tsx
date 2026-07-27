@@ -224,15 +224,21 @@ function buildMagazineDescription(command: CommandCenterData) {
   const healthcareAnchor = command.healthcareFacilities[0]?.name;
   const airportAnchor = command.airports[0]?.name;
 
-  const opening = neighborhoodA
+  const opening = !isTemplateCopy(command.destination.description)
+    ? command.destination.description
+    : neighborhoodA
     ? `${city} feels most magnetic when you start walking through ${neighborhoodA}${neighborhoodB ? ` and drift toward ${neighborhoodB}` : ""}: stone streets, layered facades, and the kind of daily rhythm that makes errands feel like part of the experience.`
     : `${city} has the kind of atmosphere that shifts from postcard to possible once you slow down and read the streets like a resident instead of a visitor.`;
 
-  const middle = beachOrRecreation || foodAnchor
+  const middle = !isTemplateCopy(command.destination.lifestyle)
+    ? command.destination.lifestyle
+    : beachOrRecreation || foodAnchor
     ? `The lifestyle test is practical and emotional at the same time: a late afternoon at ${beachOrRecreation ?? foodAnchor}, an easy dinner${foodAnchor ? ` at ${foodAnchor}` : ""}, and a realistic check on what ordinary weekdays actually feel like.`
     : `The lifestyle test is practical and emotional at the same time: test a normal weekday loop, then decide whether the city still feels compelling after the novelty fades.`;
 
-  const closing = `${city}, ${country} becomes a serious relocation contender when the essentials also hold up${healthcareAnchor ? ` - healthcare anchored by ${healthcareAnchor}` : ""}${airportAnchor ? `, travel flow through ${airportAnchor}` : ""}, and routines you would be happy to repeat for years.`;
+  const closing = !isTemplateCopy(command.destination.overview)
+    ? command.destination.overview
+    : `${city}, ${country} becomes a serious relocation contender when the essentials also hold up${healthcareAnchor ? ` - healthcare anchored by ${healthcareAnchor}` : ""}${airportAnchor ? `, travel flow through ${airportAnchor}` : ""}, and routines you would be happy to repeat for years.`;
 
   return { opening, middle, closing };
 }
