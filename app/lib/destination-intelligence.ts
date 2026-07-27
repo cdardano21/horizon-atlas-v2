@@ -34,6 +34,29 @@ type IntelligenceProfileSection = {
   items: IntelligenceProfileItem[];
 };
 
+type IntelligenceOverride = {
+  aiSummary?: string;
+  climateHeadline?: string;
+  lifestyleHeadline?: string;
+  healthcareHeadline?: string;
+  housingHeadline?: string;
+  costHeadline?: string;
+  taxHeadline?: string;
+  visaHeadline?: string;
+  restaurantHeadline?: string;
+  internetHeadline?: string;
+  golfHeadline?: string;
+  airportHeadline?: string;
+  beachHeadline?: string;
+  thingsToDoHeadline?: string;
+  cultureHeadline?: string;
+  retirementAdvantages?: string[];
+  retirementTradeoffs?: string[];
+  planningSignals?: Array<{ label: string; tone: "strong" | "review"; detail: string }>;
+  sectionSummaries?: Partial<Record<string, string>>;
+  sectionItems?: Partial<Record<string, Partial<Record<string, string>>>>;
+};
+
 export type DestinationIntelligence = {
   aiSummary: string;
   climateHeadline: string;
@@ -268,6 +291,109 @@ const contextualFallbackValue = (
   return `${city} source-backed coverage is still expanding for this signal.`;
 };
 
+const flagshipIntelligenceOverrides: Partial<Record<string, IntelligenceOverride>> = {
+  "lucca-italy": {
+    aiSummary: "Lucca is a high-fit choice for retirees who want polished daily life in a compact historic city: bikeable walls, highly walkable errands, and cultural continuity without big-city overload. The key decision variable is not whether Lucca is attractive, but which micro-area best balances tranquility, convenience, and station access.",
+    healthcareHeadline: "Lucca is best evaluated as a practical-aging city: you should verify hospital and specialist routing from your target block, but the city-format supports low-friction everyday care routines.",
+    housingHeadline: "Within-walls charm and outside-walls practicality create very different retirement experiences in Lucca; test both before committing to a lease or purchase.",
+    costHeadline: "Lucca usually trades ultra-low pricing for quality of life and consistency, making budget modeling essential before treating it as a value play.",
+    restaurantHeadline: "Lucca's food identity is neighborhood-driven and repeatable, which matters for retirees who care about daily dining quality, not just occasional standout meals.",
+    retirementAdvantages: [
+      "City-scale walkability is a tangible strength for everyday retirement routines.",
+      "Historic-core character supports long-term place attachment, not just novelty.",
+      "Rail-connected Tuscany access improves specialist appointments and regional day planning.",
+    ],
+    retirementTradeoffs: [
+      "Prime central addresses can carry pricing premiums that narrow value headroom.",
+      "Historic-building comfort varies; insulation, humidity, and elevator access must be verified case by case.",
+    ],
+    sectionItems: {
+      "housing": {
+        "best neighborhoods for retirees": "Inside the walls for pure walkability; San Concordio and nearby outer districts for easier parking and logistics.",
+        "rental resources": "Prioritize agencies with historic-center inventory and ask for full utility and humidity disclosures.",
+      },
+      "transportation": {
+        "public transportation quality": "Best when combined with walking and rail; daily car dependence can be minimized in well-chosen districts.",
+      },
+    },
+  },
+  "valencia-spain": {
+    aiSummary: "Valencia is one of the strongest all-around Mediterranean city options for retirees who want warmth, movement, and serious urban infrastructure. District selection drives outcomes: central historic access, Ruzafa social density, and Cabanyal beach adjacency each create a different retirement profile.",
+    healthcareHeadline: "Valencia's scale supports deeper healthcare optionality than smaller coastal towns; verify provider language access and insurance acceptance by network, not by city reputation.",
+    housingHeadline: "Valencia housing decisions are district-sensitive: rents, noise profile, and transit convenience can shift quickly across short distances.",
+    airportHeadline: "Valencia's airport plus high-speed rail gives the city a practical mobility edge for family travel and specialist access.",
+    thingsToDoHeadline: "Valencia sustains long-stay interest through beach routines, Turia park life, market culture, and strong neighborhood variation.",
+    sectionItems: {
+      "lifestyle": {
+        "beaches": "Malvarrosa and broader seafront zones provide daily walk-and-water routines without leaving the city.",
+      },
+      "housing": {
+        "best neighborhoods for retirees": "Ciutat Vella for walkability and heritage, Eixample/Ruzafa for active urban rhythm, Cabanyal for beach-first living.",
+      },
+    },
+  },
+  "santander-spain": {
+    aiSummary: "Santander is an Atlantic retirement play: elegant waterfront living, cooler summers, and a calmer urban pulse than many southern Spanish cities. It rewards retirees who prioritize climate comfort and daily quality over nonstop metropolitan intensity.",
+    climateHeadline: "Santander's Atlantic climate is a core differentiator: milder heat, greener surroundings, and more frequent rain than Mediterranean peers.",
+    beachHeadline: "Santander's waterfront is less about resort energy and more about repeatable promenade and bay-facing daily routines.",
+    retirementAdvantages: [
+      "Cooler summer profile can improve long-term comfort for heat-sensitive retirees.",
+      "Strong coastal public realm supports everyday movement and social life.",
+      "City services remain accessible without requiring mega-city scale.",
+    ],
+    retirementTradeoffs: [
+      "Rain frequency and gray spells need to match personal climate preferences.",
+      "Mobility planning should be tested from district level for airport and specialist trips.",
+    ],
+  },
+  "porto-portugal": {
+    aiSummary: "Porto combines architectural depth, serious food culture, and practical transport reach, but it is not effortless by default. Retirement fit depends on handling hills, choosing the right micro-neighborhood, and validating building comfort standards.",
+    lifestyleHeadline: "Porto excels when your routine includes market culture, riverside walking, and neighborhood cafes rather than purely beach-led living.",
+    housingHeadline: "Topography and housing stock diversity make Porto highly neighborhood-dependent; walk your exact block at different hours before committing.",
+    sectionItems: {
+      "transportation": {
+        "bike friendliness": "Varies sharply by elevation; flatter riverside corridors differ from steeper residential hills.",
+      },
+    },
+  },
+  "cefalu-italy": {
+    aiSummary: "Cefalu is a beauty-first coastal town best suited to retirees seeking slower rhythm, sea access, and compact daily geography. It shines when expectations are aligned with small-town service scale rather than big-city optionality.",
+    lifestyleHeadline: "Cefalu favors retirees who want daily promenade life, local food routine, and visual calm over high-volume urban convenience.",
+    retirementTradeoffs: [
+      "Service depth is narrower than in larger cities, especially for specialized needs.",
+      "Seasonal tourism intensity can affect noise and daily flow in core areas.",
+    ],
+  },
+  "matera-italy": {
+    aiSummary: "Matera is a distinct cultural retirement option with rare architectural character and a contemplative pace. It rewards people who value atmosphere and meaning over convenience density, provided mobility realities are handled upfront.",
+    climateHeadline: "Matera comfort depends as much on building behavior and slope logistics as on average temperatures.",
+    housingHeadline: "In Matera, street gradient, stair access, and practical service distance often matter more than listing aesthetics.",
+    retirementTradeoffs: [
+      "Topography and historic fabric can add mobility friction.",
+      "Regional transport is workable but less forgiving than primary metro hubs.",
+    ],
+  },
+  "kanazawa-japan": {
+    aiSummary: "Kanazawa is a high-trust, high-order destination for retirees who value safety, civic reliability, and refined daily culture. It is strongest for long-stay planners who can solve visa path and language-support details with discipline.",
+    visaHeadline: "For Kanazawa, immigration pathway clarity is the gating factor; lifestyle quality only matters once legal stay strategy is fully validated.",
+    internetHeadline: "Connectivity and infrastructure are generally strong, but housing-level internet performance should still be checked before signing.",
+    retirementAdvantages: [
+      "Exceptional social order and public behavior consistency support low-stress routines.",
+      "Four-season cultural city with excellent everyday civic standards.",
+      "Rail-linked mobility broadens domestic access without relying on frequent flights.",
+    ],
+  },
+  "taormina-italy": {
+    aiSummary: "Taormina is a premium scenic retirement option with extraordinary setting and atmosphere, but daily practicality is highly location-sensitive. The right choice can feel magical; the wrong one can add avoidable friction.",
+    beachHeadline: "Taormina's sea access is compelling, but elevation and transfer patterns define how often waterfront life is truly usable day to day.",
+    housingHeadline: "Housing in Taormina should be screened for slope, stairs, access, and off-season practicality before aesthetics drive decisions.",
+    retirementTradeoffs: [
+      "Seasonal crowd pressure can alter quality of life in peak months.",
+      "Hilltown logistics may complicate routine errands and medical access if location is poorly chosen.",
+    ],
+  },
+};
+
 export function getDestinationIntelligence(destination: Destination): DestinationIntelligence {
   const mapSearchUrl = `https://www.google.com/maps/search/${encodeURIComponent(`${destination.city}, ${destination.country}`)}`;
   const mapEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${destination.city}, ${destination.country}`)}&z=12&output=embed`;
@@ -287,6 +413,7 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
   const details = destination.memberDetails;
   const seed = generatedCommandCenterSeeds[destination.slug];
   const profileOverrides = destination.relocationProfile;
+  const flagshipOverride = flagshipIntelligenceOverrides[destination.slug];
 
   const seedNeighborhoods = listSeedNames(seed?.neighborhoods, 4);
   const seedFoodSpots = listSeedNames(seed?.foodSpots, 4);
@@ -741,57 +868,105 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
 
   const aiSummary = profileOverrides?.aiSummary?.trim() || baseAiSummary;
 
+  const applySectionOverrides = (
+    sections: IntelligenceProfileSection[],
+    override: IntelligenceOverride | undefined,
+  ): IntelligenceProfileSection[] => {
+    if (!override) return sections;
+
+    return sections.map((section) => {
+      const sectionKey = section.title.toLowerCase();
+      const summaryOverride = override.sectionSummaries?.[sectionKey];
+      const itemOverrides = override.sectionItems?.[sectionKey];
+
+      if (!summaryOverride && !itemOverrides) return section;
+
+      return {
+        ...section,
+        summary: summaryOverride ?? section.summary,
+        items: section.items.map((item) => {
+          const overrideValue = itemOverrides?.[item.label.toLowerCase()];
+          return overrideValue ? { ...item, value: overrideValue } : item;
+        }),
+      };
+    });
+  };
+
+  const comprehensiveWithFlagshipOverrides = applySectionOverrides(comprehensiveSections, flagshipOverride);
+
+  const retirementAdvantages = flagshipOverride?.retirementAdvantages ?? [
+    healthcare ? "Healthcare is a relative strength in the current model." : null,
+    safety ? "Safety reads as a meaningful advantage for everyday retirement confidence." : null,
+    walkable ? "Walkability supports a lighter, lower-friction daily routine." : null,
+    budgetFriendly ? "Value orientation can stretch retirement income further." : null,
+    coastal ? "Coastal access can materially improve lifestyle quality if sea proximity matters to you." : null,
+    expat ? "Expat-friendly or internationally aware signals may ease the transition phase." : null,
+  ].filter(Boolean) as string[];
+
+  const retirementTradeoffs = flagshipOverride?.retirementTradeoffs ?? [
+    !budgetFriendly ? "Cost structure may need closer validation against your budget." : null,
+    !healthcare ? "Healthcare should be confirmed in detail before treating it as a strength." : null,
+    !walkable ? "Daily mobility could depend more on district choice or transportation planning." : null,
+    !expat ? "Integration may rely more on personal initiative and local adaptation." : null,
+    !coastal ? "If beach living is central to your ideal future, this may be a weaker fit." : null,
+  ].filter(Boolean) as string[];
+
+  const planningSignals = flagshipOverride?.planningSignals ?? [
+    {
+      label: "Healthcare confidence",
+      tone: healthcare ? "strong" : "review",
+      detail: healthcare ? "Strong relative signal in the launch model." : "Needs deeper local verification before deciding.",
+    },
+    {
+      label: "Safety profile",
+      tone: safety ? "strong" : "review",
+      detail: safety ? "Day-to-day security looks like a relative strength." : "Check neighborhood-level safety and routines." ,
+    },
+    {
+      label: "Housing practicality",
+      tone: housingIsStrong ? "strong" : "review",
+      detail: housingIsStrong ? "Worth serious rental and purchase-market analysis." : "Do not assume value without current market checks.",
+    },
+  ];
+
   return {
-    aiSummary,
-    climateHeadline: destination.climate,
-    lifestyleHeadline: destination.lifestyle,
-    healthcareHeadline: healthcare
+    aiSummary: flagshipOverride?.aiSummary ?? aiSummary,
+    climateHeadline: flagshipOverride?.climateHeadline ?? destination.climate,
+    lifestyleHeadline: flagshipOverride?.lifestyleHeadline ?? destination.lifestyle,
+    healthcareHeadline: flagshipOverride?.healthcareHeadline ?? (healthcare
       ? `${destination.city} screens as a stronger healthcare-aligned option in the current model, but hospital network, insurance acceptance, and specialist access should still be verified locally.`
-      : `${destination.city} may still work well, but healthcare specifics should be validated before treating it as a core advantage.`,
-    housingHeadline: housingIsStrong
+      : `${destination.city} may still work well, but healthcare specifics should be validated before treating it as a core advantage.`),
+    housingHeadline: flagshipOverride?.housingHeadline ?? (housingIsStrong
       ? `${destination.city} currently reads as one of the stronger housing-fit options in the launch dataset, which makes it worth deeper rental and purchase-market review.`
-      : `${destination.city} may require closer housing-market validation, especially if budget control is one of your main decision drivers.`,
-    costHeadline: budgetFriendly
+      : `${destination.city} may require closer housing-market validation, especially if budget control is one of your main decision drivers.`),
+    costHeadline: flagshipOverride?.costHeadline ?? (budgetFriendly
       ? `${destination.city} appears more likely to support a favorable cost-to-lifestyle balance, though your exact spending pattern still needs local validation.`
-      : `${destination.city} may reward quality of life more than low spending, so it should be modeled carefully against your personal budget.`,
-    taxHeadline: countryTaxHeadlines[destination.country] ?? "Tax treatment is not fully normalized yet, so professional review is still required before making financial assumptions.",
-    visaHeadline: countryVisaHeadlines[destination.country] ?? "Visa and long-stay planning should be treated as a formal workstream and validated against current immigration rules.",
-    restaurantHeadline: hasTag(destination, "culture")
+      : `${destination.city} may reward quality of life more than low spending, so it should be modeled carefully against your personal budget.`),
+    taxHeadline: flagshipOverride?.taxHeadline ?? countryTaxHeadlines[destination.country] ?? "Tax treatment is not fully normalized yet, so professional review is still required before making financial assumptions.",
+    visaHeadline: flagshipOverride?.visaHeadline ?? countryVisaHeadlines[destination.country] ?? "Visa and long-stay planning should be treated as a formal workstream and validated against current immigration rules.",
+    restaurantHeadline: flagshipOverride?.restaurantHeadline ?? (hasTag(destination, "culture")
       ? `${destination.city} is more likely to reward someone who values dining, street life, and repeatable neighborhood experiences over purely transactional convenience.`
-      : `${destination.city} may be less about culinary density and more about overall lifestyle fit, so restaurant research is still worth doing city by city.`,
-    internetHeadline: expat
+      : `${destination.city} may be less about culinary density and more about overall lifestyle fit, so restaurant research is still worth doing city by city.`),
+    internetHeadline: flagshipOverride?.internetHeadline ?? (expat
       ? `${destination.city} has stronger odds of supporting modern connectivity expectations, especially if you value digital flexibility or hybrid work habits.`
-      : `${destination.city} may still work well, but internet reliability and home-office practicality should be checked neighborhood by neighborhood.`,
-    golfHeadline: coastal || budgetFriendly
+      : `${destination.city} may still work well, but internet reliability and home-office practicality should be checked neighborhood by neighborhood.`),
+    golfHeadline: flagshipOverride?.golfHeadline ?? (coastal || budgetFriendly
       ? `${destination.city} is worth screening for golf access if leisure-oriented routines matter to you, especially in the broader regional catchment.`
-      : `${destination.city} is less obviously golf-led in the current model, so recreational fit should be validated based on your actual hobbies.`,
-    airportHeadline: getAirportSignal(destination) === "Well connected"
+      : `${destination.city} is less obviously golf-led in the current model, so recreational fit should be validated based on your actual hobbies.`),
+    airportHeadline: flagshipOverride?.airportHeadline ?? (getAirportSignal(destination) === "Well connected"
       ? `${destination.city} appears better positioned for regular family travel and onward connections.`
-      : `${destination.city} may require more tolerance for regional routing and longer travel days.`,
-    beachHeadline: coastal
+      : `${destination.city} may require more tolerance for regional routing and longer travel days.`),
+    beachHeadline: flagshipOverride?.beachHeadline ?? (coastal
       ? `${destination.city} is meaningfully supported by coastal lifestyle signals, which can strengthen daily quality of life if water access matters to you.`
-      : `${destination.city} is less about beach access and more about overall liveability, culture, or structural stability.`,
-    thingsToDoHeadline: cultural || coastal || walkable
+      : `${destination.city} is less about beach access and more about overall liveability, culture, or structural stability.`),
+    thingsToDoHeadline: flagshipOverride?.thingsToDoHeadline ?? (cultural || coastal || walkable
       ? `${destination.city} looks more likely to sustain daily interest through neighborhood exploration, dining, waterfront life, or walkable routines.`
-      : `${destination.city} may depend more on personal routine and quieter living than on constant activity density.`,
-    cultureHeadline: cultural
+      : `${destination.city} may depend more on personal routine and quieter living than on constant activity density.`),
+    cultureHeadline: flagshipOverride?.cultureHeadline ?? (cultural
       ? `${destination.city} likely offers more repeatable character and local identity, which matters if you want your environment to keep feeling alive over time.`
-      : `${destination.city} may be appealing more for ease and stability than for strong cultural immersion alone.`,
-    retirementAdvantages: [
-      healthcare ? "Healthcare is a relative strength in the current model." : null,
-      safety ? "Safety reads as a meaningful advantage for everyday retirement confidence." : null,
-      walkable ? "Walkability supports a lighter, lower-friction daily routine." : null,
-      budgetFriendly ? "Value orientation can stretch retirement income further." : null,
-      coastal ? "Coastal access can materially improve lifestyle quality if sea proximity matters to you." : null,
-      expat ? "Expat-friendly or internationally aware signals may ease the transition phase." : null,
-    ].filter(Boolean) as string[],
-    retirementTradeoffs: [
-      !budgetFriendly ? "Cost structure may need closer validation against your budget." : null,
-      !healthcare ? "Healthcare should be confirmed in detail before treating it as a strength." : null,
-      !walkable ? "Daily mobility could depend more on district choice or transportation planning." : null,
-      !expat ? "Integration may rely more on personal initiative and local adaptation." : null,
-      !coastal ? "If beach living is central to your ideal future, this may be a weaker fit." : null,
-    ].filter(Boolean) as string[],
+      : `${destination.city} may be appealing more for ease and stability than for strong cultural immersion alone.`),
+    retirementAdvantages,
+    retirementTradeoffs,
     quickFacts: [
       { label: "Lifestyle lens", value: walkable ? "Walkable daily rhythm" : "More location-specific mobility" },
       { label: "Climate bias", value: getClimateSignal(destination) },
@@ -799,23 +974,7 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
       { label: "Community fit", value: expat ? "Easier for transition" : "Requires deeper local integration" },
     ],
     livingHereScorecard,
-    planningSignals: [
-      {
-        label: "Healthcare confidence",
-        tone: healthcare ? "strong" : "review",
-        detail: healthcare ? "Strong relative signal in the launch model." : "Needs deeper local verification before deciding.",
-      },
-      {
-        label: "Safety profile",
-        tone: safety ? "strong" : "review",
-        detail: safety ? "Day-to-day security looks like a relative strength." : "Check neighborhood-level safety and routines." ,
-      },
-      {
-        label: "Housing practicality",
-        tone: housingIsStrong ? "strong" : "review",
-        detail: housingIsStrong ? "Worth serious rental and purchase-market analysis." : "Do not assume value without current market checks.",
-      },
-    ],
+    planningSignals,
     briefingSections: [
       {
         title: "Healthcare and everyday support",
@@ -845,7 +1004,7 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
         ],
       },
     ],
-    comprehensiveSections,
+    comprehensiveSections: comprehensiveWithFlagshipOverrides,
     resources: {
       rentals: [
         {
