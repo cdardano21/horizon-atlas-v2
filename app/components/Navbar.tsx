@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import AuthStatus from "./AuthStatus";
+import HorizonAtlasLogo from "./HorizonAtlasLogo";
 
 const links = [
   { label: "How It Works", href: "#how-it-works" },
@@ -22,22 +23,19 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-[rgba(57,52,42,0.12)] bg-[rgba(248,244,236,0.78)] backdrop-blur-2xl">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-3 text-lg font-bold tracking-[0.02em] text-[var(--atlas-ink)] sm:text-2xl">
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-[linear-gradient(145deg,#235f63,#7ca084)] text-xl font-bold text-[#f8f4ec] shadow-[0_16px_30px_-20px_rgba(35,95,99,0.9)]">
-            A
-          </span>
-          <span className="font-[var(--font-display)] text-3xl leading-none">Horizon Atlas</span>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-[rgba(57,52,42,0.08)] bg-[rgba(248,244,236,0.92)] shadow-[0_10px_30px_-20px_rgba(31,35,33,0.38)] backdrop-blur-2xl">
+      <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-4 sm:h-28 sm:px-6 lg:h-32 lg:px-8">
+        <Link href="/" className="flex h-full items-center self-center py-2 pr-2 sm:pr-3 lg:pr-4">
+          <HorizonAtlasLogo layout="horizontal" tone="dark" className="text-[var(--atlas-ink)]" />
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav className="hidden items-center rounded-full border border-[rgba(57,52,42,0.1)] bg-[rgba(255,252,246,0.88)] px-2 py-2 shadow-[0_10px_35px_-22px_rgba(31,35,33,0.45)] lg:flex">
           {links.map((link) => (
             <Link
               key={link.label}
               href={link.href}
               data-testid={`navbar-link-${toTestIdToken(link.label)}`}
-              className="text-sm font-semibold tracking-[0.08em] text-[var(--atlas-muted)] transition hover:text-[var(--atlas-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgba(248,244,236,0.78)]"
+              className="rounded-full px-4 py-2 text-sm font-semibold tracking-[0.08em] text-[var(--atlas-muted)] transition hover:bg-[rgba(31,95,99,0.06)] hover:text-[var(--atlas-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgba(248,244,236,0.78)]"
             >
               {link.label}
             </Link>
@@ -45,11 +43,13 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <AuthStatus variant="desktop" />
+          <div className="hidden lg:flex">
+            <AuthStatus variant="desktop" />
+          </div>
           <button
             type="button"
             data-testid="navbar-mobile-toggle"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(57,52,42,0.16)] bg-[rgba(255,252,246,0.75)] text-[var(--atlas-accent)] transition hover:border-[rgba(31,95,99,0.42)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.38)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgba(248,244,236,0.78)] lg:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(57,52,42,0.16)] bg-[rgba(255,252,246,0.9)] text-[var(--atlas-accent)] shadow-[0_10px_22px_-18px_rgba(31,35,33,0.4)] transition hover:border-[rgba(31,95,99,0.42)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.38)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgba(248,244,236,0.78)] lg:hidden"
             aria-label="Toggle navigation"
             onClick={() => setIsOpen((current) => !current)}
           >

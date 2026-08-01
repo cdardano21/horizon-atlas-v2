@@ -17,6 +17,8 @@
     "test:e2e:install": "playwright install chromium",
     "baseline:quality": "node scripts/build_destination_quality_baseline.mjs",
     "validate:quality": "npm run check:catalog && npm run check:references",
+    "validate:destination-blueprint": "node scripts/validate_destination_blueprint.mjs",
+    "validate:destination-blueprint:strict": "BLUEPRINT_STRICT=1 node scripts/validate_destination_blueprint.mjs",
     "validate:all": "npm run lint && npm exec -- tsc --noEmit && npm run test && npm run test:e2e",
     "audit:production": "node scripts/production_readiness_audit.mjs",
     "audit:production:full": "npm run validate:all && npm run build && npm run audit:production",
@@ -70,7 +72,8 @@
     "expansion:wave1:sprint1PartialApply": "node scripts/apply_wave1_sprint_partial_to_merged.mjs --sprint=SPRINT_1",
     "expansion:wave1:opsStatus": "node scripts/build_wave1_ops_status.mjs",
     "expansion:wave1:focusReport": "node scripts/build_wave1_focus_report.mjs",
-    "expansion:wave1:preflightStrict": "npm run expansion:wave1:researchPackets && npm run expansion:wave1:completeness && npm run expansion:wave1:workboard && npm run expansion:wave1:bundles && npm run expansion:wave1:sprints && npm run expansion:wave1:sprintExtracts && npm run expansion:wave1:sprintProgress && npm run expansion:wave1:validateApplyReady && npm run expansion:wave1:sprintPartialApply && npm run expansion:wave1:applyFilled && npm run expansion:wave1:opsStatus && npm run expansion:wave1:focusReport"
+    "expansion:wave1:preflightStrict": "npm run expansion:wave1:researchPackets && npm run expansion:wave1:completeness && npm run expansion:wave1:workboard && npm run expansion:wave1:bundles && npm run expansion:wave1:sprints && npm run expansion:wave1:sprintExtracts && npm run expansion:wave1:sprintProgress && npm run expansion:wave1:validateApplyReady && npm run expansion:wave1:sprintPartialApply && npm run expansion:wave1:applyFilled && npm run expansion:wave1:opsStatus && npm run expansion:wave1:focusReport",
+    "import:workbook": "./.venv/bin/python scripts/import_workbook_destinations.py 81Horizon-Atlas-CLEAN.xlsx"
   },
   "dependencies": {
     "next": "16.2.11",

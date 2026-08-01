@@ -12,6 +12,9 @@
   --atlas-gold: #c59b5f;
   --atlas-border: rgba(57, 52, 42, 0.12);
   --atlas-shadow: 0 25px 70px -35px rgba(49, 40, 24, 0.36);
+  --font-atlas-sans: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-atlas-mono: "IBM Plex Mono", "SFMono-Regular", ui-monospace, monospace;
+  --font-atlas-display: "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
   --font-sans: var(--font-atlas-sans);
   --font-mono: var(--font-atlas-mono);
   --font-display: var(--font-atlas-display);

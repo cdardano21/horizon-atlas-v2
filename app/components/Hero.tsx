@@ -35,9 +35,6 @@ export default function Hero() {
             <h1 className="mt-8 text-4xl leading-[0.9] tracking-tight text-[#fefbf5] sm:text-6xl lg:text-7xl">
               Don&apos;t just retire.
             </h1>
-            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[#f0d0a0] sm:text-5xl lg:text-6xl">
-              Relocate with intention.
-            </h2>
             <p className="mt-8 max-w-2xl text-base leading-8 text-[#f2ebe0] sm:text-lg">
               Horizon Atlas blends destination intelligence with emotional fit, so your next chapter feels like a life upgrade, not a compromise.
             </p>
@@ -88,19 +85,20 @@ export default function Hero() {
                 A
               </div>
               <p className="mt-6 text-sm uppercase tracking-[0.35em] text-[#f4dfbe]">Your relocation studio</p>
-              <h3 className="mt-4 text-3xl font-semibold text-[#fff8ee]">A cinematic four-minute assessment that feels personal.</h3>
+              <h3 className="mt-4 text-3xl font-semibold text-[#fff8ee]">A short assessment that feels personal.</h3>
               <p className="mt-4 leading-7 text-[#efe7d8]">
                 Capture what matters most, reveal your retirement DNA, and turn wanderlust into a shortlist with conviction.
               </p>
 
-              <div className="mt-8 grid gap-3 rounded-3xl bg-[rgba(20,31,34,0.55)] p-5 text-[#efe7d8]">
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-sm">Fast guidance</span>
-                  <span className="text-sm font-semibold text-[#f9e7c8]">4 minutes</span>
-                </div>
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-sm">Private & secure</span>
-                  <span className="text-sm font-semibold text-[#f9e7c8]">Answers stay private</span>
+              <div className="mt-8 rounded-3xl bg-[rgba(20,31,34,0.55)] p-5 text-[#efe7d8]">
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-sm font-semibold text-[#f9e7c8]">Fast guidance</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-[#f9e7c8]">Private & secure</p>
+                    <p className="mt-1 text-sm text-[#efe7d8]">Answers stay private</p>
+                  </div>
                 </div>
               </div>
 

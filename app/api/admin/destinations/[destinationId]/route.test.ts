@@ -110,6 +110,58 @@ describe("admin destination-by-id route", () => {
     expect(response.status).toBe(422);
   });
 
+  it("persists editorial content and research profile into destination metadata", async () => {
+    cookieGetMock.mockReturnValue({ value: "token" });
+
+    let patchBody: Record<string, unknown> | null = null;
+
+    mockAdminAuthedFetch((url, init) => {
+      if (url.includes("/rest/v1/destinations_catalog?select=metadata&id=eq.dest_1&limit=1")) {
+        return jsonResponse({ status: 200, body: [{ metadata: { relocationProfile: { aiSummary: "Keep it local" } } }] });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog?id=eq.dest_1") && init?.method === "PATCH") {
+        patchBody = JSON.parse(init.body as string) as Record<string, unknown>;
+        return jsonResponse({ status: 200, body: [{ id: "dest_1", status: "draft", tier: "launch" }] });
+      }
+      return null;
+    });
+
+    const response = await PATCH(
+      new Request("http://localhost:3000/api/admin/destinations/dest_1", {
+        method: "PATCH",
+        body: JSON.stringify({
+          editorialContent: {
+            introduction: "A fresh intro",
+            heroNarrative: "A stronger hero narrative",
+            climateNarrative: "A cooler climate summary",
+          },
+          researchProfile: {
+            overview: "Local feel",
+            whyPeopleLoveIt: ["Food", "Weather"],
+          },
+        }),
+      }),
+      destinationContext("dest_1"),
+    );
+
+    expect(response.status).toBe(200);
+    expect(patchBody).toMatchObject({
+      metadata: {
+        relocationProfile: { aiSummary: "Keep it local" },
+        editorialContent: {
+          introduction: "A fresh intro",
+          heroNarrative: "A stronger hero narrative",
+          climateNarrative: "A cooler climate summary",
+        },
+        researchProfile: {
+          overview: "Local feel",
+          whyPeopleLoveIt: ["Food", "Weather"],
+        },
+      },
+    });
+  });
+
   it("returns 403 for DELETE when unauthenticated", async () => {
     cookieGetMock.mockReturnValue(undefined);
 

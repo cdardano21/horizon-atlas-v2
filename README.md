@@ -6,6 +6,8 @@ See the project vision and product roadmap in [VISION.md](VISION.md).
 
 Destination scaling architecture and ingestion strategy are documented in [docs/destination-data-engine-strategy.md](docs/destination-data-engine-strategy.md).
 
+Destination page quality standards are anchored to the Cavtat implementation blueprint in [docs/cavtat-destination-blueprint.md](docs/cavtat-destination-blueprint.md).
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

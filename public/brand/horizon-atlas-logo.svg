@@ -1,0 +1,10 @@
+<svg width="1600" height="600" viewBox="0 0 1600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="600" fill="#F7F0E8"/>
+  <path d="M314 381C380 274 480 228 560 228C649 228 749 282 816 381" stroke="#1F2321" stroke-width="8" stroke-linecap="round"/>
+  <path d="M338 338C397 301 482 285 560 285C639 285 723 302 782 338" stroke="#C99946" stroke-width="7" stroke-linecap="round"/>
+  <path d="M458 220C478 182 504 154 536 146C570 138 608 148 637 173" stroke="#C99946" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="550" cy="223" r="14" fill="#C99946"/>
+  <circle cx="551" cy="223" r="6" fill="#F7F0E8"/>
+  <text x="920" y="268" fill="#1F2321" font-family="'Iowan Old Style','Palatino Linotype','Book Antiqua',serif" font-size="96" letter-spacing="0.26em" font-weight="600">HORIZON</text>
+  <text x="920" y="378" fill="#1F2321" font-family="'Iowan Old Style','Palatino Linotype','Book Antiqua',serif" font-size="104" letter-spacing="0.28em" font-weight="600">ATLAS</text>
+</svg>

@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 const navItems = [
-  ["decision-fast", "Decision fast"],
   ["qa-core", "Core Q&A"],
   ["story", "Story"],
   ["day-here", "A day here"],

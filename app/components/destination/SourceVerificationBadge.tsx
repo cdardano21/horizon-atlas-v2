@@ -8,8 +8,15 @@ const statusClass: Record<string, string> = {
 };
 
 function isSourceBacked(verification?: VerificationMeta | null) {
-  const sourceType = verification?.sourceType ?? "";
-  return sourceType === "official_site" || sourceType === "government_portal" || sourceType === "tax_summary";
+  if (!verification) return false;
+  const sourceType = verification.sourceType ?? "";
+  if (sourceType === "official_site" || sourceType === "government_portal" || sourceType === "tax_summary" || sourceType === "climate_guide") {
+    return true;
+  }
+
+  const hasSourceUrl = typeof verification.sourceUrl === "string" && verification.sourceUrl.trim().length > 0;
+  const hasSourceOrg = typeof verification.sourceOrganization === "string" && verification.sourceOrganization.trim().length > 0;
+  return hasSourceUrl || hasSourceOrg;
 }
 
 function statusLabel(verification?: VerificationMeta | null) {

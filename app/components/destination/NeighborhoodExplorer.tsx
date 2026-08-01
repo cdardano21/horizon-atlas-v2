@@ -149,47 +149,47 @@ export default function NeighborhoodExplorer({ rows, city, country }: { rows: Na
         ) : null}
 
         <div className="mt-4 grid gap-3 md:grid-cols-3">
-          <div className="rounded-3xl border border-white/10 bg-slate-950/45 p-4">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-emerald-200">Best for</p>
+          <div className="rounded-3xl border border-white/20 bg-slate-950/72 p-4">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-emerald-100">Best for</p>
             <p className="mt-2 text-sm font-semibold text-white">{districtBestFor(activeRow)}</p>
           </div>
-          <div className="rounded-3xl border border-white/10 bg-slate-950/45 p-4">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-emerald-200">Watch for</p>
+          <div className="rounded-3xl border border-white/20 bg-slate-950/72 p-4">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-emerald-100">Watch for</p>
             <p className="mt-2 text-sm font-semibold text-white">{districtWatchFor(activeRow)}</p>
           </div>
-          <div className="rounded-3xl border border-white/10 bg-slate-950/45 p-4">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-emerald-200">Scout route</p>
+          <div className="rounded-3xl border border-white/20 bg-slate-950/72 p-4">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-emerald-100">Scout route</p>
             <p className="mt-2 text-sm font-semibold text-white">Home candidate → coffee → groceries → pharmacy</p>
           </div>
         </div>
 
-        <div className="mt-4 overflow-hidden rounded-3xl border border-white/10 bg-slate-950/55">
+        <div className="mt-4 overflow-hidden rounded-3xl border border-white/20 bg-slate-950/72">
           <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-emerald-200">Mini map</p>
-              <p className="text-sm text-slate-300">Place the district in the wider city before you scout it.</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-emerald-100">Mini map</p>
+              <p className="text-sm text-slate-100">Place the district in the wider city before you scout it.</p>
             </div>
             <div className="flex flex-wrap gap-2">
               <Link
                 href={`https://www.google.com/maps/search/${activeMapQuery}`}
                 target="_blank"
-                className="inline-flex rounded-full border border-emerald-400/40 bg-emerald-500/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-100 transition hover:bg-emerald-500/20"
+                className="inline-flex rounded-full border border-emerald-300/50 bg-emerald-500/20 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-50 transition hover:bg-emerald-500/30"
               >
                 View on map
               </Link>
               <Link
                 href={`https://earth.google.com/web/search/${activeMapQuery}`}
                 target="_blank"
-                className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-100 transition hover:border-emerald-400/40 hover:text-emerald-100"
+                className="inline-flex rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-50 transition hover:border-emerald-300/50 hover:text-emerald-50"
               >
                 Google Earth
               </Link>
             </div>
           </div>
-          <div className="flex flex-wrap gap-2 border-b border-white/10 px-4 py-3 text-[11px] uppercase tracking-[0.16em] text-slate-300">
-            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Map focus: {compactMapLabel(rawMapQuery)}</span>
-            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Zoom {activeMapZoom}</span>
-            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">{buildLens(activeRow)}</span>
+          <div className="flex flex-wrap gap-2 border-b border-white/15 px-4 py-3 text-[11px] uppercase tracking-[0.16em] text-slate-100">
+            <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1">Map focus: {compactMapLabel(rawMapQuery)}</span>
+            <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1">Zoom {activeMapZoom}</span>
+            <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1">{buildLens(activeRow)}</span>
           </div>
           <iframe
             src={`https://www.google.com/maps?q=${activeMapQuery}&z=${activeMapZoom}&output=embed`}
@@ -206,7 +206,7 @@ export default function NeighborhoodExplorer({ rows, city, country }: { rows: Na
               href={resolveSourceHref(activeRow.url ?? activeRow.verification.sourceUrl, [activeRow.name, city, country, "neighborhood"])}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex rounded-full border border-emerald-400/40 bg-emerald-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100 transition hover:bg-emerald-500/20"
+              className="inline-flex rounded-full border border-emerald-300/50 bg-emerald-500/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-50 transition hover:bg-emerald-500/30"
             >
               Open source
             </Link>
@@ -215,18 +215,18 @@ export default function NeighborhoodExplorer({ rows, city, country }: { rows: Na
             href={buildOfficialSourceSearchUrl([activeRow.name, city, country, "neighborhood"])}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.18em] text-slate-200 transition hover:border-emerald-400/40 hover:text-emerald-100"
+            className="inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.18em] text-slate-100 transition hover:border-emerald-300/50 hover:text-emerald-50"
           >
             Search official source
           </Link>
-          <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.18em] text-slate-200">
+          <span className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.18em] text-slate-100">
             {rows.length} verified neighborhoods loaded
           </span>
         </div>
 
-        <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-4">
-          <p className="text-xs uppercase tracking-[0.2em] text-emerald-200">Scout this area next</p>
-          <p className="mt-2 text-sm leading-7 text-slate-300">
+        <div className="mt-6 rounded-3xl border border-white/20 bg-slate-950/80 p-4">
+          <p className="text-xs uppercase tracking-[0.2em] text-emerald-100">Scout this area next</p>
+          <p className="mt-2 text-sm leading-7 text-slate-100">
             Use these nearby searches to test whether the district works for ordinary days, not just your idealized version of the move.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
@@ -235,11 +235,33 @@ export default function NeighborhoodExplorer({ rows, city, country }: { rows: Na
                 key={action.label}
                 href={action.href}
                 target="_blank"
-                className="inline-flex rounded-full border border-white/10 bg-slate-950/70 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-100 transition hover:border-emerald-400/40 hover:text-emerald-100"
+                className="inline-flex rounded-full border border-white/25 bg-slate-900/95 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-50 transition hover:border-emerald-300/50 hover:bg-emerald-500/20 hover:text-emerald-50"
               >
                 {action.label}
               </Link>
             ))}
+            {city.trim().toLowerCase() === "cavtat" ? (
+              <>
+                <Link
+                  href="#practical-top-restaurant"
+                  className="inline-flex rounded-full border border-[rgba(31,95,99,0.42)] bg-[rgba(31,95,99,0.26)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-50 transition hover:bg-[rgba(31,95,99,0.38)]"
+                >
+                  Restaurants (4)
+                </Link>
+                <Link
+                  href="#practical-top-shopping"
+                  className="inline-flex rounded-full border border-[rgba(31,95,99,0.42)] bg-[rgba(31,95,99,0.26)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-50 transition hover:bg-[rgba(31,95,99,0.38)]"
+                >
+                  Shopping (3)
+                </Link>
+                <Link
+                  href="#practical-top-service"
+                  className="inline-flex rounded-full border border-[rgba(31,95,99,0.42)] bg-[rgba(31,95,99,0.26)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-50 transition hover:bg-[rgba(31,95,99,0.38)]"
+                >
+                  Services (3)
+                </Link>
+              </>
+            ) : null}
           </div>
         </div>
       </div>

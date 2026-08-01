@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { sanitizeSummary, toConsumerCopy } from "../lib/consumer-copy";
 import type { Destination } from "../lib/destinations";
@@ -13,6 +14,47 @@ import FavoriteButton from "./FavoriteButton";
 import { getDestinationCardFacts, getFactSourceDomain, getFactSourcePublisherUrl } from "./destinationCardFacts";
 
 const normalize = (value: string) => value.toLowerCase().trim();
+
+const filterTagAliasMap: Record<string, string[]> = {
+  beach: ["beach", "beaches", "beach city", "beach town", "coast", "coastal", "coastline"],
+  "airport access": ["airport access", "airport", "airports"],
+  affordable: ["affordable", "budget", "cheap", "low cost", "value"],
+  "family friendly": ["family", "family friendly", "families"],
+  golf: ["golf"],
+  healthcare: ["healthcare", "hospital", "hospitals", "medical"],
+  walkability: ["walkability", "walkable", "pedestrian"],
+  "expat-friendly": ["expat", "expat-friendly", "international"],
+  remote: ["remote", "digital nomad", "workability"],
+  safety: ["safe", "safety"],
+};
+
+const getFilterTagVariants = (value: string) => {
+  const normalized = normalize(value);
+  const variants = new Set<string>([normalized]);
+
+  Object.entries(filterTagAliasMap).forEach(([canonical, aliases]) => {
+    if (canonical === normalized) {
+      aliases.forEach((alias) => variants.add(normalize(alias)));
+      return;
+    }
+
+    if (aliases.some((alias) => normalize(alias) === normalized)) {
+      variants.add(canonical);
+      aliases.forEach((alias) => variants.add(normalize(alias)));
+    }
+  });
+
+  return Array.from(variants);
+};
+
+const matchesSelectedTag = (destinationTags: string[], selectedTag: string) => {
+  const variants = getFilterTagVariants(selectedTag);
+
+  return destinationTags.some((tag) => {
+    const normalizedTag = normalize(tag);
+    return variants.some((variant) => normalizedTag === variant || normalizedTag.includes(variant) || variant.includes(normalizedTag));
+  });
+};
 
 const queryAliasMap: Record<string, string[]> = {
   affordable: ["value"],
@@ -47,7 +89,7 @@ const toTestIdToken = (value: string) =>
 
 const getSearchScore = (destination: Destination, query: string, tags: string[]) => {
   const normalizedTags = (destination.tags ?? []).map((tag) => normalize(tag));
-  const tagsMatch = tags.length === 0 || tags.every((selected) => normalizedTags.includes(normalize(selected)));
+  const tagsMatch = tags.length === 0 || tags.every((selected) => matchesSelectedTag(normalizedTags, selected));
   if (!tagsMatch) return null;
 
   const content = [
@@ -122,6 +164,7 @@ export default function DestinationSearch({
 }) {
   const [query, setQuery] = useState(initialQuery);
   const [activeTags, setActiveTags] = useState<string[]>([]);
+  const router = useRouter();
 
   const allTags = useMemo(() => {
     const tags = new Set<string>();
@@ -130,6 +173,40 @@ export default function DestinationSearch({
     });
     return Array.from(tags).sort();
   }, [destinations]);
+
+  const featuredTags = useMemo(() => {
+    const counts = new Map<string, number>();
+    destinations.forEach((destination) => {
+      destination.tags?.forEach((tag) => {
+        counts.set(tag, (counts.get(tag) ?? 0) + 1);
+      });
+    });
+
+    return Array.from(counts.entries())
+      .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
+      .slice(0, 8)
+      .map(([tag]) => tag);
+  }, [destinations]);
+
+  const derivedFilterTags = useMemo(() => {
+    const tags = new Set<string>();
+
+    destinations.forEach((destination) => {
+      destination.tags?.forEach((tag) => {
+        const normalizedTag = normalize(tag);
+        Object.entries(filterTagAliasMap).forEach(([canonical, aliases]) => {
+          const variants = [canonical, ...aliases].map((entry) => normalize(entry));
+          if (variants.some((variant) => normalizedTag === variant || normalizedTag.includes(variant) || variant.includes(normalizedTag))) {
+            tags.add(canonical);
+          }
+        });
+      });
+    });
+
+    return Array.from(tags).sort();
+  }, [destinations]);
+
+  const visibleTags = useMemo(() => Array.from(new Set([...featuredTags, ...derivedFilterTags, ...activeTags])), [activeTags, derivedFilterTags, featuredTags]);
 
   const filteredDestinations = useMemo(() => {
     return destinations
@@ -153,6 +230,18 @@ export default function DestinationSearch({
   const clearFilters = () => {
     setQuery("");
     setActiveTags([]);
+  };
+
+  const openDestination = (slug: string) => {
+    const target = `/destinations/${slug}`;
+
+    try {
+      router.push(target);
+    } catch {
+      if (typeof window !== "undefined") {
+        window.location.assign(target);
+      }
+    }
   };
 
   const featuredResults = filteredDestinations.slice(0, 3);
@@ -196,7 +285,10 @@ export default function DestinationSearch({
           </div>
           <div className="rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.8)] p-6">
             <div className="flex items-center justify-between gap-4">
-              <p className="text-sm font-semibold text-[var(--atlas-ink)]">Filters</p>
+              <div>
+                <p className="text-sm font-semibold text-[var(--atlas-ink)]">Suggested filters</p>
+                <p className="mt-1 text-xs uppercase tracking-[0.2em] text-[var(--atlas-muted)]">A concise set of the most useful options</p>
+              </div>
               <button
                 type="button"
                 onClick={clearFilters}
@@ -207,7 +299,7 @@ export default function DestinationSearch({
               </button>
             </div>
             <div className="mt-4 flex flex-wrap gap-3">
-              {allTags.map((tag) => (
+              {visibleTags.map((tag) => (
                 <button
                   key={tag}
                   type="button"
@@ -316,6 +408,45 @@ export default function DestinationSearch({
         </div>
       </div>
 
+      <div className="mb-10 rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.95)] p-6 shadow-lg shadow-[rgba(39,31,19,0.14)]">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-xs uppercase tracking-[0.28em] text-[var(--atlas-accent)]">Freshly surfaced destinations</p>
+            <h3 className="mt-2 text-2xl font-semibold text-[var(--atlas-ink)]">Newly added places that now get their own visible catalog cards.</h3>
+          </div>
+          <p className="text-sm text-[var(--atlas-muted)]">The catalog now promotes destinations with stronger content and a clearer path into their guide.</p>
+        </div>
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          {destinations
+            .map((destination) => {
+              const summaryLength = [destination.description, destination.overview, destination.climate, destination.lifestyle, destination.transportation]
+                .join(" ")
+                .trim().length;
+              const score = Number(summaryLength >= 220) + Number((destination.tags?.length ?? 0) >= 3) + Number((destination.images?.length ?? 0) > 0);
+              return { destination, score };
+            })
+            .sort((left, right) => right.score - left.score || right.destination.match - left.destination.match)
+            .slice(0, 6)
+            .map(({ destination }) => (
+              <div
+                key={destination.slug}
+                className="relative rounded-[1.5rem] border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.88)] p-5 transition hover:-translate-y-1 hover:border-[rgba(31,95,99,0.35)]"
+              >
+                <div className="relative z-20">
+                  <p className="text-[11px] uppercase tracking-[0.25em] text-[var(--atlas-accent)]">New destination card</p>
+                  <p className="mt-3 text-lg font-semibold text-[var(--atlas-ink)]">{destination.city}</p>
+                  <p className="mt-1 text-sm text-[var(--atlas-muted)]">{destination.country}</p>
+                  <p className="mt-4 text-sm leading-6 text-[var(--atlas-muted)]">{sanitizeSummary(destination.description)}</p>
+                  <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[var(--atlas-accent)]">
+                    <span>Open guide</span>
+                    <span aria-hidden="true">→</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
+
       {filteredDestinations.length === 0 ? (
         <div className="mb-8 rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.92)] p-8 text-center shadow-lg shadow-[rgba(39,31,19,0.14)]">
           <p className="text-xs uppercase tracking-[0.26em] text-[var(--atlas-accent)]">No matches yet</p>
@@ -335,11 +466,13 @@ export default function DestinationSearch({
       ) : null}
 
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-        {filteredDestinations.map((destination) => (
-          <article
-            key={destination.slug}
+        {filteredDestinations.map((destination, index) => (
+          <Link
+            key={`${destination.slug}-${index}`}
+            href={`/destinations/${destination.slug}`}
             data-testid={`destination-card-${destination.slug}`}
-            className="overflow-hidden rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.92)] shadow-xl shadow-[rgba(42,34,24,0.2)] transition duration-300 hover:-translate-y-1 hover:border-[rgba(31,95,99,0.42)]"
+            aria-label={`Open guide for ${destination.city}`}
+            className="group relative block overflow-hidden rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.92)] shadow-xl shadow-[rgba(42,34,24,0.2)] transition duration-300 hover:-translate-y-1 hover:border-[rgba(31,95,99,0.42)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.5)] focus-visible:ring-offset-2"
           >
             {hasVerifiedDestinationImage(destination) ? (
               <div className="relative h-56 overflow-hidden bg-slate-900/10">
@@ -358,7 +491,7 @@ export default function DestinationSearch({
                 <p className="mt-2 text-sm font-semibold uppercase tracking-[0.16em] text-[#fff7e8]">{destination.city}</p>
               </div>
             )}
-            <div className="p-6">
+            <div className="relative z-20 p-6">
               {(() => {
                 const detailHighlights = getMemberDetailHighlights(destination);
                 const details = getDestinationMemberDetails(destination);
@@ -366,113 +499,118 @@ export default function DestinationSearch({
 
                 return (
                   <>
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--atlas-accent)]">{destination.country}</p>
-                  <h2 className="mt-4 text-2xl font-semibold text-[var(--atlas-ink)]">{destination.city}</h2>
-                </div>
-                <span className="rounded-full border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.8)] px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-[var(--atlas-muted)]">
-                  {(destination.tags?.[0] ?? "curated").replace(/-/g, " ")}
-                </span>
-              </div>
-              <p className="mt-4 leading-7 text-[var(--atlas-muted)]">{sanitizeSummary(cardFacts.summary)}</p>
-              <div className="mt-5 rounded-3xl border border-[rgba(31,95,99,0.24)] bg-[rgba(31,95,99,0.08)] p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <p className="text-xs uppercase tracking-[0.25em] text-[var(--atlas-accent)]">Living Here Scorecard</p>
-                  <span className="rounded-full bg-[rgba(31,95,99,0.15)] px-3 py-1 text-xs font-semibold text-[var(--atlas-accent)]">{cardFacts.overallScore} overall</span>
-                </div>
-                <div className="mt-3 grid gap-2">
-                  {cardFacts.scoreSignals.map((item) => (
-                    <div key={item.category} className="flex items-center justify-between rounded-xl bg-[rgba(255,255,255,0.78)] px-3 py-2 text-xs">
-                      <span className="text-[var(--atlas-muted)]">{item.category}</span>
-                      <span className="font-semibold text-[var(--atlas-accent)]">{item.score}</span>
+                    <div className="rounded-[1.5rem] border border-transparent p-1 transition hover:border-[rgba(31,95,99,0.2)] hover:bg-[rgba(255,255,255,0.75)]">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--atlas-accent)]">{destination.country}</p>
+                          <h2 className="mt-4 text-2xl font-semibold text-[var(--atlas-ink)]">{destination.city}</h2>
+                        </div>
+                        <span className="rounded-full border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.8)] px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-[var(--atlas-muted)]">
+                          {(destination.tags?.[0] ?? "curated").replace(/-/g, " ")}
+                        </span>
+                      </div>
+                      <p className="mt-4 leading-7 text-[var(--atlas-muted)]">{sanitizeSummary(cardFacts.summary)}</p>
                     </div>
-                  ))}
-                </div>
-              </div>
-              <div className="mt-5 rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.74)] p-4">
-                <p className="text-xs uppercase tracking-[0.25em] text-[var(--atlas-accent)]">Relocation facts</p>
-                <div className="mt-3 grid gap-2 text-xs text-[var(--atlas-muted)]">
-                  {cardFacts.facts.map((fact, index) => {
-                    const safeSourceUrl = sanitizeExternalSourceUrl(fact.sourceUrl);
-                    const sourceHref = resolveSourceHref(fact.sourceUrl, [fact.label, destination.city, destination.country]);
-                    const publisherUrl = safeSourceUrl ? getFactSourcePublisherUrl(safeSourceUrl) : null;
-                    const sourceDomain = safeSourceUrl ? getFactSourceDomain(safeSourceUrl) : "web search";
-
-                    return (
-                      <div key={`${fact.label}-${fact.value}-${index}`} className="rounded-xl bg-[rgba(255,255,255,0.82)] px-3 py-2">
-                        <p>{fact.label}: {toConsumerCopy(fact.value)}</p>
-                        {fact.sourceUrl ? (
-                          <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                            <a href={sourceHref} target="_blank" rel="noopener noreferrer" aria-label={`Open source evidence for ${fact.label}`} title={`Open source evidence for ${fact.label}`} className="inline-flex items-center gap-1 rounded-full border border-transparent px-1 py-0.5 text-[11px] uppercase tracking-[0.2em] leading-none text-[var(--atlas-accent)] transition hover:text-[var(--atlas-accent-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.5)] focus-visible:ring-offset-2 focus-visible:ring-offset-white">
-                              <span className="inline-flex items-center gap-1">
-                                {safeSourceUrl ? "Source" : "Source search"}
-                                <ExternalLinkIcon className="h-2.5 w-2.5" />
-                              </span>
-                            </a>
-                            {publisherUrl ? (
-                              <a href={publisherUrl} target="_blank" rel="noopener noreferrer" aria-label={`Open publisher site ${sourceDomain}`} title={`Open publisher site ${sourceDomain}`} className="rounded-full border border-[rgba(31,95,99,0.28)] bg-[rgba(31,95,99,0.08)] px-2.5 py-1 text-[10px] uppercase tracking-[0.18em] leading-none text-[var(--atlas-accent)] transition hover:border-[rgba(31,95,99,0.45)] hover:text-[var(--atlas-accent-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.5)] focus-visible:ring-offset-2 focus-visible:ring-offset-white">
-                                <span className="inline-flex items-center gap-1">
-                                  {sourceDomain}
-                                  <ExternalLinkIcon className="h-2.5 w-2.5" />
-                                </span>
-                              </a>
-                            ) : (
-                              <span className="rounded-full border border-[rgba(31,95,99,0.28)] bg-[rgba(31,95,99,0.08)] px-2 py-0.5 text-[10px] uppercase tracking-[0.18em] text-[var(--atlas-accent)]">
-                                {sourceDomain}
-                              </span>
-                            )}
+                    <div className="mt-5 rounded-3xl border border-[rgba(31,95,99,0.24)] bg-[rgba(31,95,99,0.08)] p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-xs uppercase tracking-[0.25em] text-[var(--atlas-accent)]">Living Here Scorecard</p>
+                        <span className="rounded-full bg-[rgba(31,95,99,0.15)] px-3 py-1 text-xs font-semibold text-[var(--atlas-accent)]">{cardFacts.overallScore} overall</span>
+                      </div>
+                      <div className="mt-3 grid gap-2">
+                        {cardFacts.scoreSignals.map((item) => (
+                          <div key={item.category} className="flex items-center justify-between rounded-xl bg-[rgba(255,255,255,0.78)] px-3 py-2 text-xs">
+                            <span className="text-[var(--atlas-muted)]">{item.category}</span>
+                            <span className="font-semibold text-[var(--atlas-accent)]">{item.score}</span>
                           </div>
-                        ) : null}
+                        ))}
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="mt-5 rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.55)] p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <p className="text-xs uppercase tracking-[0.25em] text-[var(--atlas-accent)]">Member details</p>
-                  <span className="text-[11px] uppercase tracking-[0.2em] text-[var(--atlas-muted)]">
-                    {details.researchStatus === "structured" ? "Structured" : "Research links ready"}
-                  </span>
-                </div>
-                {detailHighlights.length > 0 ? (
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                    {detailHighlights.map((item) => (
-                      <div key={item.label} className="rounded-2xl bg-[rgba(255,255,255,0.8)] p-3">
-                        <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--atlas-muted)]">{item.label}</p>
-                        <p className="mt-2 text-sm font-semibold text-[var(--atlas-ink)]">{toConsumerCopy(item.value)}</p>
+                    </div>
+                    <div className="mt-5 rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.74)] p-4">
+                      <p className="text-xs uppercase tracking-[0.25em] text-[var(--atlas-accent)]">Relocation facts</p>
+                      <div className="mt-3 grid gap-2 text-xs text-[var(--atlas-muted)]">
+                        {cardFacts.facts.map((fact, index) => {
+                          const safeSourceUrl = sanitizeExternalSourceUrl(fact.sourceUrl);
+                          const sourceHref = resolveSourceHref(fact.sourceUrl, [fact.label, destination.city, destination.country]);
+                          const publisherUrl = safeSourceUrl ? getFactSourcePublisherUrl(safeSourceUrl) : null;
+                          const sourceDomain = safeSourceUrl ? getFactSourceDomain(safeSourceUrl) : "web search";
+
+                          return (
+                            <div key={`${fact.label}-${fact.value}-${index}`} className="rounded-xl bg-[rgba(255,255,255,0.82)] px-3 py-2">
+                              <p>{fact.label}: {toConsumerCopy(fact.value)}</p>
+                              {fact.sourceUrl ? (
+                                <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                                  <a href={sourceHref} target="_blank" rel="noopener noreferrer" onClick={(event) => event.stopPropagation()} aria-label={`Open source evidence for ${fact.label}`} title={`Open source evidence for ${fact.label}`} className="inline-flex items-center gap-1 rounded-full border border-transparent px-1 py-0.5 text-[11px] uppercase tracking-[0.2em] leading-none text-[var(--atlas-accent)] transition hover:text-[var(--atlas-accent-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.5)] focus-visible:ring-offset-2 focus-visible:ring-offset-white">
+                                    <span className="inline-flex items-center gap-1">
+                                      {safeSourceUrl ? "Source" : "Source search"}
+                                      <ExternalLinkIcon className="h-2.5 w-2.5" />
+                                    </span>
+                                  </a>
+                                  {publisherUrl ? (
+                                    <a href={publisherUrl} target="_blank" rel="noopener noreferrer" onClick={(event) => event.stopPropagation()} aria-label={`Open publisher site ${sourceDomain}`} title={`Open publisher site ${sourceDomain}`} className="rounded-full border border-[rgba(31,95,99,0.28)] bg-[rgba(31,95,99,0.08)] px-2.5 py-1 text-[10px] uppercase tracking-[0.18em] leading-none text-[var(--atlas-accent)] transition hover:border-[rgba(31,95,99,0.45)] hover:text-[var(--atlas-accent-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.5)] focus-visible:ring-offset-2 focus-visible:ring-offset-white">
+                                      <span className="inline-flex items-center gap-1">
+                                        {sourceDomain}
+                                        <ExternalLinkIcon className="h-2.5 w-2.5" />
+                                      </span>
+                                    </a>
+                                  ) : (
+                                    <span className="rounded-full border border-[rgba(31,95,99,0.28)] bg-[rgba(31,95,99,0.08)] px-2 py-0.5 text-[10px] uppercase tracking-[0.18em] text-[var(--atlas-accent)]">
+                                      {sourceDomain}
+                                    </span>
+                                  )}
+                                </div>
+                              ) : null}
+                            </div>
+                          );
+                        })}
                       </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="mt-4 text-sm leading-6 text-[var(--atlas-muted)]">
-                    Full member research categories are wired for this city: monthly weather, golf, hospitals, airports, restaurants, pickleball, and schools.
-                  </p>
-                )}
-              </div>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {destination.tags?.slice(0, 4).map((tag) => (
-                  <span key={tag} className="rounded-full bg-[rgba(255,255,255,0.7)] px-3 py-1 text-xs uppercase tracking-[0.25em] text-[var(--atlas-muted)]">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <FavoriteButton slug={destination.slug} label="Save city" />
-              </div>
-              <Link
-                href={`/destinations/${destination.slug}`}
-                data-testid={`destination-open-${destination.slug}`}
-                className="atlas-button-primary mt-8 px-5 py-2"
-              >
-                Explore →
-              </Link>
+                    </div>
+                    <div className="mt-5 rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.55)] p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-xs uppercase tracking-[0.25em] text-[var(--atlas-accent)]">Member details</p>
+                        <span className="text-[11px] uppercase tracking-[0.2em] text-[var(--atlas-muted)]">
+                          {details.researchStatus === "structured" ? "Structured" : "Research links ready"}
+                        </span>
+                      </div>
+                      {detailHighlights.length > 0 ? (
+                        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                          {detailHighlights.map((item) => (
+                            <div key={item.label} className="rounded-2xl bg-[rgba(255,255,255,0.8)] p-3">
+                              <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--atlas-muted)]">{item.label}</p>
+                              <p className="mt-2 text-sm font-semibold text-[var(--atlas-ink)]">{toConsumerCopy(item.value)}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="mt-4 text-sm leading-6 text-[var(--atlas-muted)]">
+                          Full member research categories are wired for this city: monthly weather, golf, hospitals, airports, restaurants, pickleball, and schools.
+                        </p>
+                      )}
+                    </div>
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {destination.tags?.slice(0, 4).map((tag) => (
+                        <span key={tag} className="rounded-full bg-[rgba(255,255,255,0.7)] px-3 py-1 text-xs uppercase tracking-[0.25em] text-[var(--atlas-muted)]">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="mt-6 flex flex-wrap gap-3">
+                      <FavoriteButton slug={destination.slug} label="Save city" />
+                    </div>
+                    <div className="mt-8">
+                      <Link
+                        href={`/destinations/${destination.slug}`}
+                        onClick={(event) => event.stopPropagation()}
+                        data-testid={`destination-open-${destination.slug}`}
+                        className="atlas-button-primary inline-flex items-center justify-center px-5 py-2"
+                      >
+                        View full guide
+                      </Link>
+                    </div>
                   </>
                 );
               })()}
             </div>
-          </article>
+          </Link>
         ))}
       </div>
     </section>

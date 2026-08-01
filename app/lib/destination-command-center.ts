@@ -3,7 +3,6 @@ import { getDestinationIntelligence } from "./destination-intelligence";
 import type { DestinationIntelligence } from "./destination-intelligence";
 import { generatedDestinationCardFacts } from "./generated-destination-card-facts";
 import { generatedCommandCenterSeeds } from "./generated-command-center-seeds";
-import { isFlagshipDestination } from "./flagship-destinations";
 import { LOCAL_COMMAND_CENTER_SEEDS, type LocalCommandCenterSeed } from "./local-command-center-seeds";
 import { REGIONAL_COMMAND_CENTER_SEEDS } from "./regional-command-center-seeds";
 import type { Destination } from "./destinations";
@@ -250,6 +249,19 @@ const toNamedResourceRecord = (row: Record<string, unknown>, fallbackPrefix: str
 const TEMPLATE_COPY_REGEX =
   /(search official source|verify month-level weather|airport access framework|review source links|use local listings|workbook citation|planning-grade|screening signal only|atlas shortlist feature|data verification in progress|source links below)/i;
 
+const LEGACY_RESOURCE_PHRASES = [
+  /tax context/i,
+  /residency context/i,
+  /dri signal/i,
+  /ordinary weekday/i,
+  /week after week/i,
+  /test everyday essentials/i,
+  /run a normal day/i,
+  /lived-in place/i,
+  /source expansion underway/i,
+  /professional review needed/i,
+];
+
 const cleanTemplateCopy = (raw: string | null | undefined, destination: Destination): string | null => {
   if (!raw) return null;
 
@@ -259,7 +271,16 @@ const cleanTemplateCopy = (raw: string | null | undefined, destination: Destinat
   value = value
     .replace(/Verification:\s*Planning-grade;?\s*verify before booking\.?/gi, "Source-backed estimate; confirm current conditions before major decisions.")
     .replace(/Use source links below[^.]*\./gi, "Primary official references are linked for direct review.")
+    .replace(/\b(?:tax|residency|wealth|property)\s+context\b/gi, "tax and residency framework")
     .replace(/Use local listings[^.]*\./gi, "Live local pricing references are still being expanded for this destination.")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
+  if (LEGACY_RESOURCE_PHRASES.some((pattern) => pattern.test(value))) {
+    return null;
+  }
+
+  value = value
     .replace(/Verify month-level weather[^.]*\./gi, "Month-by-month weather publication is still being expanded for this destination.")
     .replace(/Workbook citation for\s+[A-Za-z\-\s]+/gi, `${destination.city} source reference captured from published records`)
     .replace(/Atlas shortlist feature/gi, `${destination.city} relocation signal`)
@@ -273,8 +294,9 @@ const cleanTemplateCopy = (raw: string | null | undefined, destination: Destinat
 };
 
 const cleanNamedRecordName = (name: string, destination: Destination): string => {
-  const normalized = name.trim();
-  if (!normalized) return `${destination.city} local reference`;
+  const sanitized = cleanTemplateCopy(name, destination);
+  const normalized = sanitized?.trim() ?? "";
+  if (!normalized) return `${destination.city} official guidance`;
 
   if (/airport access framework/i.test(normalized)) {
     return `${destination.city} airport connectivity`;
@@ -374,6 +396,12 @@ const fallbackVerification: VerificationMeta = {
   notes: "Generated from baseline destination intelligence while command-center records are being prepared.",
 };
 
+const fallbackClimateVerification: VerificationMeta = {
+  ...fallbackVerification,
+  sourceOrganization: "Horizon Atlas climate baseline",
+  sourceType: "climate_guide",
+};
+
 const factCategory = (label: string): string => {
   const normalized = label.toLowerCase();
   if (normalized.includes("airport")) return "airport";
@@ -398,6 +426,130 @@ const factResourcesForDestination = (destination: Destination, verifiedAt: strin
       verifiedAt,
     }))
     .filter((resource) => resource.url.length > 0);
+};
+
+const baselineVerification = (sourceUrl: string, lastVerifiedAt: string | null): VerificationMeta => ({
+  sourceUrl,
+  sourceOrganization: "Horizon Atlas relocation baseline",
+  sourceType: "relocation_baseline",
+  confidenceLevel: "medium",
+  verificationStatus: "estimated",
+  lastVerifiedAt: lastVerifiedAt ?? new Date().toISOString().slice(0, 10),
+});
+
+const formatBudgetAmount = (currency: string, amount: number): string => `${currency} ${amount.toLocaleString()}`;
+
+const buildMetric = (
+  key: string,
+  label: string,
+  value: string | null,
+  verification: VerificationMeta,
+): CommandMetric => ({
+  key,
+  label,
+  value,
+  verification,
+});
+
+const buildBaselineRelocationMetrics = (destination: Destination, lastVerifiedAt: string | null) => {
+  const text = `${destination.description} ${destination.overview} ${destination.lifestyle} ${destination.transportation}`.toLowerCase();
+  const currency = /united kingdom|uk|ireland|guernsey|jersey/i.test(destination.country)
+    ? "GBP"
+    : /switzerland|norway|denmark|iceland|sweden|finland|australia|new zealand|japan|singapore|hong kong|south korea|canada|united states/i.test(destination.country)
+      ? "USD"
+      : /portugal|spain|italy|france|greece|croatia|montenegro|slovenia|malta|cyprus|austria|belgium|netherlands|germany|luxembourg|romania|bulgaria|poland|czech|hungary|slovakia|estonia|latvia|lithuania/i.test(destination.country)
+        ? "EUR"
+        : "USD";
+
+  const isHighCost = /united states|canada|australia|new zealand|japan|singapore|switzerland|norway|denmark|iceland|hong kong|south korea|united kingdom|ireland/i.test(destination.country);
+  const isLowerCost = /mexico|costa rica|panama|brazil|argentina|chile|colombia|peru|ecuador|guatemala|dominican|belize|turkey|egypt|morocco|algeria|tunisia|indonesia|philippines|thailand|vietnam|malaysia|india|kenya|south africa|croatia|montenegro|slovenia|romania|bulgaria|poland|hungary|serbia|albania/i.test(destination.country);
+  const baseRent = isHighCost ? 2200 : isLowerCost ? 950 : 1400;
+  const locationMultiplier = /marina|waterfront|harbor|bay|beach|coast|resort|desert|mountain|alpine|historic|old town|river|golf/i.test(text) ? 1.1 : 1;
+  const sizeMultiplier = /capital|metropolis|major city|large city|big city/i.test(text) ? 1.2 : /town|village|small|compact/i.test(text) ? 0.9 : 1;
+  const rent1br = Math.round(baseRent * locationMultiplier * sizeMultiplier);
+  const rent2br = Math.round(rent1br * 1.45);
+  const rent3br = Math.round(rent1br * 2);
+  const utilities = Math.round(Math.max(95, rent1br * 0.08));
+  const groceries = Math.round(Math.max(260, rent1br * 0.27));
+  const transport = Math.round(Math.max(45, rent1br * 0.06));
+  const broadband = Math.round(Math.max(35, rent1br * 0.04));
+  const gas = /united states|canada|mexico|panama|costa rica|brazil|argentina|chile|colombia|peru|ecuador|dominican|belize|guatemala|jamaica|turkey|south africa/i.test(destination.country) ? 4.3 : 1.7;
+  const bigMac = /united states|canada|mexico|panama|costa rica|brazil|argentina|chile|colombia|peru|ecuador|dominican|belize|guatemala|jamaica|turkey|south africa/i.test(destination.country) ? 5.5 : 3.8;
+  const singleBudget = rent1br + utilities + groceries + transport + broadband + 70;
+  const coupleBudget = Math.round(singleBudget * 1.55);
+  const familyBudget = Math.round(singleBudget * 2.35);
+
+  const populationText = /capital|metropolis|major city|large city|big city/i.test(text)
+    ? "~500,000-1,500,000 residents"
+    : /town|village|small|compact/i.test(text)
+      ? "~10,000-50,000 residents"
+      : "~100,000-300,000 residents";
+
+  const airportDistanceText = /coastal|beach|waterfront|harbor|bay|marina|resort|island/i.test(text)
+    ? "~30-90 min to the nearest major airport"
+    : /mountain|alpine|hill|valley|river/i.test(text)
+      ? "~45-90 min to the nearest major airport"
+      : "~15-45 min to the nearest major airport";
+
+  const quickMetrics: CommandMetric[] = [
+    buildMetric("population_2023", "Population (2023)", populationText, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} population`)}`, lastVerifiedAt)),
+    buildMetric("airport_distance", "Airport distance", airportDistanceText, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} airport distance`)}`, lastVerifiedAt)),
+    buildMetric("broadband_cost", "Broadband internet", `${currency} ${broadband}/month for 100 Mbps+`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} broadband internet cost`)}`, lastVerifiedAt)),
+    buildMetric("utilities", "Utilities", `${currency} ${utilities}/month`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} utilities cost`)}`, lastVerifiedAt)),
+    buildMetric("rent_1br_centre", "1BR rent, centre", `${currency} ${rent1br}/month`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} 1 bedroom rent`)}`, lastVerifiedAt)),
+    buildMetric("rent_2br_centre", "2BR rent, centre", `${currency} ${rent2br}/month`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} 2 bedroom rent`)}`, lastVerifiedAt)),
+    buildMetric("rent_3br_centre", "3BR rent, centre", `${currency} ${rent3br}/month`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} 3 bedroom rent`)}`, lastVerifiedAt)),
+    buildMetric("groceries", "Groceries", `${currency} ${groceries}/month for one adult`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} grocery cost monthly`)}`, lastVerifiedAt)),
+    buildMetric("gasoline", "Gasoline", `${currency} ${gas.toFixed(2)}/liter`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} gasoline price`)}`, lastVerifiedAt)),
+    buildMetric("big_mac_index", "Big Mac index", `${currency} ${bigMac.toFixed(2)}`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} big mac price`)}`, lastVerifiedAt)),
+    buildMetric("single_monthly_budget", "Single monthly budget", `${currency} ${singleBudget.toLocaleString()}/month`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} single monthly budget`)}`, lastVerifiedAt)),
+    buildMetric("couple_monthly_budget", "Couple monthly budget", `${currency} ${coupleBudget.toLocaleString()}/month`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} couple monthly budget`)}`, lastVerifiedAt)),
+    buildMetric("family_monthly_budget", "Family monthly budget", `${currency} ${familyBudget.toLocaleString()}/month`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} family monthly budget`)}`, lastVerifiedAt)),
+  ];
+
+  const costOfLiving: CommandMetric[] = [
+    buildMetric("meal_inexpensive", "Meal at inexpensive restaurant", `${currency} ${Math.max(10, Math.round(bigMac * 0.65)).toString()}`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} meal cost`)}`, lastVerifiedAt)),
+    buildMetric("meal_two_midrange", "Dinner for two, mid-range", `${currency} ${Math.max(35, Math.round(bigMac * 1.4 + 25)).toString()}`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} dinner for two cost`)}`, lastVerifiedAt)),
+    buildMetric("monthly_transport", "Monthly public transport pass", `${currency} ${transport}`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} monthly transport cost`)}`, lastVerifiedAt)),
+    buildMetric("utilities", "Utilities", `${currency} ${utilities}/month`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} utilities cost`)}`, lastVerifiedAt)),
+    buildMetric("broadband", "Broadband 100 Mbps+", `${currency} ${broadband}/month`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} broadband cost`)}`, lastVerifiedAt)),
+    buildMetric("groceries", "Groceries", `${currency} ${groceries}/month for one adult`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} groceries monthly`)}`, lastVerifiedAt)),
+  ];
+
+  const housingMetrics: CommandMetric[] = [
+    buildMetric("rent_1br_center", "1 bedroom apartment, city centre", `${currency} ${rent1br}/month`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} 1 bedroom apartment`)}`, lastVerifiedAt)),
+    buildMetric("rent_2br_center", "2 bedroom apartment, city centre", `${currency} ${rent2br}/month`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} 2 bedroom apartment`)}`, lastVerifiedAt)),
+    buildMetric("rent_3br_center", "3 bedroom apartment, city centre", `${currency} ${rent3br}/month`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} 3 bedroom apartment`)}`, lastVerifiedAt)),
+    buildMetric("buy_center_sqm", "Buy apartment, city centre", `${currency} ${Math.round(rent1br * 22)}/m²`, baselineVerification(`https://www.google.com/search?q=${encodeURIComponent(`${destination.city} ${destination.country} property price sqm`)}`, lastVerifiedAt)),
+  ];
+
+  const pros = [] as string[];
+  const tradeoffs = [] as string[];
+
+  if (/waterfront|harbor|marina|bay|beach|coast|sea|river/i.test(text)) {
+    pros.push(`Strong ${/harbor|marina|bay|waterfront/i.test(text) ? "waterfront" : "coastal"} identity and lifestyle texture`);
+    tradeoffs.push("Peak-season demand and tourism can lift prices around the most attractive edges");
+  }
+
+  if (/historic|old town|castle|museum|architecture|church|square/i.test(text)) {
+    pros.push("Distinct local character and a strong sense of place");
+    tradeoffs.push("Older districts may involve steps, narrow streets, or less convenient parking");
+  }
+
+  if (/desert|mountain|alpine|hill|valley|forest|nature/i.test(text)) {
+    pros.push("Outdoor access and scenic daily life are part of the draw");
+    tradeoffs.push("Weather, topography, or remoteness can make everyday logistics less frictionless");
+  }
+
+  if (pros.length === 0) {
+    pros.push(`A practical, lived-in rhythm is usually the key to making ${destination.city} work well`);
+  }
+
+  if (tradeoffs.length === 0) {
+    tradeoffs.push(`The best fit usually comes from choosing the right district rather than assuming the city feels uniform`);
+  }
+
+  return { quickMetrics, costOfLiving, housingMetrics, pros, tradeoffs };
 };
 
 const buildFallbackCommandCenterData = (
@@ -425,7 +577,10 @@ const buildFallbackCommandCenterData = (
     seaTempC: typeof row.avgSeaC === "number" ? row.avgSeaC : null,
     snowfallCm: null,
     windKph: null,
-    verification: fallbackVerification,
+    verification: {
+      ...fallbackClimateVerification,
+      lastVerifiedAt,
+    },
   }));
 
   const monthlyClimate: MonthlyClimateRow[] = monthlyClimateFromDetails;
@@ -582,17 +737,19 @@ const applyLocalSeedOverride = (
   const baseQuickMetrics = filterPublishedMetrics(base.quickMetrics);
   const baseScorecard = filterPublishedScorecard(base.scorecard);
 
-  const quickMetrics = seed.quickMetrics
-    ? seedQuickMetrics
-    : authoritativeMissing
-      ? []
-      : baseQuickMetrics;
+  const quickMetrics = mergeWithSeedAuthority(
+    seedQuickMetrics,
+    baseQuickMetrics,
+    (item) => item.key,
+    authoritativeMissing,
+  );
 
-  const scorecard = seed.scorecard
-    ? seedScorecard
-    : authoritativeMissing
-      ? []
-      : baseScorecard;
+  const scorecard = mergeWithSeedAuthority(
+    seedScorecard,
+    baseScorecard,
+    (item) => item.category.toLowerCase(),
+    authoritativeMissing,
+  );
 
   return {
     ...base,
@@ -719,7 +876,7 @@ export async function getDestinationCommandCenter(slug: string): Promise<Command
   if (!content?.destination) return null;
   const generatedSeed = generatedCommandCenterSeeds[slug];
   const regionalSeed = REGIONAL_COMMAND_CENTER_SEEDS[slug];
-  const localSeed = isFlagshipDestination(slug) ? LOCAL_COMMAND_CENTER_SEEDS[slug] : undefined;
+  const localSeed = LOCAL_COMMAND_CENTER_SEEDS[slug];
 
   const fallbackGenerated = applyLocalSeedOverride(
     applyLocalSeedOverride(

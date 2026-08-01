@@ -217,4 +217,22 @@ describe("destination command center resource hydration", () => {
 
     expect(result?.resources.length).toBe(5);
   });
+
+  it("avoids fabricated fallback budgets when a destination has no bespoke relocation record", async () => {
+    const result = await getDestinationCommandCenter("valencia-spain");
+    const labels = result?.quickMetrics.map((metric) => metric.label) ?? [];
+
+    expect(labels).not.toContain("Single monthly budget");
+    expect(labels).not.toContain("Couple monthly budget");
+    expect(labels).not.toContain("Family monthly budget");
+    expect(labels).not.toContain("1BR rent, centre");
+    expect(labels).not.toContain("Groceries");
+  });
+
+  it("sanitizes legacy tax and residency phrasing from command-center resources", async () => {
+    const result = await getDestinationCommandCenter("valencia-spain");
+    const combined = (result?.resources ?? []).map((resource) => `${resource.title} ${resource.description ?? ""}`).join(" ");
+
+    expect(combined).not.toMatch(/tax context|residency context|dri signal|ordinary weekday|week after week/i);
+  });
 });

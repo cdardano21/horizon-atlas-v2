@@ -1,5 +1,9 @@
 import { cookies } from "next/headers";
-import type { DestinationRelocationProfile } from "../../../../lib/destinations";
+import type {
+  DestinationEditorialContent,
+  DestinationRelocationProfile,
+  DestinationResearchProfile,
+} from "../../../../lib/destinations";
 import { getSupabaseConfig, isSupabaseConfigured } from "../../../../lib/supabase";
 
 type AuthUser = {
@@ -14,6 +18,8 @@ type DestinationUpdatePayload = {
   city?: string;
   country?: string;
   relocationProfile?: DestinationRelocationProfile | null;
+  editorialContent?: DestinationEditorialContent | null;
+  researchProfile?: DestinationResearchProfile | null;
 };
 
 async function getAuthedAdmin() {
@@ -78,7 +84,11 @@ export async function PATCH(request: Request, context: { params: Promise<{ desti
 
     const { url, anonKey } = getSupabaseConfig();
 
-    if (payload.relocationProfile !== undefined) {
+    if (
+      payload.relocationProfile !== undefined
+      || payload.editorialContent !== undefined
+      || payload.researchProfile !== undefined
+    ) {
       const existingResponse = await fetch(
         `${url}/rest/v1/destinations_catalog?select=metadata&id=eq.${destinationId}&limit=1`,
         {
@@ -99,10 +109,28 @@ export async function PATCH(request: Request, context: { params: Promise<{ desti
         ? { ...existingRows[0].metadata }
         : {};
 
-      if (payload.relocationProfile === null) {
-        delete existingMetadata.relocationProfile;
-      } else {
-        existingMetadata.relocationProfile = payload.relocationProfile;
+      if (payload.relocationProfile !== undefined) {
+        if (payload.relocationProfile === null) {
+          delete existingMetadata.relocationProfile;
+        } else {
+          existingMetadata.relocationProfile = payload.relocationProfile;
+        }
+      }
+
+      if (payload.editorialContent !== undefined) {
+        if (payload.editorialContent === null) {
+          delete existingMetadata.editorialContent;
+        } else {
+          existingMetadata.editorialContent = payload.editorialContent;
+        }
+      }
+
+      if (payload.researchProfile !== undefined) {
+        if (payload.researchProfile === null) {
+          delete existingMetadata.researchProfile;
+        } else {
+          existingMetadata.researchProfile = payload.researchProfile;
+        }
       }
 
       updates.metadata = existingMetadata;

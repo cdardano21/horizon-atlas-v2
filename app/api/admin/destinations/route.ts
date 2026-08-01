@@ -1,5 +1,10 @@
 import { cookies } from "next/headers";
-import type { DestinationMemberDetails, DestinationRelocationProfile } from "../../../lib/destinations";
+import type {
+  DestinationEditorialContent,
+  DestinationMemberDetails,
+  DestinationRelocationProfile,
+  DestinationResearchProfile,
+} from "../../../lib/destinations";
 import { getSupabaseConfig, isSupabaseConfigured } from "../../../lib/supabase";
 
 type AuthUser = {
@@ -29,6 +34,8 @@ type DestinationRow = {
   metadata?: {
     relocationProfile?: DestinationRelocationProfile;
     memberDetails?: DestinationMemberDetails;
+    editorialContent?: DestinationEditorialContent;
+    researchProfile?: DestinationResearchProfile;
   } | null;
 };
 
@@ -177,6 +184,8 @@ export async function GET() {
           ...destination,
           relocationProfile: destination.metadata?.relocationProfile ?? null,
           memberDetails: destination.metadata?.memberDetails ?? null,
+          editorialContent: destination.metadata?.editorialContent ?? null,
+          researchProfile: destination.metadata?.researchProfile ?? null,
           mediaCount: mediaCounts.get(destination.id) ?? 0,
           resourceCount: resourceCounts.get(destination.id) ?? 0,
           videoCount: videoCounts.get(destination.id) ?? 0,

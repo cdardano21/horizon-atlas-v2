@@ -114,6 +114,9 @@ export default function DestinationGallery({ destination, resources: commandReso
   const galleryResources = [
     { label: "Google Maps", href: `https://www.google.com/maps/search/${encodeURIComponent(cityCountry)}` },
     { label: "Google Earth", href: `https://earth.google.com/web/search/${encodeURIComponent(cityCountry)}` },
+    { label: "Live webcams", href: `https://www.google.com/search?q=${encodeURIComponent(`${cityCountry} live webcam`)}` },
+    { label: "YouTube", href: `https://www.youtube.com/results?search_query=${encodeURIComponent(`${cityCountry} relocation walk`)}` },
+    { label: "TikTok", href: `https://www.tiktok.com/search?q=${encodeURIComponent(`${cityCountry} relocation lifestyle`)}` },
     ...toGalleryResources(commandResources),
   ];
 

@@ -44,6 +44,8 @@ function buildFallbackFacts(destination: Destination): DestinationCardFact[] {
     { label: "Climate", value: destination.climate },
     { label: "Transportation", value: destination.transportation },
     { label: "Overview", value: destination.overview },
+    { label: "Location", value: `${destination.city}, ${destination.country}`.trim() },
+    { label: "Description", value: destination.description },
   ];
 
   const deduped: DestinationCardFact[] = [];
@@ -79,6 +81,20 @@ function isVerificationPlaceholder(value: string): boolean {
   return normalized.includes("data verification in progress");
 }
 
+function isLegacyFactContent(label: string, value: string): boolean {
+  const combined = `${label}\n${value}`.toLowerCase();
+  return combined.includes("tax context")
+    || combined.includes("residency context")
+    || combined.includes("dri signal")
+    || combined.includes("ordinary weekday")
+    || combined.includes("week after week")
+    || combined.includes("test everyday essentials")
+    || combined.includes("run a normal day")
+    || combined.includes("lived-in place")
+    || combined.includes("source expansion underway")
+    || combined.includes("professional review needed");
+}
+
 export function getDestinationCardFacts(destination: Destination): DestinationCardFactsResult {
   const generated = generatedDestinationCardFacts[destination.slug];
   const preferFallbackFirst = isGenericGeneratedRecord(generated);
@@ -87,7 +103,7 @@ export function getDestinationCardFacts(destination: Destination): DestinationCa
   const seen = new Set<string>();
 
   const addFact = (fact: DestinationCardFact) => {
-    if (!fact.value || isVerificationPlaceholder(fact.value)) {
+    if (!fact.value || isVerificationPlaceholder(fact.value) || isLegacyFactContent(fact.label, fact.value)) {
       return;
     }
     const key = `${fact.label}:${fact.value}`;
@@ -112,10 +128,14 @@ export function getDestinationCardFacts(destination: Destination): DestinationCa
   const facts = combinedFacts.slice(0, 4);
   const lowCoverage = !generated || (generated.facts?.length ?? 0) < 3 || generated.lowCoverage;
   const generatedSummary = generated?.summary?.trim() ?? "";
+  const fallbackSummary = [destination.description, destination.overview, `${destination.city}, ${destination.country}`]
+    .filter(Boolean)
+    .map((value) => value.trim())
+    .find((value) => value.length > 0) ?? "Curated destination insight coming soon.";
   const summary =
     preferFallbackFirst || isVerificationPlaceholder(generatedSummary)
-      ? destination.description || truncate(destination.overview, 170)
-      : generatedSummary || destination.description || truncate(destination.overview, 170);
+      ? truncate(fallbackSummary, 170)
+      : generatedSummary || truncate(fallbackSummary, 170);
 
   const fallbackScoreSignals = [
     { category: "Lifestyle Fit", score: 82 },

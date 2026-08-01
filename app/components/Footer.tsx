@@ -1,4 +1,5 @@
 import Link from "next/link";
+import HorizonAtlasLogo from "./HorizonAtlasLogo";
 
 const links = [
   { label: "Life Match", href: "/life-match" },
@@ -12,8 +13,8 @@ export default function Footer() {
   return (
     <footer className="border-t border-[var(--atlas-border)] bg-[linear-gradient(180deg,rgba(247,239,227,0.8),rgba(241,232,216,0.9))] px-8 py-16 text-[var(--atlas-muted)]">
       <div className="mx-auto flex max-w-7xl flex-col gap-10 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h2 className="text-3xl font-semibold text-[var(--atlas-ink)]">Horizon Atlas</h2>
+        <div className="flex flex-col items-start">
+          <HorizonAtlasLogo layout="horizontal" tone="dark" className="text-[var(--atlas-ink)]" />
           <p className="mt-3 max-w-md text-sm leading-6 text-[var(--atlas-muted)]">
             Find the right retirement destination with data-driven guidance and AI-powered preference matching.
           </p>

@@ -25,18 +25,41 @@ test.describe("Horizon Atlas smoke suite", () => {
     await expect(searchInput).toBeVisible();
     await searchInput.fill("valencia");
 
-    await expect(page.getByTestId("destination-card-valencia-spain")).toBeVisible();
+    await expect(page.getByTestId("destination-card-valencia-spain").first()).toBeVisible();
     await expect(page.getByTestId("destination-results-count")).toContainText("Showing");
 
     await expect(clearAllButton).toBeVisible();
   });
 
+  test("destination cards surface a clear route to detail data", async ({ page }) => {
+    await page.goto("/destinations");
+
+    await page.getByTestId("destination-search-input").fill("valencia");
+
+    await expect(page.getByTestId("destination-open-valencia-spain")).toBeVisible();
+  });
+
+  test("newly surfaced destinations appear in the catalog highlights", async ({ page }) => {
+    await page.goto("/destinations");
+
+    await expect(page.getByText("Freshly surfaced destinations")).toBeVisible();
+    await expect(page.getByText("Todos Santos").first()).toBeVisible();
+  });
+
+  test("clicking a destination card routes to the destination detail page", async ({ page }) => {
+    await page.goto("/destinations");
+
+    await page.getByTestId("destination-card-todos-santos-mexico").first().click({ position: { x: 20, y: 20 } });
+
+    await expect(page).toHaveURL(/\/destinations\/todos-santos-mexico/);
+  });
+
   test("destination page exposes relocation details and map resources", async ({ page }) => {
     await page.goto("/destinations/valencia-spain");
 
-    await expect(page.getByText("Rapid relocation answers")).toBeVisible();
-    await expect(page.getByTestId("destination-resource-google-maps").first()).toBeVisible();
-    await expect(page.getByTestId("destination-resource-google-earth").first()).toBeVisible();
+    await expect(page.getByText("Core relocation Q&A")).toBeVisible();
+    await expect(page.getByText("Map and media")).toBeVisible();
+    await expect(page.getByRole("link", { name: /Google Earth/i }).first()).toBeVisible();
   });
 
   test("primary navigation can move between major pages", async ({ page }) => {

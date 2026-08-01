@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { sanitizeSummary, toConsumerCopy } from "../lib/consumer-copy";
+import { sortDestinationsForFeaturedPlacement } from "../lib/flagship-destinations";
 import { publicDestinations } from "../lib/public-destinations";
 import { COSTA_DEL_SOL_HERO_IMAGE, getDestinationImageUrl, hasVerifiedDestinationImage } from "../lib/imageFallback";
 import { resolveSourceHref, sanitizeExternalSourceUrl } from "../lib/source-links";
@@ -9,7 +10,7 @@ import FavoriteButton from "./FavoriteButton";
 import { getDestinationCardFacts, getFactSourceDomain, getFactSourcePublisherUrl } from "./destinationCardFacts";
 
 export default function FeaturedDestinations() {
-  const featured = [...publicDestinations].sort((a, b) => b.match - a.match).slice(0, 4);
+  const featured = sortDestinationsForFeaturedPlacement(publicDestinations).slice(0, 4);
 
   return (
     <section id="destinations" className="mx-auto max-w-7xl px-6 py-28 sm:px-8">
@@ -107,9 +108,9 @@ export default function FeaturedDestinations() {
               <p className="mt-4 text-sm leading-6 text-[var(--atlas-muted)]">{sanitizeSummary(cardFacts.summary)}</p>
               {isLead ? (
                 <div className="mt-5 rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.6)] p-4">
-                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--atlas-accent)]">Why this city makes the shortlist</p>
+                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--atlas-accent)]">Why it enters the shortlist</p>
                   <p className="mt-3 text-sm leading-7 text-[var(--atlas-muted)]">
-                    Strong first-glance fit for people who want a place that feels livable, emotionally magnetic, and structurally practical enough to justify a scouting trip.
+                    Strong first-glance fit for people who want a place that can support real routines, not just a beautiful weekend.
                   </p>
                 </div>
               ) : null}

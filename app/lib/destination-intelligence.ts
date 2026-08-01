@@ -211,11 +211,61 @@ const firstSeedMetricLabelMatch = (
   return metric.displayValue ?? metric.value ?? null;
 };
 
+const firstSeedMetricKeyOrLabelMatch = (
+  seed: (typeof generatedCommandCenterSeeds)[string] | undefined,
+  includesAny: string[],
+): string | null => {
+  if (!seed?.quickMetrics?.length) return null;
+  const tokens = includesAny.map((token) => token.toLowerCase());
+  const metric = seed.quickMetrics.find((item) => {
+    const key = (item.key ?? "").toLowerCase();
+    const label = (item.label ?? "").toLowerCase();
+    return tokens.some((token) => key.includes(token) || label.includes(token));
+  });
+  if (!metric) return null;
+  return metric.displayValue ?? metric.value ?? null;
+};
+
+const parseNumericValue = (value: string | null): number | null => {
+  if (!value) return null;
+  const normalized = value.replace(/,/g, "");
+  const match = normalized.match(/(\d+(?:\.\d+)?)/);
+  if (!match) return null;
+  const parsed = Number(match[1]);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
+const formatCurrencyRange = (base: number, lowMultiplier: number, highMultiplier: number): string => {
+  const low = Math.round(base * lowMultiplier);
+  const high = Math.round(base * highMultiplier);
+  return `EUR ${low.toLocaleString()}-${high.toLocaleString()} / month`;
+};
+
 const listSeedNames = (rows: Array<{ name: string }> | undefined, limit = 3): string[] =>
   (rows ?? [])
     .map((row) => row.name)
     .filter((name) => typeof name === "string" && name.trim().length > 0)
     .slice(0, limit);
+
+const isWeakAnchor = (value: string | null | undefined, city: string) => {
+  if (!value) return true;
+  const normalized = value.trim().toLowerCase();
+  if (!normalized) return true;
+  if (normalized === city.trim().toLowerCase()) return true;
+  return normalized.includes("not published")
+    || normalized.includes("no verified")
+    || normalized.includes("source expansion")
+    || normalized.includes("framework")
+    || normalized.includes("support portal")
+    || normalized.includes("coastal / water access");
+};
+
+const pickAnchor = (city: string, fallback: string, ...values: Array<string | null | undefined>) => {
+  for (const value of values) {
+    if (!isWeakAnchor(value, city)) return value!.trim();
+  }
+  return fallback;
+};
 
 const missingValueRegex = /^(unavailable|not published|no structured|no .* yet|see source references below|data pending)$/i;
 
@@ -233,10 +283,10 @@ const contextualFallbackValue = (
   const section = sectionTitle.toLowerCase();
 
   if (section.includes("climate")) {
-    return `${city} climate coverage is still being expanded with month-level rows for temperature, rainfall, and comfort seasonality.`;
+    return `Not yet published for ${city}.`;
   }
   if (section.includes("cost")) {
-    return `${city} cost coverage is partial today; this line will be upgraded with localized rent and basket pricing.`;
+    return `Not yet published for ${city}.`;
   }
   if (section.includes("healthcare")) {
     return `${city} healthcare publication is in progress, including provider depth and specialist-access context.`;
@@ -483,7 +533,40 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
   const coupleBudget = toRange(monthlyBudgetBase * 1.5, 700);
   const familyBudget = toRange(monthlyBudgetBase * 2.1, 950);
 
-  const baseAiSummary = `${destination.city} feels strongest for people who want ${coastal ? "coastal" : "balanced"} living with ${walkable ? "walkable daily routines" : "a quieter pace"}, supported by ${healthcare ? "credible healthcare signals" : "solid core infrastructure"}. If your goal is a confident long-stay relocation decision, this profile gives you one place to compare costs, climate, healthcare, mobility, neighborhoods, and retirement practicality before booking a scouting trip.`;
+  const neighborhoodAnchor = seedNeighborhoods.length > 1
+    ? `${seedNeighborhoods[0]} and ${seedNeighborhoods[1]}`
+    : seedNeighborhoods[0] ?? `${destination.city} central and waterfront districts`;
+  const lifestyleAnchor = pickAnchor(
+    destination.city,
+    `${destination.city} daily core`,
+    seedFoodSpots[0],
+    seedRecreation[0],
+    seedBeaches[0],
+  );
+  const airportAnchor = pickAnchor(
+    destination.city,
+    `${destination.city} airport network`,
+    details?.airports?.[0]?.name,
+    airportFacts[0],
+    destination.transportation,
+  );
+  const healthcareAnchor = pickAnchor(
+    destination.city,
+    `${destination.city} healthcare network`,
+    details?.hospitals?.[0]?.name,
+    healthcareFacts[0],
+  );
+
+  const citySignalText = `${destination.description} ${destination.overview} ${destination.lifestyle} ${destination.transportation}`.toLowerCase();
+  const citySignalPhrase = (() => {
+    if (citySignalText.includes("river")) return `${destination.city} feels shaped by its river setting, so the best way to judge it is through daily movement and waterfront routines.`;
+    if (citySignalText.includes("harbor") || citySignalText.includes("port")) return `${destination.city} feels defined by its harbor or port edge, so test whether the waterfront is a genuine daily asset or mainly a scenic backdrop.`;
+    if (citySignalText.includes("mountain") || citySignalText.includes("hill")) return `${destination.city} feels shaped by elevation and skyline, so neighborhood choice matters more than the headline reputation.`;
+    if (citySignalText.includes("promenade") || citySignalText.includes("waterfront")) return `${destination.city} lives or dies on its waterfront rhythm, so compare the promenade life with the quieter residential pockets.`;
+    return `${destination.city} rewards a close look at local districts, because the city can feel very different from one block to the next.`;
+  })();
+
+  const baseAiSummary = `${destination.city} feels very different depending on where you spend your day, so begin with neighborhoods like ${neighborhoodAnchor} and a practical routine around ${lifestyleAnchor}. ${citySignalPhrase} If healthcare access through ${healthcareAnchor} and travel ease via ${airportAnchor} both feel straightforward, the city is usually a strong long-stay candidate.`;
 
   const baseLivingHereScorecard: IntelligenceScorecardItem[] = [
     { category: "Overall Match", score: overallMatch, context: "Weighted from relocation-fit signals." },
@@ -520,11 +603,20 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
 
   const lowestCostBudget = formatMaybeNumber(monthlyBudgetBase, " / month");
   const seedRent = firstSeedMetricValue(seed, "monthly_rent") ?? firstSeedMetricLabelMatch(seed, "rent");
+  const seedRent1br = firstSeedMetricKeyOrLabelMatch(seed, ["rent_1", "1br", "1 bedroom", "one bedroom"]);
+  const seedRent2br = firstSeedMetricKeyOrLabelMatch(seed, ["rent_2", "2br", "2 bedroom", "two bedroom"]);
+  const seedRent3br = firstSeedMetricKeyOrLabelMatch(seed, ["rent_3", "3br", "3 bedroom", "three bedroom"]);
+  const parsedSeedRent = parseNumericValue(seedRent);
+  const modeledRent1br = parsedSeedRent !== null ? formatCurrencyRange(parsedSeedRent, 0.85, 1.05) : null;
+  const modeledRent2br = parsedSeedRent !== null ? formatCurrencyRange(parsedSeedRent, 1.15, 1.35) : null;
+  const modeledRent3br = parsedSeedRent !== null ? formatCurrencyRange(parsedSeedRent, 1.5, 1.8) : null;
   const seedUtilities = firstSeedMetricLabelMatch(seed, "utilit");
   const seedInternet = firstSeedMetricLabelMatch(seed, "internet");
   const seedCoffee = firstSeedMetricLabelMatch(seed, "coffee");
   const seedDinner = firstSeedMetricLabelMatch(seed, "dinner");
   const seedGroceries = firstSeedMetricLabelMatch(seed, "grocery") ?? firstSeedMetricLabelMatch(seed, "grocer");
+  const seedGasoline = firstSeedMetricKeyOrLabelMatch(seed, ["gasoline", "fuel", "petrol", "diesel"]);
+  const seedBigMac = firstSeedMetricKeyOrLabelMatch(seed, ["big mac", "big_mac", "mcdonald", "mcdonalds"]);
 
   const baseComprehensiveSections: IntelligenceProfileSection[] = [
     {
@@ -549,14 +641,16 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
         { label: "Couple budget", value: coupleBudget },
         { label: "Family of four budget", value: familyBudget },
         { label: "Retired couple budget", value: `${formatMaybeNumber(monthlyBudgetBase + 250, " / month")}` },
-        { label: "1BR rent", value: seedRent ?? "Source-backed rent detail is still being expanded" },
-        { label: "2BR rent", value: seedRent ?? "Source-backed rent detail is still being expanded" },
-        { label: "3BR rent", value: seedRent ?? "Source-backed rent detail is still being expanded" },
+        { label: "1BR rent", value: seedRent1br ?? seedRent ?? modeledRent1br ?? "Source-backed rent detail is still being expanded" },
+        { label: "2BR rent", value: seedRent2br ?? modeledRent2br ?? "Source-backed 2BR rent detail is still being expanded" },
+        { label: "3BR rent", value: seedRent3br ?? modeledRent3br ?? "Source-backed 3BR rent detail is still being expanded" },
         { label: "Utilities", value: seedUtilities ?? "Utilities detail is still being expanded" },
         { label: "Internet", value: seedInternet ?? "Internet pricing detail is still being expanded" },
         { label: "Groceries", value: seedGroceries ?? (budgetFriendly ? "Value-led market access likely" : "Premium city pricing likely") },
         { label: "Coffee price", value: seedCoffee ?? "Cafe-price detail is still being expanded" },
         { label: "Dinner for two", value: seedDinner ?? "Restaurant-price detail is still being expanded" },
+        { label: "Gasoline", value: seedGasoline ?? "Fuel pricing detail is still being expanded" },
+        { label: "Big Mac index", value: seedBigMac ?? "Big Mac baseline is still being expanded" },
         { label: "Healthcare costs", value: healthcare ? "Private top-ups likely needed" : "Unavailable" },
       ],
     },
@@ -920,7 +1014,7 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
     {
       label: "Safety profile",
       tone: safety ? "strong" : "review",
-      detail: safety ? "Day-to-day security looks like a relative strength." : "Check neighborhood-level safety and routines." ,
+      detail: safety ? "Day-to-day security looks like a relative strength." : "Check neighborhood-level safety and routines.",
     },
     {
       label: "Housing practicality",
@@ -928,6 +1022,29 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
       detail: housingIsStrong ? "Worth serious rental and purchase-market analysis." : "Do not assume value without current market checks.",
     },
   ];
+
+  const hasBeachCue = /beach|coast|harbor|waterfront|sea|shore/i.test([
+    destination.description,
+    destination.overview,
+    destination.lifestyle,
+    destination.climate,
+    destination.transportation,
+  ].join(" "));
+  const beachAnchor = firstFactValue(destination, "Beach")
+    ?? firstFactValue(destination, "Beaches")
+    ?? firstFactValue(destination, "Parks and beaches")
+    ?? seedBeaches[0]
+    ?? (hasBeachCue ? "the waterfront districts" : null);
+  const neighborhoodFitValue = beachAnchor
+    ? `The best retirement fit usually comes from ${neighborhoodAnchor} rather than the broad city reputation, with ${beachAnchor} worth comparing against quieter inland districts.`
+    : `The best retirement fit usually comes from ${neighborhoodAnchor} rather than the broad city reputation, with daily errands and transport patterns often deciding the real winner.`;
+  const cityLogicValue = [
+    `District choice matters more than the headline reputation: ${neighborhoodAnchor} shape how you experience everyday life.`,
+    hasBeachCue || beachAnchor
+      ? `Beach or waterfront access around ${beachAnchor ?? "the coast"} can become a real part of the weekly routine, not just a weekend escape.`
+      : `Local food and café routines around ${lifestyleAnchor} often matter more than the city's broad reputation.`,
+    `The right district can make transport, errands, and social life feel far easier than the city appears on paper.`,
+  ].join(" ");
 
   return {
     aiSummary: flagshipOverride?.aiSummary ?? aiSummary,
@@ -968,6 +1085,8 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
     retirementAdvantages,
     retirementTradeoffs,
     quickFacts: [
+      { label: "City logic", value: cityLogicValue },
+      { label: "Neighborhood fit", value: neighborhoodFitValue },
       { label: "Lifestyle lens", value: walkable ? "Walkable daily rhythm" : "More location-specific mobility" },
       { label: "Climate bias", value: getClimateSignal(destination) },
       { label: "Airport access", value: getAirportSignal(destination) },
@@ -976,6 +1095,17 @@ export function getDestinationIntelligence(destination: Destination): Destinatio
     livingHereScorecard,
     planningSignals,
     briefingSections: [
+      {
+        title: "Daily rhythm and district logic",
+        summary: "The city can feel very different depending on which district you choose to live in.",
+        bullets: [
+          `Use ${neighborhoodAnchor} as the first test of where daily errands, cafés, and social life actually happen.`,
+          coastal && seedBeaches.length > 0
+            ? `Compare beach access around ${seedBeaches[0]} with the quieter residential streets that support a slower week.`
+            : `Measure how much of the city feels useful on a weekly basis rather than only attractive on a weekend.`,
+          `Check whether your ideal pace matches the local food scene, transit pattern, and weekend flow around ${lifestyleAnchor}.`,
+        ],
+      },
       {
         title: "Healthcare and everyday support",
         summary: "Treat healthcare as both an emergency question and an aging-in-place question.",

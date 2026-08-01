@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { DestinationMemberDetails, DestinationRelocationProfile } from "../lib/destinations";
+import type {
+  DestinationEditorialContent,
+  DestinationMemberDetails,
+  DestinationRelocationProfile,
+  DestinationResearchProfile,
+} from "../lib/destinations";
 import {
   appendFormRow,
   isCommandCenterFormDataset,
@@ -25,6 +30,8 @@ type AdminDestination = {
   videoCount: number;
   relocationProfile?: DestinationRelocationProfile | null;
   memberDetails?: DestinationMemberDetails | null;
+  editorialContent?: DestinationEditorialContent | null;
+  researchProfile?: DestinationResearchProfile | null;
 };
 
 type DestinationPayload = {
@@ -691,6 +698,12 @@ export default function AdminCatalogManager() {
   const [relocationProfileDraft, setRelocationProfileDraft] = useState("");
   const [relocationProfileError, setRelocationProfileError] = useState<string | null>(null);
   const [isSavingRelocationProfile, setIsSavingRelocationProfile] = useState(false);
+  const [editorialForm, setEditorialForm] = useState<DestinationEditorialContent>({});
+  const [editorialError, setEditorialError] = useState<string | null>(null);
+  const [isSavingEditorial, setIsSavingEditorial] = useState(false);
+  const [researchForm, setResearchForm] = useState<DestinationResearchProfile>({});
+  const [researchError, setResearchError] = useState<string | null>(null);
+  const [isSavingResearch, setIsSavingResearch] = useState(false);
   const [relocationEditorMode, setRelocationEditorMode] = useState<"form" | "json">("form");
   const [relocationFormTab, setRelocationFormTab] = useState<"summary" | "scorecard" | "sections" | "coverage">("summary");
   const [commandCenterDataset, setCommandCenterDataset] = useState<CommandCenterDatasetKey>("destination_core_metrics");
@@ -704,6 +717,9 @@ export default function AdminCatalogManager() {
     () => destinations.find((destination) => destination.id === assetForm.destinationId) ?? null,
     [assetForm.destinationId, destinations],
   );
+
+  const parseListField = (value: string) => value.split("\n").map((item) => item.trim()).filter(Boolean);
+  const formatListField = (items?: string[]) => (items ?? []).join("\n");
 
   const parsedRelocationProfile = useMemo(() => {
     try {
@@ -886,12 +902,22 @@ export default function AdminCatalogManager() {
       if (!selectedDestination) {
         setRelocationProfileDraft("");
         setRelocationProfileError(null);
+        setEditorialForm({});
+        setEditorialError(null);
+        setResearchForm({});
+        setResearchError(null);
         return;
       }
 
       const value = selectedDestination.relocationProfile ?? RELOCATION_PROFILE_TEMPLATE;
       setRelocationProfileDraft(JSON.stringify(value, null, 2));
       setRelocationProfileError(null);
+
+      setEditorialForm(selectedDestination.editorialContent ?? {});
+      setEditorialError(null);
+
+      setResearchForm(selectedDestination.researchProfile ?? {});
+      setResearchError(null);
     });
   }, [selectedDestination]);
 
@@ -1213,6 +1239,54 @@ export default function AdminCatalogManager() {
     }
 
     setStatusMessage("Relocation profile saved.");
+    await loadDestinations(false);
+  };
+
+  const handleSaveEditorialContent = async () => {
+    if (!canManage || !selectedDestination) return;
+
+    setIsSavingEditorial(true);
+    setEditorialError(null);
+
+    const response = await fetch(`/api/admin/destinations/${selectedDestination.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ editorialContent: editorialForm }),
+    });
+
+    setIsSavingEditorial(false);
+
+    if (!response.ok) {
+      const payload = (await response.json().catch(() => ({ error: "Could not save editorial content." }))) as { error?: string };
+      setEditorialError(payload.error ?? "Could not save editorial content.");
+      return;
+    }
+
+    setStatusMessage("Editorial content saved.");
+    await loadDestinations(false);
+  };
+
+  const handleSaveResearchProfile = async () => {
+    if (!canManage || !selectedDestination) return;
+
+    setIsSavingResearch(true);
+    setResearchError(null);
+
+    const response = await fetch(`/api/admin/destinations/${selectedDestination.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ researchProfile: researchForm }),
+    });
+
+    setIsSavingResearch(false);
+
+    if (!response.ok) {
+      const payload = (await response.json().catch(() => ({ error: "Could not save research profile." }))) as { error?: string };
+      setResearchError(payload.error ?? "Could not save research profile.");
+      return;
+    }
+
+    setStatusMessage("Research profile saved.");
     await loadDestinations(false);
   };
 
@@ -1814,6 +1888,254 @@ export default function AdminCatalogManager() {
             )}
 
             {relocationProfileError ? <p className="mt-3 text-sm text-rose-300">{relocationProfileError}</p> : null}
+          </>
+        )}
+      </div>
+
+      <div className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-6">
+        <h3 className="text-xl font-semibold text-white">Editorial content editor</h3>
+        {!assetForm.destinationId ? (
+          <p className="mt-4 text-slate-400">Choose a destination above to edit the editorial narrative fields.</p>
+        ) : (
+          <>
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              Fill in the destination story, tone, and practical positioning without writing JSON by hand.
+            </p>
+            <div className="mt-4 grid gap-4 lg:grid-cols-2">
+              <label className="space-y-2 text-sm">
+                <span className="text-slate-300">Title</span>
+                <input
+                  value={editorialForm.title ?? ""}
+                  onChange={(event) => setEditorialForm((current) => ({ ...current, title: event.target.value }))}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                <span className="text-slate-300">Subtitle</span>
+                <input
+                  value={editorialForm.subtitle ?? ""}
+                  onChange={(event) => setEditorialForm((current) => ({ ...current, subtitle: event.target.value }))}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm lg:col-span-2">
+                <span className="text-slate-300">Introduction</span>
+                <textarea
+                  value={editorialForm.introduction ?? ""}
+                  onChange={(event) => setEditorialForm((current) => ({ ...current, introduction: event.target.value }))}
+                  rows={4}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm lg:col-span-2">
+                <span className="text-slate-300">Hero narrative</span>
+                <textarea
+                  value={editorialForm.heroNarrative ?? ""}
+                  onChange={(event) => setEditorialForm((current) => ({ ...current, heroNarrative: event.target.value }))}
+                  rows={4}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                <span className="text-slate-300">Lifestyle narrative</span>
+                <textarea
+                  value={editorialForm.lifestyleNarrative ?? ""}
+                  onChange={(event) => setEditorialForm((current) => ({ ...current, lifestyleNarrative: event.target.value }))}
+                  rows={4}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                <span className="text-slate-300">Climate narrative</span>
+                <textarea
+                  value={editorialForm.climateNarrative ?? ""}
+                  onChange={(event) => setEditorialForm((current) => ({ ...current, climateNarrative: event.target.value }))}
+                  rows={4}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                <span className="text-slate-300">Transportation narrative</span>
+                <textarea
+                  value={editorialForm.transportationNarrative ?? ""}
+                  onChange={(event) => setEditorialForm((current) => ({ ...current, transportationNarrative: event.target.value }))}
+                  rows={4}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                <span className="text-slate-300">Verdict</span>
+                <textarea
+                  value={editorialForm.verdict ?? ""}
+                  onChange={(event) => setEditorialForm((current) => ({ ...current, verdict: event.target.value }))}
+                  rows={4}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm lg:col-span-2">
+                <span className="text-slate-300">Best for (one per line)</span>
+                <textarea
+                  value={formatListField(editorialForm.bestFor)}
+                  onChange={(event) => setEditorialForm((current) => ({ ...current, bestFor: parseListField(event.target.value) }))}
+                  rows={3}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm lg:col-span-2">
+                <span className="text-slate-300">Not ideal for (one per line)</span>
+                <textarea
+                  value={formatListField(editorialForm.notIdealFor)}
+                  onChange={(event) => setEditorialForm((current) => ({ ...current, notIdealFor: parseListField(event.target.value) }))}
+                  rows={3}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => void handleSaveEditorialContent()}
+                disabled={!canManage || isSavingEditorial}
+                className="rounded-full bg-cyan-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isSavingEditorial ? "Saving..." : "Save editorial content"}
+              </button>
+            </div>
+            {editorialError ? <p className="mt-3 text-sm text-rose-300">{editorialError}</p> : null}
+          </>
+        )}
+      </div>
+
+      <div className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-6">
+        <h3 className="text-xl font-semibold text-white">Research profile editor</h3>
+        {!assetForm.destinationId ? (
+          <p className="mt-4 text-slate-400">Choose a destination above to edit the research profile fields.</p>
+        ) : (
+          <>
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              Capture the practical and emotional reasons this destination is compelling for long-stay relocation.
+            </p>
+            <div className="mt-4 grid gap-4 lg:grid-cols-2">
+              <label className="space-y-2 text-sm lg:col-span-2">
+                <span className="text-slate-300">Overview</span>
+                <textarea
+                  value={researchForm.overview ?? ""}
+                  onChange={(event) => setResearchForm((current) => ({ ...current, overview: event.target.value }))}
+                  rows={3}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                <span className="text-slate-300">Feel</span>
+                <textarea
+                  value={researchForm.feel ?? ""}
+                  onChange={(event) => setResearchForm((current) => ({ ...current, feel: event.target.value }))}
+                  rows={3}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                <span className="text-slate-300">Why people love it</span>
+                <textarea
+                  value={researchForm.whyPeopleLoveIt ?? ""}
+                  onChange={(event) => setResearchForm((current) => ({ ...current, whyPeopleLoveIt: event.target.value }))}
+                  rows={3}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                <span className="text-slate-300">Climate</span>
+                <textarea
+                  value={researchForm.climate ?? ""}
+                  onChange={(event) => setResearchForm((current) => ({ ...current, climate: event.target.value }))}
+                  rows={3}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                <span className="text-slate-300">Cost of living</span>
+                <textarea
+                  value={researchForm.costOfLiving ?? ""}
+                  onChange={(event) => setResearchForm((current) => ({ ...current, costOfLiving: event.target.value }))}
+                  rows={3}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                <span className="text-slate-300">Healthcare</span>
+                <textarea
+                  value={researchForm.healthcare ?? ""}
+                  onChange={(event) => setResearchForm((current) => ({ ...current, healthcare: event.target.value }))}
+                  rows={3}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                <span className="text-slate-300">Safety</span>
+                <textarea
+                  value={researchForm.safety ?? ""}
+                  onChange={(event) => setResearchForm((current) => ({ ...current, safety: event.target.value }))}
+                  rows={3}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                <span className="text-slate-300">Transportation</span>
+                <textarea
+                  value={researchForm.transportation ?? ""}
+                  onChange={(event) => setResearchForm((current) => ({ ...current, transportation: event.target.value }))}
+                  rows={3}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                <span className="text-slate-300">Best neighborhoods (one per line)</span>
+                <textarea
+                  value={formatListField(researchForm.bestNeighborhoods)}
+                  onChange={(event) => setResearchForm((current) => ({ ...current, bestNeighborhoods: parseListField(event.target.value) }))}
+                  rows={3}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                <span className="text-slate-300">Food (one per line)</span>
+                <textarea
+                  value={formatListField(researchForm.food)}
+                  onChange={(event) => setResearchForm((current) => ({ ...current, food: parseListField(event.target.value) }))}
+                  rows={3}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm lg:col-span-2">
+                <span className="text-slate-300">Pros (one per line)</span>
+                <textarea
+                  value={formatListField(researchForm.pros)}
+                  onChange={(event) => setResearchForm((current) => ({ ...current, pros: parseListField(event.target.value) }))}
+                  rows={3}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+              <label className="space-y-2 text-sm lg:col-span-2">
+                <span className="text-slate-300">Cons (one per line)</span>
+                <textarea
+                  value={formatListField(researchForm.cons)}
+                  onChange={(event) => setResearchForm((current) => ({ ...current, cons: parseListField(event.target.value) }))}
+                  rows={3}
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-cyan-400"
+                />
+              </label>
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => void handleSaveResearchProfile()}
+                disabled={!canManage || isSavingResearch}
+                className="rounded-full bg-cyan-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isSavingResearch ? "Saving..." : "Save research profile"}
+              </button>
+            </div>
+            {researchError ? <p className="mt-3 text-sm text-rose-300">{researchError}</p> : null}
           </>
         )}
       </div>
