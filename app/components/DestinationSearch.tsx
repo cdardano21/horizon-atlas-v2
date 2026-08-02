@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ChangeEvent, type MouseEvent } from "react";
 import { sanitizeSummary, toConsumerCopy } from "../lib/consumer-copy";
 import type { Destination } from "../lib/destinations";
 import { COSTA_DEL_SOL_HERO_IMAGE, getDestinationImageUrl, hasVerifiedDestinationImage } from "../lib/imageFallback";
@@ -87,72 +87,59 @@ const toTestIdToken = (value: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
+const getSearchableFields = (destination: Destination) => [
+  destination.city,
+  destination.country,
+  destination.slug,
+  destination.description,
+  destination.overview,
+  destination.climate,
+  destination.lifestyle,
+  destination.transportation,
+  ...(destination.tags ?? []),
+];
+
+const matchesSelectedTags = (destination: Destination, selectedTags: string[]) => {
+  if (selectedTags.length === 0) {
+    return true;
+  }
+
+  const normalizedTags = (destination.tags ?? []).map((tag) => normalize(tag));
+
+  return selectedTags.every((selectedTag) => {
+    const variants = getFilterTagVariants(selectedTag);
+
+    return normalizedTags.some((tag) => variants.some((variant) => tag === variant || tag.includes(variant) || variant.includes(tag)));
+  });
+};
+
 const getSearchScore = (destination: Destination, query: string, tags: string[]) => {
   const normalizedTags = (destination.tags ?? []).map((tag) => normalize(tag));
-  const tagsMatch = tags.length === 0 || tags.every((selected) => matchesSelectedTag(normalizedTags, selected));
+  const tagsMatch = matchesSelectedTags(destination, tags);
   if (!tagsMatch) return null;
 
-  const content = [
-    destination.city,
-    destination.country,
-    destination.description,
-    destination.overview,
-    destination.climate,
-    destination.lifestyle,
-    destination.transportation,
-    ...(destination.tags ?? []),
-  ]
-    .join(" ")
-    .toLowerCase();
-
+  const searchableFields = getSearchableFields(destination).map((field) => normalize(field));
   const tokens = tokenizeQuery(query);
+
   if (tokens.length === 0) {
     return Math.max(0, destination.match);
   }
 
-  const city = normalize(destination.city);
-  const country = normalize(destination.country);
-
-  let matchedTokenCount = 0;
-  let score = Math.max(0, destination.match);
-
-  for (const token of tokens) {
-    let tokenScore = 0;
-
-    if (city === token) tokenScore += 30;
-    else if (city.includes(token)) tokenScore += 20;
-
-    if (country === token) tokenScore += 24;
-    else if (country.includes(token)) tokenScore += 14;
-
-    if (normalizedTags.some((tag) => tag === token)) {
-      tokenScore += 22;
-    } else if (normalizedTags.some((tag) => tag.includes(token) || token.includes(tag))) {
-      tokenScore += 12;
-    }
-
-    if (content.includes(token)) {
-      tokenScore += 8;
+  const matchedTokenCount = tokens.filter((token) => {
+    const tokenMatchesField = searchableFields.some((field) => field === token || field.includes(token) || token.includes(field));
+    if (tokenMatchesField) {
+      return true;
     }
 
     const aliases = queryAliasMap[token] ?? [];
-    if (aliases.some((alias) => normalizedTags.includes(alias))) {
-      tokenScore += 10;
-    }
+    return aliases.some((alias) => normalizedTags.includes(alias));
+  }).length;
 
-    if (tokenScore > 0) {
-      matchedTokenCount += 1;
-      score += tokenScore;
-    }
-  }
-
-  const requiredMatches = Math.max(1, Math.ceil(tokens.length * 0.6));
-  if (matchedTokenCount < requiredMatches) {
+  if (matchedTokenCount < tokens.length) {
     return null;
   }
 
-  score += tags.length * 6;
-  return score;
+  return Math.max(0, destination.match) + tags.length * 6;
 };
 
 export default function DestinationSearch({
@@ -165,6 +152,10 @@ export default function DestinationSearch({
   const [query, setQuery] = useState(initialQuery);
   const [activeTags, setActiveTags] = useState<string[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    setQuery(initialQuery);
+  }, [initialQuery]);
 
   const allTags = useMemo(() => {
     const tags = new Set<string>();
@@ -222,9 +213,20 @@ export default function DestinationSearch({
   const visualResults = filteredDestinations.slice(0, 3);
 
   const toggleTag = (tag: string) => {
-    setActiveTags((current) =>
-      current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag],
-    );
+    setActiveTags((current) => {
+      const next = current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag];
+      return next;
+    });
+  };
+
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
+  const handleTagClick = (event: MouseEvent<HTMLButtonElement>, tag: string) => {
+    event.preventDefault();
+    event.stopPropagation();
+    toggleTag(tag);
   };
 
   const clearFilters = () => {
@@ -245,6 +247,8 @@ export default function DestinationSearch({
   };
 
   const featuredResults = filteredDestinations.slice(0, 3);
+
+  console.log("DestinationSearch render", { activeTags, query, filteredDestinationsCount: filteredDestinations.length });
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-20 sm:px-8 sm:py-24">
@@ -277,7 +281,7 @@ export default function DestinationSearch({
             <label className="block text-sm font-semibold text-[var(--atlas-ink)]">Search destinations</label>
             <input
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={handleSearchChange}
               placeholder="e.g. beach, golf, low cost of living"
               data-testid="destination-search-input"
               className="mt-4 w-full rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.9)] px-4 py-4 text-sm text-[var(--atlas-ink)] outline-none transition focus:border-[rgba(31,95,99,0.5)] sm:text-base"
@@ -303,7 +307,8 @@ export default function DestinationSearch({
                 <button
                   key={tag}
                   type="button"
-                  onClick={() => toggleTag(tag)}
+                  onClick={(event) => handleTagClick(event, tag)}
+                  aria-pressed={activeTags.includes(tag)}
                   data-testid={`destination-filter-${toTestIdToken(tag)}`}
                   className={`rounded-full border px-4 py-2 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgba(255,252,246,0.9)] ${activeTags.includes(tag)
                     ? "border-[rgba(31,95,99,0.5)] bg-[rgba(31,95,99,0.12)] text-[var(--atlas-accent)]"
@@ -393,7 +398,7 @@ export default function DestinationSearch({
           <div className="mt-5 grid gap-3 md:grid-cols-3">
             {featuredResults.length === 0 ? (
               <div className="md:col-span-3 rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.5)] p-4 text-sm text-[var(--atlas-muted)]">
-                No destinations match the current filter set.
+                No destinations found.
               </div>
             ) : (
               featuredResults.map((destination) => (
@@ -428,9 +433,12 @@ export default function DestinationSearch({
             .sort((left, right) => right.score - left.score || right.destination.match - left.destination.match)
             .slice(0, 6)
             .map(({ destination }) => (
-              <div
+              <Link
                 key={destination.slug}
-                className="relative rounded-[1.5rem] border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.88)] p-5 transition hover:-translate-y-1 hover:border-[rgba(31,95,99,0.35)]"
+                href={`/destinations/${destination.slug}`}
+                data-testid={`destination-open-guide-${destination.slug}`}
+                aria-label={`Open guide for ${destination.city}`}
+                className="relative block rounded-[1.5rem] border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.88)] p-5 transition hover:-translate-y-1 hover:border-[rgba(31,95,99,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.5)] focus-visible:ring-offset-2"
               >
                 <div className="relative z-20">
                   <p className="text-[11px] uppercase tracking-[0.25em] text-[var(--atlas-accent)]">New destination card</p>
@@ -442,7 +450,7 @@ export default function DestinationSearch({
                     <span aria-hidden="true">→</span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
         </div>
       </div>
@@ -450,7 +458,7 @@ export default function DestinationSearch({
       {filteredDestinations.length === 0 ? (
         <div className="mb-8 rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.92)] p-8 text-center shadow-lg shadow-[rgba(39,31,19,0.14)]">
           <p className="text-xs uppercase tracking-[0.26em] text-[var(--atlas-accent)]">No matches yet</p>
-          <h3 className="mt-3 text-2xl font-semibold text-[var(--atlas-ink)]">No destinations match this exact combination.</h3>
+          <h3 className="mt-3 text-2xl font-semibold text-[var(--atlas-ink)]">No destinations found.</h3>
           <p className="mt-3 text-sm leading-7 text-[var(--atlas-muted)]">
             Try removing one filter or broadening your search terms to discover nearby lifestyle fits.
           </p>

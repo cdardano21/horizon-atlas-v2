@@ -39,6 +39,45 @@ test.describe("Horizon Atlas smoke suite", () => {
     await expect(page.getByTestId("destination-open-valencia-spain")).toBeVisible();
   });
 
+  test("search returns Chicago and remains case-insensitive", async ({ page }) => {
+    await page.goto("/destinations");
+
+    await page.getByTestId("destination-search-input").fill("chicago");
+
+    await expect(page.getByTestId("destination-card-chicago-illinois-united-states").first()).toBeVisible();
+    await expect(page.getByTestId("destination-results-count")).toContainText("Showing");
+  });
+
+  test("suggested filters change the visible catalog and clear all restores results", async ({ page }) => {
+    await page.goto("/destinations");
+
+    const resultsCount = page.getByTestId("destination-results-count").locator("span").first();
+    const initialCount = Number(await resultsCount.textContent());
+
+    await page.getByTestId("destination-filter-golf").first().click();
+
+    const filteredCount = Number(await resultsCount.textContent());
+    expect(filteredCount).toBeLessThan(initialCount);
+
+    await page.getByTestId("destination-filters-clear").click();
+    await expect(page.getByTestId("destination-search-input")).toHaveValue("");
+    await expect(page.getByTestId("destination-card-chicago-illinois-united-states").first()).toBeVisible();
+  });
+
+  test("Open guide links open the correct destination page", async ({ page }) => {
+    await page.goto("/destinations");
+
+    await page.getByTestId("destination-open-guide-nafplio-greece").click();
+    await expect(page).toHaveURL(/\/destinations\/nafplio-greece/);
+  });
+
+  test("View full guide still works", async ({ page }) => {
+    await page.goto("/destinations");
+
+    await page.getByTestId("destination-open-valencia-spain").click();
+    await expect(page).toHaveURL(/\/destinations\/valencia-spain/);
+  });
+
   test("newly surfaced destinations appear in the catalog highlights", async ({ page }) => {
     await page.goto("/destinations");
 
