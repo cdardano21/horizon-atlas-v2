@@ -6,7 +6,7 @@ export default function TermsPage() {
     <RouteFrame
       eyebrow="Terms"
       title="Terms of use"
-      description="Horizon Atlas is a planning and discovery tool. These terms set the route up now and can be expanded as account and payment features go live."
+      description="DestinationFinderAI is a planning and discovery tool. These terms set the route up now and can be expanded as account and payment features go live."
       primaryAction={{ href: "/privacy", label: "Read privacy policy" }}
       secondaryAction={{ href: "/contact", label: "Contact support" }}
     >

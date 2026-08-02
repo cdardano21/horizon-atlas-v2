@@ -13,7 +13,7 @@ import {
   type RetirementDnaAnswers,
 } from "../lib/retirement-dna";
 
-const DRAFT_STORAGE_KEY = "horizon-atlas:retirement-dna-draft";
+const DRAFT_STORAGE_KEY = "destinationfinderai:retirement-dna-draft";
 
 const loadDraftAnswers = (): RetirementDnaAnswers => {
   if (typeof window === "undefined") return {};
@@ -116,7 +116,7 @@ export default function LifeMatchApp() {
               A {RETIREMENT_DNA_TOTAL_QUESTIONS}-question relocation assessment across {LAUNCH_CATALOG_SIZE} destinations.
             </h1>
             <p className="mt-5 text-lg leading-8 text-[var(--atlas-muted)]">
-              Build a full retirement profile across budget, healthcare, safety, climate, social fit, and long-term stability. Horizon Atlas then ranks the best destinations for your exact pattern of priorities.
+              Build a full retirement profile across budget, healthcare, safety, climate, social fit, and long-term stability. DestinationFinderAI then ranks the best destinations for your exact pattern of priorities.
             </p>
             <div className="mt-8 flex flex-wrap gap-3 text-sm">
               <span className="rounded-full bg-[rgba(31,95,99,0.12)] px-4 py-2 text-[var(--atlas-accent)]">{RETIREMENT_DNA_TOTAL_QUESTIONS} scored questions</span>
@@ -346,7 +346,7 @@ export default function LifeMatchApp() {
           <div className="mt-10 rounded-3xl bg-[rgba(255,255,255,0.75)] p-5 text-sm text-[var(--atlas-muted)]">
             <p className="font-semibold text-[var(--atlas-ink)]">Why this module is deeper</p>
             <p className="mt-3">
-              Instead of matching on a few tags, Horizon Atlas now builds a weighted retirement profile across 12 dimensions, then scores the destination catalog against that full profile.
+              Instead of matching on a few tags, DestinationFinderAI now builds a weighted retirement profile across 12 dimensions, then scores the destination catalog against that full profile.
             </p>
           </div>
         </aside>

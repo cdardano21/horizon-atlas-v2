@@ -1,4 +1,4 @@
-# Horizon Atlas V2
+# DestinationFinderAI
 
 A premium AI-powered retirement and relocation platform built with Next.js, React, TypeScript, and Tailwind CSS.
 

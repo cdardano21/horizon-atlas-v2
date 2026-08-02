@@ -12,7 +12,7 @@ export default function ShareDestinationButton({ city }: { city: string }) {
       if (navigator.share) {
         await navigator.share({
           title: `${city} relocation intelligence`,
-          text: `Explore ${city} on Horizon Atlas`,
+          text: `Explore ${city} on DestinationFinderAI`,
           url,
         });
         setLabel("Shared");

@@ -34,7 +34,7 @@ export default function Footer() {
       </div>
 
       <div className="mx-auto mt-10 max-w-7xl border-t border-[var(--atlas-border)] pt-6 text-sm text-[var(--atlas-muted)]">
-        © {new Date().getFullYear()} Horizon Atlas. All rights reserved.
+        © {new Date().getFullYear()} DestinationFinderAI. All rights reserved.
       </div>
     </footer>
   );

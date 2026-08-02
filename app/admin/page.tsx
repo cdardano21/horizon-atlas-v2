@@ -55,7 +55,7 @@ export default async function AdminPage() {
     <RouteFrame
       eyebrow="Admin Console"
       title="Content operations and data architecture"
-      description="Horizon Atlas now has the schema foundation for user profiles, saved assessments, recommendation sets, destination records, media, resources, and admin roles. This route is the local operations surface for the commercial product layer."
+      description="DestinationFinderAI now has the schema foundation for user profiles, saved assessments, recommendation sets, destination records, media, resources, and admin roles. This route is the local operations surface for the commercial product layer."
       primaryAction={{ href: "/destinations", label: "Review catalog" }}
       secondaryAction={{ href: "/profile", label: "Open profile" }}
     >

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 
-const STORAGE_KEY = "horizon-atlas:favorites";
+const STORAGE_KEY = "destinationfinderai:favorites";
 const EMPTY_FAVORITE_SLUGS: string[] = [];
 
 let cachedFavoriteSlugs: string[] | null = null;

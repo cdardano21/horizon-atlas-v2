@@ -385,7 +385,7 @@ const COMMAND_CENTER_DATASET_GUIDES: Record<CommandCenterDatasetKey, CommandCent
 const RELOCATION_PROFILE_TEMPLATE: DestinationRelocationProfile = {
   aiSummary: "",
   livingHereScorecard: [
-    { category: "Overall Match", score: 90, context: "Weighted by Horizon Atlas relocation model." },
+    { category: "Overall Match", score: 90, context: "Weighted by DestinationFinderAI relocation model." },
     { category: "Safety", score: 90, context: "Adjust after district-level review." },
     { category: "Healthcare", score: 90, context: "Update after hospital and specialist validation." },
   ],
@@ -636,7 +636,7 @@ const buildRelocationProfileBaseline = (
   return {
     aiSummary: `${destination.city} is positioned as a high-confidence relocation candidate for people who value ${hasTag("walkability") ? "walkable neighborhoods" : "practical daily living"}, ${hasTag("healthcare") ? "healthcare access" : "operational stability"}, and ${hasTag("beach") || hasTag("coast") ? "coastal quality of life" : "long-term lifestyle durability"}. Use this profile as a single decision surface before spending weeks researching across separate sites.`,
     livingHereScorecard: [
-      { category: "Overall Match", score: score(84, hasTag("expat-friendly") ? 6 : 0), context: "Derived from current Horizon Atlas tags and structured signals." },
+      { category: "Overall Match", score: score(84, hasTag("expat-friendly") ? 6 : 0), context: "Derived from current DestinationFinderAI tags and structured signals." },
       { category: "Safety", score: score(80, hasTag("safety") ? 12 : 0), context: hasTag("safety") ? "Safety is tagged as a strength." : "Validate district-level variation." },
       { category: "Healthcare", score: score(78, (hasTag("healthcare") ? 12 : 0) + (hospitals > 0 ? 4 : 0)), context: hospitals > 0 ? `${hospitals} hospital records loaded.` : "Add hospital data for stronger confidence." },
       { category: "Cost of Living", score: score(76, hasTag("value") ? 10 : 0), context: hasTag("value") ? "Value-oriented tag in catalog." : "Cost requires neighborhood-level modeling." },

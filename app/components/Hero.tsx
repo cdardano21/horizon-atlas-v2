@@ -36,7 +36,7 @@ export default function Hero() {
               Don&apos;t just retire.
             </h1>
             <p className="mt-8 max-w-2xl text-base leading-8 text-[#f2ebe0] sm:text-lg">
-              Horizon Atlas blends destination intelligence with emotional fit, so your next chapter feels like a life upgrade, not a compromise.
+              DestinationFinderAI blends destination intelligence with emotional fit, so your next chapter feels like a life upgrade, not a compromise.
             </p>
 
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -52,7 +52,7 @@ export default function Hero() {
                 data-testid="hero-cta-explore-atlas"
                 className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-8 py-4 text-base font-semibold text-[#fefbf5] transition hover:border-[#f4dfbe] hover:bg-white/20"
               >
-                Explore the atlas
+                Explore the catalog
               </Link>
             </div>
 

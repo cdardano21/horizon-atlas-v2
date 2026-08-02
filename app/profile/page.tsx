@@ -9,7 +9,7 @@ export default async function ProfilePage() {
   return (
     <RouteFrame
       eyebrow="Saved cities"
-      title="Your Horizon Atlas profile"
+      title="Your DestinationFinderAI profile"
       description="Favorites, compare lists, and saved cities now live in your browser and will be surfaced from this profile route."
       primaryAction={{ href: "/destinations", label: "Browse destinations" }}
       secondaryAction={{ href: "/compare", label: "Compare cities" }}

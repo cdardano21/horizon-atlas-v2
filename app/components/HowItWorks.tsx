@@ -28,7 +28,7 @@ export default function HowItWorks() {
             A guided path from curiosity to confident relocation.
           </h2>
           <p className="mt-6 text-lg leading-8 text-[var(--atlas-muted)]">
-            Horizon Atlas uses intelligent lifestyle profiling and destination scoring to bring you the places that match your priorities, not the places that look good on paper.
+            DestinationFinderAI uses intelligent lifestyle profiling and destination scoring to bring you the places that match your priorities, not the places that look good on paper.
           </p>
         </div>
 

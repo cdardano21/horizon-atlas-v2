@@ -2,7 +2,7 @@
 
 ## Goal
 
-Scale Horizon Atlas to 300+ destinations by separating what can be gathered in a broad automated sweep from what needs curated enrichment.
+Scale DestinationFinderAI to 300+ destinations by separating what can be gathered in a broad automated sweep from what needs curated enrichment.
 
 ## Core Rule
 

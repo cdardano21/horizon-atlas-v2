@@ -10,7 +10,7 @@ export default function ProductCTA() {
             <p className="atlas-kicker">One-time search</p>
             <h2 className="mt-4 text-5xl leading-tight text-[var(--atlas-ink)]">Search {LAUNCH_CATALOG_SIZE} destinations once and get your top 10 destination matches.</h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--atlas-muted)]">
-              Horizon Atlas evaluates every destination in the catalog against your Life Match priorities, then delivers the best 10 that fit your lifestyle, budget, climate, and safety preferences.
+              DestinationFinderAI evaluates every destination in the catalog against your Life Match priorities, then delivers the best 10 that fit your lifestyle, budget, climate, and safety preferences.
             </p>
           </div>
           <div className="rounded-3xl border border-[rgba(31,95,99,0.18)] bg-[rgba(255,253,247,0.86)] p-8 text-[var(--atlas-muted)] shadow-[0_22px_42px_-28px_rgba(31,95,99,0.8)]">

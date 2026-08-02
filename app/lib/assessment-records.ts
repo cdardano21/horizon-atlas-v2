@@ -2,8 +2,8 @@
 
 import type { RetirementDnaProfile } from "./retirement-dna";
 
-const STORAGE_KEY = "horizon-atlas:assessment-records";
-const PROFILE_STORAGE_KEY = "horizon-atlas:dashboard-profile";
+const STORAGE_KEY = "destinationfinderai:assessment-records";
+const PROFILE_STORAGE_KEY = "destinationfinderai:dashboard-profile";
 
 export type SavedAssessmentRecord = {
   id: string;

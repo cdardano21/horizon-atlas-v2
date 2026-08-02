@@ -5,8 +5,8 @@ export default function AboutPage() {
   return (
     <RouteFrame
       eyebrow="About"
-      title="Why Horizon Atlas exists"
-      description="Horizon Atlas helps people find places that fit a real next chapter, not just a vacation fantasy. The product focuses on long-stay livability, cost realism, and the tradeoffs that matter in retirement and lifestyle relocation."
+      title="Why DestinationFinderAI exists"
+      description="DestinationFinderAI helps people find places that fit a real next chapter, not just a vacation fantasy. The product focuses on long-stay livability, cost realism, and the tradeoffs that matter in retirement and lifestyle relocation."
       primaryAction={{ href: "/life-match", label: "Take Life Match" }}
       secondaryAction={{ href: "/destinations", label: "Browse the catalog" }}
     >

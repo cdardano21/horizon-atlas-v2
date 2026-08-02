@@ -6,7 +6,7 @@ export default function PrivacyPage() {
     <RouteFrame
       eyebrow="Privacy"
       title="Privacy policy"
-      description="Horizon Atlas is designed to minimize data collection while the product evolves. This page establishes the route and a clear baseline for the eventual full policy."
+      description="DestinationFinderAI is designed to minimize data collection while the product evolves. This page establishes the route and a clear baseline for the eventual full policy."
       primaryAction={{ href: "/terms", label: "Read terms" }}
       secondaryAction={{ href: "/contact", label: "Contact us" }}
     >

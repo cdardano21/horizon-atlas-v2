@@ -29,7 +29,7 @@ export const destinationResearchProfiles: Partial<Record<string, DestinationRese
     familyFriendliness: "The town works well for families who value calm, sea access, and a walkable environment over an active nightlife scene.",
     nearbyDayTrips: ["Dubrovnik", "Korčula", "Mljet"],
     visaAndTax: ["EU and Schengen access matters for residency planning", "Croatia-specific tax and residency rules should be reviewed with local counsel"],
-    researchNotes: ["Built from an original Horizon Atlas synthesis of official tourism, municipal, and regional travel sources."]
+    researchNotes: ["Built from an original DestinationFinderAI synthesis of official tourism, municipal, and regional travel sources."]
   },
   "hiroshima-japan": {
     overview: "Hiroshima is a practical Japanese city that becomes more compelling the longer you live with it. Its strengths are not spectacle but daily reliability: riverside walks, tram access, strong medical infrastructure, and a calm rhythm that feels more sustainable than the country's biggest metropolises.",
@@ -59,7 +59,7 @@ export const destinationResearchProfiles: Partial<Record<string, DestinationRese
     familyFriendliness: "The city works well for families who value safety, parks, and a stable environment over constant novelty.",
     nearbyDayTrips: ["Miyajima", "Onomichi", "Kurashiki"],
     visaAndTax: ["Japan-specific residence and tax planning should be reviewed carefully", "The city's practical strengths do not replace immigration advice"],
-    researchNotes: ["Built from an original Horizon Atlas synthesis of city planning, transit, and lifestyle sources."]
+    researchNotes: ["Built from an original DestinationFinderAI synthesis of city planning, transit, and lifestyle sources."]
   },
   "kobe-japan": {
     overview: "Kobe offers a refined urban life where sea views, hillside neighborhoods, and a strong food culture create a more textured long-stay experience than many people expect from a port city. It works best for people who want a real city but still value beauty and ease in the everyday environment.",
@@ -89,7 +89,7 @@ export const destinationResearchProfiles: Partial<Record<string, DestinationRese
     familyFriendliness: "The city can work well for families who appreciate safety, transit, and a broader urban offer.",
     nearbyDayTrips: ["Osaka", "Kyoto", "Awaji Island"],
     visaAndTax: ["Japan-specific residency and tax planning should be reviewed carefully", "The city itself should not be mistaken for a visa solution"],
-    researchNotes: ["Built from an original Horizon Atlas synthesis of urban lifestyle and regional access sources."]
+    researchNotes: ["Built from an original DestinationFinderAI synthesis of urban lifestyle and regional access sources."]
   },
   "tivat-montenegro": {
     overview: "Tivat works best for people who want a polished bay base with marina energy, easy airport access, and a slower daily tempo than a big coastal city. The town feels most successful when your home base keeps the marina, the waterfront, and the center inside a compact daily loop.",
@@ -119,7 +119,7 @@ export const destinationResearchProfiles: Partial<Record<string, DestinationRese
     familyFriendliness: "The town can work well for families who want a secure, low-drama base with waterfront access and a manageable pace.",
     nearbyDayTrips: ["Kotor", "Perast", "Herceg Novi"],
     visaAndTax: ["Montenegro-specific residency and tax planning should be reviewed carefully", "The town's appeal should not replace formal legal advice"],
-    researchNotes: ["Built from a Horizon Atlas synthesis of bay access, marina infrastructure, airport convenience, and everyday residential fit."]
+    researchNotes: ["Built from a DestinationFinderAI synthesis of bay access, marina infrastructure, airport convenience, and everyday residential fit."]
   },
   "todos-santos-mexico": {
     overview: "Todos Santos works best for people who want a small Baja town with art energy, desert scenery, and a slower coastal rhythm than a resort-heavy beach destination. The place shines when you value character, weather, and a weekly routine built around the town rather than around a big hotel zone.",
@@ -149,7 +149,7 @@ export const destinationResearchProfiles: Partial<Record<string, DestinationRese
     familyFriendliness: "The town can suit families who value community, outdoor life, and a calm environment over big-city amenities.",
     nearbyDayTrips: ["Cabo San Lucas", "La Paz", "The Pacific coast and nearby surf zones"],
     visaAndTax: ["Mexico-specific residency and tax planning should be reviewed carefully", "The town's lifestyle benefits should not replace formal legal advice"],
-    researchNotes: ["Built from a Horizon Atlas synthesis of coastal lifestyle, art-town identity, healthcare access, and long-stay practicality."]
+    researchNotes: ["Built from a DestinationFinderAI synthesis of coastal lifestyle, art-town identity, healthcare access, and long-stay practicality."]
   },
 };
 
@@ -316,7 +316,7 @@ const buildGenericResearchProfile = (destination: Destination): DestinationResea
       : `${city} is usually strongest for families who want local services, a stable daily rhythm, and enough public life to keep the week feeling active.`,
     nearbyDayTrips: [`A regional day trip that reinforces the city's broader appeal`, `A second nearby destination worth testing over a weekend`],
     visaAndTax: [`Visa and tax planning should be reviewed for your citizenship and planned stay before you commit.`, `Local rules may change, so professional advice remains important.`],
-    researchNotes: [`Generated from the destination's existing profile fields and shaped into a Horizon Atlas research format.`],
+    researchNotes: [`Generated from the destination's existing profile fields and shaped into a DestinationFinderAI research format.`],
   };
 };
 

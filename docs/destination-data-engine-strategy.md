@@ -1,8 +1,8 @@
-# Horizon Atlas Destination Data Engine Strategy
+# DestinationFinderAI Destination Data Engine Strategy
 
 ## Strategic Shift
 
-Horizon Atlas is now treated as a scalable destination data platform, not a manually authored page collection.
+DestinationFinderAI is now treated as a scalable destination data platform, not a manually authored page collection.
 
 Manual destination deep-builds are limited to a small flagship set used to perfect:
 

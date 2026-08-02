@@ -59,7 +59,7 @@ export default function MonthlyClimatePanel({ rows }: { rows: MonthlyClimateRow[
           <p className="text-xs uppercase tracking-[0.3em] text-[var(--atlas-accent)]">Seasonal lens</p>
           <h3 className="mt-3 text-3xl font-semibold text-[var(--atlas-ink)]">See the rhythm of the year before you compare raw numbers.</h3>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--atlas-muted)]">
-            Horizon Atlas translates the climate table into living signals: when the city feels best for long walks, when the water gets inviting, and when rain starts to shape daily routines.
+            DestinationFinderAI translates the climate table into living signals: when the city feels best for long walks, when the water gets inviting, and when rain starts to shape daily routines.
           </p>
 
           <div className="mt-6 grid gap-3 md:grid-cols-3">

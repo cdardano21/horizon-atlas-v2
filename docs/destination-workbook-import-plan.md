@@ -8,7 +8,7 @@
 ## Findings
 - The workbook contains a single worksheet with 1000 data rows plus a header row.
 - The workbook exposes 972 unique destination slugs after duplicate-slug resolution.
-- The current Horizon Atlas V2 destination catalog is loaded from app/lib/destinations.ts.
+- The current DestinationFinderAI destination catalog is loaded from app/lib/destinations.ts.
 - The current app already contains the same destination slug set, so the import will preserve existing destination content and use the workbook as the canonical source for core fields.
 
 ## Import approach

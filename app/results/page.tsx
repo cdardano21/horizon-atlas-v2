@@ -58,7 +58,7 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
   return (
     <RouteFrame
       eyebrow={hasDnaAssessment ? "Retirement DNA results" : "Personal Top 10"}
-      title={hasDnaAssessment ? "Your best retirement matches across the Horizon Atlas catalog" : "Your best matches across the Horizon Atlas catalog"}
+      title={hasDnaAssessment ? "Your best retirement matches across the DestinationFinderAI catalog" : "Your best matches across the DestinationFinderAI catalog"}
       description={
         hasDnaAssessment && profile
           ? `Your ${profile.answeredCount}-answer Retirement DNA profile has been weighted against the full catalog of ${publicDestinations.length} destinations to generate a recommendation set with strengths and tradeoffs.`

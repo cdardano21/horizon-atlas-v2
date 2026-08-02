@@ -1,12 +1,12 @@
-# Horizon Atlas V2
+# DestinationFinderAI
 
 ## The AI-Powered Global Retirement & Relocation Platform
 
 ### Vision
 
-Horizon Atlas helps people discover where they can build the best life based on who they are, not just what they can afford.
+DestinationFinderAI helps people discover where they can build the best life based on who they are, not just what they can afford.
 
-Instead of searching through thousands of articles, YouTube videos, Reddit posts, and cost-of-living websites, Horizon Atlas analyzes hundreds of lifestyle variables and recommends the destinations that best match each person’s unique Retirement DNA.
+Instead of searching through thousands of articles, YouTube videos, Reddit posts, and cost-of-living websites, DestinationFinderAI analyzes hundreds of lifestyle variables and recommends the destinations that best match each person’s unique Retirement DNA.
 
 Our goal is to become the world’s most trusted retirement and relocation planning platform.
 
@@ -18,7 +18,7 @@ Most retirement websites ask:
 
 “Where is it cheap?”
 
-Horizon Atlas asks:
+DestinationFinderAI asks:
 
 “Where will YOU thrive?”
 
@@ -770,7 +770,7 @@ Currency API
 
 ---
 
-# Horizon Atlas Principles
+# DestinationFinderAI Principles
 
 • Recommend the best life, not the cheapest life.
 
@@ -790,4 +790,4 @@ Currency API
 
 Build the world’s best AI-powered retirement and relocation platform, combining the intelligence of a financial planner, the inspiration of a luxury travel magazine, the practicality of a relocation consultant, and the personalization of an AI life coach.
 
-When someone asks, **“Where should I build the next chapter of my life?”**, Horizon Atlas should be the first place they go.
+When someone asks, **“Where should I build the next chapter of my life?”**, DestinationFinderAI should be the first place they go.

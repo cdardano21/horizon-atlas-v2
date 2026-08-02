@@ -2,7 +2,7 @@ const reasons = [
   {
     title: "Personalized AI guidance",
     description:
-      "Horizon Atlas matches your lifestyle priorities with destinations, not just cost metrics.",
+      "DestinationFinderAI matches your lifestyle priorities with destinations, not just cost metrics.",
   },
   {
     title: "Data you can trust",
@@ -21,7 +21,7 @@ export default function WhyHorizon() {
     <section className="mx-auto max-w-7xl px-8 py-28">
       <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
         <div>
-          <p className="atlas-kicker">Why Horizon Atlas</p>
+          <p className="atlas-kicker">Why DestinationFinderAI</p>
           <h2 className="mt-4 text-5xl leading-tight text-[var(--atlas-ink)]">
             Designed to help you find the right place for the next chapter.
           </h2>

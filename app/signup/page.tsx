@@ -6,7 +6,7 @@ export default function SignupPage() {
   return (
     <RouteFrame
       eyebrow="Create account"
-      title="Join Horizon Atlas"
+      title="Join DestinationFinderAI"
       description="Set up your account to save cities, compare favorites, and receive future personalized updates."
       primaryAction={{ href: "/life-match", label: "Start Life Match" }}
       secondaryAction={{ href: "/login", label: "I already have an account" }}

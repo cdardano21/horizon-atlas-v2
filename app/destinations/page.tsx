@@ -32,7 +32,7 @@ export default async function DestinationsPage({ searchParams }: DestinationsPag
                 Explore destinations the way people actually choose a future, not a weekend trip.
               </h1>
               <p className="mt-6 max-w-3xl text-base leading-8 text-[#f4ecde] sm:text-lg">
-                Browse the Horizon Atlas catalog like an interactive magazine: climate, neighborhood feel, healthcare, daily rhythm, and relocation practicality in one cinematic search experience.
+                Browse the DestinationFinderAI catalog like an interactive magazine: climate, neighborhood feel, healthcare, daily rhythm, and relocation practicality in one cinematic search experience.
               </p>
 
               <div className="mt-6 rounded-[1.5rem] border border-white/20 bg-white/10 px-5 py-4 backdrop-blur-sm">

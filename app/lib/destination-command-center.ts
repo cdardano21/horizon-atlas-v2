@@ -398,7 +398,7 @@ const fallbackVerification: VerificationMeta = {
 
 const fallbackClimateVerification: VerificationMeta = {
   ...fallbackVerification,
-  sourceOrganization: "Horizon Atlas climate baseline",
+  sourceOrganization: "DestinationFinderAI climate baseline",
   sourceType: "climate_guide",
 };
 
@@ -430,7 +430,7 @@ const factResourcesForDestination = (destination: Destination, verifiedAt: strin
 
 const baselineVerification = (sourceUrl: string, lastVerifiedAt: string | null): VerificationMeta => ({
   sourceUrl,
-  sourceOrganization: "Horizon Atlas relocation baseline",
+  sourceOrganization: "DestinationFinderAI relocation baseline",
   sourceType: "relocation_baseline",
   confidenceLevel: "medium",
   verificationStatus: "estimated",

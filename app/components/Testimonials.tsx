@@ -1,7 +1,7 @@
 const testimonials = [
   {
     quote:
-      "Horizon Atlas helped us narrow down the perfect retirement neighborhood in Portugal, and the move felt so much less overwhelming.",
+      "DestinationFinderAI helped us narrow down the perfect retirement neighborhood in Portugal, and the move felt so much less overwhelming.",
     name: "Evelyn R.",
     role: "Retired Architect",
   },

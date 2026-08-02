@@ -3,9 +3,9 @@ import { LAUNCH_CATALOG_SIZE } from "../lib/destinations";
 import { RETIREMENT_DNA_TOTAL_QUESTIONS } from "../lib/retirement-dna";
 
 export const metadata = {
-  title: "Life Match | Horizon Atlas",
+  title: "Life Match | DestinationFinderAI",
   description:
-    `Take the ${RETIREMENT_DNA_TOTAL_QUESTIONS}-question Horizon Atlas Retirement DNA assessment to identify the top 10 retirement destinations from ${LAUNCH_CATALOG_SIZE} verified global locations.`,
+    `Take the ${RETIREMENT_DNA_TOTAL_QUESTIONS}-question DestinationFinderAI Retirement DNA assessment to identify the top 10 retirement destinations from ${LAUNCH_CATALOG_SIZE} verified global locations.`,
 };
 
 export default function LifeMatchPage() {

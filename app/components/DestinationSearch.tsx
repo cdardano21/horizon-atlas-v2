@@ -381,7 +381,7 @@ export default function DestinationSearch({
             Browse until a place starts feeling possible, then click through and pressure-test it.
           </p>
           <p className="mt-4 text-sm leading-7 text-[var(--atlas-muted)]">
-            Horizon Atlas should feel more like an exploration engine than a results list. Use the filters to narrow the emotional tone of the next chapter you are trying to build.
+            DestinationFinderAI should feel more like an exploration engine than a results list. Use the filters to narrow the emotional tone of the next chapter you are trying to build.
           </p>
         </div>
 

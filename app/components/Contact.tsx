@@ -10,7 +10,7 @@ export default function Contact() {
             Ready to find your ideal retirement destination?
           </h2>
           <p className="mt-6 max-w-xl text-lg leading-8 text-[var(--atlas-muted)]">
-            Send us a message and a Horizon Atlas specialist will guide you through the next steps.
+            Send us a message and a DestinationFinderAI specialist will guide you through the next steps.
           </p>
         </div>
 

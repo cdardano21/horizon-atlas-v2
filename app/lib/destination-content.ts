@@ -80,7 +80,7 @@ const WEAK_NARRATIVE_PATTERNS = [
   /lived-in place/i,
   /source expansion underway/i,
   /professional review needed/i,
-  /available in the horizon atlas/i,
+  /available in the destinationfinderai/i,
   /available for relocation research/i,
   /destination in/i,
   /known for.*practical transport links/i,
@@ -283,7 +283,7 @@ const toDestinationFromCatalog = (
       ?? selectEditorialNarrative(
         row.description,
         local?.description,
-        `${row.city} is available in the Horizon Atlas destination catalog with curated relocation details.`,
+        `${row.city} is available in the DestinationFinderAI destination catalog with curated relocation details.`,
       ),
     overview: sourceOnlyNarrative?.overview
       ?? selectEditorialNarrative(

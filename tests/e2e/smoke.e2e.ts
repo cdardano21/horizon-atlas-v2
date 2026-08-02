@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test.describe("Horizon Atlas smoke suite", () => {
+test.describe("DestinationFinderAI smoke suite", () => {
   test("home page loads and routes into catalog", async ({ page }) => {
     await page.goto("/");
 

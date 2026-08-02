@@ -15,14 +15,14 @@ export default function HorizonAtlasLogo({
   iconClassName = "",
 }: HorizonAtlasLogoProps) {
   const isMonochrome = tone === "monochrome";
-  const iconSrc = "/brand/horizon-atlas-icon.svg";
-  const fullSrc = "/design-reference/horizon%20atlas%20logo.JPG";
+  const iconSrc = "/brand/destinationfinder-ai-logo.png";
+  const fullSrc = "/brand/destinationfinder-ai-logo.png";
 
   if (layout === "icon") {
     return (
       <Image
         src={iconSrc}
-        alt="Horizon Atlas"
+        alt="DestinationFinderAI"
         width={96}
         height={96}
         priority
@@ -36,7 +36,7 @@ export default function HorizonAtlasLogo({
       <span className={`flex items-center justify-center leading-none ${className}`.trim()}>
         <Image
           src={fullSrc}
-          alt="Horizon Atlas"
+          alt="DestinationFinderAI"
           width={1600}
           height={600}
           priority
@@ -50,7 +50,7 @@ export default function HorizonAtlasLogo({
     <span className={`inline-flex items-center leading-none ${className}`.trim()}>
       <Image
         src={fullSrc}
-        alt="Horizon Atlas"
+        alt="DestinationFinderAI"
         width={1600}
         height={600}
         priority
