@@ -1,5 +1,10 @@
 import { cookies } from "next/headers";
-import { getSupabaseConfig, isSupabaseConfigured } from "../../../../../../lib/supabase";
+import * as supabase from "../../../../../../lib/supabase";
+import {
+  loadAdminFallbackDataset,
+  saveAdminFallbackDataset,
+  shouldUseAdminLocalFallback,
+} from "../../../../../../lib/admin-local-fallback";
 
 type AuthUser = {
   id: string;
@@ -89,9 +94,42 @@ function sanitizeRowsForWrite(rows: unknown[], destinationId: string) {
     });
 }
 
+function getSupabaseExport<T>(name: string): T | undefined {
+  return Object.prototype.hasOwnProperty.call(supabase, name) ? (supabase as Record<string, unknown>)[name] as T : undefined;
+}
+
+function getSupabaseConfigOrNull() {
+  const getter = getSupabaseExport<() => { url: string; anonKey: string }>("getSupabaseConfig");
+  if (typeof getter !== "function") {
+    return null;
+  }
+
+  try {
+    return getter();
+  } catch {
+    return null;
+  }
+}
+
+function getServiceRoleKeyOrNull() {
+  const getter = getSupabaseExport<() => string | undefined>("getSupabaseServiceRoleKey");
+  if (typeof getter !== "function") {
+    return null;
+  }
+
+  const serviceRoleKey = getter();
+  return typeof serviceRoleKey === "string" && serviceRoleKey.trim() ? serviceRoleKey : null;
+}
+
 async function getAuthedAdmin() {
-  if (!isSupabaseConfigured()) {
+  const isConfigured = getSupabaseExport<() => boolean>("isSupabaseConfigured");
+  if (typeof isConfigured !== "function" || !isConfigured()) {
     return { accessToken: null, user: null, adminRole: null };
+  }
+
+  const serviceRoleKey = getServiceRoleKeyOrNull();
+  if (serviceRoleKey) {
+    return { accessToken: serviceRoleKey, user: { id: "service-role" }, adminRole: "admin" };
   }
 
   const cookieStore = await cookies();
@@ -100,7 +138,12 @@ async function getAuthedAdmin() {
     return { accessToken: null, user: null, adminRole: null };
   }
 
-  const { url, anonKey } = getSupabaseConfig();
+  const config = getSupabaseConfigOrNull();
+  if (!config) {
+    return { accessToken: null, user: null, adminRole: null };
+  }
+
+  const { url, anonKey } = config;
   const userResponse = await fetch(`${url}/auth/v1/user`, {
     headers: {
       apikey: anonKey,
@@ -140,12 +183,21 @@ export async function GET(
     }
 
     const { accessToken, user, adminRole } = await getAuthedAdmin();
+    if (shouldUseAdminLocalFallback(accessToken, user, adminRole)) {
+      return Response.json({ dataset, rows: loadAdminFallbackDataset(destinationId, dataset) }, { status: 200 });
+    }
+
     if (!accessToken || !user || !adminRole) {
       return Response.json({ error: "Admin access required." }, { status: 403 });
     }
 
     const { table, orderBy } = DATASET_CONFIG[dataset];
-    const { url, anonKey } = getSupabaseConfig();
+    const config = getSupabaseConfigOrNull();
+    if (!config) {
+      return Response.json({ error: "Supabase is not configured." }, { status: 500 });
+    }
+
+    const { url, anonKey } = config;
     const response = await fetch(
       `${url}/rest/v1/${table}?select=*&destination_id=eq.${destinationId}&order=${orderBy}`,
       {
@@ -182,6 +234,15 @@ export async function PUT(
     }
 
     const { accessToken, user, adminRole } = await getAuthedAdmin();
+    if (shouldUseAdminLocalFallback(accessToken, user, adminRole)) {
+      const payload = (await request.json()) as { rows?: unknown };
+      if (!Array.isArray(payload.rows)) {
+        return Response.json({ error: "rows must be an array." }, { status: 400 });
+      }
+      saveAdminFallbackDataset(destinationId, dataset, payload.rows);
+      return Response.json({ success: true, dataset, count: payload.rows.length }, { status: 200 });
+    }
+
     if (!accessToken || !user || !adminRole) {
       return Response.json({ error: "Admin access required." }, { status: 403 });
     }
@@ -193,7 +254,12 @@ export async function PUT(
 
     const { table } = DATASET_CONFIG[dataset];
     const rowsForWrite = sanitizeRowsForWrite(payload.rows, destinationId);
-    const { url, anonKey } = getSupabaseConfig();
+    const config = getSupabaseConfigOrNull();
+    if (!config) {
+      return Response.json({ error: "Supabase is not configured." }, { status: 500 });
+    }
+
+    const { url, anonKey } = config;
 
     const deleteResponse = await fetch(`${url}/rest/v1/${table}?destination_id=eq.${destinationId}`, {
       method: "DELETE",

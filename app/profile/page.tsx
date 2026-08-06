@@ -1,10 +1,11 @@
 import RouteFrame from "../components/RouteFrame";
-import { publicDestinations } from "../lib/public-destinations";
+import { getPublicDestinations } from "../lib/public-destinations";
 import { getProfileSnapshot } from "../lib/profile-data";
 import ProfileClient from "../components/ProfileClient";
 
 export default async function ProfilePage() {
   const profile = await getProfileSnapshot();
+  const publicDestinations = await getPublicDestinations();
 
   return (
     <RouteFrame

@@ -12,7 +12,7 @@ export default function LaunchBanner() {
               Search our best {LAUNCH_CATALOG_SIZE} verified destination matches with one simple charge.
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--atlas-muted)]">
-              DestinationFinderAI analyzes your priorities and finds the best cities, towns, and regions across {LAUNCH_CATALOG_SIZE} curated destinations.
+              Search the catalog with a practical shortlist in mind: compare everyday comfort, healthcare access, climate, and cost before you commit.
             </p>
           </div>
           <div className="rounded-3xl border border-[rgba(31,95,99,0.2)] bg-[rgba(255,251,241,0.86)] p-8">

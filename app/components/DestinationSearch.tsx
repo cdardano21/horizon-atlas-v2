@@ -3,11 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState, type ChangeEvent, type MouseEvent } from "react";
+import { useMemo, useState, type ChangeEvent, type MouseEvent } from "react";
 import { sanitizeSummary, toConsumerCopy } from "../lib/consumer-copy";
 import type { Destination } from "../lib/destinations";
 import { COSTA_DEL_SOL_HERO_IMAGE, getDestinationImageUrl, hasVerifiedDestinationImage } from "../lib/imageFallback";
 import { getDestinationMemberDetails, getMemberDetailHighlights } from "../lib/member-details";
+import { rankDestinationsForSearch } from "../lib/destination-search-ranking";
 import { resolveSourceHref, sanitizeExternalSourceUrl } from "../lib/source-links";
 import ExternalLinkIcon from "./ExternalLinkIcon";
 import FavoriteButton from "./FavoriteButton";
@@ -153,10 +154,6 @@ export default function DestinationSearch({
   const [activeTags, setActiveTags] = useState<string[]>([]);
   const router = useRouter();
 
-  useEffect(() => {
-    setQuery(initialQuery);
-  }, [initialQuery]);
-
   const allTags = useMemo(() => {
     const tags = new Set<string>();
     destinations.forEach((destination) => {
@@ -200,17 +197,18 @@ export default function DestinationSearch({
   const visibleTags = useMemo(() => Array.from(new Set([...featuredTags, ...derivedFilterTags, ...activeTags])), [activeTags, derivedFilterTags, featuredTags]);
 
   const filteredDestinations = useMemo(() => {
-    return destinations
-      .map((destination) => ({
-        destination,
-        score: getSearchScore(destination, normalize(query), activeTags),
-      }))
-      .filter((item): item is { destination: Destination; score: number } => typeof item.score === "number")
-      .sort((left, right) => right.score - left.score)
-      .map((item) => item.destination);
+    const ranked = rankDestinationsForSearch(destinations, query, activeTags);
+    return ranked.map((destination) => destination as Destination);
   }, [destinations, query, activeTags]);
 
   const visualResults = filteredDestinations.slice(0, 3);
+  const topMatchDestination = useMemo(() => {
+    if (filteredDestinations.length === 0) {
+      return null;
+    }
+
+    return filteredDestinations[0];
+  }, [filteredDestinations]);
 
   const toggleTag = (tag: string) => {
     setActiveTags((current) => {
@@ -248,7 +246,16 @@ export default function DestinationSearch({
 
   const featuredResults = filteredDestinations.slice(0, 3);
 
-  console.log("DestinationSearch render", { activeTags, query, filteredDestinationsCount: filteredDestinations.length });
+  if (process.env.NEXT_PUBLIC_DEBUG_PUBLIC_CATALOG === "1") {
+    console.info("[DestinationSearch] render", {
+      activeTags,
+      query,
+      receivedDestinationsCount: destinations.length,
+      filteredDestinationsCount: filteredDestinations.length,
+      first10Slugs: destinations.slice(0, 10).map((destination) => destination.slug),
+      hasDevon: destinations.some((destination) => destination.slug === "devon-pa-usa"),
+    });
+  }
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-20 sm:px-8 sm:py-24">
@@ -322,6 +329,26 @@ export default function DestinationSearch({
           </div>
         </div>
       </div>
+
+      {topMatchDestination && (query.trim() || activeTags.length > 0) ? (
+        <div className="mb-6 rounded-[2rem] border border-[rgba(31,95,99,0.25)] bg-[linear-gradient(135deg,rgba(31,95,99,0.12),rgba(255,252,246,0.95))] p-6 shadow-[0_18px_40px_-24px_rgba(39,31,19,0.36)]">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.28em] text-[var(--atlas-accent)]">Top match</p>
+              <h3 className="mt-2 text-2xl font-semibold text-[var(--atlas-ink)]">{topMatchDestination.city}, {topMatchDestination.country}</h3>
+              <p className="mt-2 max-w-2xl text-sm leading-7 text-[var(--atlas-muted)]">
+                {query.trim() ? `The strongest match for “${query.trim()}” is being surfaced first so it is the first place you see.` : "This destination is the strongest fit for the active filters and is being surfaced first."}
+              </p>
+            </div>
+            <Link
+              href={`/destinations/${topMatchDestination.slug}`}
+              className="atlas-button-primary inline-flex items-center justify-center px-5 py-2"
+            >
+              Open guide
+            </Link>
+          </div>
+        </div>
+      ) : null}
 
       <div className="mb-12 rounded-[2.25rem] border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.9)] p-6 shadow-[0_22px_48px_-34px_rgba(39,31,19,0.42)]">
         <p className="text-xs uppercase tracking-[0.28em] text-[var(--atlas-accent)]">Scouting gallery</p>
@@ -401,13 +428,26 @@ export default function DestinationSearch({
                 No destinations found.
               </div>
             ) : (
-              featuredResults.map((destination) => (
-                <div key={destination.slug} className="rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.5)] p-4">
-                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--atlas-accent)]">Featured result</p>
-                  <p className="mt-2 text-lg font-semibold text-[var(--atlas-ink)]">{destination.city}</p>
-                  <p className="mt-1 text-sm text-[var(--atlas-muted)]">{destination.country}</p>
-                </div>
-              ))
+              featuredResults.map((destination, index) => {
+                const isTopMatch = index === 0 && Boolean(topMatchDestination && topMatchDestination.slug === destination.slug);
+
+                return (
+                  <div
+                    key={destination.slug}
+                    className={`rounded-3xl border p-4 ${isTopMatch
+                      ? "border-[rgba(31,95,99,0.38)] bg-[rgba(31,95,99,0.1)] shadow-[0_10px_28px_-20px_rgba(31,95,99,0.65)]"
+                      : "border-[var(--atlas-border)] bg-[rgba(255,255,255,0.5)]"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-xs uppercase tracking-[0.22em] text-[var(--atlas-accent)]">{isTopMatch ? "Best match" : "Featured result"}</p>
+                      {isTopMatch ? <span className="rounded-full bg-[rgba(31,95,99,0.16)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--atlas-accent)]">Top</span> : null}
+                    </div>
+                    <p className="mt-2 text-lg font-semibold text-[var(--atlas-ink)]">{destination.city}</p>
+                    <p className="mt-1 text-sm text-[var(--atlas-muted)]">{destination.country}</p>
+                  </div>
+                );
+              })
             )}
           </div>
         </div>
@@ -480,7 +520,10 @@ export default function DestinationSearch({
             href={`/destinations/${destination.slug}`}
             data-testid={`destination-card-${destination.slug}`}
             aria-label={`Open guide for ${destination.city}`}
-            className="group relative block overflow-hidden rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.92)] shadow-xl shadow-[rgba(42,34,24,0.2)] transition duration-300 hover:-translate-y-1 hover:border-[rgba(31,95,99,0.42)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.5)] focus-visible:ring-offset-2"
+            className={`group relative block overflow-hidden rounded-[2rem] border shadow-xl shadow-[rgba(42,34,24,0.2)] transition duration-300 hover:-translate-y-1 hover:border-[rgba(31,95,99,0.42)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,95,99,0.5)] focus-visible:ring-offset-2 ${index === 0 && Boolean(topMatchDestination && topMatchDestination.slug === destination.slug)
+              ? "border-[rgba(31,95,99,0.42)] bg-[rgba(255,252,246,1)] ring-1 ring-[rgba(31,95,99,0.18)]"
+              : "border-[var(--atlas-border)] bg-[rgba(255,252,246,0.92)]"
+            }`}
           >
             {hasVerifiedDestinationImage(destination) ? (
               <div className="relative h-56 overflow-hidden bg-slate-900/10">
@@ -500,6 +543,12 @@ export default function DestinationSearch({
               </div>
             )}
             <div className="relative z-20 p-6">
+              {index === 0 && Boolean(topMatchDestination && topMatchDestination.slug === destination.slug) ? (
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[rgba(31,95,99,0.25)] bg-[rgba(31,95,99,0.12)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--atlas-accent)]">
+                  <span>Best match</span>
+                  <span aria-hidden="true">★</span>
+                </div>
+              ) : null}
               {(() => {
                 const detailHighlights = getMemberDetailHighlights(destination);
                 const details = getDestinationMemberDetails(destination);

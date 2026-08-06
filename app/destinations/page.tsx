@@ -1,6 +1,6 @@
 import Image from "next/image";
 import DestinationSearch from "../components/DestinationSearch";
-import { publicDestinations } from "../lib/public-destinations";
+import { getPublicDestinations } from "../lib/public-destinations";
 import { COSTA_DEL_SOL_HERO_IMAGE } from "../lib/imageFallback";
 
 type DestinationsPageProps = {
@@ -9,6 +9,7 @@ type DestinationsPageProps = {
 
 export default async function DestinationsPage({ searchParams }: DestinationsPageProps) {
   const params = await searchParams;
+  const publicDestinations = await getPublicDestinations();
   const featuredCountries = Array.from(new Set(publicDestinations.map((destination) => destination.country))).slice(0, 5);
 
   return (

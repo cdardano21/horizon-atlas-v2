@@ -2,7 +2,7 @@ import Link from "next/link";
 import ResultsHistorySaver from "../components/ResultsHistorySaver";
 import RouteFrame from "../components/RouteFrame";
 import type { Destination } from "../lib/destinations";
-import { publicDestinations } from "../lib/public-destinations";
+import { getPublicDestinations } from "../lib/public-destinations";
 import { rankDestinationsForRetirementDna } from "../lib/recommendation-engine";
 import {
   computeRetirementDnaProfile,
@@ -43,6 +43,7 @@ const scoreDestination = (destination: Destination, selectedTags: string[]) => {
 
 export default async function ResultsPage({ searchParams }: ResultsPageProps) {
   const params = searchParams ? await searchParams : undefined;
+  const publicDestinations = await getPublicDestinations();
   const selectedTags = parseTags(params?.tags);
   const dnaPayload = parseDna(params?.dna);
   const dnaAnswers = dnaPayload ? deserializeRetirementDnaAnswers(dnaPayload) : {};
@@ -186,7 +187,7 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
                 </div>
                 <div>
                   <p className="text-white">Why it matched</p>
-                  <p className="mt-1">This city rose to the top because its existing destination tags and overall Horizon score aligned with your selected priorities.</p>
+                  <p className="mt-1">This city rose to the top because its existing destination tags and overall DestinationFinderAI score aligned with your selected priorities.</p>
                 </div>
                 <div>
                   <p className="text-white">Why it was not perfect</p>

@@ -775,7 +775,7 @@ export const curatedCityImageGalleriesBySlug: Record<string, string[]> = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Chicago_River_ferry_b.jpg/1280px-Chicago_River_ferry_b.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Art_Institute_of_Chicago_%2851575570710%29.jpg/1280px-Art_Institute_of_Chicago_%2851575570710%29.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Buckingham_Fountain_in_Chicago%2C_USA.jpg/1280px-Buckingham_Fountain_in_Chicago%2C_USA.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Pottawatomi_Fashion_at_the_Field_Museum_in_Chicago.jpg/1280px-Pottawatomi_Fashion_at_the_Field_Museum_in_Chicago.jpg",
+    "https://images.unsplash.com/photo-1517570544249-e4d0f7f6f5d4?auto=format&fit=crop&w=1200&q=80",
   ],
   "christchurch-new-zealand": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Panorama_of_northern_parts_of_Christchurch_Central_City%2C_New_Zealand.jpg/1280px-Panorama_of_northern_parts_of_Christchurch_Central_City%2C_New_Zealand.jpg",

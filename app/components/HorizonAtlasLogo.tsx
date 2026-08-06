@@ -26,7 +26,7 @@ export default function HorizonAtlasLogo({
         width={96}
         height={96}
         priority
-        className={iconClassName || "h-10 w-auto shrink-0"}
+        className={iconClassName || "h-16 w-auto shrink-0 sm:h-20 md:h-24"}
       />
     );
   }
@@ -40,7 +40,7 @@ export default function HorizonAtlasLogo({
           width={1600}
           height={600}
           priority
-          className={["h-16 w-auto shrink-0 sm:h-20 md:h-24 lg:h-28", isMonochrome ? "opacity-90" : ""].filter(Boolean).join(" ")}
+          className={["h-24 w-auto shrink-0 sm:h-28 md:h-32 lg:h-40", isMonochrome ? "opacity-90" : ""].filter(Boolean).join(" ")}
         />
       </span>
     );
@@ -54,7 +54,7 @@ export default function HorizonAtlasLogo({
         width={1600}
         height={600}
         priority
-        className={["mr-3 h-16 w-auto shrink-0 sm:mr-4 sm:h-20 md:mr-5 md:h-24 lg:mr-6 lg:h-28", isMonochrome ? "opacity-90" : ""].filter(Boolean).join(" ")}
+        className={["mr-3 h-24 w-auto shrink-0 sm:mr-4 sm:h-28 md:mr-5 md:h-32 lg:mr-6 lg:h-40", isMonochrome ? "opacity-90" : ""].filter(Boolean).join(" ")}
       />
     </span>
   );

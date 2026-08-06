@@ -2,14 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { sanitizeSummary, toConsumerCopy } from "../lib/consumer-copy";
 import { sortDestinationsForFeaturedPlacement } from "../lib/flagship-destinations";
-import { publicDestinations } from "../lib/public-destinations";
+import { getPublicDestinations } from "../lib/public-destinations";
 import { COSTA_DEL_SOL_HERO_IMAGE, getDestinationImageUrl, hasVerifiedDestinationImage } from "../lib/imageFallback";
 import { resolveSourceHref, sanitizeExternalSourceUrl } from "../lib/source-links";
 import ExternalLinkIcon from "./ExternalLinkIcon";
 import FavoriteButton from "./FavoriteButton";
 import { getDestinationCardFacts, getFactSourceDomain, getFactSourcePublisherUrl } from "./destinationCardFacts";
 
-export default function FeaturedDestinations() {
+export default async function FeaturedDestinations() {
+  const publicDestinations = await getPublicDestinations();
   const featured = sortDestinationsForFeaturedPlacement(publicDestinations).slice(0, 4);
 
   return (
@@ -19,14 +20,14 @@ export default function FeaturedDestinations() {
           <p className="atlas-kicker">Find places that fit your life</p>
           <h2 className="mt-4 max-w-4xl text-5xl leading-tight text-[var(--atlas-ink)]">Curated destinations. Real data. A clearer picture of your next chapter.</h2>
           <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--atlas-muted)]">
-            This should feel less like browsing listings and more like discovering futures worth taking seriously. Start with the cities that already look promising, then open the full relocation guide when one begins to feel personal.
+            Start with the places that already feel aligned, then use the facts and score signals to test whether the day-to-day life really fits.
           </p>
         </div>
 
         <div className="rounded-[2rem] border border-[var(--atlas-border)] bg-[linear-gradient(145deg,rgba(255,251,241,0.98),rgba(248,236,214,0.88))] p-6 shadow-[var(--atlas-shadow)]">
           <p className="text-xs uppercase tracking-[0.3em] text-[var(--atlas-gold)]">Why this matters</p>
           <p className="mt-4 text-2xl font-semibold leading-10 text-[var(--atlas-ink)]">
-            You are not choosing where to travel next. You are choosing where life could feel better.
+            You are not choosing a vacation. You are choosing a place that could support the life you want to build.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
@@ -110,7 +111,7 @@ export default function FeaturedDestinations() {
                 <div className="mt-5 rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.6)] p-4">
                   <p className="text-xs uppercase tracking-[0.22em] text-[var(--atlas-accent)]">Why it enters the shortlist</p>
                   <p className="mt-3 text-sm leading-7 text-[var(--atlas-muted)]">
-                    Strong first-glance fit for people who want a place that can support real routines, not just a beautiful weekend.
+                    Strong first-glance fit for people who want a place that can support everyday routines, not just a beautiful weekend.
                   </p>
                 </div>
               ) : null}

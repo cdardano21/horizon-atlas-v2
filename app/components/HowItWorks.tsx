@@ -28,14 +28,14 @@ export default function HowItWorks() {
             A guided path from curiosity to confident relocation.
           </h2>
           <p className="mt-6 text-lg leading-8 text-[var(--atlas-muted)]">
-            DestinationFinderAI uses intelligent lifestyle profiling and destination scoring to bring you the places that match your priorities, not the places that look good on paper.
+            DestinationFinderAI uses lifestyle profiling and destination scoring to surface places that match your priorities, not just the ones that look polished in photos.
           </p>
         </div>
 
         <div className="rounded-[1.8rem] border border-[var(--atlas-border)] bg-[rgba(255,251,243,0.88)] p-6 shadow-[0_24px_46px_-34px_rgba(31,95,99,0.85)]">
           <p className="text-xs uppercase tracking-[0.24em] text-[var(--atlas-accent)]">Outcome</p>
           <p className="mt-3 text-2xl font-semibold leading-10 text-[var(--atlas-ink)]">
-            You move from vague inspiration to a shortlist you can actually act on.
+            You move from ideas to a shortlist you can actually test.
           </p>
         </div>
       </div>

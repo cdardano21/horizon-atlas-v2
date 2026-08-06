@@ -121,6 +121,22 @@ describe("destination enrichment", () => {
     expect(narrative).toMatch(/harbor|promenade|sea|monopoli|waterfront/i);
   });
 
+  it("keeps Barcelona anchored to the specific art, architecture, and museum details you provided", () => {
+    const destination = destinations.find((item) => item.slug === "barcelona-spain");
+
+    expect(destination).toBeDefined();
+
+    const enriched = enrichDestination(destination!);
+    const narrative = `${enriched.description} ${enriched.overview}`.toLowerCase();
+
+    expect(narrative).toContain("sagrada família");
+    expect(narrative).toContain("gaudí");
+    expect(narrative).toContain("museu picasso");
+    expect(narrative).toContain("fundació joan miró");
+    expect(narrative).toContain("muhba");
+    expect(narrative).toContain("roman archaeological");
+  });
+
   it("uses place-specific language in the raw catalog rather than generic location boilerplate", () => {
     const cavtat = destinations.find((item) => item.slug === "cavtat-croatia")?.description ?? "";
     const rome = destinations.find((item) => item.slug === "rome-italy")?.description ?? "";
@@ -208,6 +224,26 @@ describe("destination enrichment", () => {
       .map((destination) => destination.slug);
 
     expect(matches).toEqual([]);
+  });
+
+  it("keeps Barcelona available as a public destination", () => {
+    const barcelona = destinations.find((destination) => destination.slug === "barcelona-spain");
+    const publicBarcelona = enrichedDestinations.find((destination) => destination.slug === "barcelona-spain");
+
+    expect(barcelona).toBeDefined();
+    expect(publicBarcelona?.city).toBe("Barcelona");
+    expect(publicBarcelona?.country).toBe("Spain");
+  });
+
+  it("gives Barcelona neighborhood-level detail rather than generic city copy", () => {
+    const barcelona = destinations.find((destination) => destination.slug === "barcelona-spain");
+
+    expect(barcelona).toBeDefined();
+
+    const combined = `${barcelona?.description} ${barcelona?.overview} ${barcelona?.lifestyle} ${barcelona?.transportation}`.toLowerCase();
+
+    expect(combined).toMatch(/gràcia|poblenou|montjuïc|eixample|sant antoni|sarrià/i);
+    expect(combined).toMatch(/metro|bus|tram|airport/i);
   });
 
   it("applies relocation-first practical language to every destination in the catalog", () => {

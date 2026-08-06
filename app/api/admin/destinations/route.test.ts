@@ -17,9 +17,52 @@ vi.mock("../../../lib/supabase", () => ({
     url: "https://example.supabase.co",
     anonKey: "anon-key",
   }),
+  getSupabaseServiceRoleKey: () => null,
+  getSupabaseAuthHeaders: (accessToken: string) => ({
+    apikey: "anon-key",
+    Authorization: `Bearer ${accessToken}`,
+  }),
+}));
+
+vi.mock("../../../lib/admin-local-fallback", () => ({
+  shouldUseAdminLocalFallback: (accessToken: string | null, user: unknown, adminRole: string | null) =>
+    process.env.NODE_ENV === "development" && !accessToken && !user && !adminRole,
+  createAdminFallbackDestination: (input: { city: string; country: string; slug?: string }) => ({
+    id: "local-dest-1",
+    slug: input.slug ?? "lisbon-portugal",
+    city: input.city,
+    country: input.country,
+    status: "draft" as const,
+    tier: "launch",
+    description: null,
+    overview: null,
+    updated_at: "2026-07-20T00:00:00.000Z",
+    metadata: null,
+  }),
+  listAdminFallbackDestinations: () => [
+    {
+      id: "local-dest-1",
+      slug: "lisbon-portugal",
+      city: "Lisbon",
+      country: "Portugal",
+      status: "draft" as const,
+      tier: "launch",
+      description: null,
+      overview: null,
+      updated_at: "2026-07-20T00:00:00.000Z",
+      metadata: {
+        relocationProfile: { aiSummary: "A rich relocation profile" },
+        editorialContent: { title: "Lisbon editorial" },
+        researchProfile: { overview: "The research profile" },
+      },
+    },
+  ],
+  updateAdminFallbackDestination: vi.fn(),
+  deleteAdminFallbackDestination: vi.fn(),
 }));
 
 import { GET, POST } from "./route";
+import { PATCH } from "./[destinationId]/route";
 
 describe("admin destinations route", () => {
   beforeEach(() => {
@@ -40,11 +83,28 @@ describe("admin destinations route", () => {
     expect(payload.destinations).toEqual([]);
   });
 
+  it("requests a full admin catalog window instead of a truncated 120-row slice", async () => {
+    cookieGetMock.mockReturnValue({ value: "token" });
+
+    mockAdminAuthedFetch((url) => {
+      if (url.includes("/rest/v1/destinations_catalog")) {
+        expect(url).toContain("limit=1000");
+        return jsonResponse({ body: [] });
+      }
+
+      return jsonResponse({ body: [] });
+    });
+
+    const response = await GET();
+
+    expect(response.status).toBe(200);
+  });
+
   it("returns destination rows with aggregated media/resource/video counts", async () => {
     cookieGetMock.mockReturnValue({ value: "token" });
 
     mockAdminAuthedFetch((url) => {
-      if (url.includes("/rest/v1/destinations_catalog?select=id,slug,city,country,status,tier,description,updated_at,metadata")) {
+      if (url.includes("/rest/v1/destinations_catalog?select=id,slug,city,country,status,tier,description,overview,updated_at,metadata")) {
         return jsonResponse({
           body: [
             {
@@ -145,6 +205,32 @@ describe("admin destinations route", () => {
     ]);
   });
 
+  it("returns fallback destination metadata in the list payload", async () => {
+    cookieGetMock.mockReturnValue(undefined);
+    const previousNodeEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = "development";
+
+    const response = await GET();
+    const payload = (await response.json()) as {
+      destinations?: Array<{
+        id: string;
+        relocationProfile?: unknown;
+        editorialContent?: unknown;
+        researchProfile?: unknown;
+      }>;
+    };
+
+    expect(response.status).toBe(200);
+    expect(payload.destinations?.[0]).toMatchObject({
+      id: "local-dest-1",
+      relocationProfile: { aiSummary: "A rich relocation profile" },
+      editorialContent: { title: "Lisbon editorial" },
+      researchProfile: { overview: "The research profile" },
+    });
+
+    process.env.NODE_ENV = previousNodeEnv;
+  });
+
   it("returns 403 for POST when not admin-authenticated", async () => {
     cookieGetMock.mockReturnValue(undefined);
 
@@ -196,6 +282,33 @@ describe("admin destinations route", () => {
     expect(payload.error).toBe("Slug already exists.");
   });
 
+  it("returns 409 when POST targets an identity already used by an existing destination", async () => {
+    cookieGetMock.mockReturnValue({ value: "token" });
+
+    mockAdminAuthedFetch((url) => {
+      if (url.includes("/rest/v1/destinations_catalog?select=id,slug,city,country,status,tier,description,overview,updated_at,metadata&order=updated_at.desc&limit=1000")) {
+        return jsonResponse({ body: [{ id: "dest_existing", slug: "valencia-spain", city: "Valencia", country: "Spain" }] });
+      }
+
+      if (url.endsWith("/rest/v1/destinations_catalog")) {
+        return jsonResponse({ status: 200, body: [{ id: "dest_new", slug: "valencia-spain", city: "Valencia", country: "Spain" }] });
+      }
+
+      return null;
+    });
+
+    const response = await POST(
+      new Request("http://localhost:3000/api/admin/destinations", {
+        method: "POST",
+        body: JSON.stringify({ city: "Valencia", country: "Spain", slug: "valencia-spain" }),
+      }),
+    );
+
+    const payload = (await response.json()) as { error?: string };
+    expect(response.status).toBe(409);
+    expect(payload.error).toMatch(/already exists/i);
+  });
+
   it("returns 200 and destination row for successful POST", async () => {
     cookieGetMock.mockReturnValue({ value: "token" });
 
@@ -204,6 +317,13 @@ describe("admin destinations route", () => {
         return jsonResponse({
           status: 200,
           body: [{ id: "dest_3", slug: "athens-greece", city: "Athens", country: "Greece" }],
+        });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog?select=id,slug,city,country,status,tier,description,overview&slug=eq.athens-greece&limit=1")) {
+        return jsonResponse({
+          status: 200,
+          body: [{ id: "dest_3", slug: "athens-greece", city: "Athens", country: "Greece", status: "published", tier: "launch" }],
         });
       }
       return null;
@@ -226,6 +346,84 @@ describe("admin destinations route", () => {
       slug: "athens-greece",
       city: "Athens",
       country: "Greece",
+    });
+  });
+
+  it("updates base destination fields and slug via PATCH", async () => {
+    cookieGetMock.mockReturnValue({ value: "token" });
+
+    mockAdminAuthedFetch((url, init) => {
+      if (url.endsWith("/rest/v1/destinations_catalog?id=eq.dest_3") && init?.method === "PATCH") {
+        return jsonResponse({
+          status: 200,
+          body: [{
+            id: "dest_3",
+            slug: "lisbon-portugal",
+            city: "Lisbon",
+            country: "Portugal",
+            description: "A bright Atlantic capital",
+            overview: "Perfect for a slower pace",
+            status: "review",
+            tier: "launch",
+          }],
+        });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog?select=id,slug,city,country,status,tier,description,overview&id=eq.dest_3&limit=1")) {
+        return jsonResponse({
+          status: 200,
+          body: [{
+            id: "dest_3",
+            slug: "lisbon-portugal",
+            city: "Lisbon",
+            country: "Portugal",
+            description: "A bright Atlantic capital",
+            overview: "Perfect for a slower pace",
+            status: "review",
+            tier: "launch",
+          }],
+        });
+      }
+      return null;
+    });
+
+    const response = await PATCH(
+      new Request("http://localhost:3000/api/admin/destinations/dest_3", {
+        method: "PATCH",
+        body: JSON.stringify({
+          city: "Lisbon",
+          country: "Portugal",
+          slug: "lisbon-portugal",
+          description: "A bright Atlantic capital",
+          overview: "Perfect for a slower pace",
+          status: "review",
+          tier: "launch",
+        }),
+      }),
+      { params: Promise.resolve({ destinationId: "dest_3" }) },
+    );
+
+    const payload = (await response.json()) as {
+      destination?: {
+        slug: string;
+        city: string;
+        country: string;
+        description: string | null;
+        overview: string | null;
+        status: string;
+        tier: string;
+      };
+    };
+
+    expect(response.status).toBe(200);
+    expect(payload.destination).toMatchObject({
+      slug: "lisbon-portugal",
+      city: "Lisbon",
+      country: "Portugal",
+      description: "A bright Atlantic capital",
+      overview: "Perfect for a slower pace",
+      status: "review",
+      tier: "launch",
     });
   });
 });

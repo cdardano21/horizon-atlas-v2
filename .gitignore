@@ -28,6 +28,7 @@
 *.xlsx
 *.xls
 *.xlsm
+/archive/
 /backups/
 /playwright-report/
 /test-results/

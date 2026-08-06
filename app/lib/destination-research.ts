@@ -1,6 +1,35 @@
 import type { Destination, DestinationResearchProfile } from "./destinations";
 
 export const destinationResearchProfiles: Partial<Record<string, DestinationResearchProfile>> = {
+  "spearfish-south-dakota-united-states": {
+    overview: "Spearfish sits in the northern Black Hills and works best for people who want canyon scenery, mountain-town pace, and a practical base with access to regional services. The appeal comes from the way outdoor life, small-town everyday routines, and the wider Black Hills landscape all fit together without the intensity of a larger metro.",
+    feel: "It feels scenic, active, and grounded. The town's identity comes from the canyon edge, trail access, and the way a normal week can be built around outdoor time without losing the basic comforts of daily life.",
+    whyPeopleLoveIt: "People love the mix of canyon views, outdoor access, and a manageable pace. Spearfish is especially attractive to people who want mountain scenery without giving up practical healthcare, education, and nearby regional services.",
+    climate: "The Black Hills climate gives Spearfish four clear seasons, with warm summers, cold winters, and enough variety that outdoor life remains a major part of the appeal across the year.",
+    costOfLiving: "Spearfish is generally more moderate than the most expensive mountain towns, especially when compared with high-demand resort markets. A comfortable long-stay budget usually works best when you balance housing, local driving needs, and the seasonal cost of living around the region.",
+    healthcare: "Healthcare is a practical strength for a town of this size, especially because Rapid City and the wider Black Hills region add more advanced options when needed.",
+    safety: "The town generally feels calm and practical, and that matters for people who want a lower-friction daily routine with strong access to open space.",
+    walkability: "Walkability is strongest in the core and near everyday services, but the town still rewards a plan that blends local errands with a car for broader regional movement.",
+    transportation: "Rapid City Regional Airport is the main gateway, and the wider region is easiest to enjoy when you treat the town as a base for outdoor life, local errands, and occasional regional travel.",
+    internet: "Internet quality is usually sufficient for remote work in more established neighborhoods, though the exact level can vary by property and infrastructure.",
+    bestNeighborhoods: ["Downtown and the central core", "Residential areas near schools and daily services", "Areas that balance mountain access with easier commuting"],
+    food: ["Local cafés and casual dining", "Small-town restaurants with western and regional influences", "Coffee and breakfast spots that shape the everyday rhythm"],
+    attractions: ["Spearfish Canyon", "The Black Hills landscape", "Nearby historic towns and state parks"],
+    hiddenGems: ["Canyon overlooks and short scenic drives", "Quiet neighborhoods that feel more local than resort-like", "Trailheads that become part of the weekly routine"],
+    museums: ["Local history and community museums"],
+    parks: ["Spearfish Canyon trails", "City parks and green corridors", "Nearby state park access"],
+    beaches: ["The town is more defined by canyon and mountain scenery than by beach life"],
+    photography: ["Canyon light at sunrise", "Mountain views from the town edge", "Historic downtown streets and seasonal snow"],
+    monthlyBudget: "A comfortable long-stay budget in Spearfish usually lands in a moderate range once housing, local transport, and seasonal lifestyle needs are accounted for.",
+    pros: ["Strong outdoor access", "Protective small-town pace", "Reasonable long-stay practicality for the region"],
+    cons: ["Winter weather can be severe", "Local transit is limited", "The town's appeal is tied closely to the surrounding landscape and regional access"],
+    longStaySuitability: "Spearfish is well suited to people who want a scenic mountain base with enough practical services to support a slower-paced long stay.",
+    digitalNomadSuitability: "It suits remote workers who want a quieter, more nature-oriented routine and do not need the intensity of a major city.",
+    familyFriendliness: "The town works well for families who want open space, outdoor access, and a community feel rather than a dense urban environment.",
+    nearbyDayTrips: ["Rapid City", "Deadwood", "Custer State Park"],
+    visaAndTax: ["U.S. residency and tax planning should be reviewed for your citizenship and planned stay"],
+    researchNotes: ["Built from a DestinationFinderAI synthesis of Black Hills geography, outdoor access, and long-stay practicality."]
+  },
   "cavtat-croatia": {
     overview: "Cavtat is a compact Adriatic harbor town that works best for people who want coastal charm without the intensity of a larger resort city. The appeal comes from the way a short walk can cover the waterfront, daily errands, and a calm evening meal without turning the day into a project.",
     feel: "It feels small, polished, and quietly social. Most days are built around the promenade, the old streets, and the water rather than around high-energy nightlife or a long list of urban diversions.",
@@ -220,6 +249,8 @@ const buildGenericResearchProfile = (destination: Destination): DestinationResea
   const feel = destination.lifestyle ?? `${city} works best when the daily loop feels manageable, useful, and easy to repeat over time.`;
   const whyPeopleLoveIt = destination.overview ?? `${city} attracts people who want a place that feels personal, practical, and distinctive rather than generic.`;
   const climate = destination.climate ?? `${city} is most comfortable when you plan around the seasons rather than assuming a single annual average tells the whole story.`;
+  const longFormEditorial = destination.description ?? destination.overview ?? `${city} earns a second look once you understand how daily life, climate, and ease of movement fit together.`;
+  const whyThisPlaceFeelsDistinct = destination.overview ?? destination.description ?? `${city} feels distinct when its daily pace, setting, and local character all reinforce one another.`;
   const healthcare = hasHealthcareTag
     ? `${city} is worth evaluating for medical access as part of your neighborhood decision, since healthcare comfort often matters more than any one headline attraction.`
     : `${city} should be evaluated through the actual medical access available from your preferred neighborhood, especially if specialist care or regular appointments matter to you.`;
@@ -235,6 +266,8 @@ const buildGenericResearchProfile = (destination: Destination): DestinationResea
     feel,
     whyPeopleLoveIt,
     climate,
+    longFormEditorial,
+    whyThisPlaceFeelsDistinct,
     costOfLiving: hasValueTag
       ? `${city} often stands out for value, but the best budget judgment still comes from comparing housing, everyday groceries, and local transport against your actual lifestyle.`
       : `${city} usually rewards a realistic budget that accounts for housing, groceries, local transport, and the way seasonal demand can change everyday expenses.`,
@@ -320,16 +353,27 @@ const buildGenericResearchProfile = (destination: Destination): DestinationResea
   };
 };
 
+const enrichResearchProfileWithDestinationNarrative = (profile: Partial<DestinationResearchProfile> | undefined, destination: Destination): DestinationResearchProfile => ({
+  ...(profile ?? {}),
+  overview: profile?.overview ?? destination.description,
+  feel: profile?.feel ?? destination.lifestyle,
+  whyPeopleLoveIt: profile?.whyPeopleLoveIt ?? destination.overview,
+  climate: profile?.climate ?? destination.climate,
+  transportation: profile?.transportation ?? destination.transportation,
+  longFormEditorial: profile?.longFormEditorial ?? profile?.overview ?? destination.description ?? destination.introduction ?? destination.heroNarrative,
+  whyThisPlaceFeelsDistinct: profile?.whyThisPlaceFeelsDistinct ?? profile?.whyPeopleLoveIt ?? profile?.overview ?? destination.overview ?? destination.description,
+});
+
 export const getDestinationResearchProfile = (destination: Destination) => {
   const explicitProfile = destination.researchProfile;
   if (explicitProfile && Object.keys(explicitProfile).length > 0) {
-    return explicitProfile;
+    return enrichResearchProfileWithDestinationNarrative(explicitProfile, destination);
   }
 
   const keyedProfile = destinationResearchProfiles[destination.slug];
   if (keyedProfile && Object.keys(keyedProfile).length > 0) {
-    return keyedProfile;
+    return enrichResearchProfileWithDestinationNarrative(keyedProfile, destination);
   }
 
-  return buildGenericResearchProfile(destination);
+  return enrichResearchProfileWithDestinationNarrative(buildGenericResearchProfile(destination), destination);
 };

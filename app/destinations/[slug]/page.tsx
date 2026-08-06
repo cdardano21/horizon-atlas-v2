@@ -1,6 +1,8 @@
+import fs from "node:fs";
 import Image from "next/image";
 import Link from "next/link";
 import FavoriteButton from "../../components/FavoriteButton";
+import CanonicalDestinationPage from "../../components/destination/CanonicalDestinationPage";
 import DestinationGallery from "../../components/DestinationGallery";
 import DestinationStickyNav from "../../components/destination/DestinationStickyNav";
 import GuideSpotExplorer from "../../components/destination/GuideSpotExplorer";
@@ -15,10 +17,24 @@ import { getDestinationResearchProfile } from "../../lib/destination-research";
 import type { CommandCenterData, NamedRecord, VerificationMeta } from "../../lib/destination-command-center";
 import { toConsumerCopy } from "../../lib/consumer-copy";
 import { getDestinationRelocationFrame } from "../../lib/destination-page-structure";
+import type { Destination } from "../../lib/destinations";
 import { resolveSourceHref, sanitizeExternalSourceUrl } from "../../lib/source-links";
+import { getCanonicalDestination } from "../../lib/canonical-destination-loader";
+
+const TRACE_LOG_PATH = process.env.HORIZON_ATLAS_TRACE_LOG ?? "/tmp/horizon-atlas-trace.log";
+
+const writeTrace = (label: string, payload: unknown) => {
+  try {
+    const line = `[${new Date().toISOString()}] ${label} ${JSON.stringify(payload)}\n`;
+    fs.appendFileSync(TRACE_LOG_PATH, line);
+  } catch {
+    // ignore trace-file failures
+  }
+};
 
 interface DestinationPageProps {
   params: Promise<{ slug: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }
 
 function confidenceClass(level: "high" | "medium" | "low") {
@@ -140,8 +156,8 @@ function soundsRoboticNarrative(value: string | null | undefined) {
     || value.length > 260;
 }
 
-function buildEditorialOverview(command: CommandCenterData) {
-  const destination = command.destination;
+function buildEditorialOverview(command: CommandCenterData, destinationOverride?: Partial<Destination>) {
+  const destination = destinationOverride ?? command.destination;
   const cityKey = destination.city.trim().toLowerCase();
   const isCavtat = cityKey === "cavtat";
   const isHiroshima = cityKey === "hiroshima";
@@ -739,9 +755,10 @@ function buildLifeScenarios(command: CommandCenterData) {
   ];
 }
 
-function buildMagazineDescription(command: CommandCenterData) {
-  const city = command.destination.city;
-  const country = command.destination.country;
+function buildMagazineDescription(command: CommandCenterData, destinationOverride?: Partial<Destination>) {
+  const destination = destinationOverride ?? command.destination;
+  const city = destination.city;
+  const country = destination.country;
   const cityKey = city.trim().toLowerCase();
   const isCavtat = cityKey === "cavtat";
   const isHiroshima = cityKey === "hiroshima";
@@ -754,8 +771,8 @@ function buildMagazineDescription(command: CommandCenterData) {
 
   const opening = isHiroshima
     ? "Hiroshima feels composed in a way that catches people off guard. The Peace Memorial Park matters, but the city's real character shows up in river walks, tram rides, and neighborhood routines that feel more lived-in than performative."
-    : !isTemplateCopy(command.destination.description) && !soundsRoboticNarrative(command.destination.description)
-    ? command.destination.description
+    : !isTemplateCopy(destination.description) && !soundsRoboticNarrative(destination.description)
+    ? destination.description
     : isCavtat
     ? "Cavtat opens slowly and beautifully: morning coffee on the harbor, stone paths above clear water, and evenings that feel social without feeling crowded."
     : neighborhoodA
@@ -764,8 +781,8 @@ function buildMagazineDescription(command: CommandCenterData) {
 
   const middle = isHiroshima
     ? "What makes it work is the texture of everyday life: a coffee stop near Hondori, a slow lunch in a local district, an afternoon along the river or in Shukkeien, and an evening that ends comfortably rather than theatrically."
-    : !isTemplateCopy(command.destination.lifestyle) && !soundsRoboticNarrative(command.destination.lifestyle)
-    ? command.destination.lifestyle
+    : !isTemplateCopy(destination.lifestyle) && !soundsRoboticNarrative(destination.lifestyle)
+    ? destination.lifestyle
     : isCavtat
     ? "The real draw is rhythm: a compact waterfront for daily walks, pine-shaded coastal paths when you want quiet, and an easy hop to Dubrovnik when you want more energy."
     : beachOrRecreation || foodAnchor
@@ -774,8 +791,8 @@ function buildMagazineDescription(command: CommandCenterData) {
 
   const closing = isHiroshima
     ? "For relocation, Hiroshima often lands in a rare sweet spot. It is calmer and more manageable than Tokyo or Osaka, yet still richly urban, with enough culture, transit, and weekend access to keep life interesting without feeling overpacked."
-    : !isTemplateCopy(command.destination.overview) && !soundsRoboticNarrative(command.destination.overview)
-    ? command.destination.overview
+    : !isTemplateCopy(destination.overview) && !soundsRoboticNarrative(destination.overview)
+    ? destination.overview
     : isCavtat
     ? "Cavtat works best for people who want coastal charm with less friction: near enough to Dubrovnik for services and flights, but calm enough to feel like home by week two."
     : `${city}, ${country} becomes compelling when the essentials hold up${healthcareAnchor ? ` - healthcare anchored by ${healthcareAnchor}` : ""}${airportAnchor ? `, travel through ${airportAnchor}` : ""}.`;
@@ -1352,13 +1369,28 @@ function IntelligenceGuideSection({
   );
 }
 
-export default async function DestinationPage({ params }: DestinationPageProps) {
+export default async function DestinationPage({ params, searchParams }: DestinationPageProps) {
   const { slug } = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const developerMode = resolvedSearchParams?.developer === "1" || resolvedSearchParams?.developer === "true";
+  console.log("[page] entry", { slug });
+  writeTrace("[page] entry", { slug });
+
+  const canonicalDestination = await getCanonicalDestination(slug);
+  if (canonicalDestination) {
+    return <CanonicalDestinationPage destination={canonicalDestination} developerMode={developerMode} />;
+  }
 
   const command = await getDestinationCommandCenter(slug);
+  console.log("[page] command-center-result", { slug, command });
+  writeTrace("[page] command-center-result", { slug, command });
   const content = await getDestinationContent(slug);
+  console.log("[page] getDestinationContent-result", { slug, content });
+  writeTrace("[page] getDestinationContent-result", { slug, content });
 
   if (!command || !content?.destination) {
+    console.log("[page] branch:no-command-or-destination", { slug, command: Boolean(command), hasDestination: Boolean(content?.destination) });
+    writeTrace("[page] branch:no-command-or-destination", { slug, command: Boolean(command), hasDestination: Boolean(content?.destination) });
     return (
       <main className="min-h-screen px-8 py-24 text-[var(--atlas-ink)]">
         <div className="mx-auto max-w-5xl rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.92)] p-12 text-center shadow-[var(--atlas-shadow)]">
@@ -1370,6 +1402,23 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
   }
 
   const destination = content.destination;
+  const renderedPageState = {
+    slug,
+    description: destination.description,
+    overview: destination.overview,
+    climate: destination.climate,
+    lifestyle: destination.lifestyle,
+    transportation: destination.transportation,
+    introduction: destination.introduction,
+    heroNarrative: destination.heroNarrative,
+    lifestyleNarrative: destination.lifestyleNarrative,
+    climateNarrative: destination.climateNarrative,
+    transportationNarrative: destination.transportationNarrative,
+    verdict: destination.verdict,
+    researchProfile: destination.researchProfile,
+  };
+  console.log("DESTINATION PAGE CONTENT", renderedPageState);
+  writeTrace("[page] rendered-page-state", renderedPageState);
   const researchProfile = getDestinationResearchProfile(destination);
   const destinationImageSet = destination.images.filter((image) => Boolean(image.src && image.src.trim().length > 0));
   const heroImage = destinationImageSet[0]?.src ?? null;
@@ -1433,10 +1482,10 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
   const retirementAdvantages = command.intelligence.retirementAdvantages;
   const retirementTradeoffs = command.intelligence.retirementTradeoffs;
   const briefingSections = command.intelligence.briefingSections;
-  const editorialFallback = buildEditorialOverview(command);
+  const editorialFallback = buildEditorialOverview(command, destination);
   const dayHereFallback = buildDayMoments(command);
   const lifeScenariosFallback = buildLifeScenarios(command);
-  const magazineFallback = buildMagazineDescription(command);
+  const magazineFallback = buildMagazineDescription(command, destination);
   const rapidAnswersFallback = buildRapidAnswers(command);
   const coreQaFallback = buildCoreRelocationQa(command);
   const practicalTopLinksFallback = buildPracticalTopLinks(destination.city, destination.country);
@@ -1456,6 +1505,12 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
     bullets: scenario.bullets.slice(0, 2),
   }));
   const magazine = visibleNarratives.magazine;
+  const heroDescriptionText = firstNonEmptyText(researchProfile?.longFormEditorial, editorial.intro, destination.introduction, destination.description);
+  const distinctNarrativeText = firstNonEmptyText(researchProfile?.whyThisPlaceFeelsDistinct, editorial.follow, destination.overview, destination.introduction);
+  const editorialOverviewText = firstNonEmptyText(researchProfile?.longFormEditorial, editorial.dek, destination.verdict, destination.introduction);
+  const lifestyleNarrativeText = firstNonEmptyText(researchProfile?.feel, researchProfile?.longFormEditorial, destination.lifestyleNarrative, destination.lifestyle);
+  const climateNarrativeText = firstNonEmptyText(researchProfile?.climate, destination.climateNarrative, destination.climate);
+  const transportationNarrativeText = firstNonEmptyText(researchProfile?.transportation, destination.transportationNarrative, destination.transportation);
   const rapidAnswers = destination.rapidAnswers?.length ? destination.rapidAnswers : rapidAnswersFallback;
   const conciseScorecard = scorecard.slice(0, 6);
   const conciseComprehensiveSections = comprehensiveSections.slice(0, 4);
@@ -1557,13 +1612,13 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
             <div className="max-w-4xl">
               <p className="text-xs uppercase tracking-[0.35em] text-[#f9e4bd]">{destination.country}{command.region ? ` • ${command.region}` : ""}</p>
               <h1 className="mt-4 text-5xl font-semibold text-[#fff8ef] sm:text-6xl">{destination.city}</h1>
-              <p className="mt-4 max-w-3xl text-lg leading-8 text-[#f2e8d9]">{editorial.intro}</p>
+              <p className="mt-4 max-w-3xl text-lg leading-8 text-[#f2e8d9]">{heroDescriptionText}</p>
               <div className="mt-5 max-w-4xl rounded-[1.5rem] border border-white/20 bg-[rgba(255,255,255,0.12)] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.16)]">
                 <p className="text-[11px] uppercase tracking-[0.32em] text-[#f8e3b4]">Why this place feels distinct</p>
-                <p className="mt-2 text-base font-medium leading-8 text-[#fff7eb]">{editorial.follow}</p>
-                <p className="mt-3 text-sm leading-7 text-[#f8efd9]/90">{editorial.dek}</p>
+                <p className="mt-2 text-base font-medium leading-8 text-[#fff7eb]">{distinctNarrativeText}</p>
+                <p className="mt-3 text-sm leading-7 text-[#f8efd9]/90">{editorialOverviewText}</p>
               </div>
-              <p className="mt-4 max-w-4xl text-sm leading-7 text-[#f8efd9]/92">{editorial.quote}</p>
+              <p className="mt-4 max-w-4xl text-sm leading-7 text-[#f8efd9]/92">{firstNonEmptyText(researchProfile?.whyPeopleLoveIt, researchProfile?.feel, editorial.quote, destination.heroNarrative)}</p>
               <div className="mt-6 flex flex-wrap gap-2 text-[11px] uppercase tracking-[0.22em] text-[#f1dfbe]">
                 <span className="rounded-full border border-white/20 bg-white/8 px-3 py-1">Story first</span>
                 <span className="rounded-full border border-white/20 bg-white/8 px-3 py-1">Data backed</span>
@@ -1582,7 +1637,7 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
             </div>
 
             <div className="rounded-3xl border border-white/30 bg-[rgba(20,37,39,0.42)] p-6 text-right">
-              <p className="text-xs uppercase tracking-[0.25em] text-[#f2d9ad]">Horizon Match</p>
+              <p className="text-xs uppercase tracking-[0.25em] text-[#f2d9ad]">DestinationFinderAI Match</p>
               {hasMatch ? (
                 <p className="mt-2 text-4xl font-black text-[#fff3dd]">{Math.round(destination.match)}%</p>
               ) : (
@@ -1606,12 +1661,10 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
               ) : null}
               <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(8,18,20,0.75),rgba(8,18,20,0.42),rgba(22,44,50,0.62))]" />
               <div className="relative p-6 backdrop-blur-[1.5px]">
-              <p className="mt-4 text-2xl font-semibold leading-10 sm:text-[2rem]">
-                {relocationFrame?.heroBody ?? editorial.follow}
-              </p>
-              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#f8efd9]/88">
-                {relocationFrame ? editorial.follow : magazine.middle}
-              </p>
+                <div className="mt-4 flex flex-wrap gap-2 text-[11px] uppercase tracking-[0.22em] text-[#f9e4bd]">
+                  <span className="rounded-full border border-white/20 bg-white/8 px-3 py-1">Premium editorial</span>
+                  <span className="rounded-full border border-white/20 bg-white/8 px-3 py-1">Research-led</span>
+                </div>
               </div>
             </div>
 
@@ -1705,12 +1758,12 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
               description="A concise read on how the place works once the honeymoon fades."
             />
             <p className="mt-8 text-2xl font-semibold leading-10 text-[var(--atlas-ink)] sm:text-3xl">
-              {relocationFrame?.heroBody ?? editorial.intro}
+              {editorialOverviewText}
             </p>
             <div className="mt-6 rounded-[1.75rem] border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.8)] p-6 shadow-[0_18px_35px_-24px_rgba(39,32,22,0.28)]">
               <p className="text-xs uppercase tracking-[0.28em] text-[var(--atlas-accent)]">How the place actually works</p>
-              <p className="mt-4 text-lg leading-8 text-[var(--atlas-ink)]">{editorial.follow}</p>
-              <p className="mt-4 text-sm leading-7 text-[var(--atlas-muted)]">{editorial.dek}</p>
+              <p className="mt-4 text-lg leading-8 text-[var(--atlas-ink)]">{lifestyleNarrativeText}</p>
+              <p className="mt-4 text-sm leading-7 text-[var(--atlas-muted)]">{climateNarrativeText}</p>
             </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -1748,8 +1801,8 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
             <aside className="space-y-6">
               <div className="rounded-[2.25rem] border border-[var(--atlas-border)] bg-[linear-gradient(145deg,rgba(255,252,246,0.95),rgba(247,238,221,0.84))] p-8 shadow-xl shadow-[rgba(39,32,22,0.2)]">
                 <p className="text-xs uppercase tracking-[0.3em] text-[var(--atlas-accent)]">What it feels like</p>
-                <p className="mt-5 text-lg leading-8 text-[var(--atlas-ink)]">{magazine.opening}</p>
-                <p className="mt-4 text-sm leading-7 text-[var(--atlas-muted)]">{magazine.closing}</p>
+                <p className="mt-5 text-lg leading-8 text-[var(--atlas-ink)]">{transportationNarrativeText}</p>
+                <p className="mt-4 text-sm leading-7 text-[var(--atlas-muted)]">{firstNonEmptyText(researchProfile?.whyPeopleLoveIt, editorial.quote, destination.verdict, magazine.closing)}</p>
               </div>
 
               <div className="rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.86)] p-6">

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { publicDestinations } from "../lib/public-destinations";
+import { getPublicDestinations } from "../lib/public-destinations";
 import CompareClient from "../components/CompareClient";
 import { COSTA_DEL_SOL_HERO_IMAGE } from "../lib/imageFallback";
 
@@ -15,7 +15,7 @@ const parseSlugs = (value: string | string[] | undefined) => {
   return raw.split(",").map((item) => item.trim()).filter(Boolean);
 };
 
-const selectDestinations = (searchParams?: SearchParams) => {
+const selectDestinations = (publicDestinations: ReturnType<typeof getPublicDestinations> extends Promise<infer T> ? T : never, searchParams?: SearchParams) => {
   const requested = parseSlugs(searchParams?.slugs);
   const selected = requested.length
     ? publicDestinations.filter((destination) => requested.includes(destination.slug))
@@ -25,7 +25,8 @@ const selectDestinations = (searchParams?: SearchParams) => {
 
 export default async function ComparePage({ searchParams }: ComparePageProps) {
   const params = searchParams ? await searchParams : undefined;
-  const selected = selectDestinations(params);
+  const publicDestinations = await getPublicDestinations();
+  const selected = selectDestinations(publicDestinations, params);
   const initialSlugs = selected.map((destination) => destination.slug);
 
   return (

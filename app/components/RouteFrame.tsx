@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import HorizonAtlasLogo from "./HorizonAtlasLogo";
 
 type RouteFrameProps = {
   eyebrow: string;
@@ -24,6 +25,9 @@ export default function RouteFrame({
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.16),transparent_42%),linear-gradient(180deg,rgba(2,6,23,0.8),rgba(2,6,23,1))]" />
         <div className="relative mx-auto flex max-w-7xl flex-col gap-8">
           <div className="max-w-4xl rounded-[2rem] border border-white/10 bg-slate-950/75 p-8 shadow-2xl shadow-cyan-500/10 backdrop-blur-xl sm:p-10 lg:p-12">
+            <div className="mb-6 inline-flex items-center rounded-full border border-cyan-400/25 bg-white/10 p-3 shadow-lg shadow-cyan-500/10 backdrop-blur">
+              <HorizonAtlasLogo layout="horizontal" tone="light" className="max-w-[280px] sm:max-w-[320px] lg:max-w-[360px]" />
+            </div>
             <p className="uppercase tracking-[0.35em] text-cyan-400">{eyebrow}</p>
             <h1 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">{title}</h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-300">{description}</p>

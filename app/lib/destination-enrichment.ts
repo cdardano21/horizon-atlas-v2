@@ -8,6 +8,7 @@ import {
   type DestinationMonthlyWeather,
   destinations,
 } from "./destinations";
+import { getDestinationResearchProfile } from "./destination-research";
 import { sanitizeExternalSourceUrl } from "./source-links";
 
 type Seed = (typeof generatedCommandCenterSeeds)[string];
@@ -196,10 +197,10 @@ const flagshipNarrativeOverrides: Partial<Record<string, NarrativeOverride>> = {
     transportation: "Athens is easiest to enjoy when your home base keeps transit, clinics, and neighborhood life within a manageable everyday circle. The city’s practicality improves dramatically when district choice is treated as central rather than incidental.",
   },
   "barcelona-spain": {
-    description: "Barcelona is one of those cities where the everyday experience matters more than the headline image. It works because the city can be lived in at many scales: a market breakfast, a long promenade, a neighborhood café, or a late evening in a district that still feels local.",
-    overview: "Barcelona suits people who want urban energy, cultural depth, and strong public life without giving up the pleasures of daily routine. The city becomes more livable when housing choice is aligned with neighborhood rhythm rather than abstract prestige.",
-    climate: "The climate is one of the city’s main strengths, with mild winters and long periods that make outdoor life feel ordinary rather than seasonal. Summer heat, however, remains a real planning variable.",
-    lifestyle: "A good week in Barcelona often looks like a mix of neighborhood rituals and city pleasures: markets, walks, long lunches, and evenings that can stay social without becoming exhausting.",
+    description: "Barcelona is a city of dense neighborhoods, long pedestrian days, and a landscape that shifts quickly from Gothic lanes to beachfront promenades. It is known for its art and architecture, from the Sagrada Família and other Gaudí landmarks to the Museu Picasso and Fundació Joan Miró, while MUHBA links the city to Roman archaeological sites beneath the modern urban fabric.",
+    overview: "Barcelona suits people who want a city that can support both routine and intensity. It works especially well for those who value walkable districts, strong food culture, a long social calendar, and enough public life to make daily movement feel pleasurable rather than purely functional.",
+    climate: "The climate is one of the city’s main strengths, with mild winters and long periods that make outdoor life feel ordinary rather than seasonal. Summer heat is still a real planning variable, especially in the dense central districts.",
+    lifestyle: "A good week in Barcelona often looks like a mix of neighborhood rituals and city pleasures: markets, walks, long lunches, small errands, and evenings that can stay social without becoming exhausting.",
     transportation: "Barcelona is easiest to appreciate when the home base supports metro, bus, and coastal movement without turning daily life into a logistical challenge. That is where the city’s practical charm really shows.",
   },
   "florence-italy": {
@@ -231,10 +232,10 @@ const flagshipNarrativeOverrides: Partial<Record<string, NarrativeOverride>> = {
     transportation: "Seville is easiest to live with when your home base keeps daily errands, clinics, and social life inside a manageable radius. That is what turns the city’s energy into a practical strength.",
   },
   "palma-de-mallorca-spain": {
-    description: "Palma feels most persuasive when the harbor, the old city, and the seaside life all seem to belong to the same bright, easy day. Its charm is not only scenic; it is also the way a simple morning can slip into a long lunch and a late waterfront walk.",
-    overview: "Palma suits people who want island living with urban comfort, cultural texture, and strong weather. The strongest fit is usually someone who values a navigable city, a polished daily rhythm, and easy access to both coast and culture.",
-    climate: "The climate is one of Palma’s great advantages, with long sunny seasons and enough sea influence to make outdoor life feel practical for much of the year. Summer heat still matters, especially in the urban core.",
-    lifestyle: "A satisfying week often combines old-city wandering, harbor time, café stops, and evening meals that feel social without becoming too intense. Palma works best when the city feels both relaxed and useful.",
+    description: "Palma, officially Palma de Mallorca, is the capital and largest city of Spain’s Balearic Islands, located on the island of Mallorca. It is a historic port city known for Palma Cathedral, the Royal Palace of La Almudaina, Bellver Castle, and a compact Old Town shaped by Roman origins, Moorish rule, and later Aragonese history.",
+    overview: "Palma suits people who want island living with urban comfort, cultural texture, and strong weather. The strongest fit is usually someone who values a navigable city, a polished daily rhythm, and easy access to both coast and culture, from the waterfront promenade and markets to nearby beaches such as Cala Mayor.",
+    climate: "The climate is one of Palma’s great advantages, with a subtropical Mediterranean rhythm that brings hot summers and mild winters. It works especially well for year-round living because winter culture and summer beaches both fit comfortably into the same city.",
+    lifestyle: "A satisfying week often combines old-town wandering, market mornings, café stops, promenade walks, and evening meals that feel social without becoming too intense. Palma works best when the city feels both relaxed and useful, with history, shopping, and coastal life all close at hand.",
     transportation: "Palma is easiest to enjoy when your home base keeps the center, the waterfront, and airport access within a simple daily geometry. That balance is what makes the city feel effortless rather than merely attractive.",
   },
   "porto-portugal": {
@@ -903,6 +904,8 @@ const buildEditorialPracticalTopLinks = (destination: Destination) => {
   return [] as Array<{ name: string; category: "Restaurant" | "Shopping" | "Service"; note: string; href: string }>;
 };
 
+export const getFlagshipNarrativeOverride = (slug: string): NarrativeOverride | null => flagshipNarrativeOverrides[slug] ?? null;
+
 export const getDestinationEditorialFields = (destination: Destination) => ({
   title: destination.title ?? destination.city,
   subtitle: destination.subtitle ?? `${destination.city}, ${destination.country}`,
@@ -956,7 +959,7 @@ export function enrichDestination(destination: Destination): Destination {
     transportation: narratives.transportation,
   });
 
-  return {
+  const enrichedDestination: Destination = {
     ...destination,
     description: narratives.description,
     overview: narratives.overview,
@@ -968,7 +971,81 @@ export function enrichDestination(destination: Destination): Destination {
     memberDetails: details,
     ...editorialFields,
   };
+
+  return {
+    ...enrichedDestination,
+    researchProfile: getDestinationResearchProfile(enrichedDestination),
+  };
 }
+
+const slugifyForStorage = (value: string) => value
+  .trim()
+  .toLowerCase()
+  .replace(/[^a-z0-9\s-]/g, "")
+  .replace(/\s+/g, "-")
+  .replace(/-+/g, "-")
+  .replace(/^-|-$/g, "");
+
+export const buildEnrichedDestinationCreatePayload = ({
+  city,
+  country,
+  slug,
+  description,
+  overview,
+}: {
+  city: string;
+  country: string;
+  slug?: string;
+  description?: string;
+  overview?: string;
+}) => {
+  const normalizedSlug = slugifyForStorage(slug || `${city}-${country}`) || `${city}-${country}`;
+  const baseDestination: Destination = {
+    slug: normalizedSlug,
+    city,
+    country,
+    emoji: "🌍",
+    match: 0,
+    description: description?.trim() ?? "",
+    overview: overview?.trim() ?? "",
+    climate: "",
+    lifestyle: "",
+    transportation: "",
+    images: [],
+  };
+
+  const enriched = enrichDestination(baseDestination);
+  const resolvedDescription = description?.trim() ? description.trim() : enriched.description;
+  const resolvedOverview = overview?.trim() ? overview.trim() : enriched.overview;
+
+  const editorialContent: DestinationEditorialContent = {
+    title: enriched.title ?? city,
+    subtitle: enriched.subtitle ?? `${city}, ${country}`,
+    introduction: resolvedDescription,
+    heroNarrative: resolvedOverview,
+    lifestyleNarrative: enriched.lifestyle,
+    climateNarrative: enriched.climate,
+    transportationNarrative: enriched.transportation,
+    verdict: resolvedDescription,
+    bestFor: [],
+    notIdealFor: [],
+    dayMoments: enriched.dayMoments,
+    rapidAnswers: enriched.rapidAnswers,
+    coreRelocationQa: enriched.coreRelocationQa,
+    practicalTopLinks: enriched.practicalTopLinks,
+  };
+
+  return {
+    slug: normalizedSlug,
+    description: resolvedDescription || null,
+    overview: resolvedOverview || null,
+    metadata: {
+      memberDetails: enriched.memberDetails,
+      editorialContent,
+      researchProfile: enriched.researchProfile,
+    },
+  };
+};
 
 export const enrichedDestinations: Destination[] = destinations.map(enrichDestination);
 

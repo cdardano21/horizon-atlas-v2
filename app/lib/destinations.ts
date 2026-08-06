@@ -61,7 +61,9 @@ export type DestinationResearchProfile = {
   whyPeopleLoveIt?: string;
   climate?: string;
   costOfLiving?: string;
+  housing?: string;
   healthcare?: string;
+  education?: string;
   safety?: string;
   walkability?: string;
   transportation?: string;
@@ -84,6 +86,126 @@ export type DestinationResearchProfile = {
   nearbyDayTrips?: string[];
   visaAndTax?: string[];
   researchNotes?: string[];
+  localCulture?: string;
+  foodAndDining?: string;
+  outdoorRecreation?: string;
+  bestFor?: string[];
+  notIdealFor?: string[];
+  relocationAdvice?: string;
+  longFormEditorial?: string;
+  whyThisPlaceFeelsDistinct?: string;
+  districts?: string[];
+  famousStreets?: string[];
+  restaurants?: string[];
+  cafes?: string[];
+  shoppingDistricts?: string[];
+  airports?: string[];
+  hospitals?: string[];
+  universities?: string[];
+  sportsTeams?: string[];
+  entertainmentAreas?: string[];
+  mountains?: string[];
+};
+
+export type PremiumEditorialContent = {
+  heroIntroduction?: string;
+  whyPeopleLoveIt?: string[];
+  majorStrengths?: string[];
+  majorDrawbacks?: string[];
+  bestFor?: string[];
+  overviewArticle?: string;
+  neighborhoodsArticle?: string;
+  dailyLifeArticle?: string;
+  climateArticle?: string;
+  transportationArticle?: string;
+  costOfLivingArticle?: string;
+  healthcareArticle?: string;
+  retirementGuide?: string;
+  familyGuide?: string;
+  digitalNomadGuide?: string;
+  prosAndCons?: {
+    advantages?: string[];
+    disadvantages?: string[];
+  };
+};
+
+export type DestinationKnowledgeProfile = {
+  officialName?: string;
+  country?: string;
+  adminRegion?: string;
+  latitude?: string;
+  longitude?: string;
+  population?: string;
+  metroPopulation?: string;
+  elevation?: string;
+  timeZone?: string;
+  climateClassification?: string;
+  monthlyWeather?: Array<{ month: string; avgHighC?: number; avgLowC?: number; rainfallMm?: number; sunshineHours?: number; humidity?: string }>;
+  rainfall?: string;
+  sunshineHours?: string;
+  humidity?: string;
+  airQuality?: string;
+  walkability?: string;
+  bikeFriendliness?: string;
+  publicTransportation?: string;
+  majorAirports?: string[];
+  drivingConvenience?: string;
+  internetSpeed?: string;
+  cellCoverage?: string;
+  safety?: string;
+  crime?: string;
+  healthcareQuality?: string;
+  majorHospitals?: string[];
+  emergencyCare?: string;
+  costOfLiving?: string;
+  monthlyBudget?: { single?: string; couple?: string; family?: string; note?: string };
+  apartmentRent?: string;
+  homePrices?: string;
+  propertyTaxes?: string;
+  incomeTaxes?: string;
+  salesTaxes?: string;
+  utilities?: string;
+  groceryCosts?: string;
+  diningCosts?: string;
+  transportationCosts?: string;
+  healthcareCosts?: string;
+  bestNeighborhoods?: string[];
+  luxuryNeighborhoods?: string[];
+  budgetNeighborhoods?: string[];
+  familyNeighborhoods?: string[];
+  digitalNomadNeighborhoods?: string[];
+  retirementNeighborhoods?: string[];
+  beaches?: string[];
+  mountains?: string[];
+  lakes?: string[];
+  parks?: string[];
+  hiking?: string[];
+  golf?: string[];
+  museums?: string[];
+  art?: string[];
+  architecture?: string[];
+  festivals?: string[];
+  sports?: string[];
+  nightlife?: string[];
+  restaurants?: string[];
+  coffeeShops?: string[];
+  shopping?: string[];
+  universities?: string[];
+  economy?: string;
+  majorEmployers?: string[];
+  nearbyWeekendTrips?: string[];
+  airportsWithDirectFlights?: string[];
+  visaInfo?: string;
+  residencyInfo?: string;
+  retirementSuitability?: string;
+  familySuitability?: string;
+  digitalNomadSuitability?: string;
+  lgbtqFriendliness?: string;
+  accessibility?: string;
+  localTransportation?: string;
+  healthcareRankings?: string;
+  climateRisks?: string;
+  naturalDisasterRisks?: string;
 };
 
 export type DestinationEditorialContent = {
@@ -95,8 +217,28 @@ export type DestinationEditorialContent = {
   climateNarrative?: string;
   transportationNarrative?: string;
   verdict?: string;
+  destinationOverview?: string;
+  whyThisPlaceFeelsDistinct?: string;
+  costOfLiving?: string;
+  housing?: string;
+  healthcare?: string;
+  education?: string;
+  safety?: string;
+  walkability?: string;
+  digitalNomad?: string;
+  retirement?: string;
+  familyLiving?: string;
+  bestNeighborhoods?: string[];
+  hiddenGems?: string[];
+  localCulture?: string;
+  foodAndDining?: string;
+  outdoorRecreation?: string;
+  pros?: string[];
+  cons?: string[];
   bestFor?: string[];
   notIdealFor?: string[];
+  relocationAdvice?: string;
+  longFormEditorial?: string;
   dayMoments?: Destination["dayMoments"];
   rapidAnswers?: Destination["rapidAnswers"];
   coreRelocationQa?: Destination["coreRelocationQa"];
@@ -153,17 +295,43 @@ export type Destination = {
   coreRelocationQa?: Array<{ title: string; items: Array<{ question: string; answer: string }> }>;
   practicalTopLinks?: Array<{ name: string; category: "Restaurant" | "Shopping" | "Service"; note: string; href: string }>;
   researchProfile?: DestinationResearchProfile;
+  premiumEditorialContent?: PremiumEditorialContent;
+  knowledgeProfile?: DestinationKnowledgeProfile;
+  memberDetails?: {
+    airports?: Array<{ name?: string }>;
+    hospitals?: Array<{ name?: string }>;
+  };
 };
 
-export const destinations: Destination[] = [
+const sanitizeCatalogNarrativeText = (value: string) =>
+  value
+    .replace(/\bretirees?\b/gi, "residents")
+    .replace(/\bretiree\b/gi, "resident")
+    .replace(/\bretirement\b/gi, "long-stay living")
+    .replace(/\bretirement-friendly\b/gi, "resident-friendly")
+    .replace(/\bretirement-oriented\b/gi, "long-stay-oriented")
+    .replace(/\bretirement-first\b/gi, "long-stay-first")
+    .replace(/\bactive-adult\b/gi, "long-stay resident");
+
+const sanitizeDestinationCatalogEntry = (destination: Destination): Destination => ({
+  ...destination,
+  description: destination.description ? sanitizeCatalogNarrativeText(destination.description) : destination.description,
+  overview: destination.overview ? sanitizeCatalogNarrativeText(destination.overview) : destination.overview,
+  climate: destination.climate ? sanitizeCatalogNarrativeText(destination.climate) : destination.climate,
+  lifestyle: destination.lifestyle ? sanitizeCatalogNarrativeText(destination.lifestyle) : destination.lifestyle,
+  transportation: destination.transportation ? sanitizeCatalogNarrativeText(destination.transportation) : destination.transportation,
+  tags: destination.tags?.map((tag) => sanitizeCatalogNarrativeText(tag)),
+});
+
+const rawDestinations: Destination[] = [
   {
     slug: "nafplio-greece",
     city: "Nafplio",
     country: "Greece",
     emoji: "🏔 ",
     match: 0.0,
-    description: "Nafplio sits on the Argolic Gulf beneath three fortresses, with neoclassical houses, marble squares and a harborfront that feels more like an island town than a mainland city. Palamidi Fortress rises above the rooftops, Bourtzi Castle occupies a small offshore islet, and the old town’s lanes reveal Venetian, Ottoman and early-modern Greek layers. The city’s visual polish, compact scale and waterfront setting make it one of Greece’s most romantic urban escapes.",
-    overview: "Nafplio is the capital of Argolis in the northeastern Peloponnese and one of mainland Greece’s most admired historic towns. It served as the first capital of the modern Greek state and still carries that national importance in its architecture, public squares and museums. Syntagma Square anchors the old town, while Palamidi Fortress, Acronauplia and Bourtzi create a dramatic defensive landscape around the harbor. The city is also an excellent base for Mycenae, Epidaurus, Tiryns and the beaches of the Argolic Gulf. Tourism is central to the local economy, but Nafplio retains a year-round community supported by agriculture, regional administration and services. It works especially well for couples, photographers and retirees who value beauty, walkability and proximity to archaeological sites. The main tradeoffs are weekend crowds, summer heat and limited rail access.",
+    description: "Nafplio sits on the Argolic Gulf beneath three fortresses, with neoclassical houses, marble squares and a harborfront that feels more like an island town than a mainland city. Palamidi Fortress rises above the rooftops, Bourtzi Castle occupies a small offshore islet, Akronafplia crowns the ridge above the old town, and the lanes reveal Venetian, Ottoman and early-modern Greek layers. The city’s visual polish, compact scale and waterfront setting make it one of Greece’s most romantic urban escapes.",
+    overview: "Nafplio is the capital of Argolis in the northeastern Peloponnese and one of mainland Greece’s most admired historic towns. It served as the first capital of the modern Greek state and still carries that national importance in its architecture, public squares and museums. Syntagma Square anchors the old town, while Palamidi Fortress, Akronafplia and Bourtzi create a dramatic defensive landscape around the harbor. The city is also an excellent base for Mycenae, Epidaurus, Tiryns and the beaches of the Argolic Gulf. Tourism is central to the local economy, but Nafplio retains a year-round community supported by agriculture, regional administration and services. It works especially well for couples, photographers and residents who value beauty, walkability and proximity to archaeological sites. The main tradeoffs are weekend crowds, summer heat and limited rail access.",
     climate: "Mediterranean climate with hot, dry summers and mild, wetter winters. July and August commonly reach the upper 80s°F, while winter daytime temperatures are usually in the 50s and low 60s. Rain is concentrated from late autumn through early spring. April to June and September to October offer the best balance of warmth, lower humidity and lighter crowds.",
     lifestyle: "Life revolves around the harbor, old-town cafés, evening promenades and nearby beaches. Dining emphasizes seafood, grilled meats, local citrus and Peloponnesian wines. The pace is relaxed outside weekends and holidays, with a strong café culture and limited nightlife compared with Athens. It suits walking, photography, swimming and frequent archaeological day trips.",
     transportation: "The historic center is compact and highly walkable, though Palamidi requires a steep climb or taxi. KTEL Argolida buses connect Nafplio with Athens, Argos and regional destinations; the Athens journey typically takes about two to two-and-a-half hours. Passenger rail service is currently suspended. Athens International Airport is the main gateway, and a car is useful for beaches and archaeological sites.",
@@ -5842,11 +6010,11 @@ export const destinations: Destination[] = [
     country: "Spain",
     emoji: "🏔 ",
     match: 0.0,
-    description: "Barcelona is a dense Mediterranean metropolis of Gaudí landmarks, medieval lanes, beaches, markets and neighborhood plazas. Its architecture and street life deliver extraordinary visual variety, but popularity has also brought crowding, housing pressure and intense debate over tourism.",
-    overview: "Catalonia’s capital includes the Sagrada Família, Park Güell, Gothic Quarter, Montjuïc, Eixample and a long urban waterfront. Districts such as Gràcia, Sant Antoni, Poblenou and Sarrià offer different rhythms for longer stays. The city is a major center for design, technology, education and health care. Food culture ranges from neighborhood markets and tapas bars to internationally recognized restaurants. Pickpocketing in crowded areas, summer heat and rising costs are practical considerations.",
-    climate: "Mediterranean climate with mild winters and hot, humid summers. July and August highs typically reach the low-to-mid 80s°F, with warm nights. Spring and autumn are especially comfortable, though heavy rain episodes can occur.",
-    lifestyle: "Excellent for architecture, food, art, nightlife and beach access. It rewards neighborhood living and repeat exploration, but residents seeking quiet may prefer outer districts or nearby Sitges and Girona.",
-    transportation: "An extensive metro, bus, tram and commuter-rail system covers the city. High-speed rail connects Madrid, Valencia and France. Barcelona–El Prat Airport is reached by train, metro, bus and taxi.",
+    description: "Barcelona, the cosmopolitan capital of Spain’s Catalonia region, is known for its art and architecture. The fantastical Sagrada Família church and other modernist landmarks designed by Antoni Gaudí dot the city. Museu Picasso and Fundació Joan Miró feature modern art by their namesakes. City history museum MUHBA includes several Roman archaeological sites.",
+    overview: "The city spans the Gothic Quarter, Eixample, Gràcia, El Born, Sant Antoni, Poblenou and the hills and waterfront of Montjuïc. A long-stay setup benefits from understanding which district matches the daily rhythm you want: Gràcia for a more local feel, Eixample for transit and broad sidewalks, Poblenou for a more modern, beach-adjacent life, and the old center for proximity to major sights. The city’s strengths are strong transit, a dense food scene, a long cultural calendar and easy access to beaches, but its downsides are rising housing costs, packed streets in peak season and heat that makes midday movement harder.",
+    climate: "The summer climate is Mediterranean and often sticky, with heat building through July and August and warm nights that keep the city feeling active late. Spring and autumn are better for walking because temperatures are milder and the light is easier. Winter is usually mild but not always dry, and the city can feel cool and windy during longer rain spells.",
+    lifestyle: "Daily life in Barcelona is shaped by neighborhood routines: market shopping in the morning, coffee or lunch in a local bar, an afternoon walk or beach break, and evenings that can stretch late around dinner, bars or a promenade. The city is especially good for people who want to live among architecture, food, public space and cultural activity rather than rely on a single major attraction.",
+    transportation: "The metro, buses, trams and commuter rail make most districts workable without a car, but the best long-stay setups are usually near a station, a market and a daily street life rather than only close to a landmark. The airport is well connected by metro, train and taxi, and rail links reach Madrid, Valencia and the rest of the Mediterranean corridor. The practical tradeoff is that the central neighborhoods can become crowded and some routes slow down at peak hours.",
     images: [
       {
         src: "",
@@ -5854,7 +6022,7 @@ export const destinations: Destination[] = [
         caption: "Barcelona, Spain",
       },
     ],
-    tags: ["Spain", "Catalonia", "Gaudí", "beach city", "architecture", "food", "nightlife", "metro"],
+    tags: ["Spain", "Catalonia", "Gaudí", "beach city", "architecture", "food", "nightlife", "metro", "neighborhood living"],
   },
   {
     slug: "nice-france",
@@ -5882,8 +6050,8 @@ export const destinations: Destination[] = [
     country: "Italy",
     emoji: "🏔 ",
     match: 0.0,
-    description: "Rome layers imperial ruins, baroque fountains, Renaissance palaces and ordinary neighborhood life across a vast, unruly urban landscape. Few cities offer comparable historical density, but heat, traffic, uneven maintenance and crowds are part of the bargain.",
-    overview: "Italy’s capital contains the Colosseum, Roman Forum, Pantheon, Vatican Museums, St. Peter’s Basilica, Trevi Fountain and countless churches and archaeological sites. Trastevere, Testaccio, Prati, Monti and Parioli offer different long-stay experiences. Rome is a national center for government, media, education and health care. Food culture is deeply local, from carbonara and cacio e pepe to markets and family-run trattorias. The city rewards patience and neighborhood routines more than checklist tourism.",
+    description: "Rome layers imperial ruins, baroque fountains, Renaissance palaces and ordinary neighborhood life across a vast, unruly urban landscape, with Trastevere and the Tiber shaping the city’s most lived-in daily rhythm. ancient monuments, neighborhood piazzas and everyday café life overlap in ways that make the city feel both grand and intimate, while the river and the old districts keep the pace rooted in the street rather than in spectacle alone.",
+    overview: "Italy’s capital contains the Colosseum, Roman Forum, Pantheon, Vatican Museums, St. Peter’s Basilica, Trevi Fountain and countless churches and archaeological sites. Trastevere, Testaccio, Prati, Monti and Parioli offer different long-stay experiences, and the Tiber links the city’s historic core to its everyday waterfront life. Rome is a national center for government, media, education and health care. Food culture is deeply local, from carbonara and cacio e pepe to markets and family-run trattorias. The city rewards patience and neighborhood routines more than checklist tourism.",
     climate: "Mediterranean climate with hot, dry summers and mild, wetter winters. July and August often reach the upper 80s to 90s°F, and heat waves can be stronger. Spring and October are usually the most comfortable seasons for walking.",
     lifestyle: "Ideal for history, art, food and people-watching. Long stays reveal quieter parks, local markets and residential districts, but bureaucracy, transit reliability and summer heat can frustrate.",
     transportation: "Rome has metro lines, trams, buses and suburban rail, though coverage and reliability vary. High-speed trains connect Florence, Milan, Naples and Turin. Fiumicino Airport is linked by express rail.",
@@ -6202,19 +6370,240 @@ export const destinations: Destination[] = [
     country: "United States",
     emoji: "12",
     match: 0.0,
-    description: "Chicago combines monumental architecture, lakefront parks, major museums and deeply rooted neighborhood cultures. It offers big-city cultural depth at a lower cost than New York or coastal California, balanced against harsh winters and uneven safety.",
-    overview: "The Loop, Riverwalk, Millennium Park, Art Institute and lakefront form the visitor core, while neighborhoods such as Lincoln Park, Hyde Park, Pilsen and Andersonville reveal the city’s diversity. Chicago is a major center for finance, logistics, healthcare, education and food. Housing remains comparatively attainable in many areas. Segregation and crime vary sharply by neighborhood.",
-    climate: "Humid continental climate with hot summers, cold windy winters and significant seasonal variation. Summer highs commonly reach the 80s°F. Winter temperatures often fall below freezing, with snow and lake-effect wind.",
-    lifestyle: "Excellent for architecture, sports, museums, music and food. The city rewards neighborhood exploration, though winter tolerance is essential.",
-    transportation: "The CTA ‘L,’ buses, Metra commuter rail and regional trains provide broad coverage. O’Hare and Midway airports offer extensive domestic and international service.",
-    images: [
-      {
-        src: "",
-        alt: "Chicago city view",
-        caption: "Chicago, United States",
-      },
+    title: "Chicago, Illinois",
+    subtitle: "A premium big-city base for culture, healthcare, sports, and daily life that still feels grounded in neighborhood character.",
+    description: "Chicago is the rare American metropolis that feels both grand and practical: a skyline of steel and stone, a lakefront of parks and beaches, and a neighborhood fabric that still rewards walking. It offers world-class museums, serious food, a deep sports culture, and a transit network that makes car-light living genuinely possible for many residents. The tradeoffs are real: winter is long and windy, and neighborhood safety and price vary dramatically by block and district.",
+    overview: "Chicago is best understood as a city of distinct districts rather than a single center. The Loop and Riverwalk bring the downtown core into focus, but the real depth comes from neighborhoods like Lincoln Park, Lakeview, River North, West Loop, Wicker Park, Hyde Park, Gold Coast, and the South Side’s cultural corridors. Millennium Park, The Art Institute, Museum Campus, Navy Pier, the Magnificent Mile, and Lake Michigan all shape the city’s identity, yet long-stay life is defined by the everyday experience of coffee shops, CTA trains and buses, local grocery runs, and the rhythms of each neighborhood.",
+    climate: "Chicago has a classic humid continental climate: warm, often humid summers; cold, windy winters; and real seasonal drama. July and August can be sticky and bright, but the city is at its most livable in late spring and early fall. Winter brings snow, lake-effect wind, and a very real test of tolerance for cold, while the lake moderates temperatures somewhat along the shoreline and in some neighborhoods.",
+    lifestyle: "Chicago is a city for people who want culture without surrendering their everyday life to spectacle. Residents move between work, neighborhood cafés, gym classes, museum visits, baseball games, and weekend trips to the lakefront. The city rewards a life built around blocks, transit lines, and local rituals rather than a single flagship attraction. That is why the best long-stay experience often comes from choosing a neighborhood with care and then learning its routines over time.",
+    transportation: "Chicago’s transportation story is one of its greatest advantages. CTA trains and buses reach much of the city with real efficiency, and the Metra commuter rail extends that reach into suburbs and commuting corridors. O’Hare and Midway provide strong air access, while walkability is excellent in the central neighborhoods and more variable in the outer reaches. For many residents, a car is optional in the core and a burden in others, which makes neighborhood choice and transit familiarity exceptionally important.",
+    heroNarrative: "Chicago is one of the few North American cities where the everyday experience can feel as compelling as the skyline. The city’s identity comes from neighborhoods that still have a civic and social life of their own: the lakefront calm of Lincoln Park, the restaurant energy of West Loop, the late-night pulse of River North, the student and museum culture of Hyde Park, and the historic residential character of Gold Coast. It has one of the strongest museum ecosystems in the country, excellent healthcare institutions, serious sports culture, and a waterfront that gives even the densest parts of town a breathing space. Chicago is not effortless, but when it is chosen well it offers an unusually rich balance of culture, connectivity, and value.",
+    introduction: "Chicago is a city of neighborhoods, institutions, and weather that demands respect. It rewards residents who can appreciate both the grand civic architecture and the modest rituals of daily life.",
+    researchProfile: {
+      overview: "Chicago feels like a city built around local identity. It is a place where the Lakefront Trail, the CTA map, neighborhood dining, and the rhythm of housing markets all shape the day. The city’s greatest strength is that its neighborhoods remain legible and distinctive even as the metropolis expands.",
+      feel: "Chicago has a blunt, ambitious, and deeply civic energy. It is more practical than glamorous, more neighborhood-driven than postcard-driven, and more rewarding the longer you learn its patterns.",
+      whyPeopleLoveIt: "Chicago is loved for its layered neighborhoods, exceptional museums, world-class dining, the lakefront, and the way a resident can live an urban life without feeling trapped in a single district.",
+      climate: "Chicago’s climate is dramatic and seasonal, with long winters that can be intense but also make the city’s summers and shoulder seasons feel more valuable.",
+      costOfLiving: "Chicago remains more affordable than New York or coastal California, but costs are highly location-sensitive. Good neighborhoods can be expensive, and the city’s older housing stock often requires careful budgeting for heat, maintenance, and insurance.",
+      housing: "The city offers a mix of historic apartments, condos, brownstones, and newer high-rises, with the best value often found slightly outside the most fashionable districts.",
+      healthcare: "Chicago is one of the strongest healthcare cities in the United States, with major academic medical centers, strong specialty networks, and high-quality care across several boroughs and suburbs.",
+      safety: "Safety is strongly neighborhood-specific. Some districts feel secure and active day and night, while others require more caution, especially late at night or in unfamiliar blocks.",
+      walkability: "Chicago has excellent walkability in central and lakefront neighborhoods, but car dependence rises in many outer areas and in some suburban-feeling districts.",
+      transportation: "The CTA and Metra make car-light life possible in many parts of the city, though the system is uneven and winter travel can be uncomfortable.",
+      internet: "Internet service is generally strong in the core, but building quality and older infrastructure still matter for apartment selection.",
+      bestNeighborhoods: ["Lincoln Park", "Lakeview", "West Loop", "Hyde Park", "River North", "Gold Coast", "Wicker Park", "Andersonville"],
+      food: ["Deep-dish pizza", "Italian beef", "Chicago-style hot dogs", "great steak houses", "excellent ramen and regional Mexican food"],
+      attractions: ["Millennium Park", "The Art Institute", "Museum Campus", "Navy Pier", "The Riverwalk", "The Magnificent Mile", "Lake Michigan"],
+      hiddenGems: ["The 606", "Montrose Harbor", "Pilsen mural districts", "Lincoln Park Conservatory", "The National Museum of Mexican Art"],
+      museums: ["The Art Institute", "Museum of Contemporary Art", "Field Museum", "Shedd Aquarium", "Museum of Science and Industry"],
+      parks: ["Lincoln Park", "Grant Park", "Jackson Park", "Garfield Park Conservatory", "Montrose Beach"],
+      beaches: ["North Avenue Beach", "Montrose Beach", "Ohio Street Beach", "49th Street Beach"],
+      photography: ["The skyline from Adler Planetarium", "the Chicago River architecture", "the lakefront at dusk", "the Loop at sunrise"],
+      monthlyBudget: "A single resident can live well on around $2,400 to $3,800 per month in many neighborhoods, while a comfortable family household often needs more.",
+      pros: ["Exceptional museums, food, and architecture", "Strong healthcare ecosystem", "Excellent lakefront and park access", "Robust transit in the core", "Distinct neighborhoods with real local identity"],
+      cons: ["Long winter with wind and snow", "Neighborhood-level safety varies sharply", "Older housing stock can be maintenance-heavy", "Some districts feel car-dependent", "The city can feel expensive in the most desirable areas"],
+      longStaySuitability: "Chicago is highly suitable for long stays when the resident values culture, healthcare, transit, and a city that can be lived in over many seasons rather than only visited in summer.",
+      digitalNomadSuitability: "Chicago works well for digital nomads who want a dense city with reliable cafés, strong transit, and a real neighborhood life rather than purely resort-style convenience.",
+      familyFriendliness: "Chicago is especially strong for families who want museums, parks, good schools, and neighborhoods with practical daily infrastructure rather than a one-note suburban model.",
+      nearbyDayTrips: ["Lake Geneva", "Galena", "Milwaukee", "Indiana Dunes", "Starved Rock State Park"],
+      visaAndTax: ["The city is a practical U.S. destination for long-stay residents, though visa, tax, and residency requirements depend heavily on citizenship and immigration status."],
+      researchNotes: ["Chicago’s best long-stay cases are built from neighborhood selection rather than citywide assumptions.", "The city’s cultural depth is strongest when residents use the transit network and local jobs, not just tourist attractions."],
+      localCulture: "Chicago’s local culture is rooted in neighborhood loyalty, sports fandom, architecture, and a willingness to claim a favorite corner of the city with seriousness.",
+      foodAndDining: "Dining is a civic institution in Chicago, from deep-dish pizza and Italian beef to excellent ramen, Korean barbecue, Michelin-starred restaurants, and neighborhood cafés that shape the daily rhythm.",
+      outdoorRecreation: "The lakefront, bike paths, running routes, beach access, and park system make outdoor life a serious part of the city’s identity.",
+      bestFor: ["Culture-led professionals", "Families who want museums and parks", "Retirees seeking strong healthcare and neighborhood life", "Digital nomads who want a real city with cafés and transit", "Sports fans and food lovers"],
+      notIdealFor: ["People who want perpetual warmth", "Residents who need easy suburban car logistics", "Anyone uncomfortable with winter weather", "People who want a low-stress, low-variance neighborhood map"],
+      relocationAdvice: "Choose a neighborhood by commute, winter exposure, walkability, and the type of daily errands you actually want to handle on foot. Chicago is more forgiving when the move is based on pattern and routine rather than hype.",
+      longFormEditorial: "Chicago is not a city that should be evaluated through its postcard landmarks alone. Its appeal comes from the way its neighborhoods carry the city’s identity, from the Lakefront Trail to the corner café, from the CTA line to the museum district, from the high-rise skyline to the brick residential streets that make the city feel lived in.",
+      whyThisPlaceFeelsDistinct: "Chicago feels distinct because it combines a monumental skyline with ordinary neighborhood life, a strong sense of local identity, and a cultural infrastructure that remains deeply civic.",
+      districts: ["Lakeview", "West Loop", "River North", "Lincoln Park", "Hyde Park", "Gold Coast", "Wicker Park", "Pilsen"],
+      famousStreets: ["Michigan Avenue", "Clark Street", "Halsted Street", "Lake Shore Drive", "Division Street"],
+      restaurants: ["West Loop", "River North", "Lincoln Park", "Wicker Park"],
+      cafes: ["Lakeview", "Lincoln Park", "Wicker Park", "West Loop"],
+      shoppingDistricts: ["Magnificent Mile", "Wicker Park", "West Loop", "State Street"],
+      airports: ["O'Hare International Airport", "Midway International Airport"],
+      hospitals: ["Northwestern Memorial Hospital", "University of Chicago Medical Center", "Rush University Medical Center"],
+      universities: ["University of Chicago", "Northwestern University", "DePaul University", "Loyola University Chicago"],
+      sportsTeams: ["Chicago Bulls", "Chicago Cubs", "Chicago White Sox", "Chicago Bears", "Chicago Blackhawks"],
+      entertainmentAreas: ["River North", "West Loop", "Lincoln Park", "Navy Pier"],
+      mountains: ["Lake Michigan shoreline", "the skyline", "the river corridors"]
+    },
+    premiumEditorialContent: {
+      heroIntroduction: "Chicago is one of the most rewarding cities in North America for people willing to think beyond its reputation. It is a place where the skyline can be impressive from a distance, but the real value lies in the lived texture of the neighborhoods: the lakefront in the morning, the CTA line that carries you across the city, the coffee shop where a workday begins, the museum or baseball game that punctuates the week, and the block-by-block differences that make one district feel entirely unlike another. Chicago earns its status not because it is effortless, but because it offers enormous cultural depth, serious healthcare, broad transit access, and a genuine local character that survives even when the weather is punishing. For long-stay residents, the city becomes most compelling when they choose the right neighborhood and let the city’s seasons, civic life, and food culture shape the experience over time.",
+      whyPeopleLoveIt: ["The city has a striking mix of monumental architecture and ordinary neighborhood life.", "Lincoln Park, Lakeview, Hyde Park, River North, and West Loop each feel like fully formed worlds with their own social rhythm.", "The lakefront gives Chicago a rare combination of big-city density and open space.", "The museum ecosystem is exceptional, from The Art Institute to Museum Campus.", "The dining scene is broad, serious, and deeply local rather than purely tourist-driven.", "The CTA makes many neighborhoods genuinely accessible without requiring a car.", "The sports culture is passionate and woven into civic identity.", "The city’s coffee culture and neighborhood cafés make daily life feel intimate even in a large metropolis.", "Chicago has a strong sense of historical continuity, with a cityscape that still tells stories through architecture and neighborhood names."],
+      majorStrengths: ["A world-class museum and cultural ecosystem", "Strong healthcare institutions and academic medical centers", "Exceptional food, coffee, and neighborhood culture", "Excellent lakefront access and park system", "A transit network that supports car-light urban life in many neighborhoods"],
+      majorDrawbacks: ["Winter weather can be severe and psychologically draining", "Neighborhood safety varies sharply and should be assessed by block", "Housing costs can become steep in the most desirable districts", "Older buildings require more maintenance and can have uneven heating or insulation", "Some outer areas can feel more car-oriented and less convenient than the central neighborhoods"],
+      bestFor: ["Retirees who want major healthcare access and neighborhood life", "Families who want museums, parks, and a strong urban education ecosystem", "Young professionals drawn to food, culture, and public transit", "Digital nomads who need cafés, density, and strong weekend options", "Travelers who want a real city rather than a resort-like base"],
+      overviewArticle: "Chicago is not a city that should be understood through a single landmark or a single weekend itinerary. Its identity emerges from the layered rhythm of neighborhoods that sit beside one another with very different textures: the polished lakefront of Lincoln Park, the dense rental stock and late-night energy of Lakeview, the hospitality economy of River North, the design-forward redevelopment of West Loop, the small-scale creative culture of Wicker Park, the institutional calm of Hyde Park, and the old-money polish of Gold Coast. The city’s civic architecture and its everyday streets are equally important. Millennium Park and The Art Institute draw visitors, but the deeper Chicago experience comes from the way people live around them: taking the CTA, buying groceries in a neighborhood shop, walking along the Riverwalk, sitting at a coffee bar in the morning, and understanding that a district’s character often matters more than any official tourism summary. Chicago also benefits from one of the strongest healthcare ecosystems in the country, a serious sports culture, and a lakefront that makes urban living feel less claustrophobic than many other American metropolises. For relocation, the crucial lesson is simple: the city is best evaluated neighborhood by neighborhood rather than as a single undifferentiated whole.",
+      neighborhoodsArticle: "Chicago’s neighborhoods are the product of more than geography; they are the city’s real identity. Lincoln Park offers a refined, family-friendly, and lake-adjacent version of urban life with excellent park access and a calm residential rhythm. Lakeview brings a more social, apartment-heavy, and service-rich version of the city, attractive to young professionals, families, and long-stay residents who want convenience and a modern neighborhood feel. River North is the hospitality and nightlife district, glamorous in its own way but often less appealing for people who want calm or stability. West Loop is a high-energy food and design corridor where new construction, restaurants, and professional life push the neighborhood into a more polished, expensive mode. Wicker Park carries a creative, independent, and somewhat more bohemian atmosphere, while Hyde Park is a distinct intellectual and cultural district shaped by the University of Chicago and its medical institutions. Gold Coast remains one of the city’s most prestigious residential addresses, especially for residents who want luxury, proximity to downtown, and an old-school sense of status. For retirees, families, and digital nomads, the aim is not to find a single perfect district but to match the neighborhood to the life you want to live. That is why the city’s best long-stay case is often built around a few blocks, not an abstract citywide idea.",
+      dailyLifeArticle: "Daily life in Chicago is shaped by the fact that the city is simultaneously impersonal and deeply local. A resident might start the morning with coffee on a quiet street in Lakeview, take the CTA to work, spend lunch in the West Loop, and then head to the lakefront for an evening walk or a stop at a neighborhood bar. The city makes room for both routine and ritual: a run along the Lakefront Trail, a Sunday afternoon in Lincoln Park, an evening at a Cubs game, a museum visit on a rainy day, or a weekend trip to the lakefront beaches. The city rewards a life built around recurring habits, and those habits are often easier to maintain when the neighborhood supports them directly. For people who like urban energy but still want actual texture in their daily routine, Chicago is one of the strongest options in the country.",
+      climateArticle: "Chicago’s climate creates a very specific form of urban life. Summers can be warm and sometimes humid, but the city’s lakefront and parks make them more pleasant than the humidity alone would suggest. Spring and fall are often the most compelling seasons, when the city feels open and the lake air is crisp. Winter is the major tradeoff: cold air, snow, wind off Lake Michigan, and the daily reality of dressing for the weather. That seasonal intensity matters for relocation because it shapes how often residents use the lakefront, how much they rely on indoor culture, and how much patience they have for transit delays, frozen sidewalks, and longer indoor days. Chicago is a city that rewards people who appreciate seasonal contrast rather than rejecting it.",
+      transportationArticle: "Chicago’s transportation system is one of its strongest long-stay assets. CTA trains and buses genuinely connect neighborhoods in ways that make daily errands and commuting possible without a car, especially in the central areas and along the lakefront. Metra extends that benefit for people who work in suburbs or want a more residential rhythm without giving up city access. O’Hare and Midway are both practical gateways, and the scale of the city is such that airport access matters even more than the bragging rights of a long list of attractions. The downside is that the network can feel uneven, especially in bad weather, and some neighborhoods are still better suited to the car than others. For many residents, transportation is not an afterthought but the backbone of their quality of life.",
+      costOfLivingArticle: "Chicago is often described as more affordable than coastal gateway cities, but the details matter. A one-bedroom apartment in a desirable neighborhood like Lincoln Park or West Loop can easily cost more than a comparable unit in a less central district, while neighborhoods such as Lakeview, Wicker Park, or parts of the South Side can offer a better balance of price and daily convenience. Realistic budgeting should account for rent, utilities, groceries, transit, dining, and the cost of maintaining an older apartment building. Typical grocery costs for a single adult can land around $350 to $600 per month depending on habits, while utilities frequently add another meaningful chunk, especially in older properties. For a long-stay household, the biggest financial lever is usually location choice rather than abstract citywide averages.",
+      healthcareArticle: "Chicago’s healthcare reputation is not just theoretical. Northwestern Memorial Hospital, University of Chicago Medical Center, and Rush University Medical Center all give the city a remarkable depth of care, including specialty medicine, major surgery, academic medical access, and high-end outpatient options. That matters for relocation because healthcare is not only about having a hospital nearby; it is about the practical ability to reach a specialist quickly, find a doctor who works within a neighborhood’s daily pattern, and avoid a long and inconvenient journey when the need is urgent. Chicago’s medical ecosystem is one of the strongest reasons to choose the city for a long stay, particularly for older residents or households who want access to strong care without leaving the metro area.",
+      retirementGuide: "Chicago is a very credible retirement city for people who want urban life, cultural depth, and strong healthcare access rather than a conventional retirement resort. The best neighborhoods for retirees are often those that combine walkability, good transit, reasonable grocery access, and a stronger sense of local routine than the tourism-facing districts. Lincoln Park, Lakeview, and Hyde Park all have strong appeal for different types of residents, while Gold Coast may be more attractive for those who want luxury and convenience than for those who want value. The city works best for retirees who are comfortable with winter weather and who want to remain active, socially engaged, and close to cultural institutions rather than living in a quiet, low-stimulation environment.",
+      familyGuide: "Chicago can be a very strong family city when the household values museums, parks, schools, and a dense but not overly suburban urban environment. Families often do best in neighborhoods that offer easy access to the lakefront, stable grocery infrastructure, and local schools rather than simply the most expensive or most fashionable block. Lincoln Park, Lakeview, and parts of West Loop work well for some families, while Hyde Park has a very particular intellectual and academic feel that appeals to those who want an educational atmosphere built into daily life. The family case is strongest when the household treats the city as a set of practical routines — schools, parks, transit, and weekend activities — rather than as a collection of attractions to be consumed once.",
+      digitalNomadGuide: "Chicago is especially compelling for digital nomads who want a city with an actual social rhythm. It has reliable coffee culture, numerous work-friendly cafés, a strong transit network in the core, enough restaurants and neighborhoods to keep life interesting, and a weekend culture that can quickly turn into lakefront walks, museum visits, or trips to the city’s parks. The best digital nomad neighborhoods are often in or near Lakeview, Wicker Park, West Loop, or parts of Lincoln Park, where a resident can balance comfort, convenience, and a genuine neighborhood atmosphere. Chicago is not a low-friction remote-work hideaway, but it is an excellent choice for somebody who wants to feel that their work base is also a city worth inhabiting.",
+      prosAndCons: {
+        advantages: ["World-class museums and architecture", "Strong healthcare ecosystem with major hospitals and specialists", "Excellent food, coffee, and neighborhood culture", "Lakefront, parks, and easy access to outdoor activity", "CTA access that supports a car-light urban life in many areas", "Major sports culture and a strong sense of civic identity", "A broad mix of neighborhoods that support different lifestyles and budgets"],
+        disadvantages: ["Winter is long, windy, and often draining", "Safety can vary sharply by neighborhood and time of day", "The city’s older housing stock can mean maintenance and utility surprises", "The most attractive districts are often expensive", "Some suburban-feeling outer areas can feel less efficient or less walkable than the core"],
+      }
+    },
+    knowledgeProfile: {
+      officialName: "City of Chicago",
+      country: "United States",
+      adminRegion: "Illinois",
+      population: "about 2.7 million",
+      metroPopulation: "about 9.5 million",
+      elevation: "about 180 meters",
+      climateClassification: "Humid continental",
+      walkability: "Excellent in the central and lakefront neighborhoods, moderate to weak in some outer districts",
+      publicTransportation: "CTA trains and buses are extensive and practical, especially for core neighborhoods and the lakefront corridor",
+      majorAirports: ["O'Hare International Airport", "Midway International Airport"],
+      healthcareQuality: "Very strong",
+      majorHospitals: ["Northwestern Memorial Hospital", "University of Chicago Medical Center", "Rush University Medical Center"],
+      costOfLiving: "Moderate to high, with strong variation by neighborhood and housing quality",
+      apartmentRent: "One-bedroom rents often range from about $1,800 to $3,000 per month depending on neighborhood and building quality",
+      homePrices: "Home prices vary widely, but Chicago remains more affordable than many coastal gateway cities while still expensive in prime districts",
+      utilities: "Utilities commonly add around $150 to $250 per month for an apartment, especially in older buildings",
+      groceryCosts: "A single adult can expect roughly $350 to $600 per month in groceries depending on habits and neighborhood",
+      diningCosts: "Casual dining often runs around $20 to $30 per person, while nicer dinners can exceed $80 to $150 per person",
+      transportationCosts: "CTA passes and occasional rideshare often add around $90 to $160 per month for a single resident",
+      healthcareCosts: "Out-of-pocket healthcare costs depend heavily on insurance, but the city’s provider density makes access strong",
+      bestNeighborhoods: ["Lincoln Park", "Lakeview", "West Loop", "Hyde Park", "Gold Coast", "Wicker Park"],
+      luxuryNeighborhoods: ["Gold Coast", "Streeterville", "River North", "Lincoln Park"],
+      budgetNeighborhoods: ["Albany Park", "South Chicago", "Austin", "Englewood"],
+      familyNeighborhoods: ["Lincoln Park", "Lakeview", "Hyde Park", "West Loop"],
+      digitalNomadNeighborhoods: ["West Loop", "Wicker Park", "Lakeview", "River North"],
+      retirementNeighborhoods: ["Lakeview", "Lincoln Park", "Hyde Park", "Gold Coast"],
+      parks: ["Lincoln Park", "Grant Park", "Jackson Park", "Garfield Park Conservatory", "Montrose Beach"],
+      museums: ["The Art Institute", "Museum of Contemporary Art", "Field Museum", "Museum of Science and Industry"],
+      beaches: ["North Avenue Beach", "Montrose Beach", "Ohio Street Beach", "49th Street Beach"],
+      mountains: ["the lakefront skyline", "the river corridors", "the city’s elevated rail lines"],
+      restaurants: ["West Loop", "River North", "Lincoln Park", "Wicker Park"],
+      coffeeShops: ["Lakeview", "Lincoln Park", "Wicker Park", "West Loop"],
+      shopping: ["Magnificent Mile", "Wicker Park", "West Loop", "State Street"],
+      universities: ["University of Chicago", "Northwestern University", "DePaul University", "Loyola University Chicago"],
+      economy: "Finance, healthcare, logistics, education, technology, food, and professional services are all major pillars of the Chicago economy",
+      majorEmployers: ["United Airlines", "McDonald’s", "Abbott", "Kraft Heinz", "Northwestern Medicine"],
+      nearbyWeekendTrips: ["Lake Geneva", "Milwaukee", "Indiana Dunes", "Starved Rock State Park", "Galena"],
+      airportsWithDirectFlights: ["O’Hare International Airport", "Midway International Airport"],
+      visaInfo: "U.S. immigration and visa requirements vary by citizenship and visa type; a relocation plan should be reviewed with immigration counsel",
+      retirementSuitability: "Strong for residents who want healthcare access, culture, and neighborhood-level urban life",
+      familySuitability: "Strong for families who want urban amenities and strong weekend options",
+      digitalNomadSuitability: "Very strong for remote workers who want a real city without giving up café culture and transit",
+      climateRisks: "Winter storms, lake-effect wind, and sharp seasonal swings matter more than many newcomers expect",
+      naturalDisasterRisks: "The city faces some flood and severe weather risk, but headline natural disasters are less central than winter and infrastructure issues"
+    },
+    title: "Chicago, Illinois",
+    subtitle: "A premium big-city base for culture, healthcare, sports, and daily life that still feels grounded in neighborhood character.",
+    heroNarrative: "Chicago is one of the few North American cities where the everyday experience can feel as compelling as the skyline. The city’s identity comes from neighborhoods that still have a civic and social life of their own: the lakefront calm of Lincoln Park, the restaurant energy of West Loop, the late-night pulse of River North, the student and museum culture of Hyde Park, and the historic residential character of Gold Coast. It has one of the strongest museum ecosystems in the country, excellent healthcare institutions, serious sports culture, and a waterfront that gives even the densest parts of town a breathing space. Chicago is not effortless, but when it is chosen well it offers an unusually rich balance of culture, connectivity, and value.",
+    lifestyleNarrative: "Chicago rewards residents who value city depth and neighborhood routine over a purely scenic or resort-like life.",
+    climateNarrative: "Chicago’s climate is dramatic and seasonal, with long winters that demand planning and active summers that feel richer because of the lakefront.",
+    transportationNarrative: "The CTA and Metra make many neighborhoods genuinely usable without a car, which is one of the city’s biggest strengths.",
+    verdict: "Chicago is a serious long-stay city for people who want culture, healthcare, food, transit, and neighborhood depth without surrendering urban ambition.",
+    dailyLife: "A typical week in Chicago often involves CTA rides, neighborhood cafés, museum visits, lakefront walks, groceries, and evenings shaped by the local district rather than a single downtown center.",
+    climate: "Chicago has a classic humid continental climate with warm summers, cold windy winters, and a strong seasonal rhythm that shapes how residents use the city.",
+    transportation: "CTA trains and buses, Metra commuter rail, and two major airports make Chicago one of the more practical large cities in the United States for a resident who wants car-light living.",
+    healthcare: "Chicago has one of the strongest healthcare ecosystems in the country, led by Northwestern Memorial Hospital, University of Chicago Medical Center, and Rush University Medical Center.",
+    costOfLiving: "Chicago offers genuine value relative to coastal metros, but a realistic budget should account for neighborhood choice, utilities, and the wear and tear of older housing stock.",
+    walkability: "Walkability is strongest in the central and lakefront neighborhoods, where daily errands, cafes, and parks are all within reach.",
+    internet: "Internet service is usually solid for remote work, especially in newer buildings and better-served neighborhoods.",
+    safety: "Safety is highly neighborhood-specific and should be assessed by district, block, and time of day rather than assumed from citywide reputation.",
+    neighborhoods: ["Lincoln Park", "Lakeview", "River North", "West Loop", "Wicker Park", "Hyde Park", "Gold Coast", "Pilsen"],
+    restaurants: ["West Loop", "River North", "Lincoln Park", "Wicker Park"],
+    museums: ["The Art Institute", "Museum of Contemporary Art", "Field Museum", "Museum of Science and Industry"],
+    golf: ["Harborside International", "Cog Hill", "Skokie Country Club"],
+    beaches: ["North Avenue Beach", "Montrose Beach", "Ohio Street Beach", "49th Street Beach"],
+    outdoorRecreation: ["Lakefront Trail", "The 606", "Lincoln Park Conservatory", "Garfield Park Conservatory", "Jackson Park"],
+    pros: ["Exceptional museums, food, and architecture", "Strong healthcare ecosystem", "Excellent lakefront and park access", "Robust transit in the core", "Distinct neighborhoods with real local identity"],
+    cons: ["Long winter with wind and snow", "Neighborhood safety varies sharply", "Older housing stock can be maintenance-heavy", "Some districts feel car-dependent", "The city can feel expensive in the most desirable areas"],
+    retirement: "Chicago works particularly well for residents who want a city with healthcare, culture, and daily activity rather than a sleepy retirement environment.",
+    digitalNomad: "Chicago suits digital nomads who want a real urban base with cafés, transit, and neighborhood life rather than a fully resort-like setting.",
+    family: "Chicago is strong for families that prioritize parks, museums, schools, and daily urban infrastructure over suburban sprawl.",
+    weather: "Chicago is defined by dramatic seasons, with hot summers, cold winters, and a lakefront that shapes both comfort and mood.",
+    monthlyBudgets: [
+      { label: "Single resident", amount: "$2,400–$3,800/month", note: "Comfortable monthly budget in a solid neighborhood with regular dining and transit." },
+      { label: "Couple", amount: "$3,400–$5,500/month", note: "More spacious housing and a fuller social calendar in a central or lakefront district." },
+      { label: "Family", amount: "$4,800–$7,500/month", note: "Family-scale budget including more space, schools, and frequent weekend activity." },
+      { label: "Luxury", amount: "$6,500–$12,000+/month", note: "Premium apartment or townhouse in Gold Coast, Streeterville, or similar high-demand districts." }
     ],
-    tags: ["United States", "architecture", "Lake Michigan", "food", "museums", "transit", "four seasons", "relative value"],
+    airportInfo: "O'Hare and Midway are both major gateways with strong domestic and international service.",
+    googleMapsUrl: "https://www.google.com/maps/search/Chicago,+Illinois",
+    googleEarthUrl: "https://earth.google.com/web/search/Chicago,+Illinois",
+    officialTourismUrl: "https://www.choosechicago.com/",
+    wikipediaUrl: "https://en.wikipedia.org/wiki/Chicago",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Chicago+travel+guide",
+    tiktokUrl: "https://www.tiktok.com/tag/chicagotravel",
+    instagramUrl: "https://www.instagram.com/explore/tags/chicagotravel/",
+    webcamUrl: "https://www.google.com/search?q=Chicago+live+webcams",
+    resources: [
+      { category: "official", label: "Choose Chicago", provider: "official", url: "https://www.choosechicago.com/" },
+      { category: "wikipedia", label: "Chicago on Wikipedia", provider: "wikipedia", url: "https://en.wikipedia.org/wiki/Chicago" },
+      { category: "maps", label: "Chicago on Google Maps", provider: "google", url: "https://www.google.com/maps/search/Chicago,+Illinois" },
+      { category: "earth", label: "Chicago in Google Earth", provider: "google", url: "https://earth.google.com/web/search/Chicago,+Illinois" }
+    ],
+    realEstateResources: [
+      { category: "real-estate", label: "Chicago real estate listings", provider: "google", url: "https://www.google.com/search?q=Chicago+real+estate" },
+      { category: "real-estate", label: "Chicago property search", provider: "google", url: "https://www.google.com/search?q=Chicago+property+listings" }
+    ],
+    rentalResources: [
+      { category: "rental", label: "Chicago long-stay rentals", provider: "google", url: "https://www.google.com/search?q=Chicago+long+stay+rentals" },
+      { category: "rental", label: "Chicago furnished rentals", provider: "google", url: "https://www.google.com/search?q=Chicago+furnished+rentals" }
+    ],
+    healthcareResources: [
+      { category: "healthcare", label: "Northwestern Memorial Hospital", provider: "healthcare", url: "https://www.nmh.org/" },
+      { category: "healthcare", label: "University of Chicago Medicine", provider: "healthcare", url: "https://www.uchicagomedicine.org/" },
+      { category: "healthcare", label: "Rush University System for Health", provider: "healthcare", url: "https://www.rush.edu/" }
+    ],
+    visaResources: [
+      { category: "visa", label: "U.S. immigration information", provider: "visa", url: "https://www.uscis.gov/" },
+      { category: "visa", label: "Chicago relocation guidance", provider: "visa", url: "https://www.choosechicago.com/" }
+    ],
+    weatherResources: [
+      { category: "weather", label: "Chicago weather", provider: "weather", url: "https://weather.com/weather/today/l/60601:4:US" },
+      { category: "weather", label: "NOAA Chicago climate data", provider: "weather", url: "https://www.weather.gov/" }
+    ],
+    structuredResources: [
+      { category: "official", label: "Choose Chicago", provider: "official", url: "https://www.choosechicago.com/" },
+      { category: "maps", label: "Chicago on Google Maps", provider: "google", url: "https://www.google.com/maps/search/Chicago,+Illinois" },
+      { category: "healthcare", label: "Chicago healthcare resources", provider: "healthcare", url: "https://www.choosechicago.com/health/" }
+    ],
+    videos: [],
+    media: [
+      { kind: "image", url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Chicago_Skyline_in_April_2024_b.jpg/1280px-Chicago_Skyline_in_April_2024_b.jpg", altText: "Chicago skyline over the lake", caption: "Chicago skyline and lakefront", isPrimary: true },
+      { kind: "image", url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Chicago_River_ferry_b.jpg/1280px-Chicago_River_ferry_b.jpg", altText: "Chicago River architecture", caption: "The Chicago River and downtown architecture", isPrimary: false },
+      { kind: "image", url: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Art_Institute_of_Chicago_%2851575570710%29.jpg/1280px-Art_Institute_of_Chicago_%2851575570710%29.jpg", altText: "Art Institute of Chicago", caption: "The Art Institute of Chicago", isPrimary: false }
+    ],
+    heroImages: [
+      { kind: "image", url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Chicago_Skyline_in_April_2024_b.jpg/1280px-Chicago_Skyline_in_April_2024_b.jpg", altText: "Chicago skyline over Lake Michigan", caption: "Chicago skyline from the lakefront", isPrimary: true },
+      { kind: "image", url: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Buckingham_Fountain_in_Chicago%2C_USA.jpg/1280px-Buckingham_Fountain_in_Chicago%2C_USA.jpg", altText: "Buckingham Fountain in Grant Park", caption: "Grant Park and Buckingham Fountain", isPrimary: false }
+    ],
+    mediaGallery: [
+      { kind: "image", url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Chicago_Skyline_in_April_2024_b.jpg/1280px-Chicago_Skyline_in_April_2024_b.jpg", altText: "Chicago skyline over Lake Michigan", caption: "Chicago skyline and lakefront", isPrimary: true },
+      { kind: "image", url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Chicago_River_ferry_b.jpg/1280px-Chicago_River_ferry_b.jpg", altText: "Chicago River architecture", caption: "The Chicago River and downtown architecture", isPrimary: false },
+      { kind: "image", url: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Art_Institute_of_Chicago_%2851575570710%29.jpg/1280px-Art_Institute_of_Chicago_%2851575570710%29.jpg", altText: "Art Institute of Chicago", caption: "The Art Institute of Chicago", isPrimary: false },
+      { kind: "image", url: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Buckingham_Fountain_in_Chicago%2C_USA.jpg/1280px-Buckingham_Fountain_in_Chicago%2C_USA.jpg", altText: "Buckingham Fountain in Grant Park", caption: "Buckingham Fountain and the lakefront", isPrimary: false }
+    ],
+    sections: {},
+    ai: {
+      status: "completed",
+      version: "v1-premium-chicago",
+      lastUpdated: new Date().toISOString(),
+      confidenceScore: 0.93,
+      sourcesUsed: ["Choose Chicago", "Wikipedia", "Chicago tourism and healthcare resources"],
+      missingSections: [],
+      promptVersion: "premium-editorial-v1",
+      researchTimestamp: new Date().toISOString(),
+    },
+    scoring: [
+      { name: "Retirement", weight: 30, score: 86 },
+      { name: "Family", weight: 25, score: 82 },
+      { name: "Digital nomad", weight: 20, score: 81 },
+      { name: "Lifestyle", weight: 25, score: 87 }
+    ],
+    aiScoringExplanation: "Chicago scores highly because it combines a robust healthcare ecosystem, deep cultural institutions, strong transit in the core, and a real neighborhood life that makes a long stay feel meaningful rather than merely convenient. The scores are tempered by the city’s winter severity, neighborhood-level safety differences, and the reality that the best districts can be expensive and maintenance-heavy.",
+    tags: ["United States", "architecture", "Lake Michigan", "food", "museums", "transit", "four seasons", "relative value", "healthcare", "sports"],
   },
   {
     slug: "houston-texas-united-states",
@@ -6255,6 +6644,26 @@ export const destinations: Destination[] = [
       },
     ],
     tags: ["United States", "Arizona", "desert", "winter sun", "golf", "hiking", "extreme heat", "suburban growth"],
+  },
+  {
+    slug: "devon-pa-usa",
+    city: "Devon",
+    country: "United States - Pennsylvania",
+    emoji: "🇺🇸",
+    match: 0.0,
+    description: "Devon is a leafy Philadelphia Main Line suburb known for excellent schools, established neighborhoods, and a calm suburban rhythm that still stays close to the region’s jobs, hospitals and cultural life.",
+    overview: "Positioned in suburban Philadelphia, Devon is attractive to families and professionals who want a quieter base with strong community amenities, easy access to the city, and a more polished residential feel than many surrounding towns. The area offers good parks, local retail, and proximity to major medical centers, while the tradeoff is higher housing costs and a more car-oriented daily pattern.",
+    climate: "Humid subtropical climate with four distinct seasons, warm summers, cold winters, and enough seasonal variety to make both summer and winter feel real. Spring and fall are especially pleasant.",
+    lifestyle: "A strong fit for families, professionals and retirees who want suburban comfort, good schools, and proximity to the Philadelphia metro without giving up a quieter daily rhythm. The area supports golf, local dining, parks, and easy access to the region’s healthcare and cultural centers.",
+    transportation: "The Main Line offers convenient road access to Philadelphia, while nearby regional rail and major highways make commuting practical for people who still need city access. A car is usually the most flexible option for everyday life.",
+    images: [
+      {
+        src: "",
+        alt: "Devon city view",
+        caption: "Devon, United States - Pennsylvania",
+      },
+    ],
+    tags: ["United States - Pennsylvania", "suburban", "family friendly", "healthcare", "schools", "Main Line", "quiet", "commuter access"],
   },
   {
     slug: "philadelphia-pennsylvania-united-states",
@@ -19598,4 +20007,5 @@ export const destinations: Destination[] = [
   },
 ];
 
+export const destinations: Destination[] = rawDestinations.map(sanitizeDestinationCatalogEntry);
 export const LAUNCH_CATALOG_SIZE = destinations.length;

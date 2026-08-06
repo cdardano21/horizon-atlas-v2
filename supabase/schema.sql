@@ -10,6 +10,23 @@ begin
 end;
 $$;
 
+create or replace function public.set_destination_id()
+returns trigger
+language plpgsql
+as $$
+begin
+  if new.destination_id is null then
+    new.destination_id := coalesce(new.id, gen_random_uuid());
+  end if;
+
+  if new.id is null then
+    new.id := new.destination_id;
+  end if;
+
+  return new;
+end;
+$$;
+
 create table if not exists public.app_user_profiles (
   user_id uuid primary key references auth.users(id) on delete cascade,
   display_name text,
@@ -73,6 +90,7 @@ create table if not exists public.saved_recommendation_sets (
 
 create table if not exists public.destinations_catalog (
   id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null unique default gen_random_uuid(),
   slug text not null unique,
   city text not null,
   country text not null,
@@ -100,8 +118,72 @@ create table if not exists public.destinations_catalog (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists public.destination_external_ids (
+  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  provider text not null,
+  external_id text not null,
+  metadata jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  primary key (destination_id, provider, external_id)
+);
+
+create table if not exists public.destination_import_runs (
+  id uuid primary key default gen_random_uuid(),
+  source_name text not null,
+  import_type text not null check (import_type in ('excel', 'api', 'manual', 'mixed')),
+  status text not null default 'queued' check (status in ('queued', 'running', 'completed', 'failed', 'cancelled')),
+  file_name text,
+  metadata jsonb not null default '{}'::jsonb,
+  started_at timestamptz,
+  completed_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.destination_import_rows (
+  id uuid primary key default gen_random_uuid(),
+  import_run_id uuid not null references public.destination_import_runs(id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  module_key text not null,
+  row_number integer,
+  row_status text not null default 'pending' check (row_status in ('pending', 'accepted', 'rejected', 'skipped')),
+  source_ref text,
+  payload jsonb not null default '{}'::jsonb,
+  error_message text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.destination_modules (
+  module_key text primary key,
+  display_name text not null,
+  description text,
+  schema_version text not null default '1.0',
+  active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.destination_module_items (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  module_key text not null references public.destination_modules(module_key) on delete restrict,
+  item_key text not null,
+  item_name text,
+  item_type text,
+  status text not null default 'draft' check (status in ('draft', 'review', 'published', 'archived')),
+  confidence numeric(4, 3),
+  source_ref text,
+  source_type text,
+  import_run_id uuid references public.destination_import_runs(id) on delete set null,
+  metadata jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (destination_id, module_key, item_key)
+);
+
 create table if not exists public.destination_tags (
-  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
   tag text not null,
   created_at timestamptz not null default now(),
   primary key (destination_id, tag)
@@ -109,7 +191,7 @@ create table if not exists public.destination_tags (
 
 create table if not exists public.destination_media_assets (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
   kind text not null check (kind in ('hero', 'gallery', 'map', 'streetview', 'thumbnail')),
   provider text not null,
   url text not null,
@@ -123,7 +205,7 @@ create table if not exists public.destination_media_assets (
 
 create table if not exists public.destination_resource_links (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
   category text not null check (category in ('rentals', 'healthcare', 'taxes', 'visas', 'restaurants', 'guides', 'maps', 'government')),
   label text not null,
   provider text,
@@ -135,7 +217,7 @@ create table if not exists public.destination_resource_links (
 
 create table if not exists public.destination_video_links (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
   provider text not null check (provider in ('youtube', 'tiktok', 'vimeo', 'custom')),
   label text not null,
   url text not null,
@@ -147,7 +229,7 @@ create table if not exists public.destination_video_links (
 
 create table if not exists public.destination_content_revisions (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
   editor_user_id uuid references auth.users(id) on delete set null,
   change_summary text,
   payload jsonb not null,
@@ -158,11 +240,21 @@ create index if not exists idx_favorites_user_id on public.favorites(user_id);
 create index if not exists idx_retirement_dna_assessments_user_id on public.retirement_dna_assessments(user_id, created_at desc);
 create index if not exists idx_saved_recommendation_sets_user_id on public.saved_recommendation_sets(user_id, created_at desc);
 create index if not exists idx_destinations_catalog_status on public.destinations_catalog(status, country, city);
+create index if not exists idx_destinations_catalog_destination_id on public.destinations_catalog(destination_id);
+create index if not exists idx_destination_external_ids_provider on public.destination_external_ids(provider, external_id);
+create index if not exists idx_destination_import_rows_run on public.destination_import_rows(import_run_id, row_status);
+create index if not exists idx_destination_import_rows_destination on public.destination_import_rows(destination_id, module_key);
+create index if not exists idx_destination_module_items_destination_module on public.destination_module_items(destination_id, module_key, status);
 create index if not exists idx_destination_tags_tag on public.destination_tags(tag);
 create index if not exists idx_destination_media_assets_destination on public.destination_media_assets(destination_id, sort_order);
 create index if not exists idx_destination_resource_links_destination on public.destination_resource_links(destination_id, category, sort_order);
 create index if not exists idx_destination_video_links_destination on public.destination_video_links(destination_id, provider, sort_order);
 create index if not exists idx_destination_content_revisions_destination on public.destination_content_revisions(destination_id, created_at desc);
+
+drop trigger if exists set_destination_id_destinations_catalog on public.destinations_catalog;
+create trigger set_destination_id_destinations_catalog
+before insert on public.destinations_catalog
+for each row execute procedure public.set_destination_id();
 
 drop trigger if exists set_updated_at_app_user_profiles on public.app_user_profiles;
 create trigger set_updated_at_app_user_profiles
@@ -199,12 +291,37 @@ create trigger set_updated_at_destination_video_links
 before update on public.destination_video_links
 for each row execute procedure public.set_updated_at();
 
+drop trigger if exists set_updated_at_destination_import_runs on public.destination_import_runs;
+create trigger set_updated_at_destination_import_runs
+before update on public.destination_import_runs
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_destination_import_rows on public.destination_import_rows;
+create trigger set_updated_at_destination_import_rows
+before update on public.destination_import_rows
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_destination_modules on public.destination_modules;
+create trigger set_updated_at_destination_modules
+before update on public.destination_modules
+for each row execute procedure public.set_updated_at();
+
+drop trigger if exists set_updated_at_destination_module_items on public.destination_module_items;
+create trigger set_updated_at_destination_module_items
+before update on public.destination_module_items
+for each row execute procedure public.set_updated_at();
+
 alter table public.app_user_profiles enable row level security;
 alter table public.app_admins enable row level security;
 alter table public.favorites enable row level security;
 alter table public.retirement_dna_assessments enable row level security;
 alter table public.saved_recommendation_sets enable row level security;
 alter table public.destinations_catalog enable row level security;
+alter table public.destination_external_ids enable row level security;
+alter table public.destination_import_runs enable row level security;
+alter table public.destination_import_rows enable row level security;
+alter table public.destination_modules enable row level security;
+alter table public.destination_module_items enable row level security;
 alter table public.destination_tags enable row level security;
 alter table public.destination_media_assets enable row level security;
 alter table public.destination_resource_links enable row level security;
@@ -247,6 +364,17 @@ for all
 to authenticated
 using (public.is_admin_user())
 with check (public.is_admin_user());
+
+insert into public.destination_modules (module_key, display_name, description, schema_version, active)
+values
+  ('golf_courses', 'Golf Courses', 'Golf courses, clubs, tee times, and course metadata.', '1.0', true),
+  ('restaurants', 'Restaurants', 'Restaurants, cafés, and food venues.', '1.0', true),
+  ('climate_data', 'Climate Data', 'Weather, climate, and seasonal living data.', '1.0', true),
+  ('healthcare', 'Healthcare', 'Clinics, hospitals, and care providers.', '1.0', true),
+  ('neighborhoods', 'Neighborhoods', 'Neighborhood and district-level living data.', '1.0', true),
+  ('events', 'Events', 'Local events, pop-ups, and recurring activities.', '1.0', true),
+  ('photos', 'Photos', 'Photo galleries and media collections.', '1.0', true)
+on conflict (module_key) do nothing;
 
 drop policy if exists "Users can read their own favorites" on public.favorites;
 create policy "Users can read their own favorites"

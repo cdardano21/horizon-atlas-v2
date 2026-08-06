@@ -1,10 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { jsonResponse, mockAdminAuthedFetch } from "../../../../test-utils/adminRouteFetchMocks";
 
-const { cookieGetMock, cookiesMock } = vi.hoisted(() => {
+const { cookieGetMock, cookiesMock, updateAdminFallbackDestinationMock, fallbackState, supabaseState } = vi.hoisted(() => {
   const cookieGetMock = vi.fn();
   const cookiesMock = vi.fn(async () => ({ get: cookieGetMock }));
-  return { cookieGetMock, cookiesMock };
+  const updateAdminFallbackDestinationMock = vi.fn((destinationId: string, updates: Record<string, unknown>) => ({
+    id: destinationId,
+    ...updates,
+  }));
+  const fallbackState = { shouldUseLocalFallback: false };
+  const supabaseState = { serviceRoleKey: null as string | null };
+  return { cookieGetMock, cookiesMock, updateAdminFallbackDestinationMock, fallbackState, supabaseState };
 });
 
 vi.mock("next/headers", () => ({
@@ -17,6 +23,17 @@ vi.mock("../../../../lib/supabase", () => ({
     url: "https://example.supabase.co",
     anonKey: "anon-key",
   }),
+  getSupabaseServiceRoleKey: () => supabaseState.serviceRoleKey,
+  getSupabaseAuthHeaders: (accessToken: string | null) => ({
+    apikey: supabaseState.serviceRoleKey ?? "anon-key",
+    Authorization: accessToken ? `Bearer ${accessToken}` : "Bearer anon-key",
+  }),
+}));
+
+vi.mock("../../../../lib/admin-local-fallback", () => ({
+  shouldUseAdminLocalFallback: () => fallbackState.shouldUseLocalFallback,
+  updateAdminFallbackDestination: updateAdminFallbackDestinationMock,
+  deleteAdminFallbackDestination: vi.fn(),
 }));
 
 import { DELETE, PATCH } from "./route";
@@ -30,6 +47,8 @@ describe("admin destination-by-id route", () => {
     vi.restoreAllMocks();
     cookieGetMock.mockReset();
     cookiesMock.mockClear();
+    fallbackState.shouldUseLocalFallback = false;
+    supabaseState.serviceRoleKey = null;
   });
 
   it("returns 403 for PATCH when unauthenticated", async () => {
@@ -46,12 +65,36 @@ describe("admin destination-by-id route", () => {
     expect(response.status).toBe(403);
   });
 
+  it("sends only the provided fields for partial fallback updates", async () => {
+    cookieGetMock.mockReturnValue(undefined);
+    fallbackState.shouldUseLocalFallback = true;
+    updateAdminFallbackDestinationMock.mockClear();
+
+    const response = await PATCH(
+      new Request("http://localhost:3000/api/admin/destinations/dest_1", {
+        method: "PATCH",
+        body: JSON.stringify({ status: "published" }),
+      }),
+      destinationContext("dest_1"),
+    );
+
+    expect(response.status).toBe(200);
+    expect(updateAdminFallbackDestinationMock).toHaveBeenCalledWith("dest_1", { status: "published" });
+  });
+
   it("returns 200 for PATCH and returns updated destination", async () => {
     cookieGetMock.mockReturnValue({ value: "token" });
 
     mockAdminAuthedFetch((url, init) => {
       if (url.includes("/rest/v1/destinations_catalog?select=metadata&id=eq.dest_1&limit=1")) {
         return jsonResponse({ status: 200, body: [{ metadata: null }] });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog?select=id,slug,city,country,status,tier,description,overview&id=eq.dest_1&limit=1")) {
+        return jsonResponse({
+          status: 200,
+          body: [{ id: "dest_1", slug: "valencia-spain", city: "Valencia", country: "Spain", status: "published", tier: "launch" }],
+        });
       }
 
       if (url.includes("/rest/v1/destinations_catalog?id=eq.dest_1") && init?.method === "PATCH") {
@@ -82,6 +125,80 @@ describe("admin destination-by-id route", () => {
       tier: "launch",
       city: "Valencia",
       country: "Spain",
+    });
+  });
+
+  it("returns 409 for PATCH when another destination already uses the requested identity", async () => {
+    cookieGetMock.mockReturnValue({ value: "token" });
+
+    mockAdminAuthedFetch((url, init) => {
+      if (url.includes("/rest/v1/destinations_catalog?select=metadata&id=eq.dest_1&limit=1")) {
+        return jsonResponse({ status: 200, body: [{ metadata: null }] });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog?select=id,slug,city,country,status,tier,description,overview,updated_at,metadata&order=updated_at.desc&limit=1000")) {
+        return jsonResponse({ status: 200, body: [{ id: "dest_other", slug: "lisbon-portugal", city: "Lisbon", country: "Portugal" }] });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog?id=eq.dest_1") && init?.method === "PATCH") {
+        return jsonResponse({ status: 200, body: [{ id: "dest_1", slug: "lisbon-portugal", city: "Lisbon", country: "Portugal" }] });
+      }
+      return null;
+    });
+
+    const response = await PATCH(
+      new Request("http://localhost:3000/api/admin/destinations/dest_1", {
+        method: "PATCH",
+        body: JSON.stringify({ slug: "lisbon-portugal", city: "Lisbon", country: "Portugal" }),
+      }),
+      destinationContext("dest_1"),
+    );
+
+    const payload = (await response.json()) as { error?: string };
+    expect(response.status).toBe(409);
+    expect(payload.error).toMatch(/already uses this identity/i);
+  });
+
+  it("uses service-role headers for PATCH updates when available", async () => {
+    cookieGetMock.mockReturnValue({ value: "token" });
+    supabaseState.serviceRoleKey = "service-role-key";
+
+    let observedHeaders: Record<string, string> | null = null;
+
+    mockAdminAuthedFetch((url, init) => {
+      if (url.includes("/rest/v1/destinations_catalog?select=metadata&id=eq.dest_1&limit=1")) {
+        return jsonResponse({ status: 200, body: [{ metadata: null }] });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog?id=eq.dest_1") && init?.method === "PATCH") {
+        observedHeaders = Object.fromEntries(Object.entries(init.headers ?? {}).map(([key, value]) => [key, String(value)]));
+        return jsonResponse({
+          status: 200,
+          body: [{ id: "dest_1", status: "published", tier: "launch", city: "Valencia", country: "Spain" }],
+        });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog?select=id,slug,city,country,status,tier,description,overview&id=eq.dest_1&limit=1")) {
+        return jsonResponse({
+          status: 200,
+          body: [{ id: "dest_1", slug: "valencia-spain", city: "Valencia", country: "Spain", status: "published", tier: "launch" }],
+        });
+      }
+      return null;
+    });
+
+    const response = await PATCH(
+      new Request("http://localhost:3000/api/admin/destinations/dest_1", {
+        method: "PATCH",
+        body: JSON.stringify({ status: "published" }),
+      }),
+      destinationContext("dest_1"),
+    );
+
+    expect(response.status).toBe(200);
+    expect(observedHeaders).toMatchObject({
+      apikey: "service-role-key",
+      Authorization: "Bearer service-role-key",
     });
   });
 
@@ -118,6 +235,13 @@ describe("admin destination-by-id route", () => {
     mockAdminAuthedFetch((url, init) => {
       if (url.includes("/rest/v1/destinations_catalog?select=metadata&id=eq.dest_1&limit=1")) {
         return jsonResponse({ status: 200, body: [{ metadata: { relocationProfile: { aiSummary: "Keep it local" } } }] });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog?select=id,slug,city,country,status,tier,description,overview&id=eq.dest_1&limit=1")) {
+        return jsonResponse({
+          status: 200,
+          body: [{ id: "dest_1", slug: "valencia-spain", city: "Valencia", country: "Spain", status: "draft", tier: "launch" }],
+        });
       }
 
       if (url.includes("/rest/v1/destinations_catalog?id=eq.dest_1") && init?.method === "PATCH") {
