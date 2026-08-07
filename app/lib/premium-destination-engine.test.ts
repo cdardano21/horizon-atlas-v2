@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Destination } from "./destinations";
+import { destinations, type Destination } from "./destinations";
 import { buildPremiumDestinationEditorialPackage } from "./premium-destination-engine";
 
 const destination: Destination = {
@@ -150,5 +150,24 @@ describe("buildPremiumDestinationEditorialPackage", () => {
     expect(packageContent.neighborhoodGuides.some((item) => item.name === "South Loop")).toBe(true);
     expect(packageContent.neighborhoodGuides.some((item) => item.name === "Lincoln Park")).toBe(false);
     expect(packageContent.scoringNotes.some((item) => item.note.includes("South Loop"))).toBe(false);
+  });
+
+  it("uses Bangkok-specific editorial content for the premium destination package", () => {
+    const bangkok = destinations.find((item) => item.slug === "bangkok-thailand");
+
+    expect(bangkok).toBeDefined();
+
+    if (!bangkok) {
+      throw new Error("Bangkok destination not found");
+    }
+
+    const packageContent = buildPremiumDestinationEditorialPackage(bangkok);
+
+    expect(packageContent.heroIntroduction).toContain("Bangkok");
+    expect(packageContent.overviewArticle).toContain("Chinatown");
+    expect(packageContent.neighborhoodGuide).toContain("Sathorn");
+    expect(packageContent.costOfLivingGuide).toContain("value");
+    expect(packageContent.transportationGuide).toContain("Skytrain");
+    expect(packageContent.healthcareGuide).toContain("healthcare");
   });
 });

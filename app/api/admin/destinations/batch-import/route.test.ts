@@ -198,6 +198,9 @@ describe("batch import route", () => {
     expect(researchProfile.overview).toEqual(expect.any(String));
     expect(researchProfile.feel).toEqual(expect.any(String));
     expect(researchProfile.whyPeopleLoveIt).toEqual(expect.any(String));
+    expect((createBodies[0].metadata as Record<string, unknown>).neighborhoodIntelligence).toEqual(expect.any(Array));
+    expect((createBodies[0].metadata as Record<string, unknown>).knowledgeProfile).toEqual(expect.any(Object));
+    expect((createBodies[0].metadata as Record<string, unknown>).premiumEditorialContent).toEqual(expect.any(Object));
     expect(createBodies[0].description).toEqual(expect.any(String));
     expect(createBodies[0].overview).toEqual(expect.any(String));
   });
@@ -346,6 +349,45 @@ describe("batch import route", () => {
     }));
     expect(researchProfile.feel).toEqual(expect.any(String));
     expect(researchProfile.transportation).toEqual("Local transit is limited; Rapid City Regional Airport is the main gateway.");
+  });
+
+  it("builds a Premium V2 import plan from multi-sheet workbook payloads", async () => {
+    cookieGetMock.mockReturnValue({ value: "token" });
+
+    const requestPayload = {
+      previewOnly: true,
+      workbookSheets: ["Destinations", "Neighborhoods"],
+      workbookRowsBySheet: {
+        Destinations: [{ destination_name: "Cavtat", country: "Croatia", slug: "cavtat-croatia" }],
+        Neighborhoods: [{ destination_name: "Cavtat", neighborhood_name: "Old Town", neighborhood_slug: "old-town" }],
+      },
+      workbookHeadersBySheet: {
+        Destinations: ["destination_name", "country", "slug"],
+        Neighborhoods: ["destination_name", "neighborhood_name", "neighborhood_slug"],
+      },
+    };
+
+    mockAdminAuthedFetch((url) => {
+      if (url.includes("/rest/v1/destinations_catalog")) {
+        return jsonResponse({ body: [{ id: "dest-1", slug: "cavtat-croatia", city: "Cavtat", country: "Croatia" }] });
+      }
+
+      return jsonResponse({ body: [] });
+    });
+
+    const response = await POST(new Request("https://example.com/api", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestPayload),
+    }));
+
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload.plan).toEqual(expect.any(Array));
+    expect(payload.plan.some((entry: Record<string, unknown>) => entry.action === "update")).toBe(true);
+    expect(payload.plan.some((entry: Record<string, unknown>) => entry.action === "create")).toBe(true);
+    expect(payload.summary?.destinationCount).toBe(1);
   });
 
   it("continues execution when import tracking tables are unavailable", async () => {

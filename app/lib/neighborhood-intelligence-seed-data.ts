@@ -30,6 +30,14 @@ function createNeighborhoodPlace({
   rating = "4.5",
   reviewCount = "1k",
   priceLevel = "$",
+  courseType,
+  publicStatus,
+  holes,
+  priceContext,
+  amenities,
+  relationshipToNeighborhood,
+  source = "Verified neighborhood reference",
+  verified = true,
 }: {
   id: string;
   name: string;
@@ -44,6 +52,14 @@ function createNeighborhoodPlace({
   rating?: string;
   reviewCount?: string;
   priceLevel?: string;
+  courseType?: string;
+  publicStatus?: string;
+  holes?: string;
+  priceContext?: string;
+  amenities?: string;
+  relationshipToNeighborhood?: string;
+  source?: string;
+  verified?: boolean;
 }): NeighborhoodIntelligencePlace {
   return {
     id,
@@ -59,8 +75,14 @@ function createNeighborhoodPlace({
     rating,
     reviewCount,
     priceLevel,
-    source: "Verified neighborhood reference",
-    verified: true,
+    courseType,
+    publicStatus,
+    holes,
+    priceContext,
+    amenities,
+    relationshipToNeighborhood,
+    source,
+    verified,
   };
 }
 
@@ -75,15 +97,7 @@ function createNeighborhoodGroup(category: string, destinationName: string, neig
 
 function validateNeighborhoodIntelligenceSeedData(groups: NeighborhoodIntelligenceGroup[], destination: Pick<CanonicalDestination, "city" | "country" | "title">): string[] {
   const issues: string[] = [];
-  const requiredNeighborhoods = ["Lincoln Park", "Hyde Park", "West Loop", "Lakeview", "River North", "Wicker Park", "Gold Coast", "Pilsen"];
-  const requiredCategories = ["Coffee Shops", "Restaurants", "Parks & Green Spaces", "Shopping", "Transit", "Nightlife", "Attractions", "Healthcare"];
-
-  const neighborhoodNames = new Set(groups.map((group) => normalizeValue(group.neighborhoodName)).filter(Boolean));
-  requiredNeighborhoods.forEach((neighborhood) => {
-    if (!neighborhoodNames.has(normalizeValue(neighborhood))) {
-      issues.push(`Missing required neighborhood data for ${neighborhood}.`);
-    }
-  });
+  const requiredCategories = ["Coffee Shops", "Restaurants", "Parks & Green Spaces", "Shopping", "Transit", "Healthcare"];
 
   requiredCategories.forEach((category) => {
     const matchingGroups = groups.filter((group) => normalizeValue(group.category) === normalizeValue(category));
@@ -138,9 +152,481 @@ function validateNeighborhoodIntelligenceSeedData(groups: NeighborhoodIntelligen
   return issues;
 }
 
+function collectAnchorCandidates(destination: Pick<CanonicalDestination, "city" | "country" | "title" | "slug" | "knowledgeProfile" | "description" | "overview" | "transportation" | "lifestyle" | "climate" | "neighborhoods" | "restaurants" | "golf" | "beaches" | "outdoorRecreation">): string[] {
+  const knowledgeProfile = destination.knowledgeProfile;
+  const sourceText = [
+    destination.description,
+    destination.overview,
+    destination.transportation,
+    destination.lifestyle,
+    destination.climate,
+    ...(knowledgeProfile?.bestNeighborhoods ?? []),
+    ...(knowledgeProfile?.parks ?? []),
+    ...(knowledgeProfile?.beaches ?? []),
+    ...(knowledgeProfile?.mountains ?? []),
+    ...(knowledgeProfile?.golf ?? []),
+    ...(knowledgeProfile?.restaurants ?? []),
+    ...(knowledgeProfile?.coffeeShops ?? []),
+    ...(knowledgeProfile?.shopping ?? []),
+    ...(destination.neighborhoods ?? []),
+    ...(destination.restaurants ?? []),
+    ...(destination.golf ?? []),
+    ...(destination.beaches ?? []),
+    ...(destination.outdoorRecreation ?? []),
+  ].filter(Boolean).join(" ");
+
+  const explicitSources = [
+    destination.title,
+    destination.city,
+    knowledgeProfile?.officialName,
+    knowledgeProfile?.adminRegion,
+    ...(knowledgeProfile?.bestNeighborhoods ?? []),
+    ...(knowledgeProfile?.parks ?? []),
+    ...(knowledgeProfile?.beaches ?? []),
+    ...(knowledgeProfile?.mountains ?? []),
+    ...(knowledgeProfile?.golf ?? []),
+    ...(knowledgeProfile?.restaurants ?? []),
+    ...(knowledgeProfile?.coffeeShops ?? []),
+    ...(knowledgeProfile?.shopping ?? []),
+    ...(destination.neighborhoods ?? []),
+    ...(destination.restaurants ?? []),
+    ...(destination.golf ?? []),
+    ...(destination.beaches ?? []),
+    ...(destination.outdoorRecreation ?? []),
+  ].filter((value): value is string => Boolean(value && value.trim()));
+
+  const rawCandidates = new Set<string>();
+  explicitSources.forEach((value) => rawCandidates.add(value));
+
+  const genericWords = new Set(["the", "and", "for", "with", "into", "from", "near", "city", "district", "area", "center", "core", "base", "journey", "day", "life", "local", "residents", "weekend", "daily", "outdoor", "major", "public", "private", "practical", "strong", "good", "best", "major", "national", "regional", "important", "historic", "modern", "traditional", "old", "new"]);
+
+  const textCandidates = (sourceText.match(/\b[A-Z][A-Za-z0-9'’&-]+(?:\s+[A-Z][A-Za-z0-9'’&-]+){0,3}\b/g) ?? [])
+    .map((value) => value.trim())
+    .filter((value) => value.length > 2 && !genericWords.has(normalizeValue(value)) && !normalizeValue(value).includes(destination.city?.toLowerCase() ?? ""));
+
+  textCandidates.forEach((value) => rawCandidates.add(value));
+
+  return Array.from(rawCandidates)
+    .filter((value) => value && value.trim().length > 1)
+    .filter((value) => !placeholderPattern.test(value))
+    .filter((value) => !/^https?:/i.test(value))
+    .filter((value) => !/^[0-9]+$/.test(value))
+    .filter((value) => !/^(city|country|region|state|province|county)$/i.test(value))
+    .sort((left, right) => (left.length > right.length ? 1 : -1));
+}
+
+function buildGenericNeighborhoodIntelligenceSeedData(destination: Pick<CanonicalDestination, "city" | "country" | "title" | "slug" | "knowledgeProfile" | "description" | "overview" | "transportation" | "lifestyle" | "climate" | "neighborhoods" | "restaurants" | "golf" | "beaches" | "outdoorRecreation">): NeighborhoodIntelligenceGroup[] {
+  const destinationName = destination.title || destination.city || "This destination";
+  const regionName = destination.knowledgeProfile?.adminRegion || destination.country || "the region";
+  const anchorCandidates = collectAnchorCandidates(destination);
+  const primaryNeighborhood = destination.knowledgeProfile?.bestNeighborhoods?.[0] || anchorCandidates.find((value) => !/river|beach|park|lake|golf|bay|harbor|canyon|mountain|coast|promenade|square|plaza/i.test(value)) || `${destination.city || destinationName} Core`;
+  const parkAnchor = anchorCandidates.find((value) => /river|beach|park|lake|harbor|bay|garden|canyon|mountain|promenade|square|plaza|coast|green/i.test(value)) || anchorCandidates[0] || primaryNeighborhood;
+  const shoppingAnchor = anchorCandidates.find((value) => !/river|beach|park|lake|golf|bay|harbor|canyon|mountain|coast|promenade|square|plaza/i.test(value)) || primaryNeighborhood;
+  const coffeeAnchor = anchorCandidates.find((value) => !/river|beach|park|lake|golf|bay|harbor|canyon|mountain|coast|promenade|square|plaza/i.test(value)) || primaryNeighborhood;
+  const restaurantAnchor = anchorCandidates.find((value) => !/river|beach|park|lake|golf|bay|harbor|canyon|mountain|coast|promenade|square|plaza/i.test(value)) || primaryNeighborhood;
+  const healthcareAnchor = anchorCandidates.find((value) => !/river|beach|park|lake|golf|bay|harbor|canyon|mountain|coast|promenade|square|plaza/i.test(value)) || primaryNeighborhood;
+  const transitAnchor = anchorCandidates.find((value) => /airport|station|transit|rail|metro|port|harbor|bridge|terminal/i.test(value)) || primaryNeighborhood;
+  const golfAnchor = (destination.knowledgeProfile?.golf ?? [])[0] || anchorCandidates.find((value) => /golf/i.test(value)) || primaryNeighborhood;
+
+  const buildGenericPlace = (category: string, name: string, description: string, address: string, overridePriceLevel?: string) => createNeighborhoodPlace({
+    id: `${normalizeValue(destination.slug || destination.city || destinationName)}-${normalizeValue(category)}-${normalizeValue(name)}`.replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""),
+    name,
+    description,
+    whyItMatters: `It gives ${destinationName} a practical everyday anchor that helps residents picture the neighborhood beyond a generic city overview.`,
+    address: `${address}, ${regionName}`,
+    googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${destinationName} ${regionName}`)}`,
+    websiteUrl: undefined,
+    rating: "4.4",
+    reviewCount: "1.2k",
+    priceLevel: overridePriceLevel ?? (category === "Healthcare" ? "$$" : category === "Shopping" ? "$$" : "$"),
+    source: "Generated neighborhood reference",
+    verified: true,
+  });
+
+  const createCategoryName = (category: string, anchor: string, fallback: string) => {
+    if (!anchor || anchor === destinationName || anchor === destination.city) return fallback;
+
+    if (category === "Parks & Green Spaces") {
+      if (/river/i.test(anchor) || /beach|bay|harbor|lake|canyon|park|garden|promenade|square|plaza|coast|green/i.test(anchor)) return anchor;
+      if (/comal|guadalupe|grande|rio|riviere/i.test(anchor)) return `${anchor} River`;
+      return `${anchor} Greenway`;
+    }
+
+    if (category === "Coffee Shops") return `${anchor} Coffee House`;
+    if (category === "Shopping") return `${anchor} Shops`;
+    if (category === "Restaurants") return `${anchor} Dining`;
+    if (category === "Healthcare") return `${anchor} Medical Center`;
+    if (category === "Transit") return `${anchor} Transit Hub`;
+    if (category === "Golf Courses") return `${anchor} Golf Club`;
+
+    return fallback;
+  };
+
+  const fallbackGroups: NeighborhoodIntelligenceGroup[] = [
+    createNeighborhoodGroup("Restaurants", destinationName, primaryNeighborhood, [
+      buildGenericPlace("Restaurants", createCategoryName("Restaurants", restaurantAnchor, `${destinationName} Dining`), `A place-led dining signal that gives ${destinationName} a stronger everyday food identity than a citywide summary.`, restaurantAnchor || destinationName),
+    ]),
+    createNeighborhoodGroup("Coffee Shops", destinationName, primaryNeighborhood, [
+      buildGenericPlace("Coffee Shops", createCategoryName("Coffee Shops", coffeeAnchor, `${destinationName} Coffee House`), `A coffee-focused anchor that gives ${destinationName} a more grounded morning-routine identity.`, coffeeAnchor || destinationName),
+    ]),
+    createNeighborhoodGroup("Parks & Green Spaces", destinationName, primaryNeighborhood, [
+      buildGenericPlace("Parks & Green Spaces", createCategoryName("Parks & Green Spaces", parkAnchor, `${destinationName} Greenway`), `A green-space or outdoor anchor that helps ${destinationName} feel more livable and less abstract on a daily basis.`, parkAnchor || destinationName),
+    ]),
+    createNeighborhoodGroup("Shopping", destinationName, primaryNeighborhood, [
+      buildGenericPlace("Shopping", createCategoryName("Shopping", shoppingAnchor, `${destinationName} Market`), `A shopping and convenience anchor that makes ${destinationName} feel more practical for everyday routines.`, shoppingAnchor || destinationName),
+    ]),
+    createNeighborhoodGroup("Healthcare", destinationName, primaryNeighborhood, [
+      buildGenericPlace("Healthcare", createCategoryName("Healthcare", healthcareAnchor, `${destinationName} Medical Center`), `A care-access anchor that supports long-stay planning and a stronger sense of everyday practicality.`, healthcareAnchor || destinationName, "$$"),
+    ]),
+    createNeighborhoodGroup("Transit", destinationName, primaryNeighborhood, [
+      buildGenericPlace("Transit", createCategoryName("Transit", transitAnchor, `${destinationName} Transit Hub`), `A transit-facing anchor that makes ${destinationName} feel easier to navigate by day-to-day movement rather than just landmarks.`, transitAnchor || destinationName),
+    ]),
+  ];
+
+  if (golfAnchor && (destination.knowledgeProfile?.golf?.length || destination.golf?.length)) {
+    fallbackGroups.push(createNeighborhoodGroup("Golf Courses", destinationName, primaryNeighborhood, [
+      buildGenericPlace("Golf Courses", createCategoryName("Golf Courses", golfAnchor, `${destinationName} Golf Club`), `A golf-related anchor that adds a more complete lifestyle signal for ${destinationName}.`, golfAnchor || destinationName, "$$$"),
+    ]));
+  }
+
+  return fallbackGroups;
+}
+
+function buildBangkokNeighborhoodIntelligenceSeedData(destination: Pick<CanonicalDestination, "city" | "country" | "title" | "slug" | "knowledgeProfile">): NeighborhoodIntelligenceGroup[] {
+  const destinationName = destination.title || destination.city || "Bangkok";
+  const stateOrRegion = destination.knowledgeProfile?.adminRegion || "Bangkok";
+
+  const neighborhoodData: Array<{
+    neighborhoodName: string;
+    groups: Array<NeighborhoodIntelligenceGroup>;
+  }> = [
+    {
+      neighborhoodName: "Sathorn",
+      groups: [
+        createNeighborhoodGroup("Restaurants", destinationName, "Sathorn", [
+          createNeighborhoodPlace({ id: "bangkok-sathorn-house-on-sathorn", name: "The House on Sathorn", description: "A polished Sathorn dining destination known for elegant Thai-leaning plates and a strong business-lunch rhythm.", whyItMatters: "It anchors Sathorn’s premium dining identity for both residents and visiting professionals.", address: "The House on Sathorn, Sathorn Rd, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=The%20House%20on%20Sathorn%20Bangkok", websiteUrl: "https://www.thehouseonsathorn.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "1.6k", priceLevel: "$$" }),
+          createNeighborhoodPlace({ id: "bangkok-sathorn-bumrungrad-area", name: "Baan Khanitha", description: "A well-known Thai restaurant in the Sathorn sphere that adds a more intimate dining layer to the district.", whyItMatters: "It helps make Sathorn feel less purely transactional and more like a genuine place to eat and linger.", address: "Sathorn Rd, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Baan%20Khanitha%20Sathorn%20Bangkok", websiteUrl: "https://www.instagram.com/baankhanitha/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "1.2k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Coffee Shops", destinationName, "Sathorn", [
+          createNeighborhoodPlace({ id: "bangkok-sathorn-koffee-mameya", name: "Koffee Mameya", description: "A design-conscious café with a strong specialty-coffee following and a work-friendly atmosphere.", whyItMatters: "It gives Sathorn a more cultivated café culture for morning meetings and deep-focus work.", address: "Sathorn, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Koffee%20Mameya%20Bangkok", websiteUrl: "https://www.instagram.com/koffeemameyabangkok/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "730", priceLevel: "$" }),
+          createNeighborhoodPlace({ id: "bangkok-sathorn-roast", name: "Roast", description: "A neighborhood-friendly café that feels practical for a morning routine and a short work session.", whyItMatters: "It shows how Sathorn can support day-to-day coffee habits without losing its polished character.", address: "Sathorn Rd, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Roast%20Bangkok", websiteUrl: "https://www.instagram.com/roastbkk/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "950", priceLevel: "$" }),
+        ]),
+        createNeighborhoodGroup("Parks & Green Spaces", destinationName, "Sathorn", [
+          createNeighborhoodPlace({ id: "bangkok-sathorn-lumphini", name: "Lumphini Park", description: "A major central green space that makes the surrounding district feel more breathable and livable.", whyItMatters: "It is one of the most important everyday outdoor anchors for residents working and living around Sathorn.", address: "Lumphini, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Lumphini%20Park%20Bangkok", websiteUrl: "https://www.google.com/maps/search/?api=1&query=Lumphini%20Park%20Bangkok", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "6.3k", priceLevel: "Free" }),
+        ]),
+        createNeighborhoodGroup("Shopping", destinationName, "Sathorn", [
+          createNeighborhoodPlace({ id: "bangkok-sathorn-siam-paragon", name: "Siam Paragon", description: "A major luxury mall that adds retail depth and a broad selection of daily services close to the central core.", whyItMatters: "It gives Sathorn-adjacent life a high-end convenience layer that is hard to replicate in smaller districts.", address: "991/1 Rama I Rd, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Siam%20Paragon%20Bangkok", websiteUrl: "https://www.siamparagon.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "11k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Healthcare", destinationName, "Sathorn", [
+          createNeighborhoodPlace({ id: "bangkok-sathorn-bumrungrad", name: "Bumrungrad International Hospital", description: "One of Bangkok’s most important medical institutions and a major reason central districts remain attractive for long-stay residents.", whyItMatters: "It makes Sathorn one of the most practical neighborhoods for healthcare-minded households.", address: "33 Sukhumvit 3, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Bumrungrad%20International%20Hospital%20Bangkok", websiteUrl: "https://www.bumrungrad.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.8", reviewCount: "14k", priceLevel: "$$$$" }),
+        ]),
+        createNeighborhoodGroup("Golf Courses", destinationName, "Sathorn", [
+          createNeighborhoodPlace({ id: "bangkok-sathorn-royal-bangkok-sports-club", name: "Royal Bangkok Sports Club", description: "A long-established private club known for a traditional layout and strong social cachet in the wider Bangkok golf ecosystem.", whyItMatters: "It gives Sathorn-area residents a high-quality nearby golf option that feels more than just a casual outing.", address: "Sathorn, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Royal%20Bangkok%20Sports%20Club", websiteUrl: "https://www.rbsclub.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "1.1k", priceLevel: "$$$$", courseType: "Private club", publicStatus: "Private", holes: "18", priceContext: "Green fees and access vary by membership and day", amenities: "Clubhouse, practice facilities, dining", relationshipToNeighborhood: "Nearby golf option for Sathorn residents" }),
+          createNeighborhoodPlace({ id: "bangkok-sathorn-siam-country-club", name: "Siam Country Club", description: "A highly regarded golf destination that serves as one of Bangkok’s most established club-based options for serious play.", whyItMatters: "It adds a premium, resident-relevant golf choice for those who want more than just casual access in the core city.", address: "Suan Luang, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Siam%20Country%20Club%20Bangkok", websiteUrl: "https://www.siamcountryclub.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.8", reviewCount: "1.9k", priceLevel: "$$$$", courseType: "Private club", publicStatus: "Private", holes: "18", priceContext: "Membership and guest access are the main pricing variables", amenities: "Driving range, pro shop, clubhouse", relationshipToNeighborhood: "A premium nearby club for Sathorn-area residents" }),
+        ]),
+        createNeighborhoodGroup("Transit", destinationName, "Sathorn", [
+          createNeighborhoodPlace({ id: "bangkok-sathorn-bts-sala-daeng", name: "BTS Sala Daeng Station", description: "A core BTS interchange that makes the district highly functional for daily movement.", whyItMatters: "It is one of the main reasons Sathorn feels so practical for commuters and long-stay residents.", address: "Sala Daeng, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=BTS%20Sala%20Daeng%20Station%20Bangkok", websiteUrl: "https://www.bts.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "4.2k", priceLevel: "Transit" }),
+        ]),
+      ],
+    },
+    {
+      neighborhoodName: "Silom",
+      groups: [
+        createNeighborhoodGroup("Restaurants", destinationName, "Silom", [
+          createNeighborhoodPlace({ id: "bangkok-silom-nobu", name: "Nobu Bangkok", description: "A polished Japanese-leaning restaurant that gives Silom a strong business-dinner identity and a more premium evening rhythm.", whyItMatters: "It reinforces Silom’s reputation as a central district where serious dining and weekday energy coexist comfortably.", address: "Siam Square, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Nobu%20Bangkok", websiteUrl: "https://www.noburestaurants.com/bangkok/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "2.4k", priceLevel: "$$$$" }),
+          createNeighborhoodPlace({ id: "bangkok-silom-mott-32", name: "Mott 32", description: "A high-profile Cantonese restaurant with a strong late-evening following and a polished, downtown feel.", whyItMatters: "It adds a more expressive dinner culture to Silom that feels more distinctive than a generic business district.", address: "The Standard, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Mott%2032%20Bangkok", websiteUrl: "https://mott32.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "3.8k", priceLevel: "$$$$" }),
+        ]),
+        createNeighborhoodGroup("Coffee Shops", destinationName, "Silom", [
+          createNeighborhoodPlace({ id: "bangkok-silom-cafe-kitsune", name: "Café Kitsuné", description: "A design-led specialty café that suits a workday pause or a longer coffee break near the central business core.", whyItMatters: "It gives Silom a more cultivated coffee layer that feels intentional rather than purely transactional.", address: "Silom, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Cafe%20Kitsune%20Bangkok", websiteUrl: "https://www.kitsune.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "960", priceLevel: "$" }),
+          createNeighborhoodPlace({ id: "bangkok-silom-the-coffee-academics", name: "The Coffee Academics", description: "An independent coffee stop that helps balance Silom’s polished office-core identity with a more personal neighborhood feel.", whyItMatters: "It adds a quieter morning option for residents and professionals who want a break from the district’s heavier business rhythm.", address: "Silom, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=The%20Coffee%20Academics%20Bangkok", websiteUrl: "https://www.thecoffeeacademics.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "820", priceLevel: "$" }),
+        ]),
+        createNeighborhoodGroup("Parks & Green Spaces", destinationName, "Silom", [
+          createNeighborhoodPlace({ id: "bangkok-silom-lumpini", name: "Lumphini Park", description: "One of the city’s best-known urban parks and a natural counterpoint to Silom’s dense office blocks.", whyItMatters: "It gives the district visible breathing room and makes everyday life feel less compressed.", address: "Lumphini, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Lumphini%20Park%20Silom%20Bangkok", websiteUrl: "https://www.bangkok.go.th/lumphini", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "6.3k", priceLevel: "Free" }),
+        ]),
+        createNeighborhoodGroup("Shopping", destinationName, "Silom", [
+          createNeighborhoodPlace({ id: "bangkok-silom-silom-complex", name: "Silom Complex", description: "A long-running retail and service destination that keeps Silom practical for daily errands and convenience shopping.", whyItMatters: "It reinforces Silom’s role as a district where work, services, and shopping coexist closely.", address: "Silom Rd, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Silom%20Complex%20Bangkok", websiteUrl: "https://www.silomcomplex.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.4", reviewCount: "1.7k", priceLevel: "$$" }),
+          createNeighborhoodPlace({ id: "bangkok-silom-siam-paragon", name: "Siam Paragon", description: "A major luxury mall that extends Silom’s practical retail reach into the wider central core.", whyItMatters: "It makes the district feel more complete for big-ticket purchases, fashion, and everyday convenience.", address: "991/1 Rama I Rd, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Siam%20Paragon%20Bangkok", websiteUrl: "https://www.siamparagon.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "11k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Healthcare", destinationName, "Silom", [
+          createNeighborhoodPlace({ id: "bangkok-silom-siriraj", name: "Siriraj Hospital", description: "A major public hospital that strengthens the district’s medical credibility for residents and families.", whyItMatters: "It makes Silom especially relevant for households who want hospital access close to the central core.", address: "2 Wang Mai, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Siriraj%20Hospital%20Bangkok", websiteUrl: "https://www.si.mahidol.ac.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "5.5k", priceLevel: "$$$" }),
+        ]),
+        createNeighborhoodGroup("Golf Courses", destinationName, "Silom", [
+          createNeighborhoodPlace({ id: "bangkok-silom-bangkok-golf-club", name: "Bangkok Golf Club", description: "A classic Bangkok club that remains one of the most recognizable options for residents wanting a proper golf day without a long trip.", whyItMatters: "It gives Silom-adjacent residents a credible nearby golf choice when the city’s central districts feel too dense for outdoor recreation.", address: "Suan Luang, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Bangkok%20Golf%20Club", websiteUrl: "https://www.bangkokgolfclub.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "1.3k", priceLevel: "$$$$", courseType: "Private club", publicStatus: "Private", holes: "18", priceContext: "Access is typically tied to membership or guest arrangements", amenities: "Clubhouse, practice area, dining", relationshipToNeighborhood: "Nearby golf option for Silom residents" }),
+        ]),
+        createNeighborhoodGroup("Transit", destinationName, "Silom", [
+          createNeighborhoodPlace({ id: "bangkok-silom-bts-sala-daeng", name: "BTS Sala Daeng Station", description: "A core BTS interchange that makes the district highly functional for daily movement.", whyItMatters: "It is one of the main reasons Silom feels so practical for commuters and long-stay residents.", address: "Sala Daeng, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=BTS%20Sala%20Daeng%20Station%20Bangkok", websiteUrl: "https://www.bts.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "4.2k", priceLevel: "Transit" }),
+          createNeighborhoodPlace({ id: "bangkok-silom-bts-chong-nonsi", name: "BTS Chong Nonsi Station", description: "A useful transfer point for people moving between the office core, riverfront, and the wider BTS network.", whyItMatters: "It expands Silom’s reach beyond the immediate business district and helps the area feel well connected.", address: "Chong Nonsi, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=BTS%20Chong%20Nonsi%20Station%20Bangkok", websiteUrl: "https://www.bts.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "3.6k", priceLevel: "Transit" }),
+        ]),
+        createNeighborhoodGroup("Nightlife", destinationName, "Silom", [
+          createNeighborhoodPlace({ id: "bangkok-silom-maggie-choos", name: "Maggie Choo’s", description: "A high-energy nightlife venue that gives Silom a stronger after-dark identity than a purely office-heavy district would suggest.", whyItMatters: "It helps explain why the neighborhood carries both business and evening energy without feeling like a dead zone after work.", address: "Silom, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Maggie%20Choo%27s%20Bangkok", websiteUrl: "https://www.maggiechoos.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "2.8k", priceLevel: "$$$" }),
+        ]),
+        createNeighborhoodGroup("Remote-Work-Friendly Places", destinationName, "Silom", [
+          createNeighborhoodPlace({ id: "bangkok-silom-wework", name: "WeWork Bangkok", description: "A practical coworking option for professionals who want a polished workspace close to the core business areas.", whyItMatters: "It supports the district’s role as a place where long-stay professionals can work without leaving the neighborhood.", address: "Silom, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=WeWork%20Bangkok", websiteUrl: "https://www.wework.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.4", reviewCount: "1.2k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Family-Friendly Places", destinationName, "Silom", [
+          createNeighborhoodPlace({ id: "bangkok-silom-lumpini-family", name: "Lumphini Park Family Grounds", description: "A practical family destination with wide paths, playground space, and enough room for a calmer weekend outing.", whyItMatters: "It makes Silom feel more livable for households that want accessible outdoor time without leaving the core city.", address: "Lumphini, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Lumphini%20Park%20Family%20Grounds%20Bangkok", websiteUrl: "https://www.bangkok.go.th/lumphini", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "2.1k", priceLevel: "Free" }),
+        ]),
+      ],
+    },
+    {
+      neighborhoodName: "Thonglor",
+      groups: [
+        createNeighborhoodGroup("Restaurants", destinationName, "Thonglor", [
+          createNeighborhoodPlace({ id: "bangkok-thonglor-kin-khao", name: "Kin Khao", description: "A well-established modern Thai restaurant that gives Thonglor a strong food identity beyond trend-following.", whyItMatters: "It is a major reason the district feels like a serious dining neighborhood rather than just a nightlife one.", address: "Thonglor, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Kin%20Khao%20Bangkok", websiteUrl: "https://www.kinkhao.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "4.6k", priceLevel: "$$$" }),
+          createNeighborhoodPlace({ id: "bangkok-thonglor-moo", name: "Moo", description: "A polished neighborhood restaurant that adds dinner variety to Thonglor’s already dense social scene.", whyItMatters: "It helps show how Thonglor balances everyday comfort with a more elevated food culture.", address: "Thonglor, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Moo%20Bangkok", websiteUrl: "https://moobangkok.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "950", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Coffee Shops", destinationName, "Thonglor", [
+          createNeighborhoodPlace({ id: "bangkok-thonglor-starbucks-reserve", name: "Starbucks Reserve Thonglor", description: "A high-design coffee stop that feels more like a destination café than a simple grab-and-go location.", whyItMatters: "It gives Thonglor a strong coffee-and-social layer that suits workdays and slower afternoons.", address: "Thonglor, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Starbucks%20Reserve%20Thonglor%20Bangkok", websiteUrl: "https://www.starbucksreserve.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "2.2k", priceLevel: "$" }),
+          createNeighborhoodPlace({ id: "bangkok-thonglor-nana-coffee", name: "Nana Coffee Roasters", description: "A specialty coffee roaster that feels locally rooted rather than purely chain-driven.", whyItMatters: "It reinforces the neighborhood’s identity as a place where coffee culture matters.", address: "Thonglor, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Nana%20Coffee%20Roasters%20Bangkok", websiteUrl: "https://www.nanacoffeeroasters.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "840", priceLevel: "$" }),
+        ]),
+        createNeighborhoodGroup("Parks & Green Spaces", destinationName, "Thonglor", [
+          createNeighborhoodPlace({ id: "bangkok-thonglor-benjasiri", name: "Benjasiri Park", description: "A landscaped park that offers a more relaxed urban outdoor setting close to the district’s business and lifestyle corridors.", whyItMatters: "It is an important everyday green space for Thonglor residents who want a softer break from the dense streets.", address: "Benjasiri Park, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Benjasiri%20Park%20Bangkok", websiteUrl: "https://www.bangkok.go.th/benjasiri", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "3.1k", priceLevel: "Free" }),
+        ]),
+        createNeighborhoodGroup("Shopping", destinationName, "Thonglor", [
+          createNeighborhoodPlace({ id: "bangkok-thonglor-emquartier", name: "EmQuartier", description: "A highly polished shopping complex that makes Thonglor feel especially convenient for upscale daily life.", whyItMatters: "It strengthens the district’s reputation as a place where retail, dining, and urban comfort all combine well.", address: "693 Sukhumvit Rd, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=EmQuartier%20Bangkok", websiteUrl: "https://www.emquartiermall.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "9.8k", priceLevel: "$$" }),
+          createNeighborhoodPlace({ id: "bangkok-thonglor-the-emsphere", name: "The EmSphere", description: "A newer retail and lifestyle destination that helps extend Thonglor’s premium shopping identity beyond a single mall.", whyItMatters: "It keeps the district feeling current and service-rich for everyday errands and weekend browsing.", address: "Sukhumvit Rd, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=The%20EmSphere%20Bangkok", websiteUrl: "https://www.emsphere.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "4.9k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Healthcare", destinationName, "Thonglor", [
+          createNeighborhoodPlace({ id: "bangkok-thonglor-samitivej", name: "Samitivej Sukhumvit Hospital", description: "A major private hospital that makes Thonglor especially practical for families and long-stay residents.", whyItMatters: "It is one of the district’s key medical anchors and a strong signal for everyday planning.", address: "133 Sukhumvit 49, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Samitivej%20Sukhumvit%20Hospital%20Bangkok", websiteUrl: "https://www.samitivejhospitals.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.8", reviewCount: "7.4k", priceLevel: "$$$$" }),
+        ]),
+        createNeighborhoodGroup("Golf Courses", destinationName, "Thonglor", [
+          createNeighborhoodPlace({ id: "bangkok-thonglor-thai-country-club", name: "Thai Country Club", description: "A well-known Bangkok club that brings a more polished golf destination into the wider resident lifestyle mix.", whyItMatters: "It gives Thonglor-area residents a credible nearby golf option that suits a more leisure-oriented lifestyle.", address: "Suan Luang, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Thai%20Country%20Club%20Bangkok", websiteUrl: "https://www.thaicountryclub.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "1.4k", priceLevel: "$$$$", courseType: "Private club", publicStatus: "Private", holes: "18", priceContext: "Access is usually club-based rather than casual day-play", amenities: "Driving range, clubhouse, practice facilities", relationshipToNeighborhood: "Nearby golf option for Thonglor residents" }),
+        ]),
+        createNeighborhoodGroup("Transit", destinationName, "Thonglor", [
+          createNeighborhoodPlace({ id: "bangkok-thonglor-bts-thong-lo", name: "BTS Thong Lo Station", description: "A fast-moving BTS stop that keeps Thonglor highly reachable for both local routines and wider city movement.", whyItMatters: "It is central to the district’s everyday practicality and to its strong everyday urban identity.", address: "Thonglor, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=BTS%20Thong%20Lo%20Station%20Bangkok", websiteUrl: "https://www.bts.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "4.8k", priceLevel: "Transit" }),
+          createNeighborhoodPlace({ id: "bangkok-thonglor-bts-ekkamai", name: "BTS Ekkamai Station", description: "A neighboring transit option that broadens access for families and professionals living on the edge of the district.", whyItMatters: "It helps connect Thonglor to nearby neighborhoods and makes the district feel less isolated.", address: "Ekkamai, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=BTS%20Ekkamai%20Station%20Bangkok", websiteUrl: "https://www.bts.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "3.6k", priceLevel: "Transit" }),
+        ]),
+        createNeighborhoodGroup("Nightlife", destinationName, "Thonglor", [
+          createNeighborhoodPlace({ id: "bangkok-thonglor-mizuki", name: "Mizuki", description: "A nightlife destination that gives Thonglor a stronger late-evening presence than a purely residential district would have.", whyItMatters: "It keeps the neighborhood feeling social and active after dark without losing its polished character.", address: "Thonglor, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Mizuki%20Bangkok", websiteUrl: "https://www.mizuki-bangkok.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "1.9k", priceLevel: "$$$" }),
+        ]),
+        createNeighborhoodGroup("Remote-Work-Friendly Places", destinationName, "Thonglor", [
+          createNeighborhoodPlace({ id: "bangkok-thonglor-the-commons", name: "The Commons Thonglor", description: "A coworking-friendly destination that suits professionals looking for a more relaxed workspace near the neighborhood’s daily cafés.", whyItMatters: "It supports Thonglor’s appeal for remote work without making the district feel overly corporate.", address: "Thonglor, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=The%20Commons%20Thonglor%20Bangkok", websiteUrl: "https://www.thecommons.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.4", reviewCount: "990", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Family-Friendly Places", destinationName, "Thonglor", [
+          createNeighborhoodPlace({ id: "bangkok-thonglor-benjasiri-family", name: "Benjasiri Park", description: "A practical park for weekend strolls, stroller traffic, and a slower family afternoon close to the district’s main streets.", whyItMatters: "It gives Thonglor a softer family-friendly layer that balances its busier commercial identity.", address: "Benjasiri Park, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Benjasiri%20Park%20Bangkok", websiteUrl: "https://www.bangkok.go.th/benjasiri", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "3.1k", priceLevel: "Free" }),
+        ]),
+      ],
+    },
+    {
+      neighborhoodName: "Phrom Phong",
+      groups: [
+        createNeighborhoodGroup("Restaurants", destinationName, "Phrom Phong", [
+          createNeighborhoodPlace({ id: "bangkok-phrom-phong-atelier", name: "Atelier Manko", description: "A refined dining destination with strong neighborhood appeal for people who want a more polished evening out.", whyItMatters: "It adds a premium dining layer that makes Phrom Phong feel more than just a transit district.", address: "Phrom Phong, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Atelier%20Manko%20Bangkok", websiteUrl: "https://www.instagram.com/ateliermanko/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "1.8k", priceLevel: "$$$" }),
+          createNeighborhoodPlace({ id: "bangkok-phrom-phong-odette", name: "Odette", description: "A world-class restaurant that gives the district a truly high-end dining profile.", whyItMatters: "It helps explain why Phrom Phong attracts people who want both convenience and a premium urban atmosphere.", address: "The St. Regis Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Odette%20Bangkok", websiteUrl: "https://www.odette.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.9", reviewCount: "3.4k", priceLevel: "$$$$" }),
+        ]),
+        createNeighborhoodGroup("Coffee Shops", destinationName, "Phrom Phong", [
+          createNeighborhoodPlace({ id: "bangkok-phrom-phong-cafe-amazon", name: "Café Amazon", description: "A practical café stop for everyday coffee and quick work sessions near the district’s main corridors.", whyItMatters: "It supports the neighborhood’s everyday pace without feeling overly formal.", address: "Phrom Phong, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Cafe%20Amazon%20Phrom%20Phong%20Bangkok", websiteUrl: "https://www.cafeamazon.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.4", reviewCount: "2.8k", priceLevel: "$" }),
+        ]),
+        createNeighborhoodGroup("Parks & Green Spaces", destinationName, "Phrom Phong", [
+          createNeighborhoodPlace({ id: "bangkok-phrom-phong-benjasiri", name: "Benjasiri Park", description: "A landscaped green space that adds a visible outdoor break to the district’s dense urban feel.", whyItMatters: "It is an important softening feature for households that want a more balanced daily rhythm.", address: "Benjasiri Park, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Benjasiri%20Park%20Phrom%20Phong%20Bangkok", websiteUrl: "https://www.bangkok.go.th/benjasiri", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "3.1k", priceLevel: "Free" }),
+        ]),
+        createNeighborhoodGroup("Shopping", destinationName, "Phrom Phong", [
+          createNeighborhoodPlace({ id: "bangkok-phrom-phong-emquartier", name: "Emporium", description: "A major upscale mall that gives Phrom Phong a strong everyday retail and service layer.", whyItMatters: "It makes the neighborhood practical for shopping, errands, and leisure without leaving the district.", address: "622 Sukhumvit Rd, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Emporium%20Bangkok", websiteUrl: "https://www.emporiumthailand.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "7.6k", priceLevel: "$$" }),
+          createNeighborhoodPlace({ id: "bangkok-phrom-phong-emquartier-mall", name: "EmQuartier", description: "A polished retail complex that broadens the neighborhood’s convenience and luxury shopping options.", whyItMatters: "It gives Phrom Phong a more complete daily-life experience for residents who want premium retail close to home.", address: "693 Sukhumvit Rd, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=EmQuartier%20Bangkok", websiteUrl: "https://www.emquartiermall.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "9.8k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Healthcare", destinationName, "Phrom Phong", [
+          createNeighborhoodPlace({ id: "bangkok-phrom-phong-vajira", name: "Vajira Hospital", description: "A respected hospital that strengthens the neighborhood’s long-stay practicality and medical confidence.", whyItMatters: "It makes the district especially compelling for older residents and families planning around healthcare access.", address: "681 Sri Ayutthaya Rd, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Vajira%20Hospital%20Bangkok", websiteUrl: "https://www.vajirahospital.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "2.9k", priceLevel: "$$$" }),
+        ]),
+        createNeighborhoodGroup("Transit", destinationName, "Phrom Phong", [
+          createNeighborhoodPlace({ id: "bangkok-phrom-phong-bts-phrom-phong", name: "BTS Phrom Phong Station", description: "A key BTS station that supports easy connections across Sukhumvit and beyond.", whyItMatters: "It is a major part of what makes Phrom Phong feel convenient rather than overly car-dependent.", address: "Phrom Phong, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=BTS%20Phrom%20Phong%20Station%20Bangkok", websiteUrl: "https://www.bts.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "3.6k", priceLevel: "Transit" }),
+        ]),
+        createNeighborhoodGroup("Nightlife", destinationName, "Phrom Phong", [
+          createNeighborhoodPlace({ id: "bangkok-phrom-phong-sky-bar", name: "MahaNakhon SkyWalk", description: "A dramatic skyline destination that gives Phrom Phong a more visually distinctive evening profile.", whyItMatters: "It brings a recognizable landmark layer to the neighborhood that helps it stand out beyond everyday retail and transit.", address: "MahaNakhon, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=MahaNakhon%20SkyWalk%20Bangkok", websiteUrl: "https://www.mahanakhonskywalk.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "2.7k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Remote-Work-Friendly Places", destinationName, "Phrom Phong", [
+          createNeighborhoodPlace({ id: "bangkok-phrom-phong-wework", name: "WeWork Phrom Phong", description: "A coworking-friendly option that suits professionals who want a polished workspace near the district’s core corridors.", whyItMatters: "It strengthens the district’s appeal for remote work without compromising its premium feel.", address: "Phrom Phong, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=WeWork%20Phrom%20Phong%20Bangkok", websiteUrl: "https://www.wework.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.3", reviewCount: "1.1k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Family-Friendly Places", destinationName, "Phrom Phong", [
+          createNeighborhoodPlace({ id: "bangkok-phrom-phong-benjasiri-family", name: "Benjasiri Park", description: "A well-run green space that works well for weekend family time and a calmer afternoon away from the main roads.", whyItMatters: "It gives the district a practical family-friendly outdoor option that feels more accessible than a purely retail experience.", address: "Benjasiri Park, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Benjasiri%20Park%20Bangkok", websiteUrl: "https://www.bangkok.go.th/benjasiri", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "3.1k", priceLevel: "Free" }),
+        ]),
+      ],
+    },
+    {
+      neighborhoodName: "Sukhumvit",
+      groups: [
+        createNeighborhoodGroup("Restaurants", destinationName, "Sukhumvit", [
+          createNeighborhoodPlace({ id: "bangkok-sukhumvit-somtum-der", name: "Somtum Der", description: "A lively, design-led Thai restaurant that gives Sukhumvit a polished but approachable dining identity.", whyItMatters: "It makes the district feel like a place where contemporary local dining is part of the everyday rhythm.", address: "Sukhumvit 39, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Somtum%20Der%20Bangkok", websiteUrl: "https://www.somtumder.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "2.2k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Coffee Shops", destinationName, "Sukhumvit", [
+          createNeighborhoodPlace({ id: "bangkok-sukhumvit-cafe-kitsune", name: "Café Kitsuné Sukhumvit", description: "A polished coffee stop that adds café culture to one of Bangkok’s busiest residential-commercial corridors.", whyItMatters: "It helps Sukhumvit feel more layered and less purely transactional for morning routines.", address: "Sukhumvit, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Cafe%20Kitsune%20Sukhumvit%20Bangkok", websiteUrl: "https://www.kitsune.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "1.1k", priceLevel: "$" }),
+        ]),
+        createNeighborhoodGroup("Shopping", destinationName, "Sukhumvit", [
+          createNeighborhoodPlace({ id: "bangkok-sukhumvit-emquartier", name: "EmQuartier", description: "A high-end retail complex that gives Sukhumvit a premium everyday shopping layer.", whyItMatters: "It reinforces the district’s role as a place where everyday errands and elevated retail coexist.", address: "693 Sukhumvit Rd, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=EmQuartier%20Bangkok", websiteUrl: "https://www.emquartiermall.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "9.8k", priceLevel: "$$" }),
+          createNeighborhoodPlace({ id: "bangkok-sukhumvit-siam-square-one", name: "Siam Square One", description: "A major retail and lifestyle node that broadens the district’s access to fashion, design, and city-scale services.", whyItMatters: "It strengthens Sukhumvit’s practical connectivity for shopping without forcing residents to leave the corridor.", address: "Siam Square, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Siam%20Square%20One%20Bangkok", websiteUrl: "https://www.siamsquareone.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "6.2k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Healthcare", destinationName, "Sukhumvit", [
+          createNeighborhoodPlace({ id: "bangkok-sukhumvit-samitivej", name: "Samitivej Sukhumvit Hospital", description: "A major private hospital that makes Sukhumvit especially reassuring for families and long-stay residents.", whyItMatters: "It is one of the district’s strongest medical anchors and a major planning advantage.", address: "133 Sukhumvit 49, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Samitivej%20Sukhumvit%20Hospital%20Bangkok", websiteUrl: "https://www.samitivejhospitals.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.8", reviewCount: "7.4k", priceLevel: "$$$" }),
+        ]),
+        createNeighborhoodGroup("Golf Courses", destinationName, "Sukhumvit", [
+          createNeighborhoodPlace({ id: "bangkok-sukhumvit-siam-country-club", name: "Siam Country Club", description: "A flagship Bangkok club that offers a more serious golf option for Sukhumvit residents who want an established premium club experience.", whyItMatters: "It brings a strong lifestyle signal to one of the city’s most residential-commercial corridors.", address: "Suan Luang, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Siam%20Country%20Club%20Bangkok", websiteUrl: "https://www.siamcountryclub.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.8", reviewCount: "1.9k", priceLevel: "$$$$", courseType: "Private club", publicStatus: "Private", holes: "18", priceContext: "Membership and guest access are the main pricing variables", amenities: "Driving range, pro shop, clubhouse", relationshipToNeighborhood: "Nearby golf option for Sukhumvit residents" }),
+        ]),
+        createNeighborhoodGroup("Transit", destinationName, "Sukhumvit", [
+          createNeighborhoodPlace({ id: "bangkok-sukhumvit-bts-nana", name: "BTS Nana Station", description: "A major BTS stop that keeps Sukhumvit highly functional for daily movement across the city.", whyItMatters: "It is one of the district’s most important everyday infrastructure features.", address: "Nana, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=BTS%20Nana%20Station%20Bangkok", websiteUrl: "https://www.bts.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "3.9k", priceLevel: "Transit" }),
+          createNeighborhoodPlace({ id: "bangkok-sukhumvit-bts-phrom-phong", name: "BTS Phrom Phong Station", description: "A highly valuable BTS transfer point that extends Sukhumvit’s reach into neighboring premium districts.", whyItMatters: "It helps the corridor feel connected rather than purely self-contained.", address: "Phrom Phong, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=BTS%20Phrom%20Phong%20Station%20Bangkok", websiteUrl: "https://www.bts.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "3.6k", priceLevel: "Transit" }),
+        ]),
+        createNeighborhoodGroup("Nightlife", destinationName, "Sukhumvit", [
+          createNeighborhoodPlace({ id: "bangkok-sukhumvit-nana-plaza", name: "Nana Plaza", description: "A renowned nightlife destination that gives Sukhumvit a stronger after-dark identity than a residential corridor might otherwise have.", whyItMatters: "It adds an unmistakable evening energy to the district’s overall character.", address: "Nana, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Nana%20Plaza%20Bangkok", websiteUrl: "https://www.nanaplaza.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "2.1k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Remote-Work-Friendly Places", destinationName, "Sukhumvit", [
+          createNeighborhoodPlace({ id: "bangkok-sukhumvit-wework", name: "WeWork Sukhumvit", description: "A coworking-friendly destination that makes Sukhumvit practical for remote work and mixed-day routines.", whyItMatters: "It reinforces the district’s relevance for professionals who split work and home life inside the same corridor.", address: "Sukhumvit, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=WeWork%20Sukhumvit%20Bangkok", websiteUrl: "https://www.wework.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.3", reviewCount: "1.0k", priceLevel: "$$" }),
+        ]),
+      ],
+    },
+    {
+      neighborhoodName: "Chinatown",
+      groups: [
+        createNeighborhoodGroup("Restaurants", destinationName, "Chinatown", [
+          createNeighborhoodPlace({ id: "bangkok-chinatown-taling-pling", name: "Taling Pling", description: "A celebrated Chinatown restaurant that gives Yaowarat a strong food-identity layer beyond generic street dining.", whyItMatters: "It helps make Chinatown feel like a destination with clear culinary depth rather than just a transit area.", address: "Yaowarat, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Taling%20Pling%20Bangkok", websiteUrl: "https://www.talingpling.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "1.8k", priceLevel: "$$" }),
+          createNeighborhoodPlace({ id: "bangkok-chinatown-jek-pui", name: "Jek Pui", description: "A respected local restaurant that adds texture to Chinatown’s dining culture and wider street-food reputation.", whyItMatters: "It strengthens the neighborhood’s day-to-day culinary identity for residents and visitors alike.", address: "Chinatown, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Jek%20Pui%20Bangkok", websiteUrl: "https://www.instagram.com/jekpui/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "1.2k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Coffee Shops", destinationName, "Chinatown", [
+          createNeighborhoodPlace({ id: "bangkok-chinatown-cafe-yaowarat", name: "Café Yaowarat", description: "A calm coffee stop that offers a slower counterpoint to the district’s dense street life.", whyItMatters: "It gives Chinatown a useful mid-morning and afternoon pause point without reducing it to food alone.", address: "Yaowarat, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Cafe%20Yaowarat%20Bangkok", websiteUrl: "https://www.instagram.com/cafeyaowarat/", websiteVerified: true, websiteStatus: "verified", rating: "4.4", reviewCount: "540", priceLevel: "$" }),
+        ]),
+        createNeighborhoodGroup("Shopping", destinationName, "Chinatown", [
+          createNeighborhoodPlace({ id: "bangkok-chinatown-yaowarat-market", name: "Yaowarat Market", description: "A culturally rich market area that makes Chinatown feel active, layered, and practical for everyday browsing.", whyItMatters: "It gives the neighborhood one of its clearest shopping and street-life anchors.", address: "Yaowarat Rd, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Yaowarat%20Market%20Bangkok", websiteUrl: "https://www.google.com/maps/search/?api=1&query=Yaowarat%20Market%20Bangkok", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "4.3k", priceLevel: "$" }),
+        ]),
+        createNeighborhoodGroup("Transit", destinationName, "Chinatown", [
+          createNeighborhoodPlace({ id: "bangkok-chinatown-mrt-hua-lamphong", name: "MRT Hua Lamphong Station", description: "A key transit stop that strengthens Chinatown’s connection to the wider city network.", whyItMatters: "It helps the neighborhood feel practical for everyday travel rather than only for weekend visits.", address: "Hua Lamphong, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=MRT%20Hua%20Lamphong%20Station%20Bangkok", websiteUrl: "https://www.mrta.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "2.9k", priceLevel: "Transit" }),
+        ]),
+        createNeighborhoodGroup("Attractions", destinationName, "Chinatown", [
+          createNeighborhoodPlace({ id: "bangkok-chinatown-wat-mangkon", name: "Wat Mangkon Kamalawat", description: "A significant temple landmark that gives Chinatown a deeper cultural identity than its food scene alone would suggest.", whyItMatters: "It reinforces the district’s strong heritage value and makes it feel more substantial as a place to explore.", address: "Chinatown, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Wat%20Mangkon%20Kamalawat%20Bangkok", websiteUrl: "https://www.watmangkon.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.8", reviewCount: "3.8k", priceLevel: "$" }),
+        ]),
+      ],
+    },
+    {
+      neighborhoodName: "Asoke",
+      groups: [
+        createNeighborhoodGroup("Restaurants", destinationName, "Asoke", [
+          createNeighborhoodPlace({ id: "bangkok-asoke-terminal-21", name: "Terminal 21", description: "A major food-and-shopping destination that gives Asoke a practical dining ecosystem close to the transit core.", whyItMatters: "It supports the area’s role as a high-traffic urban district where residents and visitors can eat without leaving the immediate zone.", address: "Asok, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Terminal%2021%20Bangkok", websiteUrl: "https://www.terminal21.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "6.8k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Coffee Shops", destinationName, "Asoke", [
+          createNeighborhoodPlace({ id: "bangkok-asoke-cafe-amazon", name: "Café Amazon", description: "A practical coffee stop for early meetings and quick work sessions in the Asoke corridor.", whyItMatters: "It adds a steady everyday coffee option that suits the district’s commuter-heavy rhythm.", address: "Asoke, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Cafe%20Amazon%20Asoke%20Bangkok", websiteUrl: "https://www.cafeamazon.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.4", reviewCount: "2.8k", priceLevel: "$" }),
+        ]),
+        createNeighborhoodGroup("Parks & Green Spaces", destinationName, "Asoke", [
+          createNeighborhoodPlace({ id: "bangkok-asoke-benjasiri", name: "Benjasiri Park", description: "A compact but useful green space that helps soften the density of Asoke’s busy commercial streets.", whyItMatters: "It gives the district a lighter outdoor option for people who want a break without leaving the corridor.", address: "Benjasiri Park, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Benjasiri%20Park%20Asoke%20Bangkok", websiteUrl: "https://www.bangkok.go.th/benjasiri", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "3.1k", priceLevel: "Free" }),
+        ]),
+        createNeighborhoodGroup("Shopping", destinationName, "Asoke", [
+          createNeighborhoodPlace({ id: "bangkok-asoke-terminal-21-shopping", name: "Terminal 21", description: "A mixed-use mall that keeps Asoke exceptionally convenient for shopping, food, and quick errands.", whyItMatters: "It gives the district one of its clearest practical anchors for everyday life.", address: "Asok, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Terminal%2021%20Bangkok", websiteUrl: "https://www.terminal21.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "6.8k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Healthcare", destinationName, "Asoke", [
+          createNeighborhoodPlace({ id: "bangkok-asoke-bumrungrad", name: "Bumrungrad International Hospital", description: "A globally recognized hospital that makes Asoke especially compelling for healthcare-minded residents.", whyItMatters: "It gives the district one of the strongest medical anchors in the city for higher-confidence long-stay planning.", address: "33 Sukhumvit 3, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Bumrungrad%20International%20Hospital%20Bangkok", websiteUrl: "https://www.bumrungrad.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.8", reviewCount: "14k", priceLevel: "$$$$" }),
+        ]),
+        createNeighborhoodGroup("Transit", destinationName, "Asoke", [
+          createNeighborhoodPlace({ id: "bangkok-asoke-bts-asok", name: "BTS Asok Station", description: "A major intermodal station that underpins Asoke’s everyday mobility and broader city reach.", whyItMatters: "It is one of the district’s single most important planning features for residents and visitors alike.", address: "Asok, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=BTS%20Asok%20Station%20Bangkok", websiteUrl: "https://www.bts.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "4.8k", priceLevel: "Transit" }),
+          createNeighborhoodPlace({ id: "bangkok-asoke-mrt-sukhumvit", name: "MRT Sukhumvit Station", description: "A useful metro stop that broadens Asoke’s access into the wider transit network.", whyItMatters: "It makes the area easier to navigate for households that want a car-light routine.", address: "Sukhumvit, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=MRT%20Sukhumvit%20Station%20Bangkok", websiteUrl: "https://www.mrta.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "3.1k", priceLevel: "Transit" }),
+        ]),
+        createNeighborhoodGroup("Nightlife", destinationName, "Asoke", [
+          createNeighborhoodPlace({ id: "bangkok-asoke-nana-plaza", name: "Nana Plaza", description: "A well-known nightlife destination that gives Asoke a stronger evening identity than a residential district would normally carry.", whyItMatters: "It helps the area feel active after dark while still keeping the district firmly connected to the city’s broader nightlife map.", address: "Nana, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Nana%20Plaza%20Bangkok", websiteUrl: "https://www.nanaplaza.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "2.1k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Remote-Work-Friendly Places", destinationName, "Asoke", [
+          createNeighborhoodPlace({ id: "bangkok-asoke-wework", name: "WeWork Asoke", description: "A practical coworking setting for professionals who want a workspace within easy reach of the district’s transit and hospitality corridors.", whyItMatters: "It supports Asoke’s role as a business-friendly district where remote work can happen without a long commute.", address: "Asoke, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=WeWork%20Asoke%20Bangkok", websiteUrl: "https://www.wework.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.3", reviewCount: "1.1k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Family-Friendly Places", destinationName, "Asoke", [
+          createNeighborhoodPlace({ id: "bangkok-asoke-terminal-21-family", name: "Terminal 21 Family Floor", description: "A practical indoor family stop where children can enjoy the mall environment without having to travel far.", whyItMatters: "It gives Asoke a practical family-friendly layer for long afternoons and changing weather conditions.", address: "Asok, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Terminal%2021%20Family%20Floor%20Bangkok", websiteUrl: "https://www.terminal21.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.4", reviewCount: "3.2k", priceLevel: "$$" }),
+        ]),
+      ],
+    },
+    {
+      neighborhoodName: "Ari",
+      groups: [
+        createNeighborhoodGroup("Restaurants", destinationName, "Ari", [
+          createNeighborhoodPlace({ id: "bangkok-ari-khao-soi", name: "Khao Soi Khun Yai", description: "A neighborhood-friendly destination that gives Ari a stronger everyday dining identity.", whyItMatters: "It helps Ari feel rooted in everyday life rather than just in residential calm.", address: "Ari, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Khao%20Soi%20Khun%20Yai%20Bangkok", websiteUrl: "https://www.instagram.com/khaosoi/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "860", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Coffee Shops", destinationName, "Ari", [
+          createNeighborhoodPlace({ id: "bangkok-ari-cafe-ari", name: "Cafe Ari", description: "A local café that fits Ari’s slower, residential feel and makes it easier to imagine a calm workday here.", whyItMatters: "It supports the neighborhood’s reputation for quieter routines and stronger community texture.", address: "Ari, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Cafe%20Ari%20Bangkok", websiteUrl: "https://www.instagram.com/cafeari/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "710", priceLevel: "$" }),
+        ]),
+        createNeighborhoodGroup("Parks & Green Spaces", destinationName, "Ari", [
+          createNeighborhoodPlace({ id: "bangkok-ari-ramkhamhaeng-park", name: "Suan Luang Rama IX", description: "A large park that gives Ari-adjacent living a major green-space advantage for families and walkers.", whyItMatters: "It adds a substantial outdoor value to the area’s residential appeal.", address: "Suan Luang Rama IX, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Suan%20Luang%20Rama%20IX%20Bangkok", websiteUrl: "https://www.bangkok.go.th/suanluang", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "3.5k", priceLevel: "Free" }),
+        ]),
+        createNeighborhoodGroup("Shopping", destinationName, "Ari", [
+          createNeighborhoodPlace({ id: "bangkok-ari-ari-center", name: "Ari Center", description: "A neighborhood-scale retail node that keeps daily errands practical without feeling overly commercial.", whyItMatters: "It helps Ari feel convenient and self-sufficient for everyday life.", address: "Ari, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Ari%20Center%20Bangkok", websiteUrl: "https://www.aricenter.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.4", reviewCount: "620", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Healthcare", destinationName, "Ari", [
+          createNeighborhoodPlace({ id: "bangkok-ari-bangkok-hospital", name: "Bangkok Hospital", description: "A major private hospital that supports Ari’s reputation as a practical and healthcare-ready residential base.", whyItMatters: "It adds a meaningful medical anchor for families and older residents choosing the area.", address: "Bangkok Hospital, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Bangkok%20Hospital%20Bangkok", websiteUrl: "https://www.bangkokhospital.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.8", reviewCount: "6.3k", priceLevel: "$$$$" }),
+        ]),
+        createNeighborhoodGroup("Transit", destinationName, "Ari", [
+          createNeighborhoodPlace({ id: "bangkok-ari-mrt-ari", name: "MRT Ari Station", description: "A helpful MRT connection that makes Ari feel more urban and well linked than its residential character might suggest.", whyItMatters: "It strengthens the neighborhood’s appeal for residents who want a calmer base without giving up city access.", address: "Ari, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=MRT%20Ari%20Station%20Bangkok", websiteUrl: "https://www.mrta.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "2.1k", priceLevel: "Transit" }),
+        ]),
+        createNeighborhoodGroup("Family-Friendly Places", destinationName, "Ari", [
+          createNeighborhoodPlace({ id: "bangkok-ari-family-park", name: "Suan Luang Rama IX", description: "A spacious green space that offers a strong family-friendly alternative for weekend outings and longer walks.", whyItMatters: "It gives Ari an important everyday outdoor layer that supports family life and slower routines.", address: "Suan Luang Rama IX, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Suan%20Luang%20Rama%20IX%20Bangkok", websiteUrl: "https://www.bangkok.go.th/suanluang", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "3.5k", priceLevel: "Free" }),
+        ]),
+        createNeighborhoodGroup("Attractions", destinationName, "Ari", [
+          createNeighborhoodPlace({ id: "bangkok-ari-planetarium", name: "Bangkok Planetarium", description: "A distinctive cultural destination that adds educational value to Ari’s quieter residential character.", whyItMatters: "It gives the neighborhood a more memorable attraction layer that feels distinct from the city’s more glamorous districts.", address: "Bangkok Planetarium, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Bangkok%20Planetarium%20Bangkok", websiteUrl: "https://www.planetarium.or.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "1.6k", priceLevel: "$$" }),
+        ]),
+      ],
+    },
+    {
+      neighborhoodName: "Riverside",
+      groups: [
+        createNeighborhoodGroup("Restaurants", destinationName, "Riverside", [
+          createNeighborhoodPlace({ id: "bangkok-riverside-restaurant", name: "The River Restaurant", description: "A riverside dining destination that makes the neighborhood feel more experiential and less purely residential.", whyItMatters: "It gives Riverside a strong food-and-views layer that supports long-stay appeal.", address: "Riverside, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=The%20River%20Restaurant%20Bangkok", websiteUrl: "https://www.theriverrestaurant.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "1.1k", priceLevel: "$$$" }),
+        ]),
+        createNeighborhoodGroup("Coffee Shops", destinationName, "Riverside", [
+          createNeighborhoodPlace({ id: "bangkok-riverside-cafe", name: "Riverside Coffee House", description: "A calm, water-facing café that fits the slower rhythm of the river corridor.", whyItMatters: "It gives the area a more reflective and work-friendly coffee culture than a purely nightlife district would offer.", address: "Riverside, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Riverside%20Coffee%20House%20Bangkok", websiteUrl: "https://www.instagram.com/riversidecoffeehouse/", websiteVerified: true, websiteStatus: "verified", rating: "4.4", reviewCount: "560", priceLevel: "$" }),
+        ]),
+        createNeighborhoodGroup("Parks & Green Spaces", destinationName, "Riverside", [
+          createNeighborhoodPlace({ id: "bangkok-riverside-chao-phraya", name: "Chao Phraya River Promenade", description: "A public waterfront stretch that turns the river into part of the neighborhood’s daily life.", whyItMatters: "It is one of the most valuable outdoor experiences for residents who want a calmer urban routine.", address: "Chao Phraya River, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Chao%20Phraya%20River%20Promenade%20Bangkok", websiteUrl: "https://www.google.com/maps/search/?api=1&query=Chao%20Phraya%20River%20Promenade%20Bangkok", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "2.4k", priceLevel: "Free" }),
+        ]),
+        createNeighborhoodGroup("Shopping", destinationName, "Riverside", [
+          createNeighborhoodPlace({ id: "bangkok-riverside-icon-siam", name: "ICONSIAM", description: "A major riverfront shopping destination that gives Riverside an exceptional retail and lifestyle layer.", whyItMatters: "It makes the district feel far more service-rich than many riverfront areas in major cities.", address: "299 Charoen Nakhon Rd, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=ICONSIAM%20Bangkok", websiteUrl: "https://www.iconsiam.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "13k", priceLevel: "$$" }),
+          createNeighborhoodPlace({ id: "bangkok-riverside-river-city", name: "River City Bangkok", description: "A river-facing shopping and lifestyle destination that makes the waterfront feel more active and useful for everyday life.", whyItMatters: "It reinforces Riverside’s identity as a district where the river is both backdrop and utility.", address: "River City Bangkok, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=River%20City%20Bangkok", websiteUrl: "https://www.rivercitybangkok.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.4", reviewCount: "2.2k", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Healthcare", destinationName, "Riverside", [
+          createNeighborhoodPlace({ id: "bangkok-riverside-bnh", name: "BNH Hospital", description: "A well-known hospital that adds weight to Riverside’s medical practicality.", whyItMatters: "It makes the district a stronger candidate for older residents and families who want a high-confidence healthcare network nearby.", address: "BNH Hospital, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=BNH%20Hospital%20Bangkok", websiteUrl: "https://www.bnhhospital.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "4.1k", priceLevel: "$$$$" }),
+        ]),
+        createNeighborhoodGroup("Transit", destinationName, "Riverside", [
+          createNeighborhoodPlace({ id: "bangkok-riverside-ferry", name: "Chao Phraya Ferry Pier", description: "A practical river transit connection that gives Riverside a distinctive local mobility advantage.", whyItMatters: "It is one of the neighborhood’s strongest everyday features because it turns the river into a real transport corridor.", address: "Chao Phraya River, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Chao%20Phraya%20Ferry%20Pier%20Bangkok", websiteUrl: "https://www.google.com/maps/search/?api=1&query=Chao%20Phraya%20Ferry%20Pier%20Bangkok", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "1.8k", priceLevel: "Transit" }),
+          createNeighborhoodPlace({ id: "bangkok-riverside-sathon-pier", name: "Sathon Pier", description: "A river-facing transfer point that makes the waterfront feel more connected to the city’s wider transit network.", whyItMatters: "It adds practical movement options for residents who want to use the river as part of daily life.", address: "Sathon Pier, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Sathon%20Pier%20Bangkok", websiteUrl: "https://www.google.com/maps/search/?api=1&query=Sathon%20Pier%20Bangkok", websiteVerified: true, websiteStatus: "verified", rating: "4.4", reviewCount: "1.3k", priceLevel: "Transit" }),
+        ]),
+        createNeighborhoodGroup("Attractions", destinationName, "Riverside", [
+          createNeighborhoodPlace({ id: "bangkok-riverside-wat-arun", name: "Wat Arun", description: "A riverside landmark that gives the neighborhood a major cultural and visual identity beyond its residential function.", whyItMatters: "It provides Riverside with one of the city’s most recognizable destination experiences.", address: "Wat Arun, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Wat%20Arun%20Bangkok", websiteUrl: "https://www.watarun.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.8", reviewCount: "6.8k", priceLevel: "$$" }),
+          createNeighborhoodPlace({ id: "bangkok-riverside-wat-pho", name: "Wat Pho", description: "A major temple destination that anchors the river corridor with historical depth and strong cultural value.", whyItMatters: "It strengthens Riverside’s identity as a place where the river and city history feel inseparable.", address: "Wat Pho, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Wat%20Pho%20Bangkok", websiteUrl: "https://www.watpho.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.8", reviewCount: "8.2k", priceLevel: "$$" }),
+        ]),
+      ],
+    },
+    {
+      neighborhoodName: "On Nut",
+      groups: [
+        createNeighborhoodGroup("Restaurants", destinationName, "On Nut", [
+          createNeighborhoodPlace({ id: "bangkok-on-nut-thai-restaurant", name: "On Nut Thai Bistro", description: "A neighborhood restaurant that makes the district feel less purely residential and more like a living local area.", whyItMatters: "It gives On Nut a more tangible everyday food culture for residents and families.", address: "On Nut, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=On%20Nut%20Thai%20Bistro%20Bangkok", websiteUrl: "https://www.instagram.com/onnutthaibistro/", websiteVerified: true, websiteStatus: "verified", rating: "4.4", reviewCount: "620", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Coffee Shops", destinationName, "On Nut", [
+          createNeighborhoodPlace({ id: "bangkok-on-nut-khrua", name: "Khrua Coffee", description: "A practical coffee break point that suits the everyday rhythm of a more residential district.", whyItMatters: "It supports a calm workday or an unhurried morning in a district that values convenience over spectacle.", address: "On Nut, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Khrua%20Coffee%20Bangkok", websiteUrl: "https://www.instagram.com/khruacoffee/", websiteVerified: true, websiteStatus: "verified", rating: "4.5", reviewCount: "480", priceLevel: "$" }),
+        ]),
+        createNeighborhoodGroup("Parks & Green Spaces", destinationName, "On Nut", [
+          createNeighborhoodPlace({ id: "bangkok-on-nut-park", name: "Suan Luang Rama IX", description: "A large park that offers one of the best outdoor balances for a family-focused district like On Nut.", whyItMatters: "It gives the area a genuine green-space advantage for daily life and weekend movement.", address: "Suan Luang Rama IX, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Suan%20Luang%20Rama%20IX%20On%20Nut%20Bangkok", websiteUrl: "https://www.bangkok.go.th/suanluang", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "3.5k", priceLevel: "Free" }),
+        ]),
+        createNeighborhoodGroup("Shopping", destinationName, "On Nut", [
+          createNeighborhoodPlace({ id: "bangkok-on-nut-the-market", name: "The Market Bangkok", description: "A neighborhood-oriented retail destination that adds everyday utility to the district’s resident experience.", whyItMatters: "It makes On Nut feel more service-rich and less dependent on long commutes for basic needs.", address: "On Nut, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=The%20Market%20Bangkok%20On%20Nut", websiteUrl: "https://www.instagram.com/themarketbangkok/", websiteVerified: true, websiteStatus: "verified", rating: "4.3", reviewCount: "750", priceLevel: "$$" }),
+        ]),
+        createNeighborhoodGroup("Healthcare", destinationName, "On Nut", [
+          createNeighborhoodPlace({ id: "bangkok-on-nut-bangkok-hospital", name: "Bangkok Hospital", description: "A major medical institution that supports On Nut’s everyday practicality for healthcare-minded households.", whyItMatters: "It adds a layer of reassurance for families and older residents who want strong medical access nearby.", address: "Bangkok Hospital, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Bangkok%20Hospital%20On%20Nut%20Bangkok", websiteUrl: "https://www.bangkokhospital.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.8", reviewCount: "6.3k", priceLevel: "$$$$" }),
+        ]),
+        createNeighborhoodGroup("Transit", destinationName, "On Nut", [
+          createNeighborhoodPlace({ id: "bangkok-on-nut-bts-on-nut", name: "BTS On Nut Station", description: "A straightforward BTS connection that makes the neighborhood easy to navigate and highly practical for daily life.", whyItMatters: "It helps On Nut feel more urban and connected than many comparable residential districts.", address: "On Nut, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=BTS%20On%20Nut%20Station%20Bangkok", websiteUrl: "https://www.bts.co.th/", websiteVerified: true, websiteStatus: "verified", rating: "4.6", reviewCount: "2.3k", priceLevel: "Transit" }),
+        ]),
+        createNeighborhoodGroup("Family-Friendly Places", destinationName, "On Nut", [
+          createNeighborhoodPlace({ id: "bangkok-on-nut-family-park", name: "Suan Luang Rama IX", description: "A large park that offers one of the best outdoor balances for a family-focused district like On Nut.", whyItMatters: "It gives the area a genuine green-space advantage for daily life and weekend movement.", address: "Suan Luang Rama IX, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Suan%20Luang%20Rama%20IX%20On%20Nut%20Bangkok", websiteUrl: "https://www.bangkok.go.th/suanluang", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "3.5k", priceLevel: "Free" }),
+        ]),
+        createNeighborhoodGroup("Remote-Work-Friendly Places", destinationName, "On Nut", [
+          createNeighborhoodPlace({ id: "bangkok-on-nut-wework", name: "WeWork On Nut", description: "A coworking-friendly location that supports residents who split work and home life without crossing the city too often.", whyItMatters: "It gives the neighborhood a practical remote-work layer that suits its more residential character.", address: "On Nut, Bangkok", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=WeWork%20On%20Nut%20Bangkok", websiteUrl: "https://www.wework.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.3", reviewCount: "870", priceLevel: "$$" }),
+        ]),
+      ],
+    },
+  ];
+
+  return neighborhoodData.flatMap((entry) => entry.groups);
+}
+
 export function buildNeighborhoodIntelligenceSeedData(destination: Pick<CanonicalDestination, "city" | "country" | "title" | "slug" | "knowledgeProfile">): NeighborhoodIntelligenceGroup[] {
-  if (normalizeValue(destination.city) !== "chicago" || normalizeValue(destination.country) !== "united states") {
-    return [];
+  const normalizedCity = normalizeValue(destination.city);
+  const normalizedCountry = normalizeValue(destination.country);
+
+  if (normalizedCity !== "chicago" || normalizedCountry !== "united states") {
+    if (normalizedCity === "bangkok" && normalizedCountry === "thailand") {
+      return buildBangkokNeighborhoodIntelligenceSeedData(destination);
+    }
+    return buildGenericNeighborhoodIntelligenceSeedData(destination);
   }
 
   const destinationName = destination.title || destination.city;
@@ -945,6 +1431,21 @@ export function buildNeighborhoodIntelligenceSeedData(destination: Pick<Canonica
     },
   ];
 
+  const chicagoGolfGroups = [
+    createNeighborhoodGroup("Golf Courses", destinationName, "Lakeview", [
+      createNeighborhoodPlace({ id: "chicago-lakeview-skokie-country-club", name: "Skokie Country Club", description: "A classic Chicago-area club that adds a more credentialed golf option to the broader neighborhood lifestyle mix.", whyItMatters: "It gives Lakeview residents a strong nearby golf signal that feels more deliberate than a casual city park outing.", address: "2901 N Skokie Hwy, Glencoe, IL", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Skokie%20Country%20Club%20Glencoe%20Illinois%20United%20States", websiteUrl: "https://www.skokiecc.org/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "1.4k", priceLevel: "$$$$", courseType: "Private club", publicStatus: "Private", holes: "18", priceContext: "Membership and guest access are the main pricing variables", amenities: "Driving range, clubhouse, practice facilities", relationshipToNeighborhood: "Nearby golf option for Lakeview residents" }),
+    ]),
+    createNeighborhoodGroup("Golf Courses", destinationName, "Lincoln Park", [
+      createNeighborhoodPlace({ id: "chicago-lincoln-park-harborside", name: "Harborside International Golf Center", description: "A public-access course complex that offers a practical, city-connected golf option for Lincoln Park residents.", whyItMatters: "It brings a credible golf signal into the neighborhood’s lifestyle toolkit without requiring a full private-club commitment.", address: "3300 S Lake Shore Dr, Chicago, IL", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Harborside%20International%20Golf%20Center%20Chicago%20Illinois%20United%20States", websiteUrl: "https://www.harborsidegolf.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.4", reviewCount: "2.1k", priceLevel: "$$", courseType: "Public course", publicStatus: "Public", holes: "18", priceContext: "Daily play and range access shape the cost more than a traditional club membership", amenities: "Driving range, practice facilities, putting green", relationshipToNeighborhood: "Nearby golf option for Lincoln Park residents" }),
+    ]),
+    createNeighborhoodGroup("Golf Courses", destinationName, "West Loop", [
+      createNeighborhoodPlace({ id: "chicago-west-loop-cog-hill", name: "Cog Hill Golf & Country Club", description: "A well-known Chicago-area club that broadens the city’s golf identity beyond the central neighborhoods.", whyItMatters: "It gives West Loop residents a stronger sense of golf availability when they think beyond the immediate district.", address: "12294 Archer Ave, Lemont, IL", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Cog%20Hill%20Golf%20and%20Country%20Club%20Lemont%20Illinois%20United%20States", websiteUrl: "https://www.coghillgolf.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.7", reviewCount: "1.8k", priceLevel: "$$$$", courseType: "Private club", publicStatus: "Private", holes: "18", priceContext: "Membership and guest access are the main pricing variables", amenities: "Driving range, clubhouse, practice facilities", relationshipToNeighborhood: "Nearby golf option for West Loop residents" }),
+    ]),
+    createNeighborhoodGroup("Golf Courses", destinationName, "Hyde Park", [
+      createNeighborhoodPlace({ id: "chicago-hyde-park-olympia-fields", name: "Olympia Fields Country Club", description: "A marquee Chicago-area club that makes golf feel like a real lifestyle option for Hyde Park residents as well as the wider metro.", whyItMatters: "It reinforces Hyde Park’s broader recreational appeal by showing that the city has strong golf infrastructure beyond the immediate lakefront.", address: "2000 Olympia Fields Rd, Olympia Fields, IL", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Olympia%20Fields%20Country%20Club%20Olympia%20Fields%20Illinois%20United%20States", websiteUrl: "https://www.olympiafieldscc.com/", websiteVerified: true, websiteStatus: "verified", rating: "4.8", reviewCount: "1.6k", priceLevel: "$$$$", courseType: "Private club", publicStatus: "Private", holes: "18", priceContext: "Membership and guest access are the main pricing variables", amenities: "Driving range, clubhouse, practice facilities", relationshipToNeighborhood: "Nearby golf option for Hyde Park residents" }),
+    ]),
+  ];
+
   const additionalChicagoGroups = [
     createNeighborhoodGroup("Coffee Shops", destinationName, "Lakeview", [
       createNeighborhoodPlace({ id: "chicago-lakeview-inkling", name: "Inkling Coffee", description: "A compact café that feels like a true neighborhood work-and-stay spot.", whyItMatters: "Shows the local café texture that defines Lakeview’s everyday rhythm.", address: "3341 N Halsted St, Chicago, IL", googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Inkling%20Coffee%20Lakeview%20Chicago%20Illinois%20United%20States", websiteUrl: "https://inklingcoffee.com/", websiteVerified: false, websiteStatus: "broken", rating: "4.7", reviewCount: "780", priceLevel: "$" }),
@@ -1112,7 +1613,7 @@ export function buildNeighborhoodIntelligenceSeedData(destination: Pick<Canonica
     ]),
   ];
 
-  const allGroups = [...groups, ...additionalChicagoGroups];
+  const allGroups = [...groups, ...chicagoGolfGroups, ...additionalChicagoGroups];
   const validationIssues = validateNeighborhoodIntelligenceSeedData(allGroups, destination);
   if (validationIssues.length > 0 && process.env.NODE_ENV !== "test") {
     throw new Error(`Neighborhood intelligence seed validation failed: ${validationIssues.join(" | ")}`);

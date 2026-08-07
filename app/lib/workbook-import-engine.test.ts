@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  buildPremiumV2WorkbookImportPlan,
   buildWorkbookImportPlan,
   buildWorkbookSchema,
   normalizeWorkbookImportMode,
@@ -59,5 +60,30 @@ describe("workbook import engine", () => {
 
     expect(plan[0]?.action).toBe("update");
     expect(plan[0]?.fieldUpdates?.find((fieldUpdate) => fieldUpdate.field === "description")?.changeType).toBe("set");
+  });
+
+  it("builds a Premium V2 workbook plan with verified neighborhood facts and blocks synthetic place names", () => {
+    const plan = buildPremiumV2WorkbookImportPlan({
+      destinationRows: [{ destination_name: "Cavtat", country: "Croatia", slug: "cavtat-croatia" }],
+      neighborhoodRows: [{ destination_name: "Cavtat", neighborhood_name: "Old Town", neighborhood_slug: "old-town" }],
+      neighborhoodPlaceRows: [
+        { destination_name: "Cavtat", neighborhood_name: "Old Town", category: "Restaurants", real_place_name: "Tanjga Restaurant", address: "Obala 11", google_maps_url: "https://maps.google.com/?q=Tanjga%20Restaurant" },
+        { destination_name: "Cavtat", neighborhood_name: "Old Town", category: "Restaurants", real_place_name: "Coffee District", address: "" },
+      ],
+      resourceRows: [{ destination: "Cavtat", resource_category: "Official Tourism", resource_name: "Cavtat Tourism", url: "https://www.cavtat-tourism.com" }],
+      mediaRows: [{ destination: "Cavtat", media_type: "image", image_url: "https://example.com/cavtat.jpg", verified: true }],
+      existingDestinations: [{ id: "dest-1", slug: "cavtat-croatia", city: "Cavtat", country: "Croatia" }],
+      mode: normalizeWorkbookImportMode("UPDATE_SUPPLIED_FIELDS"),
+    });
+
+    expect(plan.previewSummary.destinationCount).toBe(1);
+    expect(plan.destinations[0]?.action).toBe("update");
+    expect(plan.neighborhoods[0]?.action).toBe("create");
+    expect(plan.neighborhoodPlaces[0]?.action).toBe("create");
+    expect(plan.neighborhoodPlaces[1]?.action).toBe("reject");
+    expect(plan.neighborhoodPlaces[1]?.reason).toContain("real identifiable place");
+    expect(plan.previewSummary.placeCount).toBe(1);
+    expect(plan.previewSummary.resourceCount).toBe(1);
+    expect(plan.previewSummary.mediaCount).toBe(1);
   });
 });

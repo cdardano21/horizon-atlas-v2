@@ -4,11 +4,16 @@ import { generatedCommandCenterSeeds } from "./generated-command-center-seeds";
 import { generatedDestinationCardFacts } from "./generated-destination-card-facts";
 import {
   type Destination,
+  type DestinationEditorialContent,
   type DestinationMemberDetails,
   type DestinationMonthlyWeather,
+  type DestinationResearchProfile,
+  type PremiumEditorialContent,
   destinations,
 } from "./destinations";
+import { buildDestinationKnowledgeProfile } from "./destination-knowledge-engine";
 import { getDestinationResearchProfile } from "./destination-research";
+import { buildNeighborhoodIntelligenceSeedData } from "./neighborhood-intelligence-seed-data";
 import { sanitizeExternalSourceUrl } from "./source-links";
 
 type Seed = (typeof generatedCommandCenterSeeds)[string];
@@ -946,6 +951,55 @@ export const getDestinationEditorialFields = (destination: Destination) => ({
   },
 });
 
+const buildPremiumEditorialContentForDestination = (destination: Destination, researchProfile?: DestinationResearchProfile): PremiumEditorialContent => ({
+  heroIntroduction: destination.description?.trim() || destination.overview?.trim()
+    ? `${destination.city} feels most convincing when you understand it as a living place rather than a set of attractions. ${destination.description?.trim() || destination.overview?.trim()}`.slice(0, 280)
+    : `${destination.city} feels most convincing when you understand it as a living place rather than a set of attractions.`,
+  whyPeopleLoveIt: researchProfile?.whyPeopleLoveIt ? [researchProfile.whyPeopleLoveIt] : [destination.description?.trim() || destination.overview?.trim() || `${destination.city} has a distinctive local identity.`],
+  majorStrengths: destination.lifestyle?.trim() ? [destination.lifestyle.trim()] : undefined,
+  majorDrawbacks: destination.transportation?.trim() ? [destination.transportation.trim()] : undefined,
+  bestFor: researchProfile?.bestFor?.length ? researchProfile.bestFor : undefined,
+  overviewArticle: destination.overview?.trim() || destination.description?.trim(),
+  neighborhoodsArticle: destination.description?.trim() || destination.overview?.trim(),
+  dailyLifeArticle: destination.lifestyle?.trim(),
+  climateArticle: destination.climate?.trim(),
+  transportationArticle: destination.transportation?.trim(),
+  prosAndCons: {
+    advantages: researchProfile?.pros?.slice(0, 3),
+    disadvantages: researchProfile?.cons?.slice(0, 3),
+  },
+});
+
+export const buildDestinationEnrichmentMetadata = (destination: Destination) => {
+  const researchProfile = destination.researchProfile ?? getDestinationResearchProfile(destination);
+  const editorialContent: DestinationEditorialContent = getDestinationEditorialFields({
+    ...destination,
+    researchProfile,
+  });
+  const knowledgeProfile = buildDestinationKnowledgeProfile({
+    ...destination,
+    researchProfile,
+    knowledgeProfile: destination.knowledgeProfile,
+  });
+  const neighborhoodIntelligence = buildNeighborhoodIntelligenceSeedData({
+    city: destination.city,
+    country: destination.country,
+    title: destination.title ?? destination.city,
+    slug: destination.slug,
+    knowledgeProfile,
+  });
+  const premiumEditorialContent = buildPremiumEditorialContentForDestination(destination, researchProfile);
+
+  return {
+    memberDetails: destination.memberDetails,
+    editorialContent,
+    researchProfile,
+    neighborhoodIntelligence,
+    knowledgeProfile,
+    premiumEditorialContent,
+  };
+};
+
 export function enrichDestination(destination: Destination): Destination {
   const seed = generatedCommandCenterSeeds[destination.slug];
   const details = deriveMemberDetails(destination, seed);
@@ -972,9 +1026,19 @@ export function enrichDestination(destination: Destination): Destination {
     ...editorialFields,
   };
 
+  const researchProfile = getDestinationResearchProfile(enrichedDestination);
+  const knowledgeProfile = buildDestinationKnowledgeProfile({
+    ...enrichedDestination,
+    researchProfile,
+    knowledgeProfile: enrichedDestination.knowledgeProfile,
+  });
+  const premiumEditorialContent = buildPremiumEditorialContentForDestination(enrichedDestination, researchProfile);
+
   return {
     ...enrichedDestination,
-    researchProfile: getDestinationResearchProfile(enrichedDestination),
+    researchProfile,
+    knowledgeProfile,
+    premiumEditorialContent,
   };
 }
 
@@ -1018,6 +1082,7 @@ export const buildEnrichedDestinationCreatePayload = ({
   const resolvedDescription = description?.trim() ? description.trim() : enriched.description;
   const resolvedOverview = overview?.trim() ? overview.trim() : enriched.overview;
 
+  const enrichmentMetadata = buildDestinationEnrichmentMetadata(enriched);
   const editorialContent: DestinationEditorialContent = {
     title: enriched.title ?? city,
     subtitle: enriched.subtitle ?? `${city}, ${country}`,
@@ -1041,8 +1106,14 @@ export const buildEnrichedDestinationCreatePayload = ({
     overview: resolvedOverview || null,
     metadata: {
       memberDetails: enriched.memberDetails,
-      editorialContent,
-      researchProfile: enriched.researchProfile,
+      editorialContent: {
+        ...enrichmentMetadata.editorialContent,
+        ...editorialContent,
+      },
+      researchProfile: enrichmentMetadata.researchProfile,
+      neighborhoodIntelligence: enrichmentMetadata.neighborhoodIntelligence,
+      knowledgeProfile: enrichmentMetadata.knowledgeProfile,
+      premiumEditorialContent: enrichmentMetadata.premiumEditorialContent,
     },
   };
 };

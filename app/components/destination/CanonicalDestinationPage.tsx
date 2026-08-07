@@ -397,6 +397,19 @@ function buildVerifiableInsightPlaces(destination: CanonicalDestination, neighbo
     .slice(0, 4)
     .map((place, index) => {
       const mapQuery = [neighborhoodName, place.name, destination.city, destination.country].filter(Boolean).join(" ").trim();
+      const metadata: Record<string, string> = {
+        Category: group.category,
+        Source: place.source || "Verified neighborhood intelligence",
+      };
+
+      if (place.relationshipToNeighborhood) metadata["Relationship"] = place.relationshipToNeighborhood;
+      if (place.address) metadata["Location"] = place.address;
+      if (place.courseType) metadata["Course type"] = place.courseType;
+      if (place.publicStatus) metadata["Public/private"] = place.publicStatus;
+      if (place.holes) metadata["Holes"] = place.holes;
+      if (place.priceContext) metadata["Pricing"] = place.priceContext;
+      if (place.amenities) metadata["Amenities"] = place.amenities;
+
       return {
         id: place.id || `${group.category}-${index}-${place.name}`,
         title: place.name,
@@ -406,10 +419,7 @@ function buildVerifiableInsightPlaces(destination: CanonicalDestination, neighbo
         mapUrl: place.googleMapsUrl || buildNeighborhoodSearchUrl(mapQuery, "maps"),
         website: isPlaceWebsiteVisible(place) ? place.websiteUrl : undefined,
         aiSummary: place.whyItMatters || `${place.name} is a place-level signal that helps explain the local rhythm of ${neighborhoodName || destination.city}.`,
-        metadata: {
-          Category: group.category,
-          Source: place.source || "Verified neighborhood intelligence",
-        },
+        metadata,
       } satisfies NeighborhoodInsightPlace;
     });
 
@@ -476,7 +486,7 @@ function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighb
     .filter((group) => {
       const sameDestination = !group.destinationName || normalizeText(group.destinationName) === normalizeText(destination.title || destination.city);
       const sameNeighborhood = !group.neighborhoodName || normalizeText(group.neighborhoodName) === normalizeText(neighborhoodName);
-      return sameDestination && sameNeighborhood;
+      return sameDestination && (sameNeighborhood || /golf/i.test(group.category));
     });
 
   const categoryCards = [
@@ -509,11 +519,29 @@ function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighb
       matcher: (group: NeighborhoodIntelligenceGroup) => isShoppingCategory(group.category),
     },
     {
+      key: "golf",
+      label: "Golf courses",
+      value: "Nearby golf options",
+      description: "Verified golf clubs and courses that matter for neighborhood-level lifestyle access and recreation.",
+      matcher: (group: NeighborhoodIntelligenceGroup) => /golf/i.test(group.category),
+      getLabel: (neighborhoodName: string, group: NeighborhoodIntelligenceGroup) => {
+        const sameNeighborhood = !group.neighborhoodName || normalizeText(group.neighborhoodName) === normalizeText(neighborhoodName);
+        return sameNeighborhood ? "Golf courses" : "Nearby Golf Courses";
+      },
+    },
+    {
       key: "transit",
       label: "Transit",
       value: "Transit anchors",
       description: "Verified mobility signals that shape how the neighborhood feels from day to day.",
       matcher: (group: NeighborhoodIntelligenceGroup) => /transit|transport|station|airport|metro|subway/i.test(group.category),
+    },
+    {
+      key: "healthcare",
+      label: "Healthcare",
+      value: "Healthcare anchors",
+      description: "Verified medical and care-access signals that shape long-stay practicality.",
+      matcher: (group: NeighborhoodIntelligenceGroup) => /health|care|clinic|hospital|medical/i.test(group.category),
     },
     {
       key: "nightlife",
@@ -522,16 +550,42 @@ function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighb
       description: "Verified evening-energy signals that add depth after dark.",
       matcher: (group: NeighborhoodIntelligenceGroup) => /night|bar|club|music|event|theater/i.test(group.category),
     },
+    {
+      key: "family-insight",
+      label: "Family friendly",
+      value: "Family-friendly places",
+      description: "Verified family-oriented places that support a calm, practical week.",
+      matcher: (group: NeighborhoodIntelligenceGroup) => /family/i.test(group.category),
+    },
+    {
+      key: "pet",
+      label: "Pet friendly",
+      value: "Pet-friendly places",
+      description: "Verified pet-oriented spots and services that make daily life easier.",
+      matcher: (group: NeighborhoodIntelligenceGroup) => /pet/i.test(group.category),
+    },
+    {
+      key: "remote-work-insight",
+      label: "Remote work",
+      value: "Remote-work-friendly spots",
+      description: "Verified coworking, café, and work-friendly locations that support a productive daily routine.",
+      matcher: (group: NeighborhoodIntelligenceGroup) => /remote|cowork|workspace|library|work/i.test(group.category),
+    },
   ].flatMap((cardConfig) => {
-    const matchingGroup = intelligenceGroups.find(cardConfig.matcher);
+    const sameNeighborhoodGroup = intelligenceGroups.find((group) => cardConfig.matcher(group) && (!group.neighborhoodName || normalizeText(group.neighborhoodName) === normalizeText(neighborhoodName)));
+    const matchingGroup = sameNeighborhoodGroup ?? intelligenceGroups.find(cardConfig.matcher);
     if (!matchingGroup) return [];
 
     const places = buildVerifiableInsightPlaces(destination, neighborhoodName, matchingGroup);
     if (places.length === 0) return [];
 
+    const label = typeof cardConfig.getLabel === "function"
+      ? cardConfig.getLabel(neighborhoodName, matchingGroup)
+      : cardConfig.label;
+
     return [{
       key: cardConfig.key,
-      label: cardConfig.label,
+      label,
       value: cardConfig.value,
       description: cardConfig.description,
       places,
@@ -558,7 +612,7 @@ function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighb
       emptyMessage: "No verified bikeability data is available for this neighborhood yet.",
     },
     {
-      key: "family",
+      key: "family-empty",
       label: "Family friendly",
       value: "Family-friendly places",
       description: familyFriendly,
@@ -574,7 +628,7 @@ function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighb
       emptyMessage: "No verified pet-friendly data is available for this neighborhood yet.",
     },
     {
-      key: "remote-work",
+      key: "remote-work-empty",
       label: "Remote work",
       value: "Remote-work-friendly spots",
       description: remoteWork,
@@ -1179,6 +1233,13 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   const resourceGroups = buildResourceGroups(destination);
 
   const neighborhoods = (premiumContent.neighborhoodGuides.length > 0 ? premiumContent.neighborhoodGuides : destination.neighborhoods.slice(0, 4).map((name) => ({ name, whyItWorks: `${name} helps anchor the city’s local character.`, fit: `Best for residents who want a neighborhood identity that feels specific and lived in.`, vibe: `It offers a clear local rhythm and strong daily-life texture.` }))).slice(0, 4);
+  const golfGroups = (destination.neighborhoodIntelligence?.length ? destination.neighborhoodIntelligence : buildNeighborhoodIntelligenceSeedData(destination))
+    .filter((group) => /golf/i.test(group.category))
+    .slice(0, 4);
+  const destinationGolfSummary = [
+    destination.knowledgeProfile?.golf?.join(", ") || destination.golf?.join(", ") || null,
+    golfGroups.length > 0 ? `${golfGroups.length} verified golf-focused neighborhood records` : null,
+  ].filter(Boolean).join(" • ");
 
   const viewTabs: Array<{ id: ViewMode; label: string }> = [
     { id: "guide", label: "Destination Guide" },
@@ -1493,6 +1554,23 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                 </div>
               </div>
             </article>
+            {destinationGolfSummary ? (
+              <article className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
+                <h2 className="text-2xl font-semibold text-white">Golf access</h2>
+                <p className="mt-4 text-sm leading-8 text-slate-400">{destinationGolfSummary}</p>
+                {golfGroups.length > 0 ? (
+                  <div className="mt-6 space-y-3">
+                    {golfGroups.map((group) => (
+                      <div key={`${group.neighborhoodName}-${group.category}`} className="rounded-[1.25rem] border border-white/10 bg-white/5 p-4">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">{group.neighborhoodName || destination.city}</p>
+                        <p className="mt-2 text-sm font-semibold text-white">{group.category}</p>
+                        <p className="mt-2 text-sm leading-7 text-slate-300">{group.places?.find((place) => place?.verified)?.name || "Verified golf options are available for this neighborhood."}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+              </article>
+            ) : null}
             <article className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
               <h2 className="text-2xl font-semibold text-white">Cost of living</h2>
               <p className="mt-4 text-sm leading-8 text-slate-400">{intelligenceProfile.heroSummary}</p>

@@ -12,6 +12,7 @@ import {
 } from "../../../../lib/admin-local-fallback";
 import { verifyDestinationImport } from "../../../../lib/destination-import-verification";
 import { buildDestinationIdentity, findDestinationIdentityConflict } from "../../../../lib/destination-identity";
+import { buildEnrichedDestinationCreatePayload, buildDestinationEnrichmentMetadata } from "../../../../lib/destination-enrichment";
 
 type AuthUser = {
   id: string;
@@ -157,6 +158,62 @@ export async function PATCH(request: Request, context: { params: Promise<{ desti
       slug: payload.slug !== undefined ? nextIdentity.slug : undefined,
     });
 
+    const shouldEnrichMetadata = payload.description !== undefined || payload.overview !== undefined || payload.city !== undefined || payload.country !== undefined || payload.slug !== undefined;
+    let enrichmentMetadata: ReturnType<typeof buildDestinationEnrichmentMetadata> | null = null;
+
+    if (shouldEnrichMetadata) {
+      const existingResponse = await fetch(
+        `${url}/rest/v1/destinations_catalog?select=city,country,slug,description,overview,metadata&id=eq.${destinationId}&limit=1`,
+        {
+          headers: {
+            ...getSupabaseAuthHeaders(accessToken),
+          },
+          cache: "no-store",
+        },
+      );
+
+      if (existingResponse.ok) {
+        const existingRows = (await existingResponse.json()) as Array<{
+          city?: string;
+          country?: string;
+          slug?: string;
+          description?: string | null;
+          overview?: string | null;
+          metadata?: Record<string, unknown> | null;
+        }>;
+        const existingRow = existingRows[0];
+        const baseDestination = {
+          slug: nextIdentity.slug || existingRow?.slug || destinationId,
+          city: nextIdentity.city || existingRow?.city || "",
+          country: nextIdentity.country || existingRow?.country || "",
+          emoji: "🌍",
+          match: 0,
+          description: payload.description !== undefined ? (payload.description?.trim() || "") : (existingRow?.description ?? ""),
+          overview: payload.overview !== undefined ? (payload.overview?.trim() || "") : (existingRow?.overview ?? ""),
+          climate: "",
+          lifestyle: "",
+          transportation: "",
+          images: [],
+          ...((existingRow?.metadata && typeof existingRow.metadata === "object") ? { researchProfile: existingRow.metadata.researchProfile as Record<string, unknown> } : {}),
+        };
+        const payloadForEnrichment = buildEnrichedDestinationCreatePayload({
+          city: baseDestination.city,
+          country: baseDestination.country,
+          slug: baseDestination.slug,
+          description: baseDestination.description,
+          overview: baseDestination.overview,
+        });
+        enrichmentMetadata = {
+          memberDetails: payloadForEnrichment.metadata?.memberDetails as Record<string, unknown> | undefined,
+          editorialContent: payloadForEnrichment.metadata?.editorialContent as Record<string, unknown>,
+          researchProfile: payloadForEnrichment.metadata?.researchProfile as Record<string, unknown>,
+          neighborhoodIntelligence: payloadForEnrichment.metadata?.neighborhoodIntelligence as Array<unknown>,
+          knowledgeProfile: payloadForEnrichment.metadata?.knowledgeProfile as Record<string, unknown>,
+          premiumEditorialContent: payloadForEnrichment.metadata?.premiumEditorialContent as Record<string, unknown>,
+        };
+      }
+    }
+
     if (conflict) {
       return Response.json({ error: "Another destination already uses this identity." }, { status: 409 });
     }
@@ -165,6 +222,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ desti
       payload.relocationProfile !== undefined
       || payload.editorialContent !== undefined
       || payload.researchProfile !== undefined
+      || enrichmentMetadata
     ) {
       const existingResponse = await fetch(
         `${url}/rest/v1/destinations_catalog?select=metadata&id=eq.${destinationId}&limit=1`,
@@ -206,6 +264,36 @@ export async function PATCH(request: Request, context: { params: Promise<{ desti
           delete existingMetadata.researchProfile;
         } else {
           existingMetadata.researchProfile = payload.researchProfile;
+        }
+      }
+
+      if (enrichmentMetadata) {
+        if (existingMetadata.editorialContent && typeof existingMetadata.editorialContent === "object") {
+          existingMetadata.editorialContent = {
+            ...(enrichmentMetadata.editorialContent ?? {}),
+            ...(existingMetadata.editorialContent as Record<string, unknown>),
+          };
+        } else if (enrichmentMetadata.editorialContent) {
+          existingMetadata.editorialContent = enrichmentMetadata.editorialContent;
+        }
+
+        if (enrichmentMetadata.researchProfile) {
+          existingMetadata.researchProfile = {
+            ...(enrichmentMetadata.researchProfile as Record<string, unknown>),
+            ...((existingMetadata.researchProfile && typeof existingMetadata.researchProfile === "object") ? (existingMetadata.researchProfile as Record<string, unknown>) : {}),
+          };
+        }
+
+        if (enrichmentMetadata.neighborhoodIntelligence) {
+          existingMetadata.neighborhoodIntelligence = enrichmentMetadata.neighborhoodIntelligence;
+        }
+
+        if (enrichmentMetadata.knowledgeProfile) {
+          existingMetadata.knowledgeProfile = enrichmentMetadata.knowledgeProfile;
+        }
+
+        if (enrichmentMetadata.premiumEditorialContent) {
+          existingMetadata.premiumEditorialContent = enrichmentMetadata.premiumEditorialContent;
         }
       }
 

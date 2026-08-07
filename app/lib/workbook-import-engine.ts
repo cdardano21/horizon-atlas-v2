@@ -39,6 +39,32 @@ export type WorkbookImportPlanEntry = {
   fieldUpdates?: WorkbookImportFieldUpdate[];
 };
 
+export type PremiumV2WorkbookImportPlanEntry = {
+  rowNumber: number;
+  action: "create" | "update" | "reject";
+  reason?: string;
+  slug: string;
+  entityType: "destination" | "neighborhood" | "neighborhood_place" | "resource" | "media";
+  destinationSlug?: string;
+  fieldUpdates?: WorkbookImportFieldUpdate[];
+};
+
+export type PremiumV2WorkbookImportPlan = {
+  destinations: PremiumV2WorkbookImportPlanEntry[];
+  neighborhoods: PremiumV2WorkbookImportPlanEntry[];
+  neighborhoodPlaces: PremiumV2WorkbookImportPlanEntry[];
+  resources: PremiumV2WorkbookImportPlanEntry[];
+  media: PremiumV2WorkbookImportPlanEntry[];
+  previewSummary: {
+    destinationCount: number;
+    neighborhoodCount: number;
+    placeCount: number;
+    resourceCount: number;
+    mediaCount: number;
+    rejectedCount: number;
+  };
+};
+
 export const normalizeWorkbookImportMode = (mode: string): WorkbookImportMode => {
   switch (mode.toUpperCase()) {
     case "CREATE_ONLY":
@@ -112,26 +138,36 @@ const findExistingDestination = (row: Record<string, unknown>, existingDestinati
       }
     }
 
+    const existingName = normalizeText(destination.name ?? destination.destination_name ?? destination.city);
+    const existingCity = normalizeText(destination.city);
+    const existingCountry = normalizeText(destination.country);
+
+    if (rowName && !rowCountry) {
+      if (existingName && existingName.toLowerCase() === rowName.toLowerCase()) {
+        return true;
+      }
+    }
+
+    if (rowCity && !rowCountry) {
+      if (existingCity && existingCity.toLowerCase() === rowCity.toLowerCase()) {
+        return true;
+      }
+    }
+
     if (rowName && rowCountry) {
-      const existingName = normalizeText(destination.name ?? destination.destination_name ?? destination.city);
-      const existingCountry = normalizeText(destination.country);
       if (existingName && existingName.toLowerCase() === rowName.toLowerCase() && existingCountry.toLowerCase() === rowCountry.toLowerCase()) {
         return true;
       }
     }
 
     if (rowCity && rowCountry) {
-      const existingCity = normalizeText(destination.city);
-      const existingCountry = normalizeText(destination.country);
       if (existingCity && existingCity.toLowerCase() === rowCity.toLowerCase() && existingCountry.toLowerCase() === rowCountry.toLowerCase()) {
         return true;
       }
     }
 
     if (rowName && rowState && rowCountry) {
-      const existingName = normalizeText(destination.name ?? destination.destination_name ?? destination.city);
       const existingState = normalizeText(destination.state ?? destination.province ?? destination.region);
-      const existingCountry = normalizeText(destination.country);
       if (existingName && existingName.toLowerCase() === rowName.toLowerCase() && existingState.toLowerCase() === rowState.toLowerCase() && existingCountry.toLowerCase() === rowCountry.toLowerCase()) {
         return true;
       }
@@ -139,6 +175,15 @@ const findExistingDestination = (row: Record<string, unknown>, existingDestinati
 
     return false;
   });
+};
+
+const isMeaningfulNeighborhoodPlace = (row: Record<string, unknown>) => {
+  const placeName = normalizeText(getCellValue(row, "real_place_name") || getCellValue(row, "place_name") || getCellValue(row, "name"));
+  const address = normalizeText(getCellValue(row, "address") || getCellValue(row, "street_address"));
+  const googleMapsUrl = normalizeText(getCellValue(row, "google_maps_url") || getCellValue(row, "google_maps"));
+  const websiteUrl = normalizeText(getCellValue(row, "website_url") || getCellValue(row, "url"));
+
+  return Boolean(placeName && (address || googleMapsUrl || websiteUrl));
 };
 
 export const buildWorkbookImportPlan = (
@@ -197,4 +242,164 @@ export const buildWorkbookImportPlan = (
 
     return { rowNumber: index + 2, action: "create", slug, fieldUpdates: [] };
   });
+};
+
+const normalizeSlug = (value: string) => value
+  .trim()
+  .toLowerCase()
+  .replace(/[^a-z0-9\s-]/g, "")
+  .replace(/\s+/g, "-")
+  .replace(/-+/g, "-")
+  .replace(/^-|-$/g, "");
+
+export const buildPremiumV2WorkbookImportPlan = ({
+  destinationRows,
+  neighborhoodRows = [],
+  neighborhoodPlaceRows = [],
+  resourceRows = [],
+  mediaRows = [],
+  existingDestinations,
+  mode,
+}: {
+  destinationRows: Array<Record<string, unknown>>;
+  neighborhoodRows?: Array<Record<string, unknown>>;
+  neighborhoodPlaceRows?: Array<Record<string, unknown>>;
+  resourceRows?: Array<Record<string, unknown>>;
+  mediaRows?: Array<Record<string, unknown>>;
+  existingDestinations: WorkbookExistingDestination[];
+  mode: WorkbookImportMode;
+}): PremiumV2WorkbookImportPlan => {
+  const destinations = buildWorkbookImportPlan(
+    destinationRows,
+    existingDestinations,
+    buildWorkbookSchema("Destinations", ["destination_name", "country", "slug", "description"]),
+    mode,
+  ).map((entry) => ({ ...entry, entityType: "destination" as const }));
+
+  const neighborhoods = neighborhoodRows.map((row, index) => {
+    const destinationName = normalizeText(getCellValue(row, "destination_name") || getCellValue(row, "destination") || getCellValue(row, "destination_city"));
+    const neighborhoodName = normalizeText(getCellValue(row, "neighborhood_name") || getCellValue(row, "neighborhood"));
+    const destinationSlug = normalizeText(getCellValue(row, "destination_slug") || getCellValue(row, "destination_slug_name") || "");
+    const destinationMatch = destinationName
+      ? findExistingDestination({ destination_name: destinationName, country: getCellValue(row, "country") }, existingDestinations)
+      : null;
+
+    if (!destinationMatch || !neighborhoodName) {
+      return {
+        rowNumber: index + 2,
+        action: "reject" as const,
+        reason: "Neighborhood rows require a matching destination and a neighborhood name.",
+        slug: destinationSlug || normalizeSlug(neighborhoodName || `${destinationName}-neighborhood`),
+        entityType: "neighborhood" as const,
+      };
+    }
+
+    return {
+      rowNumber: index + 2,
+      action: "create" as const,
+      slug: destinationSlug || normalizeSlug(`${destinationName}-${neighborhoodName}`),
+      entityType: "neighborhood" as const,
+      destinationSlug: normalizeText(destinationSlug || destinationMatch.slug || ""),
+    };
+  });
+
+  const neighborhoodPlaces = neighborhoodPlaceRows.map((row, index) => {
+    const destinationName = normalizeText(getCellValue(row, "destination_name") || getCellValue(row, "destination") || getCellValue(row, "destination_city"));
+    const neighborhoodName = normalizeText(getCellValue(row, "neighborhood_name") || getCellValue(row, "neighborhood"));
+    const placeName = normalizeText(getCellValue(row, "real_place_name") || getCellValue(row, "place_name") || getCellValue(row, "name"));
+    const destinationMatch = destinationName
+      ? findExistingDestination({ destination_name: destinationName, country: getCellValue(row, "country") }, existingDestinations)
+      : null;
+
+    if (!destinationMatch || !neighborhoodName || !isMeaningfulNeighborhoodPlace(row)) {
+      return {
+        rowNumber: index + 2,
+        action: "reject" as const,
+        reason: "Neighborhood place rows require a matching destination, neighborhood, and a real identifiable place.",
+        slug: normalizeSlug(placeName || `${destinationName}-${neighborhoodName}-place`),
+        entityType: "neighborhood_place" as const,
+        destinationSlug: normalizeText(destinationMatch?.slug || ""),
+      };
+    }
+
+    return {
+      rowNumber: index + 2,
+      action: "create" as const,
+      slug: normalizeSlug(`${destinationName}-${neighborhoodName}-${placeName}`),
+      entityType: "neighborhood_place" as const,
+      destinationSlug: normalizeText(destinationMatch.slug || ""),
+    };
+  });
+
+  const resources = resourceRows.map((row, index) => {
+    const resourceName = normalizeText(getCellValue(row, "resource_name") || getCellValue(row, "name"));
+    const destinationName = normalizeText(getCellValue(row, "destination") || getCellValue(row, "destination_name") || getCellValue(row, "destination_city"));
+    const destinationMatch = destinationName
+      ? findExistingDestination({ destination_name: destinationName, country: getCellValue(row, "country") }, existingDestinations)
+      : null;
+
+    if (!destinationMatch || !resourceName) {
+      return {
+        rowNumber: index + 2,
+        action: "reject" as const,
+        reason: "Resources require a matching destination and a resource name.",
+        slug: normalizeSlug(resourceName || `${destinationName}-resource`),
+        entityType: "resource" as const,
+        destinationSlug: normalizeText(destinationMatch?.slug || ""),
+      };
+    }
+
+    return {
+      rowNumber: index + 2,
+      action: "create" as const,
+      slug: normalizeSlug(`${destinationName}-${resourceName}`),
+      entityType: "resource" as const,
+      destinationSlug: normalizeText(destinationMatch.slug || ""),
+    };
+  });
+
+  const media = mediaRows.map((row, index) => {
+    const destinationName = normalizeText(getCellValue(row, "destination") || getCellValue(row, "destination_name") || getCellValue(row, "destination_city"));
+    const destinationMatch = destinationName
+      ? findExistingDestination({ destination_name: destinationName, country: getCellValue(row, "country") }, existingDestinations)
+      : null;
+    const mediaUrl = normalizeText(getCellValue(row, "image_url") || getCellValue(row, "media_url") || getCellValue(row, "url"));
+
+    if (!destinationMatch || !mediaUrl) {
+      return {
+        rowNumber: index + 2,
+        action: "reject" as const,
+        reason: "Media rows require a matching destination and a media URL.",
+        slug: normalizeSlug(`${destinationName}-media`),
+        entityType: "media" as const,
+        destinationSlug: normalizeText(destinationMatch?.slug || ""),
+      };
+    }
+
+    return {
+      rowNumber: index + 2,
+      action: "create" as const,
+      slug: normalizeSlug(`${destinationName}-media-${index + 1}`),
+      entityType: "media" as const,
+      destinationSlug: normalizeText(destinationMatch.slug || ""),
+    };
+  });
+
+  const rejectedCount = [...destinations, ...neighborhoods, ...neighborhoodPlaces, ...resources, ...media].filter((entry) => entry.action === "reject").length;
+
+  return {
+    destinations,
+    neighborhoods,
+    neighborhoodPlaces,
+    resources,
+    media,
+    previewSummary: {
+      destinationCount: destinations.filter((entry) => entry.action !== "reject").length,
+      neighborhoodCount: neighborhoods.filter((entry) => entry.action !== "reject").length,
+      placeCount: neighborhoodPlaces.filter((entry) => entry.action !== "reject").length,
+      resourceCount: resources.filter((entry) => entry.action !== "reject").length,
+      mediaCount: media.filter((entry) => entry.action !== "reject").length,
+      rejectedCount,
+    },
+  };
 };

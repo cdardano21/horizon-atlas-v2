@@ -4,7 +4,7 @@ import { getSupabaseAuthHeaders, getSupabaseConfig, getSupabaseServiceRoleKey, i
 import { shouldUseAdminLocalFallback } from "../../../../lib/admin-local-fallback";
 import { buildEnrichedDestinationCreatePayload } from "../../../../lib/destination-enrichment";
 import { verifyDestinationImport } from "../../../../lib/destination-import-verification";
-import { buildWorkbookImportPlan, normalizeWorkbookImportMode } from "../../../../lib/workbook-import-engine";
+import { buildPremiumV2WorkbookImportPlan, buildWorkbookImportPlan, normalizeWorkbookImportMode } from "../../../../lib/workbook-import-engine";
 
 const ADMIN_TABLE = "destinations_catalog";
 
@@ -152,6 +152,9 @@ export async function POST(request: Request) {
       selectedColumns?: string[];
       allowBlankClears?: boolean;
       schema?: { sheetName?: string; headers?: string[] };
+      workbookSheets?: string[];
+      workbookRowsBySheet?: Record<string, Array<Record<string, unknown>>>;
+      workbookHeadersBySheet?: Record<string, string[]>;
     };
 
     const rows = payload.rows ?? [];
@@ -175,56 +178,143 @@ export async function POST(request: Request) {
 
     const existingDestinations = (await existingResponse.json()) as Array<{ id: string; slug: string; city: string; country: string; description?: string | null; overview?: string | null; status?: string | null; tier?: string | null }>;
     const useWorkbookSchema = Boolean(payload.schema?.headers?.length);
-    const plan = useWorkbookSchema
-      ? (rows as Array<Record<string, unknown>>).map((row, index) => {
-          const schema = payload.schema ?? { headers: [] };
-          const workplan = buildWorkbookImportPlan(
-            [row],
-            existingDestinations,
-            {
-              sheetName: schema.sheetName ?? "Imported Sheet",
-              columns: (schema.headers ?? []).map((header) => ({ rawName: header, canonicalName: header.toLowerCase().replace(/[^a-z0-9]+/g, "_"), sourceType: "sheet" as const })),
-            },
-            normalizeWorkbookImportMode(mode),
-          )[0];
-          const city = String(row.city ?? row.City ?? row.city_name ?? row.location_city ?? row.destination_name ?? row.destinationName ?? row.name ?? row.Name ?? row.destination ?? row.Destination ?? "").trim();
-          const country = String(row.country ?? row.Country ?? row.country_name ?? "").trim();
-          const slug = String(row.slug ?? row.Slug ?? row.destination_slug ?? workplan?.slug ?? "").trim();
-          const description = String(row.description ?? row.Description ?? "").trim();
-          const overview = String(row.overview ?? row.Overview ?? "").trim();
-          const status = String(row.status ?? row.Status ?? "draft").trim();
-          const tier = String(row.tier ?? row.Tier ?? "launch").trim();
-          const existingDestination = existingDestinations.find((destination) => normalizeSlug(destination.slug) === normalizeSlug(slug));
+    const hasMultiSheetWorkbookPayload = Array.isArray(payload.workbookSheets) && payload.workbookSheets.length > 0;
 
-          return {
-            rowNumber: index + 2,
-            action: workplan?.action === "create" ? "create" : workplan?.action === "update" ? "update" : "reject",
-            reason: workplan?.reason,
-            slug,
-            city,
-            country,
-            status,
-            tier,
-            description,
-            overview,
-            existingId: existingDestination?.id,
-            existingSlug: existingDestination?.slug,
-            fieldUpdates: workplan?.fieldUpdates,
-            warnings: [],
-            errors: workplan?.action === "reject" ? [workplan.reason ?? "Rejected by schema rules."] : [],
-            importedRow: row,
-          };
-        })
-      : buildBatchImportPlan({
-          rows,
+    let plan: Array<Record<string, unknown>> = [];
+    let summary = buildImportSummary({ plan: [], totalRows: rows.length });
+
+    if (hasMultiSheetWorkbookPayload) {
+      const premiumPlan = buildPremiumV2WorkbookImportPlan({
+        destinationRows: payload.workbookRowsBySheet?.Destinations ?? [],
+        neighborhoodRows: payload.workbookRowsBySheet?.Neighborhoods ?? [],
+        neighborhoodPlaceRows: payload.workbookRowsBySheet?.NeighborhoodPlaces ?? [],
+        resourceRows: payload.workbookRowsBySheet?.Resources ?? [],
+        mediaRows: payload.workbookRowsBySheet?.Media ?? [],
+        existingDestinations,
+        mode: normalizeWorkbookImportMode(mode),
+      });
+
+      const planEntries = [
+        ...premiumPlan.destinations.map((entry, index) => ({
+          ...entry,
+          city: String(payload.workbookRowsBySheet?.Destinations?.[index]?.city ?? payload.workbookRowsBySheet?.Destinations?.[index]?.destination_name ?? ""),
+          country: String(payload.workbookRowsBySheet?.Destinations?.[index]?.country ?? ""),
+          slug: String(payload.workbookRowsBySheet?.Destinations?.[index]?.slug ?? payload.workbookRowsBySheet?.Destinations?.[index]?.destination_slug ?? entry.slug ?? ""),
+          description: String(payload.workbookRowsBySheet?.Destinations?.[index]?.description ?? ""),
+          overview: String(payload.workbookRowsBySheet?.Destinations?.[index]?.overview ?? ""),
+          status: String(payload.workbookRowsBySheet?.Destinations?.[index]?.status ?? "draft"),
+          tier: String(payload.workbookRowsBySheet?.Destinations?.[index]?.tier ?? "launch"),
+          importedRow: payload.workbookRowsBySheet?.Destinations?.[index] ?? {},
+        })),
+        ...premiumPlan.neighborhoods.map((entry, index) => ({
+          ...entry,
+          city: String(payload.workbookRowsBySheet?.Neighborhoods?.[index]?.city ?? ""),
+          country: String(payload.workbookRowsBySheet?.Neighborhoods?.[index]?.country ?? ""),
+          slug: String(payload.workbookRowsBySheet?.Neighborhoods?.[index]?.neighborhood_slug ?? entry.slug ?? ""),
+          description: String(payload.workbookRowsBySheet?.Neighborhoods?.[index]?.description ?? ""),
+          overview: String(payload.workbookRowsBySheet?.Neighborhoods?.[index]?.overview ?? ""),
+          status: String(payload.workbookRowsBySheet?.Neighborhoods?.[index]?.status ?? "draft"),
+          tier: String(payload.workbookRowsBySheet?.Neighborhoods?.[index]?.tier ?? "launch"),
+          importedRow: payload.workbookRowsBySheet?.Neighborhoods?.[index] ?? {},
+        })),
+        ...premiumPlan.neighborhoodPlaces.map((entry, index) => ({
+          ...entry,
+          city: String(payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index]?.city ?? ""),
+          country: String(payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index]?.country ?? ""),
+          slug: String(payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index]?.place_slug ?? entry.slug ?? ""),
+          description: String(payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index]?.description ?? ""),
+          overview: String(payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index]?.overview ?? ""),
+          status: String(payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index]?.status ?? "draft"),
+          tier: String(payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index]?.tier ?? "launch"),
+          importedRow: payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index] ?? {},
+        })),
+        ...premiumPlan.resources.map((entry, index) => ({
+          ...entry,
+          city: String(payload.workbookRowsBySheet?.Resources?.[index]?.city ?? ""),
+          country: String(payload.workbookRowsBySheet?.Resources?.[index]?.country ?? ""),
+          slug: String(payload.workbookRowsBySheet?.Resources?.[index]?.resource_slug ?? entry.slug ?? ""),
+          description: String(payload.workbookRowsBySheet?.Resources?.[index]?.description ?? ""),
+          overview: String(payload.workbookRowsBySheet?.Resources?.[index]?.overview ?? ""),
+          status: String(payload.workbookRowsBySheet?.Resources?.[index]?.status ?? "draft"),
+          tier: String(payload.workbookRowsBySheet?.Resources?.[index]?.tier ?? "launch"),
+          importedRow: payload.workbookRowsBySheet?.Resources?.[index] ?? {},
+        })),
+        ...premiumPlan.media.map((entry, index) => ({
+          ...entry,
+          city: String(payload.workbookRowsBySheet?.Media?.[index]?.city ?? ""),
+          country: String(payload.workbookRowsBySheet?.Media?.[index]?.country ?? ""),
+          slug: String(payload.workbookRowsBySheet?.Media?.[index]?.media_slug ?? entry.slug ?? ""),
+          description: String(payload.workbookRowsBySheet?.Media?.[index]?.description ?? ""),
+          overview: String(payload.workbookRowsBySheet?.Media?.[index]?.overview ?? ""),
+          status: String(payload.workbookRowsBySheet?.Media?.[index]?.status ?? "draft"),
+          tier: String(payload.workbookRowsBySheet?.Media?.[index]?.tier ?? "launch"),
+          importedRow: payload.workbookRowsBySheet?.Media?.[index] ?? {},
+        })),
+      ];
+
+      plan = planEntries as Array<Record<string, unknown>>;
+      summary = {
+        ...buildImportSummary({ plan: plan as Array<Record<string, unknown>> as never[], totalRows: Object.values(payload.workbookRowsBySheet ?? {}).reduce((sum, sheetRows) => sum + sheetRows.length, 0) }),
+        destinationCount: premiumPlan.previewSummary.destinationCount,
+        neighborhoodCount: premiumPlan.previewSummary.neighborhoodCount,
+        placeCount: premiumPlan.previewSummary.placeCount,
+        resourceCount: premiumPlan.previewSummary.resourceCount,
+        mediaCount: premiumPlan.previewSummary.mediaCount,
+        rejectedCount: premiumPlan.previewSummary.rejectedCount,
+      };
+    } else if (useWorkbookSchema) {
+      plan = (rows as Array<Record<string, unknown>>).map((row, index) => {
+        const schema = payload.schema ?? { headers: [] };
+        const workplan = buildWorkbookImportPlan(
+          [row],
           existingDestinations,
-          mode,
-          matchField,
-          selectedColumns,
-          allowBlankClears,
-        });
+          {
+            sheetName: schema.sheetName ?? "Imported Sheet",
+            columns: (schema.headers ?? []).map((header) => ({ rawName: header, canonicalName: header.toLowerCase().replace(/[^a-z0-9]+/g, "_"), sourceType: "sheet" as const })),
+          },
+          normalizeWorkbookImportMode(mode),
+        )[0];
+        const city = String(row.city ?? row.City ?? row.city_name ?? row.location_city ?? row.destination_name ?? row.destinationName ?? row.name ?? row.Name ?? row.destination ?? row.Destination ?? "").trim();
+        const country = String(row.country ?? row.Country ?? row.country_name ?? "").trim();
+        const slug = String(row.slug ?? row.Slug ?? row.destination_slug ?? workplan?.slug ?? "").trim();
+        const description = String(row.description ?? row.Description ?? "").trim();
+        const overview = String(row.overview ?? row.Overview ?? "").trim();
+        const status = String(row.status ?? row.Status ?? "draft").trim();
+        const tier = String(row.tier ?? row.Tier ?? "launch").trim();
+        const existingDestination = existingDestinations.find((destination) => normalizeSlug(destination.slug) === normalizeSlug(slug));
 
-    const summary = buildImportSummary({ plan, totalRows: rows.length });
+        return {
+          rowNumber: index + 2,
+          action: workplan?.action === "create" ? "create" : workplan?.action === "update" ? "update" : "reject",
+          reason: workplan?.reason,
+          slug,
+          city,
+          country,
+          status,
+          tier,
+          description,
+          overview,
+          existingId: existingDestination?.id,
+          existingSlug: existingDestination?.slug,
+          fieldUpdates: workplan?.fieldUpdates,
+          warnings: [],
+          errors: workplan?.action === "reject" ? [workplan.reason ?? "Rejected by schema rules."] : [],
+          importedRow: row,
+        };
+      });
+      summary = buildImportSummary({ plan, totalRows: rows.length });
+    } else {
+      plan = buildBatchImportPlan({
+        rows,
+        existingDestinations,
+        mode,
+        matchField,
+        selectedColumns,
+        allowBlankClears,
+      }) as Array<Record<string, unknown>>;
+      summary = buildImportSummary({ plan: plan as never[], totalRows: rows.length });
+    }
+
     const preview = plan.filter((entry) => entry.action !== "reject" && entry.action !== "skip");
     if (previewOnly) {
       return Response.json({ plan, previewCount: preview.length, summary, mode, matchField }, { status: 200 });
@@ -279,6 +369,14 @@ export async function POST(request: Request) {
         overview: importedMetadata.overviewValue || entry.overview || null,
       });
       if (entry.action === "update" && payloadToSend.existingDestination) {
+        const enrichmentPayload = buildRouteEnrichedDestinationCreatePayload({
+          city: entry.city,
+          country: entry.country,
+          slug: entry.slug,
+          description: entry.description,
+          overview: entry.overview,
+          row: rowValues,
+        });
         const response = await fetch(`${url}/rest/v1/${ADMIN_TABLE}?id=eq.${payloadToSend.existingDestination.id}`, {
           method: "PATCH",
           headers: {
@@ -288,6 +386,7 @@ export async function POST(request: Request) {
           },
           body: JSON.stringify({
             ...payloadToSend.updates,
+            ...(enrichmentPayload.metadata ? { metadata: enrichmentPayload.metadata } : {}),
             ...(actorId ? { updated_by: actorId } : {}),
             updated_at: new Date().toISOString(),
           }),

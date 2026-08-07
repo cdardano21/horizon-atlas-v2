@@ -217,6 +217,12 @@ export type NeighborhoodIntelligencePlace = {
   imageUrl?: string;
   rating?: string;
   reviewCount?: string;
+  courseType?: string;
+  publicStatus?: string;
+  holes?: string;
+  priceContext?: string;
+  amenities?: string;
+  relationshipToNeighborhood?: string;
   source?: string;
   verified?: boolean;
 };

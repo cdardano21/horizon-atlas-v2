@@ -121,7 +121,7 @@ describe("CanonicalDestinationPage", () => {
     expect(screen.getAllByText(/The city has a striking mix/i).length).toBeGreaterThan(0);
     fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
     expect(screen.getByText(/How the city is experienced block by block/i)).toBeInTheDocument();
-    expect(screen.getByText("Lakeview")).toBeInTheDocument();
+    expect(screen.getAllByText("Lakeview").length).toBeGreaterThan(0);
     expect(screen.getByText(/Neighborhood summary/i)).toBeInTheDocument();
     expect(screen.queryByText("Canonical content layer")).not.toBeInTheDocument();
     expect(screen.getAllByText(/Premium Profile/i).length).toBeGreaterThan(0);
@@ -199,7 +199,9 @@ describe("CanonicalDestinationPage", () => {
 
     render(<CanonicalDestinationPage destination={destination} />);
     fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
+    const exploreButtons = screen.getAllByRole("button", { name: /Explore/i });
+    expect(exploreButtons.length).toBeGreaterThan(0);
+    fireEvent.click(exploreButtons[0]);
 
     expect(screen.getAllByRole("link", { name: /Google Maps/i }).length).toBeGreaterThan(0);
     expect(screen.getByText(/Neighborhood intelligence/i)).toBeInTheDocument();
@@ -278,6 +280,73 @@ describe("CanonicalDestinationPage", () => {
     expect(screen.getAllByText(/Lincoln Park/i).length).toBeGreaterThan(0);
   });
 
+  it("renders Bangkok neighborhood intelligence with Bangkok-specific place names and healthcare content", () => {
+    const bangkokDestination = buildDestination();
+    bangkokDestination.slug = "bangkok-thailand";
+    bangkokDestination.city = "Bangkok";
+    bangkokDestination.country = "Thailand";
+    bangkokDestination.title = "Bangkok, Thailand";
+    bangkokDestination.overview = "Bangkok rewards residents who choose the right neighborhood for daily life.";
+    bangkokDestination.neighborhoods = ["Sathorn", "Silom", "Thonglor"];
+
+    render(<CanonicalDestinationPage destination={bangkokDestination} />);
+    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
+    const exploreButtons = screen.getAllByRole("button", { name: /Explore/i });
+    expect(exploreButtons.length).toBeGreaterThan(0);
+    fireEvent.click(exploreButtons[0]);
+
+    expect(screen.getAllByText(/Sathorn/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Restaurants/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Healthcare/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Bumrungrad International Hospital/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Siam Paragon/i).length).toBeGreaterThan(0);
+  });
+
+  it("builds distinct Bangkok neighborhoods with richer place intelligence than the generic fallback state", () => {
+    const intelligence = buildNeighborhoodIntelligenceSeedData({
+      city: "Bangkok",
+      country: "Thailand",
+      title: "Bangkok",
+      slug: "bangkok-thailand",
+      knowledgeProfile: {},
+    });
+
+    const groupsByNeighborhood = (neighborhood: string) => intelligence.filter((group) => group.neighborhoodName === neighborhood);
+
+    const silom = groupsByNeighborhood("Silom");
+    const thonglor = groupsByNeighborhood("Thonglor");
+    const phromPhong = groupsByNeighborhood("Phrom Phong");
+    const asoke = groupsByNeighborhood("Asoke");
+    const ari = groupsByNeighborhood("Ari");
+    const riverside = groupsByNeighborhood("Riverside");
+    const onNut = groupsByNeighborhood("On Nut");
+    const sukhumvit = groupsByNeighborhood("Sukhumvit");
+    const chinatown = groupsByNeighborhood("Chinatown");
+
+    expect(silom.some((group) => group.category === "Nightlife" && (group.places ?? []).length > 0)).toBe(true);
+    expect(silom.some((group) => group.category === "Remote-Work-Friendly Places" && (group.places ?? []).length > 0)).toBe(true);
+    expect(silom.some((group) => group.category === "Healthcare" && (group.places ?? []).length > 0)).toBe(true);
+
+    expect(thonglor.some((group) => group.category === "Nightlife" && (group.places ?? []).length > 0)).toBe(true);
+    expect(phromPhong.some((group) => group.category === "Shopping" && (group.places ?? []).length > 0)).toBe(true);
+    expect(asoke.some((group) => group.category === "Transit" && (group.places ?? []).length > 0)).toBe(true);
+    expect(ari.some((group) => group.category === "Family-Friendly Places" && (group.places ?? []).length > 0)).toBe(true);
+    expect(riverside.some((group) => group.category === "Attractions" && (group.places ?? []).length > 0)).toBe(true);
+    expect(onNut.some((group) => group.category === "Shopping" && (group.places ?? []).length > 0)).toBe(true);
+    expect(sukhumvit.some((group) => group.category === "Restaurants" && (group.places ?? []).length > 0)).toBe(true);
+    expect(sukhumvit.some((group) => group.category === "Transit" && (group.places ?? []).length > 0)).toBe(true);
+    expect(chinatown.some((group) => group.category === "Restaurants" && (group.places ?? []).length > 0)).toBe(true);
+    expect(chinatown.some((group) => group.category === "Attractions" && (group.places ?? []).length > 0)).toBe(true);
+
+    const allPlaces = [...silom, ...thonglor, ...phromPhong, ...asoke, ...ari, ...riverside, ...onNut, ...sukhumvit, ...chinatown]
+      .flatMap((group) => group.places ?? [])
+      .filter((place) => Boolean(place.name));
+
+    expect(allPlaces.length).toBeGreaterThan(40);
+    expect(new Set(allPlaces.map((place) => place.name)).size).toBeGreaterThan(20);
+    expect(allPlaces.every((place) => place.googleMapsUrl?.startsWith("https://"))).toBe(true);
+  });
+
   it("uses a true Shopping group for West Loop instead of coffee-shop content", () => {
     const destination = buildDestination();
     destination.city = "Chicago";
@@ -333,6 +402,101 @@ describe("CanonicalDestinationPage", () => {
     expect(shoppingCard).not.toHaveTextContent("Intelligentsia Coffee");
   });
 
+  it("renders golf courses as a place-level neighborhood category with rich detail", () => {
+    const destination = buildDestination();
+    destination.city = "Bangkok";
+    destination.country = "Thailand";
+    destination.title = "Bangkok";
+    destination.neighborhoods = ["Sathorn"];
+    destination.neighborhoodIntelligence = [
+      {
+        category: "Golf Courses",
+        destinationName: "Bangkok",
+        neighborhoodName: "Sathorn",
+        places: [
+          {
+            id: "golf-1",
+            name: "Royal Bangkok Sports Club",
+            category: "Golf Courses",
+            destinationName: "Bangkok",
+            neighborhoodName: "Sathorn",
+            description: "A private club with a classic layout and strong resident appeal.",
+            whyItMatters: "An example of a nearby golf option that should surface for the neighborhood.",
+            verified: true,
+            googleMapsUrl: "https://maps.google.com/?q=Royal+Bangkok+Sports+Club",
+            websiteUrl: "https://www.rbsclub.com/",
+            websiteVerified: true,
+            websiteStatus: "verified",
+            courseType: "Private club",
+            publicStatus: "Private",
+            holes: "18",
+            priceContext: "Green fees vary by day and membership status.",
+            amenities: "Driving range, clubhouse, practice facilities",
+            relationshipToNeighborhood: "Nearby golf option for Sathorn residents",
+            source: "Verified neighborhood reference",
+          },
+        ],
+      },
+    ];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Open/i }));
+
+    expect(screen.getAllByText(/Golf courses/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Royal Bangkok Sports Club/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Private/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/18/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole("link", { name: /Open on Google Maps/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Visit website/i })).toBeInTheDocument();
+  });
+
+  it("labels off-neighborhood golf groups as nearby golf courses", () => {
+    const destination = buildDestination();
+    destination.city = "Chicago";
+    destination.country = "United States";
+    destination.title = "Chicago";
+    destination.neighborhoods = ["Lincoln Park"];
+    destination.neighborhoodIntelligence = [
+      {
+        category: "Golf Courses",
+        destinationName: "Chicago",
+        neighborhoodName: "Lakeview",
+        places: [
+          {
+            id: "golf-2",
+            name: "Lakeview Golf Club",
+            category: "Golf Courses",
+            destinationName: "Chicago",
+            neighborhoodName: "Lakeview",
+            description: "A premium nearby course that should surface in the Lincoln Park neighborhood guide.",
+            whyItMatters: "This reinforces how golf can be presented as a nearby lifestyle signal rather than a local-only amenity.",
+            verified: true,
+            googleMapsUrl: "https://maps.google.com/?q=Lakeview+Golf+Club",
+            websiteUrl: "https://www.lakeviewgolfclub.com/",
+            websiteVerified: true,
+            websiteStatus: "verified",
+            courseType: "Public course",
+            publicStatus: "Public",
+            holes: "18",
+            priceContext: "Daily play and membership options vary by season.",
+            amenities: "Driving range, pro shop, practice facilities",
+            relationshipToNeighborhood: "Nearby golf option for Lincoln Park residents",
+            source: "Verified neighborhood reference",
+          },
+        ],
+      },
+    ];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
+
+    expect(screen.getByText("Nearby Golf Courses")).toBeInTheDocument();
+    expect(screen.getAllByText("Lakeview Golf Club").length).toBeGreaterThan(0);
+  });
+
   it("shows the website action when a place has a verified direct website URL", () => {
     const destination = buildDestination();
     destination.city = "Chicago";
@@ -370,6 +534,44 @@ describe("CanonicalDestinationPage", () => {
 
     expect(screen.getAllByText("The Promontory").length).toBeGreaterThan(0);
     expect(screen.getByRole("link", { name: /Visit website/i })).toBeInTheDocument();
+  });
+
+  it("does not surface social or maps-only URLs as direct websites", () => {
+    const destination = buildDestination();
+    destination.city = "Chicago";
+    destination.country = "United States";
+    destination.title = "Chicago";
+    destination.neighborhoods = ["Hyde Park"];
+    destination.neighborhoodIntelligence = [
+      {
+        category: "Restaurants",
+        destinationName: "Chicago",
+        neighborhoodName: "Hyde Park",
+        places: [
+          {
+            id: "place-4",
+            name: "Example Place",
+            category: "Restaurants",
+            destinationName: "Chicago",
+            neighborhoodName: "Hyde Park",
+            description: "A place with a social-only URL.",
+            whyItMatters: "An example of a place whose website should not be surfaced.",
+            verified: true,
+            googleMapsUrl: "https://maps.google.com/?q=Example+Place+Chicago",
+            websiteUrl: "https://www.instagram.com/exampleplace/",
+            websiteVerified: true,
+            websiteStatus: "verified",
+          },
+        ],
+      },
+    ];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Open/i }));
+
+    expect(screen.queryByRole("link", { name: /Visit website/i })).not.toBeInTheDocument();
   });
 
   it("shows the website action when a place has a live redirected URL", () => {

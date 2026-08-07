@@ -3,6 +3,7 @@ import { enrichDestination, enrichedDestinations } from "./destination-enrichmen
 import { destinations } from "./destinations";
 import { getDestinationResearchProfile } from "./destination-research";
 import { buildExternalNarrativeSet } from "../../scripts/external-source-narrative.mjs";
+import { buildNeighborhoodIntelligenceSeedData } from "./neighborhood-intelligence-seed-data";
 
 describe("destination enrichment", () => {
   it("builds destination prose from external-source evidence rather than fallback phrasing", () => {
@@ -18,6 +19,32 @@ describe("destination enrichment", () => {
     expect(narrative.description).toContain("fortress");
     expect(narrative.overview).toContain("longer stays");
     expect(narrative.description).not.toMatch(/placeholder|fallback|city center/i);
+  });
+
+  it("builds destination-specific neighborhood intelligence for non-Chicago destinations", () => {
+    const destination = destinations.find((item) => item.slug === "new-braunfels-texas-united-states");
+
+    expect(destination).toBeDefined();
+
+    const groups = buildNeighborhoodIntelligenceSeedData({
+      city: destination!.city,
+      country: destination!.country,
+      title: destination!.title,
+      slug: destination!.slug,
+      knowledgeProfile: destination!.knowledgeProfile,
+    });
+
+    const placeNames = groups.flatMap((group) => group.places ?? []).map((place) => place.name.toLowerCase());
+
+    expect(groups.length).toBeGreaterThan(0);
+    expect(groups.some((group) => group.category === "Restaurants")).toBe(true);
+    expect(groups.some((group) => group.category === "Coffee Shops")).toBe(true);
+    expect(groups.some((group) => group.category === "Parks & Green Spaces")).toBe(true);
+    expect(groups.some((group) => group.category === "Shopping")).toBe(true);
+    expect(groups.some((group) => group.category === "Healthcare")).toBe(true);
+    expect(groups.some((group) => group.category === "Transit")).toBe(true);
+    expect(placeNames.some((name) => /gruene|comal|new braunfels|river|historic/i.test(name))).toBe(true);
+    expect(placeNames.some((name) => !/(district|center|hub|city)/i.test(name))).toBe(true);
   });
 
   it("uses place-specific catalog prose for major destinations instead of boilerplate", () => {
