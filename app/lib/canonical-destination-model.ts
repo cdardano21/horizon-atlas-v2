@@ -36,6 +36,30 @@ export type CanonicalDestinationBudget = {
   note: string;
 };
 
+export type CanonicalDestinationCostBudget = {
+  id?: string;
+  label: string;
+  amount: string;
+  note?: string;
+};
+
+export type CanonicalDestinationCostCategory = {
+  key: string;
+  label: string;
+  amount: string;
+  note?: string;
+};
+
+export type CanonicalDestinationCostProfile = {
+  summary?: string;
+  currency?: string;
+  methodology?: string;
+  confidence?: string;
+  assumptions?: string[];
+  budgets?: CanonicalDestinationCostBudget[];
+  categories?: CanonicalDestinationCostCategory[];
+};
+
 export type CanonicalDestinationAiState = {
   status: CanonicalDestinationSectionStatus;
   version: string;
@@ -152,6 +176,58 @@ export type CanonicalDestinationKnowledgeProfile = {
   naturalDisasterRisks?: string;
 };
 
+export type NeighborhoodResourceItem = {
+  category: string;
+  label: string;
+  url: string;
+  kind?: "dataset" | "generated" | "live";
+};
+
+export type NeighborhoodIntelligenceMetric = {
+  key: string;
+  label: string;
+  value: string;
+  description: string;
+};
+
+export type NeighborhoodProfile = {
+  name: string;
+  summary?: string;
+  resources?: NeighborhoodResourceItem[];
+  liveResources?: NeighborhoodResourceItem[];
+  intelligence?: NeighborhoodIntelligenceMetric[];
+};
+
+export type NeighborhoodIntelligencePlace = {
+  id: string;
+  name: string;
+  category: string;
+  destinationName?: string;
+  neighborhoodName?: string;
+  description?: string;
+  whyItMatters?: string;
+  address?: string;
+  latitude?: string;
+  longitude?: string;
+  googleMapsUrl?: string;
+  websiteUrl?: string;
+  websiteVerified?: boolean;
+  websiteStatus?: string;
+  websiteFinalUrl?: string;
+  imageUrl?: string;
+  rating?: string;
+  reviewCount?: string;
+  source?: string;
+  verified?: boolean;
+};
+
+export type NeighborhoodIntelligenceGroup = {
+  category: string;
+  destinationName?: string;
+  neighborhoodName?: string;
+  places?: NeighborhoodIntelligencePlace[];
+};
+
 export type CanonicalDestination = {
   slug: string;
   city: string;
@@ -183,6 +259,7 @@ export type CanonicalDestination = {
   family: string;
   weather: string;
   monthlyBudgets: CanonicalDestinationBudget[];
+  costOfLivingProfile?: CanonicalDestinationCostProfile;
   airportInfo: string;
   googleMapsUrl: string;
   googleEarthUrl: string;
@@ -209,4 +286,6 @@ export type CanonicalDestination = {
   aiScoringExplanation: string;
   premiumEditorialContent?: PremiumEditorialContent;
   knowledgeProfile?: CanonicalDestinationKnowledgeProfile;
+  neighborhoodProfiles?: NeighborhoodProfile[];
+  neighborhoodIntelligence?: NeighborhoodIntelligenceGroup[];
 };

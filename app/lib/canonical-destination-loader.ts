@@ -1,6 +1,7 @@
 import { destinations as localDestinations } from "./destinations";
 import { buildDestinationKnowledgeProfile } from "./destination-knowledge-engine";
-import type { CanonicalDestination, CanonicalDestinationBudget, CanonicalDestinationKnowledgeProfile, CanonicalDestinationMedia, CanonicalDestinationResource, PremiumEditorialContent } from "./canonical-destination-model";
+import type { CanonicalDestination, CanonicalDestinationBudget, CanonicalDestinationCostProfile, CanonicalDestinationKnowledgeProfile, CanonicalDestinationMedia, CanonicalDestinationResource, PremiumEditorialContent } from "./canonical-destination-model";
+import { buildNeighborhoodIntelligenceSeedData } from "./neighborhood-intelligence-seed-data";
 import { isSupabaseConfigured, supabaseFetch } from "./supabase";
 
 const canonicalDestinations: CanonicalDestination[] = [];
@@ -45,6 +46,20 @@ const buildFallbackBudgets = (city: string): CanonicalDestinationBudget[] => {
     { label: "Couple", amount: "$2,500–$4,200/month", note: `A comfortable range with better housing, dining flexibility, and occasional regional travel.` },
   ];
 };
+
+const buildFallbackCostProfile = (city: string, costOfLiving: string, budgets: CanonicalDestinationBudget[]): CanonicalDestinationCostProfile => ({
+  summary: costOfLiving || `A practical cost-of-living profile for ${city} that balances housing, dining, transport, and neighborhood choice.`,
+  currency: "USD",
+  methodology: "Modeled from a practical long-stay household budget and typical city expenses.",
+  confidence: "medium",
+  assumptions: ["Single resident or small household", "Neighborhood choice affects the final monthly spend"],
+  budgets: budgets.map((budget) => ({ label: budget.label, amount: budget.amount, note: budget.note })),
+  categories: [
+    { key: "housing", label: "Housing", amount: "$1,200–$2,200/month", note: "Apartment or condo budget in a practical district." },
+    { key: "food", label: "Food", amount: "$350–$700/month", note: "Groceries and local dining mix." },
+    { key: "transport", label: "Transport", amount: "$100–$250/month", note: "Transit, occasional rides, and local travel." },
+  ],
+});
 
 const parseStringArray = (value: unknown): string[] | undefined => {
   if (!Array.isArray(value)) return undefined;
@@ -172,6 +187,15 @@ const buildFallbackCanonicalDestination = (slug: string): CanonicalDestination |
   const fallbackResources = buildFallbackResources(city, country);
   const fallbackMedia = buildFallbackMedia(city, country);
   const fallbackBudgets = buildFallbackBudgets(city);
+  const fallbackCostProfile = buildFallbackCostProfile(city, normalizeTextValue(local.researchProfile?.costOfLiving ?? local.researchProfile?.housing) || "", fallbackBudgets);
+
+  const neighborhoodIntelligence = buildNeighborhoodIntelligenceSeedData({
+    city,
+    country,
+    title: local.title ?? local.city,
+    slug: local.slug,
+    knowledgeProfile,
+  });
 
   return {
     slug: local.slug,
@@ -204,6 +228,7 @@ const buildFallbackCanonicalDestination = (slug: string): CanonicalDestination |
     family: normalizeTextValue(local.researchProfile?.familyFriendliness) || "",
     weather: normalizeTextValue(local.climate ?? local.researchProfile?.climate) || "",
     monthlyBudgets: fallbackBudgets,
+    costOfLivingProfile: fallbackCostProfile,
     airportInfo: "",
     googleMapsUrl: premiumMaps,
     googleEarthUrl: premiumEarth,
@@ -253,6 +278,7 @@ const buildFallbackCanonicalDestination = (slug: string): CanonicalDestination |
       researchTimestamp: new Date().toISOString(),
     },
     scoring: [],
+    neighborhoodIntelligence,
   };
 };
 

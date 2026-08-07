@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import type { CanonicalDestination } from "../../lib/canonical-destination-model";
+import type { CanonicalDestination, NeighborhoodIntelligenceGroup, NeighborhoodIntelligenceMetric, NeighborhoodIntelligencePlace, NeighborhoodProfile, NeighborhoodResourceItem } from "../../lib/canonical-destination-model";
 import { buildDestinationIntelligenceProfile } from "../../lib/destination-intelligence-engine";
 import { getDestinationImageSet, getDestinationImageUrl } from "../../lib/imageFallback";
+import { buildNeighborhoodIntelligenceSeedData } from "../../lib/neighborhood-intelligence-seed-data";
 import { buildPremiumDestinationEditorialPackage } from "../../lib/premium-destination-engine";
+import { isPlaceWebsiteVisible } from "../../lib/website-verification";
 
 interface CanonicalDestinationPageProps {
   destination: CanonicalDestination;
@@ -45,6 +47,15 @@ function getReadTime(text: string) {
   if (words > 140) return "3 min read";
   return "2 min read";
 }
+
+type GalleryItem = {
+  kind: string;
+  url: string;
+  altText: string;
+  caption: string;
+  isPrimary?: boolean;
+  resolvedUrl: string;
+};
 
 function getScoreReason(categoryName: string, destination: CanonicalDestination) {
   const normalized = categoryName.toLowerCase();
@@ -95,6 +106,488 @@ function buildResourceGroups(destination: CanonicalDestination) {
   ].filter((group) => group.items.length > 0);
 
   return groups;
+}
+
+function buildNeighborhoodSearchUrl(query: string, mode: "maps" | "street-view" | "directions" | "directions-bike" | "directions-transit" = "maps") {
+  const encodedQuery = encodeURIComponent(query);
+
+  switch (mode) {
+    case "street-view":
+      return `https://www.google.com/maps?q=${encodedQuery}&layer=c`;
+    case "directions":
+      return `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${encodedQuery}`;
+    case "directions-bike":
+      return `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${encodedQuery}&dirflg=b`;
+    case "directions-transit":
+      return `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${encodedQuery}&dirflg=r`;
+    default:
+      return `https://www.google.com/maps/search/?api=1&query=${encodedQuery}`;
+  }
+}
+
+function buildNeighborhoodQuery(destination: CanonicalDestination, neighborhoodName: string, term: string) {
+  return [neighborhoodName, term, destination.city, destination.country].filter(Boolean).join(" ").trim();
+}
+
+function dedupeResourceItems(items: NeighborhoodResourceItem[]) {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const key = `${item.label}::${item.url}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function buildNeighborhoodResourceGroups(destination: CanonicalDestination, neighborhoodName: string) {
+  const baseQuery = buildNeighborhoodQuery(destination, neighborhoodName, "");
+  const explicitResources = [
+    ...destination.resources,
+    ...destination.realEstateResources,
+    ...destination.rentalResources,
+    ...destination.healthcareResources,
+    ...destination.weatherResources,
+    ...destination.structuredResources,
+    ...destination.visaResources,
+  ].filter((resource) => resource?.url && resource.url.trim().length > 0);
+
+  const groupTemplates = [
+    {
+      id: "navigation",
+      title: "Navigation",
+      icon: "🧭",
+      keywords: ["map", "street", "direction", "transit", "walking", "bike"],
+      items: [
+        { label: "Google Maps", url: buildNeighborhoodSearchUrl(baseQuery, "maps"), kind: "generated" as const },
+        { label: "Street View", url: buildNeighborhoodSearchUrl(baseQuery, "street-view"), kind: "generated" as const },
+        { label: "Walking Directions", url: buildNeighborhoodSearchUrl(baseQuery, "directions"), kind: "generated" as const },
+        { label: "Bike Directions", url: buildNeighborhoodSearchUrl(baseQuery, "directions-bike"), kind: "generated" as const },
+        { label: "Transit Directions", url: buildNeighborhoodSearchUrl(baseQuery, "directions-transit"), kind: "generated" as const },
+      ],
+    },
+    {
+      id: "housing",
+      title: "Housing",
+      icon: "🏠",
+      keywords: ["housing", "real estate", "rental", "property", "apartment", "zillow", "redfin"],
+      items: [
+        { label: "Zillow", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "zillow rentals"), "maps"), kind: "generated" as const },
+        { label: "Redfin", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "redfin homes"), "maps"), kind: "generated" as const },
+        { label: "Apartments", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "apartments"), "maps"), kind: "generated" as const },
+        { label: "Furnished rentals", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "furnished rentals"), "maps"), kind: "generated" as const },
+        { label: "Long-term rentals", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "long term rentals"), "maps"), kind: "generated" as const },
+      ],
+    },
+    {
+      id: "food",
+      title: "Food & Coffee",
+      icon: "🍽",
+      keywords: ["restaurant", "coffee", "bakery", "grocery", "market", "food", "dining"],
+      items: [
+        { label: "Top restaurants", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "restaurants"), "maps"), kind: "generated" as const },
+        { label: "Coffee shops", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "coffee shops"), "maps"), kind: "generated" as const },
+        { label: "Bakeries", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "bakeries"), "maps"), kind: "generated" as const },
+        { label: "Grocery stores", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "grocery stores"), "maps"), kind: "generated" as const },
+        { label: "Farmers markets", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "farmers markets"), "maps"), kind: "generated" as const },
+      ],
+    },
+    {
+      id: "lifestyle",
+      title: "Lifestyle",
+      icon: "🌳",
+      keywords: ["park", "trail", "gym", "recreation", "dog"],
+      items: [
+        { label: "Parks", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "parks"), "maps"), kind: "generated" as const },
+        { label: "Dog parks", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "dog parks"), "maps"), kind: "generated" as const },
+        { label: "Running trails", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "running trails"), "maps"), kind: "generated" as const },
+        { label: "Gyms", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "gyms"), "maps"), kind: "generated" as const },
+        { label: "Recreation", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "recreation"), "maps"), kind: "generated" as const },
+      ],
+    },
+    {
+      id: "healthcare",
+      title: "Healthcare",
+      icon: "🏥",
+      keywords: ["health", "medical", "hospital", "clinic", "pharmacy", "urgent care", "primary care"],
+      items: [
+        { label: "Hospitals", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "hospitals"), "maps"), kind: "generated" as const },
+        { label: "Urgent care", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "urgent care"), "maps"), kind: "generated" as const },
+        { label: "Primary care", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "primary care"), "maps"), kind: "generated" as const },
+        { label: "Pharmacies", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "pharmacies"), "maps"), kind: "generated" as const },
+      ],
+    },
+    {
+      id: "transportation",
+      title: "Transportation",
+      icon: "🚇",
+      keywords: ["transport", "transit", "station", "metro", "subway", "airport", "parking", "bike share"],
+      items: [
+        { label: "Transit stations", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "transit stations"), "maps"), kind: "generated" as const },
+        { label: "Metro/Subway", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "metro subway"), "maps"), kind: "generated" as const },
+        { label: "Airport directions", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "airport"), "maps"), kind: "generated" as const },
+        { label: "Parking", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "parking"), "maps"), kind: "generated" as const },
+        { label: "Bike share", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "bike share"), "maps"), kind: "generated" as const },
+      ],
+    },
+    {
+      id: "entertainment",
+      title: "Entertainment",
+      icon: "🎭",
+      keywords: ["museum", "music", "sport", "theater", "event", "entertainment"],
+      items: [
+        { label: "Museums", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "museums"), "maps"), kind: "generated" as const },
+        { label: "Live music", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "live music"), "maps"), kind: "generated" as const },
+        { label: "Sports", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "sports"), "maps"), kind: "generated" as const },
+        { label: "Theaters", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "theaters"), "maps"), kind: "generated" as const },
+        { label: "Events", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "events"), "maps"), kind: "generated" as const },
+      ],
+    },
+    {
+      id: "daily-living",
+      title: "Daily living",
+      icon: "🛍",
+      keywords: ["shopping", "costco", "target", "whole foods", "trader joe", "market"],
+      items: [
+        { label: "Shopping centers", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "shopping centers"), "maps"), kind: "generated" as const },
+        { label: "Costco", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "costco"), "maps"), kind: "generated" as const },
+        { label: "Target", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "target"), "maps"), kind: "generated" as const },
+        { label: "Whole Foods", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "whole foods"), "maps"), kind: "generated" as const },
+        { label: "Trader Joe's", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "trader joe's"), "maps"), kind: "generated" as const },
+      ],
+    },
+    {
+      id: "community",
+      title: "Community",
+      icon: "👨‍👩‍👧",
+      keywords: ["school", "library", "community", "police", "fire"],
+      items: [
+        { label: "Schools", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "schools"), "maps"), kind: "generated" as const },
+        { label: "Libraries", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "libraries"), "maps"), kind: "generated" as const },
+        { label: "Community centers", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "community centers"), "maps"), kind: "generated" as const },
+        { label: "Police", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "police"), "maps"), kind: "generated" as const },
+        { label: "Fire department", url: buildNeighborhoodSearchUrl(buildNeighborhoodQuery(destination, neighborhoodName, "fire department"), "maps"), kind: "generated" as const },
+      ],
+    },
+  ];
+
+  return groupTemplates
+    .map((group) => {
+      const matchedResources = explicitResources.filter((resource) => group.keywords.some((keyword) => new RegExp(keyword, "i").test(resource.category) || new RegExp(keyword, "i").test(resource.label)));
+      const items = dedupeResourceItems([
+        ...matchedResources.map((resource) => ({ label: resource.label, url: resource.url, kind: "dataset" as const })),
+        ...group.items,
+      ]).slice(0, 4);
+
+      return { ...group, items };
+    })
+    .filter((group) => group.items.length > 0);
+}
+
+function buildNeighborhoodLiveResources(destination: CanonicalDestination, neighborhoodName: string) {
+  const explicitResources = [
+    ...destination.resources,
+    ...destination.realEstateResources,
+    ...destination.rentalResources,
+    ...destination.healthcareResources,
+    ...destination.weatherResources,
+    ...destination.structuredResources,
+    ...destination.visaResources,
+  ].filter((resource) => resource?.url && resource.url.trim().length > 0);
+
+  const liveItems = [
+    ...(destination.webcamUrl ? [{ label: "Live webcam", url: destination.webcamUrl, kind: "live" as const }] : []),
+    ...explicitResources
+      .filter((resource) => /weather|traffic|air|transit|sunrise|sunset|live|webcam|camera/i.test(resource.category) || /weather|traffic|air|transit|sunrise|sunset|live|webcam|camera/i.test(resource.label))
+      .map((resource) => ({ label: resource.label, url: resource.url, kind: "live" as const })),
+  ];
+
+  return dedupeResourceItems(liveItems).filter((item) => item.url && item.url.trim().length > 0);
+}
+
+type NeighborhoodInsightPlace = {
+  id: string;
+  title: string;
+  description: string;
+  neighborhood: string;
+  rating?: string;
+  distance?: string;
+  category: string;
+  mapUrl?: string;
+  website?: string;
+  address?: string;
+  hours?: string;
+  phone?: string;
+  aiSummary?: string;
+  metadata?: Record<string, string>;
+  isFallback?: boolean;
+};
+
+type NeighborhoodInsightCard = {
+  key: string;
+  label: string;
+  value: string;
+  description: string;
+  places: NeighborhoodInsightPlace[];
+  emptyMessage: string;
+};
+
+function normalizeText(value: string | undefined | null) {
+  return (value ?? "").trim().toLowerCase();
+}
+
+function isShoppingCategory(category: string | undefined) {
+  const normalized = normalizeText(category);
+  if (!normalized) return false;
+  if (normalized === "shopping") return true;
+  if (normalized === "shopping district" || normalized === "shopping districts") return true;
+  if (normalized === "retail" || normalized === "retail district" || normalized === "retail districts") return true;
+  if (normalized === "boutique" || normalized === "boutiques") return true;
+  if (normalized === "market" || normalized === "markets") return true;
+  if (normalized.startsWith("shopping") && !normalized.includes("coffee")) return true;
+  return false;
+}
+
+function isGenericPlaceName(name: string | undefined, neighborhoodName: string, category: string, destinationName: string) {
+  const normalizedName = normalizeText(name);
+  if (!normalizedName) return true;
+
+  const blockedTerms = [
+    normalizeText(neighborhoodName),
+    normalizeText(destinationName),
+    normalizeText(category),
+    "neighborhood",
+    "district",
+    "area",
+    "city",
+    "place",
+    "spot",
+    "local",
+    "guide",
+    "category",
+    "destination",
+    "community",
+  ];
+
+  if (blockedTerms.includes(normalizedName)) return true;
+  if (normalizedName.includes("neighborhood")) return true;
+  if (normalizedName.includes("district")) return true;
+  if (normalizedName.includes("city")) return true;
+  if (normalizedName.includes("area")) return true;
+  return false;
+}
+
+function buildCategoryFallbackPlace(destination: CanonicalDestination, neighborhoodName: string, category: string) {
+  const query = [neighborhoodName, category, destination.city, destination.country].filter(Boolean).join(" ").trim();
+  return {
+    id: `fallback-${category}-${neighborhoodName}`,
+    title: `Explore ${category.toLowerCase()} in ${neighborhoodName}`,
+    description: `Open a neighborhood-specific search for ${category.toLowerCase()} in ${neighborhoodName}.`,
+    neighborhood: neighborhoodName || destination.city,
+    category,
+    mapUrl: buildNeighborhoodSearchUrl(query, "maps"),
+    isFallback: true,
+    metadata: { Source: "Neighborhood-specific search" },
+  } satisfies NeighborhoodInsightPlace;
+}
+
+function buildVerifiableInsightPlaces(destination: CanonicalDestination, neighborhoodName: string, group: NeighborhoodIntelligenceGroup) {
+  const verifiedPlaces = (group.places ?? [])
+    .filter((place) => place?.name && place.verified === true)
+    .filter((place) => !isGenericPlaceName(place.name, neighborhoodName, group.category, destination.title || destination.city))
+    .slice(0, 4)
+    .map((place, index) => {
+      const mapQuery = [neighborhoodName, place.name, destination.city, destination.country].filter(Boolean).join(" ").trim();
+      return {
+        id: place.id || `${group.category}-${index}-${place.name}`,
+        title: place.name,
+        description: place.description || `${place.name} is a verified ${group.category.toLowerCase()} that helps explain what makes ${neighborhoodName || destination.city} feel distinctive.`,
+        neighborhood: place.neighborhoodName || neighborhoodName || destination.city,
+        category: group.category,
+        mapUrl: place.googleMapsUrl || buildNeighborhoodSearchUrl(mapQuery, "maps"),
+        website: isPlaceWebsiteVisible(place) ? place.websiteUrl : undefined,
+        aiSummary: place.whyItMatters || `${place.name} is a place-level signal that helps explain the local rhythm of ${neighborhoodName || destination.city}.`,
+        metadata: {
+          Category: group.category,
+          Source: place.source || "Verified neighborhood intelligence",
+        },
+      } satisfies NeighborhoodInsightPlace;
+    });
+
+  if (verifiedPlaces.length > 0) {
+    return verifiedPlaces;
+  }
+
+  return [buildCategoryFallbackPlace(destination, neighborhoodName, group.category)];
+}
+
+function getSignatureStreetsForNeighborhood(destination: CanonicalDestination, neighborhoodName: string) {
+  const normalized = normalizeText(neighborhoodName);
+  const city = normalizeText(destination.city);
+
+  if (city === "chicago") {
+    const signatureMap: Record<string, string> = {
+      "lincoln park": "Clark Street, Halsted Street, and Diversey Parkway",
+      lakeview: "Halsted Street, Belmont Avenue, and Broadway",
+      "west loop": "Randolph Street, Fulton Market, and Halsted Street",
+      "hyde park": "57th Street, 53rd Street, and the lakefront corridors",
+      "wicker park": "Milwaukee Avenue, Damen Avenue, and Division Street",
+      "river north": "Michigan Avenue, Wells Street, and Ohio Street",
+      "gold coast": "Rush Street, Michigan Avenue, and Oak Street",
+      "logan square": "Milwaukee Avenue, Kedzie Avenue, and Armitage Avenue",
+      "south loop": "Michigan Avenue, Roosevelt Road, and State Street",
+    };
+
+    return signatureMap[normalized] || "A few local corridors shape the neighborhood’s everyday rhythm";
+  }
+
+  return profileSignatureStreets(neighborhoodName, destination.city);
+}
+
+function profileSignatureStreets(neighborhoodName: string, cityName: string) {
+  const fallback = neighborhoodName || cityName || "the neighborhood";
+  return `${fallback} is often defined by a few streets that anchor daily errands, cafés, and the social rhythm of the area.`;
+}
+
+function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighborhoodName: string) {
+  const profile = destination.neighborhoodProfiles?.find((item) => item.name.toLowerCase() === neighborhoodName.toLowerCase());
+  const directMetrics = profile?.intelligence ?? [];
+  const getDirectValue = (key: string) => directMetrics.find((metric) => metric.key === key)?.value;
+
+  const summarizeValue = (value: string | undefined, fallback: string) => (value && value.trim().length > 0 ? value : fallback);
+
+  const walkability = summarizeValue(getDirectValue("walkability"), destination.knowledgeProfile?.walkability ?? destination.walkability ?? "Well-suited for everyday life");
+  const bikeability = summarizeValue(getDirectValue("bikeability"), destination.knowledgeProfile?.bikeFriendliness ?? "Strong cycling potential when paired with a good neighborhood layout");
+  const transit = summarizeValue(getDirectValue("transit"), destination.knowledgeProfile?.publicTransportation ?? destination.transportation ?? "Useful transit access for daily movement");
+  const coffeeCulture = summarizeValue(getDirectValue("coffeeCulture"), destination.knowledgeProfile?.coffeeShops?.length ? "A lively café scene is part of the local rhythm" : "Coffee culture is an important part of everyday life here");
+  const restaurantDensity = summarizeValue(getDirectValue("restaurantDensity"), destination.restaurants.length || destination.knowledgeProfile?.restaurants?.length ? "A strong dining scene helps define the neighborhood" : "A compelling food scene helps define the neighborhood");
+  const greenSpace = summarizeValue(getDirectValue("greenSpace"), destination.knowledgeProfile?.parks?.length || destination.outdoorRecreation.length ? "Green space and outdoor access deepen the experience" : "Outdoor access is part of the neighborhood’s appeal");
+  const safety = summarizeValue(getDirectValue("safety"), destination.knowledgeProfile?.safety ?? destination.safety ?? "A practical and grounded everyday feel");
+  const familyFriendly = summarizeValue(getDirectValue("familyFriendly"), destination.knowledgeProfile?.familySuitability ?? destination.family ?? "Good fit for households seeking everyday ease");
+  const petFriendly = summarizeValue(getDirectValue("petFriendly"), destination.knowledgeProfile?.parks?.length || destination.outdoorRecreation.length ? "Dog-friendly and outdoor routines feel easy here" : "A useful neighborhood for pet-friendly routines");
+  const remoteWork = summarizeValue(getDirectValue("remoteWork"), destination.knowledgeProfile?.internetSpeed ?? destination.internet ?? destination.digitalNomad ?? "A practical base for focused work and slow routines");
+  const nightlifeValue = summarizeValue(getDirectValue("nightlife"), destination.knowledgeProfile?.nightlife?.length ? "A lively evening scene adds depth to the neighborhood" : "Evening energy is part of the local character");
+  const shoppingValue = summarizeValue(getDirectValue("shopping"), destination.knowledgeProfile?.shopping?.length ? "Essential day-to-day retail keeps the area practical" : "Convenience retail shapes the everyday experience");
+
+  const positiveSignals = [walkability, transit, coffeeCulture, restaurantDensity, greenSpace, safety, familyFriendly, remoteWork].filter((value) => /strong|good|excellent|high|dense|abundant|moderate|comfortable|solid|reliable|clear|well|lively|practical/i.test(value));
+  const overallScore = Math.min(10, Math.max(4, 4 + positiveSignals.length / 2));
+  const signatureStreets = getSignatureStreetsForNeighborhood(destination, neighborhoodName);
+
+  const intelligenceGroups = (destination.neighborhoodIntelligence?.length ? destination.neighborhoodIntelligence : buildNeighborhoodIntelligenceSeedData(destination))
+    .filter((group) => {
+      const sameDestination = !group.destinationName || normalizeText(group.destinationName) === normalizeText(destination.title || destination.city);
+      const sameNeighborhood = !group.neighborhoodName || normalizeText(group.neighborhoodName) === normalizeText(neighborhoodName);
+      return sameDestination && sameNeighborhood;
+    });
+
+  const categoryCards = [
+    {
+      key: "restaurants",
+      label: "Restaurants",
+      value: "Popular restaurants",
+      description: "Verified place-level dining signals that reflect the neighborhood’s everyday identity.",
+      matcher: (group: NeighborhoodIntelligenceGroup) => group.category.toLowerCase().includes("restaurant"),
+    },
+    {
+      key: "coffee",
+      label: "Coffee shops",
+      value: "Popular coffee shops",
+      description: "Verified café and coffee signals that support slower mornings and local routines.",
+      matcher: (group: NeighborhoodIntelligenceGroup) => /coffee/i.test(group.category),
+    },
+    {
+      key: "parks",
+      label: "Parks & green spaces",
+      value: "Popular green spaces",
+      description: "Verified outdoor and green-space signals that make daily life feel calmer and more spacious.",
+      matcher: (group: NeighborhoodIntelligenceGroup) => /park|green|outdoor/i.test(group.category),
+    },
+    {
+      key: "shopping",
+      label: "Shopping",
+      value: "Popular shopping spots",
+      description: "Verified retail and everyday convenience signals that shape the neighborhood routine.",
+      matcher: (group: NeighborhoodIntelligenceGroup) => isShoppingCategory(group.category),
+    },
+    {
+      key: "transit",
+      label: "Transit",
+      value: "Transit anchors",
+      description: "Verified mobility signals that shape how the neighborhood feels from day to day.",
+      matcher: (group: NeighborhoodIntelligenceGroup) => /transit|transport|station|airport|metro|subway/i.test(group.category),
+    },
+    {
+      key: "nightlife",
+      label: "Nightlife",
+      value: "Popular nightlife spots",
+      description: "Verified evening-energy signals that add depth after dark.",
+      matcher: (group: NeighborhoodIntelligenceGroup) => /night|bar|club|music|event|theater/i.test(group.category),
+    },
+  ].flatMap((cardConfig) => {
+    const matchingGroup = intelligenceGroups.find(cardConfig.matcher);
+    if (!matchingGroup) return [];
+
+    const places = buildVerifiableInsightPlaces(destination, neighborhoodName, matchingGroup);
+    if (places.length === 0) return [];
+
+    return [{
+      key: cardConfig.key,
+      label: cardConfig.label,
+      value: cardConfig.value,
+      description: cardConfig.description,
+      places,
+      emptyMessage: "No verified place-level data is available for this category yet.",
+    } satisfies NeighborhoodInsightCard];
+  });
+
+  const cards: NeighborhoodInsightCard[] = [
+    {
+      key: "signature-streets",
+      label: "Signature streets",
+      value: "Local corridors that shape the place",
+      description: signatureStreets,
+      places: [],
+      emptyMessage: "Signature street context is being refined for this neighborhood.",
+    },
+    ...categoryCards,
+    {
+      key: "bikeability",
+      label: "Bikeability",
+      value: "Bike-friendly routes",
+      description: bikeability,
+      places: [],
+      emptyMessage: "No verified bikeability data is available for this neighborhood yet.",
+    },
+    {
+      key: "family",
+      label: "Family friendly",
+      value: "Family-friendly places",
+      description: familyFriendly,
+      places: [],
+      emptyMessage: "No verified family-friendly data is available for this neighborhood yet.",
+    },
+    {
+      key: "pet",
+      label: "Pet friendly",
+      value: "Pet-friendly places",
+      description: petFriendly,
+      places: [],
+      emptyMessage: "No verified pet-friendly data is available for this neighborhood yet.",
+    },
+    {
+      key: "remote-work",
+      label: "Remote work",
+      value: "Remote-work-friendly spots",
+      description: remoteWork,
+      places: [],
+      emptyMessage: "No verified remote-work data is available for this neighborhood yet.",
+    },
+    { key: "walkability", label: "Walkability", value: String(walkability), description: "How easily daily errands and neighborhood life can be handled on foot.", places: [], emptyMessage: "No verified walkability data is available for this neighborhood yet." },
+    { key: "transit-signal", label: "Transit", value: String(transit), description: "How well the area supports car-light routines and local travel.", places: [], emptyMessage: "No verified transit data is available for this neighborhood yet." },
+    { key: "safety", label: "Safety", value: String(safety), description: "How the area is perceived for daily calm and residential comfort.", places: [], emptyMessage: "No verified safety data is available for this neighborhood yet." },
+    { key: "overall", label: "Overall neighborhood score", value: `${overallScore.toFixed(1)}/10`, description: "A dynamic composite built from the strongest available neighborhood signals.", places: [], emptyMessage: "No verified neighborhood score data is available for this neighborhood yet." },
+  ];
+
+  return cards;
 }
 
 function PremiumSectionBlock({
@@ -215,6 +708,39 @@ function ExpandableInsightCard({
   );
 }
 
+function getNeighborhoodResourceLinks(destination: CanonicalDestination, neighborhoodName: string) {
+  const resources = [
+    ...destination.resources,
+    ...destination.realEstateResources,
+    ...destination.rentalResources,
+    ...destination.healthcareResources,
+    ...destination.weatherResources,
+    ...destination.structuredResources,
+    ...destination.visaResources,
+  ].filter((resource) => resource?.url && resource.url.trim().length > 0);
+
+  const normalizedName = neighborhoodName.toLowerCase();
+  const scored = resources.map((resource) => {
+    const label = `${resource.label} ${resource.category}`.toLowerCase();
+    let score = 0;
+
+    if (normalizedName && label.includes(normalizedName)) score += 8;
+    if (/neighborhood|district|area|map|guide/i.test(label)) score += 4;
+    if (/housing|real estate|rental|property/i.test(label)) score += 3;
+    if (/health|medical|hospital|clinic|care/i.test(label)) score += 3;
+    if (/transport|transit|airport|train|bus/i.test(label)) score += 3;
+    if (/restaurant|food|dining/i.test(label)) score += 3;
+    if (/school|education|university|college/i.test(label)) score += 2;
+    if (/museum|culture|arts|heritage/i.test(label)) score += 2;
+    if (/tour|visit|tourism|travel/i.test(label)) score += 2;
+
+    return { resource, score };
+  });
+
+  const ranked = scored.sort((left, right) => right.score - left.score);
+  return ranked.filter((item) => item.score > 0).slice(0, 3).map((item) => item.resource);
+}
+
 function ExpandableNeighborhoodCard({
   neighborhood,
   index,
@@ -225,6 +751,10 @@ function ExpandableNeighborhoodCard({
   destination: CanonicalDestination;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState<NeighborhoodInsightPlace | null>(null);
+  const neighborhoodResourceGroups = useMemo(() => buildNeighborhoodResourceGroups(destination, neighborhood.name), [destination, neighborhood.name]);
+  const neighborhoodLiveResources = useMemo(() => buildNeighborhoodLiveResources(destination, neighborhood.name), [destination, neighborhood.name]);
+  const neighborhoodInsightCards = useMemo(() => buildNeighborhoodInsightCards(destination, neighborhood.name), [destination, neighborhood.name]);
   const detailMap = [
     { label: "Best For", value: neighborhood.fit },
     { label: "Overall Vibe", value: neighborhood.vibe },
@@ -267,7 +797,7 @@ function ExpandableNeighborhoodCard({
           <p className="mt-2 text-sm leading-6 text-slate-300">{neighborhood.vibe}</p>
         </div>
       </div>
-      <div className={`overflow-hidden transition-all duration-300 ${expanded ? "mt-4 max-h-[1400px] opacity-100" : "max-h-0 opacity-0"}`}>
+      <div className={`overflow-hidden transition-all duration-300 ${expanded ? "mt-4 max-h-[4000px] opacity-100" : "max-h-0 opacity-0"}`}>
         <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {detailMap.map((detail) => (
             <div key={detail.label} className="rounded-2xl border border-white/10 bg-slate-950/35 p-3">
@@ -276,7 +806,150 @@ function ExpandableNeighborhoodCard({
             </div>
           ))}
         </div>
+        {neighborhoodInsightCards.length > 0 ? (
+          <div className="mt-4 rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Neighborhood intelligence</p>
+                <h5 className="mt-1 text-lg font-semibold text-white">A curatorial guide to the places that make the neighborhood feel real</h5>
+              </div>
+            </div>
+            <div className="mt-4 grid gap-3 lg:grid-cols-2">
+              {neighborhoodInsightCards.map((card) => (
+                <div key={card.key} className="rounded-2xl border border-white/10 bg-white/5 p-3">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">{card.label}</p>
+                  <p className="mt-2 text-sm font-semibold text-white">{card.value}</p>
+                  <p className="mt-2 text-sm leading-6 text-slate-400">{card.description}</p>
+                  {card.places.length > 0 ? (
+                    <div className="mt-3 space-y-2">
+                      {Array.from(new Map(card.places.slice(0, 4).map((place) => [place.id, place])).values()).map((place) => {
+                        const linkClasses = "flex w-full items-start justify-between gap-3 rounded-2xl border border-white/10 bg-slate-950/40 px-3 py-2 text-left transition hover:border-cyan-400/30 hover:bg-cyan-500/10";
+                        const actionLabel = place.isFallback ? "Explore" : "Open";
+
+                        if (place.isFallback) {
+                          return (
+                            <a key={place.id} href={place.mapUrl} target="_blank" rel="noopener noreferrer" className={linkClasses}>
+                              <span>
+                                <span className="block text-sm font-semibold text-white">{place.title}</span>
+                                <span className="mt-1 block text-sm leading-6 text-slate-400">{place.description}</span>
+                              </span>
+                              <span className="text-xs uppercase tracking-[0.2em] text-cyan-200">{actionLabel}</span>
+                            </a>
+                          );
+                        }
+
+                        return (
+                          <button key={place.id} type="button" onClick={() => setSelectedPlace(place)} className={linkClasses}>
+                            <span>
+                              <span className="block text-sm font-semibold text-white">{place.title}</span>
+                              <span className="mt-1 block text-sm leading-6 text-slate-400">{place.description}</span>
+                            </span>
+                            <span className="text-xs uppercase tracking-[0.2em] text-cyan-200">{actionLabel}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className="mt-3 text-sm leading-6 text-slate-400">{card.emptyMessage}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+        {neighborhoodLiveResources.length > 0 ? (
+          <div className="mt-4 rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-4">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Live neighborhood resources</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {neighborhoodLiveResources.map((resource) => (
+                <a key={`${resource.label}-${resource.url}`} href={resource.url} target="_blank" rel="noopener noreferrer" className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/40 hover:bg-cyan-500/20">
+                  {resource.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        ) : null}
+        {neighborhoodResourceGroups.length > 0 ? (
+          <div className="mt-4 grid gap-3 lg:grid-cols-2">
+            {neighborhoodResourceGroups.map((group) => (
+              <div key={group.id} className="rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">{group.icon}</span>
+                  <h5 className="text-base font-semibold text-white">{group.title}</h5>
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {group.items.map((resource) => (
+                    <a key={`${group.id}-${resource.label}-${resource.url}`} href={resource.url} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-medium text-slate-200 transition hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-100">
+                      {resource.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : null}
       </div>
+      {selectedPlace ? (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/80 px-4 py-6 backdrop-blur-sm">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-900/95 p-6 shadow-[0_30px_100px_rgba(2,8,23,0.48)]">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-300">{selectedPlace.category}</p>
+                <h5 className="mt-2 text-2xl font-semibold text-white">{selectedPlace.title}</h5>
+              </div>
+              <button type="button" onClick={() => setSelectedPlace(null)} className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/30 hover:bg-cyan-500/10">
+                Close
+              </button>
+            </div>
+            <div className="mt-5 space-y-4">
+              <p className="text-sm leading-7 text-slate-300">{selectedPlace.description}</p>
+              {selectedPlace.aiSummary ? <p className="rounded-2xl border border-white/10 bg-white/5 p-3 text-sm leading-7 text-slate-300">{selectedPlace.aiSummary}</p> : null}
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Neighborhood</p>
+                  <p className="mt-2 text-sm font-semibold text-white">{selectedPlace.neighborhood}</p>
+                </div>
+                {selectedPlace.rating ? (
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Rating</p>
+                    <p className="mt-2 text-sm font-semibold text-white">{selectedPlace.rating}</p>
+                  </div>
+                ) : null}
+                {selectedPlace.distance ? (
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Distance</p>
+                    <p className="mt-2 text-sm font-semibold text-white">{selectedPlace.distance}</p>
+                  </div>
+                ) : null}
+                {selectedPlace.metadata && Object.keys(selectedPlace.metadata).length > 0 ? (
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3 sm:col-span-2">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Why it matters</p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {Object.entries(selectedPlace.metadata).map(([key, value]) => (
+                        <span key={key} className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300">
+                          {key}: {value}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {selectedPlace.mapUrl ? (
+                  <a href={selectedPlace.mapUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/40 hover:bg-cyan-500/20">
+                    Open on Google Maps
+                  </a>
+                ) : null}
+                {selectedPlace.website ? (
+                  <a href={selectedPlace.website} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/30 hover:bg-cyan-500/10">
+                    Visit website
+                  </a>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -285,7 +958,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   type ViewMode = "guide" | "profile" | "deep";
 
   const [viewMode, setViewMode] = useState<ViewMode>("guide");
-  const [selectedMedia, setSelectedMedia] = useState<CanonicalDestination["media"][number] | null>(null);
+  const [selectedMedia, setSelectedMedia] = useState<GalleryItem | null>(null);
+  const [galleryIndex, setGalleryIndex] = useState(0);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -301,7 +975,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   }, [viewMode]);
 
   const sectionEntries = Object.values(destination.sections ?? {}).sort((left, right) => left.title.localeCompare(right.title));
-  const galleryItems = buildGalleryItems(destination).slice(0, 8);
+  const galleryItems = buildGalleryItems(destination).slice(0, 10);
   const mediaDestination = useMemo(() => ({
     slug: destination.slug,
     city: destination.city,
@@ -313,9 +987,9 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     ].map((image) => ({ src: image.url, alt: image.altText })),
   } as unknown as Parameters<typeof getDestinationImageSet>[0]), [destination]);
   const resolvedGalleryItems = useMemo(() => {
-    const imageSet = getDestinationImageSet(mediaDestination, 6);
+    const imageSet = getDestinationImageSet(mediaDestination, 5);
     if (imageSet.length > 0) {
-      return imageSet.slice(0, 6).map((imageUrl, index) => ({
+      return imageSet.slice(0, 10).map((imageUrl, index) => ({
         kind: index === 0 ? "featured" : "gallery",
         url: imageUrl,
         altText: destination.title,
@@ -335,7 +1009,20 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
       resolvedUrl: fallbackUrl,
     }];
   }, [destination.title, mediaDestination]);
+  const previewGalleryItems = resolvedGalleryItems.slice(0, 5);
+  const galleryModalItems = resolvedGalleryItems.slice(0, 10);
+  const hasMoreGalleryItems = resolvedGalleryItems.length > 5;
   const executiveSummaryImage = resolvedGalleryItems[0];
+  const openGalleryItem = (item: GalleryItem, index: number) => {
+    setSelectedMedia(item);
+    setGalleryIndex(index);
+  };
+  const navigateGallery = (direction: -1 | 1) => {
+    if (galleryModalItems.length === 0) return;
+    const nextIndex = (galleryIndex + direction + galleryModalItems.length) % galleryModalItems.length;
+    setGalleryIndex(nextIndex);
+    setSelectedMedia(galleryModalItems[nextIndex] ?? null);
+  };
   const premiumEditorialPackage = buildPremiumDestinationEditorialPackage({
     slug: destination.slug,
     city: destination.city,
@@ -402,6 +1089,26 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     },
     resourceLinks: premiumEditorialPackage.resourceLinks,
   };
+
+  const costProfile = useMemo(() => {
+    const profile = destination.costOfLivingProfile;
+    const budgets = profile?.budgets?.length ? profile.budgets : destination.monthlyBudgets.map((budget) => ({ label: budget.label, amount: budget.amount, note: budget.note }));
+    const categories = profile?.categories?.length ? profile.categories : [
+      { key: "housing", label: "Housing", amount: "", note: destination.costOfLiving },
+      { key: "food", label: "Food", amount: "", note: destination.dailyLife },
+      { key: "transport", label: "Transport", amount: "", note: destination.transportation },
+    ].filter((category) => category.note || category.amount);
+
+    return {
+      summary: profile?.summary || destination.costOfLiving || premiumContent.costOfLivingArticle,
+      currency: profile?.currency || "USD",
+      methodology: profile?.methodology || "Modeled from housing, food, transport, and neighborhood assumptions.",
+      confidence: profile?.confidence || "medium",
+      assumptions: profile?.assumptions || [],
+      budgets,
+      categories,
+    };
+  }, [destination.costOfLiving, destination.costOfLivingProfile, destination.dailyLife, destination.monthlyBudgets, destination.transportation, premiumContent.costOfLivingArticle]);
 
   const essentialFacts = useMemo(() => [
     { label: "Population", value: destination.knowledgeProfile?.population ?? "Local context available", note: "Population helps frame the city’s scale and whether it feels intimate or metropolitan." },
@@ -511,8 +1218,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     : `/destinations/${destination.slug}?developer=1`;
 
   return (
-    <main className="space-y-6 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.08),_transparent_35%),linear-gradient(180deg,_rgba(2,6,23,0.96),_rgba(15,23,42,0.98))] px-2 py-3 text-slate-100 sm:px-4 sm:py-4 lg:px-8 lg:py-6">
-      <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-6 shadow-[0_30px_80px_rgba(2,8,23,0.35)] backdrop-blur sm:p-8">
+    <main className="space-y-8 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.12),_transparent_35%),linear-gradient(180deg,_rgba(7,12,30,0.97),_rgba(15,23,42,0.96))] px-3 py-4 text-slate-100 sm:px-5 sm:py-6 lg:px-8 lg:py-8">
+      <section className="rounded-[2rem] border border-white/20 bg-slate-900/70 p-7 shadow-[0_30px_90px_rgba(2,8,23,0.28)] backdrop-blur sm:p-9">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3">
             <span className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200">DestinationFinderAI premium guide</span>
@@ -553,16 +1260,16 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
         <p className="mt-6 max-w-4xl text-base leading-8 text-slate-400">{premiumContent.heroIntroduction}</p>
       </section>
 
-      <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
-        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+      <section className="rounded-[2rem] border border-white/20 bg-slate-900/70 p-6 shadow-[0_20px_70px_rgba(2,8,23,0.22)] sm:p-8">
+        <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Executive summary</p>
             <h2 className="mt-3 text-2xl font-semibold text-white">{destination.title} at a glance</h2>
-            <p className="mt-4 max-w-2xl text-sm leading-8 text-slate-400">A 20-second orientation for people deciding whether the city deserves deeper attention. It highlights the essentials without reducing the lived experience to a single score.</p>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-400">A 20-second orientation for people deciding whether the city deserves deeper attention. It highlights the essentials without reducing the lived experience to a single score.</p>
           </div>
           <div className="space-y-3">
-            <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/5 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
-              <img src={executiveSummaryImage.resolvedUrl} alt={executiveSummaryImage.altText || destination.title} className="h-64 w-full object-cover" loading="lazy" decoding="async" />
+            <div className="overflow-hidden rounded-[1.5rem] border border-white/20 bg-white/10 shadow-[0_20px_70px_rgba(2,8,23,0.22)]">
+              <img src={executiveSummaryImage.resolvedUrl} alt={executiveSummaryImage.altText || destination.title} className="h-[18rem] w-full object-cover sm:h-[20rem]" loading="lazy" decoding="async" />
               <div className="p-4">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">Featured image</p>
                 <p className="mt-2 text-sm font-semibold text-white">{destination.city} at a glance</p>
@@ -571,7 +1278,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               {essentialFacts.slice(0, 8).map((fact) => (
-                <div key={fact.label} className="rounded-3xl border border-white/10 bg-white/5 p-4">
+                <div key={fact.label} className="rounded-2xl border border-white/15 bg-white/10 p-3">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">{fact.label}</p>
                   <p className="mt-2 text-sm font-semibold text-white">{fact.value}</p>
                   <p className="mt-2 text-xs leading-6 text-slate-400">{fact.note}</p>
@@ -591,7 +1298,64 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
         </div>
       </section>
 
-      <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
+      <section className="rounded-[2rem] border border-white/20 bg-slate-900/70 p-8 shadow-[0_20px_70px_rgba(2,8,23,0.22)] sm:p-10">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Cost of living snapshot</p>
+            <h2 className="mt-2 text-2xl font-semibold text-white">A practical executive summary for residents and relocators</h2>
+          </div>
+          <p className="text-sm text-slate-400">{costProfile.budgets.length} budget bands</p>
+        </div>
+        <div className="mt-6 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-[1.5rem] border border-cyan-400/20 bg-cyan-500/10 p-5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">Executive summary</p>
+            <p className="mt-3 text-sm leading-8 text-slate-200">{costProfile.summary}</p>
+            <div className="mt-4 flex flex-wrap gap-2 text-xs uppercase tracking-[0.2em] text-slate-300">
+              <span className="rounded-full border border-white/10 bg-slate-950/40 px-3 py-2">{costProfile.currency}</span>
+              <span className="rounded-full border border-white/10 bg-slate-950/40 px-3 py-2">{costProfile.confidence} confidence</span>
+            </div>
+          </div>
+          <div className="space-y-3 rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
+            {costProfile.budgets.length > 0 ? costProfile.budgets.map((budget) => (
+              <div key={budget.label} className="rounded-2xl border border-white/10 bg-slate-950/40 p-4">
+                <p className="text-sm font-semibold text-white">{budget.label}</p>
+                <p className="mt-2 text-lg font-semibold text-cyan-300">{budget.amount}</p>
+                {budget.note ? <p className="mt-2 text-sm leading-7 text-slate-300">{budget.note}</p> : null}
+              </div>
+            )) : null}
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-[2rem] border border-white/20 bg-slate-900/70 p-8 shadow-[0_20px_70px_rgba(2,8,23,0.22)] sm:p-10">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Monthly cost breakdown</p>
+            <h2 className="mt-2 text-2xl font-semibold text-white">The detailed budget categories that shape the monthly picture</h2>
+          </div>
+          <p className="text-sm text-slate-400">{costProfile.categories.length} live categories</p>
+        </div>
+        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {costProfile.categories.length > 0 ? costProfile.categories.map((category) => (
+            <div key={category.key} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
+              <p className="text-sm font-semibold text-white">{category.label}</p>
+              {category.amount ? <p className="mt-2 text-lg font-semibold text-cyan-300">{category.amount}</p> : null}
+              {category.note ? <p className="mt-2 text-sm leading-7 text-slate-300">{category.note}</p> : null}
+            </div>
+          )) : null}
+        </div>
+        <div className="mt-6 rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">How the estimate is framed</p>
+          <p className="mt-3 text-sm leading-8 text-slate-300">{costProfile.methodology}</p>
+          {costProfile.assumptions.length > 0 ? (
+            <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-slate-300">
+              {costProfile.assumptions.map((item) => <li key={item}>{item}</li>)}
+            </ul>
+          ) : null}
+        </div>
+      </section>
+
+      <section className="rounded-[2rem] border border-white/20 bg-slate-900/70 p-8 shadow-[0_20px_70px_rgba(2,8,23,0.22)] sm:p-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Media and atmosphere</p>
@@ -600,20 +1364,39 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
           <p className="text-sm text-slate-400">{galleryItems.length} curated assets</p>
         </div>
         <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {resolvedGalleryItems.map((item, index) => (
-            <button key={`${item.url}-${index}`} type="button" onClick={() => setSelectedMedia(item)} className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5 text-left shadow-[0_20px_60px_rgba(2,8,23,0.16)] transition hover:-translate-y-1">
+          {previewGalleryItems.map((item, index) => (
+            <button key={`${item.url}-${index}`} type="button" onClick={() => openGalleryItem(item, index)} className="overflow-hidden rounded-[1.5rem] border border-white/15 bg-white/10 text-left shadow-[0_20px_70px_rgba(2,8,23,0.2)] transition duration-200 hover:-translate-y-1">
               <img src={item.resolvedUrl} alt={item.altText || item.caption || destination.title} loading="lazy" decoding="async" className="h-56 w-full object-cover" />
               <div className="p-4 text-sm leading-7 text-slate-300">{item.caption || item.altText || item.kind}</div>
             </button>
           ))}
         </div>
+        {hasMoreGalleryItems ? (
+          <div className="mt-6 flex justify-start">
+            <button type="button" onClick={() => openGalleryItem(previewGalleryItems[0], 0)} className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/50 hover:bg-cyan-500/20">
+              View More Images
+            </button>
+          </div>
+        ) : null}
       </section>
 
       {selectedMedia ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-4" onClick={() => setSelectedMedia(null)}>
-          <div className="relative max-h-[90vh] w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/90 p-3" onClick={(event) => event.stopPropagation()}>
-            <button type="button" onClick={() => setSelectedMedia(null)} className="absolute right-4 top-4 z-10 rounded-full border border-white/10 bg-slate-950/60 px-3 py-2 text-sm font-semibold text-white">Close</button>
-            <img src={selectedMedia.resolvedUrl ?? selectedMedia.url} alt={selectedMedia.altText || selectedMedia.caption || destination.title} className="max-h-[80vh] w-full rounded-[1.5rem] object-contain" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-4 backdrop-blur-sm" onClick={() => setSelectedMedia(null)}>
+          <div className="relative max-h-[90vh] w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/20 bg-slate-900/95 p-3 shadow-[0_30px_90px_rgba(2,8,23,0.35)]" onClick={(event) => event.stopPropagation()}>
+            <div className="flex flex-wrap items-center justify-between gap-3 px-2 py-2">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-300">Destination imagery</p>
+                <p className="mt-1 text-sm text-slate-400">{galleryIndex + 1} of {galleryModalItems.length}</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button type="button" onClick={() => navigateGallery(-1)} className="rounded-full border border-white/15 bg-white/10 px-3 py-2 text-sm font-semibold text-white">← Prev</button>
+                <button type="button" onClick={() => navigateGallery(1)} className="rounded-full border border-white/15 bg-white/10 px-3 py-2 text-sm font-semibold text-white">Next →</button>
+                <button type="button" onClick={() => setSelectedMedia(null)} className="rounded-full border border-white/15 bg-slate-950/70 px-3 py-2 text-sm font-semibold text-white">Close</button>
+              </div>
+            </div>
+            <div className="mt-3 overflow-hidden rounded-[1.5rem]">
+              <img src={selectedMedia.resolvedUrl ?? selectedMedia.url} alt={selectedMedia.altText || selectedMedia.caption || destination.title} className="max-h-[72vh] w-full rounded-[1.5rem] object-contain transition duration-300" />
+            </div>
             <p className="mt-3 px-2 text-sm leading-7 text-slate-300">{selectedMedia.caption || selectedMedia.altText || selectedMedia.kind}</p>
           </div>
         </div>
@@ -711,14 +1494,37 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               </div>
             </article>
             <article className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
-              <h2 className="text-2xl font-semibold text-white">Budgets</h2>
+              <h2 className="text-2xl font-semibold text-white">Cost of living</h2>
               <p className="mt-4 text-sm leading-8 text-slate-400">{intelligenceProfile.heroSummary}</p>
+              <div className="mt-6 rounded-[1.5rem] border border-cyan-400/20 bg-cyan-500/10 p-5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">Structured profile</p>
+                <p className="mt-3 text-sm leading-7 text-slate-200">{costProfile.summary}</p>
+                <div className="mt-4 flex flex-wrap gap-2 text-xs uppercase tracking-[0.2em] text-slate-300">
+                  <span className="rounded-full border border-white/10 bg-slate-950/40 px-3 py-2">{costProfile.currency}</span>
+                  <span className="rounded-full border border-white/10 bg-slate-950/40 px-3 py-2">{costProfile.confidence} confidence</span>
+                </div>
+                <p className="mt-4 text-sm leading-7 text-slate-300">{costProfile.methodology}</p>
+                {costProfile.assumptions.length > 0 ? (
+                  <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-slate-300">
+                    {costProfile.assumptions.map((item) => <li key={item}>{item}</li>)}
+                  </ul>
+                ) : null}
+              </div>
+              <div className="mt-6 grid gap-4 md:grid-cols-2">
+                {costProfile.categories.length > 0 ? costProfile.categories.map((category) => (
+                  <div key={category.key} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
+                    <p className="text-sm font-semibold text-white">{category.label}</p>
+                    {category.amount ? <p className="mt-2 text-lg font-semibold text-cyan-300">{category.amount}</p> : null}
+                    {category.note ? <p className="mt-2 text-sm leading-7 text-slate-300">{category.note}</p> : null}
+                  </div>
+                )) : null}
+              </div>
               <div className="mt-6 space-y-4">
-                {destination.monthlyBudgets.length > 0 ? destination.monthlyBudgets.map((budget) => (
+                {costProfile.budgets.length > 0 ? costProfile.budgets.map((budget) => (
                   <div key={budget.label} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
                     <p className="text-sm font-semibold text-white">{budget.label}</p>
                     <p className="mt-2 text-lg font-semibold text-cyan-300">{budget.amount}</p>
-                    <p className="mt-2 text-sm leading-7 text-slate-300">{budget.note}</p>
+                    {budget.note ? <p className="mt-2 text-sm leading-7 text-slate-300">{budget.note}</p> : null}
                   </div>
                 )) : <p className="text-sm leading-8 text-slate-400">{premiumContent.costOfLivingArticle}</p>}
               </div>

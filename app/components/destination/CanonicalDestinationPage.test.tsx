@@ -2,6 +2,8 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import CanonicalDestinationPage from "./CanonicalDestinationPage";
 import type { CanonicalDestination } from "../../lib/canonical-destination-model";
+import { buildNeighborhoodIntelligenceSeedData } from "../../lib/neighborhood-intelligence-seed-data";
+import { isPlaceWebsiteVisible } from "../../lib/website-verification";
 
 const buildDestination = (): CanonicalDestination => ({
   slug: "spearfish-south-dakota-united-states",
@@ -84,7 +86,7 @@ describe("CanonicalDestinationPage", () => {
     expect(screen.getByRole("tab", { name: /Destination Guide/i })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: /Premium Profile/i })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: /Deep Dive/i })).toBeInTheDocument();
-    expect(screen.getByText(/Executive summary/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Executive summary/i).length).toBeGreaterThan(0);
   });
 
   it("renders premium editorial content from a destination's structured source data", () => {
@@ -125,6 +127,32 @@ describe("CanonicalDestinationPage", () => {
     expect(screen.getAllByText(/Premium Profile/i).length).toBeGreaterThan(0);
   });
 
+  it("renders a structured cost-of-living profile from destination data", () => {
+    const destination = buildDestination();
+    destination.city = "Chicago";
+    destination.country = "United States";
+    destination.title = "Chicago";
+    destination.costOfLiving = "Chicago sits in the middle of the cost spectrum for major U.S. cities.";
+    destination.costOfLivingProfile = {
+      summary: "Chicago is a mid-market city for long-stay residents who value strong transit and neighborhood choice.",
+      currency: "USD",
+      methodology: "Modeled from housing, groceries, transit, and healthcare assumptions for a single resident.",
+      confidence: "high",
+      assumptions: ["Single resident living in a central district"],
+      budgets: [{ id: "single", label: "Single resident", amount: "$2,400–$3,800/month", note: "Comfortable monthly budget" }],
+      categories: [{ key: "housing", label: "Housing", amount: "$1,400–$2,300/month", note: "A practical apartment budget" }],
+    };
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    expect(screen.getByText(/Cost of living snapshot/i)).toBeInTheDocument();
+    expect(screen.getByText(/Monthly cost breakdown/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Chicago is a mid-market city/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Housing").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("$1,400–$2,300/month").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Single resident").length).toBeGreaterThan(0);
+  });
+
   it("renders a destination-specific placeholder when a destination has no verified media", () => {
     const destination = buildDestination();
     destination.slug = "brand-new-island-city";
@@ -136,6 +164,305 @@ describe("CanonicalDestinationPage", () => {
 
     expect(screen.getAllByRole("img", { name: /Brand New Island/i }).length).toBeGreaterThan(0);
     expect(screen.getByText(/Editorial destination placeholder/i)).toBeInTheDocument();
+  });
+
+  it("shows a view-more gallery control when a destination has more than five verified images", () => {
+    const destination = buildDestination();
+    destination.slug = "chicago-illinois-united-states";
+    destination.city = "Chicago";
+    destination.country = "United States";
+    destination.title = "Chicago";
+    destination.heroImages = Array.from({ length: 6 }, (_, index) => ({
+      url: `https://upload.wikimedia.org/wikipedia/commons/thumb/${index + 1}/image-${index + 1}.jpg/1280px-image-${index + 1}.jpg`,
+      altText: `Chicago image ${index + 1}`,
+    }));
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    expect(screen.getByRole("button", { name: /view more images/i })).toBeInTheDocument();
+  });
+
+  it("shows neighborhood resource groups and intelligence for any destination", () => {
+    const destination = buildDestination();
+    destination.city = "Bangkok";
+    destination.country = "Thailand";
+    destination.title = "Bangkok";
+    destination.neighborhoods = ["Sukhumvit"];
+    destination.resources = [{ label: "Sukhumvit neighborhood guide", url: "https://example.com/sukhumvit", category: "Neighborhood Guide" }];
+    destination.knowledgeProfile = {
+      ...destination.knowledgeProfile,
+      walkability: "Very strong",
+      bikeFriendliness: "Good",
+      publicTransportation: "Excellent",
+      coffeeShops: ["A", "B"],
+    };
+
+    render(<CanonicalDestinationPage destination={destination} />);
+    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
+
+    expect(screen.getAllByRole("link", { name: /Google Maps/i }).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Neighborhood intelligence/i)).toBeInTheDocument();
+    expect(screen.getByText(/Overall neighborhood score/i)).toBeInTheDocument();
+  });
+
+  it("avoids rendering neighborhood names or category labels as fake place cards", () => {
+    const destination = buildDestination();
+    destination.city = "Chicago";
+    destination.country = "United States";
+    destination.title = "Chicago";
+    destination.neighborhoods = ["Lincoln Park"];
+    destination.neighborhoodIntelligence = [
+      {
+        category: "Coffee Shops",
+        destinationName: "Chicago",
+        neighborhoodName: "Lincoln Park",
+        places: [
+          {
+            id: "place-1",
+            name: "Lincoln Park",
+            category: "Coffee Shops",
+            destinationName: "Chicago",
+            neighborhoodName: "Lincoln Park",
+            description: "Neighborhood reference",
+            whyItMatters: "This should not be treated as a place.",
+            verified: false,
+            googleMapsUrl: "https://maps.google.com/?q=Lincoln%20Park%20Chicago",
+          },
+        ],
+      },
+    ];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
+
+    expect(screen.queryByRole("button", { name: /Lincoln Park/i })).not.toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: /Explore coffee shops in Lincoln Park/i }).length).toBeGreaterThan(0);
+  });
+
+  it("renders verified Chicago place cards from neighborhood intelligence seed data", () => {
+    const chicagoDestination = buildDestination();
+    chicagoDestination.slug = "chicago-illinois-united-states";
+    chicagoDestination.city = "Chicago";
+    chicagoDestination.country = "United States";
+    chicagoDestination.title = "Chicago";
+    chicagoDestination.overview = "Chicago is best understood as a city of distinct districts rather than a single center.";
+    chicagoDestination.neighborhoods = ["Lincoln Park"];
+
+    render(<CanonicalDestinationPage destination={chicagoDestination} />);
+    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
+
+    expect(screen.getAllByText(/Colectivo Coffee Lincoln Park/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Lincoln Park/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("link", { name: /Google Maps/i }).length).toBeGreaterThan(0);
+  });
+
+  it("renders structured premium neighborhood sections for Chicago neighborhoods", () => {
+    const chicagoDestination = buildDestination();
+    chicagoDestination.slug = "chicago-illinois-united-states";
+    chicagoDestination.city = "Chicago";
+    chicagoDestination.country = "United States";
+    chicagoDestination.title = "Chicago";
+    chicagoDestination.overview = "Chicago is best understood as a city of distinct districts rather than a single center.";
+    chicagoDestination.neighborhoods = ["Lincoln Park", "West Loop", "Wicker Park"];
+
+    render(<CanonicalDestinationPage destination={chicagoDestination} />);
+    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    expect(screen.getAllByText(/Signature streets/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Restaurants/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Coffee shops/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Parks & green spaces/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Lincoln Park/i).length).toBeGreaterThan(0);
+  });
+
+  it("uses a true Shopping group for West Loop instead of coffee-shop content", () => {
+    const destination = buildDestination();
+    destination.city = "Chicago";
+    destination.country = "United States";
+    destination.title = "Chicago";
+    destination.neighborhoods = ["West Loop"];
+    destination.neighborhoodIntelligence = [
+      {
+        category: "Coffee Shops",
+        destinationName: "Chicago",
+        neighborhoodName: "West Loop",
+        places: [
+          {
+            id: "coffee-1",
+            name: "Intelligentsia Coffee",
+            category: "Coffee Shops",
+            destinationName: "Chicago",
+            neighborhoodName: "West Loop",
+            description: "A café",
+            whyItMatters: "A coffee venue",
+            verified: true,
+            googleMapsUrl: "https://maps.google.com/?q=Intelligentsia+Coffee",
+          },
+        ],
+      },
+      {
+        category: "Shopping",
+        destinationName: "Chicago",
+        neighborhoodName: "West Loop",
+        places: [
+          {
+            id: "shop-1",
+            name: "Fulton Market Design Shops",
+            category: "Shopping",
+            destinationName: "Chicago",
+            neighborhoodName: "West Loop",
+            description: "A retail corridor",
+            whyItMatters: "A shopping destination",
+            verified: true,
+            googleMapsUrl: "https://maps.google.com/?q=Fulton+Market+Design+Shops",
+          },
+        ],
+      },
+    ];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
+
+    const shoppingCard = screen.getByText("Shopping").closest("div");
+
+    expect(shoppingCard).toHaveTextContent("Fulton Market Design Shops");
+    expect(shoppingCard).not.toHaveTextContent("Intelligentsia Coffee");
+  });
+
+  it("shows the website action when a place has a verified direct website URL", () => {
+    const destination = buildDestination();
+    destination.city = "Chicago";
+    destination.country = "United States";
+    destination.title = "Chicago";
+    destination.neighborhoods = ["Hyde Park"];
+    destination.neighborhoodIntelligence = [
+      {
+        category: "Restaurants",
+        destinationName: "Chicago",
+        neighborhoodName: "Hyde Park",
+        places: [
+          {
+            id: "place-1",
+            name: "The Promontory",
+            category: "Restaurants",
+            destinationName: "Chicago",
+            neighborhoodName: "Hyde Park",
+            description: "A restaurant and event venue.",
+            whyItMatters: "An example of a place with an unverified website.",
+            verified: true,
+            googleMapsUrl: "https://maps.google.com/?q=The+Promontory+Chicago",
+            websiteUrl: "https://example.com/parked",
+            websiteVerified: true,
+            websiteStatus: "verified",
+          },
+        ],
+      },
+    ];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Open/i }));
+
+    expect(screen.getAllByText("The Promontory").length).toBeGreaterThan(0);
+    expect(screen.getByRole("link", { name: /Visit website/i })).toBeInTheDocument();
+  });
+
+  it("shows the website action when a place has a live redirected URL", () => {
+    const place = {
+      id: "place-3",
+      name: "Museum of Science and Industry",
+      category: "Attractions",
+      destinationName: "Chicago",
+      neighborhoodName: "Hyde Park",
+      description: "A major attraction with a redirecting website.",
+      whyItMatters: "An example of a place whose live redirect should still surface the site.",
+      verified: true,
+      googleMapsUrl: "https://maps.google.com/?q=Museum+of+Science+and+Industry+Chicago",
+      websiteUrl: "https://www.msichicago.org/",
+      websiteVerified: true,
+      websiteStatus: "redirected",
+    };
+
+    expect(isPlaceWebsiteVisible(place)).toBe(true);
+  });
+
+  it("hides the website action when a place website is broken", () => {
+    const destination = buildDestination();
+    destination.city = "Chicago";
+    destination.country = "United States";
+    destination.title = "Chicago";
+    destination.neighborhoods = ["Hyde Park"];
+    destination.neighborhoodIntelligence = [
+      {
+        category: "Coffee Shops",
+        destinationName: "Chicago",
+        neighborhoodName: "Hyde Park",
+        places: [
+          {
+            id: "place-2",
+            name: "Inkling Coffee Hyde Park",
+            category: "Coffee Shops",
+            destinationName: "Chicago",
+            neighborhoodName: "Hyde Park",
+            description: "A coffee shop with a dead website.",
+            whyItMatters: "An example of a place whose website should not be surfaced.",
+            verified: true,
+            googleMapsUrl: "https://maps.google.com/?q=Inkling+Coffee+Hyde+Park",
+            websiteUrl: "https://inklingcoffee.com/",
+            websiteVerified: false,
+            websiteStatus: "broken",
+          },
+        ],
+      },
+    ];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Open/i }));
+
+    expect(screen.queryByRole("link", { name: /Visit website/i })).not.toBeInTheDocument();
+  });
+
+  it("keeps Chicago neighborhood records category-correct and placeholder-free", () => {
+    const intelligence = buildNeighborhoodIntelligenceSeedData({
+      city: "Chicago",
+      country: "United States",
+      title: "Chicago",
+      slug: "chicago-illinois-united-states",
+      knowledgeProfile: {},
+    });
+
+    const neighborhoods = ["Lincoln Park", "Lakeview", "Hyde Park", "West Loop", "River North", "Wicker Park", "Gold Coast", "Pilsen"];
+
+    neighborhoods.forEach((neighborhood) => {
+      const groups = intelligence.filter((group) => group.neighborhoodName === neighborhood);
+      expect(groups.length).toBeGreaterThanOrEqual(8);
+
+      const restaurants = groups.find((group) => group.category === "Restaurants");
+      const coffee = groups.find((group) => group.category === "Coffee Shops");
+      const shopping = groups.find((group) => group.category === "Shopping");
+      const parks = groups.find((group) => group.category === "Parks & Green Spaces");
+      const transit = groups.find((group) => group.category === "Transit");
+
+      expect(restaurants?.places?.length).toBeGreaterThanOrEqual(1);
+      expect(coffee?.places?.length).toBeGreaterThanOrEqual(1);
+      expect(shopping?.places?.length).toBeGreaterThanOrEqual(1);
+      expect(parks?.places?.length).toBeGreaterThanOrEqual(1);
+      expect(transit?.places?.length).toBeGreaterThanOrEqual(1);
+
+      const allPlaces = groups.flatMap((group) => group.places ?? []);
+      const combinedText = allPlaces.map((place) => `${place.name}: ${place.description}`).join(" ");
+      expect(combinedText).not.toMatch(/coming soon|being refined|additional neighborhood/i);
+      expect(allPlaces.every((place) => place.googleMapsUrl?.startsWith("https://"))).toBe(true);
+      expect(shopping?.places?.every((place) => !/coffee/i.test(place.name))).toBe(true);
+      expect(allPlaces.some((place) => place.googleMapsUrl?.startsWith("https://"))).toBe(true);
+    });
   });
 
   it("shows curated Chicago imagery in the executive summary and gallery", () => {
