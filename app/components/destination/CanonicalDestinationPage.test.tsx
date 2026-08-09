@@ -140,6 +140,64 @@ describe("CanonicalDestinationPage", () => {
     expect(screen.getAllByText(/Premium Profile/i).length).toBeGreaterThan(0);
   });
 
+  it("uses category-specific content rather than reusing the general overview for category cards", () => {
+    const destination = buildDestination();
+    destination.overview = "This is the general destination overview that should not be reused for unrelated category cards.";
+    destination.heroNarrative = "A destination narrative that should stay in the hero and overview sections.";
+    destination.dailyLife = "A daily-life description that should remain distinct from category cards.";
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    const populationCard = screen.getAllByText("Population")[0].closest("div");
+    const golfCard = screen.getAllByText("Golf")[0].closest("div");
+
+    expect(populationCard?.textContent).toContain("Detailed category information is not available yet.");
+    expect(populationCard?.textContent).not.toContain("This is the general destination overview that should not be reused for unrelated category cards.");
+    expect(golfCard?.textContent).toContain("Detailed category information is not available yet.");
+    expect(golfCard?.textContent).not.toContain("This is the general destination overview that should not be reused for unrelated category cards.");
+  });
+
+  it("renders structured factual intelligence from the canonical knowledge profile in the existing essential-facts cards", () => {
+    const destination = buildDestination();
+    destination.knowledgeProfile = {
+      population: "110000",
+      metroPopulation: "San Antonio–New Braunfels metro",
+      elevation: "192 m",
+      timeZone: "America/Chicago",
+      rainfall: "884 mm/month",
+      sunshineHours: "2,500 hrs/month",
+      humidity: "65%",
+      majorAirports: ["San Antonio International Airport", "Austin-Bergstrom International Airport"],
+      majorHospitals: ["Resolute Baptist Hospital"],
+    };
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    expect(screen.getAllByText("Population")[0].closest("div")?.textContent).toContain("110,000");
+    expect(screen.getAllByText("Metro population")[0].closest("div")?.textContent).toContain("San Antonio–New Braunfels metro");
+    expect(screen.getAllByText("Elevation")[0].closest("div")?.textContent).toContain("192 m");
+    expect(screen.getAllByText("Time zone")[0].closest("div")?.textContent).toContain("America/Chicago");
+    expect(screen.getAllByText("Climate")[0].closest("div")?.textContent).toContain("884 mm/month");
+    expect(screen.getAllByText("Airport access")[0].closest("div")?.textContent).toContain("San Antonio International Airport");
+    expect(screen.getAllByText("Healthcare")[0].closest("div")?.textContent).toContain("Resolute Baptist Hospital");
+  });
+
+  it("surfaces named healthcare resources already present in the canonical payload instead of falling back to generic copy", () => {
+    const destination = buildDestination();
+    destination.healthcare = "Healthcare access is a major strength for long-stay households.";
+    destination.healthcareResources = [{
+      category: "healthcare",
+      label: "Resolute Baptist Hospital",
+      provider: "Resolute Baptist Hospital",
+      url: "https://example.com/resolute",
+    }];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    expect(screen.getAllByText("Healthcare")[0].closest("div")?.textContent).toContain("Resolute Baptist Hospital");
+    expect(screen.getAllByText("Healthcare")[0].closest("div")?.textContent).not.toContain("Healthcare access is a major strength");
+  });
+
   it("renders a structured cost-of-living profile from destination data", () => {
     const destination = buildDestination();
     destination.city = "Chicago";
@@ -569,7 +627,7 @@ describe("CanonicalDestinationPage", () => {
     expect(screen.getByRole("link", { name: /Visit website/i })).toBeInTheDocument();
   });
 
-  it("does not surface social or maps-only URLs as direct websites", () => {
+  it("shows the website action without inventing a Google Maps link when a place has only a direct website", () => {
     const destination = buildDestination();
     destination.city = "Chicago";
     destination.country = "United States";
@@ -583,6 +641,44 @@ describe("CanonicalDestinationPage", () => {
         places: [
           {
             id: "place-4",
+            name: "The Promontory",
+            category: "Restaurants",
+            destinationName: "Chicago",
+            neighborhoodName: "Hyde Park",
+            description: "A major attraction with a direct website and no maps URL.",
+            whyItMatters: "An example of a place whose website should surface without synthesizing a maps action.",
+            verified: true,
+            websiteUrl: "https://example.com/parked",
+            websiteVerified: true,
+            websiteStatus: "verified",
+          },
+        ],
+      },
+    ];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Open/i }));
+
+    expect(screen.getByRole("link", { name: /Visit website/i })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Open on Google Maps/i })).not.toBeInTheDocument();
+  });
+
+  it("does not surface social or maps-only URLs as direct websites", () => {
+    const destination = buildDestination();
+    destination.city = "Chicago";
+    destination.country = "United States";
+    destination.title = "Chicago";
+    destination.neighborhoods = ["Hyde Park"];
+    destination.neighborhoodIntelligence = [
+      {
+        category: "Restaurants",
+        destinationName: "Chicago",
+        neighborhoodName: "Hyde Park",
+        places: [
+          {
+            id: "place-5",
             name: "Example Place",
             category: "Restaurants",
             destinationName: "Chicago",

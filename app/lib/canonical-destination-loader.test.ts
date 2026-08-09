@@ -220,6 +220,65 @@ describe("canonical destination loader", () => {
     expect(destination.premiumEditorialContent?.overviewArticle).toBe("Workbook overview article");
   });
 
+  it("hydrates structured factual intelligence from workbook data into the canonical knowledge profile", () => {
+    const destination = buildWorkbookDestinationFromData("new-braunfels-tx-us", {
+      destinationKey: "new-braunfels-tx-us",
+      slug: "new-braunfels-tx-us",
+      city: "New Braunfels",
+      country: "United States",
+      title: "New Braunfels",
+      subtitle: "New Braunfels, United States",
+      heroNarrative: "Workbook hero narrative",
+      overview: "Workbook overview narrative",
+      editorial: "Workbook editorial narrative",
+      whyThisPlaceFeelsDistinct: "Workbook distinct narrative",
+      dailyLife: "Workbook daily life narrative",
+      climate: "Workbook climate narrative",
+      transportation: "Workbook transportation narrative",
+      healthcare: "Workbook healthcare narrative",
+      costOfLiving: "Workbook cost-of-living narrative",
+      walkability: "Workbook walkability narrative",
+      internet: "Workbook internet narrative",
+      safety: "Workbook safety narrative",
+      officialTourismUrl: "https://example.com/tourism",
+      googleMapsUrl: "https://example.com/maps",
+      googleEarthUrl: "https://example.com/earth",
+      wikipediaUrl: "https://example.com/wiki",
+      neighborhoods: [],
+      places: [],
+      resources: [],
+      media: [],
+      costRecords: [],
+      healthcareRecords: [],
+      transportRecords: [],
+      housingRecords: [],
+      realityChecks: [],
+      sources: [],
+      counts: { neighborhoods: 0, places: 0, resources: 0, media: 0, costRecords: 0 },
+      knowledgeProfile: {
+        population: "110000",
+        metroPopulation: "San Antonio–New Braunfels metro",
+        elevation: "192 m",
+        timeZone: "America/Chicago",
+        rainfall: "884 mm/year",
+        sunshineHours: "2,500 hrs/year",
+        humidity: "65% avg",
+        majorAirports: ["San Antonio International Airport", "Austin-Bergstrom International Airport"],
+        majorHospitals: ["Resolute Baptist Hospital"],
+      },
+    } as any);
+
+    expect(destination.knowledgeProfile?.population).toBe("110000");
+    expect(destination.knowledgeProfile?.metroPopulation).toBe("San Antonio–New Braunfels metro");
+    expect(destination.knowledgeProfile?.elevation).toBe("192 m");
+    expect(destination.knowledgeProfile?.timeZone).toBe("America/Chicago");
+    expect(destination.knowledgeProfile?.rainfall).toBe("884 mm/year");
+    expect(destination.knowledgeProfile?.sunshineHours).toBe("2,500 hrs/year");
+    expect(destination.knowledgeProfile?.humidity).toBe("65% avg");
+    expect(destination.knowledgeProfile?.majorAirports).toEqual(["San Antonio International Airport", "Austin-Bergstrom International Airport"]);
+    expect(destination.knowledgeProfile?.majorHospitals).toEqual(["Resolute Baptist Hospital"]);
+  });
+
   it("filters workbook media to destination-specific images instead of accepting generic scenic placeholders", () => {
     const destination = buildWorkbookDestinationFromData("new-braunfels-tx-us", {
       destinationKey: "new-braunfels-tx-us",
@@ -304,6 +363,49 @@ describe("canonical destination loader", () => {
     });
 
     expect(destination.media.map((item) => item.url)).toEqual(["https://example.com/hero.jpg"]);
+  });
+
+  it("preserves a direct image asset when it is a plausible destination photo and the other option is clearly generic", () => {
+    const destination = buildWorkbookDestinationFromData("new-braunfels-tx-us", {
+      destinationKey: "new-braunfels-tx-us",
+      slug: "new-braunfels-tx-us",
+      city: "New Braunfels",
+      country: "United States",
+      title: "New Braunfels",
+      subtitle: "New Braunfels, United States",
+      heroNarrative: "",
+      overview: "",
+      editorial: "",
+      whyThisPlaceFeelsDistinct: "",
+      dailyLife: "",
+      climate: "",
+      transportation: "",
+      healthcare: "",
+      costOfLiving: "",
+      walkability: "",
+      internet: "",
+      safety: "",
+      officialTourismUrl: "",
+      googleMapsUrl: "",
+      googleEarthUrl: "",
+      wikipediaUrl: "",
+      neighborhoods: [],
+      places: [],
+      resources: [],
+      media: [
+        { kind: "image", url: "https://example.com/scenic-river-view.jpg", altText: "Scenic river view", caption: "Scenic river view", isPrimary: false },
+        { kind: "image", url: "https://example.com/main-street.jpg", altText: "Main Street", caption: "Main Street", isPrimary: false },
+      ],
+      costRecords: [],
+      healthcareRecords: [],
+      transportRecords: [],
+      housingRecords: [],
+      realityChecks: [],
+      sources: [],
+      counts: { neighborhoods: 0, places: 0, resources: 0, media: 2, costRecords: 0 },
+    });
+
+    expect(destination.media.map((item) => item.url)).toEqual(["https://example.com/main-street.jpg"]);
   });
 
   it("retains verified media when the destination evidence lives in source metadata rather than the asset URL", () => {

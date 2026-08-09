@@ -1,6 +1,7 @@
 import { existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import type { CanonicalDestinationKnowledgeProfile } from "./canonical-destination-model";
 
 export type PremiumWorkbookNormalizedDestinationData = {
   destinationKey: string;
@@ -104,6 +105,7 @@ export type PremiumWorkbookNormalizedDestinationData = {
     media: number;
     costRecords: number;
   };
+  knowledgeProfile?: CanonicalDestinationKnowledgeProfile;
   source?: "runtime-loader";
 };
 
@@ -521,6 +523,10 @@ def build_destination_row(row):
         "hero_narrative": normalize_text(row.get("hero_narrative") or row.get("short_description") or row.get("long_description") or ""),
         "overview": normalize_text(row.get("overview") or row.get("summary") or row.get("long_description") or row.get("short_description") or ""),
         "editorial": normalize_text(row.get("editorial") or row.get("long_description") or row.get("overview") or row.get("short_description") or ""),
+        "population": normalize_text(row.get("population") or ""),
+        "metro_population": normalize_text(row.get("metro_population") or row.get("metro") or ""),
+        "elevation_m": normalize_text(row.get("elevation_m") or row.get("elevation") or ""),
+        "time_zone": normalize_text(row.get("time_zone") or row.get("timezone") or ""),
         "why_this_place_feels_distinct": normalize_text(row.get("why_this_place_feels_distinct") or row.get("overview") or ""),
         "daily_life": normalize_text(row.get("daily_life") or row.get("lifestyle") or ""),
         "climate": normalize_text(row.get("climate") or row.get("climate_summary") or ""),
@@ -632,6 +638,87 @@ premium_editorial = {
     "majorDrawbacks": [],
 }
 
+
+def choose_destination_row(rows):
+    if not rows:
+        return {}
+    if not slug_filter:
+        return rows[0]
+    normalized_slug = slug_filter.lower()
+    for row in rows:
+        row_slug = normalize_text(row.get("destination_key") or row.get("slug") or row.get("destination_name") or row.get("city") or "")
+        if not row_slug:
+            continue
+        normalized_row_slug = row_slug.lower()
+        if normalized_row_slug == normalized_slug or normalized_row_slug.startswith(normalized_slug) or normalized_slug.startswith(normalized_row_slug):
+            return row
+    return rows[0]
+
+
+def parse_numeric(value):
+    if value is None:
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    text = normalize_text(value)
+    if not text:
+        return None
+    try:
+        return float(text.replace(",", ""))
+    except ValueError:
+        return None
+
+
+def infer_climate_classification(value):
+    text = normalize_text(value).lower()
+    if "humid subtropical" in text:
+        return "Humid subtropical"
+    if "continental" in text:
+        return "Continental"
+    if "subtropical" in text:
+        return "Subtropical"
+    if "mediterranean" in text:
+        return "Mediterranean"
+    if "arid" in text:
+        return "Arid"
+    if "tropical" in text:
+        return "Tropical"
+    return ""
+
+
+def extract_hospital_names(texts):
+    names = []
+    pattern = re.compile(r"([A-Z][A-Za-z0-9 .&'/-]+(?:Hospital|Hospitals))")
+    for raw_text in texts:
+        for match in pattern.findall(normalize_text(raw_text)):
+            if match and match not in names:
+                names.append(match)
+    return names
+
+selected_destination = choose_destination_row(destination_rows)
+destination_key = normalize_text(selected_destination.get("destination_key") or selected_destination.get("slug") or "")
+climate_facts = [row for row in read_sheet("DESTINATION_FACTS") if normalize_text(row.get("destination_key")) == destination_key and normalize_text(row.get("fact_group")) == "climate"]
+climate_text = next((normalize_text(row.get("value_text")) for row in climate_facts if normalize_text(row.get("value_text"))), "")
+climate_monthly_rows = [row for row in read_sheet("CLIMATE_MONTHLY") if normalize_text(row.get("destination_key")) == destination_key]
+rainfall_values = [parse_numeric(row.get("rainfall_mm")) for row in climate_monthly_rows if parse_numeric(row.get("rainfall_mm")) is not None]
+sunshine_values = [parse_numeric(row.get("sunshine_hours")) for row in climate_monthly_rows if parse_numeric(row.get("sunshine_hours")) is not None]
+humidity_values = [parse_numeric(row.get("humidity_pct")) for row in climate_monthly_rows if parse_numeric(row.get("humidity_pct")) is not None]
+healthcare_rows = [row for row in read_sheet("HEALTHCARE_INSURANCE") if normalize_text(row.get("destination_key")) == destination_key]
+transport_rows = [row for row in read_sheet("TRANSPORT_AIRPORTS") if normalize_text(row.get("destination_key")) == destination_key]
+
+knowledge_profile = {
+    "population": normalize_text(selected_destination.get("population") or ""),
+    "metroPopulation": normalize_text(selected_destination.get("metro_population") or ""),
+    "elevation": f"{int(parse_numeric(selected_destination.get('elevation_m')))} m" if parse_numeric(selected_destination.get('elevation_m')) is not None else "",
+    "timeZone": normalize_text(selected_destination.get("time_zone") or ""),
+    "climateClassification": infer_climate_classification(climate_text),
+    "rainfall": f"{round(sum(rainfall_values) / len(rainfall_values))} mm/month" if rainfall_values else "",
+    "sunshineHours": f"{round(sum(sunshine_values) / len(sunshine_values))} hrs/month" if sunshine_values else "",
+    "humidity": f"{round(sum(humidity_values) / len(humidity_values))}%" if humidity_values else "",
+    "majorAirports": [normalize_text(row.get("name")) for row in transport_rows if normalize_text(row.get("topic")) == "airport" and normalize_text(row.get("name"))],
+    "majorHospitals": extract_hospital_names([row.get("system_summary") for row in healthcare_rows] + [row.get("source_name") for row in healthcare_rows]),
+}
+
 payload = {
     "destinations": destination_rows,
     "neighborhoods": neighborhood_rows,
@@ -645,6 +732,7 @@ payload = {
     "reality_checks": reality_rows,
     "sources": sources,
     "premium_editorial": premium_editorial,
+    "knowledge_profile": knowledge_profile,
 }
 
 print(json.dumps(payload, ensure_ascii=False))
@@ -761,6 +849,9 @@ print(json.dumps(payload, ensure_ascii=False))
       sources: Array.isArray(parsed.sources) ? (parsed.sources as Array<Record<string, unknown>>) : [],
       premiumEditorialContent: parsed.premium_editorial && typeof parsed.premium_editorial === "object"
         ? parsed.premium_editorial as PremiumWorkbookNormalizedDestinationData["premiumEditorialContent"]
+        : undefined,
+      knowledgeProfile: parsed.knowledge_profile && typeof parsed.knowledge_profile === "object"
+        ? parsed.knowledge_profile as CanonicalDestinationKnowledgeProfile
         : undefined,
       counts: {
         neighborhoods: filteredNeighborhoods.length,

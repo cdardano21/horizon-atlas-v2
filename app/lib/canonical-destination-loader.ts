@@ -48,11 +48,42 @@ const buildDestinationIdentityTokens = (destination: { city?: string; country?: 
 
 const looksLikeGenericMediaItem = <T extends { url?: string; altText?: string; caption?: string; kind?: string; isPrimary?: boolean; sourceUrl?: string; attribution?: string; license?: string }>(item: T, normalizedTokens: string[]) => {
   const combined = [item.altText, item.caption, item.url, item.kind, item.sourceUrl, item.attribution, item.license].filter(Boolean).map(String).join(" ").toLowerCase();
-  const genericPhrases = ["scenic", "river view", "waterfront", "skyline", "city skyline", "placeholder", "example", "generic", "view"];
+  const genericPhrases = ["scenic", "river view", "waterfront", "skyline", "city skyline", "placeholder", "generic", "view"];
   const hasDestinationToken = normalizedTokens.some((token) => combined.includes(token));
   const hasVerifiedSourceMetadata = Boolean(item.sourceUrl?.trim() || item.attribution?.trim() || item.license?.trim());
   if (hasDestinationToken || hasVerifiedSourceMetadata) return false;
   return genericPhrases.some((phrase) => combined.includes(phrase));
+};
+
+const looksLikeStockImageUrl = (value: string | null | undefined) => {
+  if (typeof value !== "string") return false;
+  const trimmed = value.trim();
+  if (!trimmed) return false;
+
+  try {
+    const parsed = new URL(trimmed);
+    return ["images.unsplash.com", "source.unsplash.com", "unsplash.com", "pixabay.com", "pexels.com", "flickr.com"].includes(parsed.hostname.toLowerCase()) || parsed.hostname.toLowerCase().endsWith(".unsplash.com");
+  } catch {
+    return false;
+  }
+};
+
+const looksLikeImageAssetUrl = (value: string | null | undefined) => {
+  if (typeof value !== "string") return false;
+  const trimmed = value.trim();
+  if (!trimmed) return false;
+
+  try {
+    const parsed = new URL(trimmed);
+    const pathname = parsed.pathname.toLowerCase();
+    const imageExtensions = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif", ".bmp", ".svg"];
+    const hasImageExtension = imageExtensions.some((extension) => pathname.endsWith(extension));
+    const hasImagePathHint = pathname.includes("/image") || pathname.includes("/images") || pathname.includes("/photo") || pathname.includes("/photos") || pathname.includes("/media") || pathname.includes("/img");
+    const hasImageQueryHint = parsed.searchParams.has("img") || parsed.searchParams.has("image") || parsed.searchParams.has("photo") || parsed.searchParams.has("src");
+    return hasImageExtension || hasImagePathHint || hasImageQueryHint;
+  } catch {
+    return false;
+  }
 };
 
 const scoreDestinationMediaItem = <T extends { url?: string; altText?: string; caption?: string; kind?: string; isPrimary?: boolean; sourceUrl?: string; attribution?: string; license?: string }>(item: T, normalizedTokens: string[]) => {
@@ -61,9 +92,11 @@ const scoreDestinationMediaItem = <T extends { url?: string; altText?: string; c
   const hasVerifiedSourceMetadata = Boolean(item.sourceUrl?.trim() || item.attribution?.trim() || item.license?.trim());
   const isPrimary = Boolean(item.isPrimary);
   const genericPenalty = looksLikeGenericMediaItem(item, normalizedTokens) ? -3 : 0;
-  const score = Number(hasDestinationToken) * 2 + Number(isPrimary) + Number(hasVerifiedSourceMetadata) * 1.5 + genericPenalty;
+  const stockPenalty = looksLikeStockImageUrl(item.url) ? -2 : 0;
+  const hasImageAssetEvidence = looksLikeImageAssetUrl(item.url) && !looksLikeGenericMediaItem(item, normalizedTokens) && !looksLikeStockImageUrl(item.url);
+  const score = Number(hasDestinationToken) * 2 + Number(isPrimary) + Number(hasVerifiedSourceMetadata) * 1.5 + Number(hasImageAssetEvidence) + genericPenalty + stockPenalty;
 
-  return { item, score, hasDestinationToken, hasVerifiedSourceMetadata, isPrimary };
+  return { item, score, hasDestinationToken, hasVerifiedSourceMetadata, isPrimary, hasImageAssetEvidence };
 };
 
 const filterDestinationSpecificMedia = <T extends { url?: string; altText?: string; caption?: string; kind?: string; isPrimary?: boolean; sourceUrl?: string; attribution?: string; license?: string }>(media: T[], identityTokens: string[]) => {
@@ -75,11 +108,11 @@ const filterDestinationSpecificMedia = <T extends { url?: string; altText?: stri
   const scored = media.map((item) => scoreDestinationMediaItem(item, normalizedTokens));
   const bestScore = Math.max(...scored.map(({ score }) => score), 0);
 
-  const accepted = scored.filter(({ item, score, hasDestinationToken, hasVerifiedSourceMetadata, isPrimary }) => {
+  const accepted = scored.filter(({ item, score, hasDestinationToken, hasVerifiedSourceMetadata, isPrimary, hasImageAssetEvidence }) => {
     if (!item.url?.trim()) return false;
     if (hasDestinationToken) return true;
 
-    const hasPositiveEvidence = hasVerifiedSourceMetadata || isPrimary;
+    const hasPositiveEvidence = hasVerifiedSourceMetadata || isPrimary || hasImageAssetEvidence;
     if (score < 1 && !hasPositiveEvidence) return false;
     if (media.length === 1 && (hasPositiveEvidence || score >= 0)) return true;
     if (hasVerifiedSourceMetadata && score >= bestScore) return true;
@@ -104,7 +137,7 @@ const isWorkbookFallbackMediaDestination = (slug: string) => {
 
 const mergeDestinationSpecificMedia = <T extends { url?: string; altText?: string; caption?: string; kind?: string; isPrimary?: boolean; sourceUrl?: string; attribution?: string; license?: string }>(primaryMedia: T[], fallbackMedia: T[], identityTokens: string[], allowFallbackSupplementation: boolean = false) => {
   const filteredPrimaryMedia = filterDestinationSpecificMedia(primaryMedia, identityTokens);
-  if (!allowFallbackSupplementation || primaryMedia.length < 2 || filteredPrimaryMedia.length >= 3 || fallbackMedia.length === 0) {
+  if (!allowFallbackSupplementation || filteredPrimaryMedia.length >= 3 || fallbackMedia.length === 0) {
     return filteredPrimaryMedia;
   }
 
@@ -748,6 +781,7 @@ export const buildWorkbookDestinationFromData = (slug: string, workbookData: Pre
   const preferredSafety = normalizeTextValue(workbookData?.safety) || normalizeTextValue(workbookFallbackData?.safety) || normalizeTextValue(fallback?.safety) || "";
   const preferredNeighborhoodProfiles = workbookFallbackData?.neighborhoodProfiles?.length ? workbookFallbackData.neighborhoodProfiles : fallback?.neighborhoodProfiles?.length ? fallback.neighborhoodProfiles : [];
   const resolvedWorkbookMedia = resolveWorkbookMediaForSlug(slug, workbookMedia);
+  const workbookKnowledgeProfile = workbookData?.knowledgeProfile ?? fallback?.knowledgeProfile;
   const destinationIdentityTokens = buildDestinationIdentityTokens({ city, country, title: workbookData?.title || city, slug: workbookData?.slug || slug });
   const allowFallbackSupplementation = Boolean(workbookData?.source === "runtime-loader" && isWorkbookFallbackMediaDestination(slug));
   const filteredWorkbookMedia = mergeDestinationSpecificMedia(resolvedWorkbookMedia, workbookFallbackData?.media ?? fallbackMedia, destinationIdentityTokens, allowFallbackSupplementation);
@@ -851,6 +885,7 @@ export const buildWorkbookDestinationFromData = (slug: string, workbookData: Pre
     heroImages: hasWorkbookContent && filteredWorkbookMedia.length > 0 ? filteredWorkbookMedia.map((item) => ({ kind: item.kind, url: item.url, altText: item.altText, caption: item.caption, isPrimary: item.isPrimary, sourceUrl: item.sourceUrl, attribution: item.attribution, license: item.license })) : (fallback?.heroImages ?? fallbackMedia),
     mediaGallery: hasWorkbookContent && filteredWorkbookMedia.length > 0 ? filteredWorkbookMedia.map((item) => ({ kind: item.kind, url: item.url, altText: item.altText, caption: item.caption, isPrimary: item.isPrimary, sourceUrl: item.sourceUrl, attribution: item.attribution, license: item.license })) : (fallback?.mediaGallery ?? fallbackMedia),
     premiumEditorialContent: buildWorkbookPremiumEditorialContent(workbookData, workbookFallbackData?.premiumEditorialContent ?? fallback?.premiumEditorialContent),
+    knowledgeProfile: workbookKnowledgeProfile,
     neighborhoodProfiles: preferredNeighborhoodProfiles,
     neighborhoodIntelligence: buildWorkbookNeighborhoodIntelligence(workbookData) ?? fallback?.neighborhoodIntelligence,
   } as CanonicalDestination;

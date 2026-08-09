@@ -393,7 +393,7 @@ function buildCategoryFallbackPlace(destination: CanonicalDestination, neighborh
     category,
     mapUrl: buildNeighborhoodSearchUrl(query, "maps"),
     isFallback: true,
-    metadata: { Source: "Neighborhood-specific search" },
+    metadata: {},
   } satisfies NeighborhoodInsightPlace;
 }
 
@@ -403,10 +403,8 @@ function buildVerifiableInsightPlaces(destination: CanonicalDestination, neighbo
     .filter((place) => !isGenericPlaceName(place.name, neighborhoodName, group.category, destination.title || destination.city))
     .slice(0, 4)
     .map((place, index) => {
-      const mapQuery = [neighborhoodName, place.name, destination.city, destination.country].filter(Boolean).join(" ").trim();
       const metadata: Record<string, string> = {
         Category: group.category,
-        Source: place.source || "Verified neighborhood intelligence",
       };
 
       if (place.relationshipToNeighborhood) metadata["Relationship"] = place.relationshipToNeighborhood;
@@ -423,7 +421,7 @@ function buildVerifiableInsightPlaces(destination: CanonicalDestination, neighbo
         description: place.description || `${place.name} is a verified ${group.category.toLowerCase()} that helps explain what makes ${neighborhoodName || destination.city} feel distinctive.`,
         neighborhood: place.neighborhoodName || neighborhoodName || destination.city,
         category: group.category,
-        mapUrl: place.googleMapsUrl || buildNeighborhoodSearchUrl(mapQuery, "maps"),
+        mapUrl: place.googleMapsUrl || undefined,
         website: isPlaceWebsiteVisible(place) ? place.websiteUrl : undefined,
         aiSummary: place.whyItMatters || `${place.name} is a place-level signal that helps explain the local rhythm of ${neighborhoodName || destination.city}.`,
         metadata,
@@ -596,7 +594,7 @@ function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighb
       value: cardConfig.value,
       description: cardConfig.description,
       places,
-      emptyMessage: "No verified place-level data is available for this category yet.",
+      emptyMessage: "More local detail coming soon.",
     } satisfies NeighborhoodInsightCard];
   });
 
@@ -616,7 +614,7 @@ function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighb
       value: "Bike-friendly routes",
       description: bikeability,
       places: [],
-      emptyMessage: "No verified bikeability data is available for this neighborhood yet.",
+      emptyMessage: "More local detail coming soon.",
     },
     {
       key: "family-empty",
@@ -624,7 +622,7 @@ function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighb
       value: "Family-friendly places",
       description: familyFriendly,
       places: [],
-      emptyMessage: "No verified family-friendly data is available for this neighborhood yet.",
+      emptyMessage: "More local detail coming soon.",
     },
     {
       key: "pet",
@@ -632,7 +630,7 @@ function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighb
       value: "Pet-friendly places",
       description: petFriendly,
       places: [],
-      emptyMessage: "No verified pet-friendly data is available for this neighborhood yet.",
+      emptyMessage: "More local detail coming soon.",
     },
     {
       key: "remote-work-empty",
@@ -640,12 +638,12 @@ function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighb
       value: "Remote-work-friendly spots",
       description: remoteWork,
       places: [],
-      emptyMessage: "No verified remote-work data is available for this neighborhood yet.",
+      emptyMessage: "More local detail coming soon.",
     },
-    { key: "walkability", label: "Walkability", value: String(walkability), description: "How easily daily errands and neighborhood life can be handled on foot.", places: [], emptyMessage: "No verified walkability data is available for this neighborhood yet." },
-    { key: "transit-signal", label: "Transit", value: String(transit), description: "How well the area supports car-light routines and local travel.", places: [], emptyMessage: "No verified transit data is available for this neighborhood yet." },
-    { key: "safety", label: "Safety", value: String(safety), description: "How the area is perceived for daily calm and residential comfort.", places: [], emptyMessage: "No verified safety data is available for this neighborhood yet." },
-    { key: "overall", label: "Overall neighborhood score", value: `${overallScore.toFixed(1)}/10`, description: "A dynamic composite built from the strongest available neighborhood signals.", places: [], emptyMessage: "No verified neighborhood score data is available for this neighborhood yet." },
+    { key: "walkability", label: "Walkability", value: String(walkability), description: "How easily daily errands and neighborhood life can be handled on foot.", places: [], emptyMessage: "More local detail coming soon." },
+    { key: "transit-signal", label: "Transit", value: String(transit), description: "How well the area supports car-light routines and local travel.", places: [], emptyMessage: "More local detail coming soon." },
+    { key: "safety", label: "Safety", value: String(safety), description: "How the area is perceived for daily calm and residential comfort.", places: [], emptyMessage: "More local detail coming soon." },
+    { key: "overall", label: "Overall neighborhood score", value: `${overallScore.toFixed(1)}/10`, description: "A dynamic composite built from the strongest available neighborhood signals.", places: [], emptyMessage: "More local detail coming soon." },
   ];
 
   return cards;
@@ -669,7 +667,7 @@ function PremiumSectionBlock({
   const hasBody = body.trim().length > 0 || remainder.trim().length > 0;
 
   return (
-    <article className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_60px_rgba(2,8,23,0.2)]">
+    <article className="rounded-[1.75rem] border border-white/10 bg-slate-900/70 p-6 shadow-[0_18px_50px_rgba(2,8,23,0.16)]">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           {eyebrow ? <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-cyan-300">{eyebrow}</p> : null}
@@ -684,10 +682,10 @@ function PremiumSectionBlock({
         ) : null}
       </div>
       <div className="mt-5 space-y-4">
-        <p className="text-sm leading-8 text-slate-300 whitespace-pre-line">{intro}</p>
+        <p className="text-[15px] leading-8 text-slate-300 whitespace-pre-line">{intro}</p>
         <div className={`overflow-hidden transition-all duration-300 ${expanded ? "max-h-[2200px] opacity-100" : "max-h-0 opacity-0"}`}>
-          {body.trim().length > 0 ? <p className="text-sm leading-8 text-slate-300 whitespace-pre-line">{body}</p> : null}
-          {remainder.trim().length > 0 ? <p className="mt-4 text-sm leading-8 text-slate-300 whitespace-pre-line">{remainder}</p> : null}
+          {body.trim().length > 0 ? <p className="text-[15px] leading-8 text-slate-300 whitespace-pre-line">{body}</p> : null}
+          {remainder.trim().length > 0 ? <p className="mt-4 text-[15px] leading-8 text-slate-300 whitespace-pre-line">{remainder}</p> : null}
         </div>
       </div>
     </article>
@@ -716,18 +714,18 @@ function ExpandableInsightCard({
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4 shadow-[0_20px_60px_rgba(2,8,23,0.18)]">
+    <div className="rounded-[1.5rem] border border-white/10 bg-slate-900/70 p-5 shadow-[0_18px_50px_rgba(2,8,23,0.16)]">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h4 className="text-base font-semibold text-white">{title}</h4>
-          <p className="mt-2 text-sm leading-7 text-slate-300">{summary}</p>
+          <p className="mt-2 text-[15px] leading-8 text-slate-300">{summary}</p>
         </div>
         <button type="button" onClick={() => setExpanded((value) => !value)} className="rounded-full border border-white/10 bg-slate-950/40 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-200">
           {expanded ? "Collapse" : "Expand"}
         </button>
       </div>
       <div className={`overflow-hidden transition-all duration-300 ${expanded ? "mt-4 max-h-[900px] opacity-100" : "max-h-0 opacity-0"}`}>
-        <p className="text-sm leading-8 text-slate-400">{body}</p>
+        <p className="text-[15px] leading-8 text-slate-300">{body}</p>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
           {strengths && strengths.length > 0 ? (
             <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-3">
@@ -842,11 +840,11 @@ function ExpandableNeighborhoodCard({
   ];
 
   return (
-    <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4 shadow-[0_20px_60px_rgba(2,8,23,0.18)]">
+    <div className="rounded-[1.5rem] border border-white/10 bg-slate-900/70 p-5 shadow-[0_18px_50px_rgba(2,8,23,0.16)]">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h4 className="text-lg font-semibold text-white">{neighborhood.name}</h4>
-          <p className="mt-2 text-sm leading-7 text-slate-300">{neighborhood.whyItWorks}</p>
+          <p className="mt-2 text-[15px] leading-8 text-slate-300">{neighborhood.whyItWorks}</p>
         </div>
         <button type="button" onClick={() => setExpanded((value) => !value)} className="rounded-full border border-white/10 bg-slate-950/40 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-200">
           {expanded ? "Collapse" : "Explore"}
@@ -855,11 +853,11 @@ function ExpandableNeighborhoodCard({
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Best for</p>
-          <p className="mt-2 text-sm leading-6 text-slate-300">{neighborhood.fit}</p>
+          <p className="mt-2 text-[15px] leading-7 text-slate-300">{neighborhood.fit}</p>
         </div>
         <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Overall vibe</p>
-          <p className="mt-2 text-sm leading-6 text-slate-300">{neighborhood.vibe}</p>
+          <p className="mt-2 text-[15px] leading-7 text-slate-300">{neighborhood.vibe}</p>
         </div>
       </div>
       {neighborhoodProfileResources.length > 0 ? (
@@ -893,10 +891,10 @@ function ExpandableNeighborhoodCard({
             </div>
             <div className="mt-4 grid gap-3 lg:grid-cols-2">
               {neighborhoodInsightCards.map((card) => (
-                <div key={card.key} className="rounded-2xl border border-white/10 bg-white/5 p-3">
+                <div key={card.key} className="rounded-2xl border border-white/10 bg-slate-950/35 p-3.5">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">{card.label}</p>
                   <p className="mt-2 text-sm font-semibold text-white">{card.value}</p>
-                  <p className="mt-2 text-sm leading-6 text-slate-400">{card.description}</p>
+                  <p className="mt-2 text-[15px] leading-7 text-slate-300">{card.description}</p>
                   {card.places.length > 0 ? (
                     <div className="mt-3 space-y-2">
                       {Array.from(new Map(card.places.slice(0, 4).map((place) => [place.id, place])).values()).map((place) => {
@@ -908,7 +906,7 @@ function ExpandableNeighborhoodCard({
                             <a key={place.id} href={place.mapUrl} target="_blank" rel="noopener noreferrer" className={linkClasses}>
                               <span>
                                 <span className="block text-sm font-semibold text-white">{place.title}</span>
-                                <span className="mt-1 block text-sm leading-6 text-slate-400">{place.description}</span>
+                                <span className="mt-1 block text-[15px] leading-7 text-slate-300">{place.description}</span>
                               </span>
                               <span className="text-xs uppercase tracking-[0.2em] text-cyan-200">{actionLabel}</span>
                             </a>
@@ -919,7 +917,7 @@ function ExpandableNeighborhoodCard({
                           <button key={place.id} type="button" onClick={() => setSelectedPlace(place)} className={linkClasses}>
                             <span>
                               <span className="block text-sm font-semibold text-white">{place.title}</span>
-                              <span className="mt-1 block text-sm leading-6 text-slate-400">{place.description}</span>
+                              <span className="mt-1 block text-[15px] leading-7 text-slate-300">{place.description}</span>
                             </span>
                             <span className="text-xs uppercase tracking-[0.2em] text-cyan-200">{actionLabel}</span>
                           </button>
@@ -927,7 +925,7 @@ function ExpandableNeighborhoodCard({
                       })}
                     </div>
                   ) : (
-                    <p className="mt-3 text-sm leading-6 text-slate-400">{card.emptyMessage}</p>
+                    <p className="mt-3 text-[15px] leading-7 text-slate-300">{card.emptyMessage}</p>
                   )}
                 </div>
               ))}
@@ -980,7 +978,7 @@ function ExpandableNeighborhoodCard({
             </div>
             <div className="mt-5 space-y-4">
               <p className="text-sm leading-7 text-slate-300">{selectedPlace.description}</p>
-              {selectedPlace.aiSummary ? <p className="rounded-2xl border border-white/10 bg-white/5 p-3 text-sm leading-7 text-slate-300">{selectedPlace.aiSummary}</p> : null}
+              {selectedPlace.aiSummary && selectedPlace.aiSummary.trim().length > 0 && selectedPlace.aiSummary !== selectedPlace.description ? <p className="rounded-2xl border border-white/10 bg-white/5 p-3 text-sm leading-7 text-slate-300">{selectedPlace.aiSummary}</p> : null}
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Neighborhood</p>
@@ -1190,37 +1188,90 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   const narrativeSummary = [destination.heroNarrative, destination.overview, destination.editorial, destination.dailyLife].find((value) => typeof value === "string" && value.trim().length > 0) ?? "A place with a distinct everyday rhythm and a strong sense of local identity.";
   const lifestyleSummary = [destination.dailyLife, destination.overview, destination.heroNarrative, destination.editorial].find((value) => typeof value === "string" && value.trim().length > 0) ?? narrativeSummary;
   const outdoorSummary = [destination.overview, destination.heroNarrative, destination.editorial, destination.weather].find((value) => typeof value === "string" && value.trim().length > 0) ?? narrativeSummary;
+  const categoryPlaceholder = "Detailed category information is not available yet.";
+  const categoryValue = (value?: string | null) => (typeof value === "string" && value.trim().length > 0 ? value : categoryPlaceholder);
+  const categoryListValue = (values: Array<string | undefined | null>) => {
+    const firstMatch = values.find((value) => typeof value === "string" && value.trim().length > 0);
+    return firstMatch ?? categoryPlaceholder;
+  };
+  const getNamedResourceValues = (category: string) => {
+    const normalizedCategory = category.toLowerCase();
+    return [
+      ...destination.resources,
+      ...destination.realEstateResources,
+      ...destination.rentalResources,
+      ...destination.healthcareResources,
+      ...destination.weatherResources,
+      ...destination.structuredResources,
+      ...destination.visaResources,
+    ]
+      .filter((resource) => resource?.label && resource.label.trim().length > 0)
+      .filter((resource) => {
+        const label = resource.label.toLowerCase();
+        const categoryValue = resource.category?.toLowerCase() ?? "";
+        return label.includes(normalizedCategory) || categoryValue.includes(normalizedCategory) || normalizedCategory.includes(label) || normalizedCategory.includes(categoryValue);
+      })
+      .map((resource) => resource.label)
+      .filter(Boolean);
+  };
+  const getSpecificCategoryValue = (category: string, fallbackValue?: string | null, namedValues?: string[]) => {
+    const explicitValues = (namedValues ?? []).filter(Boolean);
+    if (explicitValues.length > 0) return explicitValues.join(" • ");
+    return categoryValue(fallbackValue);
+  };
+  const formatPopulationValue = (value?: string | null) => {
+    if (typeof value !== "string") return undefined;
+    const trimmed = value.trim();
+    if (!trimmed) return undefined;
+    const digitsOnly = trimmed.replace(/,/g, "");
+    if (/^-?\d+$/.test(digitsOnly)) {
+      return new Intl.NumberFormat("en-US").format(Number(digitsOnly));
+    }
+    return trimmed;
+  };
+  const formatListValue = (values?: Array<string | undefined | null> | null) => {
+    const filtered = values?.filter((value) => typeof value === "string" && value.trim().length > 0) ?? [];
+    return filtered.length > 0 ? filtered.join(" • ") : undefined;
+  };
+  const formatClimateValue = () => {
+    const values = [destination.knowledgeProfile?.rainfall, destination.knowledgeProfile?.sunshineHours, destination.knowledgeProfile?.humidity]
+      .filter((value): value is string => typeof value === "string" && value.trim().length > 0);
+    if (values.length > 0) {
+      return values.join(" • ");
+    }
+    return destination.knowledgeProfile?.climateClassification || destination.climate || undefined;
+  };
 
   const essentialFacts = useMemo(() => [
-    { label: "Population", value: destination.knowledgeProfile?.population ?? narrativeSummary, note: "Population helps frame the city’s scale and whether it feels intimate or metropolitan." },
-    { label: "Metro population", value: destination.knowledgeProfile?.metroPopulation ?? (destination.overview || narrativeSummary), note: "The metro explains how far the city’s labor, healthcare, and airport ecosystems extend." },
-    { label: "Climate", value: destination.knowledgeProfile?.climateClassification ?? destination.climate ?? narrativeSummary, note: "Climate influences daily life, outdoor behavior, and long-stay comfort." },
-    { label: "Elevation", value: destination.knowledgeProfile?.elevation ?? outdoorSummary, note: "Elevation influences weather, views, and how the city feels on the ground." },
-    { label: "Average temperatures", value: destination.weather || destination.knowledgeProfile?.rainfall || destination.climate || narrativeSummary, note: "Temperature patterns are one of the clearest differences between visiting and living somewhere." },
-    { label: "Walkability", value: destination.knowledgeProfile?.walkability ?? destination.walkability ?? lifestyleSummary, note: "Walkability determines whether daily errands can happen on foot or by transit." },
-    { label: "Bikeability", value: destination.knowledgeProfile?.bikeFriendliness ?? destination.walkability ?? outdoorSummary, note: "Cycling often changes the feel of a city more than most visitors expect." },
-    { label: "Transit", value: destination.knowledgeProfile?.publicTransportation ?? destination.transportation ?? lifestyleSummary, note: "Transit turns a city into a daily-life system rather than a postcard image." },
-    { label: "Healthcare", value: destination.knowledgeProfile?.healthcareQuality ?? destination.healthcare ?? lifestyleSummary, note: "Healthcare is often the deciding factor for long-stay households and retirees." },
-    { label: "Safety", value: destination.knowledgeProfile?.safety ?? destination.safety ?? narrativeSummary, note: "A city’s safety is rarely uniform, so district-level context matters." },
-    { label: "Internet", value: destination.knowledgeProfile?.internetSpeed ?? destination.internet ?? lifestyleSummary, note: "Internet quality matters for remote work, digital nomads, and modern households." },
-    { label: "Airport access", value: destination.knowledgeProfile?.majorAirports?.join(", ") ?? destination.airportInfo ?? outdoorSummary, note: "Airport access is a major part of relocation ease for families and frequent travelers." },
-    { label: "Currency", value: destination.country === "United States" ? "USD" : destination.country === "United Kingdom" ? "GBP" : destination.country === "Japan" ? "JPY" : destination.country === "Thailand" ? "THB" : "Local currency", note: "Currency affects budgeting, transfers, and how a budget feels in practice." },
-    { label: "Language", value: destination.country === "United States" ? "English" : destination.country === "Spain" ? "Spanish" : destination.country === "France" ? "French" : destination.country === "Italy" ? "Italian" : destination.country === "Croatia" ? "Croatian" : "Local language", note: "Language shapes the ease of everyday administration and local immersion." },
-    { label: "Time zone", value: destination.knowledgeProfile?.timeZone ?? narrativeSummary, note: "Time-zone fit affects travel, work, and family communication." },
-    { label: "Cost level", value: destination.knowledgeProfile?.costOfLiving ?? destination.costOfLiving ?? narrativeSummary, note: "Cost is shaped by housing, utilities, food, and the neighborhood you choose." },
-    { label: "Family friendly", value: destination.family || destination.knowledgeProfile?.familySuitability || lifestyleSummary, note: "Family friendliness depends on parks, schools, and neighborhood routines." },
-    { label: "Retirement friendly", value: destination.retirement || destination.knowledgeProfile?.retirementSuitability || lifestyleSummary, note: "Retirement fit depends on healthcare, pace, climate, and transport access." },
-    { label: "Digital nomad", value: destination.digitalNomad || destination.knowledgeProfile?.digitalNomadSuitability || lifestyleSummary, note: "Remote-work fit depends on internet, cafés, transit, and social energy." },
-    { label: "Visa friendly", value: destination.knowledgeProfile?.visaInfo ?? (destination.overview || narrativeSummary), note: "Visa expectations are essential for long-stay planning and relocation logistics." },
-    { label: "Pet friendly", value: destination.knowledgeProfile?.parks?.join(", ") || destination.knowledgeProfile?.beaches?.join(", ") || outdoorSummary, note: "Pet-friendliness is shaped by green space, density, and neighborhood culture." },
-    { label: "Golf", value: destination.knowledgeProfile?.golf?.join(", ") || destination.golf?.join(", ") || outdoorSummary, note: "Golf availability can be a deciding factor for certain lifestyles." },
-    { label: "Museums", value: destination.knowledgeProfile?.museums?.join(", ") || destination.museums?.join(", ") || narrativeSummary, note: "Museums often define how a city feels to residents over time." },
-    { label: "Food scene", value: destination.knowledgeProfile?.restaurants?.join(", ") || destination.restaurants?.join(", ") || lifestyleSummary, note: "Food culture often becomes a daily-life anchor, not just a tourist attraction." },
-    { label: "Nightlife", value: destination.knowledgeProfile?.nightlife?.join(", ") || destination.dailyLife || narrativeSummary, note: "Nightlife changes the energy of a city from day to night." },
-    { label: "Beach", value: destination.knowledgeProfile?.beaches?.join(", ") || destination.overview || narrativeSummary, note: "Beach access can strongly shape recreation and weekend life." },
-    { label: "Mountains", value: destination.knowledgeProfile?.mountains?.join(", ") || destination.overview || narrativeSummary, note: "Mountains and natural landscapes add a layer of weekend escape." },
-    { label: "Parks", value: destination.knowledgeProfile?.parks?.join(", ") || destination.overview || narrativeSummary, note: "Parks shape how a city feels in both weekdays and weekends." },
-  ], [destination, narrativeSummary, lifestyleSummary, outdoorSummary]);
+    { label: "Population", value: categoryValue(formatPopulationValue(destination.knowledgeProfile?.population)), note: "Population helps frame the city’s scale and whether it feels intimate or metropolitan." },
+    { label: "Metro population", value: categoryValue(formatPopulationValue(destination.knowledgeProfile?.metroPopulation)), note: "The metro explains how far the city’s labor, healthcare, and airport ecosystems extend." },
+    { label: "Climate", value: categoryValue(formatClimateValue()), note: "Climate influences daily life, outdoor behavior, and long-stay comfort." },
+    { label: "Elevation", value: categoryValue(destination.knowledgeProfile?.elevation), note: "Elevation influences weather, views, and how the city feels on the ground." },
+    { label: "Average temperatures", value: categoryValue(destination.weather || destination.knowledgeProfile?.rainfall || destination.climate), note: "Temperature patterns are one of the clearest differences between visiting and living somewhere." },
+    { label: "Walkability", value: categoryValue(destination.knowledgeProfile?.walkability || destination.walkability), note: "Walkability determines whether daily errands can happen on foot or by transit." },
+    { label: "Bikeability", value: categoryValue(destination.knowledgeProfile?.bikeFriendliness), note: "Cycling often changes the feel of a city more than most visitors expect." },
+    { label: "Transit", value: categoryValue(destination.knowledgeProfile?.publicTransportation || destination.transportation), note: "Transit turns a city into a daily-life system rather than a postcard image." },
+    { label: "Healthcare", value: categoryValue(getSpecificCategoryValue("healthcare", formatListValue(destination.knowledgeProfile?.majorHospitals) || destination.knowledgeProfile?.healthcareQuality || destination.healthcare, getNamedResourceValues("healthcare"))), note: "Healthcare is often the deciding factor for long-stay households and retirees." },
+    { label: "Safety", value: categoryValue(destination.knowledgeProfile?.safety || destination.safety), note: "A city’s safety is rarely uniform, so district-level context matters." },
+    { label: "Internet", value: categoryValue(destination.knowledgeProfile?.internetSpeed || destination.internet), note: "Internet quality matters for remote work, digital nomads, and modern households." },
+    { label: "Airport access", value: categoryValue(getSpecificCategoryValue("airport", formatListValue(destination.knowledgeProfile?.majorAirports) || destination.airportInfo, getNamedResourceValues("airport"))), note: "Airport access is a major part of relocation ease for families and frequent travelers." },
+    { label: "Currency", value: categoryValue(destination.country === "United States" ? "USD" : destination.country === "United Kingdom" ? "GBP" : destination.country === "Japan" ? "JPY" : destination.country === "Thailand" ? "THB" : undefined), note: "Currency affects budgeting, transfers, and how a budget feels in practice." },
+    { label: "Language", value: categoryValue(destination.country === "United States" ? "English" : destination.country === "Spain" ? "Spanish" : destination.country === "France" ? "French" : destination.country === "Italy" ? "Italian" : destination.country === "Croatia" ? "Croatian" : undefined), note: "Language shapes the ease of everyday administration and local immersion." },
+    { label: "Time zone", value: categoryValue(destination.knowledgeProfile?.timeZone), note: "Time-zone fit affects travel, work, and family communication." },
+    { label: "Cost level", value: categoryValue(destination.knowledgeProfile?.costOfLiving || destination.costOfLiving), note: "Cost is shaped by housing, utilities, food, and the neighborhood you choose." },
+    { label: "Family friendly", value: categoryValue(getSpecificCategoryValue("family", destination.family || destination.knowledgeProfile?.familySuitability, getNamedResourceValues("family"))), note: "Family friendliness depends on parks, schools, and neighborhood routines." },
+    { label: "Retirement friendly", value: categoryValue(getSpecificCategoryValue("retirement", destination.retirement || destination.knowledgeProfile?.retirementSuitability, getNamedResourceValues("retirement"))), note: "Retirement fit depends on healthcare, pace, climate, and transport access." },
+    { label: "Digital nomad", value: categoryValue(getSpecificCategoryValue("nomad", destination.digitalNomad || destination.knowledgeProfile?.digitalNomadSuitability, getNamedResourceValues("nomad"))), note: "Remote-work fit depends on internet, cafés, transit, and social energy." },
+    { label: "Visa friendly", value: categoryValue(destination.knowledgeProfile?.visaInfo), note: "Visa expectations are essential for long-stay planning and relocation logistics." },
+    { label: "Pet friendly", value: categoryValue(getSpecificCategoryValue("pet", categoryListValue([destination.knowledgeProfile?.parks?.join(", "), destination.knowledgeProfile?.beaches?.join(", ")]), getNamedResourceValues("pet"))), note: "Pet-friendliness is shaped by green space, density, and neighborhood culture." },
+    { label: "Golf", value: categoryValue(getSpecificCategoryValue("golf", categoryListValue([destination.knowledgeProfile?.golf?.join(", "), destination.golf?.join(", ")]), getNamedResourceValues("golf"))), note: "Golf availability can be a deciding factor for certain lifestyles." },
+    { label: "Museums", value: categoryValue(getSpecificCategoryValue("museum", categoryListValue([destination.knowledgeProfile?.museums?.join(", "), destination.museums?.join(", ")]), getNamedResourceValues("museum"))), note: "Museums often define how a city feels to residents over time." },
+    { label: "Food scene", value: categoryValue(getSpecificCategoryValue("restaurant", categoryListValue([destination.knowledgeProfile?.restaurants?.join(", "), destination.restaurants?.join(", ")]), getNamedResourceValues("restaurant"))), note: "Food culture often becomes a daily-life anchor, not just a tourist attraction." },
+    { label: "Nightlife", value: categoryValue(getSpecificCategoryValue("nightlife", categoryListValue([destination.knowledgeProfile?.nightlife?.join(", "), destination.dailyLife]), getNamedResourceValues("nightlife"))), note: "Nightlife changes the energy of a city from day to night." },
+    { label: "Beach", value: categoryValue(getSpecificCategoryValue("beach", categoryListValue([destination.knowledgeProfile?.beaches?.join(", ")]), getNamedResourceValues("beach"))), note: "Beach access can strongly shape recreation and weekend life." },
+    { label: "Mountains", value: categoryValue(getSpecificCategoryValue("mountain", categoryListValue([destination.knowledgeProfile?.mountains?.join(", ")]), getNamedResourceValues("mountain"))), note: "Mountains and natural landscapes add a layer of weekend escape." },
+    { label: "Parks", value: categoryValue(getSpecificCategoryValue("park", categoryListValue([destination.knowledgeProfile?.parks?.join(", ")]), getNamedResourceValues("park"))), note: "Parks shape how a city feels in both weekdays and weekends." },
+  ], [destination]);
 
   const intelligenceProfile = buildDestinationIntelligenceProfile({
     slug: destination.slug,
@@ -1319,8 +1370,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     : `/destinations/${destination.slug}?developer=1`;
 
   return (
-    <main className="space-y-8 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.12),_transparent_35%),linear-gradient(180deg,_rgba(7,12,30,0.97),_rgba(15,23,42,0.96))] px-3 py-4 text-slate-100 sm:px-5 sm:py-6 lg:px-8 lg:py-8">
-      <section className="rounded-[2rem] border border-white/20 bg-slate-900/70 p-7 shadow-[0_30px_90px_rgba(2,8,23,0.28)] backdrop-blur sm:p-9">
+    <main className="space-y-10 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.10),_transparent_35%),linear-gradient(180deg,_rgba(10,16,34,0.96),_rgba(15,23,42,0.95))] px-3 py-5 text-slate-100 sm:px-5 sm:py-6 lg:px-8 lg:py-8">
+      <section className="rounded-[2rem] border border-white/15 bg-slate-900/60 p-7 shadow-[0_25px_80px_rgba(2,8,23,0.24)] backdrop-blur sm:p-9">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3">
             <span className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200">DestinationFinderAI premium guide</span>
@@ -1362,18 +1413,18 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
         </div>
         <h1 className="mt-6 text-4xl font-black text-white sm:text-5xl">{destination.title}</h1>
         <p className="mt-3 text-lg text-slate-300">{destination.subtitle}</p>
-        <p className="mt-6 max-w-4xl text-base leading-8 text-slate-400">{premiumContent.heroIntroduction}</p>
+        <p className="mt-6 max-w-4xl text-[15px] leading-8 text-slate-300">{premiumContent.heroIntroduction}</p>
       </section>
 
-      <section className="rounded-[2rem] border border-white/20 bg-slate-900/70 p-6 shadow-[0_20px_70px_rgba(2,8,23,0.22)] sm:p-8">
+      <section className="rounded-[2rem] border border-white/15 bg-slate-900/60 p-6 shadow-[0_20px_70px_rgba(2,8,23,0.20)] sm:p-8">
         <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Executive summary</p>
             <h2 className="mt-3 text-2xl font-semibold text-white">{destination.title} at a glance</h2>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-400">A 20-second orientation for people deciding whether the city deserves deeper attention. It highlights the essentials without reducing the lived experience to a single score.</p>
+            <p className="mt-3 max-w-2xl text-[15px] leading-8 text-slate-300">A 20-second orientation for people deciding whether the city deserves deeper attention. It highlights the essentials without reducing the lived experience to a single score.</p>
           </div>
           <div className="space-y-3">
-            <div className="overflow-hidden rounded-[1.5rem] border border-white/20 bg-white/10 shadow-[0_20px_70px_rgba(2,8,23,0.22)]">
+            <div className="overflow-hidden rounded-[1.5rem] border border-white/15 bg-white/10 shadow-[0_20px_70px_rgba(2,8,23,0.20)]">
               <img src={executiveSummaryImage.resolvedUrl} alt={executiveSummaryImage.altText || destination.title} className="h-[18rem] w-full object-cover sm:h-[20rem]" loading="lazy" decoding="async" />
               <div className="p-4">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">Featured image</p>
@@ -1383,7 +1434,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               {essentialFacts.slice(0, 8).map((fact) => (
-                <div key={fact.label} className="rounded-2xl border border-white/15 bg-white/10 p-3">
+                <div key={fact.label} className="rounded-2xl border border-white/10 bg-white/10 p-3.5">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">{fact.label}</p>
                   <p className="mt-2 text-sm font-semibold text-white">{fact.value}</p>
                   <p className="mt-2 text-xs leading-6 text-slate-400">{fact.note}</p>
@@ -1394,7 +1445,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
         </div>
         <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {essentialFacts.slice(8).map((fact) => (
-            <div key={fact.label} className="rounded-3xl border border-white/10 bg-slate-950/35 p-4">
+            <div key={fact.label} className="rounded-3xl border border-white/10 bg-slate-950/30 p-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">{fact.label}</p>
               <p className="mt-2 text-sm font-semibold text-white">{fact.value}</p>
               <p className="mt-2 text-xs leading-6 text-slate-400">{fact.note}</p>
