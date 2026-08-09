@@ -101,6 +101,23 @@ describe("buildPremiumDestinationEditorialPackage", () => {
     expect(packageContent.neighborhoodGuide).toContain("Palamidi");
   });
 
+  it("uses destination-level healthcare and transport detail when no richer research profile is available", () => {
+    const packageContent = buildPremiumDestinationEditorialPackage({
+      ...destination,
+      healthcare: "Baptist hospital access and specialty clinics are a core reason this city works for long-stay households.",
+      transportation: "The city is practical for a car-light routine, but regional transit still matters for daily life.",
+      dailyLife: "River mornings, neighborhood cafés, and local errands shape the weekly rhythm.",
+      climate: "Humid subtropical weather makes outdoor routines central to the lifestyle.",
+      researchProfile: undefined,
+      knowledgeProfile: undefined,
+    });
+
+    expect(packageContent.healthcareGuide).toContain("Baptist hospital access");
+    expect(packageContent.transportationGuide).toContain("car-light routine");
+    expect(packageContent.whatItsReallyLike).toContain("River mornings");
+    expect(packageContent.climateGuide).toContain("Humid subtropical");
+  });
+
   it("pulls destination-specific language from the shared research profiles for known places", () => {
     const packageContent = buildPremiumDestinationEditorialPackage({
       slug: "cavtat-croatia",

@@ -4,7 +4,7 @@ import { getSupabaseAuthHeaders, getSupabaseConfig, getSupabaseServiceRoleKey, i
 import { shouldUseAdminLocalFallback } from "../../../../lib/admin-local-fallback";
 import { buildEnrichedDestinationCreatePayload } from "../../../../lib/destination-enrichment";
 import { verifyDestinationImport } from "../../../../lib/destination-import-verification";
-import { buildPremiumV2WorkbookImportPlan, buildWorkbookImportPlan, normalizeWorkbookImportMode } from "../../../../lib/workbook-import-engine";
+import { buildPremiumV2WorkbookContractPreview, buildPremiumV2WorkbookImportPlan, buildWorkbookImportPlan, normalizeWorkbookImportMode, normalizeWorkbookPayloadToPremiumV2ImportInput } from "../../../../lib/workbook-import-engine";
 
 const ADMIN_TABLE = "destinations_catalog";
 
@@ -55,6 +55,128 @@ const buildRouteEnrichedDestinationCreatePayload = ({
       ...(editorialContent ? { editorialContent } : {}),
       ...(researchProfile ? { researchProfile } : {}),
     },
+  };
+};
+
+const normalizeImporterText = (value: unknown) => {
+  if (value == null) {
+    return "";
+  }
+
+  if (typeof value === "string") {
+    return value.trim();
+  }
+
+  return String(value).trim();
+};
+
+const normalizeImporterBoolean = (value: unknown) => {
+  if (typeof value === "boolean") {
+    return value;
+  }
+
+  if (typeof value === "number") {
+    return value !== 0;
+  }
+
+  const text = normalizeImporterText(value).toLowerCase();
+  return ["true", "1", "yes", "y", "verified", "on"].includes(text);
+};
+
+type PostApplyEnrichmentTarget = {
+  destinationId: string;
+  slug: string;
+  city: string;
+  country: string;
+  description: string | null;
+  overview: string | null;
+};
+
+const createPostApplyEnrichmentTarget = ({
+  destinationId,
+  slug,
+  city,
+  country,
+  description,
+  overview,
+}: {
+  destinationId: string;
+  slug: string;
+  city: string;
+  country: string;
+  description?: string | null;
+  overview?: string | null;
+}): PostApplyEnrichmentTarget => ({
+  destinationId,
+  slug: normalizeImporterText(slug),
+  city: normalizeImporterText(city),
+  country: normalizeImporterText(country),
+  description: description ?? null,
+  overview: overview ?? null,
+});
+
+const fetchDestinationEnrichmentDataset = async ({
+  accessToken,
+  url,
+  headers,
+  destinationId,
+}: {
+  accessToken: string | null;
+  url: string;
+  headers: HeadersInit;
+  destinationId: string;
+}) => {
+  const destinationResponse = await fetch(`${url}/rest/v1/${ADMIN_TABLE}?select=id,slug,city,country,description,overview,status,tier,metadata&id=eq.${destinationId}&limit=1`, {
+    headers: {
+      ...(headers as Record<string, string>),
+      Authorization: getSupabaseAuthHeaders(accessToken).Authorization ?? "",
+    },
+    cache: "no-store",
+  });
+
+  const [neighborhoodsResponse, placesResponse, resourcesResponse, mediaResponse] = await Promise.all([
+    fetch(`${url}/rest/v1/neighborhoods?select=id,name,subtitle,value_1,url,source_url,source_organization,source_type,verification_status,confidence_level,last_verified_at,notes,destination_id&destination_id=eq.${destinationId}`, {
+      headers: {
+        ...(headers as Record<string, string>),
+        Authorization: getSupabaseAuthHeaders(accessToken).Authorization ?? "",
+      },
+      cache: "no-store",
+    }),
+    fetch(`${url}/rest/v1/destination_places?select=id,name,neighborhood_name,category,address,google_maps_url,website_url,verified,source,source_url,last_verified_at,destination_id&destination_id=eq.${destinationId}`, {
+      headers: {
+        ...(headers as Record<string, string>),
+        Authorization: getSupabaseAuthHeaders(accessToken).Authorization ?? "",
+      },
+      cache: "no-store",
+    }),
+    fetch(`${url}/rest/v1/destination_resource_links?select=id,label,category,provider,url,verified,official,source,source_url,destination_id&destination_id=eq.${destinationId}`, {
+      headers: {
+        ...(headers as Record<string, string>),
+        Authorization: getSupabaseAuthHeaders(accessToken).Authorization ?? "",
+      },
+      cache: "no-store",
+    }),
+    fetch(`${url}/rest/v1/destination_media_assets?select=id,kind,provider,url,caption,alt_text,sort_order,is_primary,verified,source,source_url,destination_id&destination_id=eq.${destinationId}`, {
+      headers: {
+        ...(headers as Record<string, string>),
+        Authorization: getSupabaseAuthHeaders(accessToken).Authorization ?? "",
+      },
+      cache: "no-store",
+    }),
+  ]);
+
+  const destinationRows = destinationResponse.ok ? ((await destinationResponse.json()) as Array<Record<string, unknown>>) : [];
+  const neighborhoods = neighborhoodsResponse.ok ? ((await neighborhoodsResponse.json()) as Array<Record<string, unknown>>) : [];
+  const places = placesResponse.ok ? ((await placesResponse.json()) as Array<Record<string, unknown>>) : [];
+  const resources = resourcesResponse.ok ? ((await resourcesResponse.json()) as Array<Record<string, unknown>>) : [];
+  const media = mediaResponse.ok ? ((await mediaResponse.json()) as Array<Record<string, unknown>>) : [];
+
+  return {
+    destination: destinationRows[0] ?? null,
+    neighborhoods,
+    places,
+    resources,
+    media,
   };
 };
 
@@ -182,73 +304,94 @@ export async function POST(request: Request) {
 
     let plan: Array<Record<string, unknown>> = [];
     let summary = buildImportSummary({ plan: [], totalRows: rows.length });
+    let compatibilityNotes: Array<{ sheetName: string; unsupportedColumns: string[]; note: string }> = [];
 
     if (hasMultiSheetWorkbookPayload) {
+      const normalizedWorkbookInput = normalizeWorkbookPayloadToPremiumV2ImportInput({
+        workbookSheets: payload.workbookSheets ?? [],
+        workbookRowsBySheet: payload.workbookRowsBySheet ?? {},
+        workbookHeadersBySheet: payload.workbookHeadersBySheet ?? {},
+      });
+
+      const destinationRows = normalizedWorkbookInput.destinationRows;
+      const neighborhoodRows = normalizedWorkbookInput.neighborhoodRows;
+      const neighborhoodPlaceRows = normalizedWorkbookInput.neighborhoodPlaceRows;
+      const resourceRows = normalizedWorkbookInput.resourceRows;
+      const mediaRows = normalizedWorkbookInput.mediaRows;
+
+      const contractPreview = buildPremiumV2WorkbookContractPreview({
+        workbookSheets: payload.workbookSheets ?? [],
+        workbookRowsBySheet: payload.workbookRowsBySheet ?? {},
+        workbookHeadersBySheet: payload.workbookHeadersBySheet ?? {},
+        existingDestinations,
+      });
+
       const premiumPlan = buildPremiumV2WorkbookImportPlan({
-        destinationRows: payload.workbookRowsBySheet?.Destinations ?? [],
-        neighborhoodRows: payload.workbookRowsBySheet?.Neighborhoods ?? [],
-        neighborhoodPlaceRows: payload.workbookRowsBySheet?.NeighborhoodPlaces ?? [],
-        resourceRows: payload.workbookRowsBySheet?.Resources ?? [],
-        mediaRows: payload.workbookRowsBySheet?.Media ?? [],
+        destinationRows,
+        neighborhoodRows,
+        neighborhoodPlaceRows,
+        resourceRows,
+        mediaRows,
         existingDestinations,
         mode: normalizeWorkbookImportMode(mode),
+        compatibilityNotes: normalizedWorkbookInput.compatibilityNotes ?? [],
       });
 
       const planEntries = [
         ...premiumPlan.destinations.map((entry, index) => ({
           ...entry,
-          city: String(payload.workbookRowsBySheet?.Destinations?.[index]?.city ?? payload.workbookRowsBySheet?.Destinations?.[index]?.destination_name ?? ""),
-          country: String(payload.workbookRowsBySheet?.Destinations?.[index]?.country ?? ""),
-          slug: String(payload.workbookRowsBySheet?.Destinations?.[index]?.slug ?? payload.workbookRowsBySheet?.Destinations?.[index]?.destination_slug ?? entry.slug ?? ""),
-          description: String(payload.workbookRowsBySheet?.Destinations?.[index]?.description ?? ""),
-          overview: String(payload.workbookRowsBySheet?.Destinations?.[index]?.overview ?? ""),
-          status: String(payload.workbookRowsBySheet?.Destinations?.[index]?.status ?? "draft"),
-          tier: String(payload.workbookRowsBySheet?.Destinations?.[index]?.tier ?? "launch"),
-          importedRow: payload.workbookRowsBySheet?.Destinations?.[index] ?? {},
+          city: String(destinationRows[index]?.city ?? destinationRows[index]?.destination_name ?? ""),
+          country: String(destinationRows[index]?.country ?? ""),
+          slug: String(destinationRows[index]?.slug ?? destinationRows[index]?.destination_slug ?? entry.slug ?? ""),
+          description: String(destinationRows[index]?.description ?? ""),
+          overview: String(destinationRows[index]?.overview ?? ""),
+          status: String(destinationRows[index]?.status ?? "draft"),
+          tier: String(destinationRows[index]?.tier ?? "launch"),
+          importedRow: destinationRows[index] ?? {},
         })),
         ...premiumPlan.neighborhoods.map((entry, index) => ({
           ...entry,
-          city: String(payload.workbookRowsBySheet?.Neighborhoods?.[index]?.city ?? ""),
-          country: String(payload.workbookRowsBySheet?.Neighborhoods?.[index]?.country ?? ""),
-          slug: String(payload.workbookRowsBySheet?.Neighborhoods?.[index]?.neighborhood_slug ?? entry.slug ?? ""),
-          description: String(payload.workbookRowsBySheet?.Neighborhoods?.[index]?.description ?? ""),
-          overview: String(payload.workbookRowsBySheet?.Neighborhoods?.[index]?.overview ?? ""),
-          status: String(payload.workbookRowsBySheet?.Neighborhoods?.[index]?.status ?? "draft"),
-          tier: String(payload.workbookRowsBySheet?.Neighborhoods?.[index]?.tier ?? "launch"),
-          importedRow: payload.workbookRowsBySheet?.Neighborhoods?.[index] ?? {},
+          city: String(neighborhoodRows[index]?.city ?? ""),
+          country: String(neighborhoodRows[index]?.country ?? ""),
+          slug: String(neighborhoodRows[index]?.neighborhood_slug ?? entry.slug ?? ""),
+          description: String(neighborhoodRows[index]?.description ?? ""),
+          overview: String(neighborhoodRows[index]?.overview ?? ""),
+          status: String(neighborhoodRows[index]?.status ?? "draft"),
+          tier: String(neighborhoodRows[index]?.tier ?? "launch"),
+          importedRow: neighborhoodRows[index] ?? {},
         })),
         ...premiumPlan.neighborhoodPlaces.map((entry, index) => ({
           ...entry,
-          city: String(payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index]?.city ?? ""),
-          country: String(payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index]?.country ?? ""),
-          slug: String(payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index]?.place_slug ?? entry.slug ?? ""),
-          description: String(payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index]?.description ?? ""),
-          overview: String(payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index]?.overview ?? ""),
-          status: String(payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index]?.status ?? "draft"),
-          tier: String(payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index]?.tier ?? "launch"),
-          importedRow: payload.workbookRowsBySheet?.NeighborhoodPlaces?.[index] ?? {},
+          city: String(neighborhoodPlaceRows[index]?.city ?? ""),
+          country: String(neighborhoodPlaceRows[index]?.country ?? ""),
+          slug: String(neighborhoodPlaceRows[index]?.place_slug ?? entry.slug ?? ""),
+          description: String(neighborhoodPlaceRows[index]?.description ?? ""),
+          overview: String(neighborhoodPlaceRows[index]?.overview ?? ""),
+          status: String(neighborhoodPlaceRows[index]?.status ?? "draft"),
+          tier: String(neighborhoodPlaceRows[index]?.tier ?? "launch"),
+          importedRow: neighborhoodPlaceRows[index] ?? {},
         })),
         ...premiumPlan.resources.map((entry, index) => ({
           ...entry,
-          city: String(payload.workbookRowsBySheet?.Resources?.[index]?.city ?? ""),
-          country: String(payload.workbookRowsBySheet?.Resources?.[index]?.country ?? ""),
-          slug: String(payload.workbookRowsBySheet?.Resources?.[index]?.resource_slug ?? entry.slug ?? ""),
-          description: String(payload.workbookRowsBySheet?.Resources?.[index]?.description ?? ""),
-          overview: String(payload.workbookRowsBySheet?.Resources?.[index]?.overview ?? ""),
-          status: String(payload.workbookRowsBySheet?.Resources?.[index]?.status ?? "draft"),
-          tier: String(payload.workbookRowsBySheet?.Resources?.[index]?.tier ?? "launch"),
-          importedRow: payload.workbookRowsBySheet?.Resources?.[index] ?? {},
+          city: String(resourceRows[index]?.city ?? ""),
+          country: String(resourceRows[index]?.country ?? ""),
+          slug: String(resourceRows[index]?.resource_slug ?? entry.slug ?? ""),
+          description: String(resourceRows[index]?.description ?? ""),
+          overview: String(resourceRows[index]?.overview ?? ""),
+          status: String(resourceRows[index]?.status ?? "draft"),
+          tier: String(resourceRows[index]?.tier ?? "launch"),
+          importedRow: resourceRows[index] ?? {},
         })),
         ...premiumPlan.media.map((entry, index) => ({
           ...entry,
-          city: String(payload.workbookRowsBySheet?.Media?.[index]?.city ?? ""),
-          country: String(payload.workbookRowsBySheet?.Media?.[index]?.country ?? ""),
-          slug: String(payload.workbookRowsBySheet?.Media?.[index]?.media_slug ?? entry.slug ?? ""),
-          description: String(payload.workbookRowsBySheet?.Media?.[index]?.description ?? ""),
-          overview: String(payload.workbookRowsBySheet?.Media?.[index]?.overview ?? ""),
-          status: String(payload.workbookRowsBySheet?.Media?.[index]?.status ?? "draft"),
-          tier: String(payload.workbookRowsBySheet?.Media?.[index]?.tier ?? "launch"),
-          importedRow: payload.workbookRowsBySheet?.Media?.[index] ?? {},
+          city: String(mediaRows[index]?.city ?? ""),
+          country: String(mediaRows[index]?.country ?? ""),
+          slug: String(mediaRows[index]?.media_slug ?? entry.slug ?? ""),
+          description: String(mediaRows[index]?.description ?? ""),
+          overview: String(mediaRows[index]?.overview ?? ""),
+          status: String(mediaRows[index]?.status ?? "draft"),
+          tier: String(mediaRows[index]?.tier ?? "launch"),
+          importedRow: mediaRows[index] ?? {},
         })),
       ];
 
@@ -262,6 +405,8 @@ export async function POST(request: Request) {
         mediaCount: premiumPlan.previewSummary.mediaCount,
         rejectedCount: premiumPlan.previewSummary.rejectedCount,
       };
+
+      compatibilityNotes = premiumPlan.compatibilityNotes ?? normalizedWorkbookInput.compatibilityNotes ?? [];
     } else if (useWorkbookSchema) {
       plan = (rows as Array<Record<string, unknown>>).map((row, index) => {
         const schema = payload.schema ?? { headers: [] };
@@ -317,11 +462,23 @@ export async function POST(request: Request) {
 
     const preview = plan.filter((entry) => entry.action !== "reject" && entry.action !== "skip");
     if (previewOnly) {
-      return Response.json({ plan, previewCount: preview.length, summary, mode, matchField }, { status: 200 });
+      const contractPreview = hasMultiSheetWorkbookPayload
+        ? buildPremiumV2WorkbookContractPreview({
+            workbookSheets: payload.workbookSheets ?? [],
+            workbookRowsBySheet: payload.workbookRowsBySheet ?? {},
+            workbookHeadersBySheet: payload.workbookHeadersBySheet ?? {},
+            existingDestinations,
+          })
+        : null;
+
+      return Response.json({ plan, previewCount: preview.length, summary, mode, matchField, compatibilityNotes, contractPreview }, { status: 200 });
     }
 
     const runId = crypto.randomUUID();
     const importResults: Array<{ rowNumber: number; action: string; destinationId?: string; error?: string }> = [];
+
+    const destinationIdBySlug = new Map<string, string>();
+    const postApplyEnrichmentTargets = new Map<string, PostApplyEnrichmentTarget>();
 
     let importRunCreated = false;
     const createImportRunResponse = await fetch(`${url}/rest/v1/destination_import_runs`, {
@@ -354,6 +511,160 @@ export async function POST(request: Request) {
 
     for (const entry of preview) {
       const rowValues = (entry as unknown as { importedRow?: Record<string, unknown> }).importedRow ?? {};
+      const entityType = String((entry as Record<string, unknown>).entityType ?? "destination");
+      const destinationLookupSlug = normalizeImporterText((entry as Record<string, unknown>).destinationSlug ?? entry.slug);
+
+      if (entityType !== "destination") {
+        const destinationId = destinationLookupSlug ? destinationIdBySlug.get(destinationLookupSlug) : null;
+        if (!destinationId) {
+          importResults.push({ rowNumber: entry.rowNumber, action: entityType, error: `Unable to resolve destination for ${entityType}.` });
+          continue;
+        }
+
+        if (entityType === "neighborhood") {
+          const neighborhoodResponse = await fetch(`${url}/rest/v1/neighborhoods`, {
+            method: "POST",
+            headers: {
+              ...headers,
+              "Content-Type": "application/json",
+              Prefer: "return=representation",
+            },
+            body: JSON.stringify({
+              id: crypto.randomUUID(),
+              destination_id: destinationId,
+              name: normalizeImporterText(rowValues.neighborhood_name ?? rowValues.neighborhood ?? entry.slug),
+              subtitle: normalizeImporterText(rowValues.description ?? rowValues.overview ?? ""),
+              value_1: normalizeImporterText(rowValues.category ?? ""),
+              url: normalizeImporterText(rowValues.website_url ?? rowValues.url ?? ""),
+              source_url: normalizeImporterText(rowValues.source_url ?? rowValues.sourceUrl ?? ""),
+              source_organization: normalizeImporterText(rowValues.source ?? rowValues.source_name ?? ""),
+              source_type: "premium_v2_workbook",
+              verification_status: normalizeImporterBoolean(rowValues.verified) ? "verified" : "in_progress",
+              confidence_level: normalizeImporterBoolean(rowValues.verified) ? "high" : "medium",
+              last_verified_at: normalizeImporterText(rowValues.last_verified_at ?? rowValues.lastVerifiedAt ?? ""),
+              notes: normalizeImporterText(rowValues.notes ?? ""),
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            }),
+          });
+
+          if (!neighborhoodResponse.ok) {
+            const errorMessage = await neighborhoodResponse.text();
+            importResults.push({ rowNumber: entry.rowNumber, action: "create", error: errorMessage || "Unable to create neighborhood." });
+            continue;
+          }
+
+          importResults.push({ rowNumber: entry.rowNumber, action: "create", destinationId });
+          continue;
+        }
+
+        if (entityType === "neighborhood_place") {
+          const placeResponse = await fetch(`${url}/rest/v1/destination_places`, {
+            method: "POST",
+            headers: {
+              ...headers,
+              "Content-Type": "application/json",
+              Prefer: "return=representation",
+            },
+            body: JSON.stringify({
+              id: crypto.randomUUID(),
+              destination_id: destinationId,
+              neighborhood_name: normalizeImporterText(rowValues.neighborhood_name ?? rowValues.neighborhood ?? ""),
+              name: normalizeImporterText(rowValues.real_place_name ?? rowValues.place_name ?? rowValues.name ?? entry.slug),
+              category: normalizeImporterText(rowValues.category ?? ""),
+              address: normalizeImporterText(rowValues.address ?? rowValues.street_address ?? ""),
+              google_maps_url: normalizeImporterText(rowValues.google_maps_url ?? rowValues.google_maps ?? ""),
+              website_url: normalizeImporterText(rowValues.website_url ?? rowValues.url ?? ""),
+              verified: normalizeImporterBoolean(rowValues.verified),
+              source: normalizeImporterText(rowValues.source ?? rowValues.source_name ?? ""),
+              source_url: normalizeImporterText(rowValues.source_url ?? rowValues.sourceUrl ?? ""),
+              last_verified_at: normalizeImporterText(rowValues.last_verified_at ?? rowValues.lastVerifiedAt ?? ""),
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            }),
+          });
+
+          if (!placeResponse.ok) {
+            const errorMessage = await placeResponse.text();
+            importResults.push({ rowNumber: entry.rowNumber, action: "create", error: errorMessage || "Unable to create neighborhood place." });
+            continue;
+          }
+
+          importResults.push({ rowNumber: entry.rowNumber, action: "create", destinationId });
+          continue;
+        }
+
+        if (entityType === "resource") {
+          const resourceResponse = await fetch(`${url}/rest/v1/destination_resource_links`, {
+            method: "POST",
+            headers: {
+              ...headers,
+              "Content-Type": "application/json",
+              Prefer: "return=representation",
+            },
+            body: JSON.stringify({
+              id: crypto.randomUUID(),
+              destination_id: destinationId,
+              category: normalizeImporterText(rowValues.resource_category ?? rowValues.category ?? "guides"),
+              label: normalizeImporterText(rowValues.resource_name ?? rowValues.name ?? entry.slug),
+              provider: normalizeImporterText(rowValues.source ?? rowValues.provider ?? "premium_v2_workbook"),
+              url: normalizeImporterText(rowValues.url ?? rowValues.website_url ?? rowValues.website ?? ""),
+              verified: normalizeImporterBoolean(rowValues.verified),
+              official: normalizeImporterBoolean(rowValues.official),
+              source: normalizeImporterText(rowValues.source ?? rowValues.source_name ?? ""),
+              source_url: normalizeImporterText(rowValues.source_url ?? rowValues.sourceUrl ?? ""),
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            }),
+          });
+
+          if (!resourceResponse.ok) {
+            const errorMessage = await resourceResponse.text();
+            importResults.push({ rowNumber: entry.rowNumber, action: "create", error: errorMessage || "Unable to create resource." });
+            continue;
+          }
+
+          importResults.push({ rowNumber: entry.rowNumber, action: "create", destinationId });
+          continue;
+        }
+
+        if (entityType === "media") {
+          const mediaResponse = await fetch(`${url}/rest/v1/destination_media_assets`, {
+            method: "POST",
+            headers: {
+              ...headers,
+              "Content-Type": "application/json",
+              Prefer: "return=representation",
+            },
+            body: JSON.stringify({
+              id: crypto.randomUUID(),
+              destination_id: destinationId,
+              kind: normalizeImporterText(rowValues.media_type ?? rowValues.kind ?? "gallery"),
+              provider: normalizeImporterText(rowValues.source ?? rowValues.provider ?? "premium_v2_workbook"),
+              url: normalizeImporterText(rowValues.image_url ?? rowValues.media_url ?? rowValues.url ?? ""),
+              caption: normalizeImporterText(rowValues.caption ?? rowValues.title ?? ""),
+              alt_text: normalizeImporterText(rowValues.caption ?? rowValues.alt_text ?? rowValues.title ?? ""),
+              sort_order: Number(rowValues.gallery_order ?? rowValues.sort_order ?? 0) || 0,
+              is_primary: normalizeImporterBoolean(rowValues.primary_image),
+              verified: normalizeImporterBoolean(rowValues.verified),
+              source: normalizeImporterText(rowValues.source ?? rowValues.source_name ?? ""),
+              source_url: normalizeImporterText(rowValues.source_url ?? rowValues.sourceUrl ?? ""),
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            }),
+          });
+
+          if (!mediaResponse.ok) {
+            const errorMessage = await mediaResponse.text();
+            importResults.push({ rowNumber: entry.rowNumber, action: "create", error: errorMessage || "Unable to create media asset." });
+            continue;
+          }
+
+          importResults.push({ rowNumber: entry.rowNumber, action: "create", destinationId });
+          continue;
+        }
+      }
+
       const importedMetadata = buildImportedDestinationMetadata(rowValues);
       const payloadToSend = buildDestinationUpdatePayload({
         existingDestination: entry.existingId ? { id: entry.existingId, slug: entry.existingSlug ?? entry.slug, city: entry.city, country: entry.country } : null,
@@ -400,6 +711,15 @@ export async function POST(request: Request) {
 
         const updatedRows = (await response.json()) as Array<Record<string, unknown>>;
         const destinationId = String(updatedRows[0]?.id ?? payloadToSend.existingDestination.id);
+        destinationIdBySlug.set(normalizeImporterText(entry.slug), destinationId);
+        postApplyEnrichmentTargets.set(destinationId, createPostApplyEnrichmentTarget({
+          destinationId,
+          slug: normalizeImporterText(entry.slug),
+          city: normalizeImporterText(entry.city),
+          country: normalizeImporterText(entry.country),
+          description: entry.description ? String(entry.description) : null,
+          overview: entry.overview ? String(entry.overview) : null,
+        }));
 
         try {
           await verifyDestinationImport({
@@ -515,6 +835,15 @@ export async function POST(request: Request) {
 
         const createdRows = (await response.json()) as Array<Record<string, unknown>>;
         const destinationId = String(createdRows[0]?.id ?? "");
+        destinationIdBySlug.set(normalizeImporterText(entry.slug), destinationId);
+        postApplyEnrichmentTargets.set(destinationId, createPostApplyEnrichmentTarget({
+          destinationId,
+          slug: normalizeImporterText(entry.slug),
+          city: normalizeImporterText(entry.city),
+          country: normalizeImporterText(entry.country),
+          description: entry.description ? String(entry.description) : null,
+          overview: entry.overview ? String(entry.overview) : null,
+        }));
 
         try {
           await verifyDestinationImport({
@@ -568,6 +897,78 @@ export async function POST(request: Request) {
       }
     }
 
+    for (const target of postApplyEnrichmentTargets.values()) {
+      if (!target.destinationId) {
+        continue;
+      }
+
+      try {
+        const dataset = await fetchDestinationEnrichmentDataset({
+          accessToken,
+          url,
+          headers,
+          destinationId: target.destinationId,
+        });
+
+        const enrichmentPayload = buildEnrichedDestinationCreatePayload({
+          city: target.city || String(dataset.destination?.city ?? ""),
+          country: target.country || String(dataset.destination?.country ?? ""),
+          slug: target.slug || String(dataset.destination?.slug ?? target.destinationId),
+          description: target.description ?? (dataset.destination?.description ? String(dataset.destination.description) : undefined),
+          overview: target.overview ?? (dataset.destination?.overview ? String(dataset.destination.overview) : undefined),
+        });
+
+        const existingDestinationResponse = await fetch(`${url}/rest/v1/${ADMIN_TABLE}?select=id,metadata&id=eq.${target.destinationId}&limit=1`, {
+          headers: {
+            ...headers,
+            "Content-Type": "application/json",
+          },
+          cache: "no-store",
+        });
+
+        const existingMetadata = existingDestinationResponse.ok ? ((await existingDestinationResponse.json()) as Array<{ metadata?: Record<string, unknown> | null }>)[0]?.metadata : {};
+
+        const metadata = {
+          ...(enrichmentPayload.metadata ?? {}),
+          ...(existingMetadata && typeof existingMetadata === "object" ? existingMetadata : {}),
+          importedVerifiedFacts: {
+            destination: dataset.destination ? { ...dataset.destination } : null,
+            neighborhoods: dataset.neighborhoods,
+            places: dataset.places,
+            resources: dataset.resources,
+            media: dataset.media,
+          },
+          postApplyEnrichment: {
+            status: "completed",
+            runAt: new Date().toISOString(),
+            source: "premium_v2_workbook",
+            destinationId: target.destinationId,
+          },
+        };
+
+        const patchResponse = await fetch(`${url}/rest/v1/${ADMIN_TABLE}?id=eq.${target.destinationId}`, {
+          method: "PATCH",
+          headers: {
+            ...headers,
+            "Content-Type": "application/json",
+            Prefer: "return=minimal",
+          },
+          body: JSON.stringify({
+            metadata,
+            status: "review",
+            updated_at: new Date().toISOString(),
+          }),
+        });
+
+        if (!patchResponse.ok) {
+          const errorMessage = await patchResponse.text();
+          importResults.push({ rowNumber: 0, action: "enrich", destinationId: target.destinationId, error: errorMessage || "Unable to persist final editorial enrichment." });
+        }
+      } catch (error) {
+        importResults.push({ rowNumber: 0, action: "enrich", destinationId: target.destinationId, error: error instanceof Error ? error.message : "Unable to run final editorial enrichment." });
+      }
+    }
+
     if (importRunCreated) {
       await fetch(`${url}/rest/v1/destination_import_runs?id=eq.${runId}`, {
         method: "PATCH",
@@ -584,7 +985,7 @@ export async function POST(request: Request) {
       });
     }
 
-    return Response.json({ plan, previewCount: preview.length, importResults, summary, mode, matchField }, { status: 200 });
+    return Response.json({ plan, previewCount: preview.length, importResults, summary, mode, matchField, compatibilityNotes }, { status: 200 });
   } catch (error) {
     console.error(error);
     return Response.json(

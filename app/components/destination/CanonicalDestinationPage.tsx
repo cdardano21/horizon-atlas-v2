@@ -139,6 +139,13 @@ function dedupeResourceItems(items: NeighborhoodResourceItem[]) {
   });
 }
 
+function getNeighborhoodProfile(destination: CanonicalDestination, neighborhoodName: string) {
+  const normalizedName = normalizeText(neighborhoodName);
+  if (!normalizedName) return undefined;
+
+  return destination.neighborhoodProfiles?.find((profile) => normalizeText(profile.name) === normalizedName);
+}
+
 function buildNeighborhoodResourceGroups(destination: CanonicalDestination, neighborhoodName: string) {
   const baseQuery = buildNeighborhoodQuery(destination, neighborhoodName, "");
   const explicitResources = [
@@ -800,7 +807,7 @@ function ExpandableNeighborhoodCard({
   index,
   destination,
 }: {
-  neighborhood: { name: string; whyItWorks: string; fit: string; vibe: string };
+  neighborhood: { name: string; whyItWorks: string; fit: string; vibe: string; profile?: NeighborhoodProfile };
   index: number;
   destination: CanonicalDestination;
 }) {
@@ -809,6 +816,10 @@ function ExpandableNeighborhoodCard({
   const neighborhoodResourceGroups = useMemo(() => buildNeighborhoodResourceGroups(destination, neighborhood.name), [destination, neighborhood.name]);
   const neighborhoodLiveResources = useMemo(() => buildNeighborhoodLiveResources(destination, neighborhood.name), [destination, neighborhood.name]);
   const neighborhoodInsightCards = useMemo(() => buildNeighborhoodInsightCards(destination, neighborhood.name), [destination, neighborhood.name]);
+  const neighborhoodProfileResources = useMemo(() => dedupeResourceItems([
+    ...(neighborhood.profile?.resources ?? []),
+    ...(neighborhood.profile?.liveResources ?? []),
+  ].filter((resource): resource is NeighborhoodResourceItem => Boolean(resource?.url && resource.url.trim().length > 0))), [neighborhood.profile]);
   const detailMap = [
     { label: "Best For", value: neighborhood.fit },
     { label: "Overall Vibe", value: neighborhood.vibe },
@@ -851,6 +862,18 @@ function ExpandableNeighborhoodCard({
           <p className="mt-2 text-sm leading-6 text-slate-300">{neighborhood.vibe}</p>
         </div>
       </div>
+      {neighborhoodProfileResources.length > 0 ? (
+        <div className="mt-4 rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Neighborhood resources</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {neighborhoodProfileResources.map((resource) => (
+              <a key={`${resource.label}-${resource.url}`} href={resource.url} target="_blank" rel="noopener noreferrer" className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/40 hover:bg-cyan-500/20">
+                {resource.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      ) : null}
       <div className={`overflow-hidden transition-all duration-300 ${expanded ? "mt-4 max-h-[4000px] opacity-100" : "max-h-0 opacity-0"}`}>
         <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {detailMap.map((detail) => (
@@ -1164,36 +1187,40 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     };
   }, [destination.costOfLiving, destination.costOfLivingProfile, destination.dailyLife, destination.monthlyBudgets, destination.transportation, premiumContent.costOfLivingArticle]);
 
+  const narrativeSummary = [destination.heroNarrative, destination.overview, destination.editorial, destination.dailyLife].find((value) => typeof value === "string" && value.trim().length > 0) ?? "A place with a distinct everyday rhythm and a strong sense of local identity.";
+  const lifestyleSummary = [destination.dailyLife, destination.overview, destination.heroNarrative, destination.editorial].find((value) => typeof value === "string" && value.trim().length > 0) ?? narrativeSummary;
+  const outdoorSummary = [destination.overview, destination.heroNarrative, destination.editorial, destination.weather].find((value) => typeof value === "string" && value.trim().length > 0) ?? narrativeSummary;
+
   const essentialFacts = useMemo(() => [
-    { label: "Population", value: destination.knowledgeProfile?.population ?? "Local context available", note: "Population helps frame the city’s scale and whether it feels intimate or metropolitan." },
-    { label: "Metro population", value: destination.knowledgeProfile?.metroPopulation ?? "Regional context available", note: "The metro explains how far the city’s labor, healthcare, and airport ecosystems extend." },
-    { label: "Climate", value: destination.knowledgeProfile?.climateClassification ?? destination.climate ?? "Seasonal shifts matter", note: "Climate influences daily life, outdoor behavior, and long-stay comfort." },
-    { label: "Elevation", value: destination.knowledgeProfile?.elevation ?? "Varies by district", note: "Elevation influences weather, views, and how the city feels on the ground." },
-    { label: "Average temperatures", value: destination.weather || destination.knowledgeProfile?.rainfall || "Seasonal ranges vary", note: "Temperature patterns are one of the clearest differences between visiting and living somewhere." },
-    { label: "Walkability", value: destination.knowledgeProfile?.walkability ?? destination.walkability ?? "Varies by neighborhood", note: "Walkability determines whether daily errands can happen on foot or by transit." },
-    { label: "Bikeability", value: destination.knowledgeProfile?.bikeFriendliness ?? destination.walkability ?? "Varies by district", note: "Cycling often changes the feel of a city more than most visitors expect." },
-    { label: "Transit", value: destination.knowledgeProfile?.publicTransportation ?? destination.transportation ?? "Transit quality depends on district", note: "Transit turns a city into a daily-life system rather than a postcard image." },
-    { label: "Healthcare", value: destination.knowledgeProfile?.healthcareQuality ?? destination.healthcare ?? "Strong medical ecosystem", note: "Healthcare is often the deciding factor for long-stay households and retirees." },
-    { label: "Safety", value: destination.knowledgeProfile?.safety ?? destination.safety ?? "Neighborhood dependent", note: "A city’s safety is rarely uniform, so district-level context matters." },
-    { label: "Internet", value: destination.knowledgeProfile?.internetSpeed ?? destination.internet ?? "Strong in core districts", note: "Internet quality matters for remote work, digital nomads, and modern households." },
-    { label: "Airport access", value: destination.knowledgeProfile?.majorAirports?.join(", ") ?? destination.airportInfo ?? "Regional and international access", note: "Airport access is a major part of relocation ease for families and frequent travelers." },
+    { label: "Population", value: destination.knowledgeProfile?.population ?? narrativeSummary, note: "Population helps frame the city’s scale and whether it feels intimate or metropolitan." },
+    { label: "Metro population", value: destination.knowledgeProfile?.metroPopulation ?? (destination.overview || narrativeSummary), note: "The metro explains how far the city’s labor, healthcare, and airport ecosystems extend." },
+    { label: "Climate", value: destination.knowledgeProfile?.climateClassification ?? destination.climate ?? narrativeSummary, note: "Climate influences daily life, outdoor behavior, and long-stay comfort." },
+    { label: "Elevation", value: destination.knowledgeProfile?.elevation ?? outdoorSummary, note: "Elevation influences weather, views, and how the city feels on the ground." },
+    { label: "Average temperatures", value: destination.weather || destination.knowledgeProfile?.rainfall || destination.climate || narrativeSummary, note: "Temperature patterns are one of the clearest differences between visiting and living somewhere." },
+    { label: "Walkability", value: destination.knowledgeProfile?.walkability ?? destination.walkability ?? lifestyleSummary, note: "Walkability determines whether daily errands can happen on foot or by transit." },
+    { label: "Bikeability", value: destination.knowledgeProfile?.bikeFriendliness ?? destination.walkability ?? outdoorSummary, note: "Cycling often changes the feel of a city more than most visitors expect." },
+    { label: "Transit", value: destination.knowledgeProfile?.publicTransportation ?? destination.transportation ?? lifestyleSummary, note: "Transit turns a city into a daily-life system rather than a postcard image." },
+    { label: "Healthcare", value: destination.knowledgeProfile?.healthcareQuality ?? destination.healthcare ?? lifestyleSummary, note: "Healthcare is often the deciding factor for long-stay households and retirees." },
+    { label: "Safety", value: destination.knowledgeProfile?.safety ?? destination.safety ?? narrativeSummary, note: "A city’s safety is rarely uniform, so district-level context matters." },
+    { label: "Internet", value: destination.knowledgeProfile?.internetSpeed ?? destination.internet ?? lifestyleSummary, note: "Internet quality matters for remote work, digital nomads, and modern households." },
+    { label: "Airport access", value: destination.knowledgeProfile?.majorAirports?.join(", ") ?? destination.airportInfo ?? outdoorSummary, note: "Airport access is a major part of relocation ease for families and frequent travelers." },
     { label: "Currency", value: destination.country === "United States" ? "USD" : destination.country === "United Kingdom" ? "GBP" : destination.country === "Japan" ? "JPY" : destination.country === "Thailand" ? "THB" : "Local currency", note: "Currency affects budgeting, transfers, and how a budget feels in practice." },
     { label: "Language", value: destination.country === "United States" ? "English" : destination.country === "Spain" ? "Spanish" : destination.country === "France" ? "French" : destination.country === "Italy" ? "Italian" : destination.country === "Croatia" ? "Croatian" : "Local language", note: "Language shapes the ease of everyday administration and local immersion." },
-    { label: "Time zone", value: destination.knowledgeProfile?.timeZone ?? "Local context available", note: "Time-zone fit affects travel, work, and family communication." },
-    { label: "Cost level", value: destination.knowledgeProfile?.costOfLiving ?? destination.costOfLiving ?? "Location sensitive", note: "Cost is shaped by housing, utilities, food, and the neighborhood you choose." },
-    { label: "Family friendly", value: destination.family || "Strong with the right district", note: "Family friendliness depends on parks, schools, and neighborhood routines." },
-    { label: "Retirement friendly", value: destination.retirement || "Highly suitable with the right neighborhood", note: "Retirement fit depends on healthcare, pace, climate, and transport access." },
-    { label: "Digital nomad", value: destination.digitalNomad || "Works well with the right base", note: "Remote-work fit depends on internet, cafés, transit, and social energy." },
-    { label: "Visa friendly", value: destination.knowledgeProfile?.visaInfo ?? "Requirements depend on citizenship", note: "Visa expectations are essential for long-stay planning and relocation logistics." },
-    { label: "Pet friendly", value: destination.knowledgeProfile?.parks?.join(", ") || "Parks and open space matter", note: "Pet-friendliness is shaped by green space, density, and neighborhood culture." },
-    { label: "Golf", value: destination.knowledgeProfile?.golf?.join(", ") || "Available with local clubs and courses", note: "Golf availability can be a deciding factor for certain lifestyles." },
-    { label: "Museums", value: destination.knowledgeProfile?.museums?.join(", ") || destination.museums.join(", ") || "Cultural depth is a major draw", note: "Museums often define how a city feels to residents over time." },
-    { label: "Food scene", value: destination.knowledgeProfile?.restaurants?.join(", ") || destination.restaurants.join(", ") || "Dining is a core part of daily life", note: "Food culture often becomes a daily-life anchor, not just a tourist attraction." },
-    { label: "Nightlife", value: destination.knowledgeProfile?.nightlife?.join(", ") || "Varies by district", note: "Nightlife changes the energy of a city from day to night." },
-    { label: "Beach", value: destination.knowledgeProfile?.beaches?.join(", ") || "Water access is part of the appeal", note: "Beach access can strongly shape recreation and weekend life." },
-    { label: "Mountains", value: destination.knowledgeProfile?.mountains?.join(", ") || "Nature access broadens the city’s identity", note: "Mountains and natural landscapes add a layer of weekend escape." },
-    { label: "Parks", value: destination.knowledgeProfile?.parks?.join(", ") || "Green space helps define daily life", note: "Parks shape how a city feels in both weekdays and weekends." },
-  ], [destination]);
+    { label: "Time zone", value: destination.knowledgeProfile?.timeZone ?? narrativeSummary, note: "Time-zone fit affects travel, work, and family communication." },
+    { label: "Cost level", value: destination.knowledgeProfile?.costOfLiving ?? destination.costOfLiving ?? narrativeSummary, note: "Cost is shaped by housing, utilities, food, and the neighborhood you choose." },
+    { label: "Family friendly", value: destination.family || destination.knowledgeProfile?.familySuitability || lifestyleSummary, note: "Family friendliness depends on parks, schools, and neighborhood routines." },
+    { label: "Retirement friendly", value: destination.retirement || destination.knowledgeProfile?.retirementSuitability || lifestyleSummary, note: "Retirement fit depends on healthcare, pace, climate, and transport access." },
+    { label: "Digital nomad", value: destination.digitalNomad || destination.knowledgeProfile?.digitalNomadSuitability || lifestyleSummary, note: "Remote-work fit depends on internet, cafés, transit, and social energy." },
+    { label: "Visa friendly", value: destination.knowledgeProfile?.visaInfo ?? (destination.overview || narrativeSummary), note: "Visa expectations are essential for long-stay planning and relocation logistics." },
+    { label: "Pet friendly", value: destination.knowledgeProfile?.parks?.join(", ") || destination.knowledgeProfile?.beaches?.join(", ") || outdoorSummary, note: "Pet-friendliness is shaped by green space, density, and neighborhood culture." },
+    { label: "Golf", value: destination.knowledgeProfile?.golf?.join(", ") || destination.golf?.join(", ") || outdoorSummary, note: "Golf availability can be a deciding factor for certain lifestyles." },
+    { label: "Museums", value: destination.knowledgeProfile?.museums?.join(", ") || destination.museums?.join(", ") || narrativeSummary, note: "Museums often define how a city feels to residents over time." },
+    { label: "Food scene", value: destination.knowledgeProfile?.restaurants?.join(", ") || destination.restaurants?.join(", ") || lifestyleSummary, note: "Food culture often becomes a daily-life anchor, not just a tourist attraction." },
+    { label: "Nightlife", value: destination.knowledgeProfile?.nightlife?.join(", ") || destination.dailyLife || narrativeSummary, note: "Nightlife changes the energy of a city from day to night." },
+    { label: "Beach", value: destination.knowledgeProfile?.beaches?.join(", ") || destination.overview || narrativeSummary, note: "Beach access can strongly shape recreation and weekend life." },
+    { label: "Mountains", value: destination.knowledgeProfile?.mountains?.join(", ") || destination.overview || narrativeSummary, note: "Mountains and natural landscapes add a layer of weekend escape." },
+    { label: "Parks", value: destination.knowledgeProfile?.parks?.join(", ") || destination.overview || narrativeSummary, note: "Parks shape how a city feels in both weekdays and weekends." },
+  ], [destination, narrativeSummary, lifestyleSummary, outdoorSummary]);
 
   const intelligenceProfile = buildDestinationIntelligenceProfile({
     slug: destination.slug,
@@ -1232,7 +1259,20 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
 
   const resourceGroups = buildResourceGroups(destination);
 
-  const neighborhoods = (premiumContent.neighborhoodGuides.length > 0 ? premiumContent.neighborhoodGuides : destination.neighborhoods.slice(0, 4).map((name) => ({ name, whyItWorks: `${name} helps anchor the city’s local character.`, fit: `Best for residents who want a neighborhood identity that feels specific and lived in.`, vibe: `It offers a clear local rhythm and strong daily-life texture.` }))).slice(0, 4);
+  const neighborhoods = (premiumContent.neighborhoodGuides.length > 0 ? premiumContent.neighborhoodGuides : destination.neighborhoods.map((name) => ({ name, whyItWorks: `${name} helps anchor the city’s local character.`, fit: `Best for residents who want a neighborhood identity that feels specific and lived in.`, vibe: `It offers a clear local rhythm and strong daily-life texture.` }))).map((item) => {
+    const profile = getNeighborhoodProfile(destination, item.name);
+    const summary = profile?.summary?.trim() || item.whyItWorks || `${item.name} helps anchor the city’s local character.`;
+    const fit = profile?.intelligence?.find((metric) => /family|pet|remote|transit|walk/i.test(metric.key))?.value || item.fit || `Best for residents who want a neighborhood identity that feels specific and lived in.`;
+    const vibe = profile?.summary?.trim() || item.vibe || `It offers a clear local rhythm and strong daily-life texture.`;
+
+    return {
+      ...item,
+      profile,
+      whyItWorks: summary,
+      fit,
+      vibe,
+    };
+  });
   const golfGroups = (destination.neighborhoodIntelligence?.length ? destination.neighborhoodIntelligence : buildNeighborhoodIntelligenceSeedData(destination))
     .filter((group) => /golf/i.test(group.category))
     .slice(0, 4);
@@ -1296,6 +1336,10 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                   aria-selected={isActive}
                   tabIndex={isActive ? 0 : -1}
                   onClick={() => setViewMode(tab.id)}
+                  onPointerDown={(event) => {
+                    event.preventDefault();
+                    setViewMode(tab.id);
+                  }}
                   onKeyDown={(event) => {
                     if (event.key === "ArrowRight") {
                       event.preventDefault();

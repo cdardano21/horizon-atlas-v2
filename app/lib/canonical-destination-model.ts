@@ -28,6 +28,9 @@ export type CanonicalDestinationMedia = {
   altText: string;
   caption: string;
   isPrimary: boolean;
+  sourceUrl?: string;
+  attribution?: string;
+  license?: string;
 };
 
 export type CanonicalDestinationBudget = {
@@ -234,6 +237,16 @@ export type NeighborhoodIntelligenceGroup = {
   places?: NeighborhoodIntelligencePlace[];
 };
 
+export type ImportedVerifiedDestinationFacts = {
+  destination?: Record<string, unknown> | null;
+  neighborhoods?: Array<Record<string, unknown>>;
+  places?: Array<Record<string, unknown>>;
+  resources?: Array<Record<string, unknown>>;
+  media?: Array<Record<string, unknown>>;
+};
+
+export type CanonicalDestinationPremiumV2Modules = Record<string, Array<Record<string, unknown>>>;
+
 export type CanonicalDestination = {
   slug: string;
   city: string;
@@ -294,4 +307,5 @@ export type CanonicalDestination = {
   knowledgeProfile?: CanonicalDestinationKnowledgeProfile;
   neighborhoodProfiles?: NeighborhoodProfile[];
   neighborhoodIntelligence?: NeighborhoodIntelligenceGroup[];
+  premiumV2Modules?: CanonicalDestinationPremiumV2Modules;
 };

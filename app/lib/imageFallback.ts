@@ -2,11 +2,10 @@ import type { Destination } from "./destinations";
 import { curatedCityImagesBySlug } from "./curatedCityImages";
 import { curatedCityImageGalleriesBySlug } from "./curatedCityImageGalleries";
 
-const TRUSTED_IMAGE_HOSTS = new Set(["upload.wikimedia.org", "commons.wikimedia.org"]);
-
+const TRUSTED_IMAGE_HOSTS = new Set(["upload.wikimedia.org", "commons.wikimedia.org"]);const GENERIC_IMAGE_HOSTS = new Set(["images.unsplash.com", "source.unsplash.com", "unsplash.com", "pixabay.com", "pexels.com", "flickr.com"]);
 const featuredPhotoRegex = /images\.unsplash\.com\/featured\/\?/i;
 const sourceUnsplashRegex = /source\.unsplash\.com/i;
-const placeholderTokenRegex = /(placeholder|example|default-image)/i;
+const placeholderTokenRegex = /(placeholder|default-image)/i;
 const legacyGenericFallbackPath = "/images/costa-del-sol-hero.jpg";
 
 function escapeSvgText(value: string) {
@@ -62,7 +61,49 @@ function isInvalidImageSource(src: string | null | undefined) {
     || trimmed === legacyGenericFallbackPath;
 }
 
-function isVerifiedImageSource(src: string | null | undefined) {
+function getDestinationIdentityTokens(destination: { city?: string; country?: string; slug?: string }) {
+  const values = [destination.slug, destination.city, destination.country];
+  return Array.from(new Set(values.flatMap((value) => (value ?? "").toLowerCase().split(/[^a-z0-9]+/g).filter(Boolean))));
+}
+
+function isCuratedImageSource(src: string, destination: Destination) {
+  const curatedVariants = curatedCityImageGalleriesBySlug[destination.slug] ?? [];
+  const curatedPrimary = curatedCityImagesBySlug[destination.slug];
+  return [curatedPrimary, ...curatedVariants].filter(Boolean).includes(src);
+}
+
+function hasDestinationIdentityMatch(src: string, destination: Destination, metadata?: string | null) {
+  const tokens = getDestinationIdentityTokens(destination);
+  if (!tokens.length) return false;
+  const normalized = [src, metadata].filter(Boolean).join(" ").toLowerCase();
+  return tokens.some((token) => normalized.includes(token));
+}
+
+function isLikelyStockImageUrl(src: string) {
+  try {
+    const parsed = new URL(src);
+    return GENERIC_IMAGE_HOSTS.has(parsed.hostname.toLowerCase()) || parsed.hostname.toLowerCase().endsWith(".unsplash.com");
+  } catch {
+    return false;
+  }
+}
+
+function isLikelyImageAssetUrl(src: string) {
+  const trimmed = src.trim();
+  try {
+    const parsed = new URL(trimmed);
+    const pathname = parsed.pathname.toLowerCase();
+    const imageExtensions = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif", ".bmp", ".svg"];
+    const hasImageExtension = imageExtensions.some((extension) => pathname.endsWith(extension));
+    const hasImagePathHint = pathname.includes("/image") || pathname.includes("/images") || pathname.includes("/photo") || pathname.includes("/photos") || pathname.includes("/media") || pathname.includes("/img");
+    const hasImageQueryHint = parsed.searchParams.has("img") || parsed.searchParams.has("image") || parsed.searchParams.has("photo") || parsed.searchParams.has("src");
+    return hasImageExtension || hasImagePathHint || hasImageQueryHint;
+  } catch {
+    return false;
+  }
+}
+
+function isVerifiedImageSource(src: string | null | undefined, destination?: Destination, metadata?: string | null) {
   if (!src || isInvalidImageSource(src)) return false;
   const trimmed = src.trim();
   if (!trimmed) return false;
@@ -70,10 +111,21 @@ function isVerifiedImageSource(src: string | null | undefined) {
   // Local assets are authored and reviewed in-repo.
   if (trimmed.startsWith("/")) return true;
 
+  if (destination && isCuratedImageSource(trimmed, destination)) return true;
+
   try {
     const parsed = new URL(trimmed);
     if (parsed.protocol !== "https:") return false;
-    return TRUSTED_IMAGE_HOSTS.has(parsed.hostname.toLowerCase());
+    const host = parsed.hostname.toLowerCase();
+    if (TRUSTED_IMAGE_HOSTS.has(host)) return true;
+
+    if (destination && hasDestinationIdentityMatch(trimmed, destination, metadata)) return true;
+    if (isLikelyStockImageUrl(trimmed)) return false;
+
+    if (destination) {
+      return isLikelyImageAssetUrl(trimmed);
+    }
+    return isLikelyImageAssetUrl(trimmed);
   } catch {
     return false;
   }
@@ -128,13 +180,15 @@ function cityScopedImageUrl(destination: Destination, variant = 0) {
 
 export function getDestinationImageSet(destination: Destination, minCount = 3) {
   const primaryImages = (destination.images ?? [])
-    .map((image) => image?.src)
-    .filter((src): src is string => isVerifiedImageSource(src));
+    .map((image) => ({ src: image?.src, metadata: image?.alt }))
+    .filter(({ src, metadata }) => isVerifiedImageSource(src, destination, metadata))
+    .map(({ src }) => src)
+    .filter((src): src is string => Boolean(src));
 
   const curatedPrimary = curatedCityImagesBySlug[destination.slug];
   const curatedVariants = curatedCityImageGalleriesBySlug[destination.slug] ?? [];
   const cityScoped = cityScopedImageUrls(destination);
-  const combined = Array.from(new Set([...primaryImages, ...cityScoped.filter((src) => isVerifiedImageSource(src))]));
+  const combined = Array.from(new Set([...primaryImages, ...cityScoped.filter((src) => isVerifiedImageSource(src, destination))]));
   const rotationSeed = stableHash(`${destination.slug}:${destination.city}:${destination.country}`);
 
   let ordered = primaryImages.length > 0 ? combined : rotate(combined, rotationSeed);
@@ -173,7 +227,7 @@ export function getDestinationImageSequence(destination: Destination, count: num
 }
 
 export function getDestinationImageUrl(image: { src: string; alt?: string }, destination: Destination, variant = 0) {
-  if (isVerifiedImageSource(image?.src)) {
+  if (isVerifiedImageSource(image?.src, destination, image?.alt)) {
     return image.src;
   }
 
@@ -183,7 +237,7 @@ export function getDestinationImageUrl(image: { src: string; alt?: string }, des
   }
 
   const cityScoped = cityScopedImageUrl(destination, variant);
-  if (isVerifiedImageSource(cityScoped)) {
+  if (isVerifiedImageSource(cityScoped, destination)) {
     return cityScoped;
   }
 

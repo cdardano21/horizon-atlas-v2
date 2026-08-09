@@ -1,4 +1,3 @@
-import fs from "node:fs";
 import Image from "next/image";
 import Link from "next/link";
 import FavoriteButton from "../../components/FavoriteButton";
@@ -20,17 +19,6 @@ import { getDestinationRelocationFrame } from "../../lib/destination-page-struct
 import type { Destination } from "../../lib/destinations";
 import { resolveSourceHref, sanitizeExternalSourceUrl } from "../../lib/source-links";
 import { getCanonicalDestination } from "../../lib/canonical-destination-loader";
-
-const TRACE_LOG_PATH = process.env.HORIZON_ATLAS_TRACE_LOG ?? "/tmp/horizon-atlas-trace.log";
-
-const writeTrace = (label: string, payload: unknown) => {
-  try {
-    const line = `[${new Date().toISOString()}] ${label} ${JSON.stringify(payload)}\n`;
-    fs.appendFileSync(TRACE_LOG_PATH, line);
-  } catch {
-    // ignore trace-file failures
-  }
-};
 
 interface DestinationPageProps {
   params: Promise<{ slug: string }>;
@@ -1373,8 +1361,6 @@ export default async function DestinationPage({ params, searchParams }: Destinat
   const { slug } = await params;
   const resolvedSearchParams = searchParams ? await searchParams : undefined;
   const developerMode = resolvedSearchParams?.developer === "1" || resolvedSearchParams?.developer === "true";
-  console.log("[page] entry", { slug });
-  writeTrace("[page] entry", { slug });
 
   const canonicalDestination = await getCanonicalDestination(slug);
   if (canonicalDestination) {
@@ -1382,15 +1368,9 @@ export default async function DestinationPage({ params, searchParams }: Destinat
   }
 
   const command = await getDestinationCommandCenter(slug);
-  console.log("[page] command-center-result", { slug, command });
-  writeTrace("[page] command-center-result", { slug, command });
   const content = await getDestinationContent(slug);
-  console.log("[page] getDestinationContent-result", { slug, content });
-  writeTrace("[page] getDestinationContent-result", { slug, content });
 
   if (!command || !content?.destination) {
-    console.log("[page] branch:no-command-or-destination", { slug, command: Boolean(command), hasDestination: Boolean(content?.destination) });
-    writeTrace("[page] branch:no-command-or-destination", { slug, command: Boolean(command), hasDestination: Boolean(content?.destination) });
     return (
       <main className="min-h-screen px-8 py-24 text-[var(--atlas-ink)]">
         <div className="mx-auto max-w-5xl rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.92)] p-12 text-center shadow-[var(--atlas-shadow)]">
@@ -1417,8 +1397,6 @@ export default async function DestinationPage({ params, searchParams }: Destinat
     verdict: destination.verdict,
     researchProfile: destination.researchProfile,
   };
-  console.log("DESTINATION PAGE CONTENT", renderedPageState);
-  writeTrace("[page] rendered-page-state", renderedPageState);
   const researchProfile = getDestinationResearchProfile(destination);
   const destinationImageSet = destination.images.filter((image) => Boolean(image.src && image.src.trim().length > 0));
   const heroImage = destinationImageSet[0]?.src ?? null;

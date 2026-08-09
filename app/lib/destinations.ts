@@ -297,6 +297,8 @@ export type Destination = {
   researchProfile?: DestinationResearchProfile;
   premiumEditorialContent?: PremiumEditorialContent;
   knowledgeProfile?: DestinationKnowledgeProfile;
+  healthcare?: string;
+  dailyLife?: string;
   memberDetails?: {
     airports?: Array<{ name?: string }>;
     hospitals?: Array<{ name?: string }>;

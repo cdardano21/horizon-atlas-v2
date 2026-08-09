@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import CanonicalDestinationPage from "./CanonicalDestinationPage";
 import type { CanonicalDestination } from "../../lib/canonical-destination-model";
 import { buildNeighborhoodIntelligenceSeedData } from "../../lib/neighborhood-intelligence-seed-data";
@@ -72,6 +72,10 @@ const buildDestination = (): CanonicalDestination => ({
 });
 
 describe("CanonicalDestinationPage", () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
   it("renders a destination guide section for Spearfish", () => {
     render(<CanonicalDestinationPage destination={buildDestination()} />);
 
@@ -87,6 +91,15 @@ describe("CanonicalDestinationPage", () => {
     expect(screen.getByRole("tab", { name: /Premium Profile/i })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: /Deep Dive/i })).toBeInTheDocument();
     expect(screen.getAllByText(/Executive summary/i).length).toBeGreaterThan(0);
+  });
+
+  it("switches to the premium profile view when the tab receives a pointer interaction", () => {
+    render(<CanonicalDestinationPage destination={buildDestination()} />);
+
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    expect(screen.getByText(/Premium intelligence/i)).toBeInTheDocument();
+    expect(screen.getByText(/Scores and fit/i)).toBeInTheDocument();
   });
 
   it("renders premium editorial content from a destination's structured source data", () => {
@@ -151,6 +164,26 @@ describe("CanonicalDestinationPage", () => {
     expect(screen.getAllByText("Housing").length).toBeGreaterThan(0);
     expect(screen.getAllByText("$1,400–$2,300/month").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Single resident").length).toBeGreaterThan(0);
+  });
+
+  it("renders workbook-backed neighborhood profiles and resources in the premium view", () => {
+    const destination = buildDestination();
+    destination.city = "New Braunfels";
+    destination.country = "United States";
+    destination.title = "New Braunfels";
+    destination.neighborhoods = ["Gruene Historic District"];
+    destination.neighborhoodProfiles = [{
+      name: "Gruene Historic District",
+      summary: "A historic district with live music, river access, and a slower pace.",
+      resources: [{ category: "guide", label: "Gruene live music guide", url: "https://example.com/gruene", kind: "dataset" }],
+      intelligence: [{ key: "walkability", label: "Walkability", value: "Strong", description: "The district is highly walkable for a weekend and a long stay." }],
+    }];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    expect(screen.getAllByText(/A historic district with live music/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("link", { name: /Gruene live music guide/i }).length).toBeGreaterThan(0);
   });
 
   it("renders a destination-specific placeholder when a destination has no verified media", () => {

@@ -390,6 +390,215 @@ describe("batch import route", () => {
     expect(payload.summary?.destinationCount).toBe(1);
   });
 
+  it("returns a Premium V2 contract preview during workbook preview requests", async () => {
+    cookieGetMock.mockReturnValue({ value: "token" });
+
+    const requestPayload = {
+      previewOnly: true,
+      workbookSheets: ["Destinations", "Neighborhoods"],
+      workbookRowsBySheet: {
+        Destinations: [{ destination_name: "Cavtat", country: "Croatia", slug: "cavtat-croatia" }],
+        Neighborhoods: [{ destination_name: "Cavtat", neighborhood_name: "Old Town", neighborhood_slug: "old-town" }],
+      },
+      workbookHeadersBySheet: {
+        Destinations: ["destination_name", "country", "slug"],
+        Neighborhoods: ["destination_name", "neighborhood_name", "neighborhood_slug"],
+      },
+    };
+
+    mockAdminAuthedFetch((url) => {
+      if (url.includes("/rest/v1/destinations_catalog")) {
+        return jsonResponse({ body: [{ id: "dest-1", slug: "cavtat-croatia", city: "Cavtat", country: "Croatia" }] });
+      }
+
+      return jsonResponse({ body: [] });
+    });
+
+    const response = await POST(new Request("https://example.com/api", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestPayload),
+    }));
+
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload.contractPreview).toEqual(expect.objectContaining({
+      recognized: true,
+      runtimeModules: expect.arrayContaining([expect.objectContaining({ key: "destinations", detected: true })]),
+      structuralSheets: expect.arrayContaining([expect.objectContaining({ key: "schema_index" })]),
+      errors: expect.any(Array),
+      warnings: expect.any(Array),
+    }));
+  });
+
+  it("persists premium V2 workbook rows into destinations, neighborhoods, places, resources, and media when applied", async () => {
+    cookieGetMock.mockReturnValue({ value: "token" });
+
+    const requestPayload = {
+      previewOnly: false,
+      workbookSheets: ["Destinations", "Neighborhoods", "Neighborhood Places", "Resources", "Media"],
+      workbookRowsBySheet: {
+        Destinations: [{ destination_name: "Cavtat", country: "Croatia", slug: "cavtat-croatia" }],
+        Neighborhoods: [{ destination_name: "Cavtat", neighborhood_name: "Old Town" }],
+        "Neighborhood Places": [{ destination_name: "Cavtat", neighborhood_name: "Old Town", category: "Restaurant", real_place_name: "Tanjga Restaurant", address: "Obala 11", google_maps_url: "https://maps.google.com/?q=Tanjga%20Restaurant", website_url: "https://www.tanjga.hr" }],
+        Resources: [{ destination: "Cavtat", resource_name: "Cavtat Tourism", resource_category: "Official Tourism", url: "https://www.cavtat-tourism.com" }],
+        Media: [{ destination: "Cavtat", image_url: "https://example.com/cavtat.jpg", verified: true }],
+      },
+    };
+
+    const postedBodies: Array<Record<string, unknown>> = [];
+
+    mockAdminAuthedFetch((url, init) => {
+      if (url.includes("/rest/v1/destination_import_runs")) {
+        return jsonResponse({ body: [{ id: "run-apply" }] });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog?select=id,slug,city,country,description,overview,status,tier&order=city.asc")) {
+        return jsonResponse({ body: [] });
+      }
+
+      if (url.includes("/rest/v1/neighborhoods") && init?.method === "POST") {
+        const body = JSON.parse(String(init.body ?? "{}"));
+        postedBodies.push({ table: "neighborhoods", body });
+        return jsonResponse({ body: [{ id: "neigh-1" }] });
+      }
+
+      if (url.includes("/rest/v1/destination_places") && init?.method === "POST") {
+        const body = JSON.parse(String(init.body ?? "{}"));
+        postedBodies.push({ table: "destination_places", body });
+        return jsonResponse({ body: [{ id: "place-1" }] });
+      }
+
+      if (url.includes("/rest/v1/destination_resource_links") && init?.method === "POST") {
+        const body = JSON.parse(String(init.body ?? "{}"));
+        postedBodies.push({ table: "destination_resource_links", body });
+        return jsonResponse({ body: [{ id: "resource-1" }] });
+      }
+
+      if (url.includes("/rest/v1/destination_media_assets") && init?.method === "POST") {
+        const body = JSON.parse(String(init.body ?? "{}"));
+        postedBodies.push({ table: "destination_media_assets", body });
+        return jsonResponse({ body: [{ id: "media-1" }] });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog") && init?.method === "POST") {
+        const body = JSON.parse(String(init.body ?? "{}"));
+        postedBodies.push({ table: "destinations_catalog", body });
+        return jsonResponse({ body: [{ id: "dest-created", slug: body.slug, city: body.city, country: body.country }] });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog") && init?.method === "PATCH") {
+        return jsonResponse({ body: [{ id: "dest-1", slug: "cavtat-croatia", city: "Cavtat", country: "Croatia" }] });
+      }
+
+      if (url.includes("/rest/v1/destination_import_rows")) {
+        return jsonResponse({ body: [{ id: "row-apply" }] });
+      }
+
+      return jsonResponse({ body: [] });
+    });
+
+    const response = await POST(new Request("https://example.com/api", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestPayload),
+    }));
+
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload.importResults.some((entry: Record<string, unknown>) => entry.action === "create")).toBe(true);
+    expect(postedBodies.some((entry) => entry.table === "neighborhoods")).toBe(true);
+    expect(postedBodies.some((entry) => entry.table === "destination_places")).toBe(true);
+    expect(postedBodies.some((entry) => entry.table === "destination_resource_links")).toBe(true);
+    expect(postedBodies.some((entry) => entry.table === "destination_media_assets")).toBe(true);
+  });
+
+  it("runs a final post-apply enrichment pass for Premium V2 workbook imports and marks destinations for review", async () => {
+    cookieGetMock.mockReturnValue({ value: "token" });
+
+    const requestPayload = {
+      previewOnly: false,
+      workbookSheets: ["Destinations", "Neighborhoods", "Neighborhood Places", "Resources", "Media"],
+      workbookRowsBySheet: {
+        Destinations: [{ destination_name: "Cavtat", country: "Croatia", slug: "cavtat-croatia", description: "Cavtat is a harbor town." }],
+        Neighborhoods: [{ destination_name: "Cavtat", neighborhood_name: "Old Town" }],
+        "Neighborhood Places": [{ destination_name: "Cavtat", neighborhood_name: "Old Town", category: "Restaurant", real_place_name: "Tanjga Restaurant", address: "Obala 11", google_maps_url: "https://maps.google.com/?q=Tanjga%20Restaurant", website_url: "https://www.tanjga.hr", verified: true }],
+        Resources: [{ destination: "Cavtat", resource_name: "Cavtat Tourism", resource_category: "Official Tourism", url: "https://www.cavtat-tourism.com", verified: true }],
+        Media: [{ destination: "Cavtat", image_url: "https://example.com/cavtat.jpg", verified: true }],
+      },
+    };
+
+    const enrichmentPatchBodies: Array<Record<string, unknown>> = [];
+
+    mockAdminAuthedFetch((url, init) => {
+      if (url.includes("/rest/v1/destination_import_runs")) {
+        return jsonResponse({ body: [{ id: "run-enrichment" }] });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog?select=id,slug,city,country,description,overview,status,tier&order=city.asc")) {
+        return jsonResponse({ body: [] });
+      }
+
+      if (url.includes("/rest/v1/neighborhoods") && init?.method === "POST") {
+        return jsonResponse({ body: [{ id: "neigh-2" }] });
+      }
+
+      if (url.includes("/rest/v1/destination_places") && init?.method === "POST") {
+        return jsonResponse({ body: [{ id: "place-2" }] });
+      }
+
+      if (url.includes("/rest/v1/destination_resource_links") && init?.method === "POST") {
+        return jsonResponse({ body: [{ id: "resource-2" }] });
+      }
+
+      if (url.includes("/rest/v1/destination_media_assets") && init?.method === "POST") {
+        return jsonResponse({ body: [{ id: "media-2" }] });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog") && init?.method === "POST") {
+        return jsonResponse({ body: [{ id: "dest-created-2", slug: "cavtat-croatia", city: "Cavtat", country: "Croatia" }] });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog") && init?.method === "PATCH") {
+        const body = JSON.parse(String(init.body ?? "{}"));
+        enrichmentPatchBodies.push(body);
+        return jsonResponse({ body: [{ id: "dest-created-2", slug: "cavtat-croatia", city: "Cavtat", country: "Croatia" }] });
+      }
+
+      if (url.includes("/rest/v1/destination_import_rows")) {
+        return jsonResponse({ body: [{ id: "row-enrichment" }] });
+      }
+
+      return jsonResponse({ body: [] });
+    });
+
+    const response = await POST(new Request("https://example.com/api", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestPayload),
+    }));
+
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload.importResults.some((entry: Record<string, unknown>) => entry.action === "create")).toBe(true);
+    expect(enrichmentPatchBodies).toHaveLength(1);
+    expect(enrichmentPatchBodies[0]).toEqual(expect.objectContaining({
+      status: "review",
+      metadata: expect.objectContaining({
+        importedVerifiedFacts: expect.objectContaining({
+          neighborhoods: expect.any(Array),
+          places: expect.any(Array),
+          resources: expect.any(Array),
+          media: expect.any(Array),
+        }),
+        postApplyEnrichment: expect.objectContaining({ status: "completed" }),
+      }),
+    }));
+  });
+
   it("continues execution when import tracking tables are unavailable", async () => {
     cookieGetMock.mockReturnValue({ value: "token" });
 
