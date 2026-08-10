@@ -116,3 +116,5 @@ export type {
 } from "./types";
 
 export type { PersistenceError } from "./errors";
+export { NORMALIZATION_VERSION, normalizeComparable, normalizeScalarValue } from "./normalize";
+export { projectCanonicalComparable, projectComparable, projectStoredComparable } from "./comparable-projection";
