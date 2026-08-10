@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { buildBatchImportPlan, buildDestinationUpdatePayload, buildImportSummary, buildImportedDestinationMetadata, normalizeSlug } from "./processor";
+import { buildDeterministicV31PreviewResponse, classifyDeterministicV31WorkbookContract } from "./deterministic-preview";
 import { getSupabaseAuthHeaders, getSupabaseConfig, getSupabaseServiceRoleKey, isSupabaseConfigured } from "../../../../lib/supabase";
 import { shouldUseAdminLocalFallback } from "../../../../lib/admin-local-fallback";
 import { buildEnrichedDestinationCreatePayload } from "../../../../lib/destination-enrichment";
@@ -273,7 +274,15 @@ export async function POST(request: Request) {
       fileName?: string;
       selectedColumns?: string[];
       allowBlankClears?: boolean;
-      schema?: { sheetName?: string; headers?: string[] };
+      deterministicPreview?: boolean;
+      schema?: {
+        sheetName?: string;
+        headers?: string[];
+        schemaVersion?: string;
+        architecture?: string;
+        primaryIdentity?: string;
+        sheetNames?: string[];
+      };
       workbookSheets?: string[];
       workbookRowsBySheet?: Record<string, Array<Record<string, unknown>>>;
       workbookHeadersBySheet?: Record<string, string[]>;
@@ -285,6 +294,48 @@ export async function POST(request: Request) {
     const previewOnly = payload.previewOnly ?? payload.dryRun ?? false;
     const selectedColumns = Array.isArray(payload.selectedColumns) ? payload.selectedColumns : [];
     const allowBlankClears = Boolean(payload.allowBlankClears);
+    const hasWorkbookPayload = Boolean(
+      payload.workbookSheets?.length ||
+        payload.workbookRowsBySheet ||
+        payload.workbookHeadersBySheet ||
+        payload.schema?.headers?.length ||
+        payload.fileName?.toLowerCase().endsWith(".xlsx"),
+    );
+
+    if (hasWorkbookPayload) {
+      try {
+        const classification = await classifyDeterministicV31WorkbookContract({
+          workbookMetadata: {
+            schemaVersion: payload.schema?.schemaVersion,
+            architecture: payload.schema?.architecture,
+            primaryIdentity: payload.schema?.primaryIdentity,
+            sheetNames: payload.schema?.sheetNames ?? payload.workbookSheets,
+          },
+        });
+
+        if (classification.classification === "VALID_V31") {
+          try {
+            const deterministicPreview = await buildDeterministicV31PreviewResponse({ writeRequested: !previewOnly });
+            return Response.json({
+              ...deterministicPreview,
+              deterministicPreview: true,
+              previewOnly: true,
+              mode,
+              matchField,
+              previewCount: deterministicPreview.destinations.length,
+            }, { status: 200 });
+          } catch (error) {
+            return Response.json({ error: error instanceof Error ? error.message : "Unable to build deterministic preview." }, { status: 400 });
+          }
+        }
+
+        if (classification.classification === "INVALID_V31") {
+          return Response.json({ error: classification.error ?? "Invalid deterministic v3.1 workbook contract." }, { status: 400 });
+        }
+      } catch (error) {
+        return Response.json({ error: error instanceof Error ? error.message : "Unable to classify deterministic workbook contract." }, { status: 400 });
+      }
+    }
 
     const { url } = getSupabaseConfig();
     const headers = getSupabaseAuthHeaders(accessToken);

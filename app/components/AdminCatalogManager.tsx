@@ -18,6 +18,7 @@ import {
 import { buildEditorFormFromDestination, filterDestinationsByCatalog, getDestinationWorkflowState, normalizeDestinationIdentity, normalizeDestinationStatus, upsertItemById } from "./adminCatalogManagerUtils";
 import { buildDashboardMetrics, createSlug, filterAdminDestinations, type AdminCmsCategory, type AdminCmsMediaAsset, type AdminCmsSearchFilter, type AdminCmsTag } from "./adminCmsUtils";
 import { parseBatchImportFile } from "./batchImportFileUtils";
+import { buildDeterministicPreviewRenderModel } from "./adminDeterministicPreviewUtils";
 
 type AdminDestination = {
   id: string;
@@ -843,6 +844,7 @@ export default function AdminCatalogManager() {
   const [mediaDraft, setMediaDraft] = useState({ name: "", url: "", type: "image" as AdminCmsMediaAsset["type"], description: "", category: "hero" });
   const [batchImportFileName, setBatchImportFileName] = useState("");
   const [batchImportRowsText, setBatchImportRowsText] = useState("");
+  const [deterministicPreviewState, setDeterministicPreviewState] = useState<Record<string, unknown> | null>(null);
   const [batchImportRows, setBatchImportRows] = useState<Array<Record<string, unknown>>>([]);
   const [batchImportWorkbookSheets, setBatchImportWorkbookSheets] = useState<string[]>([]);
   const [batchImportSelectedSheet, setBatchImportSelectedSheet] = useState("");
@@ -987,6 +989,18 @@ export default function AdminCatalogManager() {
     );
   }, [destinations]);
 
+  const deterministicPreviewRenderModel = useMemo(() => {
+    if (!deterministicPreviewState) {
+      return [];
+    }
+
+    const previewDestinations = Array.isArray((deterministicPreviewState as Record<string, unknown>).destinations)
+      ? ((deterministicPreviewState as Record<string, unknown>).destinations as Array<Record<string, unknown>>)
+      : [];
+
+    return buildDeterministicPreviewRenderModel({ destinations: previewDestinations });
+  }, [deterministicPreviewState]);
+
   const handleBulkSelection = (destinationId: string) => {
     setSelectedDestinationIds((current) => current.includes(destinationId) ? current.filter((entry) => entry !== destinationId) : [...current, destinationId]);
   };
@@ -1034,6 +1048,7 @@ export default function AdminCatalogManager() {
     setBatchImportError(null);
     setBatchImportResultSummary("");
     setBatchImportPreviewPlan([]);
+    setDeterministicPreviewState(null);
     setBatchImportWorkbookSheets([]);
     setBatchImportSelectedSheet("");
     setBatchImportWorkbookRowsBySheet({});
@@ -1088,10 +1103,15 @@ export default function AdminCatalogManager() {
           mode: batchImportMode,
           matchField: batchImportMatchField,
           previewOnly: true,
+          deterministicPreview: true,
+          fileName: batchImportFileName,
           schema: batchImportSelectedSheetHeaders.length > 0 ? {
             sheetName: batchImportSelectedSheet,
             headers: batchImportSelectedSheetHeaders,
           } : undefined,
+          workbookSheets: batchImportWorkbookSheets,
+          workbookRowsBySheet: batchImportWorkbookRowsBySheet,
+          workbookHeadersBySheet: batchImportWorkbookHeadersBySheet,
         }),
       });
 
@@ -1100,6 +1120,9 @@ export default function AdminCatalogManager() {
         plan?: BatchImportPlanEntry[];
         previewCount?: number;
         summary?: BatchImportSummary;
+        deterministicPreview?: boolean;
+        workbook?: Record<string, unknown>;
+        destinations?: Array<Record<string, unknown>>;
       };
 
       if (!response.ok) {
@@ -1109,6 +1132,7 @@ export default function AdminCatalogManager() {
 
       setBatchImportPreviewPlan(payload.plan ?? []);
       setBatchImportSummary(payload.summary ?? null);
+      setDeterministicPreviewState(payload.deterministicPreview ? { workbook: payload.workbook, destinations: payload.destinations } : null);
       setBatchImportResultSummary(payload.previewCount ? `Preview ready: ${payload.previewCount} destination(s) will be imported.` : "Preview ready: no destinations will be imported.");
     } catch (error) {
       setBatchImportError(error instanceof Error ? error.message : "Unable to prepare batch import preview.");
@@ -1126,6 +1150,7 @@ export default function AdminCatalogManager() {
     setIsExecutingBatchImport(true);
     setBatchImportError(null);
     setBatchImportResultSummary("");
+    setDeterministicPreviewState(null);
 
     try {
       const response = await fetch("/api/admin/destinations/batch-import", {
@@ -1138,10 +1163,15 @@ export default function AdminCatalogManager() {
           selectedColumns: batchImportSelectedColumns,
           allowBlankClears: batchImportAllowBlankClears,
           previewOnly: false,
+          deterministicPreview: true,
+          fileName: batchImportFileName,
           schema: batchImportSelectedSheetHeaders.length > 0 ? {
             sheetName: batchImportSelectedSheet,
             headers: batchImportSelectedSheetHeaders,
           } : undefined,
+          workbookSheets: batchImportWorkbookSheets,
+          workbookRowsBySheet: batchImportWorkbookRowsBySheet,
+          workbookHeadersBySheet: batchImportWorkbookHeadersBySheet,
         }),
       });
 
@@ -2303,6 +2333,118 @@ export default function AdminCatalogManager() {
                       <div className="mt-3 flex flex-wrap gap-2">
                         <button type="button" onClick={() => void handleExecuteBatchImport()} className="rounded-full bg-cyan-500 px-3 py-2 text-sm font-semibold text-slate-950">Continue</button>
                         <button type="button" onClick={() => setBatchImportShowConfirm(false)} className="rounded-full border border-cyan-400/40 px-3 py-2 text-sm font-semibold text-cyan-200">Cancel</button>
+                      </div>
+                    </div>
+                  ) : null}
+                  {deterministicPreviewState ? (
+                    <div className="mt-4 rounded-2xl border border-cyan-400/30 bg-cyan-500/10 p-3 text-sm text-cyan-100">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                          <p className="font-semibold uppercase tracking-[0.2em] text-cyan-300">DestinationFinderAI v3.1 deterministic preview</p>
+                          <p className="mt-1 text-[11px] uppercase tracking-[0.2em] text-cyan-400/80">PREVIEW ONLY • NO IMPORT HAS OCCURRED</p>
+                        </div>
+                        <span className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-cyan-200">Read-only</span>
+                      </div>
+                      <p className="mt-2 text-sm text-cyan-100/90">The content below is sourced directly from the frozen v3.1 workbook and is not backed by any database write.</p>
+                      <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                        <div className="rounded-2xl border border-white/10 bg-slate-950/70 p-3">
+                          <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Contract</p>
+                          <p className="mt-1 text-sm font-semibold text-white">{String((deterministicPreviewState.workbook as Record<string, unknown> | undefined)?.schemaVersion ?? "unknown")}</p>
+                        </div>
+                        <div className="rounded-2xl border border-white/10 bg-slate-950/70 p-3">
+                          <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Destinations</p>
+                          <p className="mt-1 text-sm font-semibold text-white">{String((deterministicPreviewState.workbook as Record<string, unknown> | undefined)?.destinationCount ?? 0)}</p>
+                        </div>
+                      </div>
+                      <div className="mt-4 space-y-3">
+                        {deterministicPreviewRenderModel.map((destination) => (
+                          <div key={destination.destinationKey} className="rounded-2xl border border-white/10 bg-slate-950/70 p-3">
+                            <div className="flex flex-wrap items-start justify-between gap-2">
+                              <div>
+                                <p className="text-sm font-semibold text-white">{destination.name ?? destination.destinationKey}</p>
+                                <p className="mt-1 text-xs text-slate-400">{destination.city ?? "—"}, {destination.country ?? "—"} • {destination.slug ?? destination.destinationKey}</p>
+                              </div>
+                              <span className="rounded-full border border-white/10 px-2 py-1 text-[10px] uppercase tracking-[0.2em] text-slate-300">Workbook</span>
+                            </div>
+                            {destination.shortDescription ? <p className="mt-2 text-sm text-slate-300">{destination.shortDescription}</p> : null}
+                            {destination.factSummaries.length > 0 ? (
+                              <div className="mt-3 space-y-2">
+                                <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Facts</p>
+                                {destination.factSummaries.map((fact) => (
+                                  <div key={`${destination.destinationKey}-${fact.label}`} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
+                                    <p className="text-xs font-semibold text-cyan-200">{fact.label}</p>
+                                    <p className="mt-1 text-sm text-slate-300">{fact.value}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : null}
+                            {destination.scoreSummaries.length > 0 ? (
+                              <div className="mt-3 space-y-2">
+                                <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Scores</p>
+                                {destination.scoreSummaries.map((score) => (
+                                  <div key={`${destination.destinationKey}-${score.label}`} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
+                                    <p className="text-xs font-semibold text-cyan-200">{score.label}</p>
+                                    <p className="mt-1 text-sm text-slate-300">{score.value}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : null}
+                            {destination.neighborhoodSummaries.length > 0 ? (
+                              <div className="mt-3 rounded-xl border border-white/10 bg-white/5 p-3">
+                                <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Neighborhoods</p>
+                                <ul className="mt-2 space-y-1 text-sm text-slate-300">
+                                  {destination.neighborhoodSummaries.map((neighborhood) => (
+                                    <li key={`${destination.destinationKey}-${neighborhood.name}`}>
+                                      <span className="text-white">{neighborhood.name ?? "Unnamed neighborhood"}</span>
+                                      {neighborhood.description ? <span className="ml-2 text-slate-400">• {neighborhood.description}</span> : null}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            ) : null}
+                            <div className="mt-3 grid gap-2 md:grid-cols-2">
+                              {destination.placeSummaries.length > 0 ? (
+                                <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                                  <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Places</p>
+                                  <ul className="mt-2 space-y-1 text-sm text-slate-300">
+                                    {destination.placeSummaries.map((place) => (
+                                      <li key={`${destination.destinationKey}-${place.name}`}>
+                                        <span className="text-white">{place.name ?? "Unnamed place"}</span>
+                                        {place.category ? <span className="ml-2 text-slate-400">• {place.category}</span> : null}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              ) : null}
+                              {destination.resourceSummaries.length > 0 ? (
+                                <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                                  <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Resources</p>
+                                  <ul className="mt-2 space-y-1 text-sm text-slate-300">
+                                    {destination.resourceSummaries.map((resource) => (
+                                      <li key={`${destination.destinationKey}-${resource.label}`}>
+                                        <span className="text-white">{resource.label ?? "Untitled resource"}</span>
+                                        {resource.provider ? <span className="ml-2 text-slate-400">• {resource.provider}</span> : null}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              ) : null}
+                            </div>
+                            {destination.mediaSummaries.length > 0 ? (
+                              <div className="mt-3 rounded-xl border border-white/10 bg-white/5 p-3">
+                                <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Media</p>
+                                <ul className="mt-2 space-y-1 text-sm text-slate-300">
+                                  {destination.mediaSummaries.map((media) => (
+                                    <li key={`${destination.destinationKey}-${media.label}`}>
+                                      <span className="text-white">{media.label ?? "Untitled media"}</span>
+                                      {media.provider ? <span className="ml-2 text-slate-400">• {media.provider}</span> : null}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            ) : null}
+                          </div>
+                        ))}
                       </div>
                     </div>
                   ) : null}

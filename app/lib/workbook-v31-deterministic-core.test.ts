@@ -61,4 +61,16 @@ describe("workbook v3.1 deterministic core", () => {
     expect(importResult.diagnostics?.aliasResolution["new-braunfels-texas"]).toBe("new-braunfels-tx-us");
     expect(importResult.diagnostics?.moduleCounts.DESTINATIONS).toBe(3);
   });
+
+  it("keeps metadata.sheetNames stable in value and order across repeated parses", async () => {
+    const firstImport = await loadFrozenWorkbookV31DeterministicImport();
+    const secondImport = await loadFrozenWorkbookV31DeterministicImport();
+
+    const firstSheetNames = firstImport.diagnostics?.metadata.sheetNames?.split(",") ?? [];
+    const secondSheetNames = secondImport.diagnostics?.metadata.sheetNames?.split(",") ?? [];
+
+    expect(firstSheetNames).toEqual(secondSheetNames);
+    expect(firstSheetNames).toEqual(expect.arrayContaining(["DESTINATIONS", "WORKBOOK_METADATA", "DATA_DICTIONARY"]));
+    expect(firstSheetNames.length).toBeGreaterThan(0);
+  });
 });

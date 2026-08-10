@@ -319,6 +319,7 @@ export const loadFrozenWorkbookV31DeterministicImport = async (): Promise<Determ
   const contractVersionRow = metadataRows.find((row) => normalizeCellValue(row[0]).toLowerCase() === "schema_version");
   const contractVersion = contractVersionRow?.[1] ?? "unknown";
   const metadata = Object.fromEntries(metadataRows.map((row) => [normalizeCellValue(row[0]), normalizeCellValue(row[1])]).filter(([key]) => key));
+  metadata.sheetNames = sheetNames.join(",");
   const architecture = metadata.architecture ?? "unknown";
 
   const pilotStatusRows = (sheetRows.get("PILOT_STATUS") ?? []).slice(1);

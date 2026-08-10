@@ -1,11 +1,18 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { jsonResponse, mockAdminAuthedFetch } from "../../../../test-utils/adminRouteFetchMocks";
 
-const { cookieGetMock, cookiesMock } = vi.hoisted(() => {
-  const cookieGetMock = vi.fn();
-  const cookiesMock = vi.fn(async () => ({ get: cookieGetMock }));
-  return { cookieGetMock, cookiesMock };
-});
+const { cookieGetMock, cookiesMock, buildDeterministicV31PreviewResponseMock, classifyDeterministicV31WorkbookContractMock, buildBatchImportPlanMock, buildDestinationUpdatePayloadMock, buildImportSummaryMock, buildImportedDestinationMetadataMock, normalizeSlugMock, verifyDestinationImportMock } = vi.hoisted(() => ({
+  cookieGetMock: vi.fn(),
+  cookiesMock: vi.fn(async () => ({ get: cookieGetMock })),
+  buildDeterministicV31PreviewResponseMock: vi.fn(),
+  classifyDeterministicV31WorkbookContractMock: vi.fn(),
+  buildBatchImportPlanMock: vi.fn(),
+  buildDestinationUpdatePayloadMock: vi.fn(),
+  buildImportSummaryMock: vi.fn(),
+  buildImportedDestinationMetadataMock: vi.fn(),
+  normalizeSlugMock: vi.fn(),
+  verifyDestinationImportMock: vi.fn(async () => ({ ok: true })),
+}));
 
 vi.mock("next/headers", () => ({
   cookies: cookiesMock,
@@ -28,13 +35,401 @@ vi.mock("../../../../lib/admin-local-fallback", () => ({
   shouldUseAdminLocalFallback: () => false,
 }));
 
+vi.mock("./deterministic-preview", async () => {
+  const actual = await vi.importActual<typeof import("./deterministic-preview")>("./deterministic-preview");
+  return {
+    ...actual,
+    buildDeterministicV31PreviewResponse: buildDeterministicV31PreviewResponseMock,
+    classifyDeterministicV31WorkbookContract: classifyDeterministicV31WorkbookContractMock,
+  };
+});
+
+vi.mock("./processor", async () => {
+  const actual = await vi.importActual<typeof import("./processor")>("./processor");
+  return {
+    ...actual,
+    buildBatchImportPlan: buildBatchImportPlanMock,
+    buildDestinationUpdatePayload: buildDestinationUpdatePayloadMock,
+    buildImportSummary: buildImportSummaryMock,
+    buildImportedDestinationMetadata: buildImportedDestinationMetadataMock,
+    normalizeSlug: normalizeSlugMock,
+  };
+});
+
+vi.mock("../../../../lib/destination-enrichment", () => ({
+  buildEnrichedDestinationCreatePayload: vi.fn(({ city, country, slug }: { city: string; country: string; slug?: string }) => ({
+    slug: slug ?? `${city}-${country}`,
+    description: `${city} in ${country} offers a compelling destination experience.`,
+    overview: `${city} is a welcoming destination in ${country}.`,
+    metadata: {
+      editorialContent: {
+        introduction: `${city} in ${country} offers a compelling destination experience.`,
+      },
+      researchProfile: {
+        overview: `${city} is a welcoming destination in ${country}.`,
+        feel: "Relaxed and welcoming",
+        whyPeopleLoveIt: "It balances charm, convenience, and a strong sense of place.",
+      },
+      neighborhoodIntelligence: [],
+      knowledgeProfile: { vibe: "balanced" },
+      premiumEditorialContent: { tone: "premium" },
+    },
+  })),
+}));
+
+vi.mock("../../../../lib/destination-import-verification", () => ({
+  verifyDestinationImport: verifyDestinationImportMock,
+}));
+
 import { POST } from "./route";
 
 describe("batch import route", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.restoreAllMocks();
     cookieGetMock.mockReset();
     cookiesMock.mockClear();
+    buildDeterministicV31PreviewResponseMock.mockReset();
+    classifyDeterministicV31WorkbookContractMock.mockReset();
+    buildBatchImportPlanMock.mockReset();
+    buildDestinationUpdatePayloadMock.mockReset();
+    buildImportSummaryMock.mockReset();
+    buildImportedDestinationMetadataMock.mockReset();
+    normalizeSlugMock.mockReset();
+    verifyDestinationImportMock.mockReset();
+    verifyDestinationImportMock.mockImplementation(async () => ({ ok: true }));
+
+    const actualProcessor = await vi.importActual<typeof import("./processor")>("./processor");
+    buildBatchImportPlanMock.mockImplementation(actualProcessor.buildBatchImportPlan as typeof buildBatchImportPlanMock);
+    buildDestinationUpdatePayloadMock.mockImplementation(actualProcessor.buildDestinationUpdatePayload as typeof buildDestinationUpdatePayloadMock);
+    buildImportSummaryMock.mockImplementation(actualProcessor.buildImportSummary as typeof buildImportSummaryMock);
+    buildImportedDestinationMetadataMock.mockImplementation(actualProcessor.buildImportedDestinationMetadata as typeof buildImportedDestinationMetadataMock);
+    normalizeSlugMock.mockImplementation(actualProcessor.normalizeSlug as typeof normalizeSlugMock);
+
+    const actualDeterministicPreview = await vi.importActual<typeof import("./deterministic-preview")>("./deterministic-preview");
+    classifyDeterministicV31WorkbookContractMock.mockImplementation(actualDeterministicPreview.classifyDeterministicV31WorkbookContract as typeof classifyDeterministicV31WorkbookContractMock);
+  });
+
+  it("routes valid v3.1 workbook contracts deterministically regardless of request flags", async () => {
+    cookieGetMock.mockReturnValue({ value: "token" });
+
+    const previewPayload = {
+      workbook: {
+        schemaVersion: "3.1",
+        architecture: "workbook_only_no_fallback",
+        validationStatus: "PASS",
+        destinationCount: 3,
+        destinationKeys: ["new-braunfels-tx-us"],
+        validationErrors: [],
+        validationWarnings: [],
+        orphanRowErrors: [],
+        aliasErrors: [],
+        deterministicStatus: "NO_FALLBACK",
+        writeStatus: "PREVIEW_ONLY",
+        writeBlocked: true,
+        databaseReads: 0,
+        databaseWrites: 0,
+      },
+      destinations: [{
+        identity: { destinationKey: "new-braunfels-tx-us", slug: "new-braunfels-texas-united-states", name: "New Braunfels", city: "New Braunfels", country: "United States" },
+        moduleCounts: { facts: 1, scores: 1, neighborhoods: 1, places: 0, resources: 0, media: 0 },
+        canonicalDestination: { identity: { destinationKey: "new-braunfels-tx-us" } },
+      }],
+    };
+
+    buildDeterministicV31PreviewResponseMock.mockResolvedValue(previewPayload);
+    buildBatchImportPlanMock.mockImplementation(() => { throw new Error("legacy importer should not run"); });
+    buildDestinationUpdatePayloadMock.mockImplementation(() => { throw new Error("legacy importer should not run"); });
+    buildImportSummaryMock.mockImplementation(() => ({ totalRows: 0, create: 0, update: 0, reject: 0, skip: 0, warnings: 0, errors: 0 }));
+    buildImportedDestinationMetadataMock.mockImplementation(() => ({ editorialContent: {}, researchProfile: {} }));
+    normalizeSlugMock.mockImplementation((slug: string) => slug);
+
+    const seenUrls: string[] = [];
+
+    mockAdminAuthedFetch((url) => {
+      seenUrls.push(url);
+      if (url.includes("/auth/v1/user")) {
+        return jsonResponse({ body: { id: "user-1" } });
+      }
+      if (url.includes("/rest/v1/app_admins")) {
+        return jsonResponse({ body: [{ role: "admin" }] });
+      }
+      return jsonResponse({ body: [] });
+    });
+
+    const response = await POST(new Request("https://example.com/api", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        rows: [{ city: "New Braunfels", country: "United States", slug: "new-braunfels-texas-united-states" }],
+        mode: "import",
+        previewOnly: false,
+        dryRun: false,
+        execute: true,
+        commit: true,
+        confirm: true,
+        deterministicPreview: false,
+        fileName: "workbook.xlsx",
+        schema: {
+          schemaVersion: "3.1",
+          architecture: "workbook_only_no_fallback",
+          primaryIdentity: "destination_key",
+          sheetNames: ["DESTINATIONS", "DESTINATION_FACTS", "DESTINATION_SCORES", "IMPORT_CONTRACT", "PILOT_STATUS", "WORKBOOK_METADATA", "IMPORT_MANIFEST", "DESTINATION_ALIASES", "VALIDATION_RULES", "DATA_DICTIONARY"],
+          headers: ["destination_key"],
+        },
+        workbookSheets: ["DESTINATIONS"],
+        workbookRowsBySheet: { DESTINATIONS: [{ destination_key: "new-braunfels-tx-us" }] },
+        workbookHeadersBySheet: { DESTINATIONS: ["destination_key"] },
+      }),
+    }));
+
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload.deterministicPreview).toBe(true);
+    expect(payload.workbook.validationStatus).toBe("PASS");
+    expect(payload.workbook.writeStatus).toBe("PREVIEW_ONLY");
+    expect(buildBatchImportPlanMock).not.toHaveBeenCalled();
+    expect(buildDestinationUpdatePayloadMock).not.toHaveBeenCalled();
+    expect(verifyDestinationImportMock).not.toHaveBeenCalled();
+    expect(buildDeterministicV31PreviewResponseMock).toHaveBeenCalledWith({ writeRequested: true });
+    expect(seenUrls.filter((url) => url.includes("/rest/v1/destinations_catalog") || url.includes("/rest/v1/destination_import_runs") || url.includes("/rest/v1/destination_import_rows"))).toHaveLength(0);
+  });
+
+  it.each([
+    ["deterministicPreview omitted", undefined],
+    ["deterministicPreview false", false],
+    ["deterministicPreview null", null],
+    ["deterministicPreview empty string", ""],
+    ["deterministicPreview zero", 0],
+  ])("routes a valid v3.1 workbook to deterministic preview when %s", async (_label, deterministicPreviewValue) => {
+    cookieGetMock.mockReturnValue({ value: "token" });
+
+    buildDeterministicV31PreviewResponseMock.mockResolvedValue({
+      workbook: {
+        schemaVersion: "3.1",
+        architecture: "workbook_only_no_fallback",
+        validationStatus: "PASS",
+        destinationCount: 1,
+        destinationKeys: ["new-braunfels-tx-us"],
+        validationErrors: [],
+        validationWarnings: [],
+        orphanRowErrors: [],
+        aliasErrors: [],
+        deterministicStatus: "NO_FALLBACK",
+        writeStatus: "PREVIEW_ONLY",
+        writeBlocked: true,
+        databaseReads: 0,
+        databaseWrites: 0,
+      },
+      destinations: [],
+    });
+
+    const requestBody: Record<string, unknown> = {
+      rows: [{ city: "New Braunfels", country: "United States", slug: "new-braunfels-texas-united-states" }],
+      mode: "import",
+      previewOnly: false,
+      dryRun: false,
+      execute: true,
+      commit: true,
+      confirm: true,
+      fileName: "workbook.xlsx",
+      schema: {
+        schemaVersion: "3.1",
+        architecture: "workbook_only_no_fallback",
+        primaryIdentity: "destination_key",
+        sheetNames: ["DESTINATIONS", "DESTINATION_FACTS", "DESTINATION_SCORES", "IMPORT_CONTRACT", "PILOT_STATUS", "WORKBOOK_METADATA", "IMPORT_MANIFEST", "DESTINATION_ALIASES", "VALIDATION_RULES", "DATA_DICTIONARY"],
+        headers: ["destination_key"],
+      },
+      workbookSheets: ["DESTINATIONS"],
+      workbookRowsBySheet: { DESTINATIONS: [{ destination_key: "new-braunfels-tx-us" }] },
+      workbookHeadersBySheet: { DESTINATIONS: ["destination_key"] },
+    };
+
+    if (deterministicPreviewValue !== undefined) {
+      requestBody.deterministicPreview = deterministicPreviewValue;
+    }
+
+    const response = await POST(new Request("https://example.com/api", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestBody),
+    }));
+
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload.deterministicPreview).toBe(true);
+    expect(buildBatchImportPlanMock).not.toHaveBeenCalled();
+    expect(buildDestinationUpdatePayloadMock).not.toHaveBeenCalled();
+    expect(verifyDestinationImportMock).not.toHaveBeenCalled();
+  });
+
+  it("returns a validation error and never falls through when workbook classification throws", async () => {
+    cookieGetMock.mockReturnValue({ value: "token" });
+    classifyDeterministicV31WorkbookContractMock.mockRejectedValueOnce(new Error("classifier exploded"));
+
+    buildBatchImportPlanMock.mockImplementation(() => { throw new Error("legacy importer should not run"); });
+    buildDestinationUpdatePayloadMock.mockImplementation(() => { throw new Error("legacy importer should not run"); });
+
+    const seenUrls: string[] = [];
+
+    mockAdminAuthedFetch((url) => {
+      seenUrls.push(url);
+      if (url.includes("/auth/v1/user")) {
+        return jsonResponse({ body: { id: "user-3" } });
+      }
+      if (url.includes("/rest/v1/app_admins")) {
+        return jsonResponse({ body: [{ role: "admin" }] });
+      }
+      return jsonResponse({ body: [] });
+    });
+
+    const response = await POST(new Request("https://example.com/api", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        rows: [{ city: "Test", country: "Country", slug: "test-country" }],
+        mode: "import",
+        deterministicPreview: true,
+        fileName: "workbook.xlsx",
+        schema: {
+          schemaVersion: "3.1",
+          architecture: "workbook_only_no_fallback",
+          primaryIdentity: "destination_key",
+          headers: ["destination_key"],
+        },
+        workbookSheets: ["DESTINATIONS"],
+        workbookRowsBySheet: { DESTINATIONS: [{ destination_key: "test-country" }] },
+        workbookHeadersBySheet: { DESTINATIONS: ["destination_key"] },
+      }),
+    }));
+
+    const payload = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(payload.error).toMatch(/classifier|classification/i);
+    expect(buildBatchImportPlanMock).not.toHaveBeenCalled();
+    expect(buildDestinationUpdatePayloadMock).not.toHaveBeenCalled();
+    expect(verifyDestinationImportMock).not.toHaveBeenCalled();
+    expect(seenUrls.filter((url) => url.includes("/rest/v1/destinations_catalog") || url.includes("/rest/v1/destination_import_runs") || url.includes("/rest/v1/destination_import_rows"))).toHaveLength(0);
+  });
+
+  it.each([
+    ["schema_version != 3.1", { schemaVersion: "3.0", architecture: "workbook_only_no_fallback", primaryIdentity: "destination_key" }],
+    ["architecture != workbook_only_no_fallback", { schemaVersion: "3.1", architecture: "with_fallback", primaryIdentity: "destination_key" }],
+    ["primary_identity != destination_key", { schemaVersion: "3.1", architecture: "workbook_only_no_fallback", primaryIdentity: "slug" }],
+    ["missing required v3.1 sheet", { schemaVersion: "3.1", architecture: "workbook_only_no_fallback", primaryIdentity: "destination_key", sheetNames: ["DESTINATIONS"] }],
+  ])("fails closed for invalid deterministic contracts when %s", async (_label, schemaMetadata) => {
+    cookieGetMock.mockReturnValue({ value: "token" });
+
+    buildDeterministicV31PreviewResponseMock.mockResolvedValue({
+      workbook: {
+        schemaVersion: "3.0",
+        architecture: "with_fallback",
+        validationStatus: "FAIL",
+        destinationCount: 0,
+        destinationKeys: [],
+        validationErrors: ["schema_version must be 3.1"],
+        validationWarnings: [],
+        orphanRowErrors: [],
+        aliasErrors: [],
+        deterministicStatus: "NO_FALLBACK",
+        writeStatus: "PREVIEW_ONLY",
+        writeBlocked: true,
+        databaseReads: 0,
+        databaseWrites: 0,
+      },
+      destinations: [],
+    });
+
+    mockAdminAuthedFetch((url) => {
+      if (url.includes("/auth/v1/user")) {
+        return jsonResponse({ body: { id: "user-2" } });
+      }
+      if (url.includes("/rest/v1/app_admins")) {
+        return jsonResponse({ body: [{ role: "admin" }] });
+      }
+      return jsonResponse({ body: [] });
+    });
+
+    const response = await POST(new Request("https://example.com/api", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        rows: [{ city: "Test", country: "Country", slug: "test-country" }],
+        mode: "import",
+        deterministicPreview: true,
+        fileName: "workbook.xlsx",
+        schema: {
+          ...schemaMetadata,
+          headers: ["destination_key"],
+        },
+        workbookSheets: ["DESTINATIONS"],
+        workbookRowsBySheet: { DESTINATIONS: [{ destination_key: "test-country" }] },
+        workbookHeadersBySheet: { DESTINATIONS: ["destination_key"] },
+      }),
+    }));
+
+    const payload = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(payload.error).toEqual(expect.any(String));
+    expect(buildBatchImportPlanMock).not.toHaveBeenCalled();
+    expect(buildDestinationUpdatePayloadMock).not.toHaveBeenCalled();
+    expect(verifyDestinationImportMock).not.toHaveBeenCalled();
+  });
+
+  it("keeps genuinely non-v3.1 workbook requests on the legacy path", async () => {
+    cookieGetMock.mockReturnValue({ value: "token" });
+
+    buildBatchImportPlanMock.mockImplementation(() => [{ action: "create", rowNumber: 1, slug: "paris-france", city: "Paris", country: "France" }]);
+    buildImportSummaryMock.mockImplementation(() => ({ totalRows: 1, create: 1, update: 0, reject: 0, skip: 0, warnings: 0, errors: 0 }));
+
+    const requestPayload = {
+      rows: [{ city: "Paris", country: "France", slug: "paris-france" }],
+      mode: "create_or_update",
+      matchField: "slug",
+      previewOnly: false,
+      fileName: "sample.csv",
+    };
+
+    const seenUrls: string[] = [];
+
+    mockAdminAuthedFetch((url) => {
+      seenUrls.push(url);
+
+      if (url.includes("/rest/v1/destination_import_runs")) {
+        return jsonResponse({ body: [{ id: "run-legacy" }] });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog?select=id,slug,city,country,status,tier,description,overview&slug=eq.paris-france&limit=1")) {
+        return jsonResponse({ body: [] });
+      }
+
+      if (url.includes("/rest/v1/destinations_catalog")) {
+        return jsonResponse({ body: [{ id: "dest-1" }] });
+      }
+
+      if (url.includes("/rest/v1/destination_import_rows")) {
+        return jsonResponse({ body: [{ id: "row-legacy" }] });
+      }
+
+      return jsonResponse({ body: [] });
+    });
+
+    const response = await POST(new Request("https://example.com/api", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestPayload),
+    }));
+
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(buildBatchImportPlanMock).toHaveBeenCalled();
+    expect(buildDestinationUpdatePayloadMock).toHaveBeenCalled();
+    expect(payload.importResults).toHaveLength(1);
+    expect(seenUrls.some((url) => url.includes("/rest/v1/destination_import_runs"))).toBe(true);
   });
 
   it("creates import run and import row records when executing a batch import", async () => {
@@ -84,7 +479,7 @@ describe("batch import route", () => {
     expect(payload.importResults).toHaveLength(1);
     expect(payload.importResults[0]?.action).toBe("create");
     expect(seenUrls.some((url) => url.includes("/rest/v1/destination_import_runs"))).toBe(true);
-    expect(seenUrls.some((url) => url.includes("/rest/v1/destination_import_rows"))).toBe(false);
+    expect(seenUrls.some((url) => url.includes("/rest/v1/destination_import_rows"))).toBe(true);
   });
 
   it("fails the import when post-write verification cannot confirm the destination is visible", async () => {
@@ -97,6 +492,8 @@ describe("batch import route", () => {
       previewOnly: false,
       fileName: "verification.csv",
     };
+
+    verifyDestinationImportMock.mockRejectedValueOnce(new Error("Destination verification failed."));
 
     mockAdminAuthedFetch((url, init) => {
       if (url.includes("/rest/v1/destination_import_runs")) {
