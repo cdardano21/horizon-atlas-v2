@@ -1,0 +1,17 @@
+{
+  "extends": "../../../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "incremental": false,
+    "skipLibCheck": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "types": []
+  },
+  "files": [
+    "types.ts",
+    "errors.ts",
+    "index.ts",
+    "__tests__/types-contract.test.ts"
+  ]
+}
