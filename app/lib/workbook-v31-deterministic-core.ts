@@ -3,6 +3,591 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
+type DeterministicV31CanonicalStringValue = string | null;
+
+export interface DeterministicV31CanonicalIdentity {
+  destinationKey: string;
+  slug: DeterministicV31CanonicalStringValue;
+  name: DeterministicV31CanonicalStringValue;
+  city: DeterministicV31CanonicalStringValue;
+  country: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalEditorial {
+  shortDescription: DeterministicV31CanonicalStringValue;
+  longDescription: DeterministicV31CanonicalStringValue;
+  currency: DeterministicV31CanonicalStringValue;
+  primaryLanguage: DeterministicV31CanonicalStringValue;
+  timeZone: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalFact {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  fact_group: DeterministicV31CanonicalStringValue;
+  fact_key: DeterministicV31CanonicalStringValue;
+  display_label: DeterministicV31CanonicalStringValue;
+  value_text: DeterministicV31CanonicalStringValue;
+  value_number: DeterministicV31CanonicalStringValue;
+  unit: DeterministicV31CanonicalStringValue;
+  qualitative_rating: DeterministicV31CanonicalStringValue;
+  stay_mode_key: DeterministicV31CanonicalStringValue;
+  display_order: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+  confidence: DeterministicV31CanonicalStringValue;
+  notes: DeterministicV31CanonicalStringValue;
+  factKey: DeterministicV31CanonicalStringValue;
+  factGroup: DeterministicV31CanonicalStringValue;
+  valueText: DeterministicV31CanonicalStringValue;
+  displayLabel: DeterministicV31CanonicalStringValue;
+  sourceName: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalScore {
+  destination_key: string;
+  score_key: DeterministicV31CanonicalStringValue;
+  score_value: DeterministicV31CanonicalStringValue;
+  score_label: DeterministicV31CanonicalStringValue;
+  methodology_version: DeterministicV31CanonicalStringValue;
+  evidence_summary: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+  scoreKey: DeterministicV31CanonicalStringValue;
+  scoreValue: DeterministicV31CanonicalStringValue;
+  scoreLabel: DeterministicV31CanonicalStringValue;
+  methodologyVersion: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalNeighborhood {
+  destination_key: string;
+  neighborhood_key: DeterministicV31CanonicalStringValue;
+  neighborhood_name: DeterministicV31CanonicalStringValue;
+  area_type: DeterministicV31CanonicalStringValue;
+  best_for: DeterministicV31CanonicalStringValue;
+  summary: DeterministicV31CanonicalStringValue;
+  housing_character: DeterministicV31CanonicalStringValue;
+  typical_rent_low: DeterministicV31CanonicalStringValue;
+  typical_rent_high: DeterministicV31CanonicalStringValue;
+  typical_home_price: DeterministicV31CanonicalStringValue;
+  walkability_rating: DeterministicV31CanonicalStringValue;
+  safety_rating: DeterministicV31CanonicalStringValue;
+  transit_rating: DeterministicV31CanonicalStringValue;
+  pros: DeterministicV31CanonicalStringValue;
+  cons: DeterministicV31CanonicalStringValue;
+  google_maps_url: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalPlace {
+  destination_key: string;
+  place_key: DeterministicV31CanonicalStringValue;
+  neighborhood_key: DeterministicV31CanonicalStringValue;
+  category_key: DeterministicV31CanonicalStringValue;
+  place_name: DeterministicV31CanonicalStringValue;
+  subcategory: DeterministicV31CanonicalStringValue;
+  description: DeterministicV31CanonicalStringValue;
+  address: DeterministicV31CanonicalStringValue;
+  latitude: DeterministicV31CanonicalStringValue;
+  longitude: DeterministicV31CanonicalStringValue;
+  price_level: DeterministicV31CanonicalStringValue;
+  website_url: DeterministicV31CanonicalStringValue;
+  google_maps_url: DeterministicV31CanonicalStringValue;
+  phone: DeterministicV31CanonicalStringValue;
+  best_for: DeterministicV31CanonicalStringValue;
+  display_order: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+  confidence: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalResource {
+  destination_key: string;
+  resource_key: DeterministicV31CanonicalStringValue;
+  resource_category: DeterministicV31CanonicalStringValue;
+  resource_name: DeterministicV31CanonicalStringValue;
+  description: DeterministicV31CanonicalStringValue;
+  url: DeterministicV31CanonicalStringValue;
+  official: DeterministicV31CanonicalStringValue;
+  stay_mode_key: DeterministicV31CanonicalStringValue;
+  display_order: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalMedia {
+  destination_key: string;
+  media_key: DeterministicV31CanonicalStringValue;
+  media_type: DeterministicV31CanonicalStringValue;
+  image_url: DeterministicV31CanonicalStringValue;
+  caption: DeterministicV31CanonicalStringValue;
+  subject: DeterministicV31CanonicalStringValue;
+  primary_image: DeterministicV31CanonicalStringValue;
+  gallery_order: DeterministicV31CanonicalStringValue;
+  license_notes: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+  confidence: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalCostOfLivingItem {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  household_type: DeterministicV31CanonicalStringValue;
+  lifestyle_tier: DeterministicV31CanonicalStringValue;
+  category: DeterministicV31CanonicalStringValue;
+  monthly_low: DeterministicV31CanonicalStringValue;
+  monthly_high: DeterministicV31CanonicalStringValue;
+  currency: DeterministicV31CanonicalStringValue;
+  included_notes: DeterministicV31CanonicalStringValue;
+  stay_mode_key: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalClimateMonth {
+  destination_key: string;
+  month: DeterministicV31CanonicalStringValue;
+  avg_high_c: DeterministicV31CanonicalStringValue;
+  avg_low_c: DeterministicV31CanonicalStringValue;
+  rainfall_mm: DeterministicV31CanonicalStringValue;
+  humidity_pct: DeterministicV31CanonicalStringValue;
+  sunshine_hours: DeterministicV31CanonicalStringValue;
+  snowfall_cm: DeterministicV31CanonicalStringValue;
+  water_temp_c: DeterministicV31CanonicalStringValue;
+  extreme_weather_notes: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalHousingState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  housing_topic: DeterministicV31CanonicalStringValue;
+  stay_mode_key: DeterministicV31CanonicalStringValue;
+  can_foreigners_buy: DeterministicV31CanonicalStringValue;
+  residency_required_to_buy: DeterministicV31CanonicalStringValue;
+  restrictions_summary: DeterministicV31CanonicalStringValue;
+  typical_condo_price: DeterministicV31CanonicalStringValue;
+  typical_house_price: DeterministicV31CanonicalStringValue;
+  typical_villa_price: DeterministicV31CanonicalStringValue;
+  price_per_sqm: DeterministicV31CanonicalStringValue;
+  currency: DeterministicV31CanonicalStringValue;
+  property_tax_notes: DeterministicV31CanonicalStringValue;
+  transfer_tax_notes: DeterministicV31CanonicalStringValue;
+  closing_cost_notes: DeterministicV31CanonicalStringValue;
+  hoa_condo_fee_notes: DeterministicV31CanonicalStringValue;
+  foreigner_mortgage_notes: DeterministicV31CanonicalStringValue;
+  typical_down_payment_pct: DeterministicV31CanonicalStringValue;
+  rental_rules_notes: DeterministicV31CanonicalStringValue;
+  buying_process_summary: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalPropertyResource {
+  destination_key: string;
+  resource_key: DeterministicV31CanonicalStringValue;
+  transaction_type: DeterministicV31CanonicalStringValue;
+  resource_name: DeterministicV31CanonicalStringValue;
+  resource_type: DeterministicV31CanonicalStringValue;
+  url: DeterministicV31CanonicalStringValue;
+  official: DeterministicV31CanonicalStringValue;
+  description: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalHealthcareState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  topic: DeterministicV31CanonicalStringValue;
+  system_summary: DeterministicV31CanonicalStringValue;
+  public_access_foreigners: DeterministicV31CanonicalStringValue;
+  private_care_available: DeterministicV31CanonicalStringValue;
+  english_speaking_care: DeterministicV31CanonicalStringValue;
+  typical_gp_visit_cost: DeterministicV31CanonicalStringValue;
+  typical_specialist_cost: DeterministicV31CanonicalStringValue;
+  currency: DeterministicV31CanonicalStringValue;
+  medicare_applicability: DeterministicV31CanonicalStringValue;
+  international_insurance_notes: DeterministicV31CanonicalStringValue;
+  emergency_number: DeterministicV31CanonicalStringValue;
+  pharmacy_notes: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalVisaResidencyState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  traveler_nationality: DeterministicV31CanonicalStringValue;
+  stay_mode_key: DeterministicV31CanonicalStringValue;
+  visa_free_days: DeterministicV31CanonicalStringValue;
+  visa_type: DeterministicV31CanonicalStringValue;
+  residency_option: DeterministicV31CanonicalStringValue;
+  income_requirement: DeterministicV31CanonicalStringValue;
+  proof_of_funds: DeterministicV31CanonicalStringValue;
+  insurance_requirement: DeterministicV31CanonicalStringValue;
+  work_rights: DeterministicV31CanonicalStringValue;
+  renewal_notes: DeterministicV31CanonicalStringValue;
+  permanent_residency_path: DeterministicV31CanonicalStringValue;
+  citizenship_path: DeterministicV31CanonicalStringValue;
+  official_source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalTaxFinanceState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  topic: DeterministicV31CanonicalStringValue;
+  summary: DeterministicV31CanonicalStringValue;
+  income_tax_notes: DeterministicV31CanonicalStringValue;
+  retirement_income_notes: DeterministicV31CanonicalStringValue;
+  capital_gains_notes: DeterministicV31CanonicalStringValue;
+  property_tax_notes: DeterministicV31CanonicalStringValue;
+  vat_sales_tax_notes: DeterministicV31CanonicalStringValue;
+  inheritance_wealth_notes: DeterministicV31CanonicalStringValue;
+  us_tax_treaty_notes: DeterministicV31CanonicalStringValue;
+  bank_account_foreigner_notes: DeterministicV31CanonicalStringValue;
+  currency_notes: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalLgbtqInclusivityState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  overall_rating: DeterministicV31CanonicalStringValue;
+  legal_protections: DeterministicV31CanonicalStringValue;
+  social_acceptance: DeterministicV31CanonicalStringValue;
+  community_scene: DeterministicV31CanonicalStringValue;
+  pride_events: DeterministicV31CanonicalStringValue;
+  nightlife_social: DeterministicV31CanonicalStringValue;
+  healthcare_access: DeterministicV31CanonicalStringValue;
+  areas_resources: DeterministicV31CanonicalStringValue;
+  safety_considerations: DeterministicV31CanonicalStringValue;
+  evidence_summary: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalSafetyRisk {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  risk_type: DeterministicV31CanonicalStringValue;
+  severity: DeterministicV31CanonicalStringValue;
+  summary: DeterministicV31CanonicalStringValue;
+  seasonality: DeterministicV31CanonicalStringValue;
+  mitigation_notes: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalTransportationState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  topic: DeterministicV31CanonicalStringValue;
+  name: DeterministicV31CanonicalStringValue;
+  summary: DeterministicV31CanonicalStringValue;
+  distance_km: DeterministicV31CanonicalStringValue;
+  typical_drive_minutes: DeterministicV31CanonicalStringValue;
+  public_transit_available: DeterministicV31CanonicalStringValue;
+  nonstop_us_service: DeterministicV31CanonicalStringValue;
+  car_needed_rating: DeterministicV31CanonicalStringValue;
+  parking_notes: DeterministicV31CanonicalStringValue;
+  rideshare_notes: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalRemoteWorkState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  avg_download_mbps: DeterministicV31CanonicalStringValue;
+  fiber_available: DeterministicV31CanonicalStringValue;
+  mobile_5g: DeterministicV31CanonicalStringValue;
+  utility_reliability: DeterministicV31CanonicalStringValue;
+  coworking_summary: DeterministicV31CanonicalStringValue;
+  us_time_zone_fit: DeterministicV31CanonicalStringValue;
+  remote_work_notes: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalLanguageIntegrationState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  primary_language: DeterministicV31CanonicalStringValue;
+  english_proficiency: DeterministicV31CanonicalStringValue;
+  can_function_in_english: DeterministicV31CanonicalStringValue;
+  government_english_access: DeterministicV31CanonicalStringValue;
+  medical_english_access: DeterministicV31CanonicalStringValue;
+  integration_notes: DeterministicV31CanonicalStringValue;
+  language_resources: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalPetState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  import_requirements: DeterministicV31CanonicalStringValue;
+  quarantine_notes: DeterministicV31CanonicalStringValue;
+  vaccination_notes: DeterministicV31CanonicalStringValue;
+  pet_friendly_rentals: DeterministicV31CanonicalStringValue;
+  vet_access: DeterministicV31CanonicalStringValue;
+  emergency_vet_access: DeterministicV31CanonicalStringValue;
+  dog_parks_summary: DeterministicV31CanonicalStringValue;
+  airline_notes: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalFamilyEducationState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  topic: DeterministicV31CanonicalStringValue;
+  summary: DeterministicV31CanonicalStringValue;
+  international_schools: DeterministicV31CanonicalStringValue;
+  childcare_notes: DeterministicV31CanonicalStringValue;
+  universities: DeterministicV31CanonicalStringValue;
+  pediatric_care: DeterministicV31CanonicalStringValue;
+  family_activities: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalCommunitySocialState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  topic: DeterministicV31CanonicalStringValue;
+  summary: DeterministicV31CanonicalStringValue;
+  expat_presence: DeterministicV31CanonicalStringValue;
+  clubs_groups: DeterministicV31CanonicalStringValue;
+  volunteering: DeterministicV31CanonicalStringValue;
+  ease_meeting_people: DeterministicV31CanonicalStringValue;
+  age_mix: DeterministicV31CanonicalStringValue;
+  transient_vs_rooted: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalAccessibilityState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  wheelchair_access: DeterministicV31CanonicalStringValue;
+  sidewalk_quality: DeterministicV31CanonicalStringValue;
+  hills_terrain: DeterministicV31CanonicalStringValue;
+  accessible_transit: DeterministicV31CanonicalStringValue;
+  elevator_access: DeterministicV31CanonicalStringValue;
+  medical_equipment: DeterministicV31CanonicalStringValue;
+  mobility_notes: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalBureaucracySetupState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  topic: DeterministicV31CanonicalStringValue;
+  difficulty_rating: DeterministicV31CanonicalStringValue;
+  summary: DeterministicV31CanonicalStringValue;
+  typical_documents: DeterministicV31CanonicalStringValue;
+  estimated_timeline: DeterministicV31CanonicalStringValue;
+  official_url: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalWorkBusinessState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  major_industries: DeterministicV31CanonicalStringValue;
+  employment_notes: DeterministicV31CanonicalStringValue;
+  work_authorization: DeterministicV31CanonicalStringValue;
+  entrepreneurship: DeterministicV31CanonicalStringValue;
+  business_formation: DeterministicV31CanonicalStringValue;
+  coworking: DeterministicV31CanonicalStringValue;
+  remote_work_suitability: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalRetirementAgingState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  medicare_notes: DeterministicV31CanonicalStringValue;
+  social_security_notes: DeterministicV31CanonicalStringValue;
+  senior_discounts: DeterministicV31CanonicalStringValue;
+  assisted_living: DeterministicV31CanonicalStringValue;
+  home_healthcare: DeterministicV31CanonicalStringValue;
+  aging_in_place: DeterministicV31CanonicalStringValue;
+  retirement_notes: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalLifestyleLawState {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  topic: DeterministicV31CanonicalStringValue;
+  legal_status: DeterministicV31CanonicalStringValue;
+  summary: DeterministicV31CanonicalStringValue;
+  important_rules: DeterministicV31CanonicalStringValue;
+  official_source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalRealityCheckEntry {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  display_order: DeterministicV31CanonicalStringValue;
+  title: DeterministicV31CanonicalStringValue;
+  detail: DeterministicV31CanonicalStringValue;
+  severity: DeterministicV31CanonicalStringValue;
+  stay_mode_key: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalMoveChecklistState {
+  destination_key: string;
+  checklist_key: DeterministicV31CanonicalStringValue;
+  stay_mode_key: DeterministicV31CanonicalStringValue;
+  category: DeterministicV31CanonicalStringValue;
+  task: DeterministicV31CanonicalStringValue;
+  description: DeterministicV31CanonicalStringValue;
+  official_url: DeterministicV31CanonicalStringValue;
+  display_order: DeterministicV31CanonicalStringValue;
+  enabled: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalEnvironmentQualityState {
+  destination_key: string;
+  air_quality_summary: DeterministicV31CanonicalStringValue;
+  air_quality_metric: DeterministicV31CanonicalStringValue;
+  water_quality_summary: DeterministicV31CanonicalStringValue;
+  water_reliability: DeterministicV31CanonicalStringValue;
+  heat_humidity_comfort: DeterministicV31CanonicalStringValue;
+  noise_summary: DeterministicV31CanonicalStringValue;
+  light_pollution_summary: DeterministicV31CanonicalStringValue;
+  mosquito_pest_pressure: DeterministicV31CanonicalStringValue;
+  wildfire_smoke_exposure: DeterministicV31CanonicalStringValue;
+  drought_water_stress: DeterministicV31CanonicalStringValue;
+  environmental_notes: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+  confidence: DeterministicV31CanonicalStringValue;
+  last_updated_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalDailyLifePracticalityState {
+  destination_key: string;
+  car_need: DeterministicV31CanonicalStringValue;
+  driving_difficulty: DeterministicV31CanonicalStringValue;
+  parking_difficulty: DeterministicV31CanonicalStringValue;
+  grocery_access: DeterministicV31CanonicalStringValue;
+  pharmacy_access: DeterministicV31CanonicalStringValue;
+  fitness_wellness_access: DeterministicV31CanonicalStringValue;
+  banking_practicality: DeterministicV31CanonicalStringValue;
+  card_payment_acceptance: DeterministicV31CanonicalStringValue;
+  cash_usage: DeterministicV31CanonicalStringValue;
+  mobile_payment_usage: DeterministicV31CanonicalStringValue;
+  delivery_services: DeterministicV31CanonicalStringValue;
+  emergency_services_summary: DeterministicV31CanonicalStringValue;
+  senior_services_summary: DeterministicV31CanonicalStringValue;
+  childcare_access: DeterministicV31CanonicalStringValue;
+  newcomer_friction: DeterministicV31CanonicalStringValue;
+  things_residents_wish_they_knew: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  last_updated_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalEventsSeasonalityState {
+  destination_key: string;
+  event_season_key: DeterministicV31CanonicalStringValue;
+  record_type: DeterministicV31CanonicalStringValue;
+  name: DeterministicV31CanonicalStringValue;
+  month_start: DeterministicV31CanonicalStringValue;
+  month_end: DeterministicV31CanonicalStringValue;
+  season: DeterministicV31CanonicalStringValue;
+  description: DeterministicV31CanonicalStringValue;
+  crowding_level: DeterministicV31CanonicalStringValue;
+  price_pressure: DeterministicV31CanonicalStringValue;
+  weather_context: DeterministicV31CanonicalStringValue;
+  best_for: DeterministicV31CanonicalStringValue;
+  avoid_if: DeterministicV31CanonicalStringValue;
+  official_url: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  verified_at: DeterministicV31CanonicalStringValue;
+}
+
+export interface DeterministicV31CanonicalSource {
+  destination_key: string;
+  source_key: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  source_type: DeterministicV31CanonicalStringValue;
+  publisher: DeterministicV31CanonicalStringValue;
+  accessed_at: DeterministicV31CanonicalStringValue;
+  verified: DeterministicV31CanonicalStringValue;
+  confidence: DeterministicV31CanonicalStringValue;
+  notes: DeterministicV31CanonicalStringValue;
+}
+
 export type DeterministicV31Destination = {
   destinationKey: string;
   slug: string;
@@ -10,69 +595,57 @@ export type DeterministicV31Destination = {
   city: string;
   country: string;
   facts: Array<{
-    factKey: string;
-    factGroup: string;
-    valueText: string;
-    displayLabel: string;
-    sourceName: string;
+    factKey: string | null;
+    factGroup: string | null;
+    valueText: string | null;
+    displayLabel: string | null;
+    sourceName: string | null;
   }>;
   scores: Array<{
-    scoreKey: string;
-    scoreValue: string;
-    scoreLabel: string;
-    methodologyVersion: string;
+    scoreKey: string | null;
+    scoreValue: string | null;
+    scoreLabel: string | null;
+    methodologyVersion: string | null;
   }>;
   moduleCounts?: Record<string, number>;
 };
 
-export type DeterministicV31CanonicalDestination = {
-  identity: {
-    destinationKey: string;
-    slug: string | null;
-    name: string | null;
-    city: string | null;
-    country: string | null;
-  };
-  editorial: {
-    shortDescription: string | null;
-    longDescription: string | null;
-    currency: string | null;
-    primaryLanguage: string | null;
-    timeZone: string | null;
-  };
-  facts: Array<Record<string, unknown>>;
-  scores: Array<Record<string, unknown>>;
-  neighborhoods: Array<Record<string, unknown>>;
-  places: Array<Record<string, unknown>>;
-  resources: Array<Record<string, unknown>>;
-  media: Array<Record<string, unknown>>;
-  costOfLiving: Array<Record<string, unknown>>;
-  climateMonthly: Array<Record<string, unknown>>;
-  housing: Array<Record<string, unknown>>;
-  propertyResources: Array<Record<string, unknown>>;
-  healthcare: Array<Record<string, unknown>>;
-  visaResidency: Array<Record<string, unknown>>;
-  taxesFinance: Array<Record<string, unknown>>;
-  lgbtqInclusivity: Array<Record<string, unknown>>;
-  safetyRisks: Array<Record<string, unknown>>;
-  transportation: Array<Record<string, unknown>>;
-  remoteWork: Array<Record<string, unknown>>;
-  languageIntegration: Array<Record<string, unknown>>;
-  pets: Array<Record<string, unknown>>;
-  familyEducation: Array<Record<string, unknown>>;
-  communitySocial: Array<Record<string, unknown>>;
-  accessibility: Array<Record<string, unknown>>;
-  bureaucracySetup: Array<Record<string, unknown>>;
-  workBusiness: Array<Record<string, unknown>>;
-  retirementAging: Array<Record<string, unknown>>;
-  lifestyleLaws: Array<Record<string, unknown>>;
-  realityCheck: Array<Record<string, unknown>>;
-  moveChecklist: Array<Record<string, unknown>>;
-  environmentQuality: Record<string, unknown> | null;
-  dailyLifePracticality: Record<string, unknown> | null;
-  eventsSeasonality: Array<Record<string, unknown>>;
-  sources: Array<Record<string, unknown>>;
-};
+export interface DeterministicV31CanonicalDestination {
+  identity: DeterministicV31CanonicalIdentity;
+  editorial: DeterministicV31CanonicalEditorial;
+  facts: DeterministicV31CanonicalFact[];
+  scores: DeterministicV31CanonicalScore[];
+  neighborhoods: DeterministicV31CanonicalNeighborhood[];
+  places: DeterministicV31CanonicalPlace[];
+  resources: DeterministicV31CanonicalResource[];
+  media: DeterministicV31CanonicalMedia[];
+  costOfLiving: DeterministicV31CanonicalCostOfLivingItem[];
+  climateMonthly: DeterministicV31CanonicalClimateMonth[];
+  housing: DeterministicV31CanonicalHousingState[];
+  propertyResources: DeterministicV31CanonicalPropertyResource[];
+  healthcare: DeterministicV31CanonicalHealthcareState[];
+  visaResidency: DeterministicV31CanonicalVisaResidencyState[];
+  taxesFinance: DeterministicV31CanonicalTaxFinanceState[];
+  lgbtqInclusivity: DeterministicV31CanonicalLgbtqInclusivityState[];
+  safetyRisks: DeterministicV31CanonicalSafetyRisk[];
+  transportation: DeterministicV31CanonicalTransportationState[];
+  remoteWork: DeterministicV31CanonicalRemoteWorkState[];
+  languageIntegration: DeterministicV31CanonicalLanguageIntegrationState[];
+  pets: DeterministicV31CanonicalPetState[];
+  familyEducation: DeterministicV31CanonicalFamilyEducationState[];
+  communitySocial: DeterministicV31CanonicalCommunitySocialState[];
+  accessibility: DeterministicV31CanonicalAccessibilityState[];
+  bureaucracySetup: DeterministicV31CanonicalBureaucracySetupState[];
+  workBusiness: DeterministicV31CanonicalWorkBusinessState[];
+  retirementAging: DeterministicV31CanonicalRetirementAgingState[];
+  lifestyleLaws: DeterministicV31CanonicalLifestyleLawState[];
+  realityCheck: DeterministicV31CanonicalRealityCheckEntry[];
+  moveChecklist: DeterministicV31CanonicalMoveChecklistState[];
+  environmentQuality: DeterministicV31CanonicalEnvironmentQualityState | null;
+  dailyLifePracticality: DeterministicV31CanonicalDailyLifePracticalityState | null;
+  eventsSeasonality: DeterministicV31CanonicalEventsSeasonalityState[];
+  sources: DeterministicV31CanonicalSource[];
+}
 
 export type DeterministicV31ImportPlan = {
   destinations: DeterministicV31Destination[];
@@ -103,17 +676,19 @@ export type DeterministicV31IdentityResolutionResult = {
   error?: string;
 };
 
-export type DeterministicV31CanonicalImportFixture = {
-  destinations: Array<{
-    destinationKey: string;
-    facts?: Array<Record<string, unknown>>;
-    scores?: Array<Record<string, unknown>>;
-    neighborhoods?: Array<Record<string, unknown>>;
-    places?: Array<Record<string, unknown>>;
-    media?: Array<Record<string, unknown>>;
-    aliases?: Array<Record<string, unknown>>;
-  }>;
-};
+export interface DeterministicV31CanonicalImportFixtureDestination {
+  destinationKey: string;
+  facts?: DeterministicV31CanonicalFact[];
+  scores?: DeterministicV31CanonicalScore[];
+  neighborhoods?: DeterministicV31CanonicalNeighborhood[];
+  places?: DeterministicV31CanonicalPlace[];
+  media?: DeterministicV31CanonicalMedia[];
+  aliases?: Array<Record<string, unknown>>;
+}
+
+export interface DeterministicV31CanonicalImportFixture {
+  destinations: DeterministicV31CanonicalImportFixtureDestination[];
+}
 
 const workbookPath = path.resolve(process.cwd(), "data/DestinationFinderAI_Master_Workbook_v3.1_FROZEN_Pilot_Dataset.xlsx");
 
@@ -148,6 +723,8 @@ const buildRecordFromRow = (headers: string[], row: Array<string>) => {
   });
   return record;
 };
+
+const asCanonicalModuleRow = <T>(record: Record<string, unknown>): T => record as unknown as T;
 
 const getSheetRowsForDestination = (sheetRows: Map<string, Array<Array<string>>>, headersBySheet: Map<string, string[]>, sheetName: string, destinationKey: string) => {
   const rows = (sheetRows.get(sheetName) ?? []).slice(1);
@@ -190,39 +767,39 @@ export const buildDeterministicV31CanonicalDestination = (input: {
       primaryLanguage: normalizeBlankValue(destinationRowRecord.primary_language) as string | null,
       timeZone: normalizeBlankValue(destinationRowRecord.time_zone) as string | null,
     },
-    facts: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "DESTINATION_FACTS", destinationKey).map((record) => ({ ...record, factKey: record.fact_key, factGroup: record.fact_group, valueText: record.value_text, displayLabel: record.display_label, sourceName: record.source_name })),
-    scores: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "DESTINATION_SCORES", destinationKey).map((record) => ({ ...record, scoreKey: record.score_key, scoreValue: record.score_value, scoreLabel: record.score_label, methodologyVersion: record.methodology_version })),
-    neighborhoods: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "NEIGHBORHOODS", destinationKey),
-    places: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "PLACES", destinationKey),
-    resources: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "RESOURCES", destinationKey),
-    media: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "MEDIA", destinationKey),
-    costOfLiving: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "COST_OF_LIVING", destinationKey),
-    climateMonthly: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "CLIMATE_MONTHLY", destinationKey),
-    housing: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "HOUSING_PROPERTY", destinationKey),
-    propertyResources: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "PROPERTY_RESOURCES", destinationKey),
-    healthcare: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "HEALTHCARE_INSURANCE", destinationKey),
-    visaResidency: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "VISA_RESIDENCY", destinationKey),
-    taxesFinance: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "TAXES_FINANCE", destinationKey),
-    lgbtqInclusivity: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "LGBTQ_INCLUSIVITY", destinationKey),
-    safetyRisks: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "SAFETY_RISKS", destinationKey),
-    transportation: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "TRANSPORT_AIRPORTS", destinationKey),
-    remoteWork: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "CONNECTIVITY_REMOTE_WORK", destinationKey),
-    languageIntegration: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "LANGUAGE_INTEGRATION", destinationKey),
-    pets: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "PETS", destinationKey),
-    familyEducation: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "FAMILY_EDUCATION", destinationKey),
-    communitySocial: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "COMMUNITY_SOCIAL", destinationKey),
-    accessibility: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "ACCESSIBILITY", destinationKey),
-    bureaucracySetup: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "BUREAUCRACY_SETUP", destinationKey),
-    workBusiness: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "WORK_BUSINESS", destinationKey),
-    retirementAging: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "RETIREMENT_AGING", destinationKey),
-    lifestyleLaws: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "LIFESTYLE_LAWS", destinationKey),
-    realityCheck: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "REALITY_CHECK", destinationKey),
-    moveChecklist: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "MOVE_CHECKLIST", destinationKey),
-    environmentQuality: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "ENVIRONMENT_QUALITY", destinationKey)[0] ?? null,
-    dailyLifePracticality: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "DAILY_LIFE_PRACTICALITY", destinationKey)[0] ?? null,
-    eventsSeasonality: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "EVENTS_SEASONALITY", destinationKey),
-    sources: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "SOURCES", destinationKey),
-  };
+    facts: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "DESTINATION_FACTS", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalFact>({ ...record, factKey: record.fact_key, factGroup: record.fact_group, valueText: record.value_text, displayLabel: record.display_label, sourceName: record.source_name })),
+    scores: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "DESTINATION_SCORES", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalScore>({ ...record, scoreKey: record.score_key, scoreValue: record.score_value, scoreLabel: record.score_label, methodologyVersion: record.methodology_version })),
+    neighborhoods: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "NEIGHBORHOODS", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalNeighborhood>(record)),
+    places: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "PLACES", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalPlace>(record)),
+    resources: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "RESOURCES", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalResource>(record)),
+    media: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "MEDIA", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalMedia>(record)),
+    costOfLiving: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "COST_OF_LIVING", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalCostOfLivingItem>(record)),
+    climateMonthly: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "CLIMATE_MONTHLY", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalClimateMonth>(record)),
+    housing: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "HOUSING_PROPERTY", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalHousingState>(record)),
+    propertyResources: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "PROPERTY_RESOURCES", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalPropertyResource>(record)),
+    healthcare: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "HEALTHCARE_INSURANCE", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalHealthcareState>(record)),
+    visaResidency: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "VISA_RESIDENCY", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalVisaResidencyState>(record)),
+    taxesFinance: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "TAXES_FINANCE", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalTaxFinanceState>(record)),
+    lgbtqInclusivity: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "LGBTQ_INCLUSIVITY", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalLgbtqInclusivityState>(record)),
+    safetyRisks: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "SAFETY_RISKS", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalSafetyRisk>(record)),
+    transportation: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "TRANSPORT_AIRPORTS", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalTransportationState>(record)),
+    remoteWork: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "CONNECTIVITY_REMOTE_WORK", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalRemoteWorkState>(record)),
+    languageIntegration: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "LANGUAGE_INTEGRATION", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalLanguageIntegrationState>(record)),
+    pets: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "PETS", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalPetState>(record)),
+    familyEducation: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "FAMILY_EDUCATION", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalFamilyEducationState>(record)),
+    communitySocial: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "COMMUNITY_SOCIAL", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalCommunitySocialState>(record)),
+    accessibility: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "ACCESSIBILITY", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalAccessibilityState>(record)),
+    bureaucracySetup: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "BUREAUCRACY_SETUP", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalBureaucracySetupState>(record)),
+    workBusiness: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "WORK_BUSINESS", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalWorkBusinessState>(record)),
+    retirementAging: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "RETIREMENT_AGING", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalRetirementAgingState>(record)),
+    lifestyleLaws: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "LIFESTYLE_LAWS", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalLifestyleLawState>(record)),
+    realityCheck: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "REALITY_CHECK", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalRealityCheckEntry>(record)),
+    moveChecklist: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "MOVE_CHECKLIST", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalMoveChecklistState>(record)),
+    environmentQuality: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "ENVIRONMENT_QUALITY", destinationKey)[0] ? asCanonicalModuleRow<DeterministicV31CanonicalEnvironmentQualityState>(getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "ENVIRONMENT_QUALITY", destinationKey)[0]) : null,
+    dailyLifePracticality: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "DAILY_LIFE_PRACTICALITY", destinationKey)[0] ? asCanonicalModuleRow<DeterministicV31CanonicalDailyLifePracticalityState>(getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "DAILY_LIFE_PRACTICALITY", destinationKey)[0]) : null,
+    eventsSeasonality: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "EVENTS_SEASONALITY", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalEventsSeasonalityState>(record)),
+    sources: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "SOURCES", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalSource>(record)),
+  } as DeterministicV31CanonicalDestination;
 };
 
 const parseWorkbookRows = () => {
@@ -578,7 +1155,7 @@ export const validateDeterministicV31CanonicalImportFixture = (fixture: Determin
       ...(destination.media ?? []),
     ];
     childRows.forEach((row) => {
-      const rowDestinationKey = normalizeCellValue((row as Record<string, unknown>).destination_key);
+      const rowDestinationKey = normalizeCellValue((row as unknown as Record<string, unknown>).destination_key);
       if (rowDestinationKey && rowDestinationKey !== destinationKey) {
         errors.push(`Row attached to the wrong destination: ${rowDestinationKey} !== ${destinationKey}`);
       }
@@ -592,7 +1169,7 @@ export const validateDeterministicV31CanonicalImportFixture = (fixture: Determin
 
     const neighborhoodKeys = new Set<string>();
     (destination.neighborhoods ?? []).forEach((row) => {
-      const neighborhoodKey = normalizeCellValue((row as Record<string, unknown>).neighborhood_key);
+      const neighborhoodKey = normalizeCellValue((row as unknown as Record<string, unknown>).neighborhood_key);
       if (!neighborhoodKey) return;
       if (neighborhoodKeys.has(neighborhoodKey)) {
         errors.push(`Duplicate neighborhood key ${neighborhoodKey}`);
@@ -602,7 +1179,7 @@ export const validateDeterministicV31CanonicalImportFixture = (fixture: Determin
 
     const placeKeys = new Set<string>();
     (destination.places ?? []).forEach((row) => {
-      const placeKey = normalizeCellValue((row as Record<string, unknown>).place_key);
+      const placeKey = normalizeCellValue((row as unknown as Record<string, unknown>).place_key);
       if (!placeKey) return;
       if (placeKeys.has(placeKey)) {
         errors.push(`Duplicate place key ${placeKey}`);
@@ -612,21 +1189,21 @@ export const validateDeterministicV31CanonicalImportFixture = (fixture: Determin
 
     const placeNeighborhoodKeys = new Set<string>();
     (destination.neighborhoods ?? []).forEach((row) => {
-      const neighborhoodKey = normalizeCellValue((row as Record<string, unknown>).neighborhood_key);
+      const neighborhoodKey = normalizeCellValue((row as unknown as Record<string, unknown>).neighborhood_key);
       if (neighborhoodKey) {
         placeNeighborhoodKeys.add(neighborhoodKey);
       }
     });
     (destination.places ?? []).forEach((row) => {
-      const neighborhoodKey = normalizeCellValue((row as Record<string, unknown>).neighborhood_key);
+      const neighborhoodKey = normalizeCellValue((row as unknown as Record<string, unknown>).neighborhood_key);
       if (!neighborhoodKey) return;
       if (!placeNeighborhoodKeys.has(neighborhoodKey)) {
-        errors.push(`Place ${normalizeCellValue((row as Record<string, unknown>).place_key)} references unknown neighborhood ${neighborhoodKey}`);
+        errors.push(`Place ${normalizeCellValue((row as unknown as Record<string, unknown>).place_key)} references unknown neighborhood ${neighborhoodKey}`);
       }
     });
 
     (destination.aliases ?? []).forEach((row) => {
-      const aliasDestinationKey = normalizeCellValue((row as Record<string, unknown>).destination_key);
+      const aliasDestinationKey = normalizeCellValue((row as unknown as Record<string, unknown>).destination_key);
       if (aliasDestinationKey && !knownDestinationKeys.has(aliasDestinationKey)) {
         errors.push(`Alias targets unknown destination ${aliasDestinationKey}`);
       }
