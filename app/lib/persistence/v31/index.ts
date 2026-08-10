@@ -118,3 +118,4 @@ export type {
 export type { PersistenceError } from "./errors";
 export { NORMALIZATION_VERSION, normalizeComparable, normalizeScalarValue } from "./normalize";
 export { projectCanonicalComparable, projectComparable, projectStoredComparable } from "./comparable-projection";
+export { diffScalar } from "./diff-scalar";
