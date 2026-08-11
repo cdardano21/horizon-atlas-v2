@@ -176,6 +176,172 @@ describe("destination plan assembly", () => {
     expect(plan.errors).toEqual([]);
   });
 
+  it("projects scalar expectations for create update clear preserve and unchanged operations", () => {
+    const canonical = createCanonicalDestination({
+      editorial: { shortDescription: "Updated short", longDescription: "Long", currency: "USD", primaryLanguage: "English", timeZone: "UTC" },
+      environmentQuality: { air_quality_summary: "Great", water_quality_summary: "Clean" },
+      dailyLifePracticality: null,
+    });
+    const stored = createStoredState({
+      editorial: { shortDescription: "Original short", longDescription: "Long", currency: "USD", primaryLanguage: "English", timeZone: "UTC" },
+      environmentQuality: null,
+      dailyLifePracticality: { summary: "Near grocery", practicalityNotes: "Easy" },
+    });
+    const plan = buildDestinationPlan({
+      resolvedDestinationIdentity: createResolvedIdentity(),
+      canonicalDestination: canonical,
+      storedDestinationState: stored,
+      manifestInterpretation: createManifestInterpretation([{ destinationKey: DESTINATION_A_KEY, operation: "CLEAR_FIELD", targetModule: "environmentQuality", targetFieldPath: "qualityNotes" }]),
+      diffPolicy: createDiffPolicy(),
+      approvedScope: createApprovedScope(),
+    });
+
+    expect(plan.scalarOperations).toEqual(expect.arrayContaining([
+      expect.objectContaining({ kind: "CREATE", module: "environmentQuality", fieldPath: "summary" }),
+      expect.objectContaining({ kind: "UPDATE", module: "editorial", fieldPath: "shortDescription" }),
+      expect.objectContaining({ kind: "CLEAR", module: "environmentQuality", fieldPath: "qualityNotes" }),
+      expect.objectContaining({ kind: "PRESERVE", module: "dailyLifePracticality", fieldPath: "summary" }),
+    ]));
+
+    const expectedState = createStoredState({
+      editorial: { shortDescription: "Updated short", longDescription: "Long", currency: "USD", primaryLanguage: "English", timeZone: "UTC" },
+      environmentQuality: { summary: "Great", qualityNotes: null },
+      dailyLifePracticality: { summary: "Near grocery", practicalityNotes: "Easy" },
+    });
+    expect(plan.expectedComparablePostState).toEqual(projectComparable(expectedState));
+  });
+
+  it("preserves checkpoint scalar ordering for manifest clear and diff create on the same field", () => {
+    const canonical = createCanonicalDestination({
+      environmentQuality: { air_quality_summary: null, water_quality_summary: "Clean" },
+    });
+    const stored = createStoredState({ environmentQuality: null });
+    const plan = buildDestinationPlan({
+      resolvedDestinationIdentity: createResolvedIdentity(),
+      canonicalDestination: canonical,
+      storedDestinationState: stored,
+      manifestInterpretation: createManifestInterpretation([{ destinationKey: DESTINATION_A_KEY, operation: "CLEAR_FIELD", targetModule: "environmentQuality", targetFieldPath: "qualityNotes" }]),
+      diffPolicy: createDiffPolicy(),
+      approvedScope: createApprovedScope(),
+    });
+
+    expect(plan.scalarOperations.map((operation) => `${operation.kind}:${operation.module}:${operation.fieldPath}`)).toEqual([
+      "CLEAR:environmentQuality:qualityNotes",
+      "CREATE:environmentQuality:qualityNotes",
+    ]);
+
+    const expectedState = createStoredState({
+      environmentQuality: { qualityNotes: null },
+    });
+    expect(plan.expectedComparablePostState).toEqual(projectComparable(expectedState));
+  });
+
+  it("projects create-child expectations by stable child identity", () => {
+    const canonical = createCanonicalDestination({
+      facts: [{ factKey: "fact-1", factGroup: "quality", valueText: "Alpha", displayLabel: "Alpha", sourceName: "Source" }],
+    });
+    const stored = createStoredState({ facts: [] });
+    const plan = buildDestinationPlan({
+      resolvedDestinationIdentity: createResolvedIdentity(),
+      canonicalDestination: canonical,
+      storedDestinationState: stored,
+      manifestInterpretation: createManifestInterpretation(),
+      diffPolicy: createDiffPolicy(),
+      approvedScope: createApprovedScope(),
+    });
+
+    const expectedState = createStoredState({
+      facts: [{ factKey: "fact-1", factGroup: "quality", valueText: "Alpha", displayLabel: "Alpha", sourceName: "Source" }],
+    });
+    expect(plan.expectedComparablePostState).toEqual(projectComparable(expectedState));
+  });
+
+  it("projects update-child expectations by stable child identity", () => {
+    const canonical = createCanonicalDestination({
+      facts: [{ factKey: "fact-1", factGroup: "quality", valueText: "Beta", displayLabel: "Beta", sourceName: "Source" }],
+    });
+    const stored = createStoredState({
+      facts: [{ factKey: "fact-1", factGroup: "quality", valueText: "Alpha", displayLabel: "Alpha", sourceName: "Source" }],
+    });
+    const plan = buildDestinationPlan({
+      resolvedDestinationIdentity: createResolvedIdentity(),
+      canonicalDestination: canonical,
+      storedDestinationState: stored,
+      manifestInterpretation: createManifestInterpretation(),
+      diffPolicy: createDiffPolicy(),
+      approvedScope: createApprovedScope(),
+    });
+
+    const expectedState = createStoredState({
+      facts: [{ factKey: "fact-1", factGroup: "quality", valueText: "Beta", displayLabel: "Beta", sourceName: "Source" }],
+    });
+    expect(plan.expectedComparablePostState).toEqual(projectComparable(expectedState));
+  });
+
+  it("projects delete-child expectations by stable child identity", () => {
+    const canonical = createCanonicalDestination({ facts: [] });
+    const stored = createStoredState({
+      facts: [{ factKey: "fact-1", factGroup: "quality", valueText: "Alpha", displayLabel: "Alpha", sourceName: "Source" }],
+    });
+    const plan = buildDestinationPlan({
+      resolvedDestinationIdentity: createResolvedIdentity(),
+      canonicalDestination: canonical,
+      storedDestinationState: stored,
+      manifestInterpretation: createManifestInterpretation([{ destinationKey: DESTINATION_A_KEY, operation: "DELETE_CHILD", targetModule: "facts", targetChildKey: FACT_ONE_KEY }]),
+      diffPolicy: createDiffPolicy(),
+      approvedScope: createApprovedScope(),
+    });
+
+    const expectedState = createStoredState({ facts: [] });
+    expect(plan.expectedComparablePostState).toEqual(projectComparable(expectedState));
+  });
+
+  it("preserves existing keyed children in the expected comparable post state", () => {
+    const canonical = createCanonicalDestination({
+      facts: [{ factKey: "fact-1", factGroup: "quality", valueText: "Alpha", displayLabel: "Alpha", sourceName: "Source" }],
+    });
+    const stored = createStoredState({
+      facts: [{ factKey: "fact-1", factGroup: "quality", valueText: "Alpha", displayLabel: "Alpha", sourceName: "Source" }],
+    });
+    const plan = buildDestinationPlan({
+      resolvedDestinationIdentity: createResolvedIdentity(),
+      canonicalDestination: canonical,
+      storedDestinationState: stored,
+      manifestInterpretation: createManifestInterpretation(),
+      diffPolicy: createDiffPolicy(),
+      approvedScope: createApprovedScope(),
+    });
+
+    const expectedState = createStoredState({
+      facts: [{ factKey: "fact-1", factGroup: "quality", valueText: "Alpha", displayLabel: "Alpha", sourceName: "Source" }],
+    });
+    expect(plan.expectedComparablePostState).toEqual(projectComparable(expectedState));
+  });
+
+  it("keeps unchanged scalar values stable in the expected comparable post state", () => {
+    const canonical = createCanonicalDestination({
+      editorial: { shortDescription: "Short", longDescription: "Long", currency: "USD", primaryLanguage: "English", timeZone: "UTC" },
+      environmentQuality: { air_quality_summary: "Good", water_quality_summary: "Clean" },
+      dailyLifePracticality: { grocery_access: "Near grocery", things_residents_wish_they_knew: "Easy" },
+    });
+    const stored = createStoredState({
+      editorial: { shortDescription: "Short", longDescription: "Long", currency: "USD", primaryLanguage: "English", timeZone: "UTC" },
+      environmentQuality: { summary: "Good", qualityNotes: "Clean" },
+      dailyLifePracticality: { summary: "Near grocery", practicalityNotes: "Easy" },
+    });
+    const plan = buildDestinationPlan({
+      resolvedDestinationIdentity: createResolvedIdentity(),
+      canonicalDestination: canonical,
+      storedDestinationState: stored,
+      manifestInterpretation: createManifestInterpretation(),
+      diffPolicy: createDiffPolicy(),
+      approvedScope: createApprovedScope(),
+    });
+
+    expect(plan.scalarOperations).toEqual([]);
+    expect(plan.expectedComparablePostState).toEqual(projectComparable(stored));
+  });
+
   it("creates scalar operations for singleton field creation", () => {
     const canonical = createCanonicalDestination({ environmentQuality: { air_quality_summary: "Great", water_quality_summary: "Clean" } });
     const stored = createStoredState({ environmentQuality: null });
@@ -418,6 +584,69 @@ describe("destination plan assembly", () => {
       costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD" }] as Array<StoredDestinationState["costOfLiving"][number]>,
     });
     expect(plan.expectedComparablePostState).toEqual(projectComparable(expectedState));
+  });
+
+  it("projects mixed scalar child and replace-module expectations in the expected comparable post state", () => {
+    const canonical = createCanonicalDestination({
+      editorial: { shortDescription: "Updated short", longDescription: "Long", currency: "USD", primaryLanguage: "English", timeZone: "UTC" },
+      facts: [{ factKey: FACT_ONE_KEY, factGroup: "quality", valueText: "Updated fact", displayLabel: "Updated fact", sourceName: "Source" }],
+      costOfLiving: [{ record_key: "row-1", category: "food", monthly_low: "110", monthly_high: "220", currency: "USD" }] as Array<DeterministicV31CanonicalDestination["costOfLiving"][number]>,
+    });
+    const stored = createStoredState({
+      editorial: { shortDescription: "Original short", longDescription: "Long", currency: "USD", primaryLanguage: "English", timeZone: "UTC" },
+      facts: [{ factKey: FACT_ONE_KEY, factGroup: "quality", valueText: "Stored fact", displayLabel: "Stored fact", sourceName: "Source" }],
+      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "100", monthlyHigh: "200", currency: "USD" }] as Array<StoredDestinationState["costOfLiving"][number]>,
+    });
+    const manifestInterpretation = createManifestInterpretation([{ destinationKey: DESTINATION_A_KEY, operation: "REPLACE_MODULE", targetModule: "costOfLiving" }]);
+    const canonicalSnapshot = JSON.parse(JSON.stringify(canonical));
+    const storedSnapshot = JSON.parse(JSON.stringify(stored));
+    const manifestSnapshot = JSON.parse(JSON.stringify(manifestInterpretation));
+
+    const firstPlan = buildDestinationPlan({
+      resolvedDestinationIdentity: createResolvedIdentity(),
+      canonicalDestination: canonical,
+      storedDestinationState: stored,
+      manifestInterpretation,
+      diffPolicy: createDiffPolicy(),
+      approvedScope: createApprovedScope(),
+    });
+    const secondPlan = buildDestinationPlan({
+      resolvedDestinationIdentity: createResolvedIdentity(),
+      canonicalDestination: canonical,
+      storedDestinationState: stored,
+      manifestInterpretation,
+      diffPolicy: createDiffPolicy(),
+      approvedScope: createApprovedScope(),
+    });
+
+    expect(firstPlan.scalarOperations).toEqual(expect.arrayContaining([
+      expect.objectContaining({ kind: "UPDATE", module: "editorial", fieldPath: "shortDescription" }),
+    ]));
+    expect(firstPlan.childOperations).toEqual(expect.arrayContaining([
+      expect.objectContaining({ kind: "UPDATE_CHILD", module: "facts", stableChildKey: FACT_ONE_KEY }),
+    ]));
+    expect(firstPlan.moduleExecutionOperations).toEqual(expect.arrayContaining([
+      expect.objectContaining({ kind: "REPLACE_MODULE", module: "costOfLiving" }),
+    ]));
+
+    const expectedState = createStoredState({
+      editorial: { shortDescription: "Updated short", longDescription: "Long", currency: "USD", primaryLanguage: "English", timeZone: "UTC" },
+      facts: [{ factKey: FACT_ONE_KEY, factGroup: "quality", valueText: "Updated fact", displayLabel: "Updated fact", sourceName: "Source" }],
+      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD" }] as Array<StoredDestinationState["costOfLiving"][number]>,
+    });
+    expect(firstPlan.expectedComparablePostState).toEqual(projectComparable(expectedState));
+
+    const staleState = createStoredState({
+      editorial: { shortDescription: "Original short", longDescription: "Long", currency: "USD", primaryLanguage: "English", timeZone: "UTC" },
+      facts: [{ factKey: FACT_ONE_KEY, factGroup: "quality", valueText: "Stored fact", displayLabel: "Stored fact", sourceName: "Source" }],
+      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD" }] as Array<StoredDestinationState["costOfLiving"][number]>,
+    });
+    expect(firstPlan.expectedComparablePostState).not.toEqual(projectComparable(staleState));
+
+    expect(canonical).toEqual(canonicalSnapshot);
+    expect(stored).toEqual(storedSnapshot);
+    expect(manifestInterpretation).toEqual(manifestSnapshot);
+    expect(firstPlan.expectedComparablePostState).toEqual(secondPlan.expectedComparablePostState);
   });
 
   it("fails closed on canonical cross-destination mismatch", () => {

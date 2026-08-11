@@ -3,8 +3,8 @@ import { diffNonKeyedRepeatableModule } from "./diff-non-keyed";
 import { diffScalar } from "./diff-scalar";
 import { diffSingletonModule } from "./diff-non-keyed";
 import type { DeterministicV31CanonicalDestination } from "../../workbook-v31-deterministic-core";
-import { projectComparable } from "./comparable-projection";
-import type { ComparableProjection } from "./comparable-projection";
+import { projectComparable, projectComparableValue } from "./comparable-projection";
+import type { ComparableObject, ComparableProjection, ComparableValue } from "./comparable-projection";
 import type { PersistenceError } from "./errors";
 import type { OperationManifestInterpretationResult } from "./manifest";
 import type {
@@ -84,10 +84,10 @@ function sortScalarOperations(operations: readonly ScalarOperation[]): readonly 
   return [...operations]
     .filter((operation) => operation.kind !== "UNCHANGED")
     .sort((left, right) => {
-    const leftKey = `${left.module}:${left.fieldPath}:${left.kind}`;
-    const rightKey = `${right.module}:${right.fieldPath}:${right.kind}`;
-    return leftKey.localeCompare(rightKey);
-  });
+      const leftKey = `${left.module}:${left.fieldPath}:${left.kind}`;
+      const rightKey = `${right.module}:${right.fieldPath}:${right.kind}`;
+      return leftKey.localeCompare(rightKey);
+    });
 }
 
 function sortChildOperations(operations: readonly ChildOperation[]): readonly ChildOperation[] {
@@ -328,6 +328,14 @@ function buildReplaceModuleExecutionOperation<M extends ReplaceModuleExecutionMo
   };
 }
 
+function isComparableObject(value: ComparableValue): value is ComparableObject {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function asComparableObject(value: ComparableValue): ComparableObject | null {
+  return isComparableObject(value) ? value : null;
+}
+
 function buildModuleExecutionOperations(
   currentState: StoredDestinationState,
   incomingState: DeterministicV31CanonicalDestination,
@@ -345,10 +353,160 @@ function buildModuleExecutionOperations(
   return sortModuleExecutionOperations(operations);
 }
 
+function applyScalarExpectation(projection: ComparableProjection, operation: ScalarOperation): ComparableProjection {
+  const nextValue = (() => {
+    switch (operation.kind) {
+      case "CREATE":
+      case "UPDATE":
+        return projectComparableValue(operation.incomingValue);
+      case "CLEAR":
+        return null;
+      case "UNCHANGED":
+        return projectComparableValue(operation.incomingValue);
+      case "PRESERVE":
+        return projectComparableValue(operation.currentValue);
+    }
+  })();
+
+  switch (operation.module) {
+    case "editorial": {
+      const currentEditorial = asComparableObject(projection.editorial);
+      const nextEditorial = currentEditorial === null ? {} : { ...currentEditorial };
+      switch (operation.fieldPath) {
+        case "shortDescription":
+          nextEditorial.shortDescription = nextValue;
+          break;
+        case "longDescription":
+          nextEditorial.longDescription = nextValue;
+          break;
+        case "currency":
+          nextEditorial.currency = nextValue;
+          break;
+        case "primaryLanguage":
+          nextEditorial.primaryLanguage = nextValue;
+          break;
+        case "timeZone":
+          nextEditorial.timeZone = nextValue;
+          break;
+        default:
+          return projection;
+      }
+
+      return { ...projection, editorial: nextEditorial };
+    }
+    case "environmentQuality": {
+      const currentEnvironmentQuality = asComparableObject(projection.environmentQuality);
+      const nextEnvironmentQuality = currentEnvironmentQuality === null ? {} : { ...currentEnvironmentQuality };
+      switch (operation.fieldPath) {
+        case "summary":
+          nextEnvironmentQuality.summary = nextValue;
+          break;
+        case "qualityNotes":
+          nextEnvironmentQuality.qualityNotes = nextValue;
+          break;
+        default:
+          return projection;
+      }
+
+      return { ...projection, environmentQuality: nextEnvironmentQuality };
+    }
+    case "dailyLifePracticality": {
+      const currentDailyLifePracticality = asComparableObject(projection.dailyLifePracticality);
+      const nextDailyLifePracticality = currentDailyLifePracticality === null ? {} : { ...currentDailyLifePracticality };
+      switch (operation.fieldPath) {
+        case "summary":
+          nextDailyLifePracticality.summary = nextValue;
+          break;
+        case "practicalityNotes":
+          nextDailyLifePracticality.practicalityNotes = nextValue;
+          break;
+        default:
+          return projection;
+      }
+
+      return { ...projection, dailyLifePracticality: nextDailyLifePracticality };
+    }
+    default:
+      return projection;
+  }
+}
+
+function getChildKeyField(module: KeyedChildModuleKey): string {
+  return {
+    facts: "factKey",
+    scores: "scoreKey",
+    neighborhoods: "neighborhoodKey",
+    places: "placeKey",
+    resources: "resourceKey",
+    media: "mediaKey",
+    propertyResources: "itemKey",
+    moveChecklist: "checklistKey",
+    eventsSeasonality: "eventSeasonalityKey",
+    sources: "sourceKey",
+  }[module];
+}
+
+function applyChildExpectation(projection: ComparableProjection, operation: ChildOperation): ComparableProjection {
+  const currentChildrenValue = projection[operation.module];
+  const currentChildren = Array.isArray(currentChildrenValue) ? currentChildrenValue : [];
+  const keyField = getChildKeyField(operation.module);
+  const stableChildKey = String(operation.stableChildKey);
+
+  switch (operation.kind) {
+    case "CREATE_CHILD": {
+      const incomingChild = projectComparableValue(operation.incomingChild);
+      const nextChildren = [...currentChildren, incomingChild].sort((left, right) => {
+        const leftRecord = asComparableObject(left);
+        const rightRecord = asComparableObject(right);
+        const leftKey = leftRecord ? String(leftRecord[keyField] ?? "") : "";
+        const rightKey = rightRecord ? String(rightRecord[keyField] ?? "") : "";
+        return leftKey.localeCompare(rightKey);
+      });
+      return { ...projection, [operation.module]: nextChildren };
+    }
+    case "UPDATE_CHILD": {
+      const incomingChild = projectComparableValue(operation.incomingChild);
+      const nextChildren = currentChildren
+        .filter((entry) => {
+          const comparableChild = asComparableObject(entry);
+          if (comparableChild === null) {
+            return true;
+          }
+          return String(comparableChild[keyField] ?? "") !== stableChildKey;
+        })
+        .concat(incomingChild)
+        .sort((left, right) => {
+          const leftRecord = asComparableObject(left);
+          const rightRecord = asComparableObject(right);
+          const leftKey = leftRecord ? String(leftRecord[keyField] ?? "") : "";
+          const rightKey = rightRecord ? String(rightRecord[keyField] ?? "") : "";
+          return leftKey.localeCompare(rightKey);
+        });
+      return { ...projection, [operation.module]: nextChildren };
+    }
+    case "DELETE_CHILD": {
+      const nextChildren = currentChildren.filter((entry) => {
+        const comparableChild = asComparableObject(entry);
+        if (comparableChild === null) {
+          return true;
+        }
+        return String(comparableChild[keyField] ?? "") !== stableChildKey;
+      });
+      return { ...projection, [operation.module]: nextChildren };
+    }
+    case "PRESERVE_CHILD":
+    case "UNCHANGED_CHILD":
+    default:
+      return projection;
+  }
+}
+
 function buildExpectedComparablePostState(
   currentState: StoredDestinationState,
   incomingState: DeterministicV31CanonicalDestination,
   replaceModuleEntries: readonly Extract<ManifestEntry, { operation: "REPLACE_MODULE" }>[],
+  scalarOperations: readonly ScalarOperation[],
+  childOperations: readonly ChildOperation[],
 ): ComparableProjection {
   const expectedState: StoredDestinationState = {
     ...currentState,
@@ -365,7 +523,45 @@ function buildExpectedComparablePostState(
     ),
   } as StoredDestinationState;
 
-  return projectComparable(expectedState);
+  let projection = projectComparable(expectedState);
+  const fieldOperationGroups = new Map<string, ScalarOperation[]>();
+
+  for (const operation of scalarOperations) {
+    const key = `${operation.module}:${operation.fieldPath}`;
+    const existing = fieldOperationGroups.get(key) ?? [];
+    existing.push(operation);
+    fieldOperationGroups.set(key, existing);
+  }
+
+  for (const operation of scalarOperations) {
+    const key = `${operation.module}:${operation.fieldPath}`;
+    const fieldOperations = fieldOperationGroups.get(key) ?? [];
+    const hasClear = fieldOperations.some((candidate) => candidate.kind === "CLEAR");
+    if (hasClear && operation.kind !== "CLEAR") {
+      continue;
+    }
+
+    projection = applyScalarExpectation(projection, operation);
+  }
+
+  const childOperationGroups = new Map<string, ChildOperation[]>();
+  for (const operation of childOperations) {
+    const key = `${operation.module}:${operation.stableChildKey}`;
+    const existing = childOperationGroups.get(key) ?? [];
+    existing.push(operation);
+    childOperationGroups.set(key, existing);
+  }
+
+  for (const operations of childOperationGroups.values()) {
+    const hasDelete = operations.some((operation) => operation.kind === "DELETE_CHILD");
+    const operationsToApply = hasDelete ? operations.filter((operation) => operation.kind === "DELETE_CHILD") : operations;
+
+    for (const operation of operationsToApply) {
+      projection = applyChildExpectation(projection, operation);
+    }
+  }
+
+  return projection;
 }
 
 function isSingletonScalarTarget(module: unknown): module is "environmentQuality" | "dailyLifePracticality" {
@@ -454,7 +650,7 @@ export function buildDestinationPlan(input: BuildDestinationPlanInput): Destinat
   const orderedWarnings = sortWarnings(warnings);
   const orderedErrors = sortErrors(errors);
   const moduleExecutionOperations = buildModuleExecutionOperations(input.storedDestinationState, input.canonicalDestination, replaceModuleEntries);
-  const expectedComparablePostState = buildExpectedComparablePostState(input.storedDestinationState, input.canonicalDestination, replaceModuleEntries);
+  const expectedComparablePostState = buildExpectedComparablePostState(input.storedDestinationState, input.canonicalDestination, replaceModuleEntries, orderedScalarOperations, orderedChildOperations);
 
   let action: DestinationPlanAction = "UNCHANGED";
   if (orderedErrors.length > 0) {
