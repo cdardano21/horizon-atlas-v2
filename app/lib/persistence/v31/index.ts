@@ -120,3 +120,4 @@ export { NORMALIZATION_VERSION, normalizeComparable, normalizeScalarValue } from
 export { projectCanonicalComparable, projectComparable, projectStoredComparable } from "./comparable-projection";
 export { diffScalar } from "./diff-scalar";
 export { diffKeyedChildren, UnstableChildKeyError, DuplicateChildKeyError } from "./diff-keyed-children";
+export { diffNonKeyedRepeatableModule, diffSingletonModule } from "./diff-non-keyed";
