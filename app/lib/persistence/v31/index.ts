@@ -123,3 +123,4 @@ export { diffKeyedChildren, UnstableChildKeyError, DuplicateChildKeyError } from
 export { diffNonKeyedRepeatableModule, diffSingletonModule } from "./diff-non-keyed";
 export { interpretOperationManifest, validateOperationManifest } from "./manifest";
 export { buildDestinationPlan } from "./plan-destination";
+export { buildPlanEnvelope, validatePlanEnvelopeForExecution } from "./plan-envelope";
