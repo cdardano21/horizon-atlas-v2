@@ -667,6 +667,19 @@ export interface OperationManifest {
 
 export type DestinationPlanAction = "CREATE" | "UPDATE" | "UNCHANGED" | "ERROR";
 
+export type ExecutionTransactionGranularity = "PER_DESTINATION";
+export type ExecutionFailurePolicy = "CONTINUE_AFTER_FAILURE";
+export type ExecutionReplayPolicy = "IDEMPOTENT_REPLAY";
+export type ExecutionStalePlanPolicy = "STRICT_PRECONDITION_MATCH";
+
+export interface ExecutionPolicy {
+  readonly transactionGranularity: ExecutionTransactionGranularity;
+  readonly failurePolicy: ExecutionFailurePolicy;
+  readonly replayPolicy: ExecutionReplayPolicy;
+  readonly stalePlanPolicy: ExecutionStalePlanPolicy;
+  readonly readBackVerification: true;
+}
+
 export interface DestinationPlan {
   readonly destinationIdentity: ResolvedDestinationIdentity;
   readonly action: DestinationPlanAction;
@@ -695,6 +708,7 @@ export interface PlanEnvelope {
   readonly normalizationVersion?: string | null;
   readonly diffPolicyVersion?: string | null;
   readonly operationManifestHash?: string | null;
+  readonly executionPolicy: ExecutionPolicy;
   readonly approvedScope: ApprovedDestinationScope;
   readonly createdAt?: string | null;
   readonly createdBy?: string | null;

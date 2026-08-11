@@ -1,5 +1,5 @@
 import type { PersistenceError } from "./errors";
-import type { ApprovedDestinationScope, CanonicalDestinationKey, DestinationPlan, PlanEnvelope, PlanStatus, ValidationResult } from "./types";
+import type { ApprovedDestinationScope, CanonicalDestinationKey, DestinationPlan, ExecutionPolicy, PlanEnvelope, PlanStatus, ValidationResult } from "./types";
 
 export interface BuildPlanEnvelopeInput {
   readonly planId?: string | null;
@@ -9,6 +9,7 @@ export interface BuildPlanEnvelopeInput {
   readonly normalizationVersion?: string | null;
   readonly diffPolicyVersion?: string | null;
   readonly operationManifestHash?: string | null;
+  readonly executionPolicy: ExecutionPolicy;
   readonly approvedScope: ApprovedDestinationScope;
   readonly createdAt?: string | null;
   readonly createdBy?: string | null;
@@ -66,6 +67,7 @@ export function buildPlanEnvelope(input: BuildPlanEnvelopeInput): PlanEnvelope {
     normalizationVersion: input.normalizationVersion ?? null,
     diffPolicyVersion: input.diffPolicyVersion ?? null,
     operationManifestHash: input.operationManifestHash ?? null,
+    executionPolicy: input.executionPolicy,
     approvedScope,
     createdAt: input.createdAt ?? null,
     createdBy: input.createdBy ?? null,

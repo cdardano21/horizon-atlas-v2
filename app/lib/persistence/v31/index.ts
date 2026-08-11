@@ -113,6 +113,11 @@ export type {
   DiffReport,
   DriftReport,
   ValidationResult,
+  ExecutionTransactionGranularity,
+  ExecutionFailurePolicy,
+  ExecutionReplayPolicy,
+  ExecutionStalePlanPolicy,
+  ExecutionPolicy,
 } from "./types";
 
 export type { PersistenceError } from "./errors";

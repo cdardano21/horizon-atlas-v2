@@ -15,6 +15,11 @@ import type {
   DestinationPlanAction,
   DiffPolicy,
   DriftReport,
+  ExecutionFailurePolicy,
+  ExecutionPolicy,
+  ExecutionReplayPolicy,
+  ExecutionStalePlanPolicy,
+  ExecutionTransactionGranularity,
   FactKey,
   KeyedChildModuleKey,
   ManifestEntry,
@@ -243,6 +248,13 @@ describe("persistence v3.1 types contract", () => {
       normalizationVersion: "v3.1",
       diffPolicyVersion: "v3.1",
       operationManifestHash: null,
+      executionPolicy: {
+        transactionGranularity: "PER_DESTINATION",
+        failurePolicy: "CONTINUE_AFTER_FAILURE",
+        replayPolicy: "IDEMPOTENT_REPLAY",
+        stalePlanPolicy: "STRICT_PRECONDITION_MATCH",
+        readBackVerification: true,
+      },
       approvedScope,
       createdAt: null,
       createdBy: null,
@@ -263,6 +275,81 @@ describe("persistence v3.1 types contract", () => {
     expect(envelope.approvedScope[0]?.destinationId).toBe("11111111-1111-1111-1111-111111111111");
     expect(validation.valid).toBe(true);
     expect(drift.entries[0]?.kind).toBe("scalar");
+  });
+
+  it("accepts the legal execution policy and rejects forbidden policy variants", () => {
+    const legalPolicy: ExecutionPolicy = {
+      transactionGranularity: "PER_DESTINATION",
+      failurePolicy: "CONTINUE_AFTER_FAILURE",
+      replayPolicy: "IDEMPOTENT_REPLAY",
+      stalePlanPolicy: "STRICT_PRECONDITION_MATCH",
+      readBackVerification: true,
+    };
+
+    const envelope: PlanEnvelope = {
+      planId: null,
+      planHash: null,
+      workbookHash: null,
+      contractSchemaVersion: "v3.1",
+      normalizationVersion: "v3.1",
+      diffPolicyVersion: "v3.1",
+      operationManifestHash: null,
+      executionPolicy: legalPolicy,
+      approvedScope: [],
+      createdAt: null,
+      createdBy: null,
+      approvedAt: null,
+      approvedBy: null,
+      expiresAt: null,
+      status: "DRAFT",
+      destinationPlans: [],
+    };
+
+    expect(envelope.executionPolicy).toEqual(legalPolicy);
+
+    // @ts-expect-error transactionGranularity cannot use ENVELOPE_WIDE.
+    const invalidTransactionGranularity: ExecutionTransactionGranularity = "ENVELOPE_WIDE";
+
+    // @ts-expect-error transactionGranularity cannot use PER_OPERATION.
+    const invalidTransactionGranularityPerOperation: ExecutionTransactionGranularity = "PER_OPERATION";
+
+    // @ts-expect-error failurePolicy cannot use STOP_AFTER_FIRST_FAILURE.
+    const invalidFailurePolicy: ExecutionFailurePolicy = "STOP_AFTER_FIRST_FAILURE";
+
+    // @ts-expect-error replayPolicy cannot use STRICT_SINGLE_USE.
+    const invalidReplayPolicy: ExecutionReplayPolicy = "STRICT_SINGLE_USE";
+
+    // @ts-expect-error stalePlanPolicy cannot use LAST_WRITE_WINS.
+    const invalidStalePlanPolicyLastWriteWins: ExecutionStalePlanPolicy = "LAST_WRITE_WINS";
+
+    // @ts-expect-error stalePlanPolicy cannot use REPLAN_ON_STALE.
+    const invalidStalePlanPolicyReplanOnStale: ExecutionStalePlanPolicy = "REPLAN_ON_STALE";
+
+    // @ts-expect-error readBackVerification must be true.
+    const invalidReadBackVerification: ExecutionPolicy = { ...legalPolicy, readBackVerification: false };
+
+    // @ts-expect-error PlanEnvelope requires executionPolicy.
+    const missingExecutionPolicyEnvelope: PlanEnvelope = {
+      planId: null,
+      planHash: null,
+      workbookHash: null,
+      contractSchemaVersion: "v3.1",
+      normalizationVersion: "v3.1",
+      diffPolicyVersion: "v3.1",
+      operationManifestHash: null,
+      approvedScope: [],
+      createdAt: null,
+      createdBy: null,
+      approvedAt: null,
+      approvedBy: null,
+      expiresAt: null,
+      status: "DRAFT",
+      destinationPlans: [],
+    };
+
+    expect(invalidTransactionGranularity).toBe("ENVELOPE_WIDE");
+    expect(invalidReadBackVerification.readBackVerification).toBe(false);
+    expect(missingExecutionPolicyEnvelope.status).toBe("DRAFT");
   });
 
   it("supports the new execution-preflight error taxonomy", () => {
