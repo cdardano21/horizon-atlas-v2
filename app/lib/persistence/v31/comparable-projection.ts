@@ -141,7 +141,7 @@ function isComparableObjectValue(value: unknown): value is ComparableObjectInput
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function projectComparableObject(value: ComparableObjectInput): ComparableObject {
+export function projectComparableObject(value: ComparableObjectInput): ComparableObject {
   const entries = Object.entries(value as Record<string, unknown>)
     .filter(([key]) => !OPERATIONAL_METADATA_KEYS.has(key))
     .sort(([left], [right]) => left.localeCompare(right));
@@ -158,7 +158,7 @@ function getFieldPolicy(fieldName: string): ComparableScalarPolicy {
   return URL_FIELDS.has(fieldName) ? "url" : "ordinary";
 }
 
-function projectComparableValue(value: ComparableInput | unknown, policy: ComparableScalarPolicy = "ordinary"): ComparableValue {
+export function projectComparableValue(value: ComparableInput | unknown, policy: ComparableScalarPolicy = "ordinary"): ComparableValue {
   if (value === null || value === undefined) {
     return null;
   }
@@ -182,7 +182,7 @@ function projectComparableValue(value: ComparableInput | unknown, policy: Compar
   return null;
 }
 
-function projectKeyedChildArray<T extends ComparableObjectInput>(value: readonly T[], keyField: string): ComparableArray {
+export function projectKeyedChildArray<T extends ComparableObjectInput>(value: readonly T[], keyField: string): ComparableArray {
   const sorted = [...value].sort((left, right) => {
     const leftRecord = left as Record<string, unknown>;
     const rightRecord = right as Record<string, unknown>;
@@ -194,7 +194,7 @@ function projectKeyedChildArray<T extends ComparableObjectInput>(value: readonly
   return sorted.map((entry) => projectComparableObject(entry));
 }
 
-function projectOrderedArray<T>(value: readonly T[]): ComparableArray {
+export function projectOrderedArray<T>(value: readonly T[]): ComparableArray {
   return value.map((entry) => projectComparableValue(entry));
 }
 

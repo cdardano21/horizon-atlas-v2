@@ -4,7 +4,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import type { DeterministicV31CanonicalDestination } from "../../../workbook-v31-deterministic-core";
 import type { CanonicalDestinationKey, StoredDestinationState } from "../index";
-import { projectCanonicalComparable, projectComparable, projectStoredComparable } from "../comparable-projection";
+import { projectCanonicalComparable, projectComparable, projectComparableObject, projectComparableValue, projectKeyedChildArray, projectOrderedArray, projectStoredComparable } from "../comparable-projection";
 
 const asDestinationKey = (value: string): CanonicalDestinationKey => value as CanonicalDestinationKey;
 
@@ -448,6 +448,61 @@ function createState(overrides: Partial<StoredDestinationState> = {}): StoredDes
 }
 
 describe("Phase 3A.1 comparable projection", () => {
+  it("projects comparable values with the existing scalar semantics", () => {
+    expect(projectComparableValue("  Café\r\nCity  ")).toEqual("Café\nCity");
+    expect(projectComparableValue(0)).toEqual(0);
+    expect(projectComparableValue(false)).toEqual(false);
+    expect(projectComparableValue(null)).toEqual(null);
+    expect(projectComparableValue(undefined)).toEqual(null);
+    expect(projectComparableValue("https://Example.com/Path", "url")).toEqual("https://example.com/Path");
+  });
+
+  it("projects comparable objects without mutating input", () => {
+    const input = {
+      shortDescription: "  Café\r\nCity  ",
+      nested: { b: 2, a: 1 },
+      items: [{ value: "  inner  " }],
+      specialBoolean: false,
+    };
+    const before = structuredClone(input);
+
+    const result = projectComparableObject(input);
+
+    expect(result).toEqual({
+      items: [{ value: "inner" }],
+      nested: { a: 1, b: 2 },
+      shortDescription: "Café\nCity",
+      specialBoolean: false,
+    });
+    expect(input).toEqual(before);
+  });
+
+  it("projects keyed child arrays by stable key and preserves deterministic ordering", () => {
+    const input = [
+      { factKey: "fact-2", factGroup: "overview", valueText: "Second", displayLabel: "Second", sourceName: "Workbook" },
+      { factKey: "fact-1", factGroup: "overview", valueText: "First", displayLabel: "First", sourceName: "Workbook" },
+    ];
+    const before = structuredClone(input);
+
+    const result = projectKeyedChildArray(input, "factKey");
+
+    expect(result).toEqual([
+      { factKey: "fact-1", factGroup: "overview", valueText: "First", displayLabel: "First", sourceName: "Workbook" },
+      { factKey: "fact-2", factGroup: "overview", valueText: "Second", displayLabel: "Second", sourceName: "Workbook" },
+    ]);
+    expect(input).toEqual(before);
+  });
+
+  it("projects ordered arrays without changing their order", () => {
+    const input = [{ value: "  first  " }, { value: "second" }];
+    const before = structuredClone(input);
+
+    const result = projectOrderedArray(input);
+
+    expect(result).toEqual([{ value: "first" }, { value: "second" }]);
+    expect(input).toEqual(before);
+  });
+
   it("produces identical projections for identical state", () => {
     const first = createState();
     const second = createState();
