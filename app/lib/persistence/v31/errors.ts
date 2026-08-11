@@ -1,4 +1,4 @@
-import type { CanonicalDestinationKey, DestinationId, DestinationPlanAction, PersistenceModuleKey, PlanStatus, RepeatableModuleKey, StableChildKey } from "./types";
+import type { CanonicalDestinationKey, ChildOperationKind, DestinationId, DestinationPlanAction, PersistenceModuleKey, PlanStatus, RepeatableModuleKey, ScalarOperationKind, StableChildKey } from "./types";
 
 export type PersistenceError =
   | {
@@ -86,6 +86,17 @@ export type PersistenceError =
       readonly receivedVersion: string;
     }
   | {
+      readonly kind: "EXECUTION_FAILURE";
+      readonly message: string;
+      readonly destinationKey: CanonicalDestinationKey;
+      readonly destinationId: DestinationId;
+      readonly reason: ExecutionFailureReason;
+      readonly operation?: ScalarOperationKind | ChildOperationKind | "REPLACE_MODULE" | null;
+      readonly module?: PersistenceModuleKey | null;
+      readonly fieldPath?: string | null;
+      readonly stableChildKey?: StableChildKey | null;
+    }
+  | {
       readonly kind: "UNSUPPORTED_MODULE_SHAPE";
       readonly message: string;
       readonly module: PersistenceModuleKey;
@@ -96,3 +107,14 @@ export type PersistenceError =
       readonly expectedVersion: string;
       readonly receivedVersion: string;
     };
+
+export type ExecutionFailureReason =
+  | "MISSING_STARTING_STATE"
+  | "UNSUPPORTED_DESTINATION_ACTION"
+  | "STALE_PRECONDITION"
+  | "DUPLICATE_CHILD_CREATE"
+  | "MISSING_CHILD"
+  | "READ_BACK_MISMATCH"
+  | "SIMULATED_TRANSACTION_FAILURE";
+
+export type ExecutionFailurePersistenceError = Extract<PersistenceError, { readonly kind: "EXECUTION_FAILURE" }>;

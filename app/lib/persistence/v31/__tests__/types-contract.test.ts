@@ -2,7 +2,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import type { DeterministicV31CanonicalDestination } from "../../../workbook-v31-deterministic-core";
-import type { PersistenceError } from "../errors";
+import type { ExecutionFailurePersistenceError, ExecutionFailureReason, PersistenceError } from "../errors";
 import type {
   ApprovedDestinationScope,
   ApprovedDestinationScopeEntry,
@@ -23,9 +23,11 @@ import type {
   FactKey,
   KeyedChildModuleKey,
   ManifestEntry,
+  ModuleExecutionOperation,
   NonKeyedRepeatableModuleKey,
   OperationManifest,
   PlanEnvelope,
+  ReplaceModuleExecutionOperation,
   PlanStatus,
   ReplaceModuleManifestEntry,
   ScalarClearOperation,
@@ -216,6 +218,67 @@ describe("persistence v3.1 types contract", () => {
     expect(scalarOperation.kind).toBe("PRESERVE");
     expect(childOperation.kind).toBe("DELETE_CHILD");
     expect(manifest.entries[0]?.operation).toBe("REPLACE_MODULE");
+  });
+
+  it("proves the 3A.8b execution and precondition contract authority", () => {
+    const scalarCreateOperation: ScalarOperation = { kind: "CREATE", module: "editorial", fieldPath: "shortDescription", currentValue: null, incomingValue: "New" };
+    const scalarUpdateOperation: ScalarOperation = { kind: "UPDATE", module: "editorial", fieldPath: "shortDescription", currentValue: "Old", incomingValue: "New" };
+    const scalarClearOperation: ScalarOperation = { kind: "CLEAR", module: "editorial", fieldPath: "shortDescription", currentValue: "Old", incomingValue: null };
+
+    const createChildOperation: ChildOperation = { kind: "CREATE_CHILD", module: "facts", stableChildKey: asFactKey("fact-1"), currentChild: null, incomingChild: { factKey: asFactKey("fact-1"), factGroup: "overview", valueText: "A", displayLabel: "Label", sourceName: "Source" } };
+    const updateChildOperation: ChildOperation = { kind: "UPDATE_CHILD", module: "facts", stableChildKey: asFactKey("fact-1"), currentChild: { factKey: asFactKey("fact-1"), factGroup: "overview", valueText: "A", displayLabel: "Label", sourceName: "Source" }, incomingChild: { factKey: asFactKey("fact-1"), factGroup: "overview", valueText: "B", displayLabel: "Label", sourceName: "Source" } };
+    const deleteChildOperation: ChildOperation = { kind: "DELETE_CHILD", module: "facts", stableChildKey: asFactKey("fact-1"), currentChild: { factKey: asFactKey("fact-1"), factGroup: "overview", valueText: "A", displayLabel: "Label", sourceName: "Source" }, incomingChild: null };
+
+    const replaceModuleOperation: ReplaceModuleExecutionOperation<"housing"> = {
+      kind: "REPLACE_MODULE",
+      module: "housing",
+      expectedBefore: [{ summary: "Before", buyingSummary: null, rentalSummary: null }],
+      expectedAfter: [],
+    };
+    const replaceModuleOperationWithPopulatedAfter: ReplaceModuleExecutionOperation<"housing"> = {
+      kind: "REPLACE_MODULE",
+      module: "housing",
+      expectedBefore: [],
+      expectedAfter: [{ summary: "After", buyingSummary: null, rentalSummary: null }],
+    };
+
+    const executionFailure: ExecutionFailurePersistenceError = {
+      kind: "EXECUTION_FAILURE",
+      message: "execution failed",
+      destinationKey: asDestinationKey("dest-a"),
+      destinationId: asDestinationId("dest-id-a"),
+      reason: "STALE_PRECONDITION",
+      operation: "UPDATE",
+      module: "housing",
+      fieldPath: "shortDescription",
+    };
+    const executionFailureWithChild: ExecutionFailurePersistenceError = {
+      kind: "EXECUTION_FAILURE",
+      message: "child precondition failed",
+      destinationKey: asDestinationKey("dest-a"),
+      destinationId: asDestinationId("dest-id-a"),
+      reason: "DUPLICATE_CHILD_CREATE",
+      operation: "CREATE_CHILD",
+      module: "facts",
+      stableChildKey: asFactKey("fact-1"),
+    };
+
+    const reasons: ExecutionFailureReason[] = ["MISSING_STARTING_STATE", "UNSUPPORTED_DESTINATION_ACTION", "STALE_PRECONDITION", "DUPLICATE_CHILD_CREATE", "MISSING_CHILD", "READ_BACK_MISMATCH", "SIMULATED_TRANSACTION_FAILURE"];
+
+    expect(scalarCreateOperation.kind).toBe("CREATE");
+    expect(scalarUpdateOperation.kind).toBe("UPDATE");
+    expect(scalarClearOperation.kind).toBe("CLEAR");
+    expect(createChildOperation.kind).toBe("CREATE_CHILD");
+    expect(updateChildOperation.kind).toBe("UPDATE_CHILD");
+    expect(deleteChildOperation.kind).toBe("DELETE_CHILD");
+    expect(replaceModuleOperation.expectedAfter).toEqual([]);
+    expect(replaceModuleOperationWithPopulatedAfter.expectedAfter[0]?.summary).toBe("After");
+    expect(executionFailure.reason).toBe("STALE_PRECONDITION");
+    expect(executionFailureWithChild.reason).toBe("DUPLICATE_CHILD_CREATE");
+    expect(reasons).toHaveLength(7);
+
+    const moduleExecutionOperation: ModuleExecutionOperation = replaceModuleOperation;
+    expect(moduleExecutionOperation.kind).toBe("REPLACE_MODULE");
   });
 
   it("supports update policy, scope, plan envelope, and validation shape", () => {
@@ -429,6 +492,30 @@ describe("persistence v3.1 types contract", () => {
 
     // @ts-expect-error invalid MonthOfYear fails IF MonthOfYear remains in Phase 3A types.
     const invalidMonthKey: MonthKey = 13;
+
+    // @ts-expect-error REPLACE_MODULE cannot target a singleton module.
+    const invalidSingletonReplaceModule: ReplaceModuleExecutionOperation<"environmentQuality"> = { kind: "REPLACE_MODULE", module: "environmentQuality", expectedBefore: [], expectedAfter: [] };
+
+    // @ts-expect-error REPLACE_MODULE cannot target a keyed-child module.
+    const invalidKeyedChildReplaceModule: ReplaceModuleExecutionOperation<"facts"> = { kind: "REPLACE_MODULE", module: "facts", expectedBefore: [], expectedAfter: [] };
+
+    // @ts-expect-error REPLACE_MODULE cannot target editorial.
+    const invalidEditorialReplaceModule: ReplaceModuleExecutionOperation<"editorial"> = { kind: "REPLACE_MODULE", module: "editorial", expectedBefore: [], expectedAfter: [] };
+
+    // @ts-expect-error invalid execution reason rejected.
+    const invalidExecutionReason: ExecutionFailureReason = "NOT_A_REASON";
+
+    // @ts-expect-error invalid module context is rejected.
+    const invalidExecutionFailureModuleContext: PersistenceError = { kind: "EXECUTION_FAILURE", message: "invalid", destinationKey: asDestinationKey("dest-a"), destinationId: asDestinationId("dest-id-a"), reason: "STALE_PRECONDITION", module: "editorial" };
+
+    // @ts-expect-error invalid stable child key shape is rejected.
+    const invalidExecutionFailureStableChildContext: PersistenceError = { kind: "EXECUTION_FAILURE", message: "invalid", destinationKey: asDestinationKey("dest-a"), destinationId: asDestinationId("dest-id-a"), reason: "DUPLICATE_CHILD_CREATE", stableChildKey: "not-a-stable-child-key" };
+
+    // @ts-expect-error execution failure requires destination identity.
+    const missingDestinationIdentityExecutionFailure: PersistenceError = { kind: "EXECUTION_FAILURE", message: "invalid", reason: "STALE_PRECONDITION" };
+
+    // @ts-expect-error malformed expectedBefore/expectedAfter payload is rejected.
+    const malformedReplaceModulePayload: ReplaceModuleExecutionOperation<"housing"> = { kind: "REPLACE_MODULE", module: "housing", expectedBefore: [{ summary: "bad" }], expectedAfter: [] };
 
     // @ts-expect-error one module-specific child key cannot be substituted for another.
     const invalidChildKeySubtype: FactKey = asScoreKey("score-1");

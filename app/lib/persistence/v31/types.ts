@@ -556,6 +556,54 @@ export type SingletonModuleKey = "environmentQuality" | "dailyLifePracticality";
 
 export type PersistenceModuleKey = RepeatableModuleKey | SingletonModuleKey;
 
+export type ReplaceModuleExecutionModuleKey = Exclude<CanonicalRepeatableModuleKey, KeyedChildModuleKey | SingletonModuleKey>;
+
+export interface ReplaceModuleExecutionPayloadByModule {
+  facts: StoredFact;
+  scores: StoredScore;
+  neighborhoods: StoredNeighborhood;
+  places: StoredPlace;
+  resources: StoredResource;
+  media: StoredMedia;
+  costOfLiving: StoredCostOfLivingItem;
+  climateMonthly: StoredClimateMonth;
+  housing: StoredHousingState;
+  propertyResources: StoredPropertyResource;
+  healthcare: StoredHealthcareState;
+  visaResidency: StoredVisaResidencyState;
+  taxesFinance: StoredTaxFinanceState;
+  lgbtqInclusivity: StoredLgbtqInclusivityState;
+  safetyRisks: StoredSafetyRisk;
+  transportation: StoredTransportationState;
+  remoteWork: StoredRemoteWorkState;
+  languageIntegration: StoredLanguageIntegrationState;
+  pets: StoredPetState;
+  familyEducation: StoredFamilyEducationState;
+  communitySocial: StoredCommunitySocialState;
+  accessibility: StoredAccessibilityState;
+  bureaucracySetup: StoredBureaucracySetupState;
+  workBusiness: StoredWorkBusinessState;
+  retirementAging: StoredRetirementAgingState;
+  lifestyleLaws: StoredLifestyleLawState;
+  realityCheck: StoredRealityCheckEntry;
+  moveChecklist: StoredMoveChecklistState;
+  environmentQuality: StoredEnvironmentQualityState;
+  dailyLifePracticality: StoredDailyLifePracticalityState;
+  eventsSeasonality: StoredEventsSeasonalityState;
+  sources: StoredSource;
+}
+
+export type ReplaceModuleExecutionPayload<M extends ReplaceModuleExecutionModuleKey> = ReplaceModuleExecutionPayloadByModule[M];
+
+export interface ReplaceModuleExecutionOperation<M extends ReplaceModuleExecutionModuleKey> {
+  readonly kind: "REPLACE_MODULE";
+  readonly module: M;
+  readonly expectedBefore: readonly ReplaceModuleExecutionPayload<M>[];
+  readonly expectedAfter: readonly ReplaceModuleExecutionPayload<M>[];
+}
+
+export type ModuleExecutionOperation = ReplaceModuleExecutionOperation<ReplaceModuleExecutionModuleKey>;
+
 export interface ChildPayloadByModule {
   facts: StoredFact;
   scores: StoredScore;
