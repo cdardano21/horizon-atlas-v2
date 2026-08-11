@@ -301,6 +301,8 @@ describe("persistence v3.1 types contract", () => {
       errors: [],
       preStateHash: null,
       canonicalPayloadHash: null,
+      moduleExecutionOperations: [],
+      expectedComparablePostState: { identity: { destinationKey: asDestinationKey("new-braunfels-tx-us") } },
     };
 
     const envelope: PlanEnvelope = {

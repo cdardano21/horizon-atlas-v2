@@ -1,3 +1,4 @@
+import type { ComparableProjection } from "./comparable-projection";
 import type {
   DeterministicV31CanonicalAccessibilityState,
   DeterministicV31CanonicalBureaucracySetupState,
@@ -737,6 +738,8 @@ export interface DestinationPlan {
   readonly errors: readonly import("./errors").PersistenceError[];
   readonly preStateHash?: string | null;
   readonly canonicalPayloadHash?: string | null;
+  readonly moduleExecutionOperations: readonly ModuleExecutionOperation[];
+  readonly expectedComparablePostState: ComparableProjection;
 }
 
 export interface ApprovedDestinationScopeEntry {

@@ -39,6 +39,8 @@ function createDestinationPlan(destinationKey: CanonicalDestinationKey = DESTINA
     childOperations: Object.freeze([]),
     warnings: Object.freeze([]),
     errors: Object.freeze([]),
+    moduleExecutionOperations: Object.freeze([]),
+    expectedComparablePostState: Object.freeze({}),
     ...overrides,
   });
 }

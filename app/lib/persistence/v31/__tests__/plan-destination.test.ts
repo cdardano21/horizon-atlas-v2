@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 
 import type { DeterministicV31CanonicalDestination } from "../../../workbook-v31-deterministic-core";
 import { buildDestinationPlan } from "../plan-destination";
+import { projectComparable } from "../comparable-projection";
 import type { OperationManifestInterpretationResult } from "../manifest";
 import type { ApprovedDestinationScope, CanonicalDestinationKey, DestinationId, DiffPolicy, ResolvedDestinationIdentity, StoredDestinationState } from "../types";
 
@@ -387,6 +388,36 @@ describe("destination plan assembly", () => {
     });
 
     expect(plan.warnings.some((warning) => warning.includes("REPLACE_MODULE") && warning.includes("costOfLiving"))).toBe(true);
+  });
+
+  it("assembles execution expectations for replace-module intent and expected comparable post-state", () => {
+    const canonical = createCanonicalDestination({
+      costOfLiving: [{ record_key: "row-1", category: "food", monthly_low: "110", monthly_high: "220", currency: "USD" }] as Array<DeterministicV31CanonicalDestination["costOfLiving"][number]>,
+    });
+    const stored = createStoredState({
+      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "100", monthlyHigh: "200", currency: "USD" }] as Array<StoredDestinationState["costOfLiving"][number]>,
+    });
+    const plan = buildDestinationPlan({
+      resolvedDestinationIdentity: createResolvedIdentity(),
+      canonicalDestination: canonical,
+      storedDestinationState: stored,
+      manifestInterpretation: createManifestInterpretation([{ destinationKey: DESTINATION_A_KEY, operation: "REPLACE_MODULE", targetModule: "costOfLiving" }]),
+      diffPolicy: createDiffPolicy(),
+      approvedScope: createApprovedScope(),
+    });
+
+    expect(plan.moduleExecutionOperations).toEqual(expect.arrayContaining([
+      expect.objectContaining({ kind: "REPLACE_MODULE", module: "costOfLiving" }),
+    ]));
+    expect(plan.moduleExecutionOperations[0]).toEqual(expect.objectContaining({
+      expectedBefore: [expect.objectContaining({ itemKey: "row-1", monthlyLow: "100" })],
+      expectedAfter: [expect.objectContaining({ itemKey: "row-1", monthlyLow: "110" })],
+    }));
+
+    const expectedState = createStoredState({
+      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD" }] as Array<StoredDestinationState["costOfLiving"][number]>,
+    });
+    expect(plan.expectedComparablePostState).toEqual(projectComparable(expectedState));
   });
 
   it("fails closed on canonical cross-destination mismatch", () => {
