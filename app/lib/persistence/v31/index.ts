@@ -121,3 +121,4 @@ export { projectCanonicalComparable, projectComparable, projectStoredComparable 
 export { diffScalar } from "./diff-scalar";
 export { diffKeyedChildren, UnstableChildKeyError, DuplicateChildKeyError } from "./diff-keyed-children";
 export { diffNonKeyedRepeatableModule, diffSingletonModule } from "./diff-non-keyed";
+export { interpretOperationManifest, validateOperationManifest } from "./manifest";

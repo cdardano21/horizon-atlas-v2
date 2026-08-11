@@ -33,6 +33,12 @@ export type PersistenceError =
       readonly target: string;
     }
   | {
+      readonly kind: "MANIFEST_CONFLICT";
+      readonly message: string;
+      readonly destinationKey: CanonicalDestinationKey;
+      readonly target: string;
+    }
+  | {
       readonly kind: "MANIFEST_DESTINATION_NOT_IN_WORKBOOK";
       readonly message: string;
       readonly destinationKey: CanonicalDestinationKey;
