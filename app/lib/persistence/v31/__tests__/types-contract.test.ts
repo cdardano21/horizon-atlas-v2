@@ -262,8 +262,19 @@ describe("persistence v3.1 types contract", () => {
       module: "facts",
       stableChildKey: asFactKey("fact-1"),
     };
+    const executionFailureWithStoredDuplicateIdentity: ExecutionFailurePersistenceError = {
+      kind: "EXECUTION_FAILURE",
+      message: "starting state contained duplicate stored child identity",
+      destinationKey: asDestinationKey("dest-a"),
+      destinationId: asDestinationId("dest-id-a"),
+      reason: "DUPLICATE_STORED_CHILD_IDENTITY",
+      operation: "UPDATE_CHILD",
+      module: "facts",
+      stableChildKey: asFactKey("fact-1"),
+    };
 
-    const reasons: ExecutionFailureReason[] = ["MISSING_STARTING_STATE", "UNSUPPORTED_DESTINATION_ACTION", "STALE_PRECONDITION", "DUPLICATE_CHILD_CREATE", "MISSING_CHILD", "READ_BACK_MISMATCH", "SIMULATED_TRANSACTION_FAILURE"];
+    const supportedExecutionFailureReason: ExecutionFailureReason = "DUPLICATE_STORED_CHILD_IDENTITY";
+    const reasons: ExecutionFailureReason[] = ["MISSING_STARTING_STATE", "UNSUPPORTED_DESTINATION_ACTION", "STALE_PRECONDITION", "DUPLICATE_CHILD_CREATE", "DUPLICATE_STORED_CHILD_IDENTITY", "MISSING_CHILD", "READ_BACK_MISMATCH", "SIMULATED_TRANSACTION_FAILURE"];
 
     expect(scalarCreateOperation.kind).toBe("CREATE");
     expect(scalarUpdateOperation.kind).toBe("UPDATE");
@@ -275,7 +286,9 @@ describe("persistence v3.1 types contract", () => {
     expect(replaceModuleOperationWithPopulatedAfter.expectedAfter[0]?.summary).toBe("After");
     expect(executionFailure.reason).toBe("STALE_PRECONDITION");
     expect(executionFailureWithChild.reason).toBe("DUPLICATE_CHILD_CREATE");
-    expect(reasons).toHaveLength(7);
+    expect(executionFailureWithStoredDuplicateIdentity.reason).toBe("DUPLICATE_STORED_CHILD_IDENTITY");
+    expect(supportedExecutionFailureReason).toBe("DUPLICATE_STORED_CHILD_IDENTITY");
+    expect(reasons).toHaveLength(8);
 
     const moduleExecutionOperation: ModuleExecutionOperation = replaceModuleOperation;
     expect(moduleExecutionOperation.kind).toBe("REPLACE_MODULE");
@@ -506,6 +519,12 @@ describe("persistence v3.1 types contract", () => {
 
     // @ts-expect-error invalid execution reason rejected.
     const invalidExecutionReason: ExecutionFailureReason = "NOT_A_REASON";
+
+    // @ts-expect-error invalid near-miss execution reason rejected.
+    const invalidNearMissExecutionReason: ExecutionFailureReason = "DUPLICATE_CHILD_IDENTITY";
+
+    // @ts-expect-error invalid execution reason rejected.
+    const invalidDuplicateStoredChildReason: ExecutionFailureReason = "DUPLICATE_STORED_CHILD";
 
     // @ts-expect-error invalid module context is rejected.
     const invalidExecutionFailureModuleContext: PersistenceError = { kind: "EXECUTION_FAILURE", message: "invalid", destinationKey: asDestinationKey("dest-a"), destinationId: asDestinationId("dest-id-a"), reason: "STALE_PRECONDITION", module: "editorial" };
