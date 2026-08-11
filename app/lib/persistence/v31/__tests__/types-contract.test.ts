@@ -7,18 +7,24 @@ import type {
   ApprovedDestinationScopeEntry,
   CanonicalDestinationKey,
   ChildOperation,
+  ClearFieldManifestEntry,
+  DeleteChildManifestEntry,
   DestinationId,
   DestinationPlan,
   DiffPolicy,
   DriftReport,
   FactKey,
+  KeyedChildModuleKey,
   ManifestEntry,
+  NonKeyedRepeatableModuleKey,
   OperationManifest,
   PlanEnvelope,
+  ReplaceModuleManifestEntry,
   ScalarClearOperation,
   ScalarOperation,
   ScalarPreserveOperation,
   ScalarValue,
+  SingletonModuleKey,
   StoredDestinationState,
   ValidationResult,
   MonthKey,
@@ -27,8 +33,8 @@ import type {
   StoredFact,
   StoredScore,
   StoredClimateMonth,
-} from "../index";
-import type { StoredEditorialStateShape, StoredEnvironmentQualityStateShape, StoredFactShape } from "../types";
+} from "../types";
+import type { ScalarModuleKey, StoredEditorialStateShape, StoredEnvironmentQualityStateShape, StoredFactShape } from "../types";
 
 const asDestinationKey = (value: string): CanonicalDestinationKey => value as CanonicalDestinationKey;
 const asDestinationId = (value: string): DestinationId => value as DestinationId;
@@ -176,8 +182,8 @@ describe("persistence v3.1 types contract", () => {
   it("discriminated operation unions and manifest entries are structural and explicit", () => {
     const scalarOperation: ScalarOperation = {
       kind: "PRESERVE",
-      module: "facts",
-      fieldPath: "factGroup",
+      module: "environmentQuality",
+      fieldPath: "summary",
       currentValue: "stored",
       incomingValue: null,
     };
@@ -286,6 +292,37 @@ describe("persistence v3.1 types contract", () => {
 
     // @ts-expect-error one module-specific child key cannot be substituted for another.
     const invalidChildKeySubtype: FactKey = asScoreKey("score-1");
+
+    const editorialScalarOperation: ScalarOperation = { kind: "UPDATE", module: "editorial", fieldPath: "shortDescription", currentValue: "old", incomingValue: "new" };
+    const environmentQualityScalarOperation: ScalarOperation = { kind: "UPDATE", module: "environmentQuality", fieldPath: "summary", currentValue: "old", incomingValue: "new" };
+    const dailyLifePracticalityScalarOperation: ScalarOperation = { kind: "UPDATE", module: "dailyLifePracticality", fieldPath: "summary", currentValue: "old", incomingValue: "new" };
+
+    // @ts-expect-error ScalarModuleKey rejects identity.
+    const invalidIdentityScalarModule: ScalarModuleKey = "identity";
+
+    // @ts-expect-error ScalarModuleKey rejects facts.
+    const invalidFactsScalarModule: ScalarModuleKey = "facts";
+
+    // @ts-expect-error SingletonModuleKey rejects editorial.
+    const invalidEditorialSingletonModule: SingletonModuleKey = "editorial";
+
+    // @ts-expect-error KeyedChildModuleKey rejects editorial.
+    const invalidEditorialKeyedChildModule: KeyedChildModuleKey = "editorial";
+
+    // @ts-expect-error NonKeyedRepeatableModuleKey rejects editorial.
+    const invalidEditorialNonKeyedModule: NonKeyedRepeatableModuleKey = "editorial";
+
+    // @ts-expect-error ClearFieldManifestEntry rejects editorial.
+    const invalidEditorialClearFieldTarget: ClearFieldManifestEntry["targetModule"] = "editorial";
+
+    // @ts-expect-error DeleteChildManifestEntry rejects editorial.
+    const invalidEditorialDeleteTarget: DeleteChildManifestEntry["targetModule"] = "editorial";
+
+    // @ts-expect-error ReplaceModuleManifestEntry rejects editorial.
+    const invalidEditorialReplaceTarget: ReplaceModuleManifestEntry["targetModule"] = "editorial";
+
+    // @ts-expect-error ScalarModuleKey rejects invalid scalar module values.
+    const invalidScalarModuleValue: ScalarModuleKey = "facts";
 
     // @ts-expect-error missing canonical persistence field breaks conformance.
     type MissingCanonicalFieldInFacts = AssertTrue<IsEqual<keyof DeterministicV31CanonicalDestination["facts"][number], keyof Pick<StoredDestinationState["facts"][number], "factKey" | "factGroup" | "valueText" | "displayLabel">>>;

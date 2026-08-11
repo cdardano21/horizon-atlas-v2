@@ -2,7 +2,7 @@ import { normalizeScalarValue } from "./normalize";
 import type { ComparableScalarPolicy } from "./normalize";
 import type {
   DiffPolicy,
-  PersistenceModuleKey,
+  ScalarModuleKey,
   ScalarOperation,
   ScalarValue,
 } from "./types";
@@ -13,7 +13,7 @@ export interface DiffScalarInput {
   readonly incomingValue: ScalarValue;
   readonly policy: DiffPolicy;
   readonly scalarPolicy?: ComparableScalarPolicy;
-  readonly module?: PersistenceModuleKey;
+  readonly module?: ScalarModuleKey;
 }
 
 function asNonNullScalar(value: ScalarValue | null): Exclude<ScalarValue, null> {

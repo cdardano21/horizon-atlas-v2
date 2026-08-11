@@ -453,9 +453,11 @@ export interface DiffPolicy {
 
 export type ScalarOperationKind = "CREATE" | "UPDATE" | "UNCHANGED" | "PRESERVE" | "CLEAR";
 
+export type ScalarModuleKey = "editorial" | SingletonModuleKey;
+
 export interface ScalarCreateOperation {
   readonly kind: "CREATE";
-  readonly module: PersistenceModuleKey;
+  readonly module: ScalarModuleKey;
   readonly fieldPath: string;
   readonly currentValue: null;
   readonly incomingValue: Exclude<ScalarValue, null>;
@@ -463,7 +465,7 @@ export interface ScalarCreateOperation {
 
 export interface ScalarUpdateOperation {
   readonly kind: "UPDATE";
-  readonly module: PersistenceModuleKey;
+  readonly module: ScalarModuleKey;
   readonly fieldPath: string;
   readonly currentValue: Exclude<ScalarValue, null>;
   readonly incomingValue: Exclude<ScalarValue, null>;
@@ -471,7 +473,7 @@ export interface ScalarUpdateOperation {
 
 export interface ScalarUnchangedOperation {
   readonly kind: "UNCHANGED";
-  readonly module: PersistenceModuleKey;
+  readonly module: ScalarModuleKey;
   readonly fieldPath: string;
   readonly currentValue: Exclude<ScalarValue, null>;
   readonly incomingValue: Exclude<ScalarValue, null>;
@@ -479,7 +481,7 @@ export interface ScalarUnchangedOperation {
 
 export interface ScalarPreserveOperation {
   readonly kind: "PRESERVE";
-  readonly module: PersistenceModuleKey;
+  readonly module: ScalarModuleKey;
   readonly fieldPath: string;
   readonly currentValue: Exclude<ScalarValue, null>;
   readonly incomingValue: null;
@@ -487,7 +489,7 @@ export interface ScalarPreserveOperation {
 
 export interface ScalarClearOperation {
   readonly kind: "CLEAR";
-  readonly module: PersistenceModuleKey;
+  readonly module: ScalarModuleKey;
   readonly fieldPath: string;
   readonly currentValue: Exclude<ScalarValue, null>;
   readonly incomingValue: null;
