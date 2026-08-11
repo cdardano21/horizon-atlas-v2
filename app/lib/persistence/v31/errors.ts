@@ -1,4 +1,4 @@
-import type { CanonicalDestinationKey, DestinationId, PersistenceModuleKey, RepeatableModuleKey, StableChildKey } from "./types";
+import type { CanonicalDestinationKey, DestinationId, DestinationPlanAction, PersistenceModuleKey, PlanStatus, RepeatableModuleKey, StableChildKey } from "./types";
 
 export type PersistenceError =
   | {
@@ -58,6 +58,29 @@ export type PersistenceError =
     }
   | {
       readonly kind: "NORMALIZATION_VERSION_MISMATCH";
+      readonly message: string;
+      readonly expectedVersion: string;
+      readonly receivedVersion: string;
+    }
+  | {
+      readonly kind: "PLAN_IDENTITY_CONFLICT";
+      readonly message: string;
+      readonly destinationKey: CanonicalDestinationKey;
+      readonly destinationId: DestinationId;
+      readonly conflictingDestinationKey?: CanonicalDestinationKey | null;
+      readonly conflictingDestinationId?: DestinationId | null;
+      readonly reason: "SCOPE_DESTINATION_ID_MISMATCH" | "DUPLICATE_DESTINATION_KEY" | "DUPLICATE_DESTINATION_ID";
+    }
+  | {
+      readonly kind: "PLAN_EXECUTION_PRECHECK_FAILED";
+      readonly message: string;
+      readonly destinationKey?: CanonicalDestinationKey | null;
+      readonly planAction?: DestinationPlanAction | null;
+      readonly planStatus?: PlanStatus | null;
+      readonly reason: "PLAN_HAS_ERRORS" | "UNSUPPORTED_ACTION" | "INVALID_STATUS";
+    }
+  | {
+      readonly kind: "DIFF_POLICY_VERSION_MISMATCH";
       readonly message: string;
       readonly expectedVersion: string;
       readonly receivedVersion: string;

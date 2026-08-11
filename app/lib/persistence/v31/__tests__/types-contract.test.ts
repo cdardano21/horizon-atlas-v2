@@ -2,6 +2,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import type { DeterministicV31CanonicalDestination } from "../../../workbook-v31-deterministic-core";
+import type { PersistenceError } from "../errors";
 import type {
   ApprovedDestinationScope,
   ApprovedDestinationScopeEntry,
@@ -11,6 +12,7 @@ import type {
   DeleteChildManifestEntry,
   DestinationId,
   DestinationPlan,
+  DestinationPlanAction,
   DiffPolicy,
   DriftReport,
   FactKey,
@@ -19,6 +21,7 @@ import type {
   NonKeyedRepeatableModuleKey,
   OperationManifest,
   PlanEnvelope,
+  PlanStatus,
   ReplaceModuleManifestEntry,
   ScalarClearOperation,
   ScalarOperation,
@@ -262,9 +265,59 @@ describe("persistence v3.1 types contract", () => {
     expect(drift.entries[0]?.kind).toBe("scalar");
   });
 
+  it("supports the new execution-preflight error taxonomy", () => {
+    const identityConflict: PersistenceError = {
+      kind: "PLAN_IDENTITY_CONFLICT",
+      message: "Approved scope identity mismatch",
+      destinationKey: asDestinationKey("dest-a"),
+      destinationId: asDestinationId("dest-id-a"),
+      conflictingDestinationKey: asDestinationKey("dest-b"),
+      conflictingDestinationId: asDestinationId("dest-id-b"),
+      reason: "SCOPE_DESTINATION_ID_MISMATCH",
+    };
+
+    const precheckFailure: PersistenceError = {
+      kind: "PLAN_EXECUTION_PRECHECK_FAILED",
+      message: "Plan cannot execute",
+      destinationKey: asDestinationKey("dest-a"),
+      planAction: "CREATE",
+      planStatus: "DRAFT",
+      reason: "UNSUPPORTED_ACTION",
+    };
+
+    const diffPolicyMismatch: PersistenceError = {
+      kind: "DIFF_POLICY_VERSION_MISMATCH",
+      message: "Diff policy version mismatch",
+      expectedVersion: "v1",
+      receivedVersion: "v2",
+    };
+
+    expect(identityConflict.kind).toBe("PLAN_IDENTITY_CONFLICT");
+    expect(precheckFailure.reason).toBe("UNSUPPORTED_ACTION");
+    expect(diffPolicyMismatch.kind).toBe("DIFF_POLICY_VERSION_MISMATCH");
+  });
+
   it("proves the negative compile-time contract cases", () => {
     // @ts-expect-error DestinationId cannot be assigned as CanonicalDestinationKey.
     const invalidDestinationKey: CanonicalDestinationKey = asDestinationId("destination-id");
+
+    // @ts-expect-error CanonicalDestinationKey cannot be assigned as DestinationId.
+    const invalidDestinationId: DestinationId = asDestinationKey("destination-key");
+
+    // @ts-expect-error invalid PLAN_IDENTITY_CONFLICT reason rejected.
+    const invalidIdentityConflict: PersistenceError = { kind: "PLAN_IDENTITY_CONFLICT", message: "invalid", destinationKey: asDestinationKey("dest-a"), destinationId: asDestinationId("dest-id-a"), reason: "INVALID_REASON" };
+
+    // @ts-expect-error invalid PLAN_EXECUTION_PRECHECK_FAILED reason rejected.
+    const invalidPrecheckFailure: PersistenceError = { kind: "PLAN_EXECUTION_PRECHECK_FAILED", message: "invalid", reason: "INVALID_REASON" };
+
+    // @ts-expect-error DIFF_POLICY_VERSION_MISMATCH requires both expectedVersion and receivedVersion.
+    const invalidDiffPolicyVersionMismatch: PersistenceError = { kind: "DIFF_POLICY_VERSION_MISMATCH", message: "invalid" };
+
+    // @ts-expect-error arbitrary plan status string cannot be supplied as PlanStatus.
+    const invalidPlanStatus: PlanStatus = "not-a-real-status";
+
+    // @ts-expect-error arbitrary action string cannot be supplied as DestinationPlanAction.
+    const invalidPlanAction: DestinationPlanAction = "not-a-real-action";
 
     // @ts-expect-error CLEAR cannot have non-null incomingValue.
     const invalidClearOperation: ScalarClearOperation = { kind: "CLEAR", module: "facts", fieldPath: "factGroup", currentValue: "stored", incomingValue: "unexpected" };
