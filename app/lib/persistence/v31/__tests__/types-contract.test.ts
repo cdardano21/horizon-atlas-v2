@@ -39,6 +39,7 @@ import type {
   ValidationResult,
   MonthKey,
   PersistedDestinationReadResult,
+  PersistedDestinationReadFailure,
   PersistedModulePresence,
   RepeatableModuleKey,
   ScoreKey,
@@ -251,10 +252,27 @@ describe("persistence v3.1 types contract", () => {
       },
     };
 
+    const generalFailure: PersistedDestinationReadFailure = {
+      reason: "INCOMPLETE_PERSISTED_STATE",
+      destinationIdentity: {
+        destinationKey: asDestinationKey("new-braunfels-tx-us"),
+        destinationId: asDestinationId("11111111-1111-1111-1111-111111111111"),
+      },
+      module: "costOfLiving",
+    };
+
+    const singletonPresence: PersistedModulePresence = {
+      destinationId: asDestinationId("11111111-1111-1111-1111-111111111111"),
+      destinationKey: asDestinationKey("new-braunfels-tx-us"),
+      module: "environmentQuality",
+    };
+
     expect(presence.module).toBe("moveChecklist");
     expect(successReadResult.outcome).toBe("SUCCESS");
     expect(failedReadResult.outcome).toBe("FAILED");
     expect(failedReadResult.failure.reason).toBe("MALFORMED_PERSISTED_STATE");
+    expect(generalFailure.module).toBe("costOfLiving");
+    expect(singletonPresence.module).toBe("environmentQuality");
   });
 
   it("discriminated operation unions and manifest entries are structural and explicit", () => {

@@ -450,16 +450,20 @@ export type StoredDestinationState = StoredDestinationStateShape<DeterministicV3
  * Presence record existence means the module was initialized for the destination.
  * Absence does not mean empty; it means no initialization authority exists.
  */
+/**
+ * PersistedModulePresence represents durable initialization authority.
+ * Absence means no initialization authority exists; it does not mean empty or null.
+ */
 export interface PersistedModulePresence {
   readonly destinationId: DestinationId;
   readonly destinationKey: CanonicalDestinationKey;
-  readonly module: KeyedChildModuleKey;
+  readonly module: PersistedPresenceModuleKey;
 }
 
 export interface PersistedDestinationReadFailure {
   readonly reason: PersistedReadFailureReason;
   readonly destinationIdentity: ResolvedDestinationIdentity;
-  readonly module?: KeyedChildModuleKey | null;
+  readonly module?: PersistedPresenceModuleKey | null;
 }
 
 export type PersistedDestinationReadResult =
@@ -586,6 +590,30 @@ export type SingletonModuleKey = "environmentQuality" | "dailyLifePracticality";
 
 export type PersistenceModuleKey = RepeatableModuleKey | SingletonModuleKey;
 
+export type PersistedPresenceModuleKey =
+  | KeyedChildModuleKey
+  | "costOfLiving"
+  | "climateMonthly"
+  | "housing"
+  | "healthcare"
+  | "visaResidency"
+  | "taxesFinance"
+  | "lgbtqInclusivity"
+  | "safetyRisks"
+  | "transportation"
+  | "remoteWork"
+  | "languageIntegration"
+  | "pets"
+  | "familyEducation"
+  | "communitySocial"
+  | "accessibility"
+  | "bureaucracySetup"
+  | "workBusiness"
+  | "retirementAging"
+  | "lifestyleLaws"
+  | "realityCheck"
+  | SingletonModuleKey;
+
 export type ReplaceModuleExecutionModuleKey = Exclude<CanonicalRepeatableModuleKey, KeyedChildModuleKey | SingletonModuleKey>;
 
 export interface ReplaceModuleExecutionPayloadByModule {
@@ -664,6 +692,55 @@ export type ChildStableKeyByModule = {
 
 type _ChildPayloadAndKeySetsMatch = AssertTrue<IsEqual<keyof ChildPayloadByModule, keyof ChildStableKeyByModule>>;
 type _ChildPayloadAndKeySetsMatchToKeyed = AssertTrue<IsEqual<keyof ChildPayloadByModule, KeyedChildModuleKey>>;
+type _PersistedPresenceModuleKeyIsSubsetOfPersistenceModuleKey = AssertTrue<IsEqual<Extract<PersistedPresenceModuleKey, PersistenceModuleKey>, PersistedPresenceModuleKey>>;
+type _PersistedPresenceModuleKeySet = AssertTrue<IsEqual<PersistedPresenceModuleKey,
+  | "facts"
+  | "scores"
+  | "neighborhoods"
+  | "places"
+  | "resources"
+  | "media"
+  | "propertyResources"
+  | "moveChecklist"
+  | "eventsSeasonality"
+  | "sources"
+  | "costOfLiving"
+  | "climateMonthly"
+  | "housing"
+  | "healthcare"
+  | "visaResidency"
+  | "taxesFinance"
+  | "lgbtqInclusivity"
+  | "safetyRisks"
+  | "transportation"
+  | "remoteWork"
+  | "languageIntegration"
+  | "pets"
+  | "familyEducation"
+  | "communitySocial"
+  | "accessibility"
+  | "bureaucracySetup"
+  | "workBusiness"
+  | "retirementAging"
+  | "lifestyleLaws"
+  | "realityCheck"
+  | "environmentQuality"
+  | "dailyLifePracticality"
+>>;
+type _KeyedChildModuleKeySet = AssertTrue<IsEqual<KeyedChildModuleKey,
+  | "facts"
+  | "scores"
+  | "neighborhoods"
+  | "places"
+  | "resources"
+  | "media"
+  | "propertyResources"
+  | "moveChecklist"
+  | "eventsSeasonality"
+  | "sources"
+>>;
+type _ScalarPresenceExclusions = AssertTrue<IsEqual<Extract<"currency" | "primaryLanguage" | "timeZone" | "identity" | "editorial", PersistedPresenceModuleKey>, never>>;
+type _PresencePositiveProof = AssertTrue<IsEqual<Extract<"facts" | "costOfLiving" | "environmentQuality" | "dailyLifePracticality", PersistedPresenceModuleKey>, "facts" | "costOfLiving" | "environmentQuality" | "dailyLifePracticality">>;
 
 export type ChildOperationKind = "CREATE_CHILD" | "UPDATE_CHILD" | "UNCHANGED_CHILD" | "PRESERVE_CHILD" | "DELETE_CHILD";
 

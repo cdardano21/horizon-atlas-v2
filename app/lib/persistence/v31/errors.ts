@@ -1,4 +1,4 @@
-import type { CanonicalDestinationKey, ChildOperationKind, DestinationId, DestinationPlanAction, PersistenceModuleKey, PlanStatus, RepeatableModuleKey, ScalarOperationKind, StableChildKey } from "./types";
+import type { CanonicalDestinationKey, ChildOperationKind, DestinationId, DestinationPlanAction, PersistenceModuleKey, PlanStatus, PersistedPresenceModuleKey, RepeatableModuleKey, ScalarOperationKind, StableChildKey } from "./types";
 
 export type PersistedReadFailureReason =
   | "DESTINATION_NOT_FOUND"
