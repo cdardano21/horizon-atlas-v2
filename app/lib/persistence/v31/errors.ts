@@ -1,5 +1,12 @@
 import type { CanonicalDestinationKey, ChildOperationKind, DestinationId, DestinationPlanAction, PersistenceModuleKey, PlanStatus, RepeatableModuleKey, ScalarOperationKind, StableChildKey } from "./types";
 
+export type PersistedReadFailureReason =
+  | "DESTINATION_NOT_FOUND"
+  | "DB_READ_FAILED"
+  | "UNSUPPORTED_LEGACY_STATE"
+  | "INCOMPLETE_PERSISTED_STATE"
+  | "MALFORMED_PERSISTED_STATE";
+
 export type PersistenceError =
   | {
       readonly kind: "UNSTABLE_CHILD_KEY";

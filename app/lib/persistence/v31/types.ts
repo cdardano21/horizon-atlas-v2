@@ -1,4 +1,6 @@
 import type { ComparableProjection } from "./comparable-projection";
+import type { PersistedReadFailureReason } from "./errors";
+import type { NormalizedPersistedDestinationBundle } from "./materialize-stored-destination-state";
 import type {
   DeterministicV31CanonicalAccessibilityState,
   DeterministicV31CanonicalBureaucracySetupState,
@@ -442,6 +444,33 @@ export type StoredEventsSeasonalityState = StoredEventsSeasonalityStateShape<Det
 export type StoredSource = StoredSourceShape<DeterministicV31CanonicalSource>;
 
 export type StoredDestinationState = StoredDestinationStateShape<DeterministicV31CanonicalDestination>;
+
+/**
+ * Durable presence metadata for an authoritatively initialized keyed-child module.
+ * Presence record existence means the module was initialized for the destination.
+ * Absence does not mean empty; it means no initialization authority exists.
+ */
+export interface PersistedModulePresence {
+  readonly destinationId: DestinationId;
+  readonly destinationKey: CanonicalDestinationKey;
+  readonly module: KeyedChildModuleKey;
+}
+
+export interface PersistedDestinationReadFailure {
+  readonly reason: PersistedReadFailureReason;
+  readonly destinationIdentity: ResolvedDestinationIdentity;
+  readonly module?: KeyedChildModuleKey | null;
+}
+
+export type PersistedDestinationReadResult =
+  | {
+      readonly outcome: "SUCCESS";
+      readonly bundle: NormalizedPersistedDestinationBundle;
+    }
+  | {
+      readonly outcome: "FAILED";
+      readonly failure: PersistedDestinationReadFailure;
+    };
 
 export type UpdateMode = "MERGE_NONBLANK";
 

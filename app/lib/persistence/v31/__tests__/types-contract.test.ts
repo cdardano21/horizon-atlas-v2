@@ -2,7 +2,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import type { DeterministicV31CanonicalDestination } from "../../../workbook-v31-deterministic-core";
-import type { ExecutionFailurePersistenceError, ExecutionFailureReason, PersistenceError } from "../errors";
+import type { ExecutionFailurePersistenceError, ExecutionFailureReason, PersistenceError, PersistedReadFailureReason } from "../errors";
 import type {
   ApprovedDestinationScope,
   ApprovedDestinationScopeEntry,
@@ -38,6 +38,8 @@ import type {
   StoredDestinationState,
   ValidationResult,
   MonthKey,
+  PersistedDestinationReadResult,
+  PersistedModulePresence,
   RepeatableModuleKey,
   ScoreKey,
   StoredFact,
@@ -187,6 +189,72 @@ describe("persistence v3.1 types contract", () => {
     expect(summerlin.scores[0]?.scoreLabel).toBe("Walkability");
     expect(newBraunfels.housing[0]?.summary).toBe("Strong market");
     expect(newBraunfels.facts[0]?.factGroup).toBe("overview");
+  });
+
+  it("supports durable presence metadata and read-side result contracts", () => {
+    const presence: PersistedModulePresence = {
+      destinationId: asDestinationId("11111111-1111-1111-1111-111111111111"),
+      destinationKey: asDestinationKey("new-braunfels-tx-us"),
+      module: "moveChecklist",
+    };
+
+    const successReadResult: PersistedDestinationReadResult = {
+      outcome: "SUCCESS",
+      bundle: {
+        destinationKey: asDestinationKey("new-braunfels-tx-us"),
+        identity: { slug: "new-braunfels", name: "New Braunfels", city: "New Braunfels", country: "United States" },
+        editorial: { shortDescription: null, longDescription: null, currency: null, primaryLanguage: null, timeZone: null },
+        facts: [],
+        scores: [],
+        neighborhoods: [],
+        places: [],
+        resources: [],
+        media: [],
+        costOfLiving: [],
+        climateMonthly: [],
+        housing: [],
+        propertyResources: [],
+        healthcare: [],
+        visaResidency: [],
+        taxesFinance: [],
+        lgbtqInclusivity: [],
+        safetyRisks: [],
+        transportation: [],
+        remoteWork: [],
+        languageIntegration: [],
+        pets: [],
+        familyEducation: [],
+        communitySocial: [],
+        accessibility: [],
+        bureaucracySetup: [],
+        workBusiness: [],
+        retirementAging: [],
+        lifestyleLaws: [],
+        realityCheck: [],
+        moveChecklist: [],
+        environmentQuality: null,
+        dailyLifePracticality: null,
+        eventsSeasonality: [],
+        sources: [],
+      },
+    };
+
+    const failedReadResult: PersistedDestinationReadResult = {
+      outcome: "FAILED",
+      failure: {
+        reason: "MALFORMED_PERSISTED_STATE",
+        destinationIdentity: {
+          destinationKey: asDestinationKey("new-braunfels-tx-us"),
+          destinationId: asDestinationId("11111111-1111-1111-1111-111111111111"),
+        },
+        module: "eventsSeasonality",
+      },
+    };
+
+    expect(presence.module).toBe("moveChecklist");
+    expect(successReadResult.outcome).toBe("SUCCESS");
+    expect(failedReadResult.outcome).toBe("FAILED");
+    expect(failedReadResult.failure.reason).toBe("MALFORMED_PERSISTED_STATE");
   });
 
   it("discriminated operation unions and manifest entries are structural and explicit", () => {
@@ -538,6 +606,27 @@ describe("persistence v3.1 types contract", () => {
 
     // @ts-expect-error invalid near-miss execution reason rejected.
     const invalidNearMissExecutionReason: ExecutionFailureReason = "DUPLICATE_CHILD_IDENTITY";
+
+    // @ts-expect-error read-side failure reason rejects READ_FAILED.
+    const invalidReadFailureReason: PersistedReadFailureReason = "READ_FAILED";
+
+    // @ts-expect-error read-side failure reason rejects DATABASE_READ_FAILED.
+    const invalidDatabaseReadFailureReason: PersistedReadFailureReason = "DATABASE_READ_FAILED";
+
+    // @ts-expect-error read-side failure reason rejects LEGACY_STATE.
+    const invalidLegacyStateFailureReason: PersistedReadFailureReason = "LEGACY_STATE";
+
+    // @ts-expect-error read-side failure reason rejects PARTIAL_PERSISTED_STATE.
+    const invalidPartialPersistedStateFailureReason: PersistedReadFailureReason = "PARTIAL_PERSISTED_STATE";
+
+    // @ts-expect-error read-side failure reason rejects MALFORMED_STATE.
+    const invalidMalformedStateFailureReason: PersistedReadFailureReason = "MALFORMED_STATE";
+
+    // @ts-expect-error a successful read result must carry a bundle.
+    const invalidSuccessReadResult: PersistedDestinationReadResult = { outcome: "SUCCESS", failure: { reason: "DESTINATION_NOT_FOUND", destinationIdentity: { destinationKey: asDestinationKey("dest-a"), destinationId: asDestinationId("dest-id-a") } } };
+
+    // @ts-expect-error a failed read result must carry a failure object.
+    const invalidFailedReadResult: PersistedDestinationReadResult = { outcome: "FAILED", bundle: { destinationKey: asDestinationKey("dest-a"), identity: { slug: null, name: null, city: null, country: null }, editorial: { shortDescription: null, longDescription: null, currency: null, primaryLanguage: null, timeZone: null }, facts: [], scores: [], neighborhoods: [], places: [], resources: [], media: [], costOfLiving: [], climateMonthly: [], housing: [], propertyResources: [], healthcare: [], visaResidency: [], taxesFinance: [], lgbtqInclusivity: [], safetyRisks: [], transportation: [], remoteWork: [], languageIntegration: [], pets: [], familyEducation: [], communitySocial: [], accessibility: [], bureaucracySetup: [], workBusiness: [], retirementAging: [], lifestyleLaws: [], realityCheck: [], moveChecklist: [], environmentQuality: null, dailyLifePracticality: null, eventsSeasonality: [], sources: [] } };
 
     // @ts-expect-error invalid execution reason rejected.
     const invalidDuplicateStoredChildReason: ExecutionFailureReason = "DUPLICATE_STORED_CHILD";
