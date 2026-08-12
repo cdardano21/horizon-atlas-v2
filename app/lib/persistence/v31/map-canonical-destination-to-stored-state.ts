@@ -1,0 +1,197 @@
+import type { DeterministicV31CanonicalDestination } from "../../workbook-v31-deterministic-core";
+import type { CanonicalDestinationKey, StoredDestinationState } from "./types";
+
+function asStoredNullableString(value: string | null | undefined): string | null {
+  return value == null ? null : value;
+}
+
+function asStoredChild<T extends object, K extends keyof T>(value: T, key: K): T[K] {
+  return value[key];
+}
+
+function asStoredKey<T extends string>(value: unknown): T {
+  return (value == null ? "" : String(value)) as T;
+}
+
+export function mapCanonicalDestinationToStoredState(canonicalDestination: DeterministicV31CanonicalDestination): StoredDestinationState {
+  return {
+    identity: {
+      destinationKey: asStoredKey<CanonicalDestinationKey>(canonicalDestination.identity.destinationKey),
+      slug: asStoredNullableString(canonicalDestination.identity.slug),
+      name: asStoredNullableString(canonicalDestination.identity.name),
+      city: asStoredNullableString(canonicalDestination.identity.city),
+      country: asStoredNullableString(canonicalDestination.identity.country),
+    },
+    editorial: {
+      shortDescription: asStoredNullableString(canonicalDestination.editorial.shortDescription),
+      longDescription: asStoredNullableString(canonicalDestination.editorial.longDescription),
+      currency: asStoredNullableString(canonicalDestination.editorial.currency),
+      primaryLanguage: asStoredNullableString(canonicalDestination.editorial.primaryLanguage),
+      timeZone: asStoredNullableString(canonicalDestination.editorial.timeZone),
+    },
+    facts: canonicalDestination.facts.map((fact) => ({
+      factKey: asStoredKey<StoredDestinationState["facts"][number]["factKey"]>(fact.factKey),
+      factGroup: asStoredNullableString(fact.factGroup),
+      valueText: asStoredNullableString(fact.valueText),
+      displayLabel: asStoredNullableString(fact.displayLabel),
+      sourceName: asStoredNullableString(fact.sourceName),
+    })),
+    scores: canonicalDestination.scores.map((score) => ({
+      scoreKey: asStoredKey<StoredDestinationState["scores"][number]["scoreKey"]>(score.scoreKey),
+      scoreValue: asStoredNullableString(score.scoreValue),
+      scoreLabel: asStoredNullableString(score.scoreLabel),
+      methodologyVersion: asStoredNullableString(score.methodologyVersion),
+    })),
+    neighborhoods: canonicalDestination.neighborhoods.map((neighborhood) => ({
+      neighborhoodKey: asStoredKey<StoredDestinationState["neighborhoods"][number]["neighborhoodKey"]>(asStoredChild(neighborhood, "neighborhood_key")),
+      name: asStoredNullableString(neighborhood.neighborhood_name),
+      summary: asStoredNullableString(neighborhood.summary),
+      areaType: asStoredNullableString(neighborhood.area_type),
+    })),
+    places: canonicalDestination.places.map((place) => ({
+      placeKey: asStoredKey<StoredDestinationState["places"][number]["placeKey"]>(asStoredChild(place, "place_key")),
+      category: asStoredNullableString(place.category_key),
+      name: asStoredNullableString(place.place_name),
+      description: asStoredNullableString(place.description),
+    })),
+    resources: canonicalDestination.resources.map((resource) => ({
+      resourceKey: asStoredKey<StoredDestinationState["resources"][number]["resourceKey"]>(asStoredChild(resource, "resource_key")),
+      category: asStoredNullableString(resource.resource_category),
+      name: asStoredNullableString(resource.resource_name),
+      url: asStoredNullableString(resource.url),
+    })),
+    media: canonicalDestination.media.map((media) => ({
+      mediaKey: asStoredKey<StoredDestinationState["media"][number]["mediaKey"]>(asStoredChild(media, "media_key")),
+      kind: asStoredNullableString(media.media_type),
+      url: asStoredNullableString(media.image_url),
+      caption: asStoredNullableString(media.caption),
+      altText: asStoredNullableString(media.subject),
+    })),
+    costOfLiving: canonicalDestination.costOfLiving.map((item) => ({
+      itemKey: asStoredKey<StoredDestinationState["costOfLiving"][number]["itemKey"]>(asStoredChild(item, "record_key")),
+      category: asStoredNullableString(item.category),
+      monthlyLow: asStoredNullableString(item.monthly_low),
+      monthlyHigh: asStoredNullableString(item.monthly_high),
+      currency: asStoredNullableString(item.currency),
+    })),
+    climateMonthly: canonicalDestination.climateMonthly.map((month) => ({
+      monthKey: asStoredKey<StoredDestinationState["climateMonthly"][number]["monthKey"]>(asStoredChild(month, "month")),
+      avgHighTemp: asStoredNullableString(month.avg_high_c),
+      avgLowTemp: asStoredNullableString(month.avg_low_c),
+      precipitationMm: asStoredNullableString(month.rainfall_mm),
+      humidityPct: asStoredNullableString(month.humidity_pct),
+    })),
+    housing: canonicalDestination.housing.map((state) => ({
+      summary: asStoredNullableString(state.restrictions_summary),
+      buyingSummary: asStoredNullableString(state.buying_process_summary),
+      rentalSummary: asStoredNullableString(state.rental_rules_notes),
+    })),
+    propertyResources: canonicalDestination.propertyResources.map((resource) => ({
+      itemKey: asStoredKey<StoredDestinationState["propertyResources"][number]["itemKey"]>(asStoredChild(resource, "resource_key")),
+      category: asStoredNullableString(resource.resource_type),
+      name: asStoredNullableString(resource.resource_name),
+      url: asStoredNullableString(resource.url),
+    })),
+    healthcare: canonicalDestination.healthcare.map((state) => ({
+      summary: asStoredNullableString(state.system_summary),
+      publicAccessSummary: asStoredNullableString(state.public_access_foreigners),
+      insuranceSummary: asStoredNullableString(state.international_insurance_notes),
+    })),
+    visaResidency: canonicalDestination.visaResidency.map((state) => ({
+      summary: asStoredNullableString(state.visa_type),
+      residencyPath: asStoredNullableString(state.permanent_residency_path),
+      citizenshipPath: asStoredNullableString(state.citizenship_path),
+    })),
+    taxesFinance: canonicalDestination.taxesFinance.map((state) => ({
+      summary: asStoredNullableString(state.summary),
+      notes: asStoredNullableString(state.income_tax_notes),
+    })),
+    lgbtqInclusivity: canonicalDestination.lgbtqInclusivity.map((state) => ({
+      summary: asStoredNullableString(state.evidence_summary),
+      culturalNotes: asStoredNullableString(state.community_scene),
+    })),
+    safetyRisks: canonicalDestination.safetyRisks.map((risk) => ({
+      itemKey: asStoredKey<StoredDestinationState["safetyRisks"][number]["itemKey"]>(asStoredChild(risk, "record_key")),
+      topic: asStoredNullableString(risk.risk_type),
+      severity: asStoredNullableString(risk.severity),
+      summary: asStoredNullableString(risk.summary),
+    })),
+    transportation: canonicalDestination.transportation.map((state) => ({
+      summary: asStoredNullableString(state.summary),
+      airportSummary: asStoredNullableString(state.name),
+      transitSummary: asStoredNullableString(state.public_transit_available),
+    })),
+    remoteWork: canonicalDestination.remoteWork.map((state) => ({
+      summary: asStoredNullableString(state.remote_work_notes),
+      internetSummary: asStoredNullableString(state.avg_download_mbps),
+      timezoneSummary: asStoredNullableString(state.us_time_zone_fit),
+    })),
+    languageIntegration: canonicalDestination.languageIntegration.map((state) => ({
+      summary: asStoredNullableString(state.integration_notes),
+      englishSupport: asStoredNullableString(state.can_function_in_english),
+    })),
+    pets: canonicalDestination.pets.map((state) => ({
+      summary: asStoredNullableString(state.pet_friendly_rentals),
+      petFriendlyNotes: asStoredNullableString(state.dog_parks_summary),
+    })),
+    familyEducation: canonicalDestination.familyEducation.map((state) => ({
+      summary: asStoredNullableString(state.summary),
+      schoolsSummary: asStoredNullableString(state.universities),
+    })),
+    communitySocial: canonicalDestination.communitySocial.map((state) => ({
+      summary: asStoredNullableString(state.summary),
+      socialNotes: asStoredNullableString(state.clubs_groups),
+    })),
+    accessibility: canonicalDestination.accessibility.map((state) => ({
+      summary: asStoredNullableString(state.mobility_notes),
+      mobilityNotes: asStoredNullableString(state.wheelchair_access),
+    })),
+    bureaucracySetup: canonicalDestination.bureaucracySetup.map((state) => ({
+      summary: asStoredNullableString(state.summary),
+      setupNotes: asStoredNullableString(state.typical_documents),
+    })),
+    workBusiness: canonicalDestination.workBusiness.map((state) => ({
+      summary: asStoredNullableString(state.employment_notes),
+      remoteWorkNotes: asStoredNullableString(state.remote_work_suitability),
+    })),
+    retirementAging: canonicalDestination.retirementAging.map((state) => ({
+      summary: asStoredNullableString(state.retirement_notes),
+      agingNotes: asStoredNullableString(state.assisted_living),
+    })),
+    lifestyleLaws: canonicalDestination.lifestyleLaws.map((state) => ({
+      summary: asStoredNullableString(state.summary),
+      legalNotes: asStoredNullableString(state.important_rules),
+    })),
+    realityCheck: canonicalDestination.realityCheck.map((entry) => ({
+      itemKey: asStoredKey<StoredDestinationState["realityCheck"][number]["itemKey"]>(asStoredChild(entry, "record_key")),
+      title: asStoredNullableString(entry.title),
+      detail: asStoredNullableString(entry.detail),
+      severity: asStoredNullableString(entry.severity),
+    })),
+    moveChecklist: canonicalDestination.moveChecklist.map((state) => ({
+      checklistKey: asStoredKey<StoredDestinationState["moveChecklist"][number]["checklistKey"]>(asStoredChild(state, "checklist_key")),
+      summary: asStoredNullableString(state.task),
+      checklistNotes: asStoredNullableString(state.description),
+    })),
+    environmentQuality: canonicalDestination.environmentQuality ? {
+      summary: asStoredNullableString(canonicalDestination.environmentQuality.air_quality_summary),
+      qualityNotes: asStoredNullableString(canonicalDestination.environmentQuality.water_quality_summary),
+    } : null,
+    dailyLifePracticality: canonicalDestination.dailyLifePracticality ? {
+      summary: asStoredNullableString(canonicalDestination.dailyLifePracticality.grocery_access),
+      practicalityNotes: asStoredNullableString(canonicalDestination.dailyLifePracticality.things_residents_wish_they_knew),
+    } : null,
+    eventsSeasonality: canonicalDestination.eventsSeasonality.map((state) => ({
+      eventSeasonalityKey: asStoredKey<StoredDestinationState["eventsSeasonality"][number]["eventSeasonalityKey"]>(asStoredChild(state, "event_season_key")),
+      summary: asStoredNullableString(state.description),
+      seasonalityNotes: asStoredNullableString(state.weather_context),
+    })),
+    sources: canonicalDestination.sources.map((source) => ({
+      sourceKey: asStoredKey<StoredDestinationState["sources"][number]["sourceKey"]>(asStoredChild(source, "source_key")),
+      name: asStoredNullableString(source.source_name),
+      url: asStoredNullableString(source.source_url),
+      type: asStoredNullableString(source.source_type),
+    })),
+  };
+}
+
