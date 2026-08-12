@@ -259,4 +259,160 @@ describe("pure single-destination execution", () => {
 
     expect(firstResult).toEqual(secondResult);
   });
+
+  it("returns an empty trace for an unchanged plan", () => {
+    const startingState = buildDestinationState();
+    const plan = createPlan({ action: "UNCHANGED", scalarOperations: [], childOperations: [], moduleExecutionOperations: [] });
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("NO_OP");
+    expect(result.trace).toEqual([]);
+    expect(result.resultingState).toBe(startingState);
+  });
+
+  it("returns an empty trace for an ERROR plan", () => {
+    const startingState = buildDestinationState();
+    const plan = createPlan({ action: "ERROR", scalarOperations: [], childOperations: [], moduleExecutionOperations: [] });
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("FAILED");
+    expect(result.trace).toEqual([]);
+    expect(result.resultingState).toBe(startingState);
+  });
+
+  it("returns an empty trace for an unsupported CREATE plan", () => {
+    const startingState = buildDestinationState();
+    const plan = createPlan({ action: "CREATE", scalarOperations: [], childOperations: [], moduleExecutionOperations: [] });
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("FAILED");
+    expect(result.trace).toEqual([]);
+    expect(result.resultingState).toBe(startingState);
+  });
+
+  it("returns a trace for a zero-op UPDATE plan", () => {
+    const startingState = buildDestinationState();
+    const plan = createPlan({
+      scalarOperations: [{ kind: "UNCHANGED", module: "editorial", fieldPath: "shortDescription", currentValue: "old", incomingValue: "old" }],
+      childOperations: [],
+      moduleExecutionOperations: [],
+    });
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("NO_OP");
+    expect(result.trace).toHaveLength(1);
+    expect(result.trace[0]).toEqual({
+      index: 0,
+      operationFamily: "SCALAR",
+      operationKind: "UNCHANGED",
+      module: "editorial",
+      fieldPath: "shortDescription",
+      outcome: "NO_OP",
+    });
+    expect(result.resultingState).toBe(startingState);
+  });
+
+  it("records a scalar APPLIED trace entry", () => {
+    const startingState = buildDestinationState({ editorial: buildEditorialState({ shortDescription: "old" }) });
+    const plan = createPlan({
+      scalarOperations: [{ kind: "UPDATE", module: "editorial", fieldPath: "shortDescription", currentValue: "old", incomingValue: "new" }],
+      childOperations: [],
+      moduleExecutionOperations: [],
+    });
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("SUCCESS");
+    expect(result.trace).toEqual([{ index: 0, operationFamily: "SCALAR", operationKind: "UPDATE", module: "editorial", fieldPath: "shortDescription", outcome: "APPLIED" }]);
+    expect(result.resultingState.editorial.shortDescription).toBe("new");
+  });
+
+  it("records a child APPLIED trace entry", () => {
+    const startingState = buildDestinationState();
+    const plan = createPlan({
+      scalarOperations: [],
+      childOperations: [{ kind: "CREATE_CHILD", module: "facts", stableChildKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], currentChild: null, incomingChild: { factKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], factGroup: null, valueText: "alpha", displayLabel: null, sourceName: null } } as ChildOperation],
+      moduleExecutionOperations: [],
+    });
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("SUCCESS");
+    expect(result.trace).toEqual([{ index: 0, operationFamily: "CHILD", operationKind: "CREATE_CHILD", module: "facts", stableChildKey: "fact-a", outcome: "APPLIED" }]);
+    expect(result.resultingState.facts).toHaveLength(1);
+  });
+
+  it("records a module APPLIED trace entry", () => {
+    const startingState = buildDestinationState({ costOfLiving: [{ itemKey: "row-1", category: null, monthlyLow: "100", monthlyHigh: "200", currency: null }] });
+    const plan = createPlan({
+      scalarOperations: [],
+      childOperations: [],
+      moduleExecutionOperations: [{ kind: "REPLACE_MODULE", module: "costOfLiving", expectedBefore: [{ itemKey: "row-1", category: null, monthlyLow: "100", monthlyHigh: "200", currency: null }], expectedAfter: [{ itemKey: "row-1", category: null, monthlyLow: "220", monthlyHigh: "300", currency: null }] }],
+    });
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("SUCCESS");
+    expect(result.trace).toEqual([{ index: 0, operationFamily: "MODULE", operationKind: "REPLACE_MODULE", module: "costOfLiving", outcome: "APPLIED" }]);
+    expect(result.resultingState.costOfLiving).toEqual([{ itemKey: "row-1", category: null, monthlyLow: "220", monthlyHigh: "300", currency: null }]);
+  });
+
+  it("records mixed trace entries in dispatch order", () => {
+    const startingState = buildDestinationState({ costOfLiving: [{ itemKey: "row-1", category: null, monthlyLow: "100", monthlyHigh: "200", currency: null }] });
+    const plan = createPlan({
+      scalarOperations: [{ kind: "UPDATE", module: "editorial", fieldPath: "shortDescription", currentValue: "old", incomingValue: "new" }],
+      childOperations: [{ kind: "CREATE_CHILD", module: "facts", stableChildKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], currentChild: null, incomingChild: { factKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], factGroup: null, valueText: "alpha", displayLabel: null, sourceName: null } } as ChildOperation],
+      moduleExecutionOperations: [{ kind: "REPLACE_MODULE", module: "costOfLiving", expectedBefore: [{ itemKey: "row-1", category: null, monthlyLow: "100", monthlyHigh: "200", currency: null }], expectedAfter: [{ itemKey: "row-1", category: null, monthlyLow: "220", monthlyHigh: "300", currency: null }] }],
+    });
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("SUCCESS");
+    expect(result.trace).toEqual([
+      { index: 0, operationFamily: "SCALAR", operationKind: "UPDATE", module: "editorial", fieldPath: "shortDescription", outcome: "APPLIED" },
+      { index: 1, operationFamily: "CHILD", operationKind: "CREATE_CHILD", module: "facts", stableChildKey: "fact-a", outcome: "APPLIED" },
+      { index: 2, operationFamily: "MODULE", operationKind: "REPLACE_MODULE", module: "costOfLiving", outcome: "APPLIED" },
+    ]);
+  });
+
+  it("records failed operations in trace without dispatching later ones", () => {
+    const startingState = buildDestinationState();
+    const plan = createPlan({
+      scalarOperations: [{ kind: "UPDATE", module: "editorial", fieldPath: "shortDescription", currentValue: "old", incomingValue: "new" }],
+      childOperations: [{ kind: "UPDATE_CHILD", module: "facts", stableChildKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], currentChild: { factKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], factGroup: null, valueText: "gamma", displayLabel: null, sourceName: null }, incomingChild: { factKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], factGroup: null, valueText: "beta", displayLabel: null, sourceName: null } } as ChildOperation],
+      moduleExecutionOperations: [{ kind: "REPLACE_MODULE", module: "costOfLiving", expectedBefore: [], expectedAfter: [{ itemKey: "row-1", category: null, monthlyLow: "220", monthlyHigh: "300", currency: null }] }],
+    });
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("FAILED");
+    expect(result.trace).toEqual([
+      { index: 0, operationFamily: "SCALAR", operationKind: "UPDATE", module: "editorial", fieldPath: "shortDescription", outcome: "APPLIED" },
+      { index: 1, operationFamily: "CHILD", operationKind: "UPDATE_CHILD", module: "facts", stableChildKey: "fact-a", outcome: "FAILED", failureReason: "MISSING_CHILD" },
+    ]);
+    expect(result.resultingState).toBe(startingState);
+  });
+
+  it("preserves successful trace entries while a later module failure rolls back the state", () => {
+    const startingState = buildDestinationState({ costOfLiving: [{ itemKey: "row-1", category: null, monthlyLow: "100", monthlyHigh: "200", currency: null }] });
+    const plan = createPlan({
+      scalarOperations: [{ kind: "UPDATE", module: "editorial", fieldPath: "shortDescription", currentValue: "old", incomingValue: "new" }],
+      childOperations: [{ kind: "CREATE_CHILD", module: "facts", stableChildKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], currentChild: null, incomingChild: { factKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], factGroup: null, valueText: "alpha", displayLabel: null, sourceName: null } } as ChildOperation],
+      moduleExecutionOperations: [{ kind: "REPLACE_MODULE", module: "costOfLiving", expectedBefore: [{ itemKey: "row-1", category: null, monthlyLow: "300", monthlyHigh: "400", currency: null }], expectedAfter: [{ itemKey: "row-1", category: null, monthlyLow: "220", monthlyHigh: "300", currency: null }] }],
+    });
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("FAILED");
+    expect(result.trace).toEqual([
+      { index: 0, operationFamily: "SCALAR", operationKind: "UPDATE", module: "editorial", fieldPath: "shortDescription", outcome: "APPLIED" },
+      { index: 1, operationFamily: "CHILD", operationKind: "CREATE_CHILD", module: "facts", stableChildKey: "fact-a", outcome: "APPLIED" },
+      { index: 2, operationFamily: "MODULE", operationKind: "REPLACE_MODULE", module: "costOfLiving", outcome: "FAILED", failureReason: "STALE_PRECONDITION" },
+    ]);
+    expect(result.resultingState).toBe(startingState);
+  });
 });
