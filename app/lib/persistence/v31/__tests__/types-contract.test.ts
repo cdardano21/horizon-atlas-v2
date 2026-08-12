@@ -272,9 +272,21 @@ describe("persistence v3.1 types contract", () => {
       module: "facts",
       stableChildKey: asFactKey("fact-1"),
     };
+    const executionFailureWithExpectedStateMismatch: ExecutionFailurePersistenceError = {
+      kind: "EXECUTION_FAILURE",
+      message: "expected state mismatch",
+      destinationKey: asDestinationKey("dest-a"),
+      destinationId: asDestinationId("dest-id-a"),
+      reason: "EXPECTED_STATE_MISMATCH",
+      operation: "UPDATE",
+      module: "environmentQuality",
+      fieldPath: "summary",
+    };
 
     const supportedExecutionFailureReason: ExecutionFailureReason = "DUPLICATE_STORED_CHILD_IDENTITY";
-    const reasons: ExecutionFailureReason[] = ["MISSING_STARTING_STATE", "UNSUPPORTED_DESTINATION_ACTION", "STALE_PRECONDITION", "DUPLICATE_CHILD_CREATE", "DUPLICATE_STORED_CHILD_IDENTITY", "MISSING_CHILD", "READ_BACK_MISMATCH", "SIMULATED_TRANSACTION_FAILURE"];
+    const supportedExpectedStateMismatchReason: ExecutionFailureReason = "EXPECTED_STATE_MISMATCH";
+    const supportedReadBackReason: ExecutionFailureReason = "READ_BACK_MISMATCH";
+    const reasons: ExecutionFailureReason[] = ["MISSING_STARTING_STATE", "UNSUPPORTED_DESTINATION_ACTION", "STALE_PRECONDITION", "DUPLICATE_CHILD_CREATE", "DUPLICATE_STORED_CHILD_IDENTITY", "MISSING_CHILD", "READ_BACK_MISMATCH", "EXPECTED_STATE_MISMATCH", "SIMULATED_TRANSACTION_FAILURE"];
 
     expect(scalarCreateOperation.kind).toBe("CREATE");
     expect(scalarUpdateOperation.kind).toBe("UPDATE");
@@ -287,8 +299,12 @@ describe("persistence v3.1 types contract", () => {
     expect(executionFailure.reason).toBe("STALE_PRECONDITION");
     expect(executionFailureWithChild.reason).toBe("DUPLICATE_CHILD_CREATE");
     expect(executionFailureWithStoredDuplicateIdentity.reason).toBe("DUPLICATE_STORED_CHILD_IDENTITY");
+    expect(executionFailureWithExpectedStateMismatch.reason).toBe("EXPECTED_STATE_MISMATCH");
     expect(supportedExecutionFailureReason).toBe("DUPLICATE_STORED_CHILD_IDENTITY");
-    expect(reasons).toHaveLength(8);
+    expect(supportedExpectedStateMismatchReason).toBe("EXPECTED_STATE_MISMATCH");
+    expect(supportedReadBackReason).toBe("READ_BACK_MISMATCH");
+    expect(supportedExpectedStateMismatchReason).not.toBe(supportedReadBackReason);
+    expect(reasons).toHaveLength(9);
 
     const moduleExecutionOperation: ModuleExecutionOperation = replaceModuleOperation;
     expect(moduleExecutionOperation.kind).toBe("REPLACE_MODULE");
@@ -525,6 +541,15 @@ describe("persistence v3.1 types contract", () => {
 
     // @ts-expect-error invalid execution reason rejected.
     const invalidDuplicateStoredChildReason: ExecutionFailureReason = "DUPLICATE_STORED_CHILD";
+
+    // @ts-expect-error near-miss expected-state mismatch reason is rejected.
+    const invalidExpectedPostStateMismatchReason: ExecutionFailureReason = "EXPECTED_POST_STATE_MISMATCH";
+
+    // @ts-expect-error near-miss expected-state mismatch reason is rejected.
+    const invalidExpectedComparableStateMismatchReason: ExecutionFailureReason = "EXPECTED_COMPARABLE_STATE_MISMATCH";
+
+    // @ts-expect-error near-miss in-memory mismatch reason is rejected.
+    const invalidInMemoryStateMismatchReason: ExecutionFailureReason = "IN_MEMORY_STATE_MISMATCH";
 
     // @ts-expect-error invalid module context is rejected.
     const invalidExecutionFailureModuleContext: PersistenceError = { kind: "EXECUTION_FAILURE", message: "invalid", destinationKey: asDestinationKey("dest-a"), destinationId: asDestinationId("dest-id-a"), reason: "STALE_PRECONDITION", module: "editorial" };

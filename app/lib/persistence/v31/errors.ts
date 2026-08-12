@@ -116,6 +116,7 @@ export type ExecutionFailureReason =
   | "DUPLICATE_STORED_CHILD_IDENTITY"
   | "MISSING_CHILD"
   | "READ_BACK_MISMATCH"
+  | "EXPECTED_STATE_MISMATCH"
   | "SIMULATED_TRANSACTION_FAILURE";
 
 export type ExecutionFailurePersistenceError = Extract<PersistenceError, { readonly kind: "EXECUTION_FAILURE" }>;
