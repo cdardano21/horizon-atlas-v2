@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { executeDestinationPlan } from "../execute-destination-plan";
+import { projectComparable } from "../comparable-projection";
+import { reduceExecutionOperationDispatcher } from "../reduce-execution-operation-dispatch";
 import type { DestinationPlan, ScalarOperation, ChildOperation, ModuleExecutionOperation, StoredDestinationState } from "../types";
 
 function buildEditorialState(overrides: Partial<StoredDestinationState["editorial"]> = {}): StoredDestinationState["editorial"] {
@@ -66,7 +68,7 @@ function buildDestinationState(overrides: Partial<StoredDestinationState> = {}):
   };
 }
 
-function createPlan(overrides: Partial<DestinationPlan> = {}): DestinationPlan {
+function createPlan(overrides: Partial<DestinationPlan> = {}, expectedComparablePostStateOverride?: ReturnType<typeof projectComparable>): DestinationPlan {
   const scalarOperation: ScalarOperation = {
     kind: "UPDATE",
     module: "editorial",
@@ -90,6 +92,46 @@ function createPlan(overrides: Partial<DestinationPlan> = {}): DestinationPlan {
     expectedAfter: [{ itemKey: "row-1", category: null, monthlyLow: "220", monthlyHigh: "300", currency: null }],
   };
 
+  const effectiveScalarOperations = overrides.scalarOperations ?? [scalarOperation];
+  const effectiveChildOperations = overrides.childOperations ?? [childOperation];
+  const effectiveModuleOperations = overrides.moduleExecutionOperations ?? [moduleOperation];
+  let expectedState = buildDestinationState();
+
+  for (const operation of effectiveScalarOperations) {
+    if (operation.module === "editorial" && operation.fieldPath === "shortDescription") {
+      expectedState = {
+        ...expectedState,
+        editorial: buildEditorialState({ ...expectedState.editorial, shortDescription: operation.currentValue as string | null }),
+      };
+    }
+
+    const result = reduceExecutionOperationDispatcher(expectedState, operation);
+    if (result.outcome === "APPLIED" || result.outcome === "ALREADY_APPLIED" || result.outcome === "NO_OP") {
+      expectedState = result.resultingState;
+    }
+  }
+
+  for (const operation of effectiveChildOperations) {
+    const result = reduceExecutionOperationDispatcher(expectedState, operation);
+    if (result.outcome === "APPLIED" || result.outcome === "ALREADY_APPLIED" || result.outcome === "NO_OP") {
+      expectedState = result.resultingState;
+    }
+  }
+
+  for (const operation of effectiveModuleOperations) {
+    if (operation.module === "costOfLiving") {
+      expectedState = {
+        ...expectedState,
+        costOfLiving: operation.expectedBefore as StoredDestinationState["costOfLiving"],
+      };
+    }
+
+    const result = reduceExecutionOperationDispatcher(expectedState, operation);
+    if (result.outcome === "APPLIED" || result.outcome === "ALREADY_APPLIED" || result.outcome === "NO_OP") {
+      expectedState = result.resultingState;
+    }
+  }
+
   return {
     destinationIdentity: {
       destinationKey: "dest-1" as StoredDestinationState["identity"]["destinationKey"],
@@ -101,7 +143,7 @@ function createPlan(overrides: Partial<DestinationPlan> = {}): DestinationPlan {
     warnings: [],
     errors: [],
     moduleExecutionOperations: [moduleOperation],
-    expectedComparablePostState: { identity: { destinationKey: "dest-1" } },
+    expectedComparablePostState: expectedComparablePostStateOverride ?? projectComparable(expectedState),
     ...overrides,
   } as DestinationPlan;
 }
@@ -120,6 +162,11 @@ describe("pure single-destination execution", () => {
 
   it("returns SUCCESS for mixed scalar, child, and module operations and applies all effects", () => {
     const startingState = buildDestinationState({ costOfLiving: [{ itemKey: "row-1", category: null, monthlyLow: "100", monthlyHigh: "200", currency: null }] });
+    const expectedComparablePostState = projectComparable(buildDestinationState({
+      editorial: buildEditorialState({ shortDescription: "new" }),
+      facts: [{ factKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], factGroup: null, valueText: "alpha", displayLabel: null, sourceName: null }],
+      costOfLiving: [{ itemKey: "row-1", category: null, monthlyLow: "220", monthlyHigh: "300", currency: null }],
+    }));
     const plan = createPlan({ scalarOperations: [{ kind: "UPDATE", module: "editorial", fieldPath: "shortDescription", currentValue: "old", incomingValue: "new" }], childOperations: [
       {
         kind: "CREATE_CHILD",
@@ -128,7 +175,7 @@ describe("pure single-destination execution", () => {
         currentChild: null,
         incomingChild: { factKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], factGroup: null, valueText: "alpha", displayLabel: null, sourceName: null },
       } as ChildOperation,
-    ], moduleExecutionOperations: [{ kind: "REPLACE_MODULE", module: "costOfLiving", expectedBefore: [{ itemKey: "row-1", category: null, monthlyLow: "100", monthlyHigh: "200", currency: null }], expectedAfter: [{ itemKey: "row-1", category: null, monthlyLow: "220", monthlyHigh: "300", currency: null }] }] });
+    ], moduleExecutionOperations: [{ kind: "REPLACE_MODULE", module: "costOfLiving", expectedBefore: [{ itemKey: "row-1", category: null, monthlyLow: "100", monthlyHigh: "200", currency: null }], expectedAfter: [{ itemKey: "row-1", category: null, monthlyLow: "220", monthlyHigh: "300", currency: null }] }] }, expectedComparablePostState);
 
     const result = executeDestinationPlan(plan, startingState);
 
@@ -137,6 +184,111 @@ describe("pure single-destination execution", () => {
     expect(result.resultingState.facts).toHaveLength(1);
     expect(result.resultingState.costOfLiving).toEqual([{ itemKey: "row-1", category: null, monthlyLow: "220", monthlyHigh: "300", currency: null }]);
     expect(result.resultingState).not.toBe(startingState);
+  });
+
+  it("returns FAILED with EXPECTED_STATE_MISMATCH when the final projected state differs from the planner expectation", () => {
+    const startingState = buildDestinationState({ costOfLiving: [{ itemKey: "row-1", category: null, monthlyLow: "100", monthlyHigh: "200", currency: null }] });
+    const expectedComparablePostState = projectComparable(buildDestinationState({
+      editorial: buildEditorialState({ shortDescription: "wrong" }),
+      facts: [{ factKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], factGroup: null, valueText: "alpha", displayLabel: null, sourceName: null }],
+      costOfLiving: [{ itemKey: "row-1", category: null, monthlyLow: "220", monthlyHigh: "300", currency: null }],
+    }));
+    const plan = createPlan({ scalarOperations: [{ kind: "UPDATE", module: "editorial", fieldPath: "shortDescription", currentValue: "old", incomingValue: "new" }], childOperations: [{ kind: "CREATE_CHILD", module: "facts", stableChildKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], currentChild: null, incomingChild: { factKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], factGroup: null, valueText: "alpha", displayLabel: null, sourceName: null } } as ChildOperation], moduleExecutionOperations: [{ kind: "REPLACE_MODULE", module: "costOfLiving", expectedBefore: [{ itemKey: "row-1", category: null, monthlyLow: "100", monthlyHigh: "200", currency: null }], expectedAfter: [{ itemKey: "row-1", category: null, monthlyLow: "220", monthlyHigh: "300", currency: null }] }] }, expectedComparablePostState);
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("FAILED");
+    expect(result.failure?.reason).toBe("EXPECTED_STATE_MISMATCH");
+    expect(result.failure?.operationFamily).toBeUndefined();
+    expect(result.failure?.module).toBeUndefined();
+    expect(result.failure?.fieldPath).toBeUndefined();
+    expect(result.failure?.stableChildKey).toBeUndefined();
+    expect(result.trace).toHaveLength(3);
+    expect(result.resultingState).toBe(startingState);
+  });
+
+  it("returns FAILED with EXPECTED_STATE_MISMATCH for a replay when the projected state differs from the expected comparable post state", () => {
+    const startingState = buildDestinationState({ costOfLiving: [{ itemKey: "row-1", category: null, monthlyLow: "100", monthlyHigh: "200", currency: null }] });
+    const plan = createPlan({ scalarOperations: [{ kind: "UPDATE", module: "editorial", fieldPath: "shortDescription", currentValue: "old", incomingValue: "new" }], childOperations: [{ kind: "CREATE_CHILD", module: "facts", stableChildKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], currentChild: null, incomingChild: { factKey: "fact-a" as StoredDestinationState["facts"][number]["factKey"], factGroup: null, valueText: "alpha", displayLabel: null, sourceName: null } } as ChildOperation], moduleExecutionOperations: [{ kind: "REPLACE_MODULE", module: "costOfLiving", expectedBefore: [{ itemKey: "row-1", category: null, monthlyLow: "100", monthlyHigh: "200", currency: null }], expectedAfter: [{ itemKey: "row-1", category: null, monthlyLow: "220", monthlyHigh: "300", currency: null }] }] }, projectComparable(buildDestinationState({ editorial: buildEditorialState({ shortDescription: "wrong" }) })));
+
+    const firstExecution = executeDestinationPlan(plan, startingState);
+    const secondExecution = executeDestinationPlan(plan, firstExecution.resultingState);
+
+    expect(firstExecution.outcome).toBe("FAILED");
+    expect(firstExecution.failure?.reason).toBe("EXPECTED_STATE_MISMATCH");
+    expect(secondExecution.outcome).toBe("FAILED");
+    expect(secondExecution.failure?.reason).toBe("EXPECTED_STATE_MISMATCH");
+    expect(secondExecution.resultingState).toBe(startingState);
+  });
+
+  it("returns NO_OP for a zero-op UPDATE when the expected comparable post state matches the actual final state", () => {
+    const startingState = buildDestinationState();
+    const plan = createPlan({ action: "UPDATE", scalarOperations: [], childOperations: [], moduleExecutionOperations: [] }, projectComparable(startingState));
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("NO_OP");
+    expect(result.trace).toEqual([]);
+    expect(result.resultingState).toBe(startingState);
+  });
+
+  it("returns FAILED with EXPECTED_STATE_MISMATCH for a zero-op UPDATE when the expected comparable post state is mismatched", () => {
+    const startingState = buildDestinationState();
+    const plan = createPlan({ action: "UPDATE", scalarOperations: [], childOperations: [], moduleExecutionOperations: [] }, projectComparable(buildDestinationState({ editorial: buildEditorialState({ shortDescription: "different" }) })));
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("FAILED");
+    expect(result.failure?.reason).toBe("EXPECTED_STATE_MISMATCH");
+    expect(result.trace).toEqual([]);
+    expect(result.resultingState).toBe(startingState);
+  });
+
+  it("preserves a stale reducer failure and skips expected-state verification", () => {
+    const startingState = buildDestinationState({ editorial: buildEditorialState({ shortDescription: "other" }) });
+    const plan = createPlan({ scalarOperations: [{ kind: "UPDATE", module: "editorial", fieldPath: "shortDescription", currentValue: "old", incomingValue: "new" }], childOperations: [], moduleExecutionOperations: [] }, projectComparable(buildDestinationState({ editorial: buildEditorialState({ shortDescription: "different" }) })));
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("FAILED");
+    expect(result.failure?.reason).toBe("STALE_PRECONDITION");
+    expect(result.trace).toHaveLength(1);
+    expect(result.resultingState).toBe(startingState);
+  });
+
+  it("keeps ERROR plans on the existing unsupported action path without verifying expected state", () => {
+    const startingState = buildDestinationState();
+    const plan = createPlan({ action: "ERROR", scalarOperations: [], childOperations: [], moduleExecutionOperations: [] }, projectComparable(buildDestinationState({ editorial: buildEditorialState({ shortDescription: "different" }) })));
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("FAILED");
+    expect(result.failure?.reason).toBe("UNSUPPORTED_DESTINATION_ACTION");
+    expect(result.trace).toEqual([]);
+    expect(result.resultingState).toBe(startingState);
+  });
+
+  it("keeps UNCHANGED plans on the existing NO_OP path without verifying expected state", () => {
+    const startingState = buildDestinationState();
+    const plan = createPlan({ action: "UNCHANGED", scalarOperations: [], childOperations: [], moduleExecutionOperations: [] }, projectComparable(buildDestinationState({ editorial: buildEditorialState({ shortDescription: "different" }) })));
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("NO_OP");
+    expect(result.trace).toEqual([]);
+    expect(result.resultingState).toBe(startingState);
+  });
+
+  it("keeps CREATE plans on the existing unsupported action path without verifying expected state", () => {
+    const startingState = buildDestinationState();
+    const plan = createPlan({ action: "CREATE", scalarOperations: [], childOperations: [], moduleExecutionOperations: [] }, projectComparable(buildDestinationState({ editorial: buildEditorialState({ shortDescription: "different" }) })));
+
+    const result = executeDestinationPlan(plan, startingState);
+
+    expect(result.outcome).toBe("FAILED");
+    expect(result.failure?.reason).toBe("UNSUPPORTED_DESTINATION_ACTION");
+    expect(result.trace).toEqual([]);
+    expect(result.resultingState).toBe(startingState);
   });
 
   it("fails fast on scalar stale precondition and does not dispatch later operations", () => {
