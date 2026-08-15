@@ -91,6 +91,7 @@ create table if not exists public.saved_recommendation_sets (
 create table if not exists public.destinations_catalog (
   id uuid primary key default gen_random_uuid(),
   destination_id uuid not null unique default gen_random_uuid(),
+  destination_key text,
   slug text not null unique,
   city text not null,
   country text not null,
