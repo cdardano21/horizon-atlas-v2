@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+const loadPremiumWorkbookDestinationDataMock = vi.hoisted(() => vi.fn());
+
 vi.mock("./supabase", () => ({
   isSupabaseConfigured: () => true,
   supabaseFetch: vi.fn(),
@@ -49,16 +51,29 @@ vi.mock("./runtime/persisted-destination-read-runtime", () => ({
   loadPersistedDestinationFromRuntime: vi.fn(),
 }));
 
+vi.mock("./workbook-runtime-loader", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./workbook-runtime-loader")>();
+  return {
+    ...actual,
+    loadPremiumWorkbookDestinationData: loadPremiumWorkbookDestinationDataMock,
+  };
+});
+
 import { buildWorkbookDestinationFromData, getCanonicalDestination } from "./canonical-destination-loader";
 import { loadPersistedDestinationFromRuntime } from "./runtime/persisted-destination-read-runtime";
 import { supabaseFetch } from "./supabase";
 
 const mockedSupabaseFetch = vi.mocked(supabaseFetch);
 const mockedLoadPersistedDestinationFromRuntime = vi.mocked(loadPersistedDestinationFromRuntime);
+const mockedLoadPremiumWorkbookDestinationData = vi.mocked(loadPremiumWorkbookDestinationDataMock);
 
 describe("canonical destination loader", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
+    mockedLoadPremiumWorkbookDestinationData.mockImplementation(async (slug: string) => {
+      const actualModule = await vi.importActual<typeof import("./workbook-runtime-loader")>("./workbook-runtime-loader");
+      return actualModule.loadPremiumWorkbookDestinationData(slug);
+    });
     mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
       outcome: "FAILED",
       failure: {
@@ -133,6 +148,183 @@ describe("canonical destination loader", () => {
     });
   });
 
+  it("queries the real destinations_catalog table, not the non-existent destinations table", async () => {
+    mockedSupabaseFetch.mockResolvedValue({
+      ok: true,
+      json: async () => [],
+    } as Response);
+
+    await getCanonicalDestination("some-destination-slug");
+
+    const queriedPaths = mockedSupabaseFetch.mock.calls.map(([path]) => String(path));
+    expect(queriedPaths.some((path) => path.startsWith("/rest/v1/destinations_catalog?"))).toBe(true);
+    expect(queriedPaths.some((path) => path.startsWith("/rest/v1/destinations?"))).toBe(false);
+  });
+
+  it("never fuzzy-matches an approved pilot slug to an unrelated catalog row", async () => {
+    mockedSupabaseFetch.mockImplementation(async (path: string) => {
+      if (path.includes("/rest/v1/destinations_catalog?slug=eq.")) {
+        return { ok: true, json: async () => [] } as Response;
+      }
+
+      if (path.includes("/rest/v1/destinations_catalog?select=")) {
+        return {
+          ok: true,
+          json: async () => [{
+            id: "unrelated-row",
+            slug: "las-vegas-nevada-united-states",
+            city: "Las Vegas",
+            country: "United States",
+            title: "Las Vegas",
+          }],
+        } as Response;
+      }
+
+      return { ok: true, json: async () => [] } as Response;
+    });
+
+    const destination = await getCanonicalDestination("summerlin-las-vegas-nevada");
+
+    expect(destination).not.toBeNull();
+    expect(destination?.city).toBe("Summerlin");
+    expect(destination?.title).not.toBe("Las Vegas");
+  });
+
+  it("uses workbook-backed knowledge profile facts when the Supabase row has no profile", async () => {
+    mockedSupabaseFetch.mockResolvedValue({
+      ok: true,
+      json: async () => [{
+        slug: "new-braunfels-texas-united-states",
+        city: "New Braunfels",
+        country: "United States",
+        title: "New Braunfels",
+        subtitle: "New Braunfels, United States",
+        hero_narrative: "Legacy hero copy",
+        overview: "Legacy overview copy",
+        editorial: "Legacy editorial copy",
+        why_this_place_feels_distinct: "Legacy distinct copy",
+        daily_life: "Legacy daily life copy",
+        climate: "Legacy climate copy",
+        transportation: "Legacy transportation copy",
+        healthcare: "Legacy healthcare copy",
+        cost_of_living: "Legacy cost copy",
+        walkability: "Legacy walkability copy",
+        internet: "Legacy internet copy",
+        safety: "Legacy safety copy",
+        neighborhoods: [],
+        resources: [],
+        videos: [],
+        media: [],
+        sections: {},
+        scoring: [],
+      }],
+    } as Response);
+
+    mockedLoadPremiumWorkbookDestinationData.mockResolvedValueOnce({
+      destinationKey: "new-braunfels-tx-us",
+      slug: "new-braunfels-texas-united-states",
+      city: "New Braunfels",
+      country: "United States",
+      title: "New Braunfels",
+      subtitle: "New Braunfels, United States",
+      heroNarrative: "Workbook narrative",
+      overview: "Workbook overview",
+      editorial: "Workbook editorial",
+      whyThisPlaceFeelsDistinct: "",
+      dailyLife: "",
+      climate: "",
+      transportation: "",
+      healthcare: "",
+      costOfLiving: "",
+      walkability: "",
+      internet: "",
+      safety: "",
+      officialTourismUrl: "",
+      googleMapsUrl: "",
+      googleEarthUrl: "",
+      wikipediaUrl: "",
+      neighborhoods: [],
+      places: [],
+      resources: [],
+      media: [],
+      costRecords: [],
+      healthcareRecords: [],
+      transportRecords: [],
+      housingRecords: [],
+      realityChecks: [],
+      sources: [],
+      counts: { neighborhoods: 0, places: 0, resources: 0, media: 0, costRecords: 0 },
+      knowledgeProfile: {
+        population: "110000",
+        metroPopulation: "San Antonio–New Braunfels metro",
+        elevation: "192 m",
+        timeZone: "America/Chicago",
+        majorAirports: ["San Antonio International Airport", "Austin-Bergstrom International Airport"],
+        majorHospitals: ["Resolute Baptist Hospital"],
+      },
+      source: "runtime-loader",
+    } as never);
+
+    const destination = await getCanonicalDestination("new-braunfels-texas-united-states");
+
+    expect(destination).not.toBeNull();
+    expect(destination?.knowledgeProfile?.majorAirports).toEqual(["San Antonio International Airport", "Austin-Bergstrom International Airport"]);
+    expect(destination?.knowledgeProfile?.majorHospitals).toEqual(["Resolute Baptist Hospital"]);
+  });
+
+  it("uses the workbook-backed destination when Supabase fetches fail", async () => {
+    mockedSupabaseFetch.mockRejectedValueOnce(new Error("network unavailable"));
+    mockedLoadPremiumWorkbookDestinationData.mockResolvedValueOnce({
+      destinationKey: "new-braunfels-tx-us",
+      slug: "new-braunfels-texas-united-states",
+      city: "New Braunfels",
+      country: "United States",
+      title: "New Braunfels",
+      subtitle: "New Braunfels, United States",
+      heroNarrative: "Workbook narrative",
+      overview: "Workbook overview",
+      editorial: "Workbook editorial",
+      whyThisPlaceFeelsDistinct: "",
+      dailyLife: "",
+      climate: "",
+      transportation: "",
+      healthcare: "",
+      costOfLiving: "",
+      walkability: "",
+      internet: "",
+      safety: "",
+      officialTourismUrl: "",
+      googleMapsUrl: "",
+      googleEarthUrl: "",
+      wikipediaUrl: "",
+      neighborhoods: [],
+      places: [],
+      resources: [],
+      media: [],
+      costRecords: [],
+      healthcareRecords: [],
+      transportRecords: [],
+      housingRecords: [],
+      realityChecks: [],
+      sources: [],
+      counts: { neighborhoods: 0, places: 0, resources: 0, media: 0, costRecords: 0 },
+      knowledgeProfile: {
+        population: "110000",
+        metroPopulation: "San Antonio–New Braunfels metro",
+        climateClassification: "Humid subtropical",
+        majorAirports: ["San Antonio International Airport"],
+      },
+      source: "runtime-loader",
+    } as never);
+
+    const destination = await getCanonicalDestination("new-braunfels-texas-united-states");
+
+    expect(destination).not.toBeNull();
+    expect(destination?.heroNarrative).toContain("Workbook narrative");
+    expect(destination?.knowledgeProfile?.population).toBe("110000");
+    expect(destination?.knowledgeProfile?.majorAirports).toEqual(["San Antonio International Airport"]);
+  });
+
   it("hydrates a canonical destination from the persisted runtime bundle for approved pilots", async () => {
     mockedSupabaseFetch.mockResolvedValue({
       ok: true,
@@ -188,7 +380,7 @@ describe("canonical destination loader", () => {
         neighborhoods: [{ neighborhoodKey: "nb-1", name: "Alfama", summary: "Historic district", areaType: "historic" }],
         places: [],
         resources: [{ resourceKey: "resource-1", category: "tourism", name: "Visit Lisboa", url: "https://www.visitlisboa.com" }],
-        media: [{ mediaKey: "media-1", kind: "image", url: "https://example.com/lisbon.jpg", caption: "Lisbon", altText: "Lisbon" }],
+        media: [{ mediaKey: "media-1", kind: "image", url: "https://cdn.dfai-assets.com/lisbon.jpg", caption: "Lisbon", altText: "Lisbon" }],
         costOfLiving: [],
         climateMonthly: [],
         housing: [],
@@ -224,9 +416,375 @@ describe("canonical destination loader", () => {
     expect(destination?.title).toBe("Lisbon");
     expect(destination?.heroNarrative).toBe("Persisted short description");
     expect(destination?.overview).toBe("Persisted long description");
-    expect(destination?.media[0]?.url).toBe("https://example.com/lisbon.jpg");
+    expect(destination?.media[0]?.url).toBe("https://cdn.dfai-assets.com/lisbon.jpg");
     expect(destination?.resources[0]?.label).toBe("Visit Lisboa");
     expect(mockedLoadPersistedDestinationFromRuntime).toHaveBeenCalled();
+  });
+
+  it("surfaces rich workbook neighborhoods and neighborhood intelligence instead of a single sparse persisted placeholder", async () => {
+    mockedSupabaseFetch.mockResolvedValue({
+      ok: true,
+      json: async () => [{
+        id: "dest-lisbon",
+        destination_id: "dest-lisbon",
+        destination_key: "lisbon-pt",
+        slug: "lisbon-portugal",
+        city: "Lisbon",
+        country: "Portugal",
+        title: "Lisbon",
+        subtitle: "Lisbon, Portugal",
+        neighborhoods: [],
+        resources: [],
+        videos: [],
+        media: [],
+        sections: {},
+        scoring: [],
+      }],
+    } as Response);
+
+    mockedLoadPremiumWorkbookDestinationData.mockResolvedValueOnce({
+      destinationKey: "lisbon-pt",
+      slug: "lisbon-portugal",
+      city: "Lisbon",
+      country: "Portugal",
+      title: "Lisbon",
+      subtitle: "Lisbon, Portugal",
+      heroNarrative: "",
+      overview: "",
+      editorial: "",
+      whyThisPlaceFeelsDistinct: "",
+      dailyLife: "",
+      climate: "",
+      transportation: "",
+      healthcare: "",
+      costOfLiving: "",
+      walkability: "",
+      internet: "",
+      safety: "",
+      officialTourismUrl: "",
+      googleMapsUrl: "",
+      googleEarthUrl: "",
+      wikipediaUrl: "",
+      neighborhoods: [
+        { name: "Príncipe Real" },
+        { name: "Alfama" },
+        { name: "Baixa / Chiado" },
+      ],
+      places: [
+        { name: "Belcanto", category: "restaurant", neighborhoodName: "Baixa / Chiado" },
+        { name: "Copenhagen Coffee Lab", category: "coffee_shop", neighborhoodName: "Príncipe Real" },
+        { name: "Jardim da Estrela", category: "park", neighborhoodName: "Alfama" },
+      ],
+      resources: [],
+      media: [],
+      costRecords: [],
+      healthcareRecords: [],
+      transportRecords: [],
+      housingRecords: [],
+      realityChecks: [],
+      sources: [],
+      counts: { neighborhoods: 3, places: 3, resources: 0, media: 0, costRecords: 0 },
+      source: "runtime-loader",
+    } as never);
+
+    mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
+      outcome: "SUCCESS",
+      bundle: {
+        destinationKey: "lisbon-pt",
+        identity: { slug: "lisbon-portugal", name: "Lisbon", city: "Lisbon", country: "Portugal" },
+        editorial: { shortDescription: "", longDescription: "", currency: null, primaryLanguage: null, timeZone: null },
+        facts: [],
+        scores: [],
+        neighborhoods: [{ neighborhoodKey: "neighborhood-1", name: "Bairro", summary: "Nice", areaType: "urban" }],
+        places: [],
+        resources: [],
+        media: [],
+        costOfLiving: [],
+        climateMonthly: [],
+        housing: [],
+        propertyResources: [],
+        healthcare: [],
+        visaResidency: [],
+        taxesFinance: [],
+        lgbtqInclusivity: [],
+        safetyRisks: [],
+        transportation: [],
+        remoteWork: [],
+        languageIntegration: [],
+        pets: [],
+        familyEducation: [],
+        communitySocial: [],
+        accessibility: [],
+        bureaucracySetup: [],
+        workBusiness: [],
+        retirementAging: [],
+        lifestyleLaws: [],
+        realityCheck: [],
+        moveChecklist: [],
+        environmentQuality: null,
+        dailyLifePracticality: null,
+        eventsSeasonality: [],
+        sources: [],
+      },
+    } as never);
+
+    const destination = await getCanonicalDestination("lisbon-portugal");
+
+    expect(destination).not.toBeNull();
+    expect(destination?.neighborhoods).toEqual(["Príncipe Real", "Alfama", "Baixa / Chiado"]);
+    expect(destination?.neighborhoods).not.toContain("Bairro");
+    expect(destination?.neighborhoodIntelligence?.some((group) => group.places?.some((place) => place.name === "Belcanto"))).toBe(true);
+    expect(destination?.neighborhoodIntelligence?.some((group) => group.places?.some((place) => place.name === "Copenhagen Coffee Lab"))).toBe(true);
+    expect(destination?.neighborhoodIntelligence?.some((group) => group.places?.some((place) => place.name === "Jardim da Estrela"))).toBe(true);
+  });
+
+  it("uses workbook content to fill sparse persisted bundle values for pilot destinations", async () => {
+    mockedSupabaseFetch.mockResolvedValue({
+      ok: true,
+      json: async () => [{
+        id: "dest-456",
+        destination_id: "dest-456",
+        destination_key: "new-braunfels-tx-us",
+        slug: "new-braunfels-texas-united-states",
+        city: "New Braunfels",
+        country: "United States",
+        title: "New Braunfels",
+        subtitle: "New Braunfels, United States",
+        hero_narrative: "Legacy hero copy",
+        overview: "Legacy overview copy",
+        editorial: "Legacy editorial copy",
+        why_this_place_feels_distinct: "Legacy distinct copy",
+        daily_life: "Legacy daily life copy",
+        climate: "Legacy climate copy",
+        transportation: "Legacy transportation copy",
+        healthcare: "Legacy healthcare copy",
+        cost_of_living: "Legacy cost copy",
+        walkability: "Legacy walkability copy",
+        internet: "Legacy internet copy",
+        safety: "Legacy safety copy",
+        neighborhoods: [],
+        resources: [],
+        videos: [],
+        media: [],
+        sections: {},
+        scoring: [],
+      }],
+    } as Response);
+
+    mockedLoadPremiumWorkbookDestinationData.mockResolvedValueOnce({
+      destinationKey: "new-braunfels-tx-us",
+      slug: "new-braunfels-texas-united-states",
+      city: "New Braunfels",
+      country: "United States",
+      title: "New Braunfels",
+      subtitle: "New Braunfels, United States",
+      heroNarrative: "Workbook hero narrative",
+      overview: "Workbook overview",
+      editorial: "Workbook editorial",
+      whyThisPlaceFeelsDistinct: "Workbook distinct",
+      dailyLife: "Workbook daily life",
+      climate: "Workbook climate",
+      transportation: "Workbook transportation",
+      healthcare: "Workbook healthcare",
+      costOfLiving: "Workbook cost",
+      walkability: "Workbook walkability",
+      internet: "Workbook internet",
+      safety: "Workbook safety",
+      officialTourismUrl: "",
+      googleMapsUrl: "",
+      googleEarthUrl: "",
+      wikipediaUrl: "",
+      neighborhoods: [],
+      places: [],
+      resources: [],
+      media: [],
+      costRecords: [],
+      healthcareRecords: [],
+      transportRecords: [],
+      housingRecords: [],
+      realityChecks: [],
+      sources: [],
+      counts: { neighborhoods: 0, places: 0, resources: 0, media: 0, costRecords: 0 },
+      knowledgeProfile: {
+        population: "110000",
+        metroPopulation: "San Antonio–New Braunfels metro",
+        climateClassification: "Humid subtropical",
+        majorAirports: ["San Antonio International Airport"],
+        majorHospitals: ["Resolute Baptist Hospital"],
+      },
+      source: "runtime-loader",
+    } as never);
+
+    mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
+      outcome: "SUCCESS",
+      bundle: {
+        destinationKey: "new-braunfels-tx-us",
+        identity: {
+          slug: "new-braunfels-texas-united-states",
+          name: "New Braunfels",
+          city: "New Braunfels",
+          country: "United States",
+        },
+        editorial: {
+          shortDescription: "",
+          longDescription: "",
+          currency: null,
+          primaryLanguage: null,
+          timeZone: null,
+        },
+        facts: [],
+        scores: [],
+        neighborhoods: [],
+        places: [],
+        resources: [],
+        media: [],
+        costOfLiving: [],
+        climateMonthly: [],
+        housing: [],
+        propertyResources: [],
+        healthcare: [],
+        visaResidency: [],
+        taxesFinance: [],
+        lgbtqInclusivity: [],
+        safetyRisks: [],
+        transportation: [],
+        remoteWork: [],
+        languageIntegration: [],
+        pets: [],
+        familyEducation: [],
+        communitySocial: [],
+        accessibility: [],
+        bureaucracySetup: [],
+        workBusiness: [],
+        retirementAging: [],
+        lifestyleLaws: [],
+        realityCheck: [],
+        moveChecklist: [],
+        environmentQuality: null,
+        dailyLifePracticality: null,
+        eventsSeasonality: [],
+        sources: [],
+      },
+    } as never);
+
+    const destination = await getCanonicalDestination("new-braunfels-texas-united-states");
+
+    expect(destination).not.toBeNull();
+    expect(destination?.heroNarrative).toBe("Workbook hero narrative");
+    expect(destination?.knowledgeProfile?.population).toBe("110000");
+    expect(destination?.knowledgeProfile?.majorAirports).toEqual(["San Antonio International Airport"]);
+    expect(destination?.knowledgeProfile?.majorHospitals).toEqual(["Resolute Baptist Hospital"]);
+  });
+
+  it("ignores placeholder example.com media in the persisted bundle and falls back to real workbook media", async () => {
+    mockedSupabaseFetch.mockResolvedValue({
+      ok: true,
+      json: async () => [{
+        id: "dest-789",
+        destination_id: "dest-789",
+        destination_key: "new-braunfels-tx-us",
+        slug: "new-braunfels-texas-united-states",
+        city: "New Braunfels",
+        country: "United States",
+        title: "New Braunfels",
+        subtitle: "New Braunfels, United States",
+        neighborhoods: [],
+        resources: [],
+        videos: [],
+        media: [],
+        sections: {},
+        scoring: [],
+      }],
+    } as Response);
+
+    mockedLoadPremiumWorkbookDestinationData.mockResolvedValueOnce({
+      destinationKey: "new-braunfels-tx-us",
+      slug: "new-braunfels-texas-united-states",
+      city: "New Braunfels",
+      country: "United States",
+      title: "New Braunfels",
+      subtitle: "New Braunfels, United States",
+      heroNarrative: "Workbook hero narrative",
+      overview: "Workbook overview",
+      editorial: "Workbook editorial",
+      whyThisPlaceFeelsDistinct: "",
+      dailyLife: "",
+      climate: "",
+      transportation: "",
+      healthcare: "",
+      costOfLiving: "",
+      walkability: "",
+      internet: "",
+      safety: "",
+      officialTourismUrl: "",
+      googleMapsUrl: "",
+      googleEarthUrl: "",
+      wikipediaUrl: "",
+      neighborhoods: [],
+      places: [],
+      resources: [],
+      media: [{ kind: "image", url: "https://commons.wikimedia.org/wiki/Special:FilePath/New_Braunfels_Texas_Landa_Park.jpg", altText: "New Braunfels Landa Park", caption: "New Braunfels Landa Park", isPrimary: true }],
+      costRecords: [],
+      healthcareRecords: [],
+      transportRecords: [],
+      housingRecords: [],
+      realityChecks: [],
+      sources: [],
+      counts: { neighborhoods: 0, places: 0, resources: 0, media: 1, costRecords: 0 },
+      source: "runtime-loader",
+    } as never);
+
+    mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
+      outcome: "SUCCESS",
+      bundle: {
+        destinationKey: "new-braunfels-tx-us",
+        identity: {
+          slug: "new-braunfels-texas-united-states",
+          name: "New Braunfels",
+          city: "New Braunfels",
+          country: "United States",
+        },
+        editorial: { shortDescription: "", longDescription: "", currency: null, primaryLanguage: null, timeZone: null },
+        facts: [],
+        scores: [],
+        neighborhoods: [],
+        places: [],
+        resources: [],
+        media: [{ mediaKey: "media-1", kind: "image", url: "https://example.com/img.jpg", caption: "Image", altText: "Alt" }],
+        costOfLiving: [],
+        climateMonthly: [],
+        housing: [],
+        propertyResources: [],
+        healthcare: [],
+        visaResidency: [],
+        taxesFinance: [],
+        lgbtqInclusivity: [],
+        safetyRisks: [],
+        transportation: [],
+        remoteWork: [],
+        languageIntegration: [],
+        pets: [],
+        familyEducation: [],
+        communitySocial: [],
+        accessibility: [],
+        bureaucracySetup: [],
+        workBusiness: [],
+        retirementAging: [],
+        lifestyleLaws: [],
+        realityCheck: [],
+        moveChecklist: [],
+        environmentQuality: null,
+        dailyLifePracticality: null,
+        eventsSeasonality: [],
+        sources: [],
+      },
+    } as never);
+
+    const destination = await getCanonicalDestination("new-braunfels-texas-united-states");
+
+    expect(destination).not.toBeNull();
+    expect(destination?.media.some((item) => item.url.includes("example.com"))).toBe(false);
+    expect(destination?.media[0]?.url).toBe("https://commons.wikimedia.org/wiki/Special:FilePath/New_Braunfels_Texas_Landa_Park.jpg");
   });
 
   it("builds premium enrichment fields and resources for local fallback destinations", async () => {
@@ -432,6 +990,52 @@ describe("canonical destination loader", () => {
     expect(destination.media.map((item) => item.url)).toEqual(["https://example.com/new-braunfels-main-plaza.jpg"]);
   });
 
+  it("preserves valid Wikimedia Special:FilePath URLs unchanged and converts plain File: article URLs without fabricating a hash path", () => {
+    const destination = buildWorkbookDestinationFromData("new-braunfels-tx-us", {
+      destinationKey: "new-braunfels-tx-us",
+      slug: "new-braunfels-tx-us",
+      city: "New Braunfels",
+      country: "United States",
+      title: "New Braunfels",
+      subtitle: "New Braunfels, United States",
+      heroNarrative: "",
+      overview: "",
+      editorial: "",
+      whyThisPlaceFeelsDistinct: "",
+      dailyLife: "",
+      climate: "",
+      transportation: "",
+      healthcare: "",
+      costOfLiving: "",
+      walkability: "",
+      internet: "",
+      safety: "",
+      officialTourismUrl: "",
+      googleMapsUrl: "",
+      googleEarthUrl: "",
+      wikipediaUrl: "",
+      neighborhoods: [],
+      places: [],
+      resources: [],
+      media: [
+        { kind: "image", url: "https://commons.wikimedia.org/wiki/Special:FilePath/New_Braunfels_Texas_Landa_Park.jpg", altText: "New Braunfels Landa Park", caption: "New Braunfels Landa Park", isPrimary: true },
+        { kind: "image", url: "https://commons.wikimedia.org/wiki/File:New_Braunfels_Gruene_Hall.jpg", altText: "New Braunfels Gruene Hall", caption: "New Braunfels Gruene Hall", isPrimary: false },
+      ],
+      costRecords: [],
+      healthcareRecords: [],
+      transportRecords: [],
+      housingRecords: [],
+      realityChecks: [],
+      sources: [],
+      counts: { neighborhoods: 0, places: 0, resources: 0, media: 2, costRecords: 0 },
+    });
+
+    const urls = destination.media.map((item) => item.url);
+    expect(urls).toContain("https://commons.wikimedia.org/wiki/Special:FilePath/New_Braunfels_Texas_Landa_Park.jpg");
+    expect(urls).toContain("https://commons.wikimedia.org/wiki/Special:FilePath/New_Braunfels_Gruene_Hall.jpg");
+    expect(urls.some((url) => url.includes("upload.wikimedia.org"))).toBe(false);
+  });
+
   it("keeps primary media when it is clearly relevant even without explicit destination text", () => {
     const destination = buildWorkbookDestinationFromData("new-braunfels-tx-us", {
       destinationKey: "new-braunfels-tx-us",
@@ -581,7 +1185,7 @@ describe("canonical destination loader", () => {
 
     expect(destination).not.toBeNull();
     expect(destination?.media).toHaveLength(5);
-    expect(destination?.media[0]?.url).toContain("upload.wikimedia.org");
+    expect(destination?.media[0]?.url).toBe("https://commons.wikimedia.org/wiki/Special:FilePath/New_Braunfels_Texas_Landa_Park.jpg");
     expect(destination?.media[0]?.isPrimary).toBe(true);
     expect(destination?.media.slice(1).every((item) => !item.isPrimary)).toBe(true);
     expect(destination?.media.some((item) => item.url.includes("images.unsplash.com"))).toBe(false);
@@ -677,7 +1281,7 @@ describe("canonical destination loader", () => {
 
   it("hydrates Premium V2 module rows into the canonical destination payload without overwriting existing destination fields", async () => {
     mockedSupabaseFetch.mockImplementation(async (path: string) => {
-      if (path.includes("/rest/v1/destinations?")) {
+      if (path.includes("/rest/v1/destinations_catalog?")) {
         return {
           ok: true,
           json: async () => [{
@@ -930,7 +1534,7 @@ describe("canonical destination loader", () => {
 
   it("hydrates media and cost profiles from premium v2 workbook rows when imported facts are sparse", async () => {
     mockedSupabaseFetch.mockImplementation(async (path: string) => {
-      if (path.includes("/rest/v1/destinations?")) {
+      if (path.includes("/rest/v1/destinations_catalog?")) {
         return {
           ok: true,
           json: async () => [{

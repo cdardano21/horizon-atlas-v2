@@ -16,6 +16,40 @@ const normalizeTextValue = (value: string | null | undefined) => {
   return trimmed;
 };
 
+const normalizeWikimediaMediaUrl = (value: string | null | undefined) => {
+  if (typeof value !== "string") return "";
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+
+  try {
+    const parsed = new URL(trimmed);
+    const hostname = parsed.hostname.toLowerCase();
+    if (hostname !== "commons.wikimedia.org" && hostname !== "www.commons.wikimedia.org") {
+      return trimmed;
+    }
+
+    // Special:FilePath is already a valid, direct-serving hotlink (redirects to the real upload.wikimedia.org file) — leave it untouched.
+    if (/\/wiki\/Special:FilePath\//.test(parsed.pathname)) {
+      return trimmed;
+    }
+
+    // Plain /wiki/File:... URLs are HTML article pages, not image bytes — redirect them through Special:FilePath on the same domain instead of guessing a hash path.
+    const fileMatch = parsed.pathname.match(/\/wiki\/File:(.+)$/);
+    if (fileMatch?.[1]) {
+      return `https://commons.wikimedia.org/wiki/Special:FilePath/${fileMatch[1]}`;
+    }
+
+    return trimmed;
+  } catch {
+    return trimmed;
+  }
+};
+
+const normalizeMediaUrlItem = <T extends { url?: string; altText?: string; caption?: string; kind?: string; isPrimary?: boolean; sourceUrl?: string; attribution?: string; license?: string }>(item: T) => ({
+  ...item,
+  url: normalizeWikimediaMediaUrl(item.url),
+});
+
 const debugCanonicalDestinationBranches = process.env.HA_CANONICAL_ROUTE_DEBUG === "1";
 
 const logCanonicalDestinationBranch = (details: Record<string, unknown>) => {
@@ -94,6 +128,17 @@ const looksLikeImageAssetUrl = (value: string | null | undefined) => {
   }
 };
 
+const IANA_RESERVED_EXAMPLE_HOSTNAMES = new Set(["example.com", "example.org", "example.net", "www.example.com", "www.example.org", "www.example.net"]);
+
+const isReservedExampleDomainUrl = (value: string | null | undefined) => {
+  if (typeof value !== "string" || !value.trim()) return false;
+  try {
+    return IANA_RESERVED_EXAMPLE_HOSTNAMES.has(new URL(value.trim()).hostname.toLowerCase());
+  } catch {
+    return false;
+  }
+};
+
 const scoreDestinationMediaItem = <T extends { url?: string; altText?: string; caption?: string; kind?: string; isPrimary?: boolean; sourceUrl?: string; attribution?: string; license?: string }>(item: T, normalizedTokens: string[]) => {
   const combined = [item.altText, item.caption, item.url, item.kind, item.sourceUrl, item.attribution, item.license].filter(Boolean).map(String).join(" ").toLowerCase();
   const hasDestinationToken = normalizedTokens.some((token) => combined.includes(token));
@@ -120,10 +165,13 @@ const filterDestinationSpecificMedia = <T extends { url?: string; altText?: stri
     if (!item.url?.trim()) return false;
     if (hasDestinationToken) return true;
 
+    const isGenericPlaceholder = looksLikeGenericMediaItem(item, normalizedTokens);
+    if (isGenericPlaceholder) return false;
+
     const hasPositiveEvidence = hasVerifiedSourceMetadata || isPrimary || hasImageAssetEvidence;
     if (score < 1 && !hasPositiveEvidence) return false;
     if (media.length === 1 && (hasPositiveEvidence || score >= 0)) return true;
-    if (hasVerifiedSourceMetadata && score >= bestScore) return true;
+    if (hasPositiveEvidence) return true;
     if (isPrimary && (score === bestScore || bestScore <= 0)) return true;
     if (score >= 1 && score === bestScore) return true;
     return false;
@@ -280,16 +328,39 @@ const resolvePersistedRuntimeDestinationIdentity = (slug: string, row: Record<st
   };
 };
 
-const buildCanonicalDestinationFromPersistedBundle = (slug: string, fallbackDestination: CanonicalDestination, bundle: NormalizedPersistedDestinationBundle): CanonicalDestination => {
+// A rehearsal/dry-run persisted bundle can contain a single placeholder row (e.g. one generic
+// neighborhood) that would otherwise silently win over much richer authoritative workbook data.
+const selectRicherPersistedArraySource = <T>(persisted: T[], workbook: T[], fallback: T[]): T[] => {
+  if (workbook.length > persisted.length) return workbook;
+  if (persisted.length > 0) return persisted;
+  if (workbook.length > 0) return workbook;
+  return fallback;
+};
+
+const buildCanonicalDestinationFromPersistedBundle = (
+  slug: string,
+  fallbackDestination: CanonicalDestination,
+  bundle: NormalizedPersistedDestinationBundle,
+  workbookData?: PremiumWorkbookNormalizedDestinationData | null,
+): CanonicalDestination => {
   const city = normalizeTextValue(bundle.identity.city) || fallbackDestination.city;
   const country = normalizeTextValue(bundle.identity.country) || fallbackDestination.country;
   const title = normalizeTextValue(bundle.identity.name) || fallbackDestination.title;
   const subtitle = [city || title, country].filter(Boolean).join(", ");
-  const heroNarrative = normalizeTextValue(bundle.editorial.shortDescription) || fallbackDestination.heroNarrative;
-  const overview = normalizeTextValue(bundle.editorial.longDescription) || fallbackDestination.overview;
-  const editorial = normalizeTextValue(bundle.editorial.longDescription) || fallbackDestination.editorial;
+  const heroNarrative = normalizeTextValue(bundle.editorial.shortDescription) || normalizeTextValue(workbookData?.heroNarrative) || fallbackDestination.heroNarrative;
+  const overview = normalizeTextValue(bundle.editorial.longDescription) || normalizeTextValue(workbookData?.overview) || fallbackDestination.overview;
+  const editorial = normalizeTextValue(bundle.editorial.longDescription) || normalizeTextValue(workbookData?.editorial) || fallbackDestination.editorial;
 
-  const media = bundle.media
+  const persistedMedia = bundle.media
+    .map((item) => ({
+      kind: normalizeTextValue(item.kind) || "image",
+      url: normalizeTextValue(item.url) || "",
+      altText: normalizeTextValue(item.altText) || title || city || "Destination media",
+      caption: normalizeTextValue(item.caption) || title || city || "Destination media",
+      isPrimary: false,
+    }))
+    .filter((item) => item.url && !isReservedExampleDomainUrl(item.url));
+  const workbookMedia = (workbookData?.media ?? [])
     .map((item) => ({
       kind: normalizeTextValue(item.kind) || "image",
       url: normalizeTextValue(item.url) || "",
@@ -298,10 +369,11 @@ const buildCanonicalDestinationFromPersistedBundle = (slug: string, fallbackDest
       isPrimary: false,
     }))
     .filter((item) => item.url);
+  const media = persistedMedia.length > 0 ? persistedMedia : workbookMedia.length > 0 ? workbookMedia : (fallbackDestination.media ?? []).map((item) => ({ ...item, isPrimary: false }));
 
   const primaryMedia = media[0] ? [{ ...media[0], isPrimary: true }] : [];
   const normalizedMedia = [...primaryMedia, ...media.slice(1)];
-  const resources = bundle.resources
+  const persistedResources = bundle.resources
     .map((item) => ({
       category: normalizeTextValue(item.category) || "resource",
       label: normalizeTextValue(item.name) || "Imported resource",
@@ -309,16 +381,35 @@ const buildCanonicalDestinationFromPersistedBundle = (slug: string, fallbackDest
       url: normalizeTextValue(item.url) || "",
     }))
     .filter((item) => item.url);
+  const workbookResources = (workbookData?.resources ?? [])
+    .map((item) => ({
+      category: normalizeTextValue(item.category) || "resource",
+      label: normalizeTextValue(item.label) || "Imported resource",
+      provider: item.provider ?? null,
+      url: normalizeTextValue(item.url) || "",
+    }))
+    .filter((item) => item.url);
+  const resources = selectRicherPersistedArraySource(persistedResources, workbookResources, fallbackDestination.resources ?? []);
 
-  const neighborhoods = bundle.neighborhoods
+  const persistedNeighborhoods = bundle.neighborhoods
     .map((item) => normalizeTextValue(item.name))
     .filter(Boolean);
+  const workbookNeighborhoods = (workbookData?.neighborhoods ?? [])
+    .map((item) => normalizeTextValue(item.name))
+    .filter(Boolean);
+  const neighborhoods = selectRicherPersistedArraySource(persistedNeighborhoods, workbookNeighborhoods, fallbackDestination.neighborhoods ?? []);
+  const neighborhoodIntelligence = buildWorkbookNeighborhoodIntelligence(workbookData) ?? fallbackDestination.neighborhoodIntelligence;
 
   const premiumEditorialContent = {
     ...fallbackDestination.premiumEditorialContent,
     heroIntroduction: heroNarrative || fallbackDestination.premiumEditorialContent?.heroIntroduction,
     overviewArticle: overview || fallbackDestination.premiumEditorialContent?.overviewArticle,
   };
+
+  const mergedKnowledgeProfile = mergeKnowledgeProfile(
+    workbookData?.knowledgeProfile,
+    fallbackDestination.knowledgeProfile,
+  );
 
   return {
     ...fallbackDestination,
@@ -338,6 +429,8 @@ const buildCanonicalDestinationFromPersistedBundle = (slug: string, fallbackDest
     mediaGallery: normalizedMedia,
     neighborhoods,
     premiumEditorialContent,
+    knowledgeProfile: mergedKnowledgeProfile,
+    neighborhoodIntelligence,
   };
 };
 
@@ -439,6 +532,38 @@ const parseKnowledgeProfile = (value: unknown): CanonicalDestinationKnowledgePro
     climateRisks: typeof source.climateRisks === "string" ? source.climateRisks : undefined,
     naturalDisasterRisks: typeof source.naturalDisasterRisks === "string" ? source.naturalDisasterRisks : undefined,
   };
+};
+
+const mergeKnowledgeProfile = (
+  primaryProfile: CanonicalDestinationKnowledgeProfile | undefined,
+  fallbackProfile: CanonicalDestinationKnowledgeProfile | undefined,
+): CanonicalDestinationKnowledgeProfile | undefined => {
+  if (!primaryProfile) return fallbackProfile;
+  if (!fallbackProfile) return primaryProfile;
+
+  const mergedProfile = { ...fallbackProfile } as CanonicalDestinationKnowledgeProfile;
+  for (const [key, value] of Object.entries(primaryProfile) as Array<[keyof CanonicalDestinationKnowledgeProfile, unknown]>) {
+    if (typeof value === "string") {
+      if (value.trim()) {
+        (mergedProfile[key] as string | undefined) = value;
+      }
+      continue;
+    }
+
+    if (Array.isArray(value)) {
+      const cleanedValues = value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+      if (cleanedValues.length > 0) {
+        (mergedProfile[key] as string[] | undefined) = cleanedValues;
+      }
+      continue;
+    }
+
+    if (value != null) {
+      (mergedProfile[key] as unknown) = value;
+    }
+  }
+
+  return mergedProfile;
 };
 
 const parseImportedVerifiedFacts = (value: unknown): ImportedVerifiedDestinationFacts | undefined => {
@@ -880,11 +1005,12 @@ export const buildWorkbookDestinationFromData = (slug: string, workbookData: Pre
   const preferredInternet = normalizeTextValue(workbookData?.internet) || normalizeTextValue(workbookFallbackData?.internet) || normalizeTextValue(fallback?.internet) || "";
   const preferredSafety = normalizeTextValue(workbookData?.safety) || normalizeTextValue(workbookFallbackData?.safety) || normalizeTextValue(fallback?.safety) || "";
   const preferredNeighborhoodProfiles = workbookFallbackData?.neighborhoodProfiles?.length ? workbookFallbackData.neighborhoodProfiles : fallback?.neighborhoodProfiles?.length ? fallback.neighborhoodProfiles : [];
-  const resolvedWorkbookMedia = resolveWorkbookMediaForSlug(slug, workbookMedia);
-  const workbookKnowledgeProfile = workbookData?.knowledgeProfile ?? fallback?.knowledgeProfile;
+  const resolvedWorkbookMedia = resolveWorkbookMediaForSlug(slug, workbookMedia).map(normalizeMediaUrlItem);
+  const workbookFallbackMedia = (workbookFallbackData?.media ?? fallbackMedia).map(normalizeMediaUrlItem);
+  const workbookKnowledgeProfile = mergeKnowledgeProfile(workbookData?.knowledgeProfile, fallback?.knowledgeProfile);
   const destinationIdentityTokens = buildDestinationIdentityTokens({ city, country, title: workbookData?.title || city, slug: workbookData?.slug || slug });
   const allowFallbackSupplementation = Boolean(workbookData?.source === "runtime-loader" && isWorkbookFallbackMediaDestination(slug));
-  const filteredWorkbookMedia = mergeDestinationSpecificMedia(resolvedWorkbookMedia, workbookFallbackData?.media ?? fallbackMedia, destinationIdentityTokens, allowFallbackSupplementation);
+  const filteredWorkbookMedia = mergeDestinationSpecificMedia(resolvedWorkbookMedia, workbookFallbackMedia, destinationIdentityTokens, allowFallbackSupplementation);
 
   return {
     ...(fallback ?? {
@@ -1148,7 +1274,7 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
   }
 
   try {
-    const response = await supabaseFetch(`/rest/v1/destinations?slug=eq.${encodeURIComponent(normalizedSlug)}&select=*`, {
+    const response = await supabaseFetch(`/rest/v1/destinations_catalog?slug=eq.${encodeURIComponent(normalizedSlug)}&select=*`, {
       cache: "no-store",
     });
 
@@ -1158,11 +1284,14 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
     logCanonicalDestinationBranch({ phase: "row-check", slug: normalizedSlug, rowFound: Boolean(row), rowDestinationKey: typeof row?.destination_key === "string" ? row.destination_key : null, rowSlug: typeof row?.slug === "string" ? row.slug : null });
 
     if (!row) {
-      const fallbackResponse = await supabaseFetch(`/rest/v1/destinations?select=*`, {
+      // Approved pilot destinations must resolve through exact slug/alias matching only — the fuzzy
+      // fallback search below can match them to an unrelated catalog row (e.g. a shared city/region name).
+      const skipFuzzyFallbackSearch = persistedRuntimeDestinationAliases.has(normalizedSlug);
+      const fallbackResponse = skipFuzzyFallbackSearch ? null : await supabaseFetch(`/rest/v1/destinations_catalog?select=*`, {
         cache: "no-store",
       });
 
-      if (fallbackResponse.ok) {
+      if (fallbackResponse?.ok) {
         const allRows = (await fallbackResponse.json()) as Array<Record<string, unknown>>;
         row = allRows.find((candidate) => matchDestinationRowToSlug(candidate, normalizedSlug));
         if (row) {
@@ -1191,7 +1320,7 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
       const persistedRuntimeResult = await loadPersistedDestinationFromRuntime(persistedRuntimeIdentity);
       if (persistedRuntimeResult.outcome === "SUCCESS" && persistedRuntimeResult.bundle) {
         logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "persisted-bundle", destinationKey: persistedRuntimeIdentity.destinationKey, destinationId: persistedRuntimeIdentity.destinationId, bundleIdentity: persistedRuntimeResult.bundle.identity });
-        return buildCanonicalDestinationFromPersistedBundle(normalizedSlug, fallbackDestination, persistedRuntimeResult.bundle);
+        return buildCanonicalDestinationFromPersistedBundle(normalizedSlug, fallbackDestination, persistedRuntimeResult.bundle, workbookData);
       }
       logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "row-workbook-merge", reason: "persisted-read-missed", persistedOutcome: persistedRuntimeResult.outcome });
     }
@@ -1420,7 +1549,12 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
       })) : [],
       aiScoringExplanation: String(row.ai_scoring_explanation ?? ""),
       premiumEditorialContent: buildWorkbookPremiumEditorialContent(workbookData, parsePremiumEditorialContent(row.premium_editorial_content) ?? fallbackDestination?.premiumEditorialContent ?? localDestinations.find((item) => item.slug === normalizedSlug)?.premiumEditorialContent),
-      knowledgeProfile: parseKnowledgeProfile(row.knowledge_profile ?? row.knowledgeProfile) ?? fallbackDestination?.knowledgeProfile ?? localDestinations.find((item) => item.slug === normalizedSlug)?.knowledgeProfile ?? buildDestinationKnowledgeProfile(localDestinations.find((item) => item.slug === normalizedSlug) ?? { city: String(row.city ?? ""), country: String(row.country ?? "") }),
+      knowledgeProfile: mergeKnowledgeProfile(
+        mergeKnowledgeProfile(parseKnowledgeProfile(row.knowledge_profile ?? row.knowledgeProfile), workbookData?.knowledgeProfile),
+        fallbackDestination?.knowledgeProfile
+          ?? localDestinations.find((item) => item.slug === normalizedSlug)?.knowledgeProfile
+          ?? buildDestinationKnowledgeProfile(localDestinations.find((item) => item.slug === normalizedSlug) ?? { city: String(row.city ?? ""), country: String(row.country ?? "") }),
+      ),
       neighborhoodIntelligence: hasImportedPlaceFacts
         ? Object.values(importedPlaces.reduce<Record<string, NeighborhoodIntelligenceGroup>>((accumulator, placeRow) => {
             const category = placeRow.category || "Places";
@@ -1485,6 +1619,11 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
     logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "row-workbook-merge", destinationKey: workbookData?.destinationKey ?? null, workbookSlug: workbookData?.slug ?? null, rowDestinationKey: typeof row?.destination_key === "string" ? row.destination_key : null });
     return destination;
   } catch {
+    if (workbookData) {
+      logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "workbook-only", reason: "supabase-exception" });
+      return buildWorkbookDestinationFromData(normalizedSlug, workbookData);
+    }
+
     const fallback = buildFallbackCanonicalDestination(normalizedSlug);
     if (!fallback) return null;
     logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "fallback", reason: "exception" });

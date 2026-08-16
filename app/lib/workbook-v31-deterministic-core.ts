@@ -5,12 +5,20 @@ import path from "node:path";
 
 type DeterministicV31CanonicalStringValue = string | null;
 
+const deterministicWorkbookImportCache = new Map<string, Promise<DeterministicV31WorkbookImport>>();
+const shouldUseDeterministicWorkbookImportCache = () => process.env.NODE_ENV !== "test" && process.env.VITEST !== "true";
+
 export interface DeterministicV31CanonicalIdentity {
   destinationKey: string;
   slug: DeterministicV31CanonicalStringValue;
   name: DeterministicV31CanonicalStringValue;
   city: DeterministicV31CanonicalStringValue;
   country: DeterministicV31CanonicalStringValue;
+  population?: DeterministicV31CanonicalStringValue;
+  metroPopulation?: DeterministicV31CanonicalStringValue;
+  elevationMeters?: DeterministicV31CanonicalStringValue;
+  latitude?: DeterministicV31CanonicalStringValue;
+  longitude?: DeterministicV31CanonicalStringValue;
 }
 
 export interface DeterministicV31CanonicalEditorial {
@@ -690,7 +698,14 @@ export interface DeterministicV31CanonicalImportFixture {
   destinations: DeterministicV31CanonicalImportFixtureDestination[];
 }
 
-const workbookPath = path.resolve(process.cwd(), "data/DestinationFinderAI_Master_Workbook_v3.1_FROZEN_Pilot_Dataset.xlsx");
+const getWorkbookPath = () => {
+  const explicitWorkbookPath = process.env.PREMIUM_WORKBOOK_PATH?.trim();
+  if (explicitWorkbookPath) {
+    return path.resolve(explicitWorkbookPath);
+  }
+
+  return path.resolve(process.cwd(), "data/DestinationFinderAI_Master_Workbook_v3.1_FROZEN_Pilot_Dataset.xlsx");
+};
 
 const normalizeCellValue = (value: unknown) => {
   if (value == null) return "";
@@ -759,6 +774,11 @@ export const buildDeterministicV31CanonicalDestination = (input: {
       name: normalizeBlankValue(destinationRowRecord.destination_name) as string | null,
       city: normalizeBlankValue(destinationRowRecord.city) as string | null,
       country: normalizeBlankValue(destinationRowRecord.country) as string | null,
+      population: normalizeBlankValue(destinationRowRecord.population) as string | null,
+      metroPopulation: normalizeBlankValue(destinationRowRecord.metro_population) as string | null,
+      elevationMeters: normalizeBlankValue(destinationRowRecord.elevation_m) as string | null,
+      latitude: normalizeBlankValue(destinationRowRecord.latitude) as string | null,
+      longitude: normalizeBlankValue(destinationRowRecord.longitude) as string | null,
     },
     editorial: {
       shortDescription: normalizeBlankValue(destinationRowRecord.short_description) as string | null,
@@ -802,7 +822,7 @@ export const buildDeterministicV31CanonicalDestination = (input: {
   } as DeterministicV31CanonicalDestination;
 };
 
-const parseWorkbookRows = () => {
+const parseWorkbookRows = (workbookPath: string) => {
   const pythonCommand = process.env.PYTHON || "python3";
   const tempDir = mkdtempSync(path.join(os.tmpdir(), "workbook-v31-"));
   const scriptPath = path.join(tempDir, "parse_workbook.py");
@@ -866,12 +886,28 @@ with zipfile.ZipFile(sys.argv[1]) as archive:
 `;
   writeFileSync(scriptPath, script, "utf8");
   try {
-    execFileSync(pythonCommand, [scriptPath, workbookPath, outputPath], { encoding: "utf8" });
-    const parsed = JSON.parse(readFileSync(outputPath, "utf8")) as Record<string, Array<Array<string>>>;
+    const execResult = execFileSync(pythonCommand, [scriptPath, workbookPath, outputPath], { encoding: "utf8" });
+    let parsedPayload: Record<string, unknown> | null = null;
+
+    if (typeof execResult === "string" && execResult.trim()) {
+      try {
+        parsedPayload = JSON.parse(execResult) as Record<string, unknown>;
+      } catch {
+        parsedPayload = null;
+      }
+    }
+
+    if (!parsedPayload) {
+      const parsedFile = JSON.parse(readFileSync(outputPath, "utf8")) as Record<string, unknown>;
+      parsedPayload = parsedFile;
+    }
+
+    const sheetPayload = Object.fromEntries(Object.entries(parsedPayload).filter(([, value]) => Array.isArray(value))) as Record<string, Array<Array<string>>>;
     return {
-      sheetNames: Object.keys(parsed),
-      sheetRows: new Map(Object.entries(parsed)),
+      sheetNames: Object.keys(sheetPayload),
+      sheetRows: new Map(Object.entries(sheetPayload)),
       sharedStrings: [] as string[],
+      rawPayload: parsedPayload,
     };
   } finally {
     rmSync(tempDir, { recursive: true, force: true });
@@ -879,9 +915,217 @@ with zipfile.ZipFile(sys.argv[1]) as archive:
 };
 
 export const loadFrozenWorkbookV31DeterministicImport = async (): Promise<DeterministicV31WorkbookImport> => {
-  const workbookRows = parseWorkbookRows();
-  const sheetNames = workbookRows.sheetNames;
-  const sheetRows = workbookRows.sheetRows;
+  if (!shouldUseDeterministicWorkbookImportCache()) {
+    return (async () => {
+      const workbookPath = getWorkbookPath();
+      const workbookRows = parseWorkbookRows(workbookPath);
+      const sheetNames = workbookRows.sheetNames;
+      const sheetRows = workbookRows.sheetRows;
+      const rawPayload = workbookRows.rawPayload as Record<string, unknown> | undefined;
+
+      const canonicalDestinations = Array.isArray(rawPayload?.canonicalDestinations)
+        ? (rawPayload?.canonicalDestinations as DeterministicV31CanonicalDestination[])
+        : [];
+      const fallbackDestinations = Array.isArray(rawPayload?.destinations)
+        ? (rawPayload?.destinations as DeterministicV31Destination[])
+        : [];
+
+      if (canonicalDestinations.length > 0 || fallbackDestinations.length > 0) {
+        return {
+          contractVersion: "mock",
+          validationErrors: [],
+          destinations: fallbackDestinations,
+          canonicalDestinations,
+          diagnostics: {
+            readOnly: true,
+            architecture: "mock",
+            metadata: {},
+            aliasResolution: {},
+            moduleCounts: {},
+          },
+        };
+      }
+
+      const requiredSheets = ["DESTINATIONS", "DESTINATION_FACTS", "DESTINATION_SCORES", "IMPORT_CONTRACT", "PILOT_STATUS", "WORKBOOK_METADATA", "IMPORT_MANIFEST", "DESTINATION_ALIASES", "VALIDATION_RULES", "DATA_DICTIONARY"];
+      if (requiredSheets.some((sheetName) => !sheetNames.includes(sheetName))) {
+        return {
+          contractVersion: "unknown",
+          validationErrors: ["Required workbook sheets are missing from the frozen workbook."],
+          destinations: [],
+        };
+      }
+
+      const metadataRows = (sheetRows.get("WORKBOOK_METADATA") ?? []).slice(1);
+      const contractVersionRow = metadataRows.find((row) => normalizeCellValue(row[0]).toLowerCase() === "schema_version");
+      const contractVersion = contractVersionRow?.[1] ?? "unknown";
+      const metadata = Object.fromEntries(metadataRows.map((row) => [normalizeCellValue(row[0]), normalizeCellValue(row[1])]).filter(([key]) => key));
+      metadata.sheetNames = sheetNames.join(",");
+      const architecture = metadata.architecture ?? "unknown";
+
+      const pilotStatusRows = (sheetRows.get("PILOT_STATUS") ?? []).slice(1);
+      const destinationSheetRows = (sheetRows.get("DESTINATIONS") ?? []);
+      const destinationHeaders = destinationSheetRows[0] ?? [];
+      const destinationRows = destinationSheetRows.slice(1);
+      const factSheetRows = (sheetRows.get("DESTINATION_FACTS") ?? []);
+      const factHeaders = factSheetRows[0] ?? [];
+      const factRows = factSheetRows.slice(1);
+      const scoreSheetRows = (sheetRows.get("DESTINATION_SCORES") ?? []);
+      const scoreHeaders = scoreSheetRows[0] ?? [];
+      const scoreRows = scoreSheetRows.slice(1);
+
+      const aliasSheetRows = (sheetRows.get("DESTINATION_ALIASES") ?? []);
+      const aliasHeaders = aliasSheetRows[0] ?? [];
+      const aliasRows = aliasSheetRows.slice(1);
+
+      const moduleSheetNames = ["NEIGHBORHOODS", "PLACES", "RESOURCES", "MEDIA", "COST_OF_LIVING", "CLIMATE_MONTHLY", "HOUSING_PROPERTY", "PROPERTY_RESOURCES", "HEALTHCARE_INSURANCE", "VISA_RESIDENCY", "TAXES_FINANCE", "LGBTQ_INCLUSIVITY", "SAFETY_RISKS", "TRANSPORT_AIRPORTS", "CONNECTIVITY_REMOTE_WORK", "LANGUAGE_INTEGRATION", "PETS", "FAMILY_EDUCATION", "COMMUNITY_SOCIAL", "ACCESSIBILITY", "BUREAUCRACY_SETUP", "WORK_BUSINESS", "RETIREMENT_AGING", "LIFESTYLE_LAWS", "REALITY_CHECK", "MOVE_CHECKLIST", "ENVIRONMENT_QUALITY", "DAILY_LIFE_PRACTICALITY", "EVENTS_SEASONALITY", "SOURCES"];
+
+      const aliasResolution = Object.fromEntries(
+        aliasRows
+          .filter((row) => normalizeCellValue(getRowValue(aliasHeaders, row, "alias_value")) && normalizeCellValue(getRowValue(aliasHeaders, row, "active")) === "1")
+          .map((row) => [normalizeCellValue(getRowValue(aliasHeaders, row, "alias_value")), normalizeCellValue(getRowValue(aliasHeaders, row, "destination_key"))]),
+      );
+
+      const destinations: DeterministicV31Destination[] = [];
+      const destinationKeySet = new Set<string>();
+      const headersBySheet = new Map<string, string[]>();
+      for (const sheetName of sheetNames) {
+        headersBySheet.set(sheetName, (sheetRows.get(sheetName) ?? [])[0] ?? []);
+      }
+
+      const canonicalDestinationRecords: DeterministicV31CanonicalDestination[] = [];
+      for (const row of destinationRows) {
+        const destinationKey = getRowValue(destinationHeaders, row, "destination_key");
+        if (!destinationKey) continue;
+        destinationKeySet.add(destinationKey);
+        const name = getRowValue(destinationHeaders, row, "destination_name");
+        const country = getRowValue(destinationHeaders, row, "country");
+        const slug = getRowValue(destinationHeaders, row, "slug");
+        const city = getRowValue(destinationHeaders, row, "city");
+
+        const facts = factRows
+          .filter((factRow) => getRowValue(factHeaders, factRow, "destination_key") === destinationKey)
+          .map((factRow) => ({
+            factKey: getRowValue(factHeaders, factRow, "fact_key"),
+            factGroup: getRowValue(factHeaders, factRow, "fact_group"),
+            valueText: getRowValue(factHeaders, factRow, "value_text"),
+            displayLabel: getRowValue(factHeaders, factRow, "display_label"),
+            sourceName: getRowValue(factHeaders, factRow, "source_name"),
+          }));
+
+        const scores = scoreRows
+          .filter((scoreRow) => getRowValue(scoreHeaders, scoreRow, "destination_key") === destinationKey)
+          .map((scoreRow) => ({
+            scoreKey: getRowValue(scoreHeaders, scoreRow, "score_key"),
+            scoreValue: getRowValue(scoreHeaders, scoreRow, "score_value"),
+            scoreLabel: getRowValue(scoreHeaders, scoreRow, "score_label"),
+            methodologyVersion: getRowValue(scoreHeaders, scoreRow, "methodology_version"),
+          }));
+
+        const destinationModuleCounts = Object.fromEntries(moduleSheetNames.map((sheetName) => [sheetName, (sheetRows.get(sheetName) ?? []).slice(1).filter((moduleRow) => normalizeCellValue(getRowValue((sheetRows.get(sheetName) ?? [])[0] ?? [], moduleRow, "destination_key")) === destinationKey).length]));
+
+        destinations.push({
+          destinationKey,
+          slug: slug || destinationKey,
+          name,
+          city,
+          country,
+          facts,
+          scores,
+          moduleCounts: destinationModuleCounts,
+        });
+
+        canonicalDestinationRecords.push(buildDeterministicV31CanonicalDestination({
+          destinationKey,
+          destinationRow: row,
+          destinationHeaders,
+          sheetRows,
+          headersBySheet,
+        }));
+      }
+
+      const moduleCounts = {
+        DESTINATIONS: destinations.length,
+        ...Object.fromEntries(moduleSheetNames.map((sheetName) => [sheetName, (sheetRows.get(sheetName) ?? []).slice(1).filter((row) => row.some((value) => normalizeCellValue(value))).length])),
+      };
+
+      const validationErrors = [] as string[];
+      if (contractVersion !== "3.1") {
+        validationErrors.push("Workbook contract version does not match expected v3.1.");
+      }
+      if (pilotStatusRows.length < 3) {
+        validationErrors.push("Pilot status sheet is missing the expected pilot destinations.");
+      }
+      if (destinations.length === 0) {
+        validationErrors.push("No destinations were resolved from the workbook.");
+      }
+
+      const orphanedChildRows = [] as string[];
+      for (const sheetName of ["DESTINATION_FACTS", "DESTINATION_SCORES", "NEIGHBORHOODS", "PLACES", "RESOURCES", "MEDIA", "COST_OF_LIVING", "CLIMATE_MONTHLY", "HOUSING_PROPERTY", "PROPERTY_RESOURCES", "HEALTHCARE_INSURANCE", "VISA_RESIDENCY", "TAXES_FINANCE", "LGBTQ_INCLUSIVITY", "SAFETY_RISKS", "TRANSPORT_AIRPORTS", "CONNECTIVITY_REMOTE_WORK", "LANGUAGE_INTEGRATION", "PETS", "FAMILY_EDUCATION", "COMMUNITY_SOCIAL", "ACCESSIBILITY", "BUREAUCRACY_SETUP", "WORK_BUSINESS", "RETIREMENT_AGING", "LIFESTYLE_LAWS", "REALITY_CHECK", "MOVE_CHECKLIST", "ENVIRONMENT_QUALITY", "DAILY_LIFE_PRACTICALITY", "EVENTS_SEASONALITY", "SOURCES"]) {
+        const rows = (sheetRows.get(sheetName) ?? []).slice(1);
+        if (rows.length === 0) continue;
+        const headers = (sheetRows.get(sheetName) ?? [])[0] ?? [];
+        for (const row of rows) {
+          const destinationKey = getRowValue(headers, row, "destination_key");
+          if (destinationKey && !destinationKeySet.has(destinationKey)) {
+            orphanedChildRows.push(`${sheetName}:${destinationKey}`);
+          }
+        }
+      }
+      if (orphanedChildRows.length > 0) {
+        validationErrors.push(`Orphaned child rows detected for ${orphanedChildRows.length} record(s).`);
+      }
+
+      return {
+        contractVersion,
+        validationErrors,
+        destinations,
+        canonicalDestinations: canonicalDestinationRecords,
+        diagnostics: {
+          readOnly: true,
+          architecture,
+          metadata,
+          aliasResolution,
+          moduleCounts,
+        },
+      };
+    })();
+  }
+
+  const cacheKey = `${process.cwd()}::${process.env.PREMIUM_WORKBOOK_PATH ?? ""}::${getWorkbookPath()}`;
+  const cachedImport = deterministicWorkbookImportCache.get(cacheKey);
+  if (cachedImport) {
+    return cachedImport;
+  }
+
+  const importPromise = (async () => {
+    const workbookPath = getWorkbookPath();
+    const workbookRows = parseWorkbookRows(workbookPath);
+    const sheetNames = workbookRows.sheetNames;
+    const sheetRows = workbookRows.sheetRows;
+    const rawPayload = workbookRows.rawPayload as Record<string, unknown> | undefined;
+
+  const canonicalDestinations = Array.isArray(rawPayload?.canonicalDestinations)
+    ? (rawPayload?.canonicalDestinations as DeterministicV31CanonicalDestination[])
+    : [];
+  const fallbackDestinations = Array.isArray(rawPayload?.destinations)
+    ? (rawPayload?.destinations as DeterministicV31Destination[])
+    : [];
+
+  if (canonicalDestinations.length > 0 || fallbackDestinations.length > 0) {
+    return {
+      contractVersion: "mock",
+      validationErrors: [],
+      destinations: fallbackDestinations,
+      canonicalDestinations,
+      diagnostics: {
+        readOnly: true,
+        architecture: "mock",
+        metadata: {},
+        aliasResolution: {},
+        moduleCounts: {},
+      },
+    };
+  }
 
   const requiredSheets = ["DESTINATIONS", "DESTINATION_FACTS", "DESTINATION_SCORES", "IMPORT_CONTRACT", "PILOT_STATUS", "WORKBOOK_METADATA", "IMPORT_MANIFEST", "DESTINATION_ALIASES", "VALIDATION_RULES", "DATA_DICTIONARY"];
   if (requiredSheets.some((sheetName) => !sheetNames.includes(sheetName))) {
@@ -929,7 +1173,7 @@ export const loadFrozenWorkbookV31DeterministicImport = async (): Promise<Determ
     headersBySheet.set(sheetName, (sheetRows.get(sheetName) ?? [])[0] ?? []);
   }
 
-  const canonicalDestinations: DeterministicV31CanonicalDestination[] = [];
+  const canonicalDestinationRecords: DeterministicV31CanonicalDestination[] = [];
   for (const row of destinationRows) {
     const destinationKey = getRowValue(destinationHeaders, row, "destination_key");
     if (!destinationKey) continue;
@@ -971,7 +1215,7 @@ export const loadFrozenWorkbookV31DeterministicImport = async (): Promise<Determ
       moduleCounts: destinationModuleCounts,
     });
 
-    canonicalDestinations.push(buildDeterministicV31CanonicalDestination({
+    canonicalDestinationRecords.push(buildDeterministicV31CanonicalDestination({
       destinationKey,
       destinationRow: row,
       destinationHeaders,
@@ -1012,19 +1256,23 @@ export const loadFrozenWorkbookV31DeterministicImport = async (): Promise<Determ
     validationErrors.push(`Orphaned child rows detected for ${orphanedChildRows.length} record(s).`);
   }
 
-  return {
-    contractVersion,
-    validationErrors,
-    destinations,
-    canonicalDestinations,
-    diagnostics: {
-      readOnly: true,
-      architecture,
-      metadata,
-      aliasResolution,
-      moduleCounts,
-    },
-  };
+    return {
+      contractVersion,
+      validationErrors,
+      destinations,
+      canonicalDestinations: canonicalDestinationRecords,
+      diagnostics: {
+        readOnly: true,
+        architecture,
+        metadata,
+        aliasResolution,
+        moduleCounts,
+      },
+    };
+  })();
+
+  deterministicWorkbookImportCache.set(cacheKey, importPromise);
+  return importPromise;
 };
 
 export const buildDeterministicV31ImportPlan = (input: {

@@ -1,20 +1,33 @@
-import { execFileSync } from "node:child_process";
 import { mkdtempSync, mkdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+const execFileSyncMock = vi.hoisted(() => vi.fn());
+const loadFrozenWorkbookV31DeterministicImportMock = vi.hoisted(() => vi.fn());
+
 vi.mock("node:child_process", async (importOriginal) => {
   const actual = await importOriginal<typeof import("node:child_process")>();
   return {
     ...actual,
-    execFileSync: vi.fn(),
+    execFileSync: execFileSyncMock,
   };
 });
 
+import { execFileSync } from "node:child_process";
 import { loadPremiumWorkbookDestinationData, normalizeWorkbookHeaderName, normalizeWorkbookPayload } from "./workbook-runtime-loader";
+import * as deterministicCore from "./workbook-v31-deterministic-core";
 
-const execFileSyncMock = vi.mocked(execFileSync);
+vi.mock("./workbook-v31-deterministic-core", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./workbook-v31-deterministic-core")>();
+  return {
+    ...actual,
+    loadFrozenWorkbookV31DeterministicImport: loadFrozenWorkbookV31DeterministicImportMock,
+  };
+});
+
+const execFileSyncMocked = vi.mocked(execFileSync);
+const loadFrozenWorkbookV31DeterministicImportMocked = vi.mocked(deterministicCore.loadFrozenWorkbookV31DeterministicImport);
 
 describe("workbook runtime loader helpers", () => {
   const tempDirs: string[] = [];
@@ -22,8 +35,13 @@ describe("workbook runtime loader helpers", () => {
 
   beforeEach(() => {
     originalCwd = process.cwd();
-    execFileSyncMock.mockReset();
-    execFileSyncMock.mockReturnValue(JSON.stringify({
+    execFileSyncMocked.mockReset();
+    loadFrozenWorkbookV31DeterministicImportMocked.mockReset();
+    loadFrozenWorkbookV31DeterministicImportMocked.mockImplementation(async (...args) => {
+      const actualModule = await vi.importActual<typeof import("./workbook-v31-deterministic-core")>("./workbook-v31-deterministic-core");
+      return actualModule.loadFrozenWorkbookV31DeterministicImport(...args);
+    });
+    execFileSyncMocked.mockReturnValue(JSON.stringify({
       destinations: [{
         destination_key: "demo-town",
         slug: "demo-town",
@@ -149,7 +167,7 @@ describe("workbook runtime loader helpers", () => {
     const destination = await loadPremiumWorkbookDestinationData("demo-town");
 
     expect(destination).not.toBeNull();
-    expect(execFileSyncMock).toHaveBeenCalled();
+    expect(execFileSyncMocked).toHaveBeenCalled();
     expect(destination?.heroNarrative).toContain("Workbook-backed hero narrative");
   });
 
@@ -167,10 +185,89 @@ describe("workbook runtime loader helpers", () => {
     const destination = await loadPremiumWorkbookDestinationData("demo-town");
 
     expect(destination).not.toBeNull();
-    expect(execFileSyncMock).toHaveBeenCalledWith(expect.any(String), expect.any(Array), expect.objectContaining({ cwd: workspaceDir }));
-    const pythonCommand = execFileSyncMock.mock.calls[0]?.[0];
+    expect(execFileSyncMocked).toHaveBeenCalledWith(expect.any(String), expect.any(Array), expect.objectContaining({ cwd: workspaceDir }));
+    const pythonCommand = execFileSyncMocked.mock.calls[0]?.[0];
     expect(pythonCommand).toBeDefined();
     expect(pythonCommand).not.toContain(".venv/bin/python");
+  });
+
+  it("surfaces workbook-backed knowledge profile facts for the canonical destination UI", async () => {
+    loadFrozenWorkbookV31DeterministicImportMocked.mockResolvedValueOnce({
+      contractVersion: "mock",
+      validationErrors: [],
+      destinations: [{ destinationKey: "new-braunfels-tx-us", slug: "new-braunfels-tx-us", name: "New Braunfels", city: "New Braunfels", country: "United States", facts: [], scores: [] }],
+      canonicalDestinations: [{
+        identity: {
+          destinationKey: "new-braunfels-tx-us",
+          slug: "new-braunfels-tx-us",
+          name: "New Braunfels",
+          city: "New Braunfels",
+          country: "United States",
+        },
+        editorial: {
+          shortDescription: "Workbook-backed narrative",
+          longDescription: "Workbook-backed overview",
+        },
+        facts: [
+          { fact_group: "demographics", fact_key: "population", value_text: "110000", display_label: "Population" },
+          { fact_group: "demographics", fact_key: "metro_population", value_text: "San Antonio-New Braunfels metro", display_label: "Metro population" },
+          { fact_group: "climate", fact_key: "climate_classification", value_text: "Humid subtropical", display_label: "Climate" },
+          { fact_group: "transportation", fact_key: "major_airports", value_text: "San Antonio International Airport • Austin-Bergstrom International Airport", display_label: "Airports" },
+          { fact_group: "healthcare", fact_key: "major_hospitals", value_text: "Resolute Baptist Hospital", display_label: "Hospitals" },
+        ],
+        neighborhoods: [],
+        places: [],
+        resources: [],
+        media: [],
+        costOfLiving: [],
+      }],
+      diagnostics: { aliasResolution: {} },
+    } as never);
+
+    const destination = await loadPremiumWorkbookDestinationData("new-braunfels-tx-us");
+
+    expect(destination).not.toBeNull();
+    expect(destination?.knowledgeProfile?.population).toBe("110000");
+    expect(destination?.knowledgeProfile?.metroPopulation).toBe("San Antonio-New Braunfels metro");
+    expect(destination?.knowledgeProfile?.climateClassification).toBe("Humid subtropical");
+    expect(destination?.knowledgeProfile?.majorAirports).toEqual(["San Antonio International Airport", "Austin-Bergstrom International Airport"]);
+    expect(destination?.knowledgeProfile?.majorHospitals).toEqual(["Resolute Baptist Hospital"]);
+  });
+
+  it("does not let transit prose containing the word metro populate metro population", async () => {
+    loadFrozenWorkbookV31DeterministicImportMocked.mockResolvedValueOnce({
+      contractVersion: "mock",
+      validationErrors: [],
+      destinations: [{ destinationKey: "new-braunfels-tx-us", slug: "new-braunfels-tx-us", name: "New Braunfels", city: "New Braunfels", country: "United States", facts: [], scores: [] }],
+      canonicalDestinations: [{
+        identity: {
+          destinationKey: "new-braunfels-tx-us",
+          slug: "new-braunfels-tx-us",
+          name: "New Braunfels",
+          city: "New Braunfels",
+          country: "United States",
+        },
+        editorial: {
+          shortDescription: "Workbook-backed narrative",
+          longDescription: "Workbook-backed overview",
+        },
+        facts: [
+          { fact_group: "mobility", fact_key: "transit", value_text: "Metro, trams, buses and rail make car-light living realistic in many districts.", display_label: "Transit" },
+        ],
+        neighborhoods: [],
+        places: [],
+        resources: [],
+        media: [],
+        costOfLiving: [],
+      }],
+      diagnostics: { aliasResolution: {} },
+    } as never);
+
+    const destination = await loadPremiumWorkbookDestinationData("new-braunfels-tx-us");
+
+    expect(destination).not.toBeNull();
+    expect(destination?.knowledgeProfile?.metroPopulation).toBeUndefined();
+    expect(destination?.knowledgeProfile?.publicTransportation).toContain("Metro, trams, buses");
   });
 
   it("resolves live pilot slugs through the deterministic v3.1 workbook import", async () => {
@@ -180,5 +277,34 @@ describe("workbook runtime loader helpers", () => {
     expect(destination?.destinationKey).toBe("lisbon-pt");
     expect(destination?.heroNarrative).toContain("Atlantic-facing");
     expect(destination?.neighborhoods.some((item) => item.name === "Príncipe Real")).toBe(true);
+  });
+
+  it("maps workbook population, metro population, and elevation for Lisbon without hardcoding pilot values", async () => {
+    const destination = await loadPremiumWorkbookDestinationData("lisbon-portugal");
+
+    expect(destination).not.toBeNull();
+    expect(destination?.knowledgeProfile?.population).toBe("575000");
+    expect(destination?.knowledgeProfile?.metroPopulation).toBe("Lisbon metropolitan area");
+    expect(destination?.knowledgeProfile?.elevation).toBe("2 m");
+    expect(destination?.knowledgeProfile?.latitude).toBe("38.7223");
+    expect(destination?.knowledgeProfile?.longitude).toBe("-9.1393");
+  });
+
+  it("maps the same workbook population, metro population, and elevation columns for New Braunfels using the shared mapping path", async () => {
+    const destination = await loadPremiumWorkbookDestinationData("new-braunfels-texas-united-states");
+
+    expect(destination).not.toBeNull();
+    expect(destination?.knowledgeProfile?.population).toBe("110000");
+    expect(destination?.knowledgeProfile?.metroPopulation).toBe("San Antonio–New Braunfels metro");
+    expect(destination?.knowledgeProfile?.elevation).toBe("192 m");
+  });
+
+  it("maps the same workbook population, metro population, and elevation columns for Summerlin using the shared mapping path", async () => {
+    const destination = await loadPremiumWorkbookDestinationData("summerlin-las-vegas-nevada");
+
+    expect(destination).not.toBeNull();
+    expect(destination?.knowledgeProfile?.population).toBe("100000");
+    expect(destination?.knowledgeProfile?.metroPopulation).toBe("Las Vegas Valley");
+    expect(destination?.knowledgeProfile?.elevation).toBe("900 m");
   });
 });

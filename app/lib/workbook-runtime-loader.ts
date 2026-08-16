@@ -63,6 +63,9 @@ export type PremiumWorkbookNormalizedDestinationData = {
     altText: string;
     caption: string;
     isPrimary: boolean;
+    sourceUrl?: string;
+    attribution?: string;
+    license?: string;
   }>;
   costRecords: Array<{
     category: string;
@@ -111,6 +114,7 @@ export type PremiumWorkbookNormalizedDestinationData = {
 };
 
 const workbookCache = new Map<string, PremiumWorkbookNormalizedDestinationData | null>();
+const shouldUseWorkbookRuntimeCache = () => process.env.NODE_ENV !== "test" && process.env.VITEST !== "true";
 
 export const normalizeWorkbookHeaderName = (value: string | null | undefined) => {
   if (typeof value !== "string") return "";
@@ -201,6 +205,138 @@ const normalizeTextValue = (value: string | null | undefined) => {
   return value.trim();
 };
 
+const splitFactListValue = (value: string | null | undefined) => {
+  if (typeof value !== "string") {
+    return [];
+  }
+
+  return value
+    .split(/\n|\r|•|;|,/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+};
+
+const getFactTextValue = (fact: Record<string, unknown>) => {
+  const candidates = [fact.valueText, fact.value_text, fact.value, fact.text, fact.displayValue, fact.display_value, fact.factValue, fact.fact_value];
+  for (const candidate of candidates) {
+    if (typeof candidate === "string" && candidate.trim()) {
+      return candidate.trim();
+    }
+    if (typeof candidate === "number") {
+      return String(candidate);
+    }
+  }
+  return "";
+};
+
+const findFactValue = (facts: Array<Record<string, unknown>> | undefined, aliases: string[]) => {
+  const normalizedAliases = aliases.map((alias) => alias.toLowerCase());
+
+  for (const fact of facts ?? []) {
+    const factGroup = normalizeTextValue(String(fact.factGroup ?? fact.fact_group ?? fact.group ?? fact.group_name ?? "")).toLowerCase();
+    const factKey = normalizeTextValue(String(fact.factKey ?? fact.fact_key ?? fact.key ?? fact.fact ?? "")).toLowerCase();
+    const displayLabel = normalizeTextValue(String(fact.displayLabel ?? fact.display_label ?? fact.label ?? fact.name ?? fact.title ?? "")).toLowerCase();
+    // Only match identity metadata (key/label/group) — matching against value text would let unrelated prose (e.g. "Metro, trams, buses...") satisfy aliases like "metro".
+    const identityFields = [factGroup, factKey, displayLabel].filter(Boolean);
+    if (normalizedAliases.some((alias) => identityFields.some((fieldValue) => fieldValue === alias || fieldValue.includes(alias)))) {
+      return getFactTextValue(fact);
+    }
+  }
+
+  return "";
+};
+
+const mergeFactsForKnowledgeProfile = (primaryFacts: Array<Record<string, unknown>> | undefined, fallbackFacts: Array<Record<string, unknown>> | undefined) => {
+  const mergedFacts = [...(primaryFacts ?? []), ...(fallbackFacts ?? [])];
+  const seen = new Set<string>();
+
+  return mergedFacts.filter((fact) => {
+    const signature = [
+      normalizeTextValue(String(fact.factGroup ?? fact.fact_group ?? fact.group ?? fact.group_name ?? "")),
+      normalizeTextValue(String(fact.factKey ?? fact.fact_key ?? fact.key ?? fact.fact ?? "")),
+      normalizeTextValue(String(fact.displayLabel ?? fact.display_label ?? fact.label ?? fact.name ?? fact.title ?? "")),
+      normalizeTextValue(String(fact.valueText ?? fact.value_text ?? fact.value ?? fact.text ?? fact.displayValue ?? fact.display_value ?? fact.factValue ?? fact.fact_value ?? "")),
+    ].join("::").toLowerCase();
+
+    if (!signature || seen.has(signature)) {
+      return false;
+    }
+
+    seen.add(signature);
+    return true;
+  });
+};
+
+const buildKnowledgeProfileFromFacts = (facts: Array<Record<string, unknown>> | undefined): CanonicalDestinationKnowledgeProfile => {
+  const population = normalizeTextValue(findFactValue(facts, ["population", "city_population", "resident_population", "population_size"]));
+  const metroPopulation = normalizeTextValue(findFactValue(facts, ["metro_population", "metro_area_population", "metro"]));
+  const elevation = normalizeTextValue(findFactValue(facts, ["elevation", "elevation_m", "elevation_ft"]));
+  const timeZone = normalizeTextValue(findFactValue(facts, ["time_zone", "timezone"]));
+  const climateClassification = normalizeTextValue(findFactValue(facts, ["climate_classification", "climate", "climate_type"]));
+  const rainfall = normalizeTextValue(findFactValue(facts, ["rainfall", "avg_rainfall", "annual_rainfall"]));
+  const sunshineHours = normalizeTextValue(findFactValue(facts, ["sunshine_hours", "sunshine", "avg_sunshine"]));
+  const humidity = normalizeTextValue(findFactValue(facts, ["humidity", "avg_humidity"]));
+  const walkability = normalizeTextValue(findFactValue(facts, ["walkability"]));
+  const publicTransportation = normalizeTextValue(findFactValue(facts, ["public_transportation", "transport", "transit"]));
+  const safety = normalizeTextValue(findFactValue(facts, ["safety"]));
+  const internetSpeed = normalizeTextValue(findFactValue(facts, ["internet_speed", "internet", "connectivity"]));
+  const costOfLiving = normalizeTextValue(findFactValue(facts, ["cost_of_living", "cost_level"]));
+  const healthcareQuality = normalizeTextValue(findFactValue(facts, ["healthcare_quality", "healthcare_system"]));
+  const majorAirports = splitFactListValue(findFactValue(facts, ["major_airports", "airports", "airport_access"]));
+  const majorHospitals = splitFactListValue(findFactValue(facts, ["major_hospitals", "hospitals", "healthcare"]));
+  const familySuitability = normalizeTextValue(findFactValue(facts, ["family_suitability", "family_friendly"]));
+  const retirementSuitability = normalizeTextValue(findFactValue(facts, ["retirement_suitability", "retirement"]));
+  const digitalNomadSuitability = normalizeTextValue(findFactValue(facts, ["digital_nomad_suitability", "digital_nomad"]));
+  const visaInfo = normalizeTextValue(findFactValue(facts, ["visa_info", "visa"]));
+  const residencyInfo = normalizeTextValue(findFactValue(facts, ["residency_info", "residency"]));
+
+  return {
+    population: population || undefined,
+    metroPopulation: metroPopulation || undefined,
+    elevation: elevation || undefined,
+    timeZone: timeZone || undefined,
+    climateClassification: climateClassification || undefined,
+    rainfall: rainfall || undefined,
+    sunshineHours: sunshineHours || undefined,
+    humidity: humidity || undefined,
+    walkability: walkability || undefined,
+    publicTransportation: publicTransportation || undefined,
+    safety: safety || undefined,
+    internetSpeed: internetSpeed || undefined,
+    costOfLiving: costOfLiving || undefined,
+    healthcareQuality: healthcareQuality || undefined,
+    majorAirports,
+    majorHospitals,
+    familySuitability: familySuitability || undefined,
+    retirementSuitability: retirementSuitability || undefined,
+    digitalNomadSuitability: digitalNomadSuitability || undefined,
+    visaInfo: visaInfo || undefined,
+    residencyInfo: residencyInfo || undefined,
+  };
+};
+
+// The DESTINATIONS sheet stores population/metro_population/elevation_m/latitude/longitude as dedicated columns rather than DESTINATION_FACTS rows, so they must be merged in separately from the fact-derived profile above.
+const applyIdentityKnowledgeProfileOverrides = (
+  profile: CanonicalDestinationKnowledgeProfile,
+  identity: { population?: string | null; metroPopulation?: string | null; elevationMeters?: string | null; latitude?: string | null; longitude?: string | null },
+): CanonicalDestinationKnowledgeProfile => {
+  const population = normalizeTextValue(identity.population ?? undefined);
+  const metroPopulation = normalizeTextValue(identity.metroPopulation ?? undefined);
+  const elevationMeters = normalizeTextValue(identity.elevationMeters ?? undefined);
+  const latitude = normalizeTextValue(identity.latitude ?? undefined);
+  const longitude = normalizeTextValue(identity.longitude ?? undefined);
+
+  return {
+    ...profile,
+    population: population || profile.population,
+    metroPopulation: metroPopulation || profile.metroPopulation,
+    elevation: (elevationMeters && /^-?\d+(\.\d+)?$/.test(elevationMeters) ? `${Number.parseFloat(elevationMeters)} m` : elevationMeters) || profile.elevation,
+    latitude: latitude || profile.latitude,
+    longitude: longitude || profile.longitude,
+  };
+};
+
+
 const workbookFileNames = [
   "DestinationFinderAI_Master_Workbook_v3.1_FROZEN_Pilot_Dataset.xlsx",
   "DestinationFinderAI_Master_Workbook_v3.0_Workbook_Only_No_Fallback.xlsx",
@@ -223,6 +359,7 @@ const findWorkbookPath = () => {
   const repoRoot = path.resolve(workspaceRoot, "..");
   const currentFileDir = path.dirname(fileURLToPath(import.meta.url));
   const candidateRoots = [
+    process.env.PREMIUM_WORKBOOK_PATH,
     workspaceRoot,
     repoRoot,
     path.resolve(workspaceRoot, "..", ".."),
@@ -230,60 +367,83 @@ const findWorkbookPath = () => {
     path.resolve(currentFileDir, "..", ".."),
     path.resolve(currentFileDir, "..", "..", ".."),
     path.resolve(currentFileDir, "..", "..", "..", ".."),
-  ].filter((value, index, values) => value && values.indexOf(value) === index);
-  const candidates = [process.env.PREMIUM_WORKBOOK_PATH].filter(Boolean) as string[];
+  ].filter((value, index, values) => Boolean(value) && values.indexOf(value) === index) as string[];
   const visitedDirectories = new Set<string>();
+  const searchQueue = candidateRoots.slice();
 
-  const addCandidatePaths = (root: string) => {
-    if (!root || visitedDirectories.has(root)) return;
+  const checkDirectory = (root: string): string | null => {
+    if (!root || visitedDirectories.has(root)) return null;
     visitedDirectories.add(root);
 
     for (const fileName of workbookFileNames) {
-      candidates.push(path.join(root, fileName));
-    }
-
-    const entries = readdirSync(root, { withFileTypes: true });
-    for (const entry of entries) {
-      if (!entry.isFile() || !isLikelyWorkbookFile(entry.name)) continue;
-      candidates.push(path.join(root, entry.name));
-    }
-
-    for (const subdirectory of ["data", "backups", "backup", "archives", "archive", "workbooks", "documents", "downloads"]) {
-      const subdirectoryPath = path.join(root, subdirectory);
-      if (!existsSync(subdirectoryPath)) continue;
-      for (const fileName of workbookFileNames) {
-        candidates.push(path.join(subdirectoryPath, fileName));
-      }
-
-      try {
-        const subEntries = readdirSync(subdirectoryPath, { withFileTypes: true });
-        for (const entry of subEntries) {
-          if (!entry.isFile() || !isLikelyWorkbookFile(entry.name)) continue;
-          candidates.push(path.join(subdirectoryPath, entry.name));
-        }
-      } catch {
-        /* ignore */
+      const candidate = path.join(root, fileName);
+      if (existsSync(candidate)) {
+        return candidate;
       }
     }
 
     try {
       const entries = readdirSync(root, { withFileTypes: true });
       for (const entry of entries) {
-        if (!entry.isDirectory()) continue;
-        const childPath = path.join(root, entry.name);
-        if ([".git", "node_modules", ".next", "dist", "coverage"].includes(entry.name)) continue;
-        addCandidatePaths(childPath);
+        if (!entry.isFile() || !isLikelyWorkbookFile(entry.name)) continue;
+        const candidate = path.join(root, entry.name);
+        if (existsSync(candidate)) {
+          return candidate;
+        }
       }
     } catch {
       /* ignore */
     }
+
+    for (const subdirectory of ["data", "backups", "backup", "archives", "archive", "workbooks", "documents", "downloads"]) {
+      const subdirectoryPath = path.join(root, subdirectory);
+      if (!existsSync(subdirectoryPath)) continue;
+      for (const fileName of workbookFileNames) {
+        const candidate = path.join(subdirectoryPath, fileName);
+        if (existsSync(candidate)) {
+          return candidate;
+        }
+      }
+
+      try {
+        const subEntries = readdirSync(subdirectoryPath, { withFileTypes: true });
+        for (const entry of subEntries) {
+          if (!entry.isFile() || !isLikelyWorkbookFile(entry.name)) continue;
+          const candidate = path.join(subdirectoryPath, entry.name);
+          if (existsSync(candidate)) {
+            return candidate;
+          }
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+
+    return null;
   };
 
-  for (const root of candidateRoots) {
-    addCandidatePaths(root);
+  while (searchQueue.length > 0) {
+    const currentRoot = searchQueue.shift();
+    if (!currentRoot) continue;
+    const foundCandidate = checkDirectory(currentRoot);
+    if (foundCandidate) {
+      return foundCandidate;
+    }
+
+    try {
+      const entries = readdirSync(currentRoot, { withFileTypes: true });
+      for (const entry of entries) {
+        if (!entry.isDirectory()) continue;
+        const childPath = path.join(currentRoot, entry.name);
+        if ([".git", "node_modules", ".next", "dist", "coverage"].includes(entry.name)) continue;
+        searchQueue.push(childPath);
+      }
+    } catch {
+      /* ignore */
+    }
   }
 
-  return candidates.find((candidate) => existsSync(candidate)) ?? null;
+  return null;
 };
 
 const getPythonExecutable = () => {
@@ -403,10 +563,27 @@ const loadDeterministicV31WorkbookDestinationData = async (slug: string): Promis
       return null;
     }
 
-    const canonicalDestination = importResult.canonicalDestinations.find((destination) => destination.identity.destinationKey === resolvedIdentity.value);
+    const canonicalDestination = importResult.canonicalDestinations.find((destination) => destination.identity.destinationKey === resolvedIdentity.value)
+      ?? importResult.canonicalDestinations.find((destination) => {
+        const candidateValues = [normalizedSlug, resolvedIdentity.value, destination.identity.slug, destination.identity.name, destination.identity.city, destination.identity.country]
+          .map((value) => normalizeSlugValue(String(value ?? "")))
+          .filter(Boolean);
+        return candidateValues.some((candidate) => candidate === normalizedSlug || candidate === normalizeSlugValue(resolvedIdentity.value ?? "") || candidate.includes(normalizedSlug) || normalizedSlug.includes(candidate));
+      });
     if (!canonicalDestination) {
       return null;
     }
+
+    const canonicalFacts = Array.isArray((canonicalDestination as { facts?: unknown }).facts)
+      ? ((canonicalDestination as { facts?: Array<Record<string, unknown>> }).facts ?? [])
+      : [];
+    const importDestinationFacts = Array.isArray((importResult.destinations.find((destination) => destination.destinationKey === resolvedIdentity.value) as { facts?: unknown } | undefined)?.facts)
+      ? ((importResult.destinations.find((destination) => destination.destinationKey === resolvedIdentity.value) as { facts?: Array<Record<string, unknown>> }).facts ?? [])
+      : [];
+    const knowledgeProfile = applyIdentityKnowledgeProfileOverrides(
+      buildKnowledgeProfileFromFacts(mergeFactsForKnowledgeProfile(canonicalFacts, importDestinationFacts)),
+      canonicalDestination.identity,
+    );
 
     const city = normalizeTextValue(canonicalDestination.identity.city);
     const country = normalizeTextValue(canonicalDestination.identity.country);
@@ -472,6 +649,9 @@ const loadDeterministicV31WorkbookDestinationData = async (slug: string): Promis
         altText: normalizeTextValue(item.caption) || normalizeTextValue(item.subject),
         caption: normalizeTextValue(item.caption) || normalizeTextValue(item.subject),
         isPrimary: normalizeTextValue(item.primary_image) === "1" || normalizeTextValue(item.primary_image).toLowerCase() === "true",
+        sourceUrl: normalizeTextValue(item.source_url),
+        attribution: normalizeTextValue(item.source_name) || normalizeTextValue(item.license_notes),
+        license: normalizeTextValue(item.license_notes),
       })).filter((item) => item.url),
       costRecords: (canonicalDestination.costOfLiving ?? []).map((item) => ({
         category: normalizeTextValue(item.category),
@@ -498,6 +678,7 @@ const loadDeterministicV31WorkbookDestinationData = async (slug: string): Promis
         media: canonicalDestination.media?.length ?? 0,
         costRecords: canonicalDestination.costOfLiving?.length ?? 0,
       },
+      knowledgeProfile,
       source: "runtime-loader",
     };
   } catch {
@@ -513,19 +694,25 @@ export async function loadPremiumWorkbookDestinationData(slug: string): Promise<
 
   const workbookPath = findWorkbookPath();
   const cacheKey = `${normalizedSlug}:${workbookPath ?? "__missing__"}`;
-  const cached = workbookCache.get(cacheKey);
-  if (cached !== undefined) {
-    return cached;
+  if (shouldUseWorkbookRuntimeCache()) {
+    const cached = workbookCache.get(cacheKey);
+    if (cached !== undefined) {
+      return cached;
+    }
   }
 
   const deterministicWorkbookData = await loadDeterministicV31WorkbookDestinationData(normalizedSlug);
   if (deterministicWorkbookData) {
-    workbookCache.set(cacheKey, deterministicWorkbookData);
+    if (shouldUseWorkbookRuntimeCache()) {
+      workbookCache.set(cacheKey, deterministicWorkbookData);
+    }
     return deterministicWorkbookData;
   }
 
   if (!workbookPath) {
-    workbookCache.set(cacheKey, null);
+    if (shouldUseWorkbookRuntimeCache()) {
+      workbookCache.set(cacheKey, null);
+    }
     return null;
   }
 
@@ -880,7 +1067,9 @@ print(json.dumps(payload, ensure_ascii=False))
     const parsed = normalizeWorkbookPayload(JSON.parse(output) as Record<string, unknown>);
     const selectedDestination = selectWorkbookDestination(parsed, slug);
     if (!selectedDestination) {
-      workbookCache.set(cacheKey, null);
+      if (shouldUseWorkbookRuntimeCache()) {
+        workbookCache.set(cacheKey, null);
+      }
       return null;
     }
 
@@ -996,10 +1185,14 @@ print(json.dumps(payload, ensure_ascii=False))
       source: "runtime-loader",
     };
 
-    workbookCache.set(cacheKey, normalizedDestination);
+    if (shouldUseWorkbookRuntimeCache()) {
+      workbookCache.set(cacheKey, normalizedDestination);
+    }
     return normalizedDestination;
   } catch {
-    workbookCache.set(cacheKey, null);
+    if (shouldUseWorkbookRuntimeCache()) {
+      workbookCache.set(cacheKey, null);
+    }
     return null;
   }
 }
