@@ -62,6 +62,7 @@ vi.mock("./workbook-runtime-loader", async (importOriginal) => {
 import { buildWorkbookDestinationFromData, getCanonicalDestination } from "./canonical-destination-loader";
 import { loadPersistedDestinationFromRuntime } from "./runtime/persisted-destination-read-runtime";
 import { supabaseFetch } from "./supabase";
+import { getWorkbookFallbackDestinationData } from "./workbook-new-braunfels-fallback";
 
 const mockedSupabaseFetch = vi.mocked(supabaseFetch);
 const mockedLoadPersistedDestinationFromRuntime = vi.mocked(loadPersistedDestinationFromRuntime);
@@ -185,9 +186,14 @@ describe("canonical destination loader", () => {
 
     const destination = await getCanonicalDestination("summerlin-las-vegas-nevada");
 
+    // The identity/isolation invariant this test protects: an unrelated catalog row (Las Vegas)
+    // must never leak into Summerlin's resolved identity or workbook-backed facts.
     expect(destination).not.toBeNull();
-    expect(destination?.city).toBe("Summerlin");
+    expect(destination?.city).toContain("Summerlin");
+    expect(destination?.city).not.toBe("Las Vegas");
     expect(destination?.title).not.toBe("Las Vegas");
+    expect(destination?.knowledgeProfile?.population).toBe("100000");
+    expect(destination?.knowledgeProfile?.metroPopulation).toBe("Las Vegas Valley");
   });
 
   it("uses workbook-backed knowledge profile facts when the Supabase row has no profile", async () => {
@@ -1438,40 +1444,51 @@ describe("canonical destination loader", () => {
   });
 
   it("uses workbook-backed fallback content for Supabase-backed destinations when the row is generic", async () => {
-    mockedSupabaseFetch.mockResolvedValue({
-      ok: true,
-      json: async () => [{
-        slug: "new-braunfels-texas-united-states",
-        city: "New Braunfels",
-        country: "United States",
-        title: "New Braunfels",
-        subtitle: "New Braunfels, United States",
-        hero_narrative: "Generic row copy that should not replace the richer workbook narrative.",
-        overview: "Generic row overview.",
-        editorial: "Generic row editorial.",
-        why_this_place_feels_distinct: "Generic row distinct copy.",
-        daily_life: "Generic row daily life copy.",
-        climate: "Generic row climate copy.",
-        transportation: "Generic row transportation copy.",
-        healthcare: "Generic row healthcare copy.",
-        cost_of_living: "Generic row cost of living copy.",
-        walkability: "Generic row walkability copy.",
-        internet: "Generic row internet copy.",
-        safety: "Generic row safety copy.",
-        neighborhoods: [],
-        resources: [],
-        videos: [],
-        media: [],
-        sections: {},
-        metadata: {},
-      }],
-    } as Response);
+    // The retired legacy fallback file must not be required for this to pass: getWorkbookFallbackDestinationData
+    // returns null for New Braunfels, so every assertion below has to come from the authoritative workbook data.
+    expect(getWorkbookFallbackDestinationData("new-braunfels-texas-united-states")).toBeNull();
+
+    mockedSupabaseFetch.mockImplementation(async (path: string) => {
+      if (path.includes("/rest/v1/destinations_catalog?")) {
+        return {
+          ok: true,
+          json: async () => [{
+            slug: "new-braunfels-texas-united-states",
+            city: "New Braunfels",
+            country: "United States",
+            title: "New Braunfels",
+            subtitle: "New Braunfels, United States",
+            hero_narrative: "Generic row copy that should not replace the richer workbook narrative.",
+            overview: "Generic row overview.",
+            editorial: "Generic row editorial.",
+            why_this_place_feels_distinct: "Generic row distinct copy.",
+            daily_life: "Generic row daily life copy.",
+            climate: "Generic row climate copy.",
+            transportation: "Generic row transportation copy.",
+            healthcare: "Generic row healthcare copy.",
+            cost_of_living: "Generic row cost of living copy.",
+            walkability: "Generic row walkability copy.",
+            internet: "Generic row internet copy.",
+            safety: "Generic row safety copy.",
+            neighborhoods: [],
+            resources: [],
+            videos: [],
+            media: [],
+            sections: {},
+            metadata: {},
+          }],
+        } as Response;
+      }
+
+      return { ok: true, json: async () => [] } as Response;
+    });
 
     const destination = await getCanonicalDestination("new-braunfels-texas-united-states");
 
     expect(destination).not.toBeNull();
     expect(destination?.heroNarrative).toContain("German heritage");
     expect(destination?.overview).toContain("river recreation");
+    // These labels/URLs are asserted directly against the authoritative workbook RESOURCES sheet, not the retired fallback.
     expect(destination?.resources).toEqual(expect.arrayContaining([
       expect.objectContaining({ label: "City of New Braunfels", url: "https://www.newbraunfels.gov/" }),
       expect.objectContaining({ label: "New Braunfels Tourism", url: "https://www.playinnewbraunfels.com/" }),
@@ -1509,26 +1526,29 @@ describe("canonical destination loader", () => {
     expect(destination?.costOfLivingProfile?.summary).toContain("Planning estimate");
   });
 
-  it("uses richer fallback content for Summerlin when the remote row is unavailable", async () => {
+  it("resolves Summerlin from authoritative workbook data when the remote row is unavailable", async () => {
+    // The retired legacy fallback file must not be required for this to pass.
+    expect(getWorkbookFallbackDestinationData("summerlin-las-vegas-nevada")).toBeNull();
+
     mockedSupabaseFetch.mockResolvedValue({
       ok: false,
       status: 500,
       json: async () => [],
     } as Response);
 
-    const destination = await getCanonicalDestination("summerlin");
+    const destination = await getCanonicalDestination("summerlin-las-vegas-nevada");
 
     expect(destination).not.toBeNull();
     expect(destination?.heroNarrative).toContain("master-planned");
     expect(destination?.overview).toContain("neighborhoods");
     expect(destination?.resources).toEqual(expect.arrayContaining([
-      expect.objectContaining({ label: "Visit Summerlin", url: "https://www.summerlin.com/" }),
-      expect.objectContaining({ label: "The Summerlin Company", url: "https://www.thesummerlincompany.com/" }),
+      expect.objectContaining({ label: "Summerlin", url: "https://summerlin.com/" }),
+      expect.objectContaining({ label: "Summerlin Hospital Medical Center", url: "https://www.summerlinhospital.com/" }),
     ]));
     expect(destination?.neighborhoods).toEqual(expect.arrayContaining([
-      "The Gardens",
-      "The Pueblo",
-      "Summerlin Centre",
+      "Downtown Summerlin",
+      "The Ridges",
+      "Sun City Summerlin",
     ]));
   });
 

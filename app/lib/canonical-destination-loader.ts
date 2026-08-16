@@ -753,11 +753,12 @@ const normalizePremiumV2Resources = (rows: Array<Record<string, unknown>> | unde
     };
   }).filter((resource) => resource.url.trim().length > 0);
 
-  if (normalized.length > 0) {
-    return normalized;
-  }
-
-  return fallbackResources;
+  // Do not silently substitute fallbackResources here: the caller's own cascade
+  // (premiumResources -> workbookResources -> fallbackResources) already handles
+  // the case where no real premium-v2 rows exist. Returning fallbackResources from
+  // here would make premiumResources.length > 0 always true, masking richer
+  // workbook-sourced resources further down the cascade.
+  return normalized;
 };
 
 const normalizePremiumV2Media = (rows: Array<Record<string, unknown>> | undefined, fallbackMedia: CanonicalDestinationMedia[]) => {
