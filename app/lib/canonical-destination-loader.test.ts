@@ -45,14 +45,27 @@ vi.mock("./destinations", () => ({
   ],
 }));
 
+vi.mock("./runtime/persisted-destination-read-runtime", () => ({
+  loadPersistedDestinationFromRuntime: vi.fn(),
+}));
+
 import { buildWorkbookDestinationFromData, getCanonicalDestination } from "./canonical-destination-loader";
+import { loadPersistedDestinationFromRuntime } from "./runtime/persisted-destination-read-runtime";
 import { supabaseFetch } from "./supabase";
 
 const mockedSupabaseFetch = vi.mocked(supabaseFetch);
+const mockedLoadPersistedDestinationFromRuntime = vi.mocked(loadPersistedDestinationFromRuntime);
 
 describe("canonical destination loader", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
+      outcome: "FAILED",
+      failure: {
+        reason: "DB_READ_FAILED",
+        destinationIdentity: { destinationKey: "", destinationId: "" },
+      },
+    } as never);
   });
 
   it("maps section payloads from Supabase rows into the canonical destination model", async () => {
@@ -118,6 +131,102 @@ describe("canonical destination loader", () => {
       title: "Overview",
       content: "Barcelona is a city that rewards district choice.",
     });
+  });
+
+  it("hydrates a canonical destination from the persisted runtime bundle for approved pilots", async () => {
+    mockedSupabaseFetch.mockResolvedValue({
+      ok: true,
+      json: async () => [{
+        id: "dest-123",
+        destination_id: "dest-123",
+        destination_key: "lisbon-pt",
+        slug: "lisbon-portugal",
+        city: "Lisbon",
+        country: "Portugal",
+        title: "Lisbon",
+        subtitle: "Lisbon, Portugal",
+        hero_narrative: "Legacy hero copy",
+        overview: "Legacy overview copy",
+        editorial: "Legacy editorial copy",
+        why_this_place_feels_distinct: "Legacy distinct copy",
+        daily_life: "Legacy daily life copy",
+        climate: "Legacy climate copy",
+        transportation: "Legacy transportation copy",
+        healthcare: "Legacy healthcare copy",
+        cost_of_living: "Legacy cost copy",
+        walkability: "Legacy walkability copy",
+        internet: "Legacy internet copy",
+        safety: "Legacy safety copy",
+        neighborhoods: ["Alfama"],
+        resources: [],
+        videos: [],
+        media: [],
+        sections: {},
+        scoring: [],
+      }],
+    } as Response);
+
+    mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
+      outcome: "SUCCESS",
+      bundle: {
+        destinationKey: "lisbon-pt",
+        identity: {
+          slug: "lisbon-portugal",
+          name: "Lisbon",
+          city: "Lisbon",
+          country: "Portugal",
+        },
+        editorial: {
+          shortDescription: "Persisted short description",
+          longDescription: "Persisted long description",
+          currency: "EUR",
+          primaryLanguage: "Portuguese",
+          timeZone: "WET",
+        },
+        facts: [{ factKey: "fact-1", factGroup: "overview", valueText: "Persisted fact", displayLabel: "Fact", sourceName: "Workbook" }],
+        scores: [{ scoreKey: "score-1", scoreValue: "82", scoreLabel: "Retirement", methodologyVersion: "v1" }],
+        neighborhoods: [{ neighborhoodKey: "nb-1", name: "Alfama", summary: "Historic district", areaType: "historic" }],
+        places: [],
+        resources: [{ resourceKey: "resource-1", category: "tourism", name: "Visit Lisboa", url: "https://www.visitlisboa.com" }],
+        media: [{ mediaKey: "media-1", kind: "image", url: "https://example.com/lisbon.jpg", caption: "Lisbon", altText: "Lisbon" }],
+        costOfLiving: [],
+        climateMonthly: [],
+        housing: [],
+        propertyResources: [],
+        healthcare: [],
+        visaResidency: [],
+        taxesFinance: [],
+        lgbtqInclusivity: [],
+        safetyRisks: [],
+        transportation: [],
+        remoteWork: [],
+        languageIntegration: [],
+        pets: [],
+        familyEducation: [],
+        communitySocial: [],
+        accessibility: [],
+        bureaucracySetup: [],
+        workBusiness: [],
+        retirementAging: [],
+        lifestyleLaws: [],
+        realityCheck: [],
+        moveChecklist: [],
+        environmentQuality: null,
+        dailyLifePracticality: null,
+        eventsSeasonality: [],
+        sources: [],
+      },
+    } as never);
+
+    const destination = await getCanonicalDestination("lisbon-portugal");
+
+    expect(destination).not.toBeNull();
+    expect(destination?.title).toBe("Lisbon");
+    expect(destination?.heroNarrative).toBe("Persisted short description");
+    expect(destination?.overview).toBe("Persisted long description");
+    expect(destination?.media[0]?.url).toBe("https://example.com/lisbon.jpg");
+    expect(destination?.resources[0]?.label).toBe("Visit Lisboa");
+    expect(mockedLoadPersistedDestinationFromRuntime).toHaveBeenCalled();
   });
 
   it("builds premium enrichment fields and resources for local fallback destinations", async () => {
@@ -794,6 +903,29 @@ describe("canonical destination loader", () => {
       "Resolute Baptist Hospital",
     ]));
     expect(destination?.costOfLivingProfile?.summary).toContain("Planning estimate");
+  });
+
+  it("uses richer fallback content for Summerlin when the remote row is unavailable", async () => {
+    mockedSupabaseFetch.mockResolvedValue({
+      ok: false,
+      status: 500,
+      json: async () => [],
+    } as Response);
+
+    const destination = await getCanonicalDestination("summerlin");
+
+    expect(destination).not.toBeNull();
+    expect(destination?.heroNarrative).toContain("master-planned");
+    expect(destination?.overview).toContain("neighborhoods");
+    expect(destination?.resources).toEqual(expect.arrayContaining([
+      expect.objectContaining({ label: "Visit Summerlin", url: "https://www.summerlin.com/" }),
+      expect.objectContaining({ label: "The Summerlin Company", url: "https://www.thesummerlincompany.com/" }),
+    ]));
+    expect(destination?.neighborhoods).toEqual(expect.arrayContaining([
+      "The Gardens",
+      "The Pueblo",
+      "Summerlin Centre",
+    ]));
   });
 
   it("hydrates media and cost profiles from premium v2 workbook rows when imported facts are sparse", async () => {

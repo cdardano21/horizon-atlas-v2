@@ -172,4 +172,13 @@ describe("workbook runtime loader helpers", () => {
     expect(pythonCommand).toBeDefined();
     expect(pythonCommand).not.toContain(".venv/bin/python");
   });
+
+  it("resolves live pilot slugs through the deterministic v3.1 workbook import", async () => {
+    const destination = await loadPremiumWorkbookDestinationData("lisbon-portugal");
+
+    expect(destination).not.toBeNull();
+    expect(destination?.destinationKey).toBe("lisbon-pt");
+    expect(destination?.heroNarrative).toContain("Atlantic-facing");
+    expect(destination?.neighborhoods.some((item) => item.name === "Príncipe Real")).toBe(true);
+  });
 });

@@ -6,13 +6,21 @@ import { getPremiumV2RuntimeModuleDefinitions } from "./premium-v2-storage";
 import { isSupabaseConfigured, supabaseFetch } from "./supabase";
 import { getWorkbookFallbackDestinationData } from "./workbook-new-braunfels-fallback";
 import { loadPremiumWorkbookDestinationData, type PremiumWorkbookNormalizedDestinationData } from "./workbook-runtime-loader";
-
-const canonicalDestinations: CanonicalDestination[] = [];
+import { loadPersistedDestinationFromRuntime } from "./runtime/persisted-destination-read-runtime";
+import type { NormalizedPersistedDestinationBundle } from "./persistence/v31/materialize-stored-destination-state";
+import type { ResolvedDestinationIdentity } from "./persistence/v31/types";
 
 const normalizeTextValue = (value: string | null | undefined) => {
   if (typeof value !== "string") return "";
   const trimmed = value.trim();
   return trimmed;
+};
+
+const debugCanonicalDestinationBranches = process.env.HA_CANONICAL_ROUTE_DEBUG === "1";
+
+const logCanonicalDestinationBranch = (details: Record<string, unknown>) => {
+  if (!debugCanonicalDestinationBranches) return;
+  console.info("[canonical-route-debug]", JSON.stringify(details));
 };
 
 const looksLikeGenericRowContent = (value: string | null | undefined) => {
@@ -239,6 +247,98 @@ const buildFallbackBudgets = (city: string): CanonicalDestinationBudget[] => {
     { label: "Single resident", amount: "$1,600–$2,800/month", note: `A practical long-stay budget for ${city} with a simple apartment and regular local dining.` },
     { label: "Couple", amount: "$2,500–$4,200/month", note: `A comfortable range with better housing, dining flexibility, and occasional regional travel.` },
   ];
+};
+
+const persistedRuntimeDestinationAliases = new Map<string, string>([
+  ["lisbon-portugal", "lisbon-pt"],
+  ["lisbon-pt", "lisbon-pt"],
+  ["new-braunfels-texas-united-states", "new-braunfels-tx-us"],
+  ["new-braunfels-tx-us", "new-braunfels-tx-us"],
+  ["summerlin-nevada-united-states", "summerlin-nv-us"],
+  ["summerlin-las-vegas-nevada", "summerlin-nv-us"],
+  ["summerlin-nv-us", "summerlin-nv-us"],
+]);
+
+const resolvePersistedRuntimeDestinationIdentity = (slug: string, row: Record<string, unknown> | undefined): ResolvedDestinationIdentity | null => {
+  const normalizedSlug = slug.trim().toLowerCase();
+  const destinationKey = persistedRuntimeDestinationAliases.get(normalizedSlug)
+    ?? (typeof row?.destination_key === "string" && row.destination_key.trim() ? row.destination_key.trim() : "");
+
+  if (!destinationKey) {
+    return null;
+  }
+
+  const destinationId = typeof row?.destination_id === "string" && row.destination_id.trim()
+    ? row.destination_id.trim()
+    : typeof row?.id === "string" && row.id.trim()
+      ? row.id.trim()
+      : "";
+
+  return {
+    destinationKey,
+    destinationId,
+  };
+};
+
+const buildCanonicalDestinationFromPersistedBundle = (slug: string, fallbackDestination: CanonicalDestination, bundle: NormalizedPersistedDestinationBundle): CanonicalDestination => {
+  const city = normalizeTextValue(bundle.identity.city) || fallbackDestination.city;
+  const country = normalizeTextValue(bundle.identity.country) || fallbackDestination.country;
+  const title = normalizeTextValue(bundle.identity.name) || fallbackDestination.title;
+  const subtitle = [city || title, country].filter(Boolean).join(", ");
+  const heroNarrative = normalizeTextValue(bundle.editorial.shortDescription) || fallbackDestination.heroNarrative;
+  const overview = normalizeTextValue(bundle.editorial.longDescription) || fallbackDestination.overview;
+  const editorial = normalizeTextValue(bundle.editorial.longDescription) || fallbackDestination.editorial;
+
+  const media = bundle.media
+    .map((item) => ({
+      kind: normalizeTextValue(item.kind) || "image",
+      url: normalizeTextValue(item.url) || "",
+      altText: normalizeTextValue(item.altText) || title || city || "Destination media",
+      caption: normalizeTextValue(item.caption) || title || city || "Destination media",
+      isPrimary: false,
+    }))
+    .filter((item) => item.url);
+
+  const primaryMedia = media[0] ? [{ ...media[0], isPrimary: true }] : [];
+  const normalizedMedia = [...primaryMedia, ...media.slice(1)];
+  const resources = bundle.resources
+    .map((item) => ({
+      category: normalizeTextValue(item.category) || "resource",
+      label: normalizeTextValue(item.name) || "Imported resource",
+      provider: null,
+      url: normalizeTextValue(item.url) || "",
+    }))
+    .filter((item) => item.url);
+
+  const neighborhoods = bundle.neighborhoods
+    .map((item) => normalizeTextValue(item.name))
+    .filter(Boolean);
+
+  const premiumEditorialContent = {
+    ...fallbackDestination.premiumEditorialContent,
+    heroIntroduction: heroNarrative || fallbackDestination.premiumEditorialContent?.heroIntroduction,
+    overviewArticle: overview || fallbackDestination.premiumEditorialContent?.overviewArticle,
+  };
+
+  return {
+    ...fallbackDestination,
+    slug: normalizeTextValue(bundle.identity.slug) || slug,
+    city,
+    country,
+    title,
+    subtitle,
+    heroNarrative,
+    overview,
+    editorial,
+    resources,
+    structuredResources: resources,
+    videos: [],
+    media: normalizedMedia,
+    heroImages: normalizedMedia,
+    mediaGallery: normalizedMedia,
+    neighborhoods,
+    premiumEditorialContent,
+  };
 };
 
 const buildFallbackCostProfile = (city: string, costOfLiving: string, budgets: CanonicalDestinationBudget[]): CanonicalDestinationCostProfile => ({
@@ -893,28 +993,47 @@ export const buildWorkbookDestinationFromData = (slug: string, workbookData: Pre
 
 const buildFallbackCanonicalDestination = (slug: string): CanonicalDestination | null => {
   const local = localDestinations.find((item) => item.slug === slug);
-  if (!local) return null;
-
   const workbookFallback = getWorkbookFallbackDestinationData(slug);
-  const city = workbookFallback?.city ?? local.city;
-  const country = workbookFallback?.country ?? local.country;
+  const inferredName = slug
+    .split("-")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+  const fallbackSource = local ?? {
+    slug,
+    city: workbookFallback?.city ?? inferredName,
+    country: workbookFallback?.country ?? "",
+    title: workbookFallback?.title ?? inferredName,
+    subtitle: workbookFallback?.subtitle ?? `${workbookFallback?.city ?? inferredName}${workbookFallback?.country ? `, ${workbookFallback.country}` : ""}`,
+    description: "",
+    overview: "",
+    heroNarrative: "",
+    climate: "",
+    lifestyle: "",
+    transportation: "",
+    researchProfile: {},
+    premiumEditorialContent: undefined,
+  } as typeof local;
+
+  const city = workbookFallback?.city ?? fallbackSource.city;
+  const country = workbookFallback?.country ?? fallbackSource.country;
   const premiumMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${city} ${country}`)}`;
   const premiumEarth = `https://earth.google.com/web/search/${encodeURIComponent(`${city} ${country}`)}`;
-  const knowledgeProfile = buildDestinationKnowledgeProfile(local);
+  const knowledgeProfile = buildDestinationKnowledgeProfile(fallbackSource as never);
   const fallbackResources = workbookFallback?.resources ?? buildFallbackResources(city, country);
   const fallbackMedia = workbookFallback?.media ?? buildFallbackMedia(city, country);
   const fallbackBudgets = workbookFallback?.monthlyBudgets ?? buildFallbackBudgets(city);
-  const fallbackCostProfile = workbookFallback?.costOfLivingProfile ?? buildFallbackCostProfile(city, normalizeTextValue(local.researchProfile?.costOfLiving ?? local.researchProfile?.housing) || "", fallbackBudgets);
+  const fallbackCostProfile = workbookFallback?.costOfLivingProfile ?? buildFallbackCostProfile(city, normalizeTextValue(fallbackSource.researchProfile?.costOfLiving ?? fallbackSource.researchProfile?.housing) || "", fallbackBudgets);
 
   const neighborhoodIntelligence = workbookFallback?.neighborhoodIntelligence ?? buildNeighborhoodIntelligenceSeedData({
     city,
     country,
-    title: local.title ?? local.city,
-    slug: local.slug,
+    title: fallbackSource.title ?? fallbackSource.city,
+    slug: fallbackSource.slug,
     knowledgeProfile,
   });
 
-  const premiumEditorialContent = workbookFallback?.premiumEditorialContent ?? local.premiumEditorialContent;
+  const premiumEditorialContent = workbookFallback?.premiumEditorialContent ?? fallbackSource.premiumEditorialContent;
   const neighborhoodProfiles = workbookFallback?.neighborhoodProfiles?.map((profile) => ({
     name: profile.name,
     summary: profile.summary,
@@ -923,35 +1042,35 @@ const buildFallbackCanonicalDestination = (slug: string): CanonicalDestination |
   })) ?? [];
 
   return {
-    slug: workbookFallback?.slug ?? local.slug,
+    slug: workbookFallback?.slug ?? fallbackSource.slug,
     city,
     country,
-    title: workbookFallback?.title ?? local.title ?? local.city,
-    subtitle: workbookFallback?.subtitle ?? local.subtitle ?? `${local.city}, ${local.country}`,
-    heroNarrative: workbookFallback?.heroNarrative ?? (normalizeTextValue(local.heroNarrative ?? local.description) || ""),
-    overview: workbookFallback?.overview ?? (normalizeTextValue(local.overview ?? local.description) || ""),
-    editorial: workbookFallback?.editorial ?? (normalizeTextValue(local.description ?? local.overview) || ""),
-    whyThisPlaceFeelsDistinct: workbookFallback?.whyThisPlaceFeelsDistinct ?? (normalizeTextValue(local.researchProfile?.whyThisPlaceFeelsDistinct) || ""),
-    dailyLife: workbookFallback?.dailyLife ?? (normalizeTextValue(local.lifestyle ?? local.researchProfile?.feel) || ""),
-    climate: workbookFallback?.climate ?? (normalizeTextValue(local.climate ?? local.researchProfile?.climate) || ""),
-    transportation: workbookFallback?.transportation ?? (normalizeTextValue(local.transportation ?? local.researchProfile?.transportation) || ""),
-    healthcare: workbookFallback?.healthcare ?? (normalizeTextValue(local.researchProfile?.healthcare) || ""),
-    costOfLiving: workbookFallback?.costOfLiving ?? (normalizeTextValue(local.researchProfile?.costOfLiving) || ""),
-    walkability: workbookFallback?.walkability ?? (normalizeTextValue(local.researchProfile?.walkability) || ""),
-    internet: workbookFallback?.internet ?? (normalizeTextValue(local.researchProfile?.internet) || ""),
-    safety: workbookFallback?.safety ?? (normalizeTextValue(local.researchProfile?.safety) || ""),
-    neighborhoods: workbookFallback?.neighborhoods ?? local.researchProfile?.bestNeighborhoods ?? [],
+    title: workbookFallback?.title ?? fallbackSource.title ?? city,
+    subtitle: workbookFallback?.subtitle ?? fallbackSource.subtitle ?? `${city}${country ? `, ${country}` : ""}`,
+    heroNarrative: workbookFallback?.heroNarrative ?? (normalizeTextValue(fallbackSource.heroNarrative ?? fallbackSource.description) || ""),
+    overview: workbookFallback?.overview ?? (normalizeTextValue(fallbackSource.overview ?? fallbackSource.description) || ""),
+    editorial: workbookFallback?.editorial ?? (normalizeTextValue(fallbackSource.description ?? fallbackSource.overview) || ""),
+    whyThisPlaceFeelsDistinct: workbookFallback?.whyThisPlaceFeelsDistinct ?? (normalizeTextValue(fallbackSource.researchProfile?.whyThisPlaceFeelsDistinct) || ""),
+    dailyLife: workbookFallback?.dailyLife ?? (normalizeTextValue(fallbackSource.lifestyle ?? fallbackSource.researchProfile?.feel) || ""),
+    climate: workbookFallback?.climate ?? (normalizeTextValue(fallbackSource.climate ?? fallbackSource.researchProfile?.climate) || ""),
+    transportation: workbookFallback?.transportation ?? (normalizeTextValue(fallbackSource.transportation ?? fallbackSource.researchProfile?.transportation) || ""),
+    healthcare: workbookFallback?.healthcare ?? (normalizeTextValue(fallbackSource.researchProfile?.healthcare) || ""),
+    costOfLiving: workbookFallback?.costOfLiving ?? (normalizeTextValue(fallbackSource.researchProfile?.costOfLiving) || ""),
+    walkability: workbookFallback?.walkability ?? (normalizeTextValue(fallbackSource.researchProfile?.walkability) || ""),
+    internet: workbookFallback?.internet ?? (normalizeTextValue(fallbackSource.researchProfile?.internet) || ""),
+    safety: workbookFallback?.safety ?? (normalizeTextValue(fallbackSource.researchProfile?.safety) || ""),
+    neighborhoods: workbookFallback?.neighborhoods ?? fallbackSource.researchProfile?.bestNeighborhoods ?? [],
     restaurants: [],
-    museums: local.researchProfile?.museums ?? [],
-    golf: local.researchProfile?.golf ?? [],
-    beaches: local.researchProfile?.beaches ?? [],
-    outdoorRecreation: local.researchProfile?.attractions ?? [],
-    pros: local.researchProfile?.pros ?? [],
-    cons: local.researchProfile?.cons ?? [],
-    retirement: normalizeTextValue(local.researchProfile?.longStaySuitability) || "",
-    digitalNomad: normalizeTextValue(local.researchProfile?.digitalNomadSuitability) || "",
-    family: normalizeTextValue(local.researchProfile?.familyFriendliness) || "",
-    weather: workbookFallback?.climate ?? (normalizeTextValue(local.climate ?? local.researchProfile?.climate) || ""),
+    museums: fallbackSource.researchProfile?.museums ?? [],
+    golf: fallbackSource.researchProfile?.golf ?? [],
+    beaches: fallbackSource.researchProfile?.beaches ?? [],
+    outdoorRecreation: fallbackSource.researchProfile?.attractions ?? [],
+    pros: fallbackSource.researchProfile?.pros ?? [],
+    cons: fallbackSource.researchProfile?.cons ?? [],
+    retirement: normalizeTextValue(fallbackSource.researchProfile?.longStaySuitability) || "",
+    digitalNomad: normalizeTextValue(fallbackSource.researchProfile?.digitalNomadSuitability) || "",
+    family: normalizeTextValue(fallbackSource.researchProfile?.familyFriendliness) || "",
+    weather: workbookFallback?.climate ?? (normalizeTextValue(fallbackSource.climate ?? fallbackSource.researchProfile?.climate) || ""),
     monthlyBudgets: fallbackBudgets,
     costOfLivingProfile: fallbackCostProfile,
     airportInfo: "",
@@ -1010,24 +1129,21 @@ const buildFallbackCanonicalDestination = (slug: string): CanonicalDestination |
 
 export async function getCanonicalDestination(slug: string): Promise<CanonicalDestination | null> {
   const normalizedSlug = slug.trim().toLowerCase();
-  const cached = canonicalDestinations.find((item) => item.slug === normalizedSlug);
-  if (cached) {
-    return cached;
-  }
 
   const workbookData = await loadPremiumWorkbookDestinationData(normalizedSlug);
   const fallbackDestination = buildFallbackCanonicalDestination(normalizedSlug);
 
+  logCanonicalDestinationBranch({ phase: "start", slug: normalizedSlug, workbookResolved: Boolean(workbookData), workbookKey: workbookData?.destinationKey ?? null, workbookSlug: workbookData?.slug ?? null });
+
   if (!isSupabaseConfigured()) {
     if (workbookData) {
-      const destination = buildWorkbookDestinationFromData(normalizedSlug, workbookData);
-      canonicalDestinations.push(destination);
-      return destination;
+      logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "workbook-only", reason: "supabase-unconfigured" });
+      return buildWorkbookDestinationFromData(normalizedSlug, workbookData);
     }
 
     const fallback = buildFallbackCanonicalDestination(normalizedSlug);
     if (!fallback) return null;
-    canonicalDestinations.push(fallback);
+    logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "fallback", reason: "supabase-unconfigured-and-no-workbook" });
     return fallback;
   }
 
@@ -1038,6 +1154,8 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
 
     let rows = response.ok ? ((await response.json()) as Array<Record<string, unknown>>) : [];
     let row = rows[0];
+
+    logCanonicalDestinationBranch({ phase: "row-check", slug: normalizedSlug, rowFound: Boolean(row), rowDestinationKey: typeof row?.destination_key === "string" ? row.destination_key : null, rowSlug: typeof row?.slug === "string" ? row.slug : null });
 
     if (!row) {
       const fallbackResponse = await supabaseFetch(`/rest/v1/destinations?select=*`, {
@@ -1055,17 +1173,27 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
 
     if (!row) {
       if (workbookData) {
-        const destination = buildWorkbookDestinationFromData(normalizedSlug, workbookData);
-        canonicalDestinations.push(destination);
-        return destination;
+        logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "workbook-only", reason: "no-supabase-row" });
+        return buildWorkbookDestinationFromData(normalizedSlug, workbookData);
       }
 
       const fallback = buildFallbackCanonicalDestination(normalizedSlug);
       if (!fallback) {
         return null;
       }
-      canonicalDestinations.push(fallback);
+      logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "fallback", reason: "no-supabase-row-and-no-workbook" });
       return fallback;
+    }
+
+    const persistedRuntimeIdentity = resolvePersistedRuntimeDestinationIdentity(normalizedSlug, row);
+    logCanonicalDestinationBranch({ phase: "persisted-identity", slug: normalizedSlug, persistedIdentity: persistedRuntimeIdentity, rowDestinationKey: typeof row?.destination_key === "string" ? row.destination_key : null });
+    if (persistedRuntimeIdentity) {
+      const persistedRuntimeResult = await loadPersistedDestinationFromRuntime(persistedRuntimeIdentity);
+      if (persistedRuntimeResult.outcome === "SUCCESS" && persistedRuntimeResult.bundle) {
+        logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "persisted-bundle", destinationKey: persistedRuntimeIdentity.destinationKey, destinationId: persistedRuntimeIdentity.destinationId, bundleIdentity: persistedRuntimeResult.bundle.identity });
+        return buildCanonicalDestinationFromPersistedBundle(normalizedSlug, fallbackDestination, persistedRuntimeResult.bundle);
+      }
+      logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "row-workbook-merge", reason: "persisted-read-missed", persistedOutcome: persistedRuntimeResult.outcome });
     }
 
     const rawImportedFacts = parseImportedVerifiedFacts((row.metadata as Record<string, unknown> | undefined)?.importedVerifiedFacts);
@@ -1354,12 +1482,12 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
       premiumV2Modules: Object.keys(premiumV2Modules).length > 0 ? premiumV2Modules : undefined,
     };
 
-    canonicalDestinations.push(destination);
+    logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "row-workbook-merge", destinationKey: workbookData?.destinationKey ?? null, workbookSlug: workbookData?.slug ?? null, rowDestinationKey: typeof row?.destination_key === "string" ? row.destination_key : null });
     return destination;
   } catch {
     const fallback = buildFallbackCanonicalDestination(normalizedSlug);
     if (!fallback) return null;
-    canonicalDestinations.push(fallback);
+    logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "fallback", reason: "exception" });
     return fallback;
   }
 }

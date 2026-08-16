@@ -57,6 +57,150 @@ export interface WorkbookFallbackDestinationData {
   neighborhoodIntelligence?: NeighborhoodIntelligenceGroup[];
 }
 
+const SUMMERLIN_FALLBACK_DATA: WorkbookFallbackDestinationData = {
+  slug: "summerlin-nv-us",
+  city: "Summerlin",
+  country: "United States",
+  title: "Summerlin",
+  subtitle: "Summerlin, United States",
+  heroNarrative: "Summerlin is a master-planned desert community where neighborhood identity, parks, golf, and amenity clusters matter more than any single skyline.",
+  overview: "Summerlin feels most compelling when its neighborhoods, recreation corridors, and everyday amenities are visible rather than reduced to generic suburban shorthand.",
+  editorial: "The place is best understood through its district-level lifestyle: community centers, golf courses, parks, and a strong everyday amenity structure.",
+  whyThisPlaceFeelsDistinct: "Its distinctiveness comes from how master-planned neighborhoods and amenity clusters create a durable sense of place without depending on a single downtown core.",
+  dailyLife: "Daily life here is shaped by parks, shopping, golf, and the rhythm of neighborhood-centered living in the Las Vegas region.",
+  premiumEditorialContent: {
+    heroIntroduction: "Summerlin is a master-planned desert community where the everyday quality of life is built from neighborhood design, golf, parks, and practical convenience.",
+    whyPeopleLoveIt: ["Master-planned neighborhoods", "Strong parks and recreation", "Golf and amenity clusters", "Easy access to Las Vegas"],
+    majorStrengths: ["Neighborhood identity", "Strong amenities", "Good golf and recreation", "Practical access to the metro"],
+    majorDrawbacks: ["Heat and desert conditions", "Suburban pace", "Some amenities feel car-dependent"],
+    bestFor: ["Retirees valuing comfort and convenience", "Families wanting a planned community feel", "Active residents who want recreation close at hand"],
+    overviewArticle: "Summerlin is most legible through the way its neighborhoods, parks, and amenity centers make everyday life feel organized rather than sprawling.",
+    neighborhoodsArticle: "The city is easiest to understand by looking at its distinct districts and the way each one carries its own retail, recreation, and community character.",
+    dailyLifeArticle: "Daily life here is shaped by parks, shopping, golf, and a suburban rhythm that still feels more intentional than generic.",
+    climateArticle: "The climate is hot, dry, and desert-oriented, with heat and sun shaping everything from outdoor time to landscaping and daily planning.",
+    transportationArticle: "Getting around is still mostly car-oriented, but the community's layout makes it easier to navigate daily life through carefully planned nodes and corridors.",
+    costOfLivingArticle: "The cost of living is generally higher than many broader regional markets, but the community's amenity structure and planned layout make it feel worth the premium for many households.",
+    healthcareArticle: "Healthcare access is practical because the area offers strong regional medical access alongside a more suburban everyday rhythm.",
+    retirementGuide: "Summerlin works well for retirees who want a planned, amenity-rich lifestyle with access to golf, parks, dining, and regional services.",
+    familyGuide: "Families often value the neighborhood structure and recreation access, though daily life still depends on planning around heat and car travel.",
+    digitalNomadGuide: "Remote workers can do well here when they value a calm, planned environment with strong amenities and practical access to Las Vegas.",
+  },
+  neighborhoodProfiles: [
+    {
+      name: "The Gardens",
+      summary: "A neighborhood identity defined by mature landscaping, community amenities, and an established residential feel.",
+      resources: [
+        { category: "parks", label: "The Gardens Park", url: "https://www.summerlin.com/", kind: "dataset" },
+      ],
+      intelligence: [
+        { key: "walkability", label: "Walkability", value: "Moderate", description: "The district is more residential and amenity-centered than intensely urban." },
+        { key: "recreation", label: "Recreation", value: "Strong", description: "Parks and community facilities are part of the neighborhood's identity." },
+      ],
+    },
+    {
+      name: "The Pueblo",
+      summary: "A more village-like district that helps define Summerlin's neighborhood-centered lifestyle.",
+      resources: [
+        { category: "shopping", label: "The Pueblo", url: "https://www.summerlin.com/", kind: "dataset" },
+      ],
+      intelligence: [
+        { key: "shopping", label: "Shopping", value: "Strong", description: "The district is shaped by retail and everyday convenience." },
+        { key: "community", label: "Community", value: "Strong", description: "The area gives the broader community a more intimate daily rhythm." },
+      ],
+    },
+  ],
+  climate: "Hot desert climate with very sunny conditions, dry air, and significant summer heat that shapes daily life and outdoor habits.",
+  transportation: "Transportation is mostly car-oriented, but the planned community structure supports easier daily movement and practical regional access.",
+  healthcare: "Healthcare access is strong through the broader Las Vegas region, with major hospitals and specialty care available nearby.",
+  costOfLiving: "The cost of living is generally higher than many broader regional communities, but the amenity structure and school-and-recreation quality often justify the premium for long-stay households.",
+  walkability: "Some neighborhoods offer a walkable everyday pattern, but Summerlin is generally more about planned convenience than dense walkability.",
+  internet: "Broadband and mobile connectivity are generally strong and support remote work and long-stay living.",
+  safety: "The community is generally considered a practical, well-managed suburban environment with strong resident services.",
+  neighborhoods: [
+    "The Gardens",
+    "The Pueblo",
+    "Summerlin Centre",
+    "West Summerlin",
+    "South Summerlin",
+    "Summerlin North",
+    "The Mesa",
+    "Stonebridge",
+  ],
+  resources: [
+    { category: "official", label: "Visit Summerlin", provider: "Visit Summerlin", url: "https://www.summerlin.com/" },
+    { category: "real-estate", label: "The Summerlin Company", provider: "The Summerlin Company", url: "https://www.thesummerlincompany.com/" },
+    { category: "tourism", label: "Summerlin Neighborhood Guide", provider: "Summerlin", url: "https://www.summerlin.com/" },
+    { category: "maps", label: "Summerlin on Google Maps", provider: "Google", url: "https://www.google.com/maps/search/?api=1&query=Summerlin%20Nevada" },
+  ],
+  media: [
+    {
+      kind: "image",
+      url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+      altText: "Summerlin neighborhood landscape",
+      caption: "A planned desert neighborhood landscape in Summerlin",
+      isPrimary: true,
+      sourceUrl: "https://unsplash.com/",
+      attribution: "Unsplash",
+      license: "Unsplash",
+    },
+    {
+      kind: "image",
+      url: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1200&q=80",
+      altText: "Desert golf and recreation in Summerlin",
+      caption: "Golf and recreation settings in Summerlin",
+      isPrimary: false,
+      sourceUrl: "https://unsplash.com/",
+      attribution: "Unsplash",
+      license: "Unsplash",
+    },
+  ],
+  monthlyBudgets: [
+    { label: "Single resident", amount: "$1,900–$3,200/month", note: "A practical long-stay budget for Summerlin with a simple apartment and regular local dining." },
+    { label: "Couple", amount: "$2,900–$4,700/month", note: "A comfortable range that supports housing flexibility and stronger recreation access." },
+  ],
+  costOfLivingProfile: {
+    summary: "Planning estimate: Summerlin is often more expensive than many regional suburban communities, but the amenity structure and neighborhood planning can make the premium feel worthwhile.",
+    currency: "USD",
+    methodology: "Workbook-informed expectations for a practical long-stay household budget.",
+    confidence: "medium",
+    assumptions: ["Single resident or small household", "Neighborhood choice affects the final monthly spend"],
+    budgets: [
+      { label: "Single resident", amount: "$1,900–$3,200/month", note: "Practical monthly budget for a simple apartment and regular local dining." },
+      { label: "Couple", amount: "$2,900–$4,700/month", note: "Comfortable range with more flexibility for dining and recreation." },
+    ],
+    categories: [
+      { key: "housing", label: "Housing", amount: "$1,700–$3,000/month", note: "Apartment or condo budget in a practical district." },
+      { key: "food", label: "Food", amount: "$400–$800/month", note: "Groceries and local dining mix." },
+      { key: "transport", label: "Transport", amount: "$150–$350/month", note: "Local travel and regional movement." },
+    ],
+  },
+  officialTourismUrl: "https://www.summerlin.com/",
+  googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Summerlin%20Nevada",
+  googleEarthUrl: "https://earth.google.com/web/search/Summerlin%20Nevada",
+  wikipediaUrl: "https://en.wikipedia.org/wiki/Summerlin,_Nevada",
+  youtubeUrl: "https://www.youtube.com/results?search_query=Summerlin%20Nevada%20travel%20guide",
+  tiktokUrl: "https://www.tiktok.com/search?q=Summerlin%20Nevada",
+  instagramUrl: "https://www.instagram.com/explore/tags/summerlin",
+  webcamUrl: "https://www.google.com/search?q=Summerlin%20Nevada%20webcam",
+  neighborhoodIntelligence: [
+    {
+      category: "Neighborhoods",
+      neighborhoodName: "The Gardens",
+      places: [
+        {
+          id: "summerlin-gardens-park",
+          name: "The Gardens Park",
+          category: "Neighborhoods",
+          neighborhoodName: "The Gardens",
+          description: "A community-centered green space that helps anchor the district's everyday identity.",
+          whyItMatters: "It makes the neighborhood feel more grounded and less generic.",
+          verified: true,
+        },
+      ],
+    },
+  ],
+};
+
 const NEW_BRAUNFELS_FALLBACK_DATA: WorkbookFallbackDestinationData = {
   slug: "new-braunfels-texas-united-states",
   city: "New Braunfels",
@@ -64,7 +208,7 @@ const NEW_BRAUNFELS_FALLBACK_DATA: WorkbookFallbackDestinationData = {
   title: "New Braunfels",
   subtitle: "New Braunfels, United States",
   heroNarrative: "New Braunfels combines Texas Hill Country river life, German heritage, and a strong local identity rooted in Gruene, Downtown, and the Comal and Guadalupe rivers.",
-  overview: "New Braunfels feels most compelling when the daily rhythm is visible: river access, historic districts, neighborhood cafés, and a practical mix of local services and healthcare.",
+  overview: "New Braunfels feels most compelling when river recreation, historic districts, neighborhood cafés, and a practical mix of local services and healthcare all shape the same day.",
   editorial: "The place is best understood through its lived-in districts and the way daily routine is shaped by rivers, parks, hospitality, and community anchors.",
   whyThisPlaceFeelsDistinct: "The city’s distinctiveness comes from how its historic core and river culture remain visible in everyday life rather than being reduced to tourism alone.",
   premiumEditorialContent: {
@@ -119,11 +263,22 @@ const NEW_BRAUNFELS_FALLBACK_DATA: WorkbookFallbackDestinationData = {
   walkability: "Downtown and Gruene offer the most walkable everyday experience, while other districts remain more car-dependent.",
   internet: "Broadband and mobile connectivity are generally reliable for long-stay and remote-work use.",
   safety: "The city is widely viewed as a practical, community-oriented place with strong local identity and manageable day-to-day risk.",
-  neighborhoods: ["Downtown New Braunfels", "Gruene Historic District"],
+  neighborhoods: [
+    "Downtown New Braunfels",
+    "Gruene Historic District",
+    "Veramendi",
+    "Landa Park",
+    "North New Braunfels",
+    "South New Braunfels",
+    "Historic Gruene",
+    "River Acres",
+  ],
   resources: [
     { category: "official", label: "City of New Braunfels", provider: "City of New Braunfels", url: "https://www.newbraunfels.gov/" },
     { category: "tourism", label: "New Braunfels Tourism", provider: "New Braunfels Tourism", url: "https://www.playinnewbraunfels.com/" },
     { category: "healthcare", label: "Resolute Baptist Hospital", provider: "Resolute Baptist Hospital", url: "https://www.baptisthealthsystem.com/locations/detail/resolute-baptist-hospital" },
+    { category: "parks", label: "Landa Park", provider: "City of New Braunfels", url: "https://www.newbraunfels.gov/parks" },
+    { category: "culture", label: "Gruene Hall", provider: "Gruene Hall", url: "https://gruenehall.com/" },
   ],
   media: [
     {
@@ -182,7 +337,7 @@ const NEW_BRAUNFELS_FALLBACK_DATA: WorkbookFallbackDestinationData = {
     { label: "Couple", amount: "$2,500–$4,200/month", note: "A comfortable range that supports housing flexibility and a stronger dining and recreation mix." },
   ],
   costOfLivingProfile: {
-    summary: "New Braunfels is usually more affordable than many Texas Hill Country lifestyle markets, while still carrying costs linked to river access, historic districts, and growth.",
+    summary: "Planning estimate: New Braunfels is usually more affordable than many Texas Hill Country lifestyle markets, while still carrying costs linked to river access, historic districts, and growth.",
     currency: "USD",
     methodology: "Workbook-informed expectations for a practical long-stay household budget.",
     confidence: "medium",
@@ -235,6 +390,51 @@ const NEW_BRAUNFELS_FALLBACK_DATA: WorkbookFallbackDestinationData = {
       ],
     },
     {
+      category: "Restaurants",
+      neighborhoodName: "Gruene Historic District",
+      places: [
+        {
+          id: "gruene-gristmill",
+          name: "The Gristmill Restaurant & Bar",
+          category: "Restaurants",
+          neighborhoodName: "Gruene Historic District",
+          description: "Historic riverfront restaurant and an iconic first-stop experience in Gruene.",
+          whyItMatters: "It anchors the district’s identity and gives the area one of its clearest local rituals.",
+          googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Gristmill%20River%20Restaurant%20%26%20Bar%20New%20Braunfels%20TX",
+          websiteUrl: "https://gristmillrestaurant.com/",
+          verified: true,
+        },
+        {
+          id: "mcadoo-seafood",
+          name: "McAdoo's Seafood Company",
+          category: "Restaurants",
+          neighborhoodName: "Gruene Historic District",
+          description: "A well-known local seafood and dining anchor in the River Road corridor.",
+          whyItMatters: "It helps make the district feel lived-in rather than purely promotional.",
+          googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=McAdoo%27s%20Seafood%20Company%20New%20Braunfels%20TX",
+          websiteUrl: "https://www.mcadoo.com/",
+          verified: true,
+        },
+      ],
+    },
+    {
+      category: "Parks",
+      neighborhoodName: "Landa Park",
+      places: [
+        {
+          id: "landa-park",
+          name: "Landa Park",
+          category: "Parks",
+          neighborhoodName: "Landa Park",
+          description: "A central green space that shapes daily outdoor life and river access.",
+          whyItMatters: "It gives the city one of its clearest everyday recreation anchors.",
+          googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Landa%20Park%20New%20Braunfels%20TX",
+          websiteUrl: "https://www.newbraunfels.gov/parks/landa-park",
+          verified: true,
+        },
+      ],
+    },
+    {
       category: "Healthcare",
       neighborhoodName: "Downtown New Braunfels",
       places: [
@@ -269,9 +469,19 @@ export function getWorkbookFallbackDestinationData(slug: string): WorkbookFallba
     normalized.replace(/-texas$/, ""),
     normalized.replace(/-united-states$/, ""),
     normalized.replace(/-us$/, ""),
+    normalized.replace(/-nevada-united-states$/, ""),
+    normalized.replace(/-nv-us$/, ""),
+    normalized.replace(/-nevada$/, ""),
+    normalized.replace(/-las-vegas-nevada$/, ""),
   ];
 
-  return aliases.some((alias) => alias === "new-braunfels" || alias === "new-braunfels-texas" || alias === "new-braunfels-tx-us" || alias === "new-braunfels-texas-united-states")
-    ? NEW_BRAUNFELS_FALLBACK_DATA
-    : null;
+  if (aliases.some((alias) => alias === "new-braunfels" || alias === "new-braunfels-texas" || alias === "new-braunfels-tx-us" || alias === "new-braunfels-texas-united-states")) {
+    return null;
+  }
+
+  if (aliases.some((alias) => alias === "summerlin" || alias === "summerlin-nv" || alias === "summerlin-las-vegas" || alias === "summerlin-las-vegas-nevada" || alias === "summerlin-nevada" || alias === "summerlin-nv-us" || alias === "summerlin-nevada-united-states" || alias === "summerlin-nv-usa")) {
+    return null;
+  }
+
+  return null;
 }

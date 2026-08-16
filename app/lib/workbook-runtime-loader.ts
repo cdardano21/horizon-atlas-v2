@@ -2,6 +2,7 @@ import { existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { CanonicalDestinationKnowledgeProfile } from "./canonical-destination-model";
+import { loadFrozenWorkbookV31DeterministicImport, resolveDeterministicV31DestinationIdentity } from "./workbook-v31-deterministic-core";
 
 export type PremiumWorkbookNormalizedDestinationData = {
   destinationKey: string;
@@ -195,7 +196,13 @@ const normalizeSlugValue = (value: string | null | undefined) => {
   return value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 };
 
+const normalizeTextValue = (value: string | null | undefined) => {
+  if (typeof value !== "string") return "";
+  return value.trim();
+};
+
 const workbookFileNames = [
+  "DestinationFinderAI_Master_Workbook_v3.1_FROZEN_Pilot_Dataset.xlsx",
   "DestinationFinderAI_Master_Workbook_v3.0_Workbook_Only_No_Fallback.xlsx",
   "DestinationFinderAI_Master_Workbook_v3.0_Workbook_Only_No_Fallback copy.xlsx",
   "DestinationFinderAI_Master_Workbook_v3.0_Workbook_Only.xlsx",
@@ -378,6 +385,126 @@ const selectWorkbookDestination = (workbookData: Record<string, unknown>, slug: 
   return bestMatch?.destination ?? null;
 };
 
+const loadDeterministicV31WorkbookDestinationData = async (slug: string): Promise<PremiumWorkbookNormalizedDestinationData | null> => {
+  try {
+    const importResult = await loadFrozenWorkbookV31DeterministicImport();
+    if (!importResult.canonicalDestinations?.length) {
+      return null;
+    }
+
+    const normalizedSlug = normalizeSlugValue(slug);
+    const resolvedIdentity = resolveDeterministicV31DestinationIdentity({
+      requestedIdentity: normalizedSlug,
+      destinations: importResult.destinations.map((destination) => ({ destination_key: destination.destinationKey, slug: destination.slug })),
+      destinationAliases: importResult.diagnostics?.aliasResolution ? Object.entries(importResult.diagnostics.aliasResolution).map(([alias, destinationKey]) => ({ destination_key: destinationKey, alias_value: alias, active: "1" })) : [],
+    });
+
+    if (!resolvedIdentity.ok || !resolvedIdentity.value) {
+      return null;
+    }
+
+    const canonicalDestination = importResult.canonicalDestinations.find((destination) => destination.identity.destinationKey === resolvedIdentity.value);
+    if (!canonicalDestination) {
+      return null;
+    }
+
+    const city = normalizeTextValue(canonicalDestination.identity.city);
+    const country = normalizeTextValue(canonicalDestination.identity.country);
+    const title = normalizeTextValue(canonicalDestination.identity.name);
+    const subtitle = [city || title, country].filter(Boolean).join(", ");
+
+    return {
+      destinationKey: canonicalDestination.identity.destinationKey,
+      slug: normalizeSlugValue(canonicalDestination.identity.slug || slug) || normalizedSlug || slug,
+      city,
+      country,
+      title,
+      subtitle,
+      heroNarrative: normalizeTextValue(canonicalDestination.editorial.shortDescription),
+      overview: normalizeTextValue(canonicalDestination.editorial.longDescription),
+      editorial: normalizeTextValue(canonicalDestination.editorial.longDescription),
+      whyThisPlaceFeelsDistinct: "",
+      dailyLife: "",
+      climate: "",
+      transportation: "",
+      healthcare: "",
+      costOfLiving: "",
+      walkability: "",
+      internet: "",
+      safety: "",
+      officialTourismUrl: "",
+      googleMapsUrl: "",
+      googleEarthUrl: "",
+      wikipediaUrl: "",
+      neighborhoods: (canonicalDestination.neighborhoods ?? []).map((item) => ({
+        name: normalizeTextValue(item.neighborhood_name),
+        summary: normalizeTextValue(item.summary),
+        housingCharacter: normalizeTextValue(item.housing_character),
+        walkabilityRating: normalizeTextValue(item.walkability_rating),
+        safetyRating: normalizeTextValue(item.safety_rating),
+        transitRating: normalizeTextValue(item.transit_rating),
+        googleMapsUrl: normalizeTextValue(item.google_maps_url),
+        sourceUrl: normalizeTextValue(item.source_url),
+        verified: normalizeTextValue(item.verified) === "1" || normalizeTextValue(item.verified).toLowerCase() === "true",
+      })).filter((item) => item.name),
+      places: (canonicalDestination.places ?? []).map((item) => ({
+        name: normalizeTextValue(item.place_name),
+        category: normalizeTextValue(item.category_key),
+        neighborhoodName: normalizeTextValue(item.neighborhood_key),
+        description: normalizeTextValue(item.description),
+        address: normalizeTextValue(item.address),
+        websiteUrl: normalizeTextValue(item.website_url),
+        googleMapsUrl: normalizeTextValue(item.google_maps_url),
+        sourceUrl: normalizeTextValue(item.source_url),
+        verified: normalizeTextValue(item.verified) === "1" || normalizeTextValue(item.verified).toLowerCase() === "true",
+      })).filter((item) => item.name),
+      resources: (canonicalDestination.resources ?? []).map((item) => ({
+        category: normalizeTextValue(item.resource_category),
+        label: normalizeTextValue(item.resource_name),
+        url: normalizeTextValue(item.url),
+        provider: normalizeTextValue(item.source_name) || null,
+        sourceUrl: normalizeTextValue(item.source_url),
+        verified: normalizeTextValue(item.verified) === "1" || normalizeTextValue(item.verified).toLowerCase() === "true",
+      })).filter((item) => item.label || item.url),
+      media: (canonicalDestination.media ?? []).map((item) => ({
+        kind: normalizeTextValue(item.media_type) || "image",
+        url: normalizeTextValue(item.image_url),
+        altText: normalizeTextValue(item.caption) || normalizeTextValue(item.subject),
+        caption: normalizeTextValue(item.caption) || normalizeTextValue(item.subject),
+        isPrimary: normalizeTextValue(item.primary_image) === "1" || normalizeTextValue(item.primary_image).toLowerCase() === "true",
+      })).filter((item) => item.url),
+      costRecords: (canonicalDestination.costOfLiving ?? []).map((item) => ({
+        category: normalizeTextValue(item.category),
+        monthlyLow: Number.parseFloat(normalizeTextValue(item.monthly_low)) || null,
+        monthlyHigh: Number.parseFloat(normalizeTextValue(item.monthly_high)) || null,
+        currency: normalizeTextValue(item.currency) || "USD",
+        description: normalizeTextValue(item.included_notes),
+        householdType: normalizeTextValue(item.household_type),
+        lifestyleTier: normalizeTextValue(item.lifestyle_tier),
+      })).filter((item) => item.category),
+      healthcareRecords: [],
+      transportRecords: [],
+      housingRecords: [],
+      realityChecks: [],
+      sources: [],
+      premiumEditorialContent: {
+        heroIntroduction: normalizeTextValue(canonicalDestination.editorial.shortDescription),
+        overviewArticle: normalizeTextValue(canonicalDestination.editorial.longDescription),
+      },
+      counts: {
+        neighborhoods: canonicalDestination.neighborhoods?.length ?? 0,
+        places: canonicalDestination.places?.length ?? 0,
+        resources: canonicalDestination.resources?.length ?? 0,
+        media: canonicalDestination.media?.length ?? 0,
+        costRecords: canonicalDestination.costOfLiving?.length ?? 0,
+      },
+      source: "runtime-loader",
+    };
+  } catch {
+    return null;
+  }
+};
+
 export async function loadPremiumWorkbookDestinationData(slug: string): Promise<PremiumWorkbookNormalizedDestinationData | null> {
   const normalizedSlug = normalizeSlugValue(slug);
   if (!normalizedSlug) {
@@ -389,6 +516,12 @@ export async function loadPremiumWorkbookDestinationData(slug: string): Promise<
   const cached = workbookCache.get(cacheKey);
   if (cached !== undefined) {
     return cached;
+  }
+
+  const deterministicWorkbookData = await loadDeterministicV31WorkbookDestinationData(normalizedSlug);
+  if (deterministicWorkbookData) {
+    workbookCache.set(cacheKey, deterministicWorkbookData);
+    return deterministicWorkbookData;
   }
 
   if (!workbookPath) {
