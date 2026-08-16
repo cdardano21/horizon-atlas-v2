@@ -229,9 +229,9 @@ function buildRowValue(row, table, destinationKey, destinationId, state, rowInde
         destination_id: destinationId,
         destination_key: destinationKey,
         record_key: resolveRecordKey(row, `${destinationKey}-housing`, rowIndex),
-        summary: row.summary ?? null,
-        buying_summary: row.buyingSummary ?? null,
-        rental_summary: row.rentalSummary ?? null,
+        restrictions_summary: row.summary ?? null,
+        buying_process_summary: row.buyingSummary ?? null,
+        rental_rules_notes: row.rentalSummary ?? null,
       };
     case 'premium_property_resources':
       return {
@@ -247,17 +247,17 @@ function buildRowValue(row, table, destinationKey, destinationId, state, rowInde
         destination_id: destinationId,
         destination_key: destinationKey,
         record_key: resolveRecordKey(row, `${destinationKey}-healthcare`, rowIndex),
-        summary: row.summary ?? null,
-        public_access_summary: row.publicAccessSummary ?? null,
-        insurance_summary: row.insuranceSummary ?? null,
+        system_summary: row.summary ?? null,
+        public_access_foreigners: row.publicAccessSummary ?? null,
+        international_insurance_notes: row.insuranceSummary ?? null,
       };
     case 'premium_visa_residency':
       return {
         destination_id: destinationId,
         destination_key: destinationKey,
         record_key: resolveRecordKey(row, `${destinationKey}-visa`, rowIndex),
-        summary: row.summary ?? null,
-        residency_path: row.residencyPath ?? null,
+        visa_type: row.summary ?? null,
+        permanent_residency_path: row.residencyPath ?? null,
         citizenship_path: row.citizenshipPath ?? null,
       };
     case 'premium_taxes_finance':
@@ -283,17 +283,17 @@ function buildRowValue(row, table, destinationKey, destinationId, state, rowInde
         destination_key: destinationKey,
         record_key: resolveRecordKey(row, `${destinationKey}-transport`, rowIndex),
         summary: row.summary ?? null,
-        airport_summary: row.airportSummary ?? null,
-        transit_summary: row.transitSummary ?? null,
+        name: row.airportSummary ?? null,
+        public_transit_available: row.transitSummary == null ? null : /^(1|true|yes|y)$/i.test(String(row.transitSummary)) ? true : false,
       };
     case 'premium_connectivity_remote_work':
       return {
         destination_id: destinationId,
         destination_key: destinationKey,
         record_key: resolveRecordKey(row, `${destinationKey}-remote-work`, rowIndex),
-        summary: row.summary ?? null,
-        internet_summary: row.internetSummary ?? null,
-        timezone_summary: row.timezoneSummary ?? null,
+        remote_work_notes: row.summary ?? null,
+        avg_download_mbps: row.internetSummary == null || row.internetSummary === '' ? null : Number(row.internetSummary),
+        us_time_zone_fit: row.timezoneSummary ?? null,
       };
     case 'premium_reality_check':
       return {

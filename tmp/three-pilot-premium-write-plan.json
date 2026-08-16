@@ -6,12 +6,12 @@
   },
   {
     "table": "premium_bureaucracy_setup",
-    "expectedRowCount": 15,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
     "table": "premium_climate_monthly",
-    "expectedRowCount": 36,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
@@ -26,7 +26,7 @@
   },
   {
     "table": "premium_cost_of_living",
-    "expectedRowCount": 30,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
@@ -36,7 +36,7 @@
   },
   {
     "table": "premium_destination_facts",
-    "expectedRowCount": 10,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
@@ -51,7 +51,7 @@
   },
   {
     "table": "premium_destination_scores",
-    "expectedRowCount": 9,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
@@ -61,7 +61,7 @@
   },
   {
     "table": "premium_events_seasonality",
-    "expectedRowCount": 6,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
@@ -91,22 +91,22 @@
   },
   {
     "table": "premium_lifestyle_laws",
-    "expectedRowCount": 6,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
     "table": "premium_media",
-    "expectedRowCount": 11,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
     "table": "premium_move_checklist",
-    "expectedRowCount": 30,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
     "table": "premium_neighborhoods",
-    "expectedRowCount": 24,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
@@ -116,22 +116,22 @@
   },
   {
     "table": "premium_places",
-    "expectedRowCount": 105,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
     "table": "premium_property_resources",
-    "expectedRowCount": 9,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
     "table": "premium_reality_check",
-    "expectedRowCount": 15,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
     "table": "premium_resources",
-    "expectedRowCount": 20,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
@@ -141,12 +141,12 @@
   },
   {
     "table": "premium_safety_risks",
-    "expectedRowCount": 4,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
     "table": "premium_sources",
-    "expectedRowCount": 51,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
@@ -156,12 +156,12 @@
   },
   {
     "table": "premium_transport_airports",
-    "expectedRowCount": 7,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {
     "table": "premium_visa_residency",
-    "expectedRowCount": 4,
+    "expectedRowCount": 3,
     "zeroRows": false
   },
   {

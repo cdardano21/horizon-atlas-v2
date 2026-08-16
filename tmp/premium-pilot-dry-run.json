@@ -1,0 +1,319 @@
+{
+  "destinations": [
+    {
+      "identity": {
+        "destinationKey": "lisbon-pt",
+        "slug": "lisbon-portugal",
+        "name": "Lisbon",
+        "city": "Lisbon",
+        "country": "Portugal"
+      },
+      "storedState": {
+        "identity": { "name": "Lisbon" },
+        "editorial": { "currency": "EUR", "primaryLanguage": "Portuguese", "timeZone": "Europe/Lisbon" },
+        "facts": [
+          { "factKey": "fact-1", "factGroup": "climate", "valueText": "Mediterranean", "displayLabel": "Climate", "sourceName": "Workbook" }
+        ],
+        "scores": [
+          { "scoreKey": "score-1", "scoreValue": "90", "scoreLabel": "Excellent", "methodologyVersion": "1" }
+        ],
+        "neighborhoods": [
+          { "neighborhoodKey": "neighborhood-1", "name": "Bairro", "summary": "Nice", "areaType": "urban" }
+        ],
+        "places": [
+          { "placeKey": "place-1", "category": "museum", "name": "Museum", "description": "Great" }
+        ],
+        "resources": [
+          { "resourceKey": "resource-1", "category": "tourism", "name": "Visit Lisbon", "url": "https://example.com" }
+        ],
+        "media": [
+          { "mediaKey": "media-1", "kind": "image", "url": "https://example.com/img.jpg", "caption": "Image", "altText": "Alt" }
+        ],
+        "costOfLiving": [
+          { "itemKey": "col-1", "category": "housing", "monthlyLow": "1000", "monthlyHigh": "2000", "currency": "EUR" }
+        ],
+        "climateMonthly": [
+          { "monthKey": "1", "avgHighTemp": "15", "avgLowTemp": "8", "precipitationMm": "100", "humidityPct": "70" }
+        ],
+        "housing": [
+          { "summary": "Good", "buyingSummary": "Easy", "rentalSummary": "Strict" }
+        ],
+        "propertyResources": [
+          { "itemKey": "prop-1", "category": "for_sale", "name": "Idealista", "url": "https://example.com" }
+        ],
+        "healthcare": [
+          { "summary": "Good", "publicAccessSummary": "Easy", "insuranceSummary": "Required" }
+        ],
+        "visaResidency": [
+          { "summary": "D", "residencyPath": "Long", "citizenshipPath": "Long" }
+        ],
+        "taxesFinance": [
+          { "summary": "Simple", "notes": "No issues" }
+        ],
+        "lgbtqInclusivity": [
+          { "summary": "Good", "culturalNotes": "Active" }
+        ],
+        "safetyRisks": [
+          { "itemKey": "risk-1", "topic": "heat", "severity": "medium", "summary": "High" }
+        ],
+        "transportation": [
+          { "summary": "Good", "airportSummary": "Airport", "transitSummary": "Yes" }
+        ],
+        "remoteWork": [
+          { "summary": "Fast", "internetSummary": "300", "timezoneSummary": "Good" }
+        ],
+        "languageIntegration": [
+          { "summary": "English works", "englishSupport": "Yes" }
+        ],
+        "pets": [
+          { "summary": "Pet-friendly", "petFriendlyNotes": "Good" }
+        ],
+        "familyEducation": [
+          { "summary": "Great", "schoolsSummary": "Many" }
+        ],
+        "communitySocial": [
+          { "summary": "Social", "socialNotes": "Many" }
+        ],
+        "accessibility": [
+          { "summary": "Accessible", "mobilityNotes": "Good" }
+        ],
+        "bureaucracySetup": [
+          { "summary": "Easy", "setupNotes": "Passport" }
+        ],
+        "workBusiness": [
+          { "summary": "Good", "remoteWorkNotes": "Great" }
+        ],
+        "retirementAging": [
+          { "summary": "Good", "agingNotes": "Great" }
+        ],
+        "lifestyleLaws": [
+          { "summary": "Good", "legalNotes": "Rules" }
+        ],
+        "realityCheck": [
+          { "itemKey": "reality-1", "title": "Beware", "detail": "Info", "severity": "medium" }
+        ],
+        "moveChecklist": [
+          { "checklistKey": "move-1", "summary": "Pack", "checklistNotes": "Move" }
+        ],
+        "eventsSeasonality": [
+          { "eventSeasonalityKey": "season-1", "summary": "Festival", "seasonalityNotes": "Warm" }
+        ],
+        "sources": [
+          { "sourceKey": "source-1", "name": "Source", "url": "https://example.com", "type": "gov" }
+        ],
+        "environmentQuality": { "summary": "Good", "qualityNotes": "Good" },
+        "dailyLifePracticality": { "summary": "Great", "practicalityNotes": "Be prepared" }
+      }
+    },
+    {
+      "identity": {
+        "destinationKey": "new-braunfels-tx-us",
+        "slug": "new-braunfels-texas",
+        "name": "New Braunfels",
+        "city": "New Braunfels",
+        "country": "United States"
+      },
+      "storedState": {
+        "identity": { "name": "New Braunfels" },
+        "editorial": { "currency": "USD", "primaryLanguage": "English", "timeZone": "America/Chicago" },
+        "facts": [
+          { "factKey": "fact-2", "factGroup": "climate", "valueText": "Warm", "displayLabel": "Climate", "sourceName": "Workbook" }
+        ],
+        "scores": [
+          { "scoreKey": "score-2", "scoreValue": "88", "scoreLabel": "Excellent", "methodologyVersion": "1" }
+        ],
+        "neighborhoods": [
+          { "neighborhoodKey": "neighborhood-2", "name": "Downtown", "summary": "Lively", "areaType": "urban" }
+        ],
+        "places": [
+          { "placeKey": "place-2", "category": "park", "name": "River Park", "description": "Great" }
+        ],
+        "resources": [
+          { "resourceKey": "resource-2", "category": "tourism", "name": "Visit New Braunfels", "url": "https://example.com" }
+        ],
+        "media": [
+          { "mediaKey": "media-2", "kind": "image", "url": "https://example.com/img2.jpg", "caption": "Image", "altText": "Alt" }
+        ],
+        "costOfLiving": [
+          { "itemKey": "col-2", "category": "housing", "monthlyLow": "1200", "monthlyHigh": "2400", "currency": "USD" }
+        ],
+        "climateMonthly": [
+          { "monthKey": "1", "avgHighTemp": "30", "avgLowTemp": "20", "precipitationMm": "90", "humidityPct": "70" }
+        ],
+        "housing": [
+          { "summary": "Good", "buyingSummary": "Easy", "rentalSummary": "Moderate" }
+        ],
+        "propertyResources": [
+          { "itemKey": "prop-2", "category": "for_sale", "name": "Realtor", "url": "https://example.com" }
+        ],
+        "healthcare": [
+          { "summary": "Good", "publicAccessSummary": "Easy", "insuranceSummary": "Required" }
+        ],
+        "visaResidency": [
+          { "summary": "D", "residencyPath": "Long", "citizenshipPath": "Long" }
+        ],
+        "taxesFinance": [
+          { "summary": "Simple", "notes": "No issues" }
+        ],
+        "lgbtqInclusivity": [
+          { "summary": "Good", "culturalNotes": "Active" }
+        ],
+        "safetyRisks": [
+          { "itemKey": "risk-2", "topic": "heat", "severity": "medium", "summary": "High" }
+        ],
+        "transportation": [
+          { "summary": "Good", "airportSummary": "Airport", "transitSummary": "Yes" }
+        ],
+        "remoteWork": [
+          { "summary": "Fast", "internetSummary": "200", "timezoneSummary": "Good" }
+        ],
+        "languageIntegration": [
+          { "summary": "English works", "englishSupport": "Yes" }
+        ],
+        "pets": [
+          { "summary": "Pet-friendly", "petFriendlyNotes": "Good" }
+        ],
+        "familyEducation": [
+          { "summary": "Great", "schoolsSummary": "Many" }
+        ],
+        "communitySocial": [
+          { "summary": "Social", "socialNotes": "Many" }
+        ],
+        "accessibility": [
+          { "summary": "Accessible", "mobilityNotes": "Good" }
+        ],
+        "bureaucracySetup": [
+          { "summary": "Easy", "setupNotes": "Passport" }
+        ],
+        "workBusiness": [
+          { "summary": "Good", "remoteWorkNotes": "Great" }
+        ],
+        "retirementAging": [
+          { "summary": "Good", "agingNotes": "Great" }
+        ],
+        "lifestyleLaws": [
+          { "summary": "Good", "legalNotes": "Rules" }
+        ],
+        "realityCheck": [
+          { "itemKey": "reality-2", "title": "Beware", "detail": "Info", "severity": "medium" }
+        ],
+        "moveChecklist": [
+          { "checklistKey": "move-2", "summary": "Pack", "checklistNotes": "Move" }
+        ],
+        "eventsSeasonality": [
+          { "eventSeasonalityKey": "season-2", "summary": "Festival", "seasonalityNotes": "Warm" }
+        ],
+        "sources": [
+          { "sourceKey": "source-2", "name": "Source", "url": "https://example.com", "type": "gov" }
+        ],
+        "environmentQuality": { "summary": "Good", "qualityNotes": "Good" },
+        "dailyLifePracticality": { "summary": "Great", "practicalityNotes": "Be prepared" }
+      }
+    },
+    {
+      "identity": {
+        "destinationKey": "summerlin-nv-us",
+        "slug": "summerlin-las-vegas-nevada",
+        "name": "Summerlin",
+        "city": "Summerlin",
+        "country": "United States"
+      },
+      "storedState": {
+        "identity": { "name": "Summerlin" },
+        "editorial": { "currency": "USD", "primaryLanguage": "English", "timeZone": "America/Los_Angeles" },
+        "facts": [
+          { "factKey": "fact-3", "factGroup": "climate", "valueText": "Dry", "displayLabel": "Climate", "sourceName": "Workbook" }
+        ],
+        "scores": [
+          { "scoreKey": "score-3", "scoreValue": "86", "scoreLabel": "Good", "methodologyVersion": "1" }
+        ],
+        "neighborhoods": [
+          { "neighborhoodKey": "neighborhood-3", "name": "Village", "summary": "Prosperous", "areaType": "urban" }
+        ],
+        "places": [
+          { "placeKey": "place-3", "category": "park", "name": "Park", "description": "Great" }
+        ],
+        "resources": [
+          { "resourceKey": "resource-3", "category": "tourism", "name": "Visit Summerlin", "url": "https://example.com" }
+        ],
+        "media": [
+          { "mediaKey": "media-3", "kind": "image", "url": "https://example.com/img3.jpg", "caption": "Image", "altText": "Alt" }
+        ],
+        "costOfLiving": [
+          { "itemKey": "col-3", "category": "housing", "monthlyLow": "1400", "monthlyHigh": "2600", "currency": "USD" }
+        ],
+        "climateMonthly": [
+          { "monthKey": "1", "avgHighTemp": "35", "avgLowTemp": "22", "precipitationMm": "80", "humidityPct": "40" }
+        ],
+        "housing": [
+          { "summary": "Good", "buyingSummary": "Easy", "rentalSummary": "Moderate" }
+        ],
+        "propertyResources": [
+          { "itemKey": "prop-3", "category": "for_sale", "name": "Realtor", "url": "https://example.com" }
+        ],
+        "healthcare": [
+          { "summary": "Good", "publicAccessSummary": "Easy", "insuranceSummary": "Required" }
+        ],
+        "visaResidency": [
+          { "summary": "D", "residencyPath": "Long", "citizenshipPath": "Long" }
+        ],
+        "taxesFinance": [
+          { "summary": "Simple", "notes": "No issues" }
+        ],
+        "lgbtqInclusivity": [
+          { "summary": "Good", "culturalNotes": "Active" }
+        ],
+        "safetyRisks": [
+          { "itemKey": "risk-3", "topic": "heat", "severity": "medium", "summary": "High" }
+        ],
+        "transportation": [
+          { "summary": "Good", "airportSummary": "Airport", "transitSummary": "Yes" }
+        ],
+        "remoteWork": [
+          { "summary": "Fast", "internetSummary": "250", "timezoneSummary": "Good" }
+        ],
+        "languageIntegration": [
+          { "summary": "English works", "englishSupport": "Yes" }
+        ],
+        "pets": [
+          { "summary": "Pet-friendly", "petFriendlyNotes": "Good" }
+        ],
+        "familyEducation": [
+          { "summary": "Great", "schoolsSummary": "Many" }
+        ],
+        "communitySocial": [
+          { "summary": "Social", "socialNotes": "Many" }
+        ],
+        "accessibility": [
+          { "summary": "Accessible", "mobilityNotes": "Good" }
+        ],
+        "bureaucracySetup": [
+          { "summary": "Easy", "setupNotes": "Passport" }
+        ],
+        "workBusiness": [
+          { "summary": "Good", "remoteWorkNotes": "Great" }
+        ],
+        "retirementAging": [
+          { "summary": "Good", "agingNotes": "Great" }
+        ],
+        "lifestyleLaws": [
+          { "summary": "Good", "legalNotes": "Rules" }
+        ],
+        "realityCheck": [
+          { "itemKey": "reality-3", "title": "Beware", "detail": "Info", "severity": "medium" }
+        ],
+        "moveChecklist": [
+          { "checklistKey": "move-3", "summary": "Pack", "checklistNotes": "Move" }
+        ],
+        "eventsSeasonality": [
+          { "eventSeasonalityKey": "season-3", "summary": "Festival", "seasonalityNotes": "Warm" }
+        ],
+        "sources": [
+          { "sourceKey": "source-3", "name": "Source", "url": "https://example.com", "type": "gov" }
+        ],
+        "environmentQuality": { "summary": "Good", "qualityNotes": "Good" },
+        "dailyLifePracticality": { "summary": "Great", "practicalityNotes": "Be prepared" }
+      }
+    }
+  ]
+}

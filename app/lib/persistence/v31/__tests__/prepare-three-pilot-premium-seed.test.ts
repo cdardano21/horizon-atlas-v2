@@ -268,6 +268,43 @@ describe('prepare_three_pilot_premium_seed', () => {
     expect(sql).toContain("'lisbon-pt-reality-check-check-2'");
   });
 
+  it('maps premium module payload fields into the live storage column names', () => {
+    const payload = {
+      destinations: [
+        {
+          identity: {
+            destinationKey: 'lisbon-pt',
+            slug: 'lisbon-portugal',
+            name: 'Lisbon',
+            country: 'Portugal',
+          },
+          storedState: {
+            identity: { name: 'Lisbon' },
+            editorial: { currency: 'EUR', primaryLanguage: 'Portuguese', timeZone: 'Europe/Lisbon' },
+            housing: [{ summary: 'Good', buyingSummary: 'Easy', rentalSummary: 'Strict' }],
+            healthcare: [{ summary: 'Modern', publicAccessSummary: 'Easy', insuranceSummary: 'Required' }],
+            visaResidency: [{ summary: 'Short stay', residencyPath: 'Temporary', citizenshipPath: 'None' }],
+            transportation: [{ summary: 'Airport', airportSummary: 'Large', transitSummary: 'Yes' }],
+            remoteWork: [{ summary: 'Fast', internetSummary: '300', timezoneSummary: 'Good' }],
+          },
+        },
+      ],
+    };
+
+    const sql = buildSql(payload);
+
+    expect(sql).toContain("INSERT INTO public.premium_housing_property (destination_id, destination_key, record_key, restrictions_summary, buying_process_summary, rental_rules_notes)");
+    expect(sql).toContain("'lisbon-pt-housing-1', 'Good', 'Easy', 'Strict'");
+    expect(sql).toContain("INSERT INTO public.premium_healthcare_insurance (destination_id, destination_key, record_key, system_summary, public_access_foreigners, international_insurance_notes)");
+    expect(sql).toContain("'lisbon-pt-healthcare-1', 'Modern', 'Easy', 'Required'");
+    expect(sql).toContain("INSERT INTO public.premium_visa_residency (destination_id, destination_key, record_key, visa_type, permanent_residency_path, citizenship_path)");
+    expect(sql).toContain("'lisbon-pt-visa-1', 'Short stay', 'Temporary', 'None'");
+    expect(sql).toContain("INSERT INTO public.premium_transport_airports (destination_id, destination_key, record_key, summary, name, public_transit_available)");
+    expect(sql).toContain("'lisbon-pt-transport-1', 'Airport', 'Large', true");
+    expect(sql).toContain("INSERT INTO public.premium_connectivity_remote_work (destination_id, destination_key, record_key, remote_work_notes, avg_download_mbps, us_time_zone_fit)");
+    expect(sql).toContain("'lisbon-pt-remote-work-1', 'Fast', 300, 'Good'");
+  });
+
   it('writes per-destination sequential positions for every position-based module in the SQL artifact', () => {
     execFileSync('node', ['scripts/prepare_three_pilot_premium_seed.mjs'], {
       cwd: process.cwd(),
