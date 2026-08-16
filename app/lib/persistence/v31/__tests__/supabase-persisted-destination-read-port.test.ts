@@ -4,6 +4,7 @@ import { createSupabasePersistedDestinationReadPort, type PersistedDestinationSu
 
 class FakeSupabaseReadClient implements PersistedDestinationSupabaseReadClient {
   readonly writeCalls: string[] = [];
+  readonly selectCalls: Array<{ readonly table: string; readonly select: string; readonly filters?: readonly { readonly column: string; readonly operator: string; readonly value: unknown }[] }> = [];
 
   constructor(
     private readonly rowsByTable: Record<string, readonly Record<string, unknown>[]>,
@@ -12,6 +13,7 @@ class FakeSupabaseReadClient implements PersistedDestinationSupabaseReadClient {
   ) {}
 
   async selectRows(args: { readonly table: string; readonly select: string; readonly filters?: readonly { readonly column: string; readonly operator: string; readonly value: unknown }[] }) {
+    this.selectCalls.push({ table: args.table, select: args.select, filters: args.filters });
     const error = this.errorsByTable[args.table];
     if (error) {
       if (this.delayedErrorsByTable[args.table]) {
@@ -64,10 +66,24 @@ describe("createSupabasePersistedDestinationReadPort", () => {
         destinationId: "dest-id-a",
         destinationKey: "dest-a",
         slug: "braunfels",
-        name: "Braunfels",
+        name: null,
         city: "Braunfels",
         country: "United States",
       },
+    });
+  });
+
+  it("uses the catalog id column for root lookups", async () => {
+    const identity = createIdentity();
+    const client = new FakeSupabaseReadClient({ destinations_catalog: [] });
+    const port = createSupabasePersistedDestinationReadPort(client);
+
+    await port.readRoot(identity);
+
+    expect(client.selectCalls[0]).toEqual({
+      table: "destinations_catalog",
+      select: "id,destination_key,slug,city,country",
+      filters: [{ column: "id", operator: "eq", value: identity.destinationId }],
     });
   });
 

@@ -6,7 +6,7 @@ create extension if not exists pgcrypto;
 
 create table if not exists public.premium_lgbtq_inclusivity (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   position integer not null,
   summary text,
@@ -19,7 +19,7 @@ create table if not exists public.premium_lgbtq_inclusivity (
 
 create table if not exists public.premium_language_integration (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   position integer not null,
   summary text,
@@ -32,7 +32,7 @@ create table if not exists public.premium_language_integration (
 
 create table if not exists public.premium_pets (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   position integer not null,
   summary text,
@@ -45,7 +45,7 @@ create table if not exists public.premium_pets (
 
 create table if not exists public.premium_family_education (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   position integer not null,
   summary text,
@@ -58,7 +58,7 @@ create table if not exists public.premium_family_education (
 
 create table if not exists public.premium_community_social (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   position integer not null,
   summary text,
@@ -71,7 +71,7 @@ create table if not exists public.premium_community_social (
 
 create table if not exists public.premium_accessibility (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   position integer not null,
   summary text,
@@ -84,7 +84,7 @@ create table if not exists public.premium_accessibility (
 
 create table if not exists public.premium_bureaucracy_setup (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   position integer not null,
   summary text,
@@ -97,7 +97,7 @@ create table if not exists public.premium_bureaucracy_setup (
 
 create table if not exists public.premium_work_business (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   position integer not null,
   summary text,
@@ -110,7 +110,7 @@ create table if not exists public.premium_work_business (
 
 create table if not exists public.premium_retirement_aging (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   position integer not null,
   summary text,
@@ -123,7 +123,7 @@ create table if not exists public.premium_retirement_aging (
 
 create table if not exists public.premium_lifestyle_laws (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   position integer not null,
   summary text,
@@ -136,7 +136,7 @@ create table if not exists public.premium_lifestyle_laws (
 
 create table if not exists public.premium_environment_quality (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   summary text,
   quality_notes text,
@@ -147,7 +147,7 @@ create table if not exists public.premium_environment_quality (
 
 create table if not exists public.premium_daily_life_practicality (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   summary text,
   practicality_notes text,

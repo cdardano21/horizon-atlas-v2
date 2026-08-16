@@ -6,7 +6,7 @@ create extension if not exists pgcrypto;
 
 create table if not exists public.premium_destination_profiles (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   profile_status text not null default 'draft' check (profile_status in ('draft', 'review', 'published', 'archived')),
   summary text,
@@ -20,7 +20,7 @@ create table if not exists public.premium_destination_profiles (
 
 create table if not exists public.premium_destination_facts (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   fact_key text not null,
   fact_type text,
@@ -35,7 +35,7 @@ create table if not exists public.premium_destination_facts (
 
 create table if not exists public.premium_destination_scores (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   score_key text not null,
   score_name text,
@@ -50,7 +50,7 @@ create table if not exists public.premium_destination_scores (
 
 create table if not exists public.premium_neighborhoods (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   neighborhood_key text not null,
   neighborhood_name text not null,
@@ -75,7 +75,7 @@ create table if not exists public.premium_neighborhoods (
 
 create table if not exists public.premium_places (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   neighborhood_key text,
   place_key text not null,
@@ -104,7 +104,7 @@ create table if not exists public.premium_places (
 
 create table if not exists public.premium_resources (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   resource_key text not null,
   resource_category text,
@@ -125,7 +125,7 @@ create table if not exists public.premium_resources (
 
 create table if not exists public.premium_media (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   media_key text not null,
   media_type text,
@@ -146,7 +146,7 @@ create table if not exists public.premium_media (
 
 create table if not exists public.premium_cost_of_living (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   record_key text not null,
   household_type text,
@@ -168,7 +168,7 @@ create table if not exists public.premium_cost_of_living (
 
 create table if not exists public.premium_climate_monthly (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   record_key text not null,
   month_key text not null,
@@ -185,7 +185,7 @@ create table if not exists public.premium_climate_monthly (
 
 create table if not exists public.premium_housing_property (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   record_key text not null,
   housing_topic text,
@@ -217,7 +217,7 @@ create table if not exists public.premium_housing_property (
 
 create table if not exists public.premium_property_resources (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   record_key text not null,
   transaction_type text,
@@ -236,7 +236,7 @@ create table if not exists public.premium_property_resources (
 
 create table if not exists public.premium_healthcare_insurance (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   record_key text not null,
   topic text,
@@ -262,7 +262,7 @@ create table if not exists public.premium_healthcare_insurance (
 
 create table if not exists public.premium_visa_residency (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   record_key text not null,
   traveler_nationality text,
@@ -287,7 +287,7 @@ create table if not exists public.premium_visa_residency (
 
 create table if not exists public.premium_taxes_finance (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   record_key text not null,
   topic text,
@@ -305,7 +305,7 @@ create table if not exists public.premium_taxes_finance (
 
 create table if not exists public.premium_safety_risks (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   record_key text not null,
   topic text,
@@ -322,7 +322,7 @@ create table if not exists public.premium_safety_risks (
 
 create table if not exists public.premium_transport_airports (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   record_key text not null,
   topic text,
@@ -346,7 +346,7 @@ create table if not exists public.premium_transport_airports (
 
 create table if not exists public.premium_connectivity_remote_work (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   record_key text not null,
   avg_download_mbps numeric(8,2),
@@ -367,7 +367,7 @@ create table if not exists public.premium_connectivity_remote_work (
 
 create table if not exists public.premium_reality_check (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   record_key text not null,
   display_order integer not null default 0,
@@ -386,7 +386,7 @@ create table if not exists public.premium_reality_check (
 
 create table if not exists public.premium_sources (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   source_key text not null,
   source_name text not null,

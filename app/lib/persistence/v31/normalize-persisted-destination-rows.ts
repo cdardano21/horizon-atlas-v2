@@ -281,7 +281,7 @@ export function normalizePersistedDestinationRows(input: {
     destinationKey: input.identity.destinationKey,
     identity: {
       slug: input.root.slug,
-      name: input.root.name,
+      name: input.root.name ?? input.profile.identityName ?? null,
       city: input.root.city,
       country: input.root.country,
     },

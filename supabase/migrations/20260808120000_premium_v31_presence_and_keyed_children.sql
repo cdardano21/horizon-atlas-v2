@@ -6,7 +6,7 @@ create extension if not exists pgcrypto;
 
 create table if not exists public.premium_destination_module_presence (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   module_key text not null,
   created_at timestamptz not null default now(),
@@ -30,7 +30,7 @@ create table if not exists public.premium_destination_module_presence (
 
 create table if not exists public.premium_move_checklist (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   checklist_key text not null,
   summary text,
@@ -42,7 +42,7 @@ create table if not exists public.premium_move_checklist (
 
 create table if not exists public.premium_events_seasonality (
   id uuid primary key default gen_random_uuid(),
-  destination_id uuid not null references public.destinations_catalog(destination_id) on delete cascade,
+  destination_id uuid not null references public.destinations_catalog(id) on delete cascade,
   destination_key text not null,
   event_seasonality_key text not null,
   summary text,

@@ -13,7 +13,36 @@ function asStoredKey<T extends string>(value: unknown): T {
   return (value == null ? "" : String(value)) as T;
 }
 
+function ensureUniqueChildRows<T extends Record<string, unknown>, K extends keyof T>(rows: readonly T[], keyField: K): Array<T> {
+  const counts = new Map<string, number>();
+
+  return rows.map((row, index) => {
+    const candidateValue = String((row[keyField] as unknown) ?? "");
+    const baseValue = candidateValue.trim() || `row-${index + 1}`;
+    const occurrence = counts.get(baseValue) ?? 0;
+    const nextValue = occurrence > 0 ? `${baseValue}-${occurrence + 1}` : baseValue;
+    counts.set(baseValue, occurrence + 1);
+
+    return { ...row, [keyField]: nextValue } as T;
+  });
+}
+
 export function mapCanonicalDestinationToStoredState(canonicalDestination: DeterministicV31CanonicalDestination): StoredDestinationState {
+  const facts = ensureUniqueChildRows(canonicalDestination.facts, "factKey");
+  const scores = ensureUniqueChildRows(canonicalDestination.scores, "scoreKey");
+  const neighborhoods = ensureUniqueChildRows(canonicalDestination.neighborhoods, "neighborhood_key");
+  const places = ensureUniqueChildRows(canonicalDestination.places, "place_key");
+  const resources = ensureUniqueChildRows(canonicalDestination.resources, "resource_key");
+  const media = ensureUniqueChildRows(canonicalDestination.media, "media_key");
+  const costOfLiving = ensureUniqueChildRows(canonicalDestination.costOfLiving, "record_key");
+  const climateMonthly = ensureUniqueChildRows(canonicalDestination.climateMonthly, "month");
+  const propertyResources = ensureUniqueChildRows(canonicalDestination.propertyResources, "resource_key");
+  const safetyRisks = ensureUniqueChildRows(canonicalDestination.safetyRisks, "record_key");
+  const realityCheck = ensureUniqueChildRows(canonicalDestination.realityCheck, "record_key");
+  const moveChecklist = ensureUniqueChildRows(canonicalDestination.moveChecklist, "checklist_key");
+  const eventsSeasonality = ensureUniqueChildRows(canonicalDestination.eventsSeasonality, "event_season_key");
+  const sources = ensureUniqueChildRows(canonicalDestination.sources, "source_key");
+
   return {
     identity: {
       destinationKey: asStoredKey<CanonicalDestinationKey>(canonicalDestination.identity.destinationKey),
@@ -29,52 +58,52 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       primaryLanguage: asStoredNullableString(canonicalDestination.editorial.primaryLanguage),
       timeZone: asStoredNullableString(canonicalDestination.editorial.timeZone),
     },
-    facts: canonicalDestination.facts.map((fact) => ({
+    facts: facts.map((fact) => ({
       factKey: asStoredKey<StoredDestinationState["facts"][number]["factKey"]>(fact.factKey),
       factGroup: asStoredNullableString(fact.factGroup),
       valueText: asStoredNullableString(fact.valueText),
       displayLabel: asStoredNullableString(fact.displayLabel),
       sourceName: asStoredNullableString(fact.sourceName),
     })),
-    scores: canonicalDestination.scores.map((score) => ({
+    scores: scores.map((score) => ({
       scoreKey: asStoredKey<StoredDestinationState["scores"][number]["scoreKey"]>(score.scoreKey),
       scoreValue: asStoredNullableString(score.scoreValue),
       scoreLabel: asStoredNullableString(score.scoreLabel),
       methodologyVersion: asStoredNullableString(score.methodologyVersion),
     })),
-    neighborhoods: canonicalDestination.neighborhoods.map((neighborhood) => ({
+    neighborhoods: neighborhoods.map((neighborhood) => ({
       neighborhoodKey: asStoredKey<StoredDestinationState["neighborhoods"][number]["neighborhoodKey"]>(asStoredChild(neighborhood, "neighborhood_key")),
       name: asStoredNullableString(neighborhood.neighborhood_name),
       summary: asStoredNullableString(neighborhood.summary),
       areaType: asStoredNullableString(neighborhood.area_type),
     })),
-    places: canonicalDestination.places.map((place) => ({
+    places: places.map((place) => ({
       placeKey: asStoredKey<StoredDestinationState["places"][number]["placeKey"]>(asStoredChild(place, "place_key")),
       category: asStoredNullableString(place.category_key),
       name: asStoredNullableString(place.place_name),
       description: asStoredNullableString(place.description),
     })),
-    resources: canonicalDestination.resources.map((resource) => ({
+    resources: resources.map((resource) => ({
       resourceKey: asStoredKey<StoredDestinationState["resources"][number]["resourceKey"]>(asStoredChild(resource, "resource_key")),
       category: asStoredNullableString(resource.resource_category),
       name: asStoredNullableString(resource.resource_name),
       url: asStoredNullableString(resource.url),
     })),
-    media: canonicalDestination.media.map((media) => ({
+    media: media.map((media) => ({
       mediaKey: asStoredKey<StoredDestinationState["media"][number]["mediaKey"]>(asStoredChild(media, "media_key")),
       kind: asStoredNullableString(media.media_type),
       url: asStoredNullableString(media.image_url),
       caption: asStoredNullableString(media.caption),
       altText: asStoredNullableString(media.subject),
     })),
-    costOfLiving: canonicalDestination.costOfLiving.map((item) => ({
+    costOfLiving: costOfLiving.map((item) => ({
       itemKey: asStoredKey<StoredDestinationState["costOfLiving"][number]["itemKey"]>(asStoredChild(item, "record_key")),
       category: asStoredNullableString(item.category),
       monthlyLow: asStoredNullableString(item.monthly_low),
       monthlyHigh: asStoredNullableString(item.monthly_high),
       currency: asStoredNullableString(item.currency),
     })),
-    climateMonthly: canonicalDestination.climateMonthly.map((month) => ({
+    climateMonthly: climateMonthly.map((month) => ({
       monthKey: asStoredKey<StoredDestinationState["climateMonthly"][number]["monthKey"]>(asStoredChild(month, "month")),
       avgHighTemp: asStoredNullableString(month.avg_high_c),
       avgLowTemp: asStoredNullableString(month.avg_low_c),
@@ -86,7 +115,7 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       buyingSummary: asStoredNullableString(state.buying_process_summary),
       rentalSummary: asStoredNullableString(state.rental_rules_notes),
     })),
-    propertyResources: canonicalDestination.propertyResources.map((resource) => ({
+    propertyResources: propertyResources.map((resource) => ({
       itemKey: asStoredKey<StoredDestinationState["propertyResources"][number]["itemKey"]>(asStoredChild(resource, "resource_key")),
       category: asStoredNullableString(resource.resource_type),
       name: asStoredNullableString(resource.resource_name),
@@ -110,7 +139,7 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       summary: asStoredNullableString(state.evidence_summary),
       culturalNotes: asStoredNullableString(state.community_scene),
     })),
-    safetyRisks: canonicalDestination.safetyRisks.map((risk) => ({
+    safetyRisks: safetyRisks.map((risk) => ({
       itemKey: asStoredKey<StoredDestinationState["safetyRisks"][number]["itemKey"]>(asStoredChild(risk, "record_key")),
       topic: asStoredNullableString(risk.risk_type),
       severity: asStoredNullableString(risk.severity),
@@ -162,13 +191,13 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       summary: asStoredNullableString(state.summary),
       legalNotes: asStoredNullableString(state.important_rules),
     })),
-    realityCheck: canonicalDestination.realityCheck.map((entry) => ({
+    realityCheck: realityCheck.map((entry) => ({
       itemKey: asStoredKey<StoredDestinationState["realityCheck"][number]["itemKey"]>(asStoredChild(entry, "record_key")),
       title: asStoredNullableString(entry.title),
       detail: asStoredNullableString(entry.detail),
       severity: asStoredNullableString(entry.severity),
     })),
-    moveChecklist: canonicalDestination.moveChecklist.map((state) => ({
+    moveChecklist: moveChecklist.map((state) => ({
       checklistKey: asStoredKey<StoredDestinationState["moveChecklist"][number]["checklistKey"]>(asStoredChild(state, "checklist_key")),
       summary: asStoredNullableString(state.task),
       checklistNotes: asStoredNullableString(state.description),
@@ -181,12 +210,12 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       summary: asStoredNullableString(canonicalDestination.dailyLifePracticality.grocery_access),
       practicalityNotes: asStoredNullableString(canonicalDestination.dailyLifePracticality.things_residents_wish_they_knew),
     } : null,
-    eventsSeasonality: canonicalDestination.eventsSeasonality.map((state) => ({
+    eventsSeasonality: eventsSeasonality.map((state) => ({
       eventSeasonalityKey: asStoredKey<StoredDestinationState["eventsSeasonality"][number]["eventSeasonalityKey"]>(asStoredChild(state, "event_season_key")),
       summary: asStoredNullableString(state.description),
       seasonalityNotes: asStoredNullableString(state.weather_context),
     })),
-    sources: canonicalDestination.sources.map((source) => ({
+    sources: sources.map((source) => ({
       sourceKey: asStoredKey<StoredDestinationState["sources"][number]["sourceKey"]>(asStoredChild(source, "source_key")),
       name: asStoredNullableString(source.source_name),
       url: asStoredNullableString(source.source_url),

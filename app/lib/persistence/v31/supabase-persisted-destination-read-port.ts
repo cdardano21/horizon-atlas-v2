@@ -69,12 +69,13 @@ async function readSingleRow<T>(
   select: string,
   identity: ResolvedDestinationIdentity,
   transform: (row: Record<string, unknown>) => T,
+  identityColumn = "destination_id",
 ): Promise<QueryResult<T | null>> {
   try {
     const rows = await client.selectRows({
       table,
       select,
-      filters: [{ column: "destination_id", operator: "eq", value: identity.destinationId }],
+      filters: [{ column: identityColumn, operator: "eq", value: identity.destinationId }],
     });
 
     if (rows.length === 0) {
@@ -100,12 +101,13 @@ async function readRows<T>(
   select: string,
   identity: ResolvedDestinationIdentity,
   transform: (row: Record<string, unknown>) => T,
+  identityColumn = "destination_id",
 ): Promise<QueryResult<readonly T[]>> {
   try {
     const rows = await client.selectRows({
       table,
       select,
-      filters: [{ column: "destination_id", operator: "eq", value: identity.destinationId }],
+      filters: [{ column: identityColumn, operator: "eq", value: identity.destinationId }],
     });
 
     const mapped: T[] = [];
@@ -126,14 +128,14 @@ export function createSupabasePersistedDestinationReadPort(
 ): PersistedDestinationReadPort {
   return {
     async readRoot(identity) {
-      return readSingleRow(client, "destinations_catalog", "destination_id,destination_key,slug,name,city,country", identity, (row) => ({
-        destinationId: String(row.destination_id ?? ""),
+      return readSingleRow(client, "destinations_catalog", "id,destination_key,slug,city,country", identity, (row) => ({
+        destinationId: String(row.id ?? row.destination_id ?? ""),
         destinationKey: String(row.destination_key ?? ""),
         slug: pickString(row, "slug"),
-        name: pickString(row, "name"),
+        name: null,
         city: pickString(row, "city"),
         country: pickString(row, "country"),
-      } as PersistedRootRow));
+      } as PersistedRootRow), "id");
     },
 
     async readProfile(identity) {

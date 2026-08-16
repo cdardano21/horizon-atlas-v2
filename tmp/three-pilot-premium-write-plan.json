@@ -1,0 +1,172 @@
+[
+  {
+    "table": "premium_accessibility",
+    "expectedRowCount": 3,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_bureaucracy_setup",
+    "expectedRowCount": 15,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_climate_monthly",
+    "expectedRowCount": 36,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_community_social",
+    "expectedRowCount": 3,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_connectivity_remote_work",
+    "expectedRowCount": 3,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_cost_of_living",
+    "expectedRowCount": 30,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_daily_life_practicality",
+    "expectedRowCount": 3,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_destination_facts",
+    "expectedRowCount": 10,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_destination_module_presence",
+    "expectedRowCount": 96,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_destination_profiles",
+    "expectedRowCount": 3,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_destination_scores",
+    "expectedRowCount": 9,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_environment_quality",
+    "expectedRowCount": 3,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_events_seasonality",
+    "expectedRowCount": 6,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_family_education",
+    "expectedRowCount": 3,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_healthcare_insurance",
+    "expectedRowCount": 3,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_housing_property",
+    "expectedRowCount": 3,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_language_integration",
+    "expectedRowCount": 3,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_lgbtq_inclusivity",
+    "expectedRowCount": 3,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_lifestyle_laws",
+    "expectedRowCount": 6,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_media",
+    "expectedRowCount": 11,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_move_checklist",
+    "expectedRowCount": 30,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_neighborhoods",
+    "expectedRowCount": 24,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_pets",
+    "expectedRowCount": 3,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_places",
+    "expectedRowCount": 105,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_property_resources",
+    "expectedRowCount": 9,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_reality_check",
+    "expectedRowCount": 15,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_resources",
+    "expectedRowCount": 20,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_retirement_aging",
+    "expectedRowCount": 3,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_safety_risks",
+    "expectedRowCount": 4,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_sources",
+    "expectedRowCount": 51,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_taxes_finance",
+    "expectedRowCount": 3,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_transport_airports",
+    "expectedRowCount": 7,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_visa_residency",
+    "expectedRowCount": 4,
+    "zeroRows": false
+  },
+  {
+    "table": "premium_work_business",
+    "expectedRowCount": 3,
+    "zeroRows": false
+  }
+]
