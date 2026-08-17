@@ -4,7 +4,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import type { DeterministicV31CanonicalDestination } from "../../../workbook-v31-deterministic-core";
 import type { CanonicalDestinationKey, StoredDestinationState } from "../index";
-import { projectCanonicalComparable, projectComparable, projectComparableObject, projectComparableValue, projectKeyedChildArray, projectOrderedArray, projectStoredComparable } from "../comparable-projection";
+import { projectCanonicalComparable, projectComparable, projectComparableObject, projectComparableValue, projectKeyedChildArray, projectKeyedChildComparableRow, projectOrderedArray, projectStoredComparable } from "../comparable-projection";
 
 const asDestinationKey = (value: string): CanonicalDestinationKey => value as CanonicalDestinationKey;
 
@@ -739,6 +739,75 @@ describe("Phase 3A.1 comparable projection", () => {
 
     expect(projectCanonicalComparable(canonicalFixture)).toEqual(projectStoredComparable(storedFixture));
     expect(projectComparable(canonicalFixture)).toEqual(projectComparable(storedFixture));
+  });
+
+  it("projects canonical and stored keyed-child rows to the same comparable shape for every keyed-child module", () => {
+    const fixtures: ReadonlyArray<{ module: import("../types").KeyedChildModuleKey; canonical: Record<string, unknown>; stored: Record<string, unknown> }> = [
+      { module: "facts", canonical: { fact_key: "fact-1", fact_group: "group", value_text: "Value", display_label: "Label", source_name: "Source" }, stored: { factKey: "fact-1", factGroup: "group", valueText: "Value", displayLabel: "Label", sourceName: "Source" } },
+      { module: "scores", canonical: { score_key: "score-1", score_value: "8.4", score_label: "Overall", methodology_version: "v31" }, stored: { scoreKey: "score-1", scoreValue: "8.4", scoreLabel: "Overall", methodologyVersion: "v31" } },
+      { module: "neighborhoods", canonical: { neighborhood_key: "hood-1", neighborhood_name: "Old Town", summary: "Center", area_type: "urban" }, stored: { neighborhoodKey: "hood-1", name: "Old Town", summary: "Center", areaType: "urban" } },
+      { module: "places", canonical: { place_key: "place-1", category_key: "food", place_name: "Bluefin", description: "Seafood", neighborhood_key: "hood-1", website_url: "https://example.com", google_maps_url: "https://maps.example.com", source_url: "https://source.example.com", address: "123 Main", phone: "+1 111", display_order: "1" }, stored: { placeKey: "place-1", category: "food", name: "Bluefin", description: "Seafood", neighborhoodKey: "hood-1", websiteUrl: "https://example.com", googleMapsUrl: "https://maps.example.com", sourceUrl: "https://source.example.com", address: "123 Main", phone: "+1 111", displayOrder: "1" } },
+      { module: "resources", canonical: { resource_key: "resource-1", resource_category: "government", resource_name: "City Hall", url: "https://city.example.com" }, stored: { resourceKey: "resource-1", category: "government", name: "City Hall", url: "https://city.example.com" } },
+      { module: "media", canonical: { media_key: "media-1", media_type: "image", image_url: "https://img.example.com/a.jpg", caption: "Main square", subject: "Square" }, stored: { mediaKey: "media-1", kind: "image", url: "https://img.example.com/a.jpg", caption: "Main square", altText: "Square" } },
+      { module: "propertyResources", canonical: { resource_key: "property-1", resource_type: "agent", resource_name: "Local Realty", url: "https://realty.example.com" }, stored: { itemKey: "property-1", category: "agent", name: "Local Realty", url: "https://realty.example.com" } },
+      { module: "moveChecklist", canonical: { checklist_key: "check-1", task: "Open bank account", description: "Bring passport" }, stored: { checklistKey: "check-1", summary: "Open bank account", checklistNotes: "Bring passport" } },
+      { module: "eventsSeasonality", canonical: { event_season_key: "season-1", description: "Summer high season", weather_context: "Hot and dry" }, stored: { eventSeasonalityKey: "season-1", summary: "Summer high season", seasonalityNotes: "Hot and dry" } },
+      { module: "sources", canonical: { source_key: "source-1", source_name: "Tourism Board", source_url: "https://source.example.com", source_type: "official" }, stored: { sourceKey: "source-1", name: "Tourism Board", url: "https://source.example.com", type: "official" } },
+    ];
+
+    for (const fixture of fixtures) {
+      expect(projectKeyedChildComparableRow(fixture.module, fixture.canonical)).toEqual(projectKeyedChildComparableRow(fixture.module, fixture.stored));
+    }
+  });
+
+  it("treats score methodologyVersion as non-comparable metadata", () => {
+    const canonicalScore = {
+      score_key: "score-1",
+      score_value: "8.4",
+      score_label: "Overall",
+      methodology_version: "v3.1",
+    };
+
+    const storedScore = {
+      scoreKey: "score-1",
+      scoreValue: "8.4",
+      scoreLabel: "Overall",
+      methodologyVersion: null,
+    };
+
+    expect(projectKeyedChildComparableRow("scores", canonicalScore)).toEqual(projectKeyedChildComparableRow("scores", storedScore));
+  });
+
+  it("treats place optional null and undefined fields as semantically equivalent", () => {
+    const canonicalPlace = {
+      place_key: "place-1",
+      category_key: "food",
+      place_name: "Bluefin",
+      description: null,
+      neighborhood_key: null,
+      website_url: undefined,
+      google_maps_url: null,
+      source_url: undefined,
+      address: undefined,
+      phone: null,
+      display_order: null,
+    };
+
+    const storedPlace = {
+      placeKey: "place-1",
+      category: "food",
+      name: "Bluefin",
+      description: null,
+      neighborhoodKey: null,
+      websiteUrl: null,
+      googleMapsUrl: null,
+      sourceUrl: null,
+      address: null,
+      phone: null,
+      displayOrder: null,
+    };
+
+    expect(projectKeyedChildComparableRow("places", canonicalPlace)).toEqual(projectKeyedChildComparableRow("places", storedPlace));
   });
 
   it("produces identical comparable output in a fresh Node process", () => {

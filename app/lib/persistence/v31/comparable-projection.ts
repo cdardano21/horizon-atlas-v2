@@ -1,4 +1,5 @@
 import type { DeterministicV31CanonicalDestination } from "../../workbook-v31-deterministic-core";
+import type { KeyedChildModuleKey } from "./types";
 import type { StoredDestinationState } from "./types";
 
 export type ComparablePrimitive = null | string | number | boolean;
@@ -196,6 +197,114 @@ export function projectKeyedChildArray<T extends ComparableObjectInput>(value: r
 
 export function projectOrderedArray<T>(value: readonly T[]): ComparableArray {
   return value.map((entry) => projectComparableValue(entry));
+}
+
+function toNullableString(value: unknown): string | null {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  return String(value);
+}
+
+function pickFirst(record: Record<string, unknown>, fields: readonly string[]): unknown {
+  for (const field of fields) {
+    const value = record[field];
+    if (value !== null && value !== undefined) {
+      return value;
+    }
+  }
+  return null;
+}
+
+function pickNullableString(record: Record<string, unknown>, fields: readonly string[]): string | null {
+  return toNullableString(pickFirst(record, fields));
+}
+
+export function projectKeyedChildComparableRow(module: KeyedChildModuleKey, value: unknown): ComparableObject {
+  if (!isComparableObjectValue(value)) {
+    return projectComparableObject({});
+  }
+
+  const record = value as Record<string, unknown>;
+
+  switch (module) {
+    case "facts":
+      return projectComparableObject({
+        factKey: pickNullableString(record, ["factKey", "fact_key"]),
+        factGroup: pickNullableString(record, ["factGroup", "fact_group"]),
+        valueText: pickNullableString(record, ["valueText", "value_text"]),
+        displayLabel: pickNullableString(record, ["displayLabel", "display_label"]),
+        sourceName: pickNullableString(record, ["sourceName", "source_name"]),
+      });
+    case "scores":
+      return projectComparableObject({
+        scoreKey: pickNullableString(record, ["scoreKey", "score_key"]),
+        scoreValue: pickNullableString(record, ["scoreValue", "score_value"]),
+        scoreLabel: pickNullableString(record, ["scoreLabel", "score_label"]),
+      });
+    case "neighborhoods":
+      return projectComparableObject({
+        neighborhoodKey: pickNullableString(record, ["neighborhoodKey", "neighborhood_key"]),
+        name: pickNullableString(record, ["name", "neighborhood_name"]),
+        summary: pickNullableString(record, ["summary"]),
+        areaType: pickNullableString(record, ["areaType", "area_type"]),
+      });
+    case "places":
+      return projectComparableObject({
+        placeKey: pickNullableString(record, ["placeKey", "place_key"]),
+        category: pickNullableString(record, ["category", "category_key"]),
+        name: pickNullableString(record, ["name", "place_name"]),
+        description: pickNullableString(record, ["description"]),
+        neighborhoodKey: pickNullableString(record, ["neighborhoodKey", "neighborhood_key"]),
+        websiteUrl: pickNullableString(record, ["websiteUrl", "website_url"]),
+        googleMapsUrl: pickNullableString(record, ["googleMapsUrl", "google_maps_url"]),
+        sourceUrl: pickNullableString(record, ["sourceUrl", "source_url"]),
+        address: pickNullableString(record, ["address"]),
+        phone: pickNullableString(record, ["phone"]),
+        displayOrder: pickNullableString(record, ["displayOrder", "display_order"]),
+      });
+    case "resources":
+      return projectComparableObject({
+        resourceKey: pickNullableString(record, ["resourceKey", "resource_key"]),
+        category: pickNullableString(record, ["category", "resource_category"]),
+        name: pickNullableString(record, ["name", "resource_name"]),
+        url: pickNullableString(record, ["url"]),
+      });
+    case "media":
+      return projectComparableObject({
+        mediaKey: pickNullableString(record, ["mediaKey", "media_key"]),
+        kind: pickNullableString(record, ["kind", "media_type"]),
+        url: pickNullableString(record, ["url", "image_url"]),
+        caption: pickNullableString(record, ["caption"]),
+        altText: pickNullableString(record, ["altText", "subject"]),
+      });
+    case "propertyResources":
+      return projectComparableObject({
+        itemKey: pickNullableString(record, ["itemKey", "resource_key"]),
+        category: pickNullableString(record, ["category", "resource_type"]),
+        name: pickNullableString(record, ["name", "resource_name"]),
+        url: pickNullableString(record, ["url"]),
+      });
+    case "moveChecklist":
+      return projectComparableObject({
+        checklistKey: pickNullableString(record, ["checklistKey", "checklist_key"]),
+        summary: pickNullableString(record, ["summary", "task"]),
+        checklistNotes: pickNullableString(record, ["checklistNotes", "description"]),
+      });
+    case "eventsSeasonality":
+      return projectComparableObject({
+        eventSeasonalityKey: pickNullableString(record, ["eventSeasonalityKey", "event_season_key"]),
+        summary: pickNullableString(record, ["summary", "description"]),
+        seasonalityNotes: pickNullableString(record, ["seasonalityNotes", "weather_context"]),
+      });
+    case "sources":
+      return projectComparableObject({
+        sourceKey: pickNullableString(record, ["sourceKey", "source_key"]),
+        name: pickNullableString(record, ["name", "source_name"]),
+        url: pickNullableString(record, ["url", "source_url"]),
+        type: pickNullableString(record, ["type", "source_type"]),
+      });
+  }
 }
 
 function toCanonicalFact(value: DeterministicV31CanonicalDestination["facts"][number]): ComparableObjectInput {

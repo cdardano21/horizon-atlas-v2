@@ -3,7 +3,7 @@ import { diffNonKeyedRepeatableModule } from "./diff-non-keyed";
 import { diffScalar } from "./diff-scalar";
 import { diffSingletonModule } from "./diff-non-keyed";
 import type { DeterministicV31CanonicalDestination } from "../../workbook-v31-deterministic-core";
-import { projectComparable, projectComparableValue } from "./comparable-projection";
+import { projectComparable, projectComparableValue, projectKeyedChildComparableRow } from "./comparable-projection";
 import type { ComparableObject, ComparableProjection, ComparableValue } from "./comparable-projection";
 import type { PersistenceError } from "./errors";
 import type { OperationManifestInterpretationResult } from "./manifest";
@@ -153,6 +153,7 @@ function buildChildOperations(currentState: StoredDestinationState, incomingStat
       module,
       currentChildren: currentChildren as readonly never[],
       incomingChildren: incomingChildren as readonly never[],
+      projectChildForComparison: (child) => projectKeyedChildComparableRow(module, child),
       getStableKey: (child) => {
         const keyField = {
           facts: "factKey",
@@ -166,11 +167,6 @@ function buildChildOperations(currentState: StoredDestinationState, incomingStat
           eventsSeasonality: "eventSeasonalityKey",
           sources: "sourceKey",
         }[module] as string;
-        // Raw canonical destination objects parsed directly from a workbook only carry the
-        // sheet's snake_case column names (e.g. neighborhood_key) - only facts/scores also get an
-        // explicit camelCase alias added during parsing. Falling back to the snake_case column
-        // name here lets every keyed-child module resolve a real stable key instead of colliding
-        // on `undefined` for any raw canonical destination with more than one child in a module.
         const snakeCaseKeyField = {
           facts: "fact_key",
           scores: "score_key",

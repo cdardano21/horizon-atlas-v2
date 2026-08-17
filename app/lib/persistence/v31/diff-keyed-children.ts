@@ -23,6 +23,10 @@ export interface DiffKeyedChildrenInput<M extends KeyedChildModuleKey> {
   readonly getStableKey: (
     child: ChildPayloadByModule[M]
   ) => ChildStableKeyByModule[M] | null;
+  readonly projectChildForComparison?: (
+    child: ChildPayloadByModule[M],
+    side: "current" | "incoming",
+  ) => unknown;
 }
 
 class ChildKeyError extends Error {
@@ -165,7 +169,14 @@ export function diffKeyedChildren<M extends KeyedChildModuleKey>(
       }
 
       if (currentChild !== null && incomingChild !== null) {
-        if (compareChildren(currentChild, incomingChild)) {
+        const comparableCurrentChild = input.projectChildForComparison
+          ? input.projectChildForComparison(currentChild, "current")
+          : currentChild;
+        const comparableIncomingChild = input.projectChildForComparison
+          ? input.projectChildForComparison(incomingChild, "incoming")
+          : incomingChild;
+
+        if (compareChildren(comparableCurrentChild, comparableIncomingChild)) {
           return createUnchangedOperation(input.module, key as ChildStableKeyByModule[M], currentChild, incomingChild) as ChildOperationForModule<M>;
         }
 
