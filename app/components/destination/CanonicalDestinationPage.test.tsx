@@ -924,4 +924,191 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
 
     expect(screen.queryByText("Pets")).not.toBeInTheDocument();
   });
+
+  function buildV31PlaceLinkedDestination(): CanonicalDestination {
+    const destination = buildV31Destination();
+    destination.neighborhoods = ["Neighborhood A", "Neighborhood B", "Neighborhood C", "Neighborhood D", "Neighborhood E"];
+    destination.v31Modules = {
+      ...destination.v31Modules!,
+      neighborhoods: [
+        { neighborhoodKey: "nb-a", name: "Neighborhood A", summary: "First neighborhood.", areaType: "urban" },
+        { neighborhoodKey: "nb-b", name: "Neighborhood B", summary: "Second neighborhood.", areaType: "urban" },
+        { neighborhoodKey: "nb-c", name: "Neighborhood C", summary: "Third neighborhood.", areaType: "urban" },
+        { neighborhoodKey: "nb-d", name: "Neighborhood D", summary: "Fourth neighborhood.", areaType: "urban" },
+        { neighborhoodKey: "nb-e", name: "Neighborhood E", summary: "Fifth neighborhood - should never render.", areaType: "urban" },
+      ],
+      places: [
+        {
+          placeKey: "place-a-restaurant",
+          category: "restaurant",
+          name: "Neighborhood A Bistro",
+          description: "A real restaurant in Neighborhood A.",
+          neighborhoodKey: "nb-a",
+          websiteUrl: "https://neighborhood-a-bistro.example-test.invalid/",
+          googleMapsUrl: "https://maps.example-test.invalid/neighborhood-a-bistro",
+          sourceUrl: "https://neighborhood-a-bistro.example-test.invalid/",
+          address: "1 Main St",
+          phone: "+1 555-0001",
+          displayOrder: "1",
+        },
+        {
+          placeKey: "place-a-coffee",
+          category: "coffee_shop",
+          name: "Neighborhood A Coffee Co",
+          description: "A real coffee shop in Neighborhood A.",
+          neighborhoodKey: "nb-a",
+          websiteUrl: null,
+          googleMapsUrl: "https://maps.example-test.invalid/neighborhood-a-coffee",
+          sourceUrl: "https://maps.example-test.invalid/neighborhood-a-coffee",
+          address: null,
+          phone: null,
+          displayOrder: "2",
+        },
+        {
+          placeKey: "place-a-no-links",
+          category: "restaurant",
+          name: "Neighborhood A No Link Diner",
+          description: "A real restaurant with no verified links at all.",
+          neighborhoodKey: "nb-a",
+          websiteUrl: null,
+          googleMapsUrl: null,
+          sourceUrl: null,
+          address: null,
+          phone: null,
+          displayOrder: "3",
+        },
+        {
+          placeKey: "place-b-restaurant",
+          category: "restaurant",
+          name: "Neighborhood B Grill",
+          description: "A real restaurant in Neighborhood B.",
+          neighborhoodKey: "nb-b",
+          websiteUrl: "https://neighborhood-b-grill.example-test.invalid/",
+          googleMapsUrl: "https://maps.example-test.invalid/neighborhood-b-grill",
+          sourceUrl: "https://neighborhood-b-grill.example-test.invalid/",
+          address: null,
+          phone: null,
+          displayOrder: "1",
+        },
+        {
+          placeKey: "place-e-restaurant",
+          category: "restaurant",
+          name: "Neighborhood E Cafe",
+          description: "A real restaurant in Neighborhood E - must never render since only the first 4 neighborhoods display.",
+          neighborhoodKey: "nb-e",
+          websiteUrl: "https://neighborhood-e-cafe.example-test.invalid/",
+          googleMapsUrl: "https://maps.example-test.invalid/neighborhood-e-cafe",
+          sourceUrl: "https://neighborhood-e-cafe.example-test.invalid/",
+          address: null,
+          phone: null,
+          displayOrder: "1",
+        },
+      ],
+    };
+    return destination;
+  }
+
+  it("renders only 4 neighborhood cards even when more than 4 are persisted", () => {
+    render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    expect(screen.getAllByText("Neighborhood A").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Neighborhood B").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Neighborhood C").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Neighborhood D").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Neighborhood E")).not.toBeInTheDocument();
+  });
+
+  it("selects the same first-4 neighborhoods deterministically across repeated renders", () => {
+    const { unmount } = render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+    const firstRenderHasD = screen.queryByText("Neighborhood D") !== null;
+    unmount();
+
+    render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+    const secondRenderHasD = screen.queryByText("Neighborhood D") !== null;
+
+    expect(firstRenderHasD).toBe(true);
+    expect(secondRenderHasD).toBe(true);
+  });
+
+  it("filters real places by exact neighborhoodKey - a Neighborhood A restaurant never appears under Neighborhood B", () => {
+    render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    expect(screen.getByText("Neighborhood A Bistro")).toBeInTheDocument();
+    expect(screen.getByText("Neighborhood B Grill")).toBeInTheDocument();
+    // Both real restaurants render exactly once each - proves no cross-neighborhood duplication.
+    expect(screen.getAllByText("Neighborhood A Bistro")).toHaveLength(1);
+    expect(screen.getAllByText("Neighborhood B Grill")).toHaveLength(1);
+  });
+
+  it("never renders a place from a neighborhood beyond the 4-neighborhood cap (cross-destination/leakage safety)", () => {
+    render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    expect(screen.queryByText("Neighborhood E Cafe")).not.toBeInTheDocument();
+  });
+
+  it("opens the place modal with a real clickable website link when websiteUrl is present", () => {
+    render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    fireEvent.click(screen.getByText("Neighborhood A Bistro"));
+
+    const websiteLink = screen.getByText("Visit website").closest("a");
+    expect(websiteLink).toHaveAttribute("href", "https://neighborhood-a-bistro.example-test.invalid/");
+  });
+
+  it("opens the place modal with a real clickable Maps link when googleMapsUrl is present", () => {
+    render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    fireEvent.click(screen.getByText("Neighborhood A Bistro"));
+
+    const mapsLink = screen.getByText("Open on Google Maps").closest("a");
+    expect(mapsLink).toHaveAttribute("href", "https://maps.example-test.invalid/neighborhood-a-bistro");
+  });
+
+  it("shows both Website and Maps actions when a real place has both links", () => {
+    render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    fireEvent.click(screen.getByText("Neighborhood A Bistro"));
+
+    expect(screen.getByText("Visit website")).toBeInTheDocument();
+    expect(screen.getByText("Open on Google Maps")).toBeInTheDocument();
+  });
+
+  it("does not invent a fake URL when a real place has no website, maps, or source link at all", () => {
+    render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    fireEvent.click(screen.getByText("Neighborhood A No Link Diner"));
+
+    expect(screen.queryByText("Visit website")).not.toBeInTheDocument();
+    expect(screen.queryByText("Open on Google Maps")).not.toBeInTheDocument();
+  });
+
+  it("omits a category entirely when a neighborhood has zero real places for it (no forced empty category)", () => {
+    render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    // Neighborhood A has no real golf/healthcare/attractions places - these distinctive
+    // compound category labels (unique to the real-places grouping) must not appear.
+    expect(screen.queryByText("Entertainment & nightlife")).not.toBeInTheDocument();
+    expect(screen.queryByText("Attractions & things to do")).not.toBeInTheDocument();
+    expect(screen.queryByText("Outdoor recreation")).not.toBeInTheDocument();
+  });
+
+  it("does not replace real persisted places with generic 'More local detail coming soon' filler for categories that have real data", () => {
+    render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    // Real restaurant/coffee content must be present, not replaced by filler text for those categories.
+    expect(screen.getByText("Neighborhood A Bistro")).toBeInTheDocument();
+    expect(screen.getByText("Neighborhood A Coffee Co")).toBeInTheDocument();
+  });
 });
+

@@ -463,7 +463,81 @@ function profileSignatureStreets(neighborhoodName: string, cityName: string) {
   return `${fallback} is often defined by a few streets that anchor daily errands, cafés, and the social rhythm of the area.`;
 }
 
-function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighborhoodName: string) {
+// Real persisted category_key -> display bucket mapping, covering every category_key value
+// observed across the real Batch #1 workbook data. A category only ever appears on the page when
+// at least one real, exact-neighborhoodKey-matched place exists for it - never forced, never
+// fabricated. Keys not covered here (e.g. "coworking") are intentionally omitted rather than
+// guessed into an unrelated bucket.
+const REAL_PLACE_CATEGORY_BUCKETS: ReadonlyArray<{ key: string; label: string; matches: (category: string) => boolean }> = [
+  { key: "restaurants", label: "Restaurants", matches: (category) => category === "restaurant" },
+  { key: "coffee", label: "Coffee", matches: (category) => category === "coffee_shop" || category === "bakery" },
+  { key: "parks", label: "Parks & recreation", matches: (category) => category === "park" || category === "trail" },
+  { key: "shopping", label: "Shopping", matches: (category) => category === "shopping" || category === "grocery" || category === "farmers_market" },
+  { key: "golf", label: "Golf", matches: (category) => category === "golf" },
+  { key: "healthcare", label: "Healthcare", matches: (category) => category === "hospital" || category === "urgent_care" },
+  { key: "entertainment", label: "Entertainment & nightlife", matches: (category) => category === "live_music" || category === "nightlife" || category === "theater" },
+  { key: "attractions", label: "Attractions & things to do", matches: (category) => category === "attraction" || category === "museum" || category === "zoo_aquarium" },
+  { key: "outdoor", label: "Outdoor recreation", matches: (category) => category === "beach" || category === "water_recreation" || category === "skiing_winter" },
+];
+
+/**
+ * Builds neighborhood-intelligence-style category cards directly from real persisted v3.1 places,
+ * filtered by an exact neighborhoodKey match (never fuzzy, never destination-wide). A category is
+ * only ever included when it has at least one real matching place - no generic filler, no invented
+ * URLs. Places are ordered by their real persisted displayOrder where present, capped at 4 per
+ * category to keep cards compact.
+ */
+function buildRealNeighborhoodPlaceCards(destination: CanonicalDestination, neighborhoodKey: string): NeighborhoodInsightCard[] {
+  const allPlaces = destination.v31Modules?.places ?? [];
+  const neighborhoodPlaces = allPlaces.filter((place) => place.neighborhoodKey === neighborhoodKey);
+
+  return REAL_PLACE_CATEGORY_BUCKETS.flatMap((bucket) => {
+    const matchingPlaces = neighborhoodPlaces
+      .filter((place) => place.category && bucket.matches(place.category) && place.name && place.name.trim().length > 0)
+      .sort((left, right) => {
+        const orderLeft = left.displayOrder ? Number(left.displayOrder) : Number.MAX_SAFE_INTEGER;
+        const orderRight = right.displayOrder ? Number(right.displayOrder) : Number.MAX_SAFE_INTEGER;
+        return orderLeft - orderRight;
+      })
+      .slice(0, 4);
+
+    if (matchingPlaces.length === 0) {
+      return [];
+    }
+
+    const places: NeighborhoodInsightPlace[] = matchingPlaces.map((place) => {
+      const website = place.websiteUrl && place.websiteUrl.trim().length > 0 ? place.websiteUrl : undefined;
+      const mapUrl = place.googleMapsUrl && place.googleMapsUrl.trim().length > 0
+        ? place.googleMapsUrl
+        : website
+        ? undefined
+        : (place.sourceUrl && place.sourceUrl.trim().length > 0 ? place.sourceUrl : undefined);
+
+      return {
+        id: place.placeKey,
+        title: place.name as string,
+        description: place.description ?? `${place.name} is a real place tied to this neighborhood.`,
+        neighborhood: destination.city,
+        category: bucket.label,
+        mapUrl,
+        website,
+        address: place.address ?? undefined,
+        phone: place.phone ?? undefined,
+      } satisfies NeighborhoodInsightPlace;
+    });
+
+    return [{
+      key: bucket.key,
+      label: bucket.label,
+      value: bucket.label,
+      description: `Real persisted places tied to this neighborhood.`,
+      places,
+      emptyMessage: "",
+    } satisfies NeighborhoodInsightCard];
+  });
+}
+
+function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighborhoodName: string, neighborhoodKey?: string) {
   const profile = destination.neighborhoodProfiles?.find((item) => item.name.toLowerCase() === neighborhoodName.toLowerCase());
   const directMetrics = profile?.intelligence ?? [];
   const getDirectValue = (key: string) => directMetrics.find((metric) => metric.key === key)?.value;
@@ -494,7 +568,13 @@ function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighb
       return sameDestination && (sameNeighborhood || /golf/i.test(group.category));
     });
 
-  const categoryCards = [
+  // Real persisted v3.1 places are authoritative for a v3.1 destination's neighborhood cards -
+  // never fall back to generic seed-based category signals (which have no real neighborhoodKey
+  // scoping and can leak an unrelated neighborhood's name into the fallback search query) when
+  // real, exact-neighborhoodKey-matched place rows exist.
+  const categoryCards: NeighborhoodInsightCard[] = neighborhoodKey && (destination.v31Modules?.places?.length ?? 0) > 0
+    ? buildRealNeighborhoodPlaceCards(destination, neighborhoodKey)
+    : [
     {
       key: "restaurants",
       label: "Restaurants",
@@ -805,15 +885,21 @@ function ExpandableNeighborhoodCard({
   index,
   destination,
 }: {
-  neighborhood: { name: string; whyItWorks: string; fit: string; vibe: string; profile?: NeighborhoodProfile };
+  neighborhood: { name: string; neighborhoodKey?: string; whyItWorks: string; fit: string; vibe: string; profile?: NeighborhoodProfile };
   index: number;
   destination: CanonicalDestination;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState<NeighborhoodInsightPlace | null>(null);
-  const neighborhoodResourceGroups = useMemo(() => buildNeighborhoodResourceGroups(destination, neighborhood.name), [destination, neighborhood.name]);
+  // A v3.1 destination's neighborhood category signals come from real persisted places only -
+  // suppress the legacy synthetic Google-search-link resource groups entirely for v3.1 bundles
+  // (never a per-neighborhood generic fallback, which has no real neighborhoodKey scoping and can
+  // leak an unrelated neighborhood's name into the generated query). If this neighborhood genuinely
+  // has zero real places, the category is simply omitted rather than shown with a fabricated link.
+  const isV31Bundle = Boolean(destination.v31Modules);
+  const neighborhoodResourceGroups = useMemo(() => (isV31Bundle ? [] : buildNeighborhoodResourceGroups(destination, neighborhood.name)), [destination, neighborhood.name, isV31Bundle]);
   const neighborhoodLiveResources = useMemo(() => buildNeighborhoodLiveResources(destination, neighborhood.name), [destination, neighborhood.name]);
-  const neighborhoodInsightCards = useMemo(() => buildNeighborhoodInsightCards(destination, neighborhood.name), [destination, neighborhood.name]);
+  const neighborhoodInsightCards = useMemo(() => buildNeighborhoodInsightCards(destination, neighborhood.name, neighborhood.neighborhoodKey), [destination, neighborhood.name, neighborhood.neighborhoodKey]);
   const neighborhoodProfileResources = useMemo(() => dedupeResourceItems([
     ...(neighborhood.profile?.resources ?? []),
     ...(neighborhood.profile?.liveResources ?? []),
@@ -1430,14 +1516,17 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   // STEP 6: persisted neighborhood rows are authoritative for a v3.1 destination - never fall
   // back to the legacy engine's generic "${city} center" single entry, and never fabricate one
   // when a destination genuinely has zero persisted neighborhoods (the section is simply empty).
+  // Capped to the first 4 (deterministic persisted order) - the page intentionally shows at most
+  // 4 neighborhood cards for spacing/layout reasons.
   const neighborhoods = (hasV31Bundle
     ? (destination.v31Modules?.neighborhoods ?? []).map((item) => ({
         name: item.name ?? item.neighborhoodKey,
+        neighborhoodKey: item.neighborhoodKey as string | undefined,
         whyItWorks: item.summary ?? "",
         fit: item.areaType ?? "",
         vibe: item.summary ?? "",
       }))
-    : premiumContent.neighborhoodGuides.length > 0 ? premiumContent.neighborhoodGuides : destination.neighborhoods.map((name) => ({ name, whyItWorks: `${name} helps anchor the city’s local character.`, fit: `Best for residents who want a neighborhood identity that feels specific and lived in.`, vibe: `It offers a clear local rhythm and strong daily-life texture.` }))).map((item) => {
+    : premiumContent.neighborhoodGuides.length > 0 ? premiumContent.neighborhoodGuides : destination.neighborhoods.map((name) => ({ name, whyItWorks: `${name} helps anchor the city’s local character.`, fit: `Best for residents who want a neighborhood identity that feels specific and lived in.`, vibe: `It offers a clear local rhythm and strong daily-life texture.` }))).slice(0, 4).map((item) => {
     const profile = getNeighborhoodProfile(destination, item.name);
     const summary = profile?.summary?.trim() || item.whyItWorks || `${item.name} helps anchor the city’s local character.`;
     const fit = profile?.intelligence?.find((metric) => /family|pet|remote|transit|walk/i.test(metric.key))?.value || item.fit || `Best for residents who want a neighborhood identity that feels specific and lived in.`;

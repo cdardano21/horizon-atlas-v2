@@ -364,7 +364,19 @@ const mapNeighborhoods = (bundle: NormalizedPersistedDestinationBundle): Canonic
   bundle.neighborhoods.map((item) => ({ neighborhoodKey: item.neighborhoodKey, name: item.name, summary: item.summary, areaType: item.areaType }));
 
 const mapPlacesAndResources = (bundle: NormalizedPersistedDestinationBundle): { places: CanonicalDestinationV31Modules["places"]; resources: CanonicalDestinationV31Modules["resources"]; propertyResources: CanonicalDestinationV31Modules["propertyResources"] } => ({
-  places: bundle.places.map((item) => ({ placeKey: item.placeKey, category: item.category, name: item.name, description: item.description })),
+  places: bundle.places.map((item) => ({
+    placeKey: item.placeKey,
+    category: item.category,
+    name: item.name,
+    description: item.description,
+    neighborhoodKey: item.neighborhoodKey,
+    websiteUrl: item.websiteUrl,
+    googleMapsUrl: item.googleMapsUrl,
+    sourceUrl: item.sourceUrl,
+    address: item.address,
+    phone: item.phone,
+    displayOrder: item.displayOrder,
+  })),
   resources: bundle.resources.map((item) => ({ resourceKey: item.resourceKey, category: item.category, name: item.name, url: item.url })),
   propertyResources: bundle.propertyResources.map((item) => ({ resourceKey: item.itemKey, category: item.category, name: item.name, url: item.url })),
 });
