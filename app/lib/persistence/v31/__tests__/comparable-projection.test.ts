@@ -704,7 +704,7 @@ describe("Phase 3A.1 comparable projection", () => {
       facts: [{ factKey: "fact-1" as StoredDestinationState["facts"][number]["factKey"], factGroup: "overview", valueText: "Popular with retirees", displayLabel: "Overview", sourceName: "Workbook editorial research" }],
       scores: [{ scoreKey: "score-1" as StoredDestinationState["scores"][number]["scoreKey"], scoreValue: "8.4", scoreLabel: "Overall", methodologyVersion: "v3.1" }],
       neighborhoods: [{ neighborhoodKey: "neighborhood-1" as StoredDestinationState["neighborhoods"][number]["neighborhoodKey"], name: "Historic", summary: "Walkable", areaType: "urban" }],
-      places: [{ placeKey: "place-1" as StoredDestinationState["places"][number]["placeKey"], category: "food", name: "Downtown", description: "Historic district" }],
+      places: [{ placeKey: "place-1" as StoredDestinationState["places"][number]["placeKey"], category: "food", name: "Downtown", description: "Historic district", neighborhoodKey: null, websiteUrl: null, googleMapsUrl: null, sourceUrl: null, address: null, phone: null, displayOrder: null }],
       resources: [{ resourceKey: "resource-1" as StoredDestinationState["resources"][number]["resourceKey"], category: "health", name: "Clinic", url: "https://example.com/" }],
       media: [{ mediaKey: "media-1" as StoredDestinationState["media"][number]["mediaKey"], kind: "photo", url: "https://example.com/", caption: "View", altText: "Downtown" }],
       costOfLiving: [{ itemKey: "food", category: "Food", monthlyLow: "1000", monthlyHigh: "1500", currency: "USD" }],

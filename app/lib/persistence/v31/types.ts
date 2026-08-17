@@ -100,6 +100,13 @@ export type StoredPlaceShape<T extends DeterministicV31CanonicalPlace> = {
   readonly category: CanonicalNullableString<T["category_key"]>;
   readonly name: CanonicalNullableString<T["place_name"]>;
   readonly description: CanonicalNullableString<T["description"]>;
+  readonly neighborhoodKey: CanonicalNullableString<T["neighborhood_key"]>;
+  readonly websiteUrl: CanonicalNullableString<T["website_url"]>;
+  readonly googleMapsUrl: CanonicalNullableString<T["google_maps_url"]>;
+  readonly sourceUrl: CanonicalNullableString<T["source_url"]>;
+  readonly address: CanonicalNullableString<T["address"]>;
+  readonly phone: CanonicalNullableString<T["phone"]>;
+  readonly displayOrder: CanonicalNullableString<T["display_order"]>;
 };
 
 export type StoredResourceShape<T extends DeterministicV31CanonicalResource> = {

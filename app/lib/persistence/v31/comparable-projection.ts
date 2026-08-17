@@ -69,7 +69,7 @@ const KEYED_CHILD_MODULES = {
   sources: "sourceKey",
 } as const;
 
-const URL_FIELDS = new Set(["url", "source_url", "image_url"]);
+const URL_FIELDS = new Set(["url", "source_url", "image_url", "websiteUrl", "googleMapsUrl", "sourceUrl"]);
 
 function normalizeStringValue(value: string): string | null {
   const normalized = value.normalize("NFC").replace(/\r\n?/g, "\n").trim();
@@ -232,6 +232,13 @@ function toCanonicalPlace(value: DeterministicV31CanonicalDestination["places"][
     category: value.category_key,
     name: value.place_name,
     description: value.description,
+    neighborhoodKey: value.neighborhood_key,
+    websiteUrl: value.website_url,
+    googleMapsUrl: value.google_maps_url,
+    sourceUrl: value.source_url,
+    address: value.address,
+    phone: value.phone,
+    displayOrder: value.display_order,
   };
 }
 

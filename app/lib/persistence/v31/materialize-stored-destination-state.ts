@@ -39,6 +39,13 @@ export interface NormalizedPersistedDestinationBundle {
     readonly category: string | null;
     readonly name: string | null;
     readonly description: string | null;
+    readonly neighborhoodKey: string | null;
+    readonly websiteUrl: string | null;
+    readonly googleMapsUrl: string | null;
+    readonly sourceUrl: string | null;
+    readonly address: string | null;
+    readonly phone: string | null;
+    readonly displayOrder: string | null;
   }>;
   readonly resources: ReadonlyArray<{
     readonly resourceKey: string;
@@ -224,6 +231,13 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
       category: asNullableString(place.category),
       name: asNullableString(place.name),
       description: asNullableString(place.description),
+      neighborhoodKey: asNullableString(place.neighborhoodKey),
+      websiteUrl: asNullableString(place.websiteUrl),
+      googleMapsUrl: asNullableString(place.googleMapsUrl),
+      sourceUrl: asNullableString(place.sourceUrl),
+      address: asNullableString(place.address),
+      phone: asNullableString(place.phone),
+      displayOrder: asNullableString(place.displayOrder),
     })),
     resources: bundle.resources.map((resource) => ({
       resourceKey: resource.resourceKey as StoredDestinationState["resources"][number]["resourceKey"],

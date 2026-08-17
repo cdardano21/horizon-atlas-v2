@@ -165,7 +165,7 @@ export function createSupabasePersistedDestinationReadPort(
         ["facts", "premium_destination_facts", "destination_id,destination_key,fact_key,fact_type,title,body,source_ref", "facts"],
         ["scores", "premium_destination_scores", "destination_id,destination_key,score_key,score_name,score_value,weight,higher_is_better", "scores"],
         ["neighborhoods", "premium_neighborhoods", "destination_id,destination_key,neighborhood_key,neighborhood_name,area_type,summary", "neighborhoods"],
-        ["places", "premium_places", "destination_id,destination_key,place_key,category_key,place_name,description", "places"],
+        ["places", "premium_places", "destination_id,destination_key,place_key,category_key,place_name,description,neighborhood_key,website_url,google_maps_url,source_url,address,phone,display_order", "places"],
         ["resources", "premium_resources", "destination_id,destination_key,resource_key,resource_category,resource_name,url", "resources"],
         ["media", "premium_media", "destination_id,destination_key,media_key,media_type,url,caption,alt_text", "media"],
         ["propertyResources", "premium_property_resources", "destination_id,destination_key,record_key,resource_type,resource_name,url", "propertyResources"],
@@ -214,6 +214,13 @@ export function createSupabasePersistedDestinationReadPort(
                   category: pickString(row, "category_key"),
                   name: pickString(row, "place_name"),
                   description: pickString(row, "description"),
+                  neighborhoodKey: pickString(row, "neighborhood_key"),
+                  websiteUrl: pickString(row, "website_url"),
+                  googleMapsUrl: pickString(row, "google_maps_url"),
+                  sourceUrl: pickString(row, "source_url"),
+                  address: pickString(row, "address"),
+                  phone: pickString(row, "phone"),
+                  displayOrder: row.display_order == null ? null : String(row.display_order),
                 };
               case "resources":
                 return {

@@ -278,6 +278,105 @@ describe("write-port statement translation", () => {
     expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, "hood-1", "Snake Case Heights", "ok", "urban"]);
   });
 
+  it("translates CREATE_CHILD for places into an upsert that includes neighborhood_key, website_url, google_maps_url, source_url, address, phone, and display_order alongside category/name/description", () => {
+    const childOperations: ChildOperation[] = [
+      {
+        kind: "CREATE_CHILD",
+        module: "places",
+        stableChildKey: "place-1" as any,
+        currentChild: null,
+        incomingChild: {
+          placeKey: "place-1" as any,
+          category: "restaurant",
+          name: "Bluefin Grill & Bar",
+          description: "Seafood-focused restaurant.",
+          neighborhoodKey: "hood-1",
+          websiteUrl: "https://www.bluefingrillbar.com/",
+          googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Bluefin",
+          sourceUrl: "https://www.bluefingrillbar.com/",
+          address: "2738 Brownwood Blvd",
+          phone: "+1 352-571-5344",
+          displayOrder: "1",
+        },
+      },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ childOperations }));
+    expect(statements[0].text).toContain("premium_places");
+    for (const column of ["category_key", "place_name", "description", "neighborhood_key", "website_url", "google_maps_url", "source_url", "address", "phone", "display_order"]) {
+      expect(statements[0].text).toContain(column);
+    }
+    expect(statements[0].values).toEqual([
+      DEST_ID,
+      DEST_KEY,
+      "place-1",
+      "restaurant",
+      "Bluefin Grill & Bar",
+      "Seafood-focused restaurant.",
+      "hood-1",
+      "https://www.bluefingrillbar.com/",
+      "https://www.google.com/maps/search/?api=1&query=Bluefin",
+      "https://www.bluefingrillbar.com/",
+      "2738 Brownwood Blvd",
+      "+1 352-571-5344",
+      "1",
+    ]);
+  });
+
+  it("falls back to raw canonical snake_case field names for place payloads that were never given a camelCase alias upstream (neighborhood_key, website_url, google_maps_url, source_url, display_order)", () => {
+    const childOperations: ChildOperation[] = [
+      {
+        kind: "CREATE_CHILD",
+        module: "places",
+        stableChildKey: "place-1" as any,
+        currentChild: null,
+        incomingChild: {
+          place_key: "place-1",
+          category_key: "restaurant",
+          place_name: "Snake Case Bistro",
+          description: "ok",
+          neighborhood_key: "hood-1",
+          website_url: "https://example-test.invalid/bistro",
+          google_maps_url: "https://maps.example-test.invalid/bistro",
+          source_url: "https://example-test.invalid/bistro",
+          address: "1 Main St",
+          phone: "+1 555-0000",
+          display_order: "2",
+        } as any,
+      },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ childOperations }));
+    expect(statements[0].values).toEqual([
+      DEST_ID,
+      DEST_KEY,
+      "place-1",
+      "restaurant",
+      "Snake Case Bistro",
+      "ok",
+      "hood-1",
+      "https://example-test.invalid/bistro",
+      "https://maps.example-test.invalid/bistro",
+      "https://example-test.invalid/bistro",
+      "1 Main St",
+      "+1 555-0000",
+      "2",
+    ]);
+  });
+
+  it("does not add columns to any other keyed-child module's write statement when the places config is extended", () => {
+    const childOperations: ChildOperation[] = [
+      {
+        kind: "CREATE_CHILD",
+        module: "sources",
+        stableChildKey: "source-1" as SourceKey,
+        currentChild: null,
+        incomingChild: { sourceKey: "source-1" as SourceKey, name: "Unrelated Source", url: "https://example-test.invalid/source", type: "gov" },
+      },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ childOperations }));
+    expect(statements[0].text).toContain("premium_sources");
+    expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, "source-1", "Unrelated Source", "https://example-test.invalid/source", "gov"]);
+  });
+
   it("translates DELETE_CHILD for sources into a targeted delete with no presence insert", () => {
     const childOperations: ChildOperation[] = [
       {

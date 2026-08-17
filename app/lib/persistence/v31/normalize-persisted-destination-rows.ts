@@ -104,6 +104,13 @@ export interface PersistedPlaceRow {
   readonly category: string | null;
   readonly name: string | null;
   readonly description: string | null;
+  readonly neighborhoodKey: string | null;
+  readonly websiteUrl: string | null;
+  readonly googleMapsUrl: string | null;
+  readonly sourceUrl: string | null;
+  readonly address: string | null;
+  readonly phone: string | null;
+  readonly displayOrder: string | null;
 }
 
 export interface PersistedResourceRow {
@@ -297,7 +304,19 @@ export function normalizePersistedDestinationRows(input: {
     facts: input.keyedChildren.facts.map((fact) => ({ factKey: fact.factKey, factGroup: fact.factGroup, valueText: fact.valueText, displayLabel: fact.displayLabel, sourceName: fact.sourceName })),
     scores: input.keyedChildren.scores.map((score) => ({ scoreKey: score.scoreKey, scoreValue: score.scoreValue, scoreLabel: score.scoreLabel, methodologyVersion: score.methodologyVersion })),
     neighborhoods: input.keyedChildren.neighborhoods.map((row) => ({ neighborhoodKey: row.neighborhoodKey, name: row.name, summary: row.summary, areaType: row.areaType })),
-    places: input.keyedChildren.places.map((row) => ({ placeKey: row.placeKey, category: row.category, name: row.name, description: row.description })),
+    places: input.keyedChildren.places.map((row) => ({
+      placeKey: row.placeKey,
+      category: row.category,
+      name: row.name,
+      description: row.description,
+      neighborhoodKey: row.neighborhoodKey,
+      websiteUrl: row.websiteUrl,
+      googleMapsUrl: row.googleMapsUrl,
+      sourceUrl: row.sourceUrl,
+      address: row.address,
+      phone: row.phone,
+      displayOrder: row.displayOrder,
+    })),
     resources: input.keyedChildren.resources.map((row) => ({ resourceKey: row.resourceKey, category: row.category, name: row.name, url: row.url })),
     media: input.keyedChildren.media.map((row) => ({ mediaKey: row.mediaKey, kind: row.kind, url: row.url, caption: row.caption, altText: row.altText })),
     costOfLiving: input.replaceModules.costOfLiving.map((row) => ({ itemKey: row.itemKey, category: row.category, monthlyLow: row.monthlyLow, monthlyHigh: row.monthlyHigh, currency: row.currency })),

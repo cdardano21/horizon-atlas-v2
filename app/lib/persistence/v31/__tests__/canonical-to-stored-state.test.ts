@@ -154,4 +154,91 @@ describe("v31 canonical-to-stored-state adapter", () => {
     expect(result.identity.slug).toBe("alpha");
     expect(result.editorial.shortDescription).toBe("A lively retirement hub");
   });
+
+  it("preserves neighborhoodKey, websiteUrl, googleMapsUrl, sourceUrl, address, phone, and displayOrder for a real place row", () => {
+    const canonicalDestination = createCanonicalDestination({
+      places: [
+        {
+          destination_key: "dest-a",
+          place_key: "place-1",
+          neighborhood_key: "hood-1",
+          category_key: "restaurant",
+          place_name: "Bluefin Grill & Bar",
+          subcategory: "Restaurant",
+          description: "Seafood-focused restaurant.",
+          address: "2738 Brownwood Blvd",
+          latitude: null,
+          longitude: null,
+          price_level: "$$",
+          website_url: "https://www.bluefingrillbar.com/",
+          google_maps_url: "https://www.google.com/maps/search/?api=1&query=Bluefin",
+          phone: "+1 352-571-5344",
+          best_for: "Residents",
+          display_order: "1",
+          source_name: "Bluefin Grill & Bar official website",
+          source_url: "https://www.bluefingrillbar.com/",
+          verified: "1",
+          verified_at: "2026-08-16",
+        } as unknown as DeterministicV31CanonicalDestination["places"][number],
+      ],
+    });
+
+    const result = mapCanonicalDestinationToStoredState(canonicalDestination);
+
+    expect(result.places).toHaveLength(1);
+    expect(result.places[0]).toMatchObject({
+      placeKey: "place-1",
+      category: "restaurant",
+      name: "Bluefin Grill & Bar",
+      description: "Seafood-focused restaurant.",
+      neighborhoodKey: "hood-1",
+      websiteUrl: "https://www.bluefingrillbar.com/",
+      googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Bluefin",
+      sourceUrl: "https://www.bluefingrillbar.com/",
+      address: "2738 Brownwood Blvd",
+      phone: "+1 352-571-5344",
+      displayOrder: "1",
+    });
+  });
+
+  it("leaves neighborhoodKey/websiteUrl/googleMapsUrl/sourceUrl/address/phone/displayOrder null when the canonical place row has no value, without fabricating any of them", () => {
+    const canonicalDestination = createCanonicalDestination({
+      places: [
+        {
+          destination_key: "dest-a",
+          place_key: "place-1",
+          neighborhood_key: null,
+          category_key: "restaurant",
+          place_name: "Unlinked Place",
+          subcategory: null,
+          description: null,
+          address: null,
+          latitude: null,
+          longitude: null,
+          price_level: null,
+          website_url: null,
+          google_maps_url: null,
+          phone: null,
+          best_for: null,
+          display_order: null,
+          source_name: null,
+          source_url: null,
+          verified: null,
+          verified_at: null,
+        } as unknown as DeterministicV31CanonicalDestination["places"][number],
+      ],
+    });
+
+    const result = mapCanonicalDestinationToStoredState(canonicalDestination);
+
+    expect(result.places[0]).toMatchObject({
+      neighborhoodKey: null,
+      websiteUrl: null,
+      googleMapsUrl: null,
+      sourceUrl: null,
+      address: null,
+      phone: null,
+      displayOrder: null,
+    });
+  });
 });

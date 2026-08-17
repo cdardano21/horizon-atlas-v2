@@ -82,6 +82,13 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       category: asStoredNullableString(place.category_key),
       name: asStoredNullableString(place.place_name),
       description: asStoredNullableString(place.description),
+      neighborhoodKey: asStoredNullableString(place.neighborhood_key),
+      websiteUrl: asStoredNullableString(place.website_url),
+      googleMapsUrl: asStoredNullableString(place.google_maps_url),
+      sourceUrl: asStoredNullableString(place.source_url),
+      address: asStoredNullableString(place.address),
+      phone: asStoredNullableString(place.phone),
+      displayOrder: asStoredNullableString(place.display_order),
     })),
     resources: resources.map((resource) => ({
       resourceKey: asStoredKey<StoredDestinationState["resources"][number]["resourceKey"]>(asStoredChild(resource, "resource_key")),

@@ -184,7 +184,7 @@ describe("createSupabasePersistedDestinationReadPort", () => {
       premium_destination_facts: [{ destination_id: "dest-id-a", destination_key: "dest-a", fact_key: "fact-1", fact_type: null, title: null, body: null, source_ref: null, metadata: {} }],
       premium_destination_scores: [{ destination_id: "dest-id-a", destination_key: "dest-a", score_key: "score-1", score_value: 5, score_name: null, weight: null, higher_is_better: true, metadata: {} }],
       premium_neighborhoods: [{ destination_id: "dest-id-a", destination_key: "dest-a", neighborhood_key: "hood-1", neighborhood_name: "Old Town", area_type: "urban", summary: null, housing_character: null, walkability_rating: null, safety_rating: null, transit_rating: null, pros: null, cons: null, google_maps_url: null, source_url: null, verified: false, metadata: {}, sort_order: 1 }],
-      premium_places: [{ destination_id: "dest-id-a", destination_key: "dest-a", place_key: "place-1", category_key: "food", place_name: "Market", subcategory: null, description: "Nice market", address: null, latitude: null, longitude: null, price_level: null, website_url: null, google_maps_url: null, phone: null, best_for: null, display_order: 1, source_name: null, source_url: null, verified: false, confidence: null, metadata: {} }],
+      premium_places: [{ destination_id: "dest-id-a", destination_key: "dest-a", place_key: "place-1", category_key: "food", place_name: "Market", subcategory: null, description: "Nice market", neighborhood_key: "hood-1", address: "123 Main St", latitude: null, longitude: null, price_level: null, website_url: "https://example.com/market", google_maps_url: "https://maps.example.com/market", phone: "+1 555-1234", best_for: null, display_order: 1, source_name: null, source_url: "https://example.com/source-market", verified: false, confidence: null, metadata: {} }],
       premium_resources: [{ destination_id: "dest-id-a", destination_key: "dest-a", resource_key: "resource-1", resource_category: "gov", resource_name: "Visa office", description: null, url: "https://example.com", official: true, stay_mode_key: null, display_order: 1, source_name: null, source_url: null, verified: false, metadata: {} }],
       premium_media: [{ destination_id: "dest-id-a", destination_key: "dest-a", media_key: "media-1", media_type: "image", url: "https://cdn.example.com/a.jpg", caption: "View", alt_text: "A", sort_order: 1, is_primary: true, verified: false, source_name: null, source_url: null, metadata: {} }],
       premium_property_resources: [{ destination_id: "dest-id-a", destination_key: "dest-a", record_key: "property-1", transaction_type: null, resource_name: "Broker", resource_type: "real-estate", url: "https://example.com/broker", official: false, description: null, source_url: null, verified: false, metadata: {} }],
@@ -205,7 +205,7 @@ describe("createSupabasePersistedDestinationReadPort", () => {
       facts: [{ destinationId: "dest-id-a", destinationKey: "dest-a", factKey: "fact-1", factGroup: null, valueText: null, displayLabel: null, sourceName: null }],
       scores: [{ destinationId: "dest-id-a", destinationKey: "dest-a", scoreKey: "score-1", scoreValue: "5", scoreLabel: null, methodologyVersion: null }],
       neighborhoods: [{ destinationId: "dest-id-a", destinationKey: "dest-a", neighborhoodKey: "hood-1", name: "Old Town", summary: null, areaType: "urban" }],
-      places: [{ destinationId: "dest-id-a", destinationKey: "dest-a", placeKey: "place-1", category: "food", name: "Market", description: "Nice market" }],
+      places: [{ destinationId: "dest-id-a", destinationKey: "dest-a", placeKey: "place-1", category: "food", name: "Market", description: "Nice market", neighborhoodKey: "hood-1", websiteUrl: "https://example.com/market", googleMapsUrl: "https://maps.example.com/market", sourceUrl: "https://example.com/source-market", address: "123 Main St", phone: "+1 555-1234", displayOrder: "1" }],
       resources: [{ destinationId: "dest-id-a", destinationKey: "dest-a", resourceKey: "resource-1", category: "gov", name: "Visa office", url: "https://example.com" }],
       media: [{ destinationId: "dest-id-a", destinationKey: "dest-a", mediaKey: "media-1", kind: "image", url: "https://cdn.example.com/a.jpg", caption: "View", altText: "A" }],
       propertyResources: [{ destinationId: "dest-id-a", destinationKey: "dest-a", itemKey: "property-1", category: "real-estate", name: "Broker", url: "https://example.com/broker" }],
@@ -409,4 +409,19 @@ describe("createSupabasePersistedDestinationReadPort", () => {
 
     expect(client.writeCalls).toEqual([]);
   });
+
+  it("selects neighborhood_key, website_url, google_maps_url, source_url, address, phone, and display_order for premium_places", async () => {
+    const identity = createIdentity();
+    const client = new FakeSupabaseReadClient({});
+
+    const port = createSupabasePersistedDestinationReadPort(client);
+    await port.readKeyedChildren(identity);
+
+    const placesCall = client.selectCalls.find((call) => call.table === "premium_places");
+    expect(placesCall).toBeDefined();
+    for (const column of ["place_key", "category_key", "place_name", "description", "neighborhood_key", "website_url", "google_maps_url", "source_url", "address", "phone", "display_order"]) {
+      expect(placesCall?.select).toContain(column);
+    }
+  });
 });
+
