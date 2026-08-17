@@ -8,7 +8,7 @@ import DestinationFinderIcon from "./DestinationFinderIcon";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[98vh] overflow-hidden pt-16 text-[#faf8f2] sm:pt-20">
+    <section className="relative min-h-[96vh] overflow-hidden pt-20 text-[#faf8f2]">
       <Image
         src={COSTA_DEL_SOL_HERO_IMAGE}
         alt="Costa del Sol coastline"
@@ -16,9 +16,8 @@ export default function Hero() {
         sizes="100vw"
         className="object-cover object-center"
       />
-      <div className="absolute inset-0 bg-[linear-gradient(116deg,rgba(6,16,20,0.82)_0%,rgba(14,38,44,0.58)_44%,rgba(96,69,32,0.2)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(5,16,18,0.74)_0%,rgba(22,48,52,0.46)_42%,rgba(98,74,34,0.16)_100%)]" />
       <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-[rgba(248,244,236,0.58)] via-transparent to-transparent blur-3xl" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(255,239,205,0.2),transparent_40%),radial-gradient(circle_at_15%_85%,rgba(88,164,170,0.22),transparent_38%)]" />
       <div className="absolute -left-16 bottom-8 h-56 w-56 rounded-full bg-[rgba(197,155,95,0.36)] blur-3xl" />
       <div className="absolute -right-20 top-36 h-64 w-64 rounded-full bg-[rgba(73,147,153,0.28)] blur-3xl" />
 
@@ -34,10 +33,10 @@ export default function Hero() {
               Costa del Sol, Spain
             </p>
 
-            <h1 className="mt-8 text-4xl leading-[0.88] tracking-[-0.035em] text-[#fefbf5] sm:text-6xl lg:text-7xl">
+            <h1 className="mt-8 text-4xl leading-[0.88] tracking-[-0.03em] text-[#fefbf5] sm:text-6xl lg:text-7xl">
               Find where your best life begins.
             </h1>
-            <p className="mt-8 max-w-2xl text-base leading-8 text-[#f3ebdd] sm:text-lg">
+            <p className="mt-8 max-w-2xl text-base leading-8 text-[#f2ebe0] sm:text-lg">
               DestinationFinderAI helps you discover, compare, and confidently choose places that match your lifestyle, budget, climate preferences, career goals, and everyday happiness.
             </p>
 
@@ -58,14 +57,14 @@ export default function Hero() {
               </Link>
             </div>
 
-            <div className="mt-10 rounded-[1.75rem] border border-white/25 bg-[linear-gradient(155deg,rgba(20,31,34,0.6),rgba(16,25,30,0.5))] px-5 py-4 shadow-[0_18px_45px_-24px_rgba(0,0,0,0.65)] backdrop-blur">
+            <div className="mt-10 rounded-[1.75rem] border border-white/20 bg-[rgba(20,31,34,0.56)] px-5 py-4 shadow-[0_18px_45px_-24px_rgba(0,0,0,0.65)] backdrop-blur">
               <p className="text-[11px] uppercase tracking-[0.24em] text-[#f7d7a4]">Relocation manifesto</p>
               <p className="mt-2 text-sm leading-7 text-[#efe7d8]">
                 Choose a place where your routines feel easier, your support systems feel stronger, and your next chapter feels realistic.
               </p>
             </div>
 
-            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            <div className="mt-6 grid gap-4 sm:grid-cols-3">
               <div className="rounded-3xl border border-white/20 bg-white/10 p-6 text-left backdrop-blur-sm shadow-[0_16px_38px_-24px_rgba(0,0,0,0.75)]">
                 <p className="text-3xl font-black text-[#f8e2bc]">{LAUNCH_CATALOG_SIZE}</p>
                 <p className="mt-2 text-xs uppercase tracking-[0.25em] text-[#e8dece]">destinations</p>
@@ -82,7 +81,7 @@ export default function Hero() {
           </div>
 
           <div className="space-y-6 lg:pl-2">
-            <div className="rounded-[2rem] border border-white/25 bg-[linear-gradient(165deg,rgba(255,251,243,0.22),rgba(255,247,234,0.12))] p-8 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.7)] backdrop-blur-xl">
+            <div className="rounded-[2rem] border border-white/25 bg-[rgba(255,251,243,0.17)] p-8 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.7)] backdrop-blur-xl">
               <div className="inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-[linear-gradient(145deg,#f2d9ad,#d6a96a)] p-2 text-[#253638] shadow-[0_10px_24px_-12px_rgba(242,217,173,0.8)]">
                 <DestinationFinderIcon size={40} accent="#253638" base="#172427" />
               </div>
@@ -116,7 +115,7 @@ export default function Hero() {
               </p>
             </div>
 
-            <div className="rounded-[1.6rem] border border-white/20 bg-[rgba(12,28,30,0.64)] p-5 backdrop-blur">
+            <div className="rounded-[1.6rem] border border-white/20 bg-[rgba(12,28,30,0.62)] p-5 backdrop-blur">
               <p className="text-[11px] uppercase tracking-[0.22em] text-[#f6dfb7]">What happens next</p>
               <ol className="mt-3 grid gap-2 text-sm text-[#efe7d8]">
                 <li>1. Share your lifestyle priorities.</li>
