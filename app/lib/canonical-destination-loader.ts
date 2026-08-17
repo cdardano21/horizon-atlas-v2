@@ -1,6 +1,6 @@
 import { destinations as localDestinations } from "./destinations";
 import { buildDestinationKnowledgeProfile } from "./destination-knowledge-engine";
-import type { CanonicalDestination, CanonicalDestinationBudget, CanonicalDestinationCostProfile, CanonicalDestinationKnowledgeProfile, CanonicalDestinationMedia, CanonicalDestinationResource, ImportedVerifiedDestinationFacts, NeighborhoodIntelligenceGroup, PremiumEditorialContent } from "./canonical-destination-model";
+import type { CanonicalDestination, CanonicalDestinationBudget, CanonicalDestinationCostProfile, CanonicalDestinationKnowledgeProfile, CanonicalDestinationMedia, CanonicalDestinationResource, CanonicalDestinationV31Modules, ImportedVerifiedDestinationFacts, NeighborhoodIntelligenceGroup, PremiumEditorialContent } from "./canonical-destination-model";
 import { buildNeighborhoodIntelligenceSeedData } from "./neighborhood-intelligence-seed-data";
 import { getPremiumV2RuntimeModuleDefinitions } from "./premium-v2-storage";
 import { isSupabaseConfigured, supabaseFetch } from "./supabase";
@@ -349,7 +349,118 @@ const selectRicherPersistedArraySource = <T>(persisted: T[], workbook: T[], fall
   return fallback;
 };
 
-const buildCanonicalDestinationFromPersistedBundle = (
+// Dedicated typed section adapters (STEP 3): each maps one family of the real persisted v3.1
+// bundle into the CanonicalDestinationV31Modules carrier. Every adapter preserves real values
+// as-is, never invents destination-specific content, and leaves an array empty when the bundle
+// has no rows for that module - the renderer is responsible for omitting empty sections rather
+// than fabricating placeholder content.
+const mapIdentityAndFacts = (bundle: NormalizedPersistedDestinationBundle): CanonicalDestinationV31Modules["facts"] =>
+  bundle.facts.map((fact) => ({ factKey: fact.factKey, factGroup: fact.factGroup, valueText: fact.valueText, displayLabel: fact.displayLabel, sourceName: fact.sourceName }));
+
+const mapScores = (bundle: NormalizedPersistedDestinationBundle): CanonicalDestinationV31Modules["scores"] =>
+  bundle.scores.map((score) => ({ scoreKey: score.scoreKey, scoreValue: score.scoreValue, scoreLabel: score.scoreLabel }));
+
+const mapNeighborhoods = (bundle: NormalizedPersistedDestinationBundle): CanonicalDestinationV31Modules["neighborhoods"] =>
+  bundle.neighborhoods.map((item) => ({ neighborhoodKey: item.neighborhoodKey, name: item.name, summary: item.summary, areaType: item.areaType }));
+
+const mapPlacesAndResources = (bundle: NormalizedPersistedDestinationBundle): { places: CanonicalDestinationV31Modules["places"]; resources: CanonicalDestinationV31Modules["resources"]; propertyResources: CanonicalDestinationV31Modules["propertyResources"] } => ({
+  places: bundle.places.map((item) => ({ placeKey: item.placeKey, category: item.category, name: item.name, description: item.description })),
+  resources: bundle.resources.map((item) => ({ resourceKey: item.resourceKey, category: item.category, name: item.name, url: item.url })),
+  propertyResources: bundle.propertyResources.map((item) => ({ resourceKey: item.itemKey, category: item.category, name: item.name, url: item.url })),
+});
+
+const mapMedia = (bundle: NormalizedPersistedDestinationBundle): CanonicalDestinationV31Modules["media"] =>
+  bundle.media.map((item) => ({ mediaKey: item.mediaKey, kind: item.kind, url: item.url, caption: item.caption, altText: item.altText }));
+
+const mapCostAndClimate = (bundle: NormalizedPersistedDestinationBundle): { costOfLiving: CanonicalDestinationV31Modules["costOfLiving"]; climateMonthly: CanonicalDestinationV31Modules["climateMonthly"]; housing: CanonicalDestinationV31Modules["housing"] } => ({
+  costOfLiving: bundle.costOfLiving.map((item) => ({ itemKey: item.itemKey, category: item.category, monthlyLow: item.monthlyLow, monthlyHigh: item.monthlyHigh, currency: item.currency })),
+  climateMonthly: bundle.climateMonthly.map((item) => ({ monthKey: item.monthKey, avgHighTemp: item.avgHighTemp, avgLowTemp: item.avgLowTemp, precipitationMm: item.precipitationMm, humidityPct: item.humidityPct })),
+  housing: bundle.housing.map((item) => ({ summary: item.summary, buyingSummary: item.buyingSummary, rentalSummary: item.rentalSummary })),
+});
+
+const mapHealthcareAndSafety = (bundle: NormalizedPersistedDestinationBundle): { healthcare: CanonicalDestinationV31Modules["healthcare"]; safetyRisks: CanonicalDestinationV31Modules["safetyRisks"] } => ({
+  healthcare: bundle.healthcare.map((item) => ({ summary: item.summary, publicAccessSummary: item.publicAccessSummary, insuranceSummary: item.insuranceSummary })),
+  safetyRisks: bundle.safetyRisks.map((item) => ({ itemKey: item.itemKey, summary: item.summary, topic: item.topic, severity: item.severity })),
+});
+
+const mapVisaTaxesAndBureaucracy = (bundle: NormalizedPersistedDestinationBundle): { visaResidency: CanonicalDestinationV31Modules["visaResidency"]; taxesFinance: CanonicalDestinationV31Modules["taxesFinance"]; bureaucracySetup: CanonicalDestinationV31Modules["bureaucracySetup"]; lgbtqInclusivity: CanonicalDestinationV31Modules["lgbtqInclusivity"] } => ({
+  visaResidency: bundle.visaResidency.map((item) => ({ summary: item.summary, residencyPath: item.residencyPath, citizenshipPath: item.citizenshipPath })),
+  taxesFinance: bundle.taxesFinance.map((item) => ({ summary: item.summary, notes: item.notes })),
+  bureaucracySetup: bundle.bureaucracySetup.map((item) => ({ summary: item.summary, setupNotes: item.setupNotes })),
+  lgbtqInclusivity: bundle.lgbtqInclusivity.map((item) => ({ summary: item.summary, culturalNotes: item.culturalNotes })),
+});
+
+const mapTransportationAndRemoteWork = (bundle: NormalizedPersistedDestinationBundle): { transportation: CanonicalDestinationV31Modules["transportation"]; remoteWork: CanonicalDestinationV31Modules["remoteWork"]; languageIntegration: CanonicalDestinationV31Modules["languageIntegration"] } => ({
+  transportation: bundle.transportation.map((item) => ({ summary: item.summary, airportSummary: item.airportSummary, transitSummary: item.transitSummary })),
+  remoteWork: bundle.remoteWork.map((item) => ({ summary: item.summary, internetSummary: item.internetSummary, timezoneSummary: item.timezoneSummary })),
+  languageIntegration: bundle.languageIntegration.map((item) => ({ summary: item.summary, englishSupport: item.englishSupport })),
+});
+
+const mapPetsFamilyCommunity = (bundle: NormalizedPersistedDestinationBundle): { pets: CanonicalDestinationV31Modules["pets"]; familyEducation: CanonicalDestinationV31Modules["familyEducation"]; communitySocial: CanonicalDestinationV31Modules["communitySocial"]; accessibility: CanonicalDestinationV31Modules["accessibility"] } => ({
+  pets: bundle.pets.map((item) => ({ summary: item.summary, petFriendlyNotes: item.petFriendlyNotes })),
+  familyEducation: bundle.familyEducation.map((item) => ({ summary: item.summary, schoolsSummary: item.schoolsSummary })),
+  communitySocial: bundle.communitySocial.map((item) => ({ summary: item.summary, socialNotes: item.socialNotes })),
+  accessibility: bundle.accessibility.map((item) => ({ summary: item.summary, mobilityNotes: item.mobilityNotes })),
+});
+
+const mapRetirementLifestyleRealityCheck = (bundle: NormalizedPersistedDestinationBundle): { retirementAging: CanonicalDestinationV31Modules["retirementAging"]; lifestyleLaws: CanonicalDestinationV31Modules["lifestyleLaws"]; workBusiness: CanonicalDestinationV31Modules["workBusiness"]; realityCheck: CanonicalDestinationV31Modules["realityCheck"] } => ({
+  retirementAging: bundle.retirementAging.map((item) => ({ summary: item.summary, agingNotes: item.agingNotes })),
+  lifestyleLaws: bundle.lifestyleLaws.map((item) => ({ summary: item.summary, legalNotes: item.legalNotes })),
+  workBusiness: bundle.workBusiness.map((item) => ({ summary: item.summary, remoteWorkNotes: item.remoteWorkNotes })),
+  realityCheck: bundle.realityCheck.map((item) => ({ summary: item.detail, title: item.title, severity: item.severity })),
+});
+
+const mapMoveChecklistEventsAndSources = (bundle: NormalizedPersistedDestinationBundle): { moveChecklist: CanonicalDestinationV31Modules["moveChecklist"]; eventsSeasonality: CanonicalDestinationV31Modules["eventsSeasonality"]; sources: CanonicalDestinationV31Modules["sources"] } => ({
+  moveChecklist: bundle.moveChecklist.map((item) => ({ checklistKey: item.checklistKey, summary: item.summary, checklistNotes: item.checklistNotes })),
+  eventsSeasonality: bundle.eventsSeasonality.map((item) => ({ eventSeasonalityKey: item.eventSeasonalityKey, summary: item.summary, seasonalityNotes: item.seasonalityNotes })),
+  sources: bundle.sources.map((item) => ({ sourceKey: item.sourceKey, name: item.name, url: item.url, type: item.type })),
+});
+
+export const buildCanonicalDestinationV31Modules = (bundle: NormalizedPersistedDestinationBundle): CanonicalDestinationV31Modules => {
+  const placesAndResources = mapPlacesAndResources(bundle);
+  const costAndClimate = mapCostAndClimate(bundle);
+  const healthcareAndSafety = mapHealthcareAndSafety(bundle);
+  const visaTaxesAndBureaucracy = mapVisaTaxesAndBureaucracy(bundle);
+  const transportationAndRemoteWork = mapTransportationAndRemoteWork(bundle);
+  const petsFamilyCommunity = mapPetsFamilyCommunity(bundle);
+  const retirementLifestyleRealityCheck = mapRetirementLifestyleRealityCheck(bundle);
+  const moveChecklistEventsAndSources = mapMoveChecklistEventsAndSources(bundle);
+
+  return {
+    facts: mapIdentityAndFacts(bundle),
+    scores: mapScores(bundle),
+    neighborhoods: mapNeighborhoods(bundle),
+    places: placesAndResources.places,
+    resources: placesAndResources.resources,
+    propertyResources: placesAndResources.propertyResources,
+    media: mapMedia(bundle),
+    costOfLiving: costAndClimate.costOfLiving,
+    climateMonthly: costAndClimate.climateMonthly,
+    housing: costAndClimate.housing,
+    healthcare: healthcareAndSafety.healthcare,
+    safetyRisks: healthcareAndSafety.safetyRisks,
+    visaResidency: visaTaxesAndBureaucracy.visaResidency,
+    taxesFinance: visaTaxesAndBureaucracy.taxesFinance,
+    bureaucracySetup: visaTaxesAndBureaucracy.bureaucracySetup,
+    lgbtqInclusivity: visaTaxesAndBureaucracy.lgbtqInclusivity,
+    transportation: transportationAndRemoteWork.transportation,
+    remoteWork: transportationAndRemoteWork.remoteWork,
+    languageIntegration: transportationAndRemoteWork.languageIntegration,
+    pets: petsFamilyCommunity.pets,
+    familyEducation: petsFamilyCommunity.familyEducation,
+    communitySocial: petsFamilyCommunity.communitySocial,
+    accessibility: petsFamilyCommunity.accessibility,
+    retirementAging: retirementLifestyleRealityCheck.retirementAging,
+    lifestyleLaws: retirementLifestyleRealityCheck.lifestyleLaws,
+    workBusiness: retirementLifestyleRealityCheck.workBusiness,
+    realityCheck: retirementLifestyleRealityCheck.realityCheck,
+    moveChecklist: moveChecklistEventsAndSources.moveChecklist,
+    eventsSeasonality: moveChecklistEventsAndSources.eventsSeasonality,
+    sources: moveChecklistEventsAndSources.sources,
+  };
+};
+
+export const buildCanonicalDestinationFromPersistedBundle = (
   slug: string,
   fallbackDestination: CanonicalDestination,
   bundle: NormalizedPersistedDestinationBundle,
@@ -381,7 +492,11 @@ const buildCanonicalDestinationFromPersistedBundle = (
       isPrimary: false,
     }))
     .filter((item) => item.url);
-  const media = persistedMedia.length > 0 ? persistedMedia : workbookMedia.length > 0 ? workbookMedia : (fallbackDestination.media ?? []).map((item) => ({ ...item, isPrimary: false }));
+  // A resolved v3.1 bundle never falls back to buildFallbackCanonicalDestination's hardcoded
+  // generic stock photos - a destination with genuinely zero persisted/workbook media renders an
+  // empty gallery (the page's own neutral "verified imagery pending" placeholder), never fabricated
+  // unrelated imagery captioned with this destination's name.
+  const media = persistedMedia.length > 0 ? persistedMedia : workbookMedia.length > 0 ? workbookMedia : [];
 
   const primaryMedia = media[0] ? [{ ...media[0], isPrimary: true }] : [];
   const normalizedMedia = [...primaryMedia, ...media.slice(1)];
@@ -422,6 +537,38 @@ const buildCanonicalDestinationFromPersistedBundle = (
     workbookData?.knowledgeProfile,
     fallbackDestination.knowledgeProfile,
   );
+  const v31Modules: CanonicalDestinationV31Modules = buildCanonicalDestinationV31Modules(bundle);
+
+  // Representative real per-module narrative text (STEP 4/8): a v3.1 destination's flat
+  // string fields (consumed by the existing UI shell) are fed from the real persisted module
+  // summary/fact for that topic instead of staying blank or being wrapped in generic template
+  // prose - never fabricated, just the real value or nothing.
+  const findFactValue = (factGroup: string) => normalizeTextValue(v31Modules.facts.find((fact) => fact.factGroup === factGroup)?.valueText);
+  const findFactByKey = (factKey: string) => normalizeTextValue(v31Modules.facts.find((fact) => fact.factKey === factKey)?.valueText);
+  const firstSummary = (rows: ReadonlyArray<{ readonly summary: string | null }>) => normalizeTextValue(rows.find((row) => normalizeTextValue(row.summary))?.summary);
+  const v31Climate = findFactValue("climate");
+  const v31Transportation = firstSummary(v31Modules.transportation) || findFactValue("mobility");
+  const v31Healthcare = firstSummary(v31Modules.healthcare) || findFactValue("healthcare");
+  const v31Retirement = firstSummary(v31Modules.retirementAging);
+  const v31Family = firstSummary(v31Modules.familyEducation);
+  const v31DigitalNomad = firstSummary(v31Modules.remoteWork);
+  const v31Safety = firstSummary(v31Modules.safetyRisks) || findFactValue("safety");
+  const v31Internet = normalizeTextValue(v31Modules.remoteWork.find((row) => normalizeTextValue(row.internetSummary))?.internetSummary);
+  const firstCostOfLivingItem = v31Modules.costOfLiving[0];
+  const v31CostOfLiving = firstCostOfLivingItem
+    ? `${firstCostOfLivingItem.category ?? "Housing"}: ${firstCostOfLivingItem.currency ?? ""}${firstCostOfLivingItem.monthlyLow ?? ""}\u2013${firstCostOfLivingItem.currency ?? ""}${firstCostOfLivingItem.monthlyHigh ?? ""}/month`
+    : "";
+  // Scalar identity/finance facts (population, metro population, elevation, currency, time zone)
+  // are legitimate 1:1 overrides of the existing scalar knowledgeProfile fields - not "cramming"
+  // rich modules into it, since these were always meant to be single scalar strings.
+  const v31KnowledgeProfileOverrides = {
+    population: findFactByKey("population") || undefined,
+    metroPopulation: findFactByKey("metro_population") || undefined,
+    elevation: findFactByKey("elevation") || undefined,
+    timeZone: normalizeTextValue(bundle.editorial.timeZone) || findFactByKey("time_zone") || undefined,
+  };
+  const v31Currency = normalizeTextValue(bundle.editorial.currency) || findFactByKey("currency");
+  const v31PrimaryLanguage = normalizeTextValue(bundle.editorial.primaryLanguage) || findFactByKey("language");
 
   return {
     ...fallbackDestination,
@@ -433,6 +580,15 @@ const buildCanonicalDestinationFromPersistedBundle = (
     heroNarrative,
     overview,
     editorial,
+    climate: v31Climate || fallbackDestination.climate,
+    transportation: v31Transportation || fallbackDestination.transportation,
+    healthcare: v31Healthcare || fallbackDestination.healthcare,
+    retirement: v31Retirement || fallbackDestination.retirement,
+    family: v31Family || fallbackDestination.family,
+    digitalNomad: v31DigitalNomad || fallbackDestination.digitalNomad,
+    safety: v31Safety || fallbackDestination.safety,
+    internet: v31Internet || fallbackDestination.internet,
+    costOfLiving: v31CostOfLiving || fallbackDestination.costOfLiving,
     resources,
     structuredResources: resources,
     videos: [],
@@ -441,8 +597,15 @@ const buildCanonicalDestinationFromPersistedBundle = (
     mediaGallery: normalizedMedia,
     neighborhoods,
     premiumEditorialContent,
-    knowledgeProfile: mergedKnowledgeProfile,
+    knowledgeProfile: {
+      ...mergedKnowledgeProfile,
+      ...Object.fromEntries(Object.entries(v31KnowledgeProfileOverrides).filter(([, value]) => value !== undefined)),
+      currency: v31Currency || mergedKnowledgeProfile?.currency,
+      primaryLanguage: v31PrimaryLanguage || mergedKnowledgeProfile?.primaryLanguage,
+    },
     neighborhoodIntelligence,
+    v31Modules,
+    v31DestinationKey: String(bundle.destinationKey),
   };
 };
 
@@ -606,47 +769,6 @@ const resolveWorkbookMediaForSlug = (slug: string, workbookMedia: CanonicalDesti
   }
 
   return workbookMedia;
-};
-
-const buildDestinationSlugCandidates = (slug: string) => {
-  const normalized = normalizeLookupToken(slug);
-  const tokens = normalized.split("-").filter(Boolean);
-  const candidates = new Set<string>([normalized]);
-
-  if (tokens.length > 0) {
-    candidates.add(tokens[0]);
-    if (tokens.length > 1) {
-      candidates.add(tokens.slice(0, 2).join("-"));
-    }
-  }
-
-  const withoutCountrySuffix = normalized.replace(/-(?:us|usa|uk|gb|ca|canada|au|aus|nz|mx|de|fr|es|it|pt|jp|cn|kr|sg|ae|in|br|co|cl|za|se|no|dk|nl|be|gr|hr|ch|at|ie|fi|pl|cz|hu|ro|bg|rs|si|sk|tr|il|sa|eg|ma|my|th|vn|ph|id|pk|ng|ke|tz)$/g, "");
-  if (withoutCountrySuffix && withoutCountrySuffix !== normalized) {
-    candidates.add(withoutCountrySuffix);
-  }
-
-  return Array.from(candidates).filter(Boolean);
-};
-
-const matchDestinationRowToSlug = (row: Record<string, unknown>, slug: string) => {
-  const candidates = buildDestinationSlugCandidates(slug);
-  const haystacks = [
-    String(row.slug ?? ""),
-    String(row.destination_slug ?? ""),
-    String(row.destination_key ?? ""),
-    String(row.title ?? ""),
-    String(row.city ?? ""),
-    String(row.subtitle ?? ""),
-  ];
-
-  const normalizedHaystacks = haystacks.map((value) => normalizeLookupToken(value)).filter(Boolean);
-
-  return candidates.some((candidate) => normalizedHaystacks.some((haystack) => {
-    if (haystack === candidate) return true;
-    if (haystack.startsWith(candidate)) return true;
-    if (candidate.startsWith(haystack)) return true;
-    return haystack.includes(candidate) || candidate.includes(haystack);
-  }));
 };
 
 const parsePremiumEditorialContent = (value: unknown): PremiumEditorialContent | undefined => {
@@ -1130,7 +1252,7 @@ export const buildWorkbookDestinationFromData = (slug: string, workbookData: Pre
   } as CanonicalDestination;
 };
 
-const buildFallbackCanonicalDestination = (slug: string): CanonicalDestination | null => {
+export const buildFallbackCanonicalDestination = (slug: string): CanonicalDestination | null => {
   const local = localDestinations.find((item) => item.slug === slug);
   const workbookFallback = getWorkbookFallbackDestinationData(slug);
   const inferredName = slug
@@ -1303,19 +1425,31 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
     logCanonicalDestinationBranch({ phase: "row-check", slug: normalizedSlug, rowFound: Boolean(row), rowDestinationKey: typeof row?.destination_key === "string" ? row.destination_key : null, rowSlug: typeof row?.slug === "string" ? row.slug : null });
 
     if (!row) {
-      // Approved pilot destinations must resolve through exact slug/alias matching only — the fuzzy
-      // fallback search below can match them to an unrelated catalog row (e.g. a shared city/region name).
-      const skipFuzzyFallbackSearch = GOLDEN_PILOT_FIXTURE_SLUG_ALIASES.has(normalizedSlug);
-      const fallbackResponse = skipFuzzyFallbackSearch ? null : await supabaseFetch(`/rest/v1/destinations_catalog?select=*`, {
+      // SAFE IDENTITY RESOLUTION ONLY: exact destination_key equality, then an explicit reviewed
+      // alias (the golden-pilot fixture map), then NOT FOUND. No substring/fuzzy matching is ever
+      // performed here - a requested destination may never silently resolve to a different one.
+      // This replaced an unsafe fuzzy substring search that previously matched, e.g.,
+      // "the-villages-florida-united-states" (whose first hyphen-token is "the") to an unrelated
+      // "Athens" row, and "puerto-vallarta-mexico" to an unrelated "Puerto Escondido" row.
+      const exactKeyResponse = await supabaseFetch(`/rest/v1/destinations_catalog?destination_key=eq.${encodeURIComponent(normalizedSlug)}&select=*`, {
         cache: "no-store",
       });
+      const exactKeyRows = exactKeyResponse.ok ? ((await exactKeyResponse.json()) as Array<Record<string, unknown>>) : [];
+      row = exactKeyRows[0];
 
-      if (fallbackResponse?.ok) {
-        const allRows = (await fallbackResponse.json()) as Array<Record<string, unknown>>;
-        row = allRows.find((candidate) => matchDestinationRowToSlug(candidate, normalizedSlug));
-        if (row) {
-          rows = [row];
+      if (!row) {
+        const aliasedDestinationKey = GOLDEN_PILOT_FIXTURE_SLUG_ALIASES.get(normalizedSlug);
+        if (aliasedDestinationKey) {
+          const aliasResponse = await supabaseFetch(`/rest/v1/destinations_catalog?destination_key=eq.${encodeURIComponent(aliasedDestinationKey)}&select=*`, {
+            cache: "no-store",
+          });
+          const aliasRows = aliasResponse.ok ? ((await aliasResponse.json()) as Array<Record<string, unknown>>) : [];
+          row = aliasRows[0];
         }
+      }
+
+      if (row) {
+        rows = [row];
       }
     }
 

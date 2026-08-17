@@ -1098,7 +1098,35 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     setGalleryIndex(nextIndex);
     setSelectedMedia(galleryModalItems[nextIndex] ?? null);
   };
-  const premiumEditorialPackage = buildPremiumDestinationEditorialPackage({
+  // A destination resolved through the real persisted v3.1 read path carries v31Modules - the
+  // single signal used to disable every legacy generic-template generator (STEP 9). Legacy
+  // (pre-v3.1) destinations keep their existing behavior completely unchanged below.
+  const hasV31Bundle = Boolean(destination.v31Modules);
+
+  const premiumEditorialPackage = hasV31Bundle
+    ? {
+        overviewArticle: destination.overview || "",
+        whatItsReallyLike: destination.dailyLife || "",
+        neighborhoodGuide: "",
+        retirementGuide: destination.retirement || "",
+        familyGuide: destination.family || "",
+        digitalNomadGuide: destination.digitalNomad || "",
+        healthcareGuide: destination.healthcare || "",
+        costOfLivingGuide: destination.costOfLiving || "",
+        transportationGuide: destination.transportation || "",
+        climateGuide: destination.climate || "",
+        walkabilityGuide: destination.walkability || "",
+        safetyGuide: destination.safety || "",
+        pros: destination.pros ?? [],
+        cons: destination.cons ?? [],
+        resourceLinks: buildResourceGroups(destination).flatMap((group) => group.items.map((item) => ({ label: item.label, url: item.url }))),
+        monthlyBudgets: destination.monthlyBudgets ?? [],
+        neighborhoodGuides: [],
+        scoringNotes: [],
+        heroIntroduction: destination.heroNarrative || "",
+        whyPeopleLoveIt: [],
+      }
+    : buildPremiumDestinationEditorialPackage({
     slug: destination.slug,
     city: destination.city,
     country: destination.country,
@@ -1255,15 +1283,15 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     { label: "Safety", value: categoryValue(destination.knowledgeProfile?.safety || destination.safety), note: "A city’s safety is rarely uniform, so district-level context matters." },
     { label: "Internet", value: categoryValue(destination.knowledgeProfile?.internetSpeed || destination.internet), note: "Internet quality matters for remote work, digital nomads, and modern households." },
     { label: "Airport access", value: categoryValue(getSpecificCategoryValue("airport", formatListValue(destination.knowledgeProfile?.majorAirports) || destination.airportInfo, getNamedResourceValues("airport"))), note: "Airport access is a major part of relocation ease for families and frequent travelers." },
-    { label: "Currency", value: categoryValue(destination.country === "United States" ? "USD" : destination.country === "United Kingdom" ? "GBP" : destination.country === "Japan" ? "JPY" : destination.country === "Thailand" ? "THB" : undefined), note: "Currency affects budgeting, transfers, and how a budget feels in practice." },
-    { label: "Language", value: categoryValue(destination.country === "United States" ? "English" : destination.country === "Spain" ? "Spanish" : destination.country === "France" ? "French" : destination.country === "Italy" ? "Italian" : destination.country === "Croatia" ? "Croatian" : undefined), note: "Language shapes the ease of everyday administration and local immersion." },
+    { label: "Currency", value: categoryValue(destination.knowledgeProfile?.currency || (destination.country === "United States" ? "USD" : destination.country === "United Kingdom" ? "GBP" : destination.country === "Japan" ? "JPY" : destination.country === "Thailand" ? "THB" : undefined)), note: "Currency affects budgeting, transfers, and how a budget feels in practice." },
+    { label: "Language", value: categoryValue(destination.knowledgeProfile?.primaryLanguage || (destination.country === "United States" ? "English" : destination.country === "Spain" ? "Spanish" : destination.country === "France" ? "French" : destination.country === "Italy" ? "Italian" : destination.country === "Croatia" ? "Croatian" : undefined)), note: "Language shapes the ease of everyday administration and local immersion." },
     { label: "Time zone", value: categoryValue(destination.knowledgeProfile?.timeZone), note: "Time-zone fit affects travel, work, and family communication." },
     { label: "Cost level", value: categoryValue(destination.knowledgeProfile?.costOfLiving || destination.costOfLiving), note: "Cost is shaped by housing, utilities, food, and the neighborhood you choose." },
     { label: "Family friendly", value: categoryValue(getSpecificCategoryValue("family", destination.family || destination.knowledgeProfile?.familySuitability, getNamedResourceValues("family"))), note: "Family friendliness depends on parks, schools, and neighborhood routines." },
     { label: "Retirement friendly", value: categoryValue(getSpecificCategoryValue("retirement", destination.retirement || destination.knowledgeProfile?.retirementSuitability, getNamedResourceValues("retirement"))), note: "Retirement fit depends on healthcare, pace, climate, and transport access." },
     { label: "Digital nomad", value: categoryValue(getSpecificCategoryValue("nomad", destination.digitalNomad || destination.knowledgeProfile?.digitalNomadSuitability, getNamedResourceValues("nomad"))), note: "Remote-work fit depends on internet, cafés, transit, and social energy." },
-    { label: "Visa friendly", value: categoryValue(destination.knowledgeProfile?.visaInfo), note: "Visa expectations are essential for long-stay planning and relocation logistics." },
-    { label: "Pet friendly", value: categoryValue(getSpecificCategoryValue("pet", categoryListValue([destination.knowledgeProfile?.parks?.join(", "), destination.knowledgeProfile?.beaches?.join(", ")]), getNamedResourceValues("pet"))), note: "Pet-friendliness is shaped by green space, density, and neighborhood culture." },
+    { label: "Visa friendly", value: categoryValue(destination.v31Modules?.visaResidency.find((row) => row.summary)?.summary || destination.knowledgeProfile?.visaInfo), note: "Visa expectations are essential for long-stay planning and relocation logistics." },
+    { label: "Pet friendly", value: categoryValue(destination.v31Modules?.pets.find((row) => row.petFriendlyNotes || row.summary)?.summary || getSpecificCategoryValue("pet", categoryListValue([destination.knowledgeProfile?.parks?.join(", "), destination.knowledgeProfile?.beaches?.join(", ")]), getNamedResourceValues("pet"))), note: "Pet-friendliness is shaped by green space, density, and neighborhood culture." },
     { label: "Golf", value: categoryValue(getSpecificCategoryValue("golf", categoryListValue([destination.knowledgeProfile?.golf?.join(", "), destination.golf?.join(", ")]), getNamedResourceValues("golf"))), note: "Golf availability can be a deciding factor for certain lifestyles." },
     { label: "Museums", value: categoryValue(getSpecificCategoryValue("museum", categoryListValue([destination.knowledgeProfile?.museums?.join(", "), destination.museums?.join(", ")]), getNamedResourceValues("museum"))), note: "Museums often define how a city feels to residents over time." },
     { label: "Food scene", value: categoryValue(getSpecificCategoryValue("restaurant", categoryListValue([destination.knowledgeProfile?.restaurants?.join(", "), destination.restaurants?.join(", ")]), getNamedResourceValues("restaurant"))), note: "Food culture often becomes a daily-life anchor, not just a tourist attraction." },
@@ -1272,6 +1300,82 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     { label: "Mountains", value: categoryValue(getSpecificCategoryValue("mountain", categoryListValue([destination.knowledgeProfile?.mountains?.join(", ")]), getNamedResourceValues("mountain"))), note: "Mountains and natural landscapes add a layer of weekend escape." },
     { label: "Parks", value: categoryValue(getSpecificCategoryValue("park", categoryListValue([destination.knowledgeProfile?.parks?.join(", ")]), getNamedResourceValues("park"))), note: "Parks shape how a city feels in both weekdays and weekends." },
   ], [destination]);
+
+  // STEP 8: representative UI for the rich v3.1 modules that have no existing dedicated section -
+  // built entirely from real persisted rows. A module with zero rows is simply omitted from this
+  // list, never replaced with generic prose.
+  const v31RichModuleCards = useMemo(() => {
+    const modules = destination.v31Modules;
+    if (!modules) return [] as Array<{ title: string; lines: string[] }>;
+    const cards: Array<{ title: string; lines: string[] }> = [];
+    const singletonLines = (rows: ReadonlyArray<{ summary: string | null } & Record<string, string | null>>, extraKeys: string[] = []) =>
+      rows
+        .flatMap((row) => [row.summary, ...extraKeys.map((key) => row[key])])
+        .filter((value) => value !== null && value !== undefined && String(value).trim().length > 0)
+        .map((value) => String(value));
+
+    if (modules.costOfLiving.length > 0) {
+      cards.push({ title: "Cost of living", lines: modules.costOfLiving.map((item) => `${item.category ?? "Category"}: ${item.currency ?? ""}${item.monthlyLow ?? "?"}–${item.currency ?? ""}${item.monthlyHigh ?? "?"}/month`) });
+    }
+    if (modules.climateMonthly.length > 0) {
+      cards.push({ title: "Climate (monthly)", lines: modules.climateMonthly.slice(0, 6).map((item) => `${item.monthKey}: ${item.avgLowTemp ?? "?"}–${item.avgHighTemp ?? "?"}°`) });
+    }
+    if (modules.housing.length > 0) {
+      cards.push({ title: "Housing / property", lines: singletonLines(modules.housing, ["buyingSummary", "rentalSummary"]) });
+    }
+    if (modules.healthcare.length > 0) {
+      cards.push({ title: "Healthcare", lines: singletonLines(modules.healthcare, ["publicAccessSummary", "insuranceSummary"]) });
+    }
+    if (modules.visaResidency.length > 0) {
+      cards.push({ title: "Visa / residency", lines: singletonLines(modules.visaResidency, ["residencyPath", "citizenshipPath"]) });
+    }
+    if (modules.taxesFinance.length > 0) {
+      cards.push({ title: "Taxes / finance", lines: singletonLines(modules.taxesFinance, ["notes"]) });
+    }
+    if (modules.lgbtqInclusivity.length > 0) {
+      cards.push({ title: "LGBTQ inclusivity", lines: singletonLines(modules.lgbtqInclusivity, ["culturalNotes"]) });
+    }
+    if (modules.safetyRisks.length > 0) {
+      cards.push({ title: "Safety", lines: modules.safetyRisks.map((item) => `${item.topic ?? "Topic"} (${item.severity ?? "n/a"}): ${item.summary ?? ""}`) });
+    }
+    if (modules.transportation.length > 0) {
+      cards.push({ title: "Transportation", lines: singletonLines(modules.transportation, ["airportSummary", "transitSummary"]) });
+    }
+    if (modules.remoteWork.length > 0) {
+      cards.push({ title: "Remote work", lines: singletonLines(modules.remoteWork, ["internetSummary", "timezoneSummary"]) });
+    }
+    if (modules.languageIntegration.length > 0) {
+      cards.push({ title: "Language / integration", lines: singletonLines(modules.languageIntegration, ["englishSupport"]) });
+    }
+    if (modules.pets.length > 0) {
+      cards.push({ title: "Pets", lines: singletonLines(modules.pets, ["petFriendlyNotes"]) });
+    }
+    if (modules.familyEducation.length > 0) {
+      cards.push({ title: "Family / education", lines: singletonLines(modules.familyEducation, ["schoolsSummary"]) });
+    }
+    if (modules.communitySocial.length > 0) {
+      cards.push({ title: "Community / social", lines: singletonLines(modules.communitySocial, ["socialNotes"]) });
+    }
+    if (modules.accessibility.length > 0) {
+      cards.push({ title: "Accessibility", lines: singletonLines(modules.accessibility, ["mobilityNotes"]) });
+    }
+    if (modules.bureaucracySetup.length > 0) {
+      cards.push({ title: "Bureaucracy / setup", lines: singletonLines(modules.bureaucracySetup, ["setupNotes"]) });
+    }
+    if (modules.workBusiness.length > 0) {
+      cards.push({ title: "Work / business", lines: singletonLines(modules.workBusiness, ["remoteWorkNotes"]) });
+    }
+    if (modules.retirementAging.length > 0) {
+      cards.push({ title: "Retirement / aging", lines: singletonLines(modules.retirementAging, ["agingNotes"]) });
+    }
+    if (modules.lifestyleLaws.length > 0) {
+      cards.push({ title: "Lifestyle / laws", lines: singletonLines(modules.lifestyleLaws, ["legalNotes"]) });
+    }
+    if (modules.realityCheck.length > 0) {
+      cards.push({ title: "Reality checks", lines: modules.realityCheck.map((item) => `${(item as { title?: string }).title ?? "Note"} (${(item as { severity?: string }).severity ?? "n/a"}): ${item.summary ?? ""}`) });
+    }
+    return cards.filter((card) => card.lines.length > 0);
+  }, [destination.v31Modules]);
 
   const intelligenceProfile = buildDestinationIntelligenceProfile({
     slug: destination.slug,
@@ -1288,7 +1392,20 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     match: destination.scoring?.[0]?.score ?? 0,
     heroNarrative: destination.heroNarrative,
   });
-  const scoreCards = destination.scoring.length > 0
+  // STEP 5: destination-level scores only - map the real persisted DESTINATION_SCORES rows into
+  // the score-card UI. Hide the section (empty array) rather than inventing a score when a v3.1
+  // destination genuinely has none. The hardcoded 76/74/72/78 defaults are never used for a
+  // resolved v3.1 destination. This is a display mapping only - no personalized quiz/match/
+  // recommendation scoring logic is introduced here.
+  const v31ScoreLabel = (scoreKey: string) => scoreKey.split("_").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
+  const scoreCards = hasV31Bundle
+    ? (destination.v31Modules?.scores ?? []).map((score) => ({
+        name: v31ScoreLabel(score.scoreKey),
+        weight: 0,
+        score: score.scoreValue ? Math.round(Number(score.scoreValue)) : 0,
+        label: score.scoreLabel ?? undefined,
+      }))
+    : destination.scoring.length > 0
     ? destination.scoring
     : [
       { name: "Retirement", weight: 30, score: 76 },
@@ -1310,7 +1427,17 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
 
   const resourceGroups = buildResourceGroups(destination);
 
-  const neighborhoods = (premiumContent.neighborhoodGuides.length > 0 ? premiumContent.neighborhoodGuides : destination.neighborhoods.map((name) => ({ name, whyItWorks: `${name} helps anchor the city’s local character.`, fit: `Best for residents who want a neighborhood identity that feels specific and lived in.`, vibe: `It offers a clear local rhythm and strong daily-life texture.` }))).map((item) => {
+  // STEP 6: persisted neighborhood rows are authoritative for a v3.1 destination - never fall
+  // back to the legacy engine's generic "${city} center" single entry, and never fabricate one
+  // when a destination genuinely has zero persisted neighborhoods (the section is simply empty).
+  const neighborhoods = (hasV31Bundle
+    ? (destination.v31Modules?.neighborhoods ?? []).map((item) => ({
+        name: item.name ?? item.neighborhoodKey,
+        whyItWorks: item.summary ?? "",
+        fit: item.areaType ?? "",
+        vibe: item.summary ?? "",
+      }))
+    : premiumContent.neighborhoodGuides.length > 0 ? premiumContent.neighborhoodGuides : destination.neighborhoods.map((name) => ({ name, whyItWorks: `${name} helps anchor the city’s local character.`, fit: `Best for residents who want a neighborhood identity that feels specific and lived in.`, vibe: `It offers a clear local rhythm and strong daily-life texture.` }))).map((item) => {
     const profile = getNeighborhoodProfile(destination, item.name);
     const summary = profile?.summary?.trim() || item.whyItWorks || `${item.name} helps anchor the city’s local character.`;
     const fit = profile?.intelligence?.find((metric) => /family|pet|remote|transit|walk/i.test(metric.key))?.value || item.fit || `Best for residents who want a neighborhood identity that feels specific and lived in.`;
@@ -1628,7 +1755,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                 <div key={category.name} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
                   <p className="text-sm font-semibold text-white">{category.name}</p>
                   <p className="mt-3 text-3xl font-black text-cyan-300">{category.score}/100</p>
-                  <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-400">{category.weight}% weight</p>
+                  <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-400">{hasV31Bundle ? (category as { label?: string }).label ?? "" : `${category.weight}% weight`}</p>
                 </div>
               ))}
             </div>
@@ -1788,7 +1915,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               <div className="rounded-3xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-200">{getReadTime(premiumContent.overviewArticle)}</div>
             </div>
             <div className="mt-6 space-y-4">
-              <PremiumSectionBlock title="Overview" summary={premiumContent.overviewArticle} body="" readTime={getReadTime(premiumContent.overviewArticle)} eyebrow="Editorial" />
+              {premiumContent.overviewArticle ? <PremiumSectionBlock title="Overview" summary={premiumContent.overviewArticle} body="" readTime={getReadTime(premiumContent.overviewArticle)} eyebrow="Editorial" /> : null}
             </div>
           </section>
 
@@ -1807,23 +1934,23 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            <PremiumSectionBlock title="Daily life" summary={premiumContent.dailyLifeArticle} body={`Morning: ${destination.heroNarrative}\n\nAfternoon: ${destination.dailyLife}\n\nEvening: ${destination.editorial}\n\nWeekend: ${destination.overview}\n\nSeasonal rhythm: ${destination.climate}`} readTime={getReadTime(premiumContent.dailyLifeArticle)} eyebrow="Living there" />
-            <PremiumSectionBlock title="Climate" summary={premiumContent.climateArticle} body={destination.climate} readTime={getReadTime(premiumContent.climateArticle)} eyebrow="Weather" />
+            {premiumContent.dailyLifeArticle ? <PremiumSectionBlock title="Daily life" summary={premiumContent.dailyLifeArticle} body={`Morning: ${destination.heroNarrative}\n\nAfternoon: ${destination.dailyLife}\n\nEvening: ${destination.editorial}\n\nWeekend: ${destination.overview}\n\nSeasonal rhythm: ${destination.climate}`} readTime={getReadTime(premiumContent.dailyLifeArticle)} eyebrow="Living there" /> : null}
+            {premiumContent.climateArticle ? <PremiumSectionBlock title="Climate" summary={premiumContent.climateArticle} body={destination.climate} readTime={getReadTime(premiumContent.climateArticle)} eyebrow="Weather" /> : null}
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            <PremiumSectionBlock title="Transportation" summary={premiumContent.transportationArticle} body={`Airport access: ${destination.airportInfo || destination.knowledgeProfile?.majorAirports?.join(", ") || "Regional and international access"}\n\nTransit: ${destination.transportation}\n\nCar dependency: ${destination.transportation}\n\nWalking and cycling: ${destination.walkability}\n\nTypical commute: ${destination.transportation}`} readTime={getReadTime(premiumContent.transportationArticle)} eyebrow="Movement" />
-            <PremiumSectionBlock title="Cost of living" summary={premiumContent.costOfLivingArticle} body={`Monthly budgets: ${destination.monthlyBudgets.map((budget) => `${budget.label}: ${budget.amount}`).join(" • ")}\n\nRent: ${destination.costOfLiving}\n\nUtilities: ${destination.costOfLiving}\n\nFood: ${destination.dailyLife}\n\nHealthcare: ${destination.healthcare}\n\nTransportation: ${destination.transportation}\n\nEntertainment: ${destination.editorial}\n\nTaxes: ${destination.costOfLiving}`} readTime={getReadTime(premiumContent.costOfLivingArticle)} eyebrow="Economics" />
+            {premiumContent.transportationArticle ? <PremiumSectionBlock title="Transportation" summary={premiumContent.transportationArticle} body={`Airport access: ${destination.airportInfo || destination.knowledgeProfile?.majorAirports?.join(", ") || "Regional and international access"}\n\nTransit: ${destination.transportation}\n\nCar dependency: ${destination.transportation}\n\nWalking and cycling: ${destination.walkability}\n\nTypical commute: ${destination.transportation}`} readTime={getReadTime(premiumContent.transportationArticle)} eyebrow="Movement" /> : null}
+            {premiumContent.costOfLivingArticle ? <PremiumSectionBlock title="Cost of living" summary={premiumContent.costOfLivingArticle} body={`Monthly budgets: ${destination.monthlyBudgets.map((budget) => `${budget.label}: ${budget.amount}`).join(" • ")}\n\nRent: ${destination.costOfLiving}\n\nUtilities: ${destination.costOfLiving}\n\nFood: ${destination.dailyLife}\n\nHealthcare: ${destination.healthcare}\n\nTransportation: ${destination.transportation}\n\nEntertainment: ${destination.editorial}\n\nTaxes: ${destination.costOfLiving}`} readTime={getReadTime(premiumContent.costOfLivingArticle)} eyebrow="Economics" /> : null}
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            <PremiumSectionBlock title="Healthcare" summary={premiumContent.healthcareArticle} body={`Top hospitals: ${destination.knowledgeProfile?.majorHospitals?.join(", ") || destination.healthcare}\n\nSpecialty care: ${destination.healthcare}\n\nInsurance quality: ${destination.healthcare}\n\nEmergency care: ${destination.healthcare}\n\nRetirement healthcare: ${destination.retirement}\n\nMedical tourism: ${destination.healthcare}`} readTime={getReadTime(premiumContent.healthcareArticle)} eyebrow="Wellness" />
-            <PremiumSectionBlock title="Retirement" summary={premiumContent.retirementGuide} body={`Ideal retiree profile: ${destination.retirement}\n\nWho should retire here: ${destination.retirement}\n\nWho should not: ${destination.cons.join(", ") || destination.editorial}\n\nBest neighborhoods: ${destination.neighborhoods.join(", ") || "A strong district match matters"}\n\nClimate considerations: ${destination.climate}\n\nHealthcare considerations: ${destination.healthcare}\n\nLifestyle: ${destination.dailyLife}\n\nTaxes: ${destination.costOfLiving}`} readTime={getReadTime(premiumContent.retirementGuide)} eyebrow="Retirement" />
+            {premiumContent.healthcareArticle ? <PremiumSectionBlock title="Healthcare" summary={premiumContent.healthcareArticle} body={`Top hospitals: ${destination.knowledgeProfile?.majorHospitals?.join(", ") || destination.healthcare}\n\nSpecialty care: ${destination.healthcare}\n\nInsurance quality: ${destination.healthcare}\n\nEmergency care: ${destination.healthcare}\n\nRetirement healthcare: ${destination.retirement}\n\nMedical tourism: ${destination.healthcare}`} readTime={getReadTime(premiumContent.healthcareArticle)} eyebrow="Wellness" /> : null}
+            {premiumContent.retirementGuide ? <PremiumSectionBlock title="Retirement" summary={premiumContent.retirementGuide} body={`Ideal retiree profile: ${destination.retirement}\n\nWho should retire here: ${destination.retirement}\n\nWho should not: ${destination.cons.join(", ") || destination.editorial}\n\nBest neighborhoods: ${destination.neighborhoods.join(", ") || "A strong district match matters"}\n\nClimate considerations: ${destination.climate}\n\nHealthcare considerations: ${destination.healthcare}\n\nLifestyle: ${destination.dailyLife}\n\nTaxes: ${destination.costOfLiving}`} readTime={getReadTime(premiumContent.retirementGuide)} eyebrow="Retirement" /> : null}
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            <PremiumSectionBlock title="Family" summary={premiumContent.familyGuide} body={`School quality: ${destination.family}\n\nActivities: ${destination.dailyLife}\n\nSafety: ${destination.safety}\n\nParks: ${destination.knowledgeProfile?.parks?.join(", ") || destination.overview}\n\nMuseums: ${destination.knowledgeProfile?.museums?.join(", ") || destination.museums.join(", ") || destination.overview}\n\nSports: ${destination.knowledgeProfile?.sports?.join(", ") || destination.overview}\n\nHealthcare: ${destination.healthcare}\n\nNeighborhood recommendations: ${destination.neighborhoods.join(", ") || destination.city}`} readTime={getReadTime(premiumContent.familyGuide)} eyebrow="Family" />
-            <PremiumSectionBlock title="Digital nomad" summary={premiumContent.digitalNomadGuide} body={`Internet: ${destination.internet}\n\nCoworking: ${destination.dailyLife}\n\nCoffee shops: ${destination.knowledgeProfile?.coffeeShops?.join(", ") || destination.dailyLife}\n\nRemote work: ${destination.digitalNomad}\n\nCommunity: ${destination.overview}\n\nVisa: ${destination.knowledgeProfile?.visaInfo || "Requirements vary by citizenship"}\n\nMonthly costs: ${destination.monthlyBudgets.map((budget) => `${budget.label}: ${budget.amount}`).join(" • ")}\n\nBest neighborhoods: ${destination.neighborhoods.join(", ") || destination.city}`} readTime={getReadTime(premiumContent.digitalNomadGuide)} eyebrow="Remote work" />
+            {premiumContent.familyGuide ? <PremiumSectionBlock title="Family" summary={premiumContent.familyGuide} body={`School quality: ${destination.family}\n\nActivities: ${destination.dailyLife}\n\nSafety: ${destination.safety}\n\nParks: ${destination.knowledgeProfile?.parks?.join(", ") || destination.overview}\n\nMuseums: ${destination.knowledgeProfile?.museums?.join(", ") || destination.museums.join(", ") || destination.overview}\n\nSports: ${destination.knowledgeProfile?.sports?.join(", ") || destination.overview}\n\nHealthcare: ${destination.healthcare}\n\nNeighborhood recommendations: ${destination.neighborhoods.join(", ") || destination.city}`} readTime={getReadTime(premiumContent.familyGuide)} eyebrow="Family" /> : null}
+            {premiumContent.digitalNomadGuide ? <PremiumSectionBlock title="Digital nomad" summary={premiumContent.digitalNomadGuide} body={`Internet: ${destination.internet}\n\nCoworking: ${destination.dailyLife}\n\nCoffee shops: ${destination.knowledgeProfile?.coffeeShops?.join(", ") || destination.dailyLife}\n\nRemote work: ${destination.digitalNomad}\n\nCommunity: ${destination.overview}\n\nVisa: ${destination.knowledgeProfile?.visaInfo || "Requirements vary by citizenship"}\n\nMonthly costs: ${destination.monthlyBudgets.map((budget) => `${budget.label}: ${budget.amount}`).join(" • ")}\n\nBest neighborhoods: ${destination.neighborhoods.join(", ") || destination.city}`} readTime={getReadTime(premiumContent.digitalNomadGuide)} eyebrow="Remote work" /> : null}
           </section>
 
           <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
@@ -1852,8 +1979,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                 <ExpandableInsightCard
                   key={category.name}
                   title={category.name}
-                  summary={`${category.score}/100 — ${category.weight}% weight`}
-                  body={premiumContent.scoringNotes.find((note) => note.category.toLowerCase() === category.name.toLowerCase())?.note || getScoreReason(category.name, destination)}
+                  summary={hasV31Bundle ? `${category.score}/100${(category as { label?: string }).label ? ` — ${(category as { label?: string }).label}` : ""}` : `${category.score}/100 — ${category.weight}% weight`}
+                  body={hasV31Bundle ? `Real persisted destination-level score: ${category.score}/100${(category as { label?: string }).label ? ` (${(category as { label?: string }).label})` : ""}.` : (premiumContent.scoringNotes.find((note) => note.category.toLowerCase() === category.name.toLowerCase())?.note || getScoreReason(category.name, destination))}
                 />
               ))}
             </div>
@@ -1893,6 +2020,29 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               </div>
             </div>
           </section>
+
+          {hasV31Bundle ? (
+            <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Persisted v3.1 modules</p>
+                  <h2 className="mt-3 text-2xl font-semibold text-white">Real destination-specific data</h2>
+                </div>
+              </div>
+              <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                {v31RichModuleCards.map((card) => (
+                  <div key={card.title} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
+                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">{card.title}</p>
+                    <ul className="mt-3 space-y-2">
+                      {card.lines.map((line, index) => (
+                        <li key={index} className="text-sm leading-6 text-slate-300">{line}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ) : null}
 
           <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
             <div className="flex items-center justify-between gap-4">

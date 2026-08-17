@@ -181,10 +181,10 @@ export function createSupabasePersistedDestinationReadPort(
                   destinationId: String(row.destination_id ?? ""),
                   destinationKey: String(row.destination_key ?? ""),
                   factKey: String(row.fact_key ?? ""),
-                  factGroup: null,
-                  valueText: null,
-                  displayLabel: null,
-                  sourceName: null,
+                  factGroup: pickString(row, "fact_type"),
+                  valueText: pickString(row, "body"),
+                  displayLabel: pickString(row, "title"),
+                  sourceName: pickString(row, "source_ref"),
                 };
               case "scores":
                 return {

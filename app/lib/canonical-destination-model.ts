@@ -112,6 +112,8 @@ export type CanonicalDestinationKnowledgeProfile = {
   metroPopulation?: string;
   elevation?: string;
   timeZone?: string;
+  currency?: string;
+  primaryLanguage?: string;
   climateClassification?: string;
   rainfall?: string;
   sunshineHours?: string;
@@ -247,6 +249,57 @@ export type ImportedVerifiedDestinationFacts = {
 
 export type CanonicalDestinationPremiumV2Modules = Record<string, Array<Record<string, unknown>>>;
 
+/**
+ * Typed carrier for the full normalized v3.1 persisted bundle (see
+ * NormalizedPersistedDestinationBundle in persistence/v31/materialize-stored-destination-state.ts).
+ * Present ONLY when a destination was resolved through the real persisted v3.1 read path - its
+ * presence is the single signal the renderer uses to decide real module data is authoritative and
+ * legacy generic-template generation must not run (see CanonicalDestinationPage.tsx / STEP 9).
+ * Every array here is exactly what was persisted - empty means "no rows", never a synthesized entry.
+ */
+export type CanonicalDestinationV31Fact = { readonly factKey: string; readonly factGroup: string | null; readonly valueText: string | null; readonly displayLabel: string | null; readonly sourceName: string | null };
+export type CanonicalDestinationV31Score = { readonly scoreKey: string; readonly scoreValue: string | null; readonly scoreLabel: string | null };
+export type CanonicalDestinationV31Neighborhood = { readonly neighborhoodKey: string; readonly name: string | null; readonly summary: string | null; readonly areaType: string | null };
+export type CanonicalDestinationV31Place = { readonly placeKey: string; readonly category: string | null; readonly name: string | null; readonly description: string | null };
+export type CanonicalDestinationV31Resource = { readonly resourceKey: string; readonly category: string | null; readonly name: string | null; readonly url: string | null };
+export type CanonicalDestinationV31Media = { readonly mediaKey: string; readonly kind: string | null; readonly url: string | null; readonly caption: string | null; readonly altText: string | null };
+export type CanonicalDestinationV31CostOfLivingItem = { readonly itemKey: string; readonly category: string | null; readonly monthlyLow: string | null; readonly monthlyHigh: string | null; readonly currency: string | null };
+export type CanonicalDestinationV31ClimateMonth = { readonly monthKey: string; readonly avgHighTemp: string | null; readonly avgLowTemp: string | null; readonly precipitationMm: string | null; readonly humidityPct: string | null };
+export type CanonicalDestinationV31Singleton = { readonly summary: string | null } & Record<string, string | null>;
+
+export type CanonicalDestinationV31Modules = {
+  readonly facts: readonly CanonicalDestinationV31Fact[];
+  readonly scores: readonly CanonicalDestinationV31Score[];
+  readonly neighborhoods: readonly CanonicalDestinationV31Neighborhood[];
+  readonly places: readonly CanonicalDestinationV31Place[];
+  readonly resources: readonly CanonicalDestinationV31Resource[];
+  readonly media: readonly CanonicalDestinationV31Media[];
+  readonly costOfLiving: readonly CanonicalDestinationV31CostOfLivingItem[];
+  readonly climateMonthly: readonly CanonicalDestinationV31ClimateMonth[];
+  readonly housing: readonly CanonicalDestinationV31Singleton[];
+  readonly propertyResources: readonly CanonicalDestinationV31Resource[];
+  readonly healthcare: readonly CanonicalDestinationV31Singleton[];
+  readonly visaResidency: readonly CanonicalDestinationV31Singleton[];
+  readonly taxesFinance: readonly CanonicalDestinationV31Singleton[];
+  readonly lgbtqInclusivity: readonly CanonicalDestinationV31Singleton[];
+  readonly safetyRisks: readonly (CanonicalDestinationV31Singleton & { readonly itemKey: string; readonly topic: string | null; readonly severity: string | null })[];
+  readonly transportation: readonly CanonicalDestinationV31Singleton[];
+  readonly remoteWork: readonly CanonicalDestinationV31Singleton[];
+  readonly languageIntegration: readonly CanonicalDestinationV31Singleton[];
+  readonly pets: readonly CanonicalDestinationV31Singleton[];
+  readonly familyEducation: readonly CanonicalDestinationV31Singleton[];
+  readonly communitySocial: readonly CanonicalDestinationV31Singleton[];
+  readonly accessibility: readonly CanonicalDestinationV31Singleton[];
+  readonly bureaucracySetup: readonly CanonicalDestinationV31Singleton[];
+  readonly workBusiness: readonly CanonicalDestinationV31Singleton[];
+  readonly retirementAging: readonly CanonicalDestinationV31Singleton[];
+  readonly lifestyleLaws: readonly CanonicalDestinationV31Singleton[];
+  readonly realityCheck: readonly CanonicalDestinationV31Singleton[];
+  readonly moveChecklist: readonly { readonly checklistKey: string; readonly summary: string | null; readonly checklistNotes: string | null }[];
+  readonly eventsSeasonality: readonly { readonly eventSeasonalityKey: string; readonly summary: string | null; readonly seasonalityNotes: string | null }[];
+  readonly sources: readonly { readonly sourceKey: string; readonly name: string | null; readonly url: string | null; readonly type: string | null }[];
+};
+
 export type CanonicalDestination = {
   slug: string;
   city: string;
@@ -308,4 +361,8 @@ export type CanonicalDestination = {
   neighborhoodProfiles?: NeighborhoodProfile[];
   neighborhoodIntelligence?: NeighborhoodIntelligenceGroup[];
   premiumV2Modules?: CanonicalDestinationPremiumV2Modules;
+  /** Only set when resolved through the real persisted v3.1 read path - see CanonicalDestinationV31Modules. */
+  v31Modules?: CanonicalDestinationV31Modules;
+  /** The real v3.1 destination_key this bundle was resolved from, when applicable. */
+  v31DestinationKey?: string;
 };

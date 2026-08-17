@@ -1690,3 +1690,335 @@ describe("canonical destination loader", () => {
     expect(destination?.costOfLivingProfile?.summary).toContain("Practical long-stay budget");
   });
 });
+
+// ---------------------------------------------------------------------------------------------
+// STEP 11 regression suite: renderer-integration authority contract (identity, facts, scores,
+// neighborhoods, media, rich modules, fallback policy). Covers the audit-fixed root causes:
+// unsafe fuzzy slug substitution (The Villages -> Athens, Puerto Vallarta -> Puerto Escondido),
+// generic "${city} center" neighborhood fabrication, hardcoded 76/74/72/78 score fallback, and
+// generic stock-photo media fallback overriding real persisted v3.1 content.
+// ---------------------------------------------------------------------------------------------
+function buildFullNormalizedBundle(overrides: Record<string, unknown> = {}) {
+  return {
+    destinationKey: "test-destination-key",
+    identity: { slug: "test-destination", name: "Test Destination", city: "Test City", country: "Testland" },
+    editorial: { shortDescription: "Real short description.", longDescription: "Real long description.", currency: "USD", primaryLanguage: "English", timeZone: "UTC" },
+    facts: [
+      { factKey: "population", factGroup: "identity", valueText: "123,456", displayLabel: "Population", sourceName: "Census" },
+      { factKey: "elevation", factGroup: "identity", valueText: "42 m", displayLabel: "Elevation", sourceName: "Geo" },
+      { factKey: "metro_population", factGroup: "identity", valueText: "Metro area: 200,000", displayLabel: "Metro population", sourceName: "Census" },
+      { factKey: "currency", factGroup: "finance", valueText: "US Dollar (USD)", displayLabel: "Currency", sourceName: "ECB" },
+      { factKey: "climate", factGroup: "climate", valueText: "Real climate narrative.", displayLabel: "Climate", sourceName: "WeatherSpark" },
+      { factKey: "healthcare", factGroup: "healthcare", valueText: "Real healthcare fact narrative.", displayLabel: "Hospital access", sourceName: "Health Dept" },
+    ],
+    scores: [
+      { scoreKey: "retirement", scoreValue: "91", scoreLabel: "Excellent", methodologyVersion: "v3.1-editorial-2026-08" },
+      { scoreKey: "family", scoreValue: "88", scoreLabel: "Very strong", methodologyVersion: "v3.1-editorial-2026-08" },
+    ],
+    neighborhoods: [
+      { neighborhoodKey: "nb-1", name: "Real Neighborhood One", summary: "Real neighborhood one summary.", areaType: "urban" },
+      { neighborhoodKey: "nb-2", name: "Real Neighborhood Two", summary: "Real neighborhood two summary.", areaType: "residential" },
+    ],
+    places: [{ placeKey: "place-1", category: "restaurant", name: "Real Place", description: "Real place description." }],
+    resources: [{ resourceKey: "resource-1", category: "tourism", name: "Real Resource", url: "https://real-resource.example.gov" }],
+    media: [
+      { mediaKey: "media-1", kind: "image", url: "https://commons.wikimedia.org/wiki/Special:FilePath/Real1.jpg", caption: "Real caption one", altText: "Real alt one" },
+      { mediaKey: "media-2", kind: "image", url: "https://commons.wikimedia.org/wiki/Special:FilePath/Real2.jpg", caption: "Real caption two", altText: "Real alt two" },
+    ],
+    costOfLiving: [{ itemKey: "col-1", category: "housing", monthlyLow: "1000", monthlyHigh: "2000", currency: "USD" }],
+    climateMonthly: [],
+    housing: [],
+    propertyResources: [],
+    healthcare: [{ summary: "Real healthcare module summary.", publicAccessSummary: "Real public access summary.", insuranceSummary: "Real insurance summary." }],
+    visaResidency: [],
+    taxesFinance: [],
+    lgbtqInclusivity: [],
+    safetyRisks: [],
+    transportation: [{ summary: "Real transportation module summary.", airportSummary: "Real airport summary.", transitSummary: "Real transit summary." }],
+    remoteWork: [{ summary: "Real remote work module summary.", internetSummary: "Real internet summary.", timezoneSummary: "Real timezone summary." }],
+    languageIntegration: [],
+    pets: [{ summary: "Real pets module summary.", petFriendlyNotes: "Real pet-friendly notes." }],
+    familyEducation: [{ summary: "Real family module summary.", schoolsSummary: "Real schools summary." }],
+    communitySocial: [],
+    accessibility: [],
+    bureaucracySetup: [],
+    workBusiness: [],
+    retirementAging: [{ summary: "Real retirement module summary.", agingNotes: "Real aging notes." }],
+    lifestyleLaws: [],
+    realityCheck: [],
+    moveChecklist: [],
+    environmentQuality: null,
+    dailyLifePracticality: null,
+    eventsSeasonality: [],
+    sources: [],
+    ...overrides,
+  };
+}
+
+function mockExactCatalogRow(destinationKey: string, slug: string, extra: Record<string, unknown> = {}) {
+  mockedSupabaseFetch.mockImplementation(async (path: string) => {
+    if (path.includes(`/rest/v1/destinations_catalog?slug=eq.${encodeURIComponent(slug)}`)) {
+      return {
+        ok: true,
+        json: async () => [{ id: `id-${destinationKey}`, destination_id: `id-${destinationKey}`, destination_key: destinationKey, slug, city: "", country: "", neighborhoods: [], resources: [], videos: [], media: [], sections: {}, scoring: [], ...extra }],
+      } as Response;
+    }
+    // Any other exact-key or fuzzy-style lookup must never return an unrelated row.
+    return { ok: true, json: async () => [] } as Response;
+  });
+}
+
+describe("STEP 11: renderer-integration authority contract", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockedLoadPremiumWorkbookDestinationData.mockResolvedValue(null);
+  });
+
+  describe("identity resolution safety", () => {
+    it("the-villages-florida-united-states can never resolve to Athens", async () => {
+      // No exact slug row, no exact destination_key row - simulates the real RLS-blocked draft
+      // scenario. Historically this fell through to a fuzzy substring search that matched the
+      // bare token "the" against a published "Athens" row.
+      mockedSupabaseFetch.mockResolvedValue({ ok: true, json: async () => [] } as Response);
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "FAILED", failure: { reason: "DB_READ_FAILED", destinationIdentity: { destinationKey: "", destinationId: "" } } } as never);
+
+      const destination = await getCanonicalDestination("the-villages-florida-united-states");
+
+      expect(destination).not.toBeNull();
+      expect(destination?.city).not.toBe("Athens");
+      expect(destination?.title).not.toBe("Athens");
+      expect(destination?.country).not.toBe("Greece");
+      // No fuzzy full-table scan may ever occur - only exact slug and exact destination_key lookups.
+      const queriedPaths = mockedSupabaseFetch.mock.calls.map(([path]) => String(path));
+      for (const path of queriedPaths) {
+        expect(path).toMatch(/destinations_catalog\?(slug|destination_key)=eq\./);
+      }
+    });
+
+    it("puerto-vallarta-mexico can never resolve to Puerto Escondido", async () => {
+      mockedSupabaseFetch.mockResolvedValue({ ok: true, json: async () => [] } as Response);
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "FAILED", failure: { reason: "DB_READ_FAILED", destinationIdentity: { destinationKey: "", destinationId: "" } } } as never);
+
+      const destination = await getCanonicalDestination("puerto-vallarta-mexico");
+
+      expect(destination).not.toBeNull();
+      expect(destination?.city).not.toBe("Puerto Escondido");
+      expect(destination?.title).not.toBe("Puerto Escondido");
+    });
+
+    it("resolves through an exact destination_key match when the slug lookup misses", async () => {
+      mockedSupabaseFetch.mockImplementation(async (path: string) => {
+        if (path.includes("/rest/v1/destinations_catalog?slug=eq.")) {
+          return { ok: true, json: async () => [] } as Response;
+        }
+        if (path.includes("/rest/v1/destinations_catalog?destination_key=eq.hoi-an-vn")) {
+          return { ok: true, json: async () => [{ id: "id-hoi-an", destination_id: "id-hoi-an", destination_key: "hoi-an-vn", slug: "hoi-an-vietnam", city: "", country: "", neighborhoods: [], resources: [], videos: [], media: [], sections: {}, scoring: [] }] } as Response;
+        }
+        return { ok: true, json: async () => [] } as Response;
+      });
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "hoi-an-vn", identity: { slug: "hoi-an-vietnam", name: "Hoi An", city: "Hoi An", country: "Vietnam" } }) } as never);
+
+      const destination = await getCanonicalDestination("hoi-an-vn");
+
+      expect(destination?.city).toBe("Hoi An");
+      expect(destination?.v31DestinationKey).toBe("hoi-an-vn");
+    });
+
+    it("exact legacy slugs continue to resolve unaffected", async () => {
+      mockedSupabaseFetch.mockResolvedValue({
+        ok: true,
+        json: async () => [{ slug: "barcelona-spain", city: "Barcelona", country: "Spain", title: "Barcelona", neighborhoods: [], resources: [], videos: [], media: [], sections: {}, scoring: [] }],
+      } as Response);
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "FAILED", failure: { reason: "DB_READ_FAILED", destinationIdentity: { destinationKey: "", destinationId: "" } } } as never);
+
+      const destination = await getCanonicalDestination("barcelona-spain");
+      expect(destination?.city).toBe("Barcelona");
+    });
+
+    it("an unknown destination stays not-found/generic rather than resolving to a different real destination", async () => {
+      mockedSupabaseFetch.mockResolvedValue({ ok: true, json: async () => [] } as Response);
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "FAILED", failure: { reason: "DB_READ_FAILED", destinationIdentity: { destinationKey: "", destinationId: "" } } } as never);
+
+      const destination = await getCanonicalDestination("completely-unknown-slug-xyz");
+
+      expect(destination).not.toBeNull();
+      // Generic fallback naming derived purely from the requested slug - never another real place.
+      expect(destination?.city.toLowerCase()).not.toBe("athens");
+      expect(destination?.city.toLowerCase()).not.toBe("puerto escondido");
+    });
+
+    it("golden-pilot aliases still resolve via the explicit reviewed alias map", async () => {
+      mockedSupabaseFetch.mockImplementation(async (path: string) => {
+        if (path.includes("/rest/v1/destinations_catalog?slug=eq.")) {
+          return { ok: true, json: async () => [] } as Response;
+        }
+        if (path.includes("/rest/v1/destinations_catalog?destination_key=eq.summerlin-nv-us")) {
+          return { ok: true, json: async () => [{ id: "id-summerlin", destination_id: "id-summerlin", destination_key: "summerlin-nv-us", slug: "summerlin-nv-usa", city: "Summerlin", country: "United States", neighborhoods: [], resources: [], videos: [], media: [], sections: {}, scoring: [] }] } as Response;
+        }
+        return { ok: true, json: async () => [] } as Response;
+      });
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "FAILED", failure: { reason: "DB_READ_FAILED", destinationIdentity: { destinationKey: "", destinationId: "" } } } as never);
+
+      const destination = await getCanonicalDestination("summerlin-las-vegas-nevada");
+
+      expect(destination?.city).toBe("Summerlin");
+    });
+  });
+
+  describe("real facts mapping", () => {
+    it("maps persisted population, healthcare, and climate facts into the view model", async () => {
+      mockExactCatalogRow("the-villages-fl-us", "the-villages-florida-united-states");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "the-villages-fl-us" }) } as never);
+
+      const destination = await getCanonicalDestination("the-villages-florida-united-states");
+
+      expect(destination?.knowledgeProfile?.population).toBe("123,456");
+      expect(destination?.knowledgeProfile?.metroPopulation).toBe("Metro area: 200,000");
+      expect(destination?.knowledgeProfile?.elevation).toBe("42 m");
+      expect(destination?.knowledgeProfile?.currency).toBe("USD");
+      expect(destination?.healthcare).toContain("Real healthcare module summary");
+      expect(destination?.climate).toContain("Real climate narrative");
+    });
+  });
+
+  describe("destination-level score mapping (STEP 5 - display mapping only, no quiz/recommendation logic)", () => {
+    it("maps real persisted DESTINATION_SCORES rows into v31Modules.scores", async () => {
+      mockExactCatalogRow("sofia-bg", "sofia-bulgaria");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "sofia-bg" }) } as never);
+
+      const destination = await getCanonicalDestination("sofia-bulgaria");
+
+      expect(destination?.v31Modules?.scores).toEqual([
+        { scoreKey: "retirement", scoreValue: "91", scoreLabel: "Excellent" },
+        { scoreKey: "family", scoreValue: "88", scoreLabel: "Very strong" },
+      ]);
+    });
+
+    it("the hardcoded 76/74/72/78 fallback scores are not present anywhere in a resolved v3.1 destination's scoring", async () => {
+      mockExactCatalogRow("sofia-bg", "sofia-bulgaria");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "sofia-bg" }) } as never);
+
+      const destination = await getCanonicalDestination("sofia-bulgaria");
+      const scoreValues = (destination?.v31Modules?.scores ?? []).map((score) => score.scoreValue);
+      expect(scoreValues).not.toContain("76");
+      expect(scoreValues).not.toContain("74");
+      expect(scoreValues).not.toContain("72");
+      expect(scoreValues).not.toContain("78");
+    });
+
+    it("does not introduce any personalized quiz/match/recommendation scoring field or module", async () => {
+      mockExactCatalogRow("sofia-bg", "sofia-bulgaria");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "sofia-bg" }) } as never);
+
+      const destination = await getCanonicalDestination("sofia-bulgaria");
+      const serialized = JSON.stringify(destination);
+      expect(serialized.toLowerCase()).not.toContain("matchpercentage");
+      expect(serialized.toLowerCase()).not.toContain("quizanswer");
+      expect(serialized.toLowerCase()).not.toContain("retirementdna");
+      expect(serialized.toLowerCase()).not.toContain("recommendationweight");
+    });
+  });
+
+  describe("real neighborhoods mapping (STEP 6)", () => {
+    it("maps persisted neighborhoods and never fabricates a generic city-center entry", async () => {
+      mockExactCatalogRow("hoi-an-vn", "hoi-an-vietnam");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "hoi-an-vn", identity: { slug: "hoi-an-vietnam", name: "Hoi An", city: "Hoi An", country: "Vietnam" } }) } as never);
+
+      const destination = await getCanonicalDestination("hoi-an-vietnam");
+
+      expect(destination?.v31Modules?.neighborhoods.map((n) => n.name)).toEqual(["Real Neighborhood One", "Real Neighborhood Two"]);
+      expect(destination?.neighborhoods).toEqual(["Real Neighborhood One", "Real Neighborhood Two"]);
+      expect(destination?.neighborhoods.join(" ")).not.toContain("center");
+    });
+
+    it("omits neighborhoods rather than fabricating one when a v3.1 destination genuinely has zero persisted rows", async () => {
+      mockExactCatalogRow("queenstown-nz", "queenstown-new-zealand");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "queenstown-nz", neighborhoods: [] }) } as never);
+
+      const destination = await getCanonicalDestination("queenstown-new-zealand");
+
+      expect(destination?.v31Modules?.neighborhoods).toEqual([]);
+    });
+  });
+
+  describe("real media mapping (STEP 7)", () => {
+    it("maps persisted media and never falls back to generic stock photos when real media exists", async () => {
+      mockExactCatalogRow("puerto-vallarta-mx", "puerto-vallarta-mexico");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "puerto-vallarta-mx" }) } as never);
+
+      const destination = await getCanonicalDestination("puerto-vallarta-mexico");
+
+      expect(destination?.media.map((item) => item.url)).toEqual([
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Real1.jpg",
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Real2.jpg",
+      ]);
+      const stockPhotoIds = ["photo-1500530855697-b586d89ba3ee", "photo-1499856871958-5b9627545d1a"];
+      for (const item of destination?.media ?? []) {
+        for (const stockId of stockPhotoIds) {
+          expect(item.url).not.toContain(stockId);
+        }
+      }
+    });
+
+    it("omits media (empty array) rather than using generic stock photos when a v3.1 destination genuinely has zero persisted/workbook media", async () => {
+      mockExactCatalogRow("the-villages-fl-us", "the-villages-florida-united-states");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "the-villages-fl-us", media: [] }) } as never);
+
+      const destination = await getCanonicalDestination("the-villages-florida-united-states");
+
+      expect(destination?.media).toEqual([]);
+      const stockPhotoIds = ["photo-1500530855697-b586d89ba3ee", "photo-1499856871958-5b9627545d1a"];
+      for (const stockId of stockPhotoIds) {
+        expect(JSON.stringify(destination)).not.toContain(stockId);
+      }
+    });
+  });
+
+  describe("rich module representative mapping (STEP 8)", () => {
+    it("maps representative cost of living, transportation, remote work, pets, family, and retirement rows", async () => {
+      mockExactCatalogRow("the-villages-fl-us", "the-villages-florida-united-states");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "the-villages-fl-us" }) } as never);
+
+      const destination = await getCanonicalDestination("the-villages-florida-united-states");
+
+      expect(destination?.v31Modules?.costOfLiving[0]).toMatchObject({ category: "housing", monthlyLow: "1000", monthlyHigh: "2000" });
+      expect(destination?.v31Modules?.transportation[0]?.summary).toContain("Real transportation module summary");
+      expect(destination?.v31Modules?.remoteWork[0]?.summary).toContain("Real remote work module summary");
+      expect(destination?.v31Modules?.pets[0]?.summary).toContain("Real pets module summary");
+      expect(destination?.v31Modules?.familyEducation[0]?.summary).toContain("Real family module summary");
+      expect(destination?.v31Modules?.retirementAging[0]?.summary).toContain("Real retirement module summary");
+      expect(destination?.transportation).toContain("Real transportation module summary");
+      expect(destination?.family).toContain("Real family module summary");
+      expect(destination?.retirement).toContain("Real retirement module summary");
+      expect(destination?.digitalNomad).toContain("Real remote work module summary");
+    });
+  });
+
+  describe("fallback policy: real data > omit > fabricated prose", () => {
+    it("an absent persisted module is represented as an empty array, never fabricated content", async () => {
+      mockExactCatalogRow("puerto-vallarta-mx", "puerto-vallarta-mexico");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "puerto-vallarta-mx", visaResidency: [], taxesFinance: [], lgbtqInclusivity: [] }) } as never);
+
+      const destination = await getCanonicalDestination("puerto-vallarta-mexico");
+
+      expect(destination?.v31Modules?.visaResidency).toEqual([]);
+      expect(destination?.v31Modules?.taxesFinance).toEqual([]);
+      expect(destination?.v31Modules?.lgbtqInclusivity).toEqual([]);
+    });
+
+    it("v31Modules is present for a resolved v3.1 destination and absent for a legacy destination", async () => {
+      mockExactCatalogRow("puerto-vallarta-mx", "puerto-vallarta-mexico");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "puerto-vallarta-mx" }) } as never);
+      const v31Destination = await getCanonicalDestination("puerto-vallarta-mexico");
+      expect(v31Destination?.v31Modules).toBeDefined();
+
+      mockedSupabaseFetch.mockResolvedValue({
+        ok: true,
+        json: async () => [{ slug: "barcelona-spain", city: "Barcelona", country: "Spain", title: "Barcelona", neighborhoods: [], resources: [], videos: [], media: [], sections: {}, scoring: [] }],
+      } as Response);
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "FAILED", failure: { reason: "DB_READ_FAILED", destinationIdentity: { destinationKey: "", destinationId: "" } } } as never);
+      const legacyDestination = await getCanonicalDestination("barcelona-spain");
+      expect(legacyDestination?.v31Modules).toBeUndefined();
+    });
+  });
+});

@@ -813,3 +813,115 @@ describe("CanonicalDestinationPage", () => {
     expect(screen.getByText(/Featured image/i)).toBeInTheDocument();
   });
 });
+
+describe("CanonicalDestinationPage - v3.1 renderer-integration authority contract", () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
+  function buildV31Destination(): CanonicalDestination {
+    return {
+      ...buildDestination(),
+      slug: "test-v31-destination",
+      city: "Real City",
+      country: "Real Country",
+      title: "Real City",
+      neighborhoods: ["Real Neighborhood One", "Real Neighborhood Two"],
+      media: [{ kind: "image", url: "https://commons.wikimedia.org/wiki/Special:FilePath/Real1.jpg", altText: "Real alt", caption: "Real caption", isPrimary: true }],
+      heroImages: [{ kind: "image", url: "https://commons.wikimedia.org/wiki/Special:FilePath/Real1.jpg", altText: "Real alt", caption: "Real caption", isPrimary: true }],
+      v31DestinationKey: "real-city-key",
+      v31Modules: {
+        facts: [{ factKey: "population", factGroup: "identity", valueText: "50,000", displayLabel: "Population", sourceName: "Census" }],
+        scores: [
+          { scoreKey: "retirement", scoreValue: "91", scoreLabel: "Excellent" },
+          { scoreKey: "family", scoreValue: "88", scoreLabel: "Very strong" },
+        ],
+        neighborhoods: [
+          { neighborhoodKey: "nb-1", name: "Real Neighborhood One", summary: "Real neighborhood one summary.", areaType: "urban" },
+          { neighborhoodKey: "nb-2", name: "Real Neighborhood Two", summary: "Real neighborhood two summary.", areaType: "residential" },
+        ],
+        places: [],
+        resources: [],
+        media: [{ mediaKey: "media-1", kind: "image", url: "https://commons.wikimedia.org/wiki/Special:FilePath/Real1.jpg", caption: "Real caption", altText: "Real alt" }],
+        costOfLiving: [{ itemKey: "col-1", category: "housing", monthlyLow: "1000", monthlyHigh: "2000", currency: "USD" }],
+        climateMonthly: [],
+        housing: [],
+        propertyResources: [],
+        healthcare: [{ summary: "Real healthcare summary." }],
+        visaResidency: [],
+        taxesFinance: [],
+        lgbtqInclusivity: [],
+        safetyRisks: [],
+        transportation: [{ summary: "Real transportation summary." }],
+        remoteWork: [{ summary: "Real remote work summary." }],
+        languageIntegration: [],
+        pets: [{ summary: "Real pets summary." }],
+        familyEducation: [{ summary: "Real family summary." }],
+        communitySocial: [],
+        accessibility: [],
+        bureaucracySetup: [],
+        workBusiness: [],
+        retirementAging: [{ summary: "Real retirement summary." }],
+        lifestyleLaws: [],
+        realityCheck: [],
+        moveChecklist: [],
+        eventsSeasonality: [],
+        sources: [],
+      },
+    };
+  }
+
+  it("shows real persisted destination-level scores, never the hardcoded 76/74/72/78 fallback", () => {
+    render(<CanonicalDestinationPage destination={buildV31Destination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    expect(screen.getByText("91/100")).toBeInTheDocument();
+    expect(screen.getByText("88/100")).toBeInTheDocument();
+    expect(screen.queryByText("76/100")).not.toBeInTheDocument();
+    expect(screen.queryByText("74/100")).not.toBeInTheDocument();
+    expect(screen.queryByText("72/100")).not.toBeInTheDocument();
+    expect(screen.queryByText("78/100")).not.toBeInTheDocument();
+  });
+
+  it("shows real persisted neighborhood names and never a fabricated '${city} center' entry", () => {
+    render(<CanonicalDestinationPage destination={buildV31Destination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    expect(screen.getAllByText("Real Neighborhood One").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Real Neighborhood Two").length).toBeGreaterThan(0);
+    expect(screen.queryByText(/Real City center/i)).not.toBeInTheDocument();
+  });
+
+  it("does not render generic legacy editorial template phrases for a v3.1 destination", () => {
+    render(<CanonicalDestinationPage destination={buildV31Destination()} />);
+
+    expect(screen.queryByText(/feels most convincing when you understand it as a living place/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/is easiest to understand in a normal week rather than on a weekend checklist/i)).not.toBeInTheDocument();
+  });
+
+  it("renders the real v3.1 rich module section with representative real content", () => {
+    render(<CanonicalDestinationPage destination={buildV31Destination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Deep Dive/i }));
+
+    expect(screen.getByText("Real destination-specific data")).toBeInTheDocument();
+    expect(screen.getAllByText(/Real healthcare summary/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Real remote work summary/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Real pets summary/i).length).toBeGreaterThan(0);
+  });
+
+  it("does not render the v3.1 rich module section for a legacy (non-v3.1) destination", () => {
+    render(<CanonicalDestinationPage destination={buildDestination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Deep Dive/i }));
+
+    expect(screen.queryByText("Real destination-specific data")).not.toBeInTheDocument();
+  });
+
+  it("hides a rich-module category entirely rather than fabricating content when its array is empty", () => {
+    const destination = buildV31Destination();
+    destination.v31Modules = { ...destination.v31Modules!, pets: [] };
+    render(<CanonicalDestinationPage destination={destination} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Deep Dive/i }));
+
+    expect(screen.queryByText("Pets")).not.toBeInTheDocument();
+  });
+});
