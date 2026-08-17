@@ -14,6 +14,8 @@ import type {
   DestinationId,
   DestinationPlan,
   KeyedChildModuleKey,
+  ModuleExecutionOperation,
+  ReplaceModuleExecutionModuleKey,
   ScalarModuleKey,
   ScalarOperation,
 } from "./types";
@@ -92,8 +94,14 @@ export function checkExecutionGates(input: ExecutionGateCheckInput): WriteGateRe
   if (!destinationId || String(destinationId).trim() === "") {
     return { ok: false, reason: "MISSING_DESTINATION_ID", message: "Refusing to write: destination_id is missing or blank." };
   }
-  if (input.plan.action === "ERROR") {
-    return { ok: false, reason: "PLAN_ACTION_UNSUPPORTED", message: "Refusing to write: plan action is ERROR." };
+  if (input.plan.action === "ERROR" || input.plan.action === "CREATE") {
+    // Real plans never carry action "CREATE" - buildDestinationPlan only ever emits UNCHANGED,
+    // UPDATE, or ERROR. A destination that doesn't exist yet is bootstrapped by creating its
+    // destinations_catalog row BEFORE planning, so the resulting plan targets an existing row and
+    // arrives here as UPDATE. Rejecting a hand-written action="CREATE" plan keeps this gate aligned
+    // with validatePlanEnvelopeForExecution, which rejects the same action for the same reason -
+    // there is exactly one authority on this, not two disagreeing ones.
+    return { ok: false, reason: "PLAN_ACTION_UNSUPPORTED", message: `Refusing to write: plan action is ${input.plan.action}.` };
   }
   if (input.plan.errors.length > 0) {
     return { ok: false, reason: "PLAN_HAS_ERRORS", message: "Refusing to write: plan contains execution-blocking errors." };
@@ -131,6 +139,26 @@ const KEYED_CHILD_TABLE_CONFIG: Readonly<Record<KeyedChildModuleKey, KeyedChildT
   sources: { table: "premium_sources", stableKeyColumn: "source_key", columns: { name: "source_name", url: "source_url", type: "source_type" }, requiredTextColumn: "source_name" },
 };
 
+// Real canonical destination objects (parsed directly from a workbook) only carry the sheet's raw
+// snake_case column names for keyed-child payload fields - only facts/scores get an explicit
+// camelCase alias added during parsing (see the matching comment in plan-destination.ts's
+// buildChildOperations, which already applies this exact fallback for stable-key extraction only).
+// This map extends the same defensive fallback to the rest of each child's payload fields, so the
+// write port never inserts a null into a column the DB requires NOT NULL just because the upstream
+// canonical object used its raw workbook column name instead of a stored-shape alias.
+const KEYED_CHILD_CANONICAL_FALLBACK_FIELD: Readonly<Record<KeyedChildModuleKey, Readonly<Record<string, string>>>> = {
+  facts: {},
+  scores: {},
+  neighborhoods: { name: "neighborhood_name", areaType: "area_type" },
+  places: { category: "category_key", name: "place_name" },
+  resources: { category: "resource_category", name: "resource_name" },
+  media: { kind: "media_type", url: "image_url", altText: "subject" },
+  propertyResources: { category: "resource_type", name: "resource_name" },
+  moveChecklist: { summary: "task", checklistNotes: "description" },
+  eventsSeasonality: { summary: "description", seasonalityNotes: "weather_context" },
+  sources: { name: "source_name", url: "source_url", type: "source_type" },
+};
+
 interface SingletonTableConfig {
   readonly table: string;
   readonly columns: Readonly<Record<string, string>>;
@@ -149,8 +177,103 @@ const EDITORIAL_TABLE_CONFIG: SingletonTableConfig = {
   conflictColumns: ["destination_id", "destination_key"],
 };
 
-function readChildField(child: Record<string, unknown>, storedField: string): unknown {
-  return child[storedField] ?? null;
+interface ReplaceModuleTableConfig {
+  readonly table: string;
+  /** How each row's per-destination-unique identity column is generated, since these modules
+   *  carry no stable key from the canonical/stored layer (that absence is exactly why they are
+   *  REPLACE_MODULE rather than keyed-diff modules in the first place). */
+  readonly keyStrategy: "record_key" | "position";
+  readonly columns: Readonly<Record<string, string>>;
+}
+
+// Two real DB key-column shapes cover all 20 non-keyed modules (verified directly against the
+// tracked premium-module storage migrations' table definitions):
+// - "record_key" tables: unique(destination_id, destination_key, record_key)
+// - "position" tables: unique(destination_id, position), position >= 1
+const REPLACE_MODULE_TABLE_CONFIG: Readonly<Record<ReplaceModuleExecutionModuleKey, ReplaceModuleTableConfig>> = {
+  costOfLiving: { table: "premium_cost_of_living", keyStrategy: "record_key", columns: { category: "category", monthlyLow: "monthly_low", monthlyHigh: "monthly_high", currency: "currency" } },
+  climateMonthly: { table: "premium_climate_monthly", keyStrategy: "record_key", columns: { monthKey: "month_key", avgHighTemp: "avg_high_temp", avgLowTemp: "avg_low_temp", precipitationMm: "precipitation_mm", humidityPct: "humidity_pct" } },
+  housing: { table: "premium_housing_property", keyStrategy: "record_key", columns: { summary: "restrictions_summary", buyingSummary: "buying_process_summary", rentalSummary: "rental_rules_notes" } },
+  healthcare: { table: "premium_healthcare_insurance", keyStrategy: "record_key", columns: { summary: "system_summary", publicAccessSummary: "public_access_foreigners", insuranceSummary: "international_insurance_notes" } },
+  visaResidency: { table: "premium_visa_residency", keyStrategy: "record_key", columns: { summary: "visa_type", residencyPath: "permanent_residency_path", citizenshipPath: "citizenship_path" } },
+  taxesFinance: { table: "premium_taxes_finance", keyStrategy: "record_key", columns: { summary: "summary", notes: "notes" } },
+  safetyRisks: { table: "premium_safety_risks", keyStrategy: "record_key", columns: { topic: "topic", severity: "severity", summary: "summary" } },
+  transportation: { table: "premium_transport_airports", keyStrategy: "record_key", columns: { summary: "summary", airportSummary: "name", transitSummary: "public_transit_available" } },
+  remoteWork: { table: "premium_connectivity_remote_work", keyStrategy: "record_key", columns: { summary: "remote_work_notes", internetSummary: "avg_download_mbps", timezoneSummary: "us_time_zone_fit" } },
+  realityCheck: { table: "premium_reality_check", keyStrategy: "record_key", columns: { title: "title", detail: "detail", severity: "severity" } },
+  lgbtqInclusivity: { table: "premium_lgbtq_inclusivity", keyStrategy: "position", columns: { summary: "summary", culturalNotes: "cultural_notes" } },
+  languageIntegration: { table: "premium_language_integration", keyStrategy: "position", columns: { summary: "summary", englishSupport: "english_support" } },
+  pets: { table: "premium_pets", keyStrategy: "position", columns: { summary: "summary", petFriendlyNotes: "pet_friendly_notes" } },
+  familyEducation: { table: "premium_family_education", keyStrategy: "position", columns: { summary: "summary", schoolsSummary: "schools_summary" } },
+  communitySocial: { table: "premium_community_social", keyStrategy: "position", columns: { summary: "summary", socialNotes: "social_notes" } },
+  accessibility: { table: "premium_accessibility", keyStrategy: "position", columns: { summary: "summary", mobilityNotes: "mobility_notes" } },
+  bureaucracySetup: { table: "premium_bureaucracy_setup", keyStrategy: "position", columns: { summary: "summary", setupNotes: "setup_notes" } },
+  workBusiness: { table: "premium_work_business", keyStrategy: "position", columns: { summary: "summary", remoteWorkNotes: "remote_work_notes" } },
+  retirementAging: { table: "premium_retirement_aging", keyStrategy: "position", columns: { summary: "summary", agingNotes: "aging_notes" } },
+  lifestyleLaws: { table: "premium_lifestyle_laws", keyStrategy: "position", columns: { summary: "summary", legalNotes: "legal_notes" } },
+};
+
+function buildReplaceModuleStatements(
+  destinationId: DestinationId,
+  destinationKey: string,
+  operations: readonly ModuleExecutionOperation[],
+): SqlStatement[] {
+  const statements: SqlStatement[] = [];
+
+  for (const operation of operations) {
+    const config = REPLACE_MODULE_TABLE_CONFIG[operation.module];
+    if (!config) {
+      continue;
+    }
+
+    // Narrowest correct REPLACE_MODULE behavior: this operation is only ever present when an
+    // explicit manifest REPLACE_MODULE entry authorized it, so an atomic delete-then-reinsert of
+    // the whole array is exactly what was approved - never a silent per-row merge.
+    statements.push({
+      text: `delete from public.${config.table} where destination_id = $1 and destination_key = $2`,
+      values: [destinationId, destinationKey],
+    });
+
+    const rows = operation.expectedAfter as readonly unknown[];
+    rows.forEach((row, index) => {
+      const record = row as Record<string, unknown>;
+      const columnEntries = Object.entries(config.columns);
+      const columnNames = columnEntries.map(([, dbColumn]) => dbColumn);
+      const columnValues = columnEntries.map(([storedField]) => record[storedField] ?? null);
+      const keyColumnName = config.keyStrategy === "record_key" ? "record_key" : "position";
+      const keyColumnValue: unknown = config.keyStrategy === "record_key" ? `record-${index + 1}` : index + 1;
+
+      const allColumns = ["destination_id", "destination_key", keyColumnName, ...columnNames];
+      const allValues: unknown[] = [destinationId, destinationKey, keyColumnValue, ...columnValues];
+      const placeholders = allValues.map((_, valueIndex) => `$${valueIndex + 1}`);
+
+      statements.push({
+        text: `insert into public.${config.table} (${allColumns.join(", ")}) values (${placeholders.join(", ")})`,
+        values: allValues,
+      });
+    });
+
+    if (rows.length > 0) {
+      statements.push({
+        text: "insert into public.premium_destination_module_presence (destination_id, destination_key, module_key) values ($1, $2, $3) on conflict (destination_id, module_key) do nothing",
+        values: [destinationId, destinationKey, operation.module],
+      });
+    }
+  }
+
+  return statements;
+}
+
+function readChildField(child: Record<string, unknown>, storedField: string, module: KeyedChildModuleKey): unknown {
+  const directValue = child[storedField];
+  if (directValue !== undefined && directValue !== null) {
+    return directValue;
+  }
+  const fallbackField = KEYED_CHILD_CANONICAL_FALLBACK_FIELD[module][storedField];
+  if (fallbackField) {
+    return child[fallbackField] ?? null;
+  }
+  return directValue ?? null;
 }
 
 function buildKeyedChildStatements(
@@ -169,7 +292,7 @@ function buildKeyedChildStatements(
       const child = operation.incomingChild as unknown as Record<string, unknown>;
       const columnEntries = Object.entries(config.columns);
       const columnNames = columnEntries.map(([, dbColumn]) => dbColumn);
-      const columnValues = columnEntries.map(([storedField]) => readChildField(child, storedField));
+      const columnValues = columnEntries.map(([storedField]) => readChildField(child, storedField, operation.module));
 
       const allColumns = ["destination_id", "destination_key", config.stableKeyColumn, ...columnNames];
       const allValues: unknown[] = [destinationId, destinationKey, operation.stableChildKey, ...columnValues];
@@ -290,6 +413,7 @@ export function buildDestinationPlanWriteStatements(plan: DestinationPlan): read
   }
 
   statements.push(...buildKeyedChildStatements(destinationId, destinationKey, plan.childOperations));
+  statements.push(...buildReplaceModuleStatements(destinationId, destinationKey, plan.moduleExecutionOperations));
 
   return statements;
 }

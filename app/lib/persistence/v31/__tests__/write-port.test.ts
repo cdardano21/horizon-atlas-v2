@@ -14,6 +14,7 @@ import type {
   DestinationId,
   DestinationPlan,
   FactKey,
+  ModuleExecutionOperation,
   NeighborhoodKey,
   ResolvedDestinationIdentity,
   ScalarOperation,
@@ -106,6 +107,14 @@ describe("write-port execution gates", () => {
     expect((result as { reason: string }).reason).toBe("PLAN_ACTION_UNSUPPORTED");
   });
 
+  it("rejects a hand-crafted plan with action CREATE, keeping one authority with validatePlanEnvelopeForExecution", () => {
+    // buildDestinationPlan never actually emits action "CREATE" in real usage - only UNCHANGED,
+    // UPDATE, or ERROR. This proves the write port refuses a hand-written CREATE-action plan the
+    // same way validatePlanEnvelopeForExecution already does, so there is one consistent rule.
+    const result = checkExecutionGates(baseGateInput({ plan: basePlan({ action: "CREATE" }) }));
+    expect((result as { reason: string }).reason).toBe("PLAN_ACTION_UNSUPPORTED");
+  });
+
   it("rejects a plan that has execution-blocking errors", () => {
     const result = checkExecutionGates(baseGateInput({
       plan: basePlan({ errors: [{ kind: "OUT_OF_SCOPE_DESTINATION", message: "boom", destinationKey: DEST_KEY }] }),
@@ -189,6 +198,23 @@ describe("write-port statement translation", () => {
     expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "neighborhoods"]);
   });
 
+  it("falls back to raw canonical snake_case field names for keyed-child payloads that were never given a camelCase alias upstream", () => {
+    // Real canonical destinations parsed from a workbook only carry raw sheet column names
+    // (e.g. neighborhood_name) for every keyed-child module except facts/scores - this proves the
+    // write port itself is robust to that shape instead of silently inserting nulls.
+    const childOperations: ChildOperation[] = [
+      {
+        kind: "CREATE_CHILD",
+        module: "neighborhoods",
+        stableChildKey: "hood-1" as NeighborhoodKey,
+        currentChild: null,
+        incomingChild: { neighborhood_key: "hood-1", neighborhood_name: "Snake Case Heights", summary: "ok", area_type: "urban" } as any,
+      },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ childOperations }));
+    expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, "hood-1", "Snake Case Heights", "ok", "urban"]);
+  });
+
   it("translates DELETE_CHILD for sources into a targeted delete with no presence insert", () => {
     const childOperations: ChildOperation[] = [
       {
@@ -216,6 +242,84 @@ describe("write-port statement translation", () => {
       },
     ];
     expect(buildDestinationPlanWriteStatements(basePlan({ childOperations }))).toEqual([]);
+  });
+
+  it("translates a REPLACE_MODULE operation for a record_key-group module (costOfLiving) into delete-then-reinsert plus presence", () => {
+    const moduleExecutionOperations: ModuleExecutionOperation[] = [
+      {
+        kind: "REPLACE_MODULE",
+        module: "costOfLiving",
+        expectedBefore: [],
+        expectedAfter: [
+          { itemKey: "old-1" as any, category: "housing", monthlyLow: "1200", monthlyHigh: "1800", currency: "USD" },
+          { itemKey: "old-2" as any, category: "groceries", monthlyLow: "300", monthlyHigh: "500", currency: "USD" },
+        ],
+      },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ moduleExecutionOperations }));
+    expect(statements).toHaveLength(4);
+    expect(statements[0].text).toBe("delete from public.premium_cost_of_living where destination_id = $1 and destination_key = $2");
+    expect(statements[0].values).toEqual([DEST_ID, DEST_KEY]);
+    expect(statements[1].text).toContain("insert into public.premium_cost_of_living");
+    expect(statements[1].text).toContain("record_key");
+    expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "housing", "1200", "1800", "USD"]);
+    expect(statements[2].values).toEqual([DEST_ID, DEST_KEY, "record-2", "groceries", "300", "500", "USD"]);
+    expect(statements[3].text).toContain("premium_destination_module_presence");
+    expect(statements[3].values).toEqual([DEST_ID, DEST_KEY, "costOfLiving"]);
+  });
+
+  it("translates a REPLACE_MODULE operation for a position-group module (pets) into delete-then-reinsert with sequential positions", () => {
+    const moduleExecutionOperations: ModuleExecutionOperation[] = [
+      {
+        kind: "REPLACE_MODULE",
+        module: "pets",
+        expectedBefore: [],
+        expectedAfter: [
+          { summary: "Pet-friendly overall", petFriendlyNotes: "Many parks" },
+        ],
+      },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ moduleExecutionOperations }));
+    expect(statements).toHaveLength(3);
+    expect(statements[0].text).toBe("delete from public.premium_pets where destination_id = $1 and destination_key = $2");
+    expect(statements[1].text).toContain("position");
+    expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, 1, "Pet-friendly overall", "Many parks"]);
+    expect(statements[2].values).toEqual([DEST_ID, DEST_KEY, "pets"]);
+  });
+
+  it("still deletes existing rows but skips presence insert when a REPLACE_MODULE has an empty expectedAfter", () => {
+    const moduleExecutionOperations: ModuleExecutionOperation[] = [
+      { kind: "REPLACE_MODULE", module: "healthcare", expectedBefore: [{ summary: "old" } as any], expectedAfter: [] },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ moduleExecutionOperations }));
+    expect(statements).toHaveLength(1);
+    expect(statements[0].text).toBe("delete from public.premium_healthcare_insurance where destination_id = $1 and destination_key = $2");
+  });
+
+  it("maps all 20 non-keyed REPLACE_MODULE modules to a distinct, non-empty target table without throwing", () => {
+    // TypeScript's Record<ReplaceModuleExecutionModuleKey, ...> mapped type already forces
+    // compile-time exhaustiveness over every module key; this proves the runtime SQL generation
+    // also succeeds for every one of them and targets 20 distinct tables (no accidental collisions).
+    const allTwentyModules = [
+      "costOfLiving", "climateMonthly", "housing", "healthcare", "visaResidency", "taxesFinance",
+      "safetyRisks", "transportation", "remoteWork", "realityCheck",
+      "lgbtqInclusivity", "languageIntegration", "pets", "familyEducation", "communitySocial",
+      "accessibility", "bureaucracySetup", "workBusiness", "retirementAging", "lifestyleLaws",
+    ] as const;
+    expect(allTwentyModules).toHaveLength(20);
+
+    const moduleExecutionOperations: ModuleExecutionOperation[] = allTwentyModules.map((module) => ({
+      kind: "REPLACE_MODULE",
+      module,
+      expectedBefore: [],
+      expectedAfter: [{ summary: `synthetic value for ${module}` } as any],
+    }));
+
+    const statements = buildDestinationPlanWriteStatements(basePlan({ moduleExecutionOperations }));
+    const insertTables = statements
+      .filter((statement) => statement.text.startsWith("insert into public.") && !statement.text.includes("module_presence"))
+      .map((statement) => statement.text.match(/insert into public\.(\w+)/)?.[1]);
+    expect(new Set(insertTables).size).toBe(20);
   });
 });
 
