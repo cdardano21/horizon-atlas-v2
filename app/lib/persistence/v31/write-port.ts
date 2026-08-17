@@ -124,19 +124,25 @@ interface KeyedChildTableConfig {
   readonly stableKeyColumn: string;
   readonly columns: Readonly<Record<string, string>>;
   readonly requiredTextColumn?: string;
+  /** Must exactly match the table's actual unique constraint column list - most keyed-child
+   *  tables are unique on (destination_id, destination_key, <stableKeyColumn>), but
+   *  premium_move_checklist and premium_events_seasonality are only unique on
+   *  (destination_id, <stableKeyColumn>) (confirmed directly against live pg_constraint), so this
+   *  is per-module config rather than a hardcoded assumption. */
+  readonly conflictColumns: readonly string[];
 }
 
 const KEYED_CHILD_TABLE_CONFIG: Readonly<Record<KeyedChildModuleKey, KeyedChildTableConfig>> = {
-  facts: { table: "premium_destination_facts", stableKeyColumn: "fact_key", columns: { factGroup: "fact_type", valueText: "body", displayLabel: "title", sourceName: "source_ref" } },
-  scores: { table: "premium_destination_scores", stableKeyColumn: "score_key", columns: { scoreValue: "score_value", scoreLabel: "score_name" } },
-  neighborhoods: { table: "premium_neighborhoods", stableKeyColumn: "neighborhood_key", columns: { name: "neighborhood_name", summary: "summary", areaType: "area_type" }, requiredTextColumn: "neighborhood_name" },
-  places: { table: "premium_places", stableKeyColumn: "place_key", columns: { category: "category_key", name: "place_name", description: "description" }, requiredTextColumn: "place_name" },
-  resources: { table: "premium_resources", stableKeyColumn: "resource_key", columns: { category: "resource_category", name: "resource_name", url: "url" }, requiredTextColumn: "resource_name" },
-  media: { table: "premium_media", stableKeyColumn: "media_key", columns: { kind: "media_type", url: "url", caption: "caption", altText: "alt_text" } },
-  propertyResources: { table: "premium_property_resources", stableKeyColumn: "record_key", columns: { category: "resource_type", name: "resource_name", url: "url" } },
-  moveChecklist: { table: "premium_move_checklist", stableKeyColumn: "checklist_key", columns: { summary: "summary", checklistNotes: "checklist_notes" } },
-  eventsSeasonality: { table: "premium_events_seasonality", stableKeyColumn: "event_seasonality_key", columns: { summary: "summary", seasonalityNotes: "seasonality_notes" } },
-  sources: { table: "premium_sources", stableKeyColumn: "source_key", columns: { name: "source_name", url: "source_url", type: "source_type" }, requiredTextColumn: "source_name" },
+  facts: { table: "premium_destination_facts", stableKeyColumn: "fact_key", columns: { factGroup: "fact_type", valueText: "body", displayLabel: "title", sourceName: "source_ref" }, conflictColumns: ["destination_id", "destination_key", "fact_key"] },
+  scores: { table: "premium_destination_scores", stableKeyColumn: "score_key", columns: { scoreValue: "score_value", scoreLabel: "score_name" }, conflictColumns: ["destination_id", "destination_key", "score_key"] },
+  neighborhoods: { table: "premium_neighborhoods", stableKeyColumn: "neighborhood_key", columns: { name: "neighborhood_name", summary: "summary", areaType: "area_type" }, requiredTextColumn: "neighborhood_name", conflictColumns: ["destination_id", "destination_key", "neighborhood_key"] },
+  places: { table: "premium_places", stableKeyColumn: "place_key", columns: { category: "category_key", name: "place_name", description: "description" }, requiredTextColumn: "place_name", conflictColumns: ["destination_id", "destination_key", "place_key"] },
+  resources: { table: "premium_resources", stableKeyColumn: "resource_key", columns: { category: "resource_category", name: "resource_name", url: "url" }, requiredTextColumn: "resource_name", conflictColumns: ["destination_id", "destination_key", "resource_key"] },
+  media: { table: "premium_media", stableKeyColumn: "media_key", columns: { kind: "media_type", url: "url", caption: "caption", altText: "alt_text" }, conflictColumns: ["destination_id", "destination_key", "media_key"] },
+  propertyResources: { table: "premium_property_resources", stableKeyColumn: "record_key", columns: { category: "resource_type", name: "resource_name", url: "url" }, conflictColumns: ["destination_id", "destination_key", "record_key"] },
+  moveChecklist: { table: "premium_move_checklist", stableKeyColumn: "checklist_key", columns: { summary: "summary", checklistNotes: "checklist_notes" }, conflictColumns: ["destination_id", "checklist_key"] },
+  eventsSeasonality: { table: "premium_events_seasonality", stableKeyColumn: "event_seasonality_key", columns: { summary: "summary", seasonalityNotes: "seasonality_notes" }, conflictColumns: ["destination_id", "event_seasonality_key"] },
+  sources: { table: "premium_sources", stableKeyColumn: "source_key", columns: { name: "source_name", url: "source_url", type: "source_type" }, requiredTextColumn: "source_name", conflictColumns: ["destination_id", "destination_key", "source_key"] },
 };
 
 // Real canonical destination objects (parsed directly from a workbook) only carry the sheet's raw
@@ -264,6 +270,19 @@ function buildReplaceModuleStatements(
   return statements;
 }
 
+/**
+ * Builds the `on conflict (...)` target list for a keyed-child upsert from that module's
+ * per-module conflictColumns config. Throws rather than silently emitting an empty/invalid
+ * `on conflict ()` clause, which Postgres would otherwise reject anyway - fails loudly and early
+ * instead of producing unsafe SQL.
+ */
+export function buildKeyedChildConflictTarget(module: string, conflictColumns: readonly string[]): string {
+  if (conflictColumns.length === 0) {
+    throw new Error(`Keyed-child module "${module}" has an empty conflictColumns config - refusing to generate an unsafe ON CONFLICT target.`);
+  }
+  return conflictColumns.join(", ");
+}
+
 function readChildField(child: Record<string, unknown>, storedField: string, module: KeyedChildModuleKey): unknown {
   const directValue = child[storedField];
   if (directValue !== undefined && directValue !== null) {
@@ -294,6 +313,7 @@ function buildKeyedChildStatements(
       const columnNames = columnEntries.map(([, dbColumn]) => dbColumn);
       const columnValues = columnEntries.map(([storedField]) => readChildField(child, storedField, operation.module));
 
+      const conflictTarget = buildKeyedChildConflictTarget(operation.module, config.conflictColumns);
       const allColumns = ["destination_id", "destination_key", config.stableKeyColumn, ...columnNames];
       const allValues: unknown[] = [destinationId, destinationKey, operation.stableChildKey, ...columnValues];
       const placeholders = allValues.map((_, index) => `$${index + 1}`);
@@ -301,7 +321,7 @@ function buildKeyedChildStatements(
 
       statements.push({
         text: `insert into public.${config.table} (${allColumns.join(", ")}) values (${placeholders.join(", ")}) ` +
-          `on conflict (destination_id, destination_key, ${config.stableKeyColumn}) do update set ${updateAssignments.join(", ")}, updated_at = now()`,
+          `on conflict (${conflictTarget}) do update set ${updateAssignments.join(", ")}, updated_at = now()`,
         values: allValues,
       });
       continue;

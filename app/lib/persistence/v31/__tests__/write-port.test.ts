@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildDestinationPlanWriteStatements,
+  buildKeyedChildConflictTarget,
   checkExecutionGates,
   executeApprovedDestinationPlanWrite,
   type ExecutionGateCheckInput,
@@ -13,8 +14,10 @@ import type {
   ChildOperation,
   DestinationId,
   DestinationPlan,
+  EventsSeasonalityKey,
   FactKey,
   ModuleExecutionOperation,
+  MoveChecklistKey,
   NeighborhoodKey,
   ResolvedDestinationIdentity,
   ScalarOperation,
@@ -294,6 +297,130 @@ describe("write-port statement translation", () => {
     const statements = buildDestinationPlanWriteStatements(basePlan({ moduleExecutionOperations }));
     expect(statements).toHaveLength(1);
     expect(statements[0].text).toBe("delete from public.premium_healthcare_insurance where destination_id = $1 and destination_key = $2");
+  });
+
+  it("real-schema regression: moveChecklist CREATE_CHILD conflict target is (destination_id, checklist_key) - NOT 3-column", () => {
+    // premium_move_checklist's real live unique constraint is UNIQUE(destination_id, checklist_key)
+    // (no destination_key) - confirmed against pg_constraint. The generic 3-column assumption used
+    // here previously caused every real Batch #1 write to fail with "there is no unique or
+    // exclusion constraint matching the ON CONFLICT specification".
+    const childOperations: ChildOperation[] = [
+      {
+        kind: "CREATE_CHILD",
+        module: "moveChecklist",
+        stableChildKey: "checklist-1" as MoveChecklistKey,
+        currentChild: null,
+        incomingChild: { checklistKey: "checklist-1" as MoveChecklistKey, summary: "Pack boxes", checklistNotes: "Start early" },
+      },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ childOperations }));
+    expect(statements[0].text).toContain("insert into public.premium_move_checklist");
+    expect(statements[0].text).toContain("on conflict (destination_id, checklist_key) do update");
+    expect(statements[0].text).not.toContain("on conflict (destination_id, destination_key, checklist_key)");
+  });
+
+  it("real-schema regression: eventsSeasonality CREATE_CHILD conflict target is (destination_id, event_seasonality_key) - NOT 3-column", () => {
+    // premium_events_seasonality's real live unique constraint is
+    // UNIQUE(destination_id, event_seasonality_key) (no destination_key) - confirmed against
+    // pg_constraint, the second of the two real schema mismatches this fix addresses.
+    const childOperations: ChildOperation[] = [
+      {
+        kind: "CREATE_CHILD",
+        module: "eventsSeasonality",
+        stableChildKey: "event-1" as EventsSeasonalityKey,
+        currentChild: null,
+        incomingChild: { eventSeasonalityKey: "event-1" as EventsSeasonalityKey, summary: "Rainy season", seasonalityNotes: "Bring an umbrella" },
+      },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ childOperations }));
+    expect(statements[0].text).toContain("insert into public.premium_events_seasonality");
+    expect(statements[0].text).toContain("on conflict (destination_id, event_seasonality_key) do update");
+    expect(statements[0].text).not.toContain("on conflict (destination_id, destination_key, event_seasonality_key)");
+  });
+
+  it("an ordinary 3-column keyed module (facts) still uses the full (destination_id, destination_key, stableKey) conflict target", () => {
+    const childOperations: ChildOperation[] = [
+      {
+        kind: "CREATE_CHILD",
+        module: "facts",
+        stableChildKey: "fact-1" as FactKey,
+        currentChild: null,
+        incomingChild: { factKey: "fact-1" as FactKey, factGroup: "identity", valueText: "A fact", displayLabel: "Fact", sourceName: "Test" },
+      },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ childOperations }));
+    expect(statements[0].text).toContain("on conflict (destination_id, destination_key, fact_key) do update");
+  });
+
+  it("every keyed-child module has a non-empty conflictColumns config (no silently unsafe ON CONFLICT target possible)", () => {
+    // Exercises CREATE_CHILD for every one of the 10 keyed-child modules and proves each produces
+    // a non-empty ON CONFLICT target - the write port throws rather than emitting invalid SQL if a
+    // module's conflictColumns config were ever left empty (see the throw in buildKeyedChildStatements).
+    const modules: ReadonlyArray<ChildOperation["module"]> = [
+      "facts", "scores", "neighborhoods", "places", "resources", "media",
+      "propertyResources", "moveChecklist", "eventsSeasonality", "sources",
+    ];
+    for (const module of modules) {
+      const childOperations: ChildOperation[] = [
+        { kind: "CREATE_CHILD", module, stableChildKey: "k1" as any, currentChild: null, incomingChild: { summary: "x" } as any },
+      ];
+      const statements = buildDestinationPlanWriteStatements(basePlan({ childOperations }));
+      const insertStatement = statements.find((statement) => statement.text.startsWith("insert into public."));
+      expect(insertStatement?.text).toMatch(/on conflict \([^)]+\) do update/);
+    }
+  });
+
+  it("UPDATE_CHILD for an existing moveChecklist row uses DO UPDATE against the same 2-column target, never a duplicate insert-only path", () => {
+    const childOperations: ChildOperation[] = [
+      {
+        kind: "UPDATE_CHILD",
+        module: "moveChecklist",
+        stableChildKey: "checklist-1" as MoveChecklistKey,
+        currentChild: { checklistKey: "checklist-1" as MoveChecklistKey, summary: "Pack boxes", checklistNotes: "old" },
+        incomingChild: { checklistKey: "checklist-1" as MoveChecklistKey, summary: "Pack boxes", checklistNotes: "Start early" },
+      },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ childOperations }));
+    expect(statements[0].text).toContain("on conflict (destination_id, checklist_key) do update set summary = excluded.summary, checklist_notes = excluded.checklist_notes");
+  });
+
+  it("UPDATE_CHILD for an existing eventsSeasonality row uses DO UPDATE against the same 2-column target", () => {
+    const childOperations: ChildOperation[] = [
+      {
+        kind: "UPDATE_CHILD",
+        module: "eventsSeasonality",
+        stableChildKey: "event-1" as EventsSeasonalityKey,
+        currentChild: { eventSeasonalityKey: "event-1" as EventsSeasonalityKey, summary: "Rainy season", seasonalityNotes: "old" },
+        incomingChild: { eventSeasonalityKey: "event-1" as EventsSeasonalityKey, summary: "Rainy season", seasonalityNotes: "Bring an umbrella" },
+      },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ childOperations }));
+    expect(statements[0].text).toContain("on conflict (destination_id, event_seasonality_key) do update set summary = excluded.summary, seasonality_notes = excluded.seasonality_notes");
+  });
+
+  it("destination isolation for the 2-column conflict targets is structural: destination_id is always the first bound parameter and part of the conflict target, so identical checklist/event keys under a different destination_id can never collide", () => {
+    const otherDestinationId = "22222222-2222-2222-2222-222222222222" as DestinationId;
+    const otherIdentity: ResolvedDestinationIdentity = { destinationKey: "other-dest" as CanonicalDestinationKey, destinationId: otherDestinationId };
+    const childOperations: ChildOperation[] = [
+      {
+        kind: "CREATE_CHILD",
+        module: "moveChecklist",
+        stableChildKey: "checklist-1" as MoveChecklistKey,
+        currentChild: null,
+        incomingChild: { checklistKey: "checklist-1" as MoveChecklistKey, summary: "Pack boxes", checklistNotes: "Start early" },
+      },
+    ];
+    const forDestA = buildDestinationPlanWriteStatements(basePlan({ childOperations }));
+    const forDestB = buildDestinationPlanWriteStatements(basePlan({ destinationIdentity: otherIdentity, childOperations }));
+    expect(forDestA[0].text).toBe(forDestB[0].text);
+    expect(forDestA[0].values[0]).toBe(DEST_ID);
+    expect(forDestB[0].values[0]).toBe(otherDestinationId);
+    expect(forDestA[0].values[0]).not.toBe(forDestB[0].values[0]);
+  });
+
+  it("rejects an empty conflictColumns config rather than silently generating unsafe SQL", () => {
+    expect(() => buildKeyedChildConflictTarget("someModule", [])).toThrow(/empty conflictColumns/);
+    expect(buildKeyedChildConflictTarget("moveChecklist", ["destination_id", "checklist_key"])).toBe("destination_id, checklist_key");
   });
 
   it("maps all 20 non-keyed REPLACE_MODULE modules to a distinct, non-empty target table without throwing", () => {
