@@ -794,7 +794,7 @@ function ExpandableInsightCard({
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="rounded-[1.5rem] border border-white/10 bg-slate-900/70 p-5 shadow-[0_18px_50px_rgba(2,8,23,0.16)]">
+    <div className="rounded-[1.5rem] border border-white/10 bg-[linear-gradient(170deg,rgba(14,24,42,0.82),rgba(10,17,31,0.68))] p-5 shadow-[0_18px_50px_rgba(2,8,23,0.2)]">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h4 className="text-base font-semibold text-white">{title}</h4>
@@ -932,16 +932,16 @@ function ExpandableNeighborhoodCard({
           <h4 className="text-lg font-semibold text-white">{neighborhood.name}</h4>
           <p className="mt-2 text-[15px] leading-8 text-slate-300">{neighborhood.whyItWorks}</p>
         </div>
-        <button type="button" onClick={() => setExpanded((value) => !value)} className="rounded-full border border-white/10 bg-slate-950/40 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-200">
+        <button type="button" onClick={() => setExpanded((value) => !value)} className="rounded-full border border-cyan-300/30 bg-cyan-500/10 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-100 transition hover:bg-cyan-500/20">
           {expanded ? "Collapse" : "Explore"}
         </button>
       </div>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
+      <div className="mt-4 grid gap-2 sm:grid-cols-2">
+        <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-3">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Best for</p>
           <p className="mt-2 text-[15px] leading-7 text-slate-300">{neighborhood.fit}</p>
         </div>
-        <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
+        <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-3">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Overall vibe</p>
           <p className="mt-2 text-[15px] leading-7 text-slate-300">{neighborhood.vibe}</p>
         </div>
@@ -959,9 +959,9 @@ function ExpandableNeighborhoodCard({
         </div>
       ) : null}
       <div className={`overflow-hidden transition-all duration-300 ${expanded ? "mt-4 max-h-[4000px] opacity-100" : "max-h-0 opacity-0"}`}>
-        <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
           {detailMap.map((detail) => (
-            <div key={detail.label} className="rounded-2xl border border-white/10 bg-slate-950/35 p-3">
+            <div key={detail.label} className="rounded-2xl border border-white/10 bg-slate-950/30 p-3">
               <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">{detail.label}</p>
               <p className="mt-2 text-sm leading-6 text-slate-300">{detail.value}</p>
             </div>
@@ -975,9 +975,9 @@ function ExpandableNeighborhoodCard({
                 <h5 className="mt-1 text-lg font-semibold text-white">A curatorial guide to the places that make the neighborhood feel real</h5>
               </div>
             </div>
-            <div className="mt-4 grid gap-3 lg:grid-cols-2">
+            <div className="mt-4 grid gap-2 lg:grid-cols-2">
               {neighborhoodInsightCards.map((card) => (
-                <div key={card.key} className="rounded-2xl border border-white/10 bg-slate-950/35 p-3.5">
+                <div key={card.key} className="rounded-2xl border border-white/10 bg-slate-950/25 p-3.5">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">{card.label}</p>
                   <p className="mt-2 text-sm font-semibold text-white">{card.value}</p>
                   <p className="mt-2 text-[15px] leading-7 text-slate-300">{card.description}</p>
@@ -1118,17 +1118,15 @@ function ExpandableNeighborhoodCard({
 export default function CanonicalDestinationPage({ destination, developerMode = false }: CanonicalDestinationPageProps) {
   type ViewMode = "guide" | "profile" | "deep";
 
-  const [viewMode, setViewMode] = useState<ViewMode>("guide");
+  const [viewMode, setViewMode] = useState<ViewMode>(() => {
+    if (typeof window === "undefined") return "guide";
+    const storedView = window.localStorage.getItem("horizon-atlas-view-mode");
+    return storedView === "guide" || storedView === "profile" || storedView === "deep"
+      ? storedView
+      : "guide";
+  });
   const [selectedMedia, setSelectedMedia] = useState<GalleryItem | null>(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const storedView = window.localStorage.getItem("horizon-atlas-view-mode");
-    if (storedView === "guide" || storedView === "profile" || storedView === "deep") {
-      setViewMode(storedView as ViewMode);
-    }
-  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -1586,11 +1584,14 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     : `/destinations/${destination.slug}?developer=1`;
 
   return (
-    <main className="space-y-10 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.10),_transparent_35%),linear-gradient(180deg,_rgba(10,16,34,0.96),_rgba(15,23,42,0.95))] px-3 py-5 text-slate-100 sm:px-5 sm:py-6 lg:px-8 lg:py-8">
-      <section className="rounded-[2rem] border border-white/15 bg-slate-900/60 p-7 shadow-[0_25px_80px_rgba(2,8,23,0.24)] backdrop-blur sm:p-9">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+    <main className="space-y-10 bg-[radial-gradient(circle_at_12%_8%,_rgba(246,214,153,0.16),_transparent_34%),radial-gradient(circle_at_88%_6%,_rgba(63,132,138,0.2),_transparent_34%),linear-gradient(180deg,_rgba(7,16,30,0.98),_rgba(14,24,42,0.97))] px-3 py-5 text-slate-100 sm:px-5 sm:py-6 lg:px-8 lg:py-8">
+      <section className="relative overflow-hidden rounded-[2rem] border border-white/15 bg-slate-900/55 p-7 shadow-[0_25px_80px_rgba(2,8,23,0.24)] backdrop-blur sm:p-9">
+        <img src={executiveSummaryImage.resolvedUrl} alt={executiveSummaryImage.altText || destination.title} className="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" />
+        <div className="absolute inset-0 bg-[linear-gradient(112deg,rgba(4,10,20,0.86),rgba(8,24,33,0.58)_48%,rgba(92,69,33,0.28)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_20%,rgba(255,226,171,0.2),transparent_40%)]" />
+        <div className="relative flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200">DestinationFinderAI premium guide</span>
+            <span className="rounded-full border border-[#f5d8a2]/40 bg-[rgba(26,38,44,0.52)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.32em] text-[#f6deae]">DestinationFinderAI premium guide</span>
           </div>
           <div role="tablist" aria-label="Destination page views" className="inline-flex rounded-full border border-white/10 bg-white/5 p-1">
             {viewTabs.map((tab, index) => {
@@ -1627,12 +1628,12 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             })}
           </div>
         </div>
-        <h1 className="mt-6 text-4xl font-black text-white sm:text-5xl">{destination.title}</h1>
-        <p className="mt-3 text-lg text-slate-300">{destination.subtitle}</p>
-        <p className="mt-6 max-w-4xl text-[15px] leading-8 text-slate-300">{premiumContent.heroIntroduction}</p>
+        <h1 className="relative mt-8 max-w-4xl text-4xl font-black leading-[0.95] tracking-[-0.02em] text-white sm:text-5xl lg:text-6xl">{destination.title}</h1>
+        <p className="relative mt-3 text-lg text-slate-200">{destination.subtitle}</p>
+        <p className="relative mt-6 max-w-4xl text-[15px] leading-8 text-slate-200">{premiumContent.heroIntroduction}</p>
       </section>
 
-      <section className="rounded-[2rem] border border-white/15 bg-slate-900/60 p-6 shadow-[0_20px_70px_rgba(2,8,23,0.20)] sm:p-8">
+      <section className="rounded-[2rem] border border-white/15 bg-slate-900/58 p-6 shadow-[0_20px_70px_rgba(2,8,23,0.20)] sm:p-8">
         <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Executive summary</p>
@@ -1648,23 +1649,21 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                 <p className="mt-2 text-xs leading-6 text-slate-400">{destination.overview}</p>
               </div>
             </div>
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid gap-2 sm:grid-cols-2">
               {essentialFacts.slice(0, 8).map((fact) => (
-                <div key={fact.label} className="rounded-2xl border border-white/10 bg-white/10 p-3.5">
+                <div key={fact.label} className="rounded-2xl border border-white/10 bg-[rgba(8,15,30,0.5)] p-3.5">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">{fact.label}</p>
-                  <p className="mt-2 text-sm font-semibold text-white">{fact.value}</p>
-                  <p className="mt-2 text-xs leading-6 text-slate-400">{fact.note}</p>
+                  <p className="mt-1.5 text-sm font-semibold text-white">{fact.value}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
-        <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-6 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
           {essentialFacts.slice(8).map((fact) => (
-            <div key={fact.label} className="rounded-3xl border border-white/10 bg-slate-950/30 p-4">
+            <div key={fact.label} className="rounded-2xl border border-white/10 bg-slate-950/30 p-3.5">
               <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">{fact.label}</p>
               <p className="mt-2 text-sm font-semibold text-white">{fact.value}</p>
-              <p className="mt-2 text-xs leading-6 text-slate-400">{fact.note}</p>
             </div>
           ))}
         </div>
@@ -1788,7 +1787,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">Fast overview</p>
                 <p className="mt-3 text-sm leading-8 text-slate-400">{premiumContent.overviewArticle || destination.overview}</p>
                 <div className="mt-4 rounded-2xl border border-cyan-400/20 bg-cyan-500/10 p-4">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">What you'll learn</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">What you&apos;ll learn</p>
                   <ul className="mt-3 space-y-2 text-sm leading-7 text-slate-200">
                     <li>• Whether the destination deserves serious consideration</li>
                     <li>• Which facts matter most before you dig deeper</li>
@@ -2119,8 +2118,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                 </div>
               </div>
               <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {v31RichModuleCards.map((card) => (
-                  <div key={card.title} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
+                {v31RichModuleCards.map((card, index) => (
+                  <div key={card.title} className={`rounded-[1.5rem] border border-white/10 p-4 ${index % 3 === 0 ? "bg-cyan-500/8" : index % 3 === 1 ? "bg-white/6" : "bg-slate-950/28"}`}>
                     <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">{card.title}</p>
                     <ul className="mt-3 space-y-2">
                       {card.lines.map((line, index) => (

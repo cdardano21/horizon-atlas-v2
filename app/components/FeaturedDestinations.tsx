@@ -61,7 +61,7 @@ export default async function FeaturedDestinations() {
           return (
           <article key={place.slug} className={`overflow-hidden rounded-[2rem] border border-[var(--atlas-border)] bg-[rgba(255,252,246,0.92)] shadow-[0_26px_54px_-36px_rgba(39,33,22,0.75)] transition duration-300 hover:-translate-y-1 hover:border-[rgba(31,95,99,0.42)] ${isLead ? "lg:col-span-6" : "lg:col-span-3"}`}>
             {hasVerifiedDestinationImage(place) ? (
-              <div className="relative h-64 overflow-hidden bg-slate-900/10">
+              <div className={`relative overflow-hidden bg-slate-900/10 ${isLead ? "h-80" : "h-60"}`}>
                 <Image
                   src={getDestinationImageUrl(place.images[0] ?? { src: "", alt: place.city }, place)}
                   alt={place.images[0]?.alt || place.city}
@@ -84,7 +84,7 @@ export default async function FeaturedDestinations() {
                 </div>
               </div>
             ) : (
-              <div className="relative h-64 overflow-hidden bg-slate-900/10">
+              <div className={`relative overflow-hidden bg-slate-900/10 ${isLead ? "h-80" : "h-60"}`}>
                 <Image
                   src={getDestinationImageUrl({ src: COSTA_DEL_SOL_HERO_IMAGE, alt: `${place.city} editorial fallback` }, place)}
                   alt={`${place.city} editorial fallback view`}
@@ -103,9 +103,9 @@ export default async function FeaturedDestinations() {
                 </div>
               </div>
             )}
-            <div className="p-6">
+            <div className={`${isLead ? "p-6" : "p-5"}`}>
               <p className="text-sm uppercase tracking-[0.25em] text-[var(--atlas-accent)]">{place.tags?.slice(0, 2).join(" • ")}</p>
-              <p className="mt-4 text-xl font-semibold text-[var(--atlas-ink)]">{place.description}</p>
+              <p className={`mt-4 font-semibold text-[var(--atlas-ink)] ${isLead ? "text-2xl leading-9" : "text-xl leading-8"}`}>{place.description}</p>
               <p className="mt-4 text-sm leading-6 text-[var(--atlas-muted)]">{sanitizeSummary(cardFacts.summary)}</p>
               {isLead ? (
                 <div className="mt-5 rounded-3xl border border-[var(--atlas-border)] bg-[rgba(255,255,255,0.6)] p-4">
@@ -175,7 +175,7 @@ export default async function FeaturedDestinations() {
               </div>
               <Link
                 href={`/destinations/${place.slug}`}
-                className="atlas-button-primary mt-8 px-5 py-3"
+                className={`atlas-button-primary mt-8 px-5 py-3 ${isLead ? "w-auto" : "w-full justify-center"}`}
               >
                 View details
               </Link>

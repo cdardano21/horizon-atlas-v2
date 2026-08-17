@@ -5,16 +5,20 @@
   --atlas-canvas-soft: #efe6d6;
   --atlas-surface: #fffdf7;
   --atlas-panel: #fff9ef;
+  --atlas-panel-soft: rgba(255, 251, 242, 0.72);
   --atlas-ink: #17202a;
   --atlas-muted: #3f3a33;
   --atlas-accent: #1f5f63;
   --atlas-accent-soft: #2f7c72;
   --atlas-gold: #c59b5f;
+  --atlas-bronze: #9d7442;
   --atlas-border: rgba(57, 52, 42, 0.12);
   --atlas-shadow: 0 25px 70px -35px rgba(49, 40, 24, 0.36);
-  --font-atlas-sans: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --atlas-shadow-soft: 0 16px 44px -30px rgba(25, 30, 34, 0.42);
+  --atlas-ring: rgba(31, 95, 99, 0.35);
+  --font-atlas-sans: "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", sans-serif;
   --font-atlas-mono: "IBM Plex Mono", "SFMono-Regular", ui-monospace, monospace;
-  --font-atlas-display: "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+  --font-atlas-display: "Canela", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
   --font-sans: var(--font-atlas-sans);
   --font-mono: var(--font-atlas-mono);
   --font-display: var(--font-atlas-display);
@@ -26,9 +30,9 @@ html {
 
 body {
   background:
-    radial-gradient(circle at 5% 5%, rgba(197, 155, 95, 0.24), transparent 24%),
-    radial-gradient(circle at 90% 0%, rgba(31, 95, 99, 0.14), transparent 34%),
-    linear-gradient(180deg, #f8f4ec 0%, #f4efe3 36%, #f7f2e9 100%);
+    radial-gradient(circle at 4% 4%, rgba(197, 155, 95, 0.22), transparent 22%),
+    radial-gradient(circle at 96% 2%, rgba(31, 95, 99, 0.13), transparent 34%),
+    linear-gradient(180deg, #f8f4ec 0%, #f4eee0 34%, #f8f3ea 100%);
   color: var(--atlas-ink);
   font-family: var(--font-sans), sans-serif;
   text-rendering: optimizeLegibility;
@@ -119,6 +123,29 @@ h6 {
     backdrop-filter: blur(8px);
   }
 
+  .atlas-premium-surface {
+    background:
+      linear-gradient(160deg, rgba(255, 252, 246, 0.82), rgba(244, 234, 216, 0.62)),
+      radial-gradient(circle at 14% 8%, rgba(255, 255, 255, 0.55), transparent 42%);
+    border: 1px solid rgba(68, 56, 35, 0.16);
+    box-shadow: var(--atlas-shadow-soft);
+    backdrop-filter: blur(8px);
+  }
+
+  .atlas-premium-surface-soft {
+    background: var(--atlas-panel-soft);
+    border: 1px solid rgba(68, 56, 35, 0.14);
+    box-shadow: 0 14px 34px -30px rgba(20, 26, 30, 0.5);
+    backdrop-filter: blur(6px);
+  }
+
+  .atlas-premium-chip {
+    border-radius: 9999px;
+    border: 1px solid rgba(31, 95, 99, 0.28);
+    background: rgba(249, 243, 230, 0.68);
+    color: var(--atlas-accent);
+  }
+
   .atlas-kicker {
     font-size: 11px;
     font-weight: 600;
@@ -175,7 +202,7 @@ h6 {
 
   .atlas-button-secondary:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(31, 95, 99, 0.28);
+    box-shadow: 0 0 0 3px var(--atlas-ring);
   }
 
   .atlas-animate {
