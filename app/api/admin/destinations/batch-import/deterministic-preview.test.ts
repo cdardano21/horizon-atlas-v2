@@ -180,7 +180,7 @@ describe("deterministic v3.1 preview adapter", () => {
   it("rejects invalid contracts cleanly", async () => {
     const invalidContract = await detectDeterministicV31WorkbookContract({ overrides: { schemaVersion: "3.0", architecture: "with_fallback", primaryIdentity: "slug" } });
     expect(invalidContract.isValid).toBe(false);
-    expect(invalidContract.validationErrors).toContain("schema_version must be 3.1");
+    expect(invalidContract.validationErrors).toContain('schema_version "3.0" is not within the supported range (3.1\u20133.999)');
     expect(invalidContract.validationErrors).toContain("architecture must be workbook_only_no_fallback");
     expect(invalidContract.validationErrors).toContain("primary_identity must be destination_key");
   });

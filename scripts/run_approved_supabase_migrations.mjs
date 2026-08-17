@@ -14,6 +14,8 @@ const migrationFiles = [
   'supabase/migrations/20260812120000_premium_v31_editorial_profile_storage.sql',
   'supabase/migrations/20260813120000_premium_v31_remaining_module_storage.sql',
   'supabase/migrations/20260814120000_destinations_catalog_destination_key_nullable.sql',
+  'supabase/migrations/20260816120000_destinations_catalog_destination_key_unique_index.sql',
+  'supabase/migrations/20260816130000_deterministic_v31_batch_audit_history.sql',
 ];
 
 function loadSupabaseDbUrl() {

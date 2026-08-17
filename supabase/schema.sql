@@ -88,6 +88,19 @@ create table if not exists public.saved_recommendation_sets (
   updated_at timestamptz not null default now()
 );
 
+-- NOTE on identity columns (do not rename/restructure without a dedicated migration):
+-- destinations_catalog.id is the primary key. destinations_catalog.destination_id is a separate,
+-- also-unique UUID that legacy destination_* tables (destination_media_assets, destination_tags,
+-- destination_resource_links, etc.) reference as their foreign key.
+-- The v3.1/premium_v2 module tables (premium_neighborhoods, premium_resources, premium_places, etc.,
+-- see supabase/migrations/20260807120000_premium_v2_storage.sql and later) instead reference
+-- destinations_catalog.id as their destination_id foreign key. Any new v3.1 orchestration code must
+-- target destinations_catalog.id, matching the existing premium_v2 module tables, not destination_id.
+-- VERIFIED (2026-08-16, live information_schema query): the live database does not actually have a
+-- destination_id column on destinations_catalog today; only id exists. This file (schema.sql) declares
+-- destination_id as part of the broader tracked baseline, but it has not been applied to the live
+-- instance. Application code already accounts for this by falling back to row.id when destination_id
+-- is absent (see resolvePersistedRuntimeDestinationIdentity in app/lib/canonical-destination-loader.ts).
 create table if not exists public.destinations_catalog (
   id uuid primary key default gen_random_uuid(),
   destination_id uuid not null unique default gen_random_uuid(),
@@ -242,6 +255,9 @@ create index if not exists idx_retirement_dna_assessments_user_id on public.reti
 create index if not exists idx_saved_recommendation_sets_user_id on public.saved_recommendation_sets(user_id, created_at desc);
 create index if not exists idx_destinations_catalog_status on public.destinations_catalog(status, country, city);
 create index if not exists idx_destinations_catalog_destination_id on public.destinations_catalog(destination_id);
+-- destination_key stays nullable for legacy rows; any row that does have one must be globally unique.
+-- See supabase/migrations/20260816120000_destinations_catalog_destination_key_unique_index.sql
+create unique index if not exists idx_destinations_catalog_destination_key_unique on public.destinations_catalog(destination_key) where destination_key is not null;
 create index if not exists idx_destination_external_ids_provider on public.destination_external_ids(provider, external_id);
 create index if not exists idx_destination_import_rows_run on public.destination_import_rows(import_run_id, row_status);
 create index if not exists idx_destination_import_rows_destination on public.destination_import_rows(destination_id, module_key);

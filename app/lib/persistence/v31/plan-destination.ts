@@ -166,8 +166,25 @@ function buildChildOperations(currentState: StoredDestinationState, incomingStat
           eventsSeasonality: "eventSeasonalityKey",
           sources: "sourceKey",
         }[module] as string;
+        // Raw canonical destination objects parsed directly from a workbook only carry the
+        // sheet's snake_case column names (e.g. neighborhood_key) - only facts/scores also get an
+        // explicit camelCase alias added during parsing. Falling back to the snake_case column
+        // name here lets every keyed-child module resolve a real stable key instead of colliding
+        // on `undefined` for any raw canonical destination with more than one child in a module.
+        const snakeCaseKeyField = {
+          facts: "fact_key",
+          scores: "score_key",
+          neighborhoods: "neighborhood_key",
+          places: "place_key",
+          resources: "resource_key",
+          media: "media_key",
+          propertyResources: "resource_key",
+          moveChecklist: "checklist_key",
+          eventsSeasonality: "event_season_key",
+          sources: "source_key",
+        }[module] as string;
         const record = child as Record<string, unknown>;
-        return (record[keyField] as string | null | undefined) as never;
+        return ((record[keyField] as string | null | undefined) ?? (record[snakeCaseKeyField] as string | null | undefined)) as never;
       },
     });
 

@@ -297,7 +297,14 @@ const buildFallbackBudgets = (city: string): CanonicalDestinationBudget[] => {
   ];
 };
 
-const persistedRuntimeDestinationAliases = new Map<string, string>([
+// Permanent, intentionally narrow allowlist for the 3 golden regression-fixture pilots only.
+// This is NOT the mechanism future destinations use to reach the persisted-runtime path -
+// see resolvePersistedRuntimeDestinationIdentity below, which prefers the real destination_key
+// column for every destination. This map exists solely to (a) preserve the pilots' exact current
+// workbook-assisted rendering behavior, and (b) let the 2 pilot catalog rows that do not yet have
+// destination_key populated in Supabase (see repo docs) still resolve correctly without a data write.
+// Do not add future/non-pilot destinations to this map.
+const GOLDEN_PILOT_FIXTURE_SLUG_ALIASES = new Map<string, string>([
   ["lisbon-portugal", "lisbon-pt"],
   ["lisbon-pt", "lisbon-pt"],
   ["new-braunfels-texas-united-states", "new-braunfels-tx-us"],
@@ -309,8 +316,13 @@ const persistedRuntimeDestinationAliases = new Map<string, string>([
 
 const resolvePersistedRuntimeDestinationIdentity = (slug: string, row: Record<string, unknown> | undefined): ResolvedDestinationIdentity | null => {
   const normalizedSlug = slug.trim().toLowerCase();
-  const destinationKey = persistedRuntimeDestinationAliases.get(normalizedSlug)
-    ?? (typeof row?.destination_key === "string" && row.destination_key.trim() ? row.destination_key.trim() : "");
+  // Any destination with a real destination_key on its catalog row can use the persisted-runtime
+  // path generically - no source-code allowlist entry is required for new destinations. The golden
+  // pilot fixture map is only consulted as a fallback for the 2 pilot rows whose destination_key
+  // column is not yet populated in Supabase.
+  const destinationKey = (typeof row?.destination_key === "string" && row.destination_key.trim() ? row.destination_key.trim() : "")
+    || GOLDEN_PILOT_FIXTURE_SLUG_ALIASES.get(normalizedSlug)
+    || "";
 
   if (!destinationKey) {
     return null;
@@ -1257,7 +1269,13 @@ const buildFallbackCanonicalDestination = (slug: string): CanonicalDestination |
 export async function getCanonicalDestination(slug: string): Promise<CanonicalDestination | null> {
   const normalizedSlug = slug.trim().toLowerCase();
 
-  const workbookData = await loadPremiumWorkbookDestinationData(normalizedSlug);
+  // Only the 3 golden regression-fixture pilots ever live-parse the frozen workbook at request time.
+  // Every other destination (including all future batch-imported destinations) renders purely from
+  // persisted database state - the runtime has no dependency on which workbook, if any, originally
+  // produced a destination's data. See GOLDEN_PILOT_FIXTURE_SLUG_ALIASES for the exact, permanent scope
+  // of this exception.
+  const isGoldenPilotFixtureSlug = GOLDEN_PILOT_FIXTURE_SLUG_ALIASES.has(normalizedSlug);
+  const workbookData = isGoldenPilotFixtureSlug ? await loadPremiumWorkbookDestinationData(normalizedSlug) : null;
   const fallbackDestination = buildFallbackCanonicalDestination(normalizedSlug);
 
   logCanonicalDestinationBranch({ phase: "start", slug: normalizedSlug, workbookResolved: Boolean(workbookData), workbookKey: workbookData?.destinationKey ?? null, workbookSlug: workbookData?.slug ?? null });
@@ -1287,7 +1305,7 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
     if (!row) {
       // Approved pilot destinations must resolve through exact slug/alias matching only — the fuzzy
       // fallback search below can match them to an unrelated catalog row (e.g. a shared city/region name).
-      const skipFuzzyFallbackSearch = persistedRuntimeDestinationAliases.has(normalizedSlug);
+      const skipFuzzyFallbackSearch = GOLDEN_PILOT_FIXTURE_SLUG_ALIASES.has(normalizedSlug);
       const fallbackResponse = skipFuzzyFallbackSearch ? null : await supabaseFetch(`/rest/v1/destinations_catalog?select=*`, {
         cache: "no-store",
       });

@@ -427,6 +427,84 @@ describe("canonical destination loader", () => {
     expect(mockedLoadPersistedDestinationFromRuntime).toHaveBeenCalled();
   });
 
+  it("resolves a brand-new, non-pilot destination through the persisted runtime path using only its real destination_key, with no source-code allowlist entry required", async () => {
+    mockedSupabaseFetch.mockResolvedValue({
+      ok: true,
+      json: async () => [{
+        id: "dest-future-batch",
+        destination_id: "dest-future-batch",
+        destination_key: "sofia-bg",
+        slug: "sofia-bulgaria",
+        city: "Sofia",
+        country: "Bulgaria",
+        title: "Sofia",
+        subtitle: "Sofia, Bulgaria",
+        neighborhoods: [],
+        resources: [],
+        videos: [],
+        media: [],
+        sections: {},
+        scoring: [],
+      }],
+    } as Response);
+
+    mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
+      outcome: "SUCCESS",
+      bundle: {
+        destinationKey: "sofia-bg",
+        identity: { slug: "sofia-bulgaria", name: "Sofia", city: "Sofia", country: "Bulgaria" },
+        editorial: {
+          shortDescription: "Persisted Sofia short description",
+          longDescription: "Persisted Sofia long description",
+          currency: "BGN",
+          primaryLanguage: "Bulgarian",
+          timeZone: "EET",
+        },
+        facts: [],
+        scores: [],
+        neighborhoods: [],
+        places: [],
+        resources: [],
+        media: [],
+        costOfLiving: [],
+        climateMonthly: [],
+        housing: [],
+        propertyResources: [],
+        healthcare: [],
+        visaResidency: [],
+        taxesFinance: [],
+        lgbtqInclusivity: [],
+        safetyRisks: [],
+        transportation: [],
+        remoteWork: [],
+        languageIntegration: [],
+        pets: [],
+        familyEducation: [],
+        communitySocial: [],
+        accessibility: [],
+        bureaucracySetup: [],
+        workBusiness: [],
+        retirementAging: [],
+        lifestyleLaws: [],
+        realityCheck: [],
+        moveChecklist: [],
+        environmentQuality: null,
+        dailyLifePracticality: null,
+        eventsSeasonality: [],
+        sources: [],
+      },
+    } as never);
+
+    const destination = await getCanonicalDestination("sofia-bulgaria");
+
+    expect(destination).not.toBeNull();
+    expect(destination?.title).toBe("Sofia");
+    expect(destination?.heroNarrative).toBe("Persisted Sofia short description");
+    expect(mockedLoadPersistedDestinationFromRuntime).toHaveBeenCalledWith(expect.objectContaining({ destinationKey: "sofia-bg" }));
+    // The runtime must never live-parse the frozen workbook for a non-golden-pilot destination.
+    expect(mockedLoadPremiumWorkbookDestinationData).not.toHaveBeenCalled();
+  });
+
   it("surfaces rich workbook neighborhoods and neighborhood intelligence instead of a single sparse persisted placeholder", async () => {
     mockedSupabaseFetch.mockResolvedValue({
       ok: true,

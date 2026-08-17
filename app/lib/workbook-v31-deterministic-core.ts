@@ -698,13 +698,45 @@ export interface DeterministicV31CanonicalImportFixture {
   destinations: DeterministicV31CanonicalImportFixtureDestination[];
 }
 
-const getWorkbookPath = () => {
-  const explicitWorkbookPath = process.env.PREMIUM_WORKBOOK_PATH?.trim();
-  if (explicitWorkbookPath) {
-    return path.resolve(explicitWorkbookPath);
+const getWorkbookPath = (explicitWorkbookPath?: string) => {
+  const requestedWorkbookPath = explicitWorkbookPath?.trim() || process.env.PREMIUM_WORKBOOK_PATH?.trim();
+  if (requestedWorkbookPath) {
+    return path.resolve(requestedWorkbookPath);
   }
 
   return path.resolve(process.cwd(), "data/DestinationFinderAI_Master_Workbook_v3.1_FROZEN_Pilot_Dataset.xlsx");
+};
+
+// Any batch workbook declaring a schema_version within this major.minor range is accepted without code
+// changes here; only a genuinely incompatible version (older than the minimum, or a future major bump)
+// requires explicit review. This intentionally stays a simple range check, not a migration framework.
+const DETERMINISTIC_V31_MIN_SUPPORTED_CONTRACT_VERSION = "3.1";
+const DETERMINISTIC_V31_MAX_SUPPORTED_CONTRACT_VERSION = "3.999";
+
+const parseDeterministicV31ContractVersion = (version: string): [number, number] | null => {
+  const match = normalizeCellValueForVersionParsing(version).match(/^(\d+)\.(\d+)$/);
+  if (!match) return null;
+  return [Number(match[1]), Number(match[2])];
+};
+
+function normalizeCellValueForVersionParsing(value: unknown) {
+  if (value == null) return "";
+  if (typeof value === "string") return value.trim();
+  return String(value).trim();
+}
+
+const compareDeterministicV31ContractVersions = (left: [number, number], right: [number, number]) => {
+  if (left[0] !== right[0]) return left[0] - right[0];
+  return left[1] - right[1];
+};
+
+export const isDeterministicV31ContractVersionSupported = (version: string): boolean => {
+  const parsed = parseDeterministicV31ContractVersion(version);
+  if (!parsed) return false;
+  const min = parseDeterministicV31ContractVersion(DETERMINISTIC_V31_MIN_SUPPORTED_CONTRACT_VERSION);
+  const max = parseDeterministicV31ContractVersion(DETERMINISTIC_V31_MAX_SUPPORTED_CONTRACT_VERSION);
+  if (!min || !max) return false;
+  return compareDeterministicV31ContractVersions(parsed, min) >= 0 && compareDeterministicV31ContractVersions(parsed, max) <= 0;
 };
 
 const normalizeCellValue = (value: unknown) => {
@@ -914,10 +946,10 @@ with zipfile.ZipFile(sys.argv[1]) as archive:
   }
 };
 
-export const loadFrozenWorkbookV31DeterministicImport = async (): Promise<DeterministicV31WorkbookImport> => {
+export const loadFrozenWorkbookV31DeterministicImport = async (explicitWorkbookPath?: string): Promise<DeterministicV31WorkbookImport> => {
   if (!shouldUseDeterministicWorkbookImportCache()) {
     return (async () => {
-      const workbookPath = getWorkbookPath();
+      const workbookPath = getWorkbookPath(explicitWorkbookPath);
       const workbookRows = parseWorkbookRows(workbookPath);
       const sheetNames = workbookRows.sheetNames;
       const sheetRows = workbookRows.sheetRows;
@@ -962,7 +994,6 @@ export const loadFrozenWorkbookV31DeterministicImport = async (): Promise<Determ
       metadata.sheetNames = sheetNames.join(",");
       const architecture = metadata.architecture ?? "unknown";
 
-      const pilotStatusRows = (sheetRows.get("PILOT_STATUS") ?? []).slice(1);
       const destinationSheetRows = (sheetRows.get("DESTINATIONS") ?? []);
       const destinationHeaders = destinationSheetRows[0] ?? [];
       const destinationRows = destinationSheetRows.slice(1);
@@ -1049,11 +1080,8 @@ export const loadFrozenWorkbookV31DeterministicImport = async (): Promise<Determ
       };
 
       const validationErrors = [] as string[];
-      if (contractVersion !== "3.1") {
-        validationErrors.push("Workbook contract version does not match expected v3.1.");
-      }
-      if (pilotStatusRows.length < 3) {
-        validationErrors.push("Pilot status sheet is missing the expected pilot destinations.");
+      if (!isDeterministicV31ContractVersionSupported(contractVersion)) {
+        validationErrors.push(`Workbook contract version "${contractVersion}" is not within the supported range (${DETERMINISTIC_V31_MIN_SUPPORTED_CONTRACT_VERSION}–${DETERMINISTIC_V31_MAX_SUPPORTED_CONTRACT_VERSION}).`);
       }
       if (destinations.length === 0) {
         validationErrors.push("No destinations were resolved from the workbook.");
@@ -1091,14 +1119,14 @@ export const loadFrozenWorkbookV31DeterministicImport = async (): Promise<Determ
     })();
   }
 
-  const cacheKey = `${process.cwd()}::${process.env.PREMIUM_WORKBOOK_PATH ?? ""}::${getWorkbookPath()}`;
+  const cacheKey = `${process.cwd()}::${explicitWorkbookPath ?? process.env.PREMIUM_WORKBOOK_PATH ?? ""}::${getWorkbookPath(explicitWorkbookPath)}`;
   const cachedImport = deterministicWorkbookImportCache.get(cacheKey);
   if (cachedImport) {
     return cachedImport;
   }
 
   const importPromise = (async () => {
-    const workbookPath = getWorkbookPath();
+    const workbookPath = getWorkbookPath(explicitWorkbookPath);
     const workbookRows = parseWorkbookRows(workbookPath);
     const sheetNames = workbookRows.sheetNames;
     const sheetRows = workbookRows.sheetRows;
@@ -1143,7 +1171,6 @@ export const loadFrozenWorkbookV31DeterministicImport = async (): Promise<Determ
   metadata.sheetNames = sheetNames.join(",");
   const architecture = metadata.architecture ?? "unknown";
 
-  const pilotStatusRows = (sheetRows.get("PILOT_STATUS") ?? []).slice(1);
   const destinationSheetRows = (sheetRows.get("DESTINATIONS") ?? []);
   const destinationHeaders = destinationSheetRows[0] ?? [];
   const destinationRows = destinationSheetRows.slice(1);
@@ -1230,11 +1257,8 @@ export const loadFrozenWorkbookV31DeterministicImport = async (): Promise<Determ
   };
 
   const validationErrors = [] as string[];
-  if (contractVersion !== "3.1") {
-    validationErrors.push("Workbook contract version does not match expected v3.1.");
-  }
-  if (pilotStatusRows.length < 3) {
-    validationErrors.push("Pilot status sheet is missing the expected pilot destinations.");
+  if (!isDeterministicV31ContractVersionSupported(contractVersion)) {
+    validationErrors.push(`Workbook contract version "${contractVersion}" is not within the supported range (${DETERMINISTIC_V31_MIN_SUPPORTED_CONTRACT_VERSION}–${DETERMINISTIC_V31_MAX_SUPPORTED_CONTRACT_VERSION}).`);
   }
   if (destinations.length === 0) {
     validationErrors.push("No destinations were resolved from the workbook.");
@@ -1376,8 +1400,8 @@ export const validateDeterministicV31Contract = (input: {
       errors.push(`Missing required sheet: ${sheetName}`);
     }
   });
-  if (normalizeCellValue(input.metadata.schema_version) !== "3.1") {
-    errors.push("schema_version must be 3.1");
+  if (!isDeterministicV31ContractVersionSupported(normalizeCellValue(input.metadata.schema_version))) {
+    errors.push(`schema_version "${input.metadata.schema_version}" is not within the supported range (${DETERMINISTIC_V31_MIN_SUPPORTED_CONTRACT_VERSION}–${DETERMINISTIC_V31_MAX_SUPPORTED_CONTRACT_VERSION})`);
   }
   if (normalizeCellValue(input.metadata.architecture) !== "workbook_only_no_fallback") {
     errors.push("architecture must be workbook_only_no_fallback");

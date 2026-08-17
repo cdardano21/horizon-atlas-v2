@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildDeterministicV31ImportPlan,
+  isDeterministicV31ContractVersionSupported,
   loadFrozenWorkbookV31DeterministicImport,
 } from "./workbook-v31-deterministic-core";
 
@@ -22,6 +23,52 @@ describe("workbook v3.1 deterministic core", () => {
     expect(newBraunfels?.country).toBe("United States");
     expect(newBraunfels?.facts.find((fact) => fact.factKey === "climate")?.sourceName).toBe("Workbook editorial research");
     expect(newBraunfels?.scores.find((score) => score.scoreKey === "retirement")?.scoreValue).toBe("82");
+  });
+
+  it("loads identically when the frozen workbook path is supplied explicitly, proving the loader is parameterized", async () => {
+    const explicitPath = `${process.cwd()}/data/DestinationFinderAI_Master_Workbook_v3.1_FROZEN_Pilot_Dataset.xlsx`;
+    const defaultResult = await loadFrozenWorkbookV31DeterministicImport();
+    const explicitResult = await loadFrozenWorkbookV31DeterministicImport(explicitPath);
+
+    expect(explicitResult.validationErrors).toEqual([]);
+    expect(explicitResult.destinations.map((destination) => destination.destinationKey).sort()).toEqual(
+      defaultResult.destinations.map((destination) => destination.destinationKey).sort(),
+    );
+  });
+
+  it("rejects an explicit workbook path that does not resolve to a real file, proving the parameter is not silently ignored", async () => {
+    await expect(loadFrozenWorkbookV31DeterministicImport("/tmp/definitely-not-a-real-workbook-path.xlsx")).rejects.toBeTruthy();
+  });
+
+  it("no longer requires a minimum pilot-status row count for a workbook to be considered valid", async () => {
+    const importResult = await loadFrozenWorkbookV31DeterministicImport();
+    expect(importResult.validationErrors.some((error) => error.toLowerCase().includes("pilot status"))).toBe(false);
+  });
+
+  describe("isDeterministicV31ContractVersionSupported", () => {
+    it("accepts the current supported version", () => {
+      expect(isDeterministicV31ContractVersionSupported("3.1")).toBe(true);
+    });
+
+    it("accepts a compatible future minor version within the supported range", () => {
+      expect(isDeterministicV31ContractVersionSupported("3.2")).toBe(true);
+      expect(isDeterministicV31ContractVersionSupported("3.9")).toBe(true);
+    });
+
+    it("rejects an unsupported older version", () => {
+      expect(isDeterministicV31ContractVersionSupported("3.0")).toBe(false);
+      expect(isDeterministicV31ContractVersionSupported("2.9")).toBe(false);
+    });
+
+    it("rejects an unsupported future major version safely", () => {
+      expect(isDeterministicV31ContractVersionSupported("4.0")).toBe(false);
+    });
+
+    it("handles malformed version strings safely without throwing", () => {
+      expect(isDeterministicV31ContractVersionSupported("")).toBe(false);
+      expect(isDeterministicV31ContractVersionSupported("not-a-version")).toBe(false);
+      expect(isDeterministicV31ContractVersionSupported("3")).toBe(false);
+    });
   });
 
   it("preserves blank values and rejects orphaned module rows without fuzzy matching", () => {
