@@ -32,16 +32,30 @@ describe("deterministic v3.1 batch orchestration - golden 3 dry-run proof", () =
     expect(result.summary.unresolved).toBe(0);
   }, 30000);
 
-  it("documents the known pre-existing blocker for Lisbon: a duplicate source_key in the frozen workbook's SOURCES sheet", async () => {
-    // This is intentionally an integration-style regression: it proves the orchestration entrypoint
-    // surfaces this real data defect loudly (via a thrown DuplicateChildKeyError) instead of silently
-    // dropping or guessing at one of the two colliding rows. Fixing the frozen workbook's data is a
-    // separate, explicit decision for the user - not something this pass should do unilaterally.
-    await expect(runDeterministicV31BatchOrchestration({
+  it("resolves Lisbon cleanly now that the frozen workbook's SOURCES sheet has unique stable keys for both legitimate 'CUF' entries", async () => {
+    // Historical note: the SOURCES sheet used to have two distinct sources (the general "CUF"
+    // network page and "CUF Lisbon Hospitals") incorrectly sharing one source_key ("lis-cuf"),
+    // which previously made this call reject with a DuplicateChildKeyError. The frozen workbook
+    // was corrected to give the hospitals entry its own key ("lis-cuf-hospitals"), preserving both
+    // real rows. This test now proves the positive, resolved contract instead of the old failure.
+    const result = await runDeterministicV31BatchOrchestration({
       approvedDestinationKeys: ["lisbon-pt"],
       catalogSlugByDestinationKey: { "lisbon-pt": "lisbon-portugal" },
       mode: "DRY_RUN",
-    })).rejects.toThrow(/Duplicate stable child key lis-cuf for module sources/);
+    });
+
+    expect(result.contractValid).toBe(true);
+    expect(result.summary.unresolved).toBe(0);
+    expect(result.destinationReports).toEqual([
+      expect.objectContaining({ destinationKey: "lisbon-pt", status: "PLANNED", errors: [] }),
+    ]);
+
+    // A duplicate stable child key (the historical "lis-cuf" collision) would have thrown a
+    // DuplicateChildKeyError during planning, so reaching a PLANNED report at all - combined with
+    // errors being empty - is already the definitive proof that both Lisbon source rows now resolve
+    // under unique stable keys. This loose bound is a general sanity check that real child
+    // operations were actually planned, without pinning to a fragile exact snapshot count.
+    expect(result.summary.totalChildOperations).toBeGreaterThan(50);
   }, 30000);
 
   it("documents the known pre-existing blocker for New Braunfels: its destinations_catalog row is status='review', not 'published'", async () => {

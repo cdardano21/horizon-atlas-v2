@@ -12,6 +12,7 @@ export default defineConfig({
       '**/BACKUP_*/**',
       '**/playwright-report/**',
       '**/test-results/**',
+      '**/tmp/**',
     ],
   },
 });

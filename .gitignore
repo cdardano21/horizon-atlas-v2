@@ -26,6 +26,7 @@
 
 # generated data and exports
 *.xlsx
+!data/DestinationFinderAI_Master_Workbook_v3.1_FROZEN_Pilot_Dataset.xlsx
 *.xls
 *.xlsm
 /archive/
