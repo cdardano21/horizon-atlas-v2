@@ -15,6 +15,8 @@ export interface PersistedProfileRow {
   readonly destinationKey: string;
   readonly profileStorageVersion: number | null;
   readonly identityName: string | null;
+  readonly shortDescription: string | null;
+  readonly longDescription: string | null;
   readonly currency: string | null;
   readonly primaryLanguage: string | null;
   readonly timeZone: string | null;
@@ -286,8 +288,8 @@ export function normalizePersistedDestinationRows(input: {
       country: input.root.country,
     },
     editorial: {
-      shortDescription: null,
-      longDescription: null,
+      shortDescription: input.profile.shortDescription,
+      longDescription: input.profile.longDescription,
       currency: input.profile.currency,
       primaryLanguage: input.profile.primaryLanguage,
       timeZone: input.profile.timeZone,

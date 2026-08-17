@@ -170,17 +170,24 @@ interface SingletonTableConfig {
   readonly columns: Readonly<Record<string, string>>;
   /** Must exactly match the table's actual unique constraint column list. */
   readonly conflictColumns: readonly string[];
+  /** Whether a successful write of this module must also produce the same durable
+   *  premium_destination_module_presence row every keyed-child/REPLACE_MODULE write already
+   *  produces (see REQUIRED_PRESENCE_MODULES in load-normalized-persisted-destination-bundle.ts).
+   *  Editorial is the destination's root profile row (validated separately via validateProfile,
+   *  not via presence) and is intentionally NOT in REQUIRED_PRESENCE_MODULES, so it stays false. */
+  readonly requiresPresence: boolean;
 }
 
 const SINGLETON_TABLE_CONFIG: Readonly<Record<"environmentQuality" | "dailyLifePracticality", SingletonTableConfig>> = {
-  environmentQuality: { table: "premium_environment_quality", columns: { summary: "summary", qualityNotes: "quality_notes" }, conflictColumns: ["destination_id"] },
-  dailyLifePracticality: { table: "premium_daily_life_practicality", columns: { summary: "summary", practicalityNotes: "practicality_notes" }, conflictColumns: ["destination_id"] },
+  environmentQuality: { table: "premium_environment_quality", columns: { summary: "summary", qualityNotes: "quality_notes" }, conflictColumns: ["destination_id"], requiresPresence: true },
+  dailyLifePracticality: { table: "premium_daily_life_practicality", columns: { summary: "summary", practicalityNotes: "practicality_notes" }, conflictColumns: ["destination_id"], requiresPresence: true },
 };
 
 const EDITORIAL_TABLE_CONFIG: SingletonTableConfig = {
   table: "premium_destination_profiles",
   columns: { shortDescription: "summary", longDescription: "overview", currency: "currency", primaryLanguage: "primary_language", timeZone: "time_zone" },
   conflictColumns: ["destination_id", "destination_key"],
+  requiresPresence: false,
 };
 
 interface ReplaceModuleTableConfig {
@@ -348,16 +355,23 @@ function buildKeyedChildStatements(
   return statements;
 }
 
+/**
+ * The single authoritative current v3.1 persisted profile storage version. Owned here (the write
+ * port) rather than scattered as a literal - the reader (load-normalized-persisted-destination-bundle.ts)
+ * imports this same constant for its equality check instead of hardcoding "1" a second time.
+ */
+export const CURRENT_V31_PROFILE_STORAGE_VERSION = 1;
+
 function buildScalarStatementsForModule(
   destinationId: DestinationId,
   destinationKey: string,
   module: ScalarModuleKey,
   operations: readonly ScalarOperation[],
-): SqlStatement | null {
+): readonly SqlStatement[] {
   const config: SingletonTableConfig = module === "editorial" ? EDITORIAL_TABLE_CONFIG : SINGLETON_TABLE_CONFIG[module];
   const writableOps = operations.filter((op) => op.kind === "CREATE" || op.kind === "UPDATE" || op.kind === "CLEAR");
   if (writableOps.length === 0) {
-    return null;
+    return [];
   }
 
   const setColumns: string[] = [];
@@ -374,7 +388,7 @@ function buildScalarStatementsForModule(
   }
 
   if (setColumns.length === 0) {
-    return null;
+    return [];
   }
 
   const insertColumns = ["destination_id", "destination_key"];
@@ -393,11 +407,35 @@ function buildScalarStatementsForModule(
     insertPlaceholders.push(`$${paramIndex}`);
   }
 
-  return {
+  // Stamp the write-time schema version on the destination's root profile row whenever it is
+  // touched. Forward-safe: GREATEST(...) means an older writer can never downgrade a row a newer
+  // process has already advanced past CURRENT_V31_PROFILE_STORAGE_VERSION - it can only hold or
+  // raise the stored value, never lower it.
+  if (module === "editorial") {
+    paramCursor += 1;
+    values.push(CURRENT_V31_PROFILE_STORAGE_VERSION);
+    insertColumns.push("profile_storage_version");
+    insertPlaceholders.push(`$${paramCursor}`);
+    setColumns.push(`profile_storage_version = greatest(coalesce(${config.table}.profile_storage_version, 0), excluded.profile_storage_version)`);
+  }
+
+  const statements: SqlStatement[] = [{
     text: `insert into public.${config.table} (${insertColumns.join(", ")}) values (${insertPlaceholders.join(", ")}) ` +
       `on conflict (${config.conflictColumns.join(", ")}) do update set ${setColumns.join(", ")}, updated_at = now()`,
     values,
-  };
+  }];
+
+  // Required-presence modules (STEP 3): a successful singleton content write must produce the
+  // exact same durable presence row the keyed-child and REPLACE_MODULE write paths already
+  // produce for their modules - "on conflict do nothing" keeps replay idempotent, never duplicating.
+  if (config.requiresPresence) {
+    statements.push({
+      text: "insert into public.premium_destination_module_presence (destination_id, destination_key, module_key) values ($1, $2, $3) on conflict (destination_id, module_key) do nothing",
+      values: [destinationId, destinationKey, module],
+    });
+  }
+
+  return statements;
 }
 
 function groupBy<T, K>(items: readonly T[], keyFn: (item: T) => K): Map<K, T[]> {
@@ -426,10 +464,7 @@ export function buildDestinationPlanWriteStatements(plan: DestinationPlan): read
 
   const scalarByModule = groupBy(plan.scalarOperations, (op) => op.module);
   for (const [module, operations] of scalarByModule) {
-    const statement = buildScalarStatementsForModule(destinationId, destinationKey, module, operations);
-    if (statement) {
-      statements.push(statement);
-    }
+    statements.push(...buildScalarStatementsForModule(destinationId, destinationKey, module, operations));
   }
 
   statements.push(...buildKeyedChildStatements(destinationId, destinationKey, plan.childOperations));

@@ -3,6 +3,7 @@ import type { PersistedDestinationReadResult, PersistedDestinationReadFailure, R
 import type { PersistedDestinationReadPort } from "./persisted-destination-read-port";
 import { normalizePersistedDestinationRows } from "./normalize-persisted-destination-rows";
 import type { PersistedRootRow, PersistedProfileRow, PersistedPresenceRow, PersistedKeyedChildrenRows, PersistedReplaceModulesRows, PersistedSingletonsRows } from "./normalize-persisted-destination-rows";
+import { CURRENT_V31_PROFILE_STORAGE_VERSION } from "./write-port";
 
 const REQUIRED_PRESENCE_MODULES: readonly PersistedPresenceModuleKey[] = [
   "facts",
@@ -99,6 +100,8 @@ function isPersistedProfileRow(value: unknown): value is PersistedProfileRow {
     && typeof value.destinationKey === "string"
     && (value.profileStorageVersion === null || typeof value.profileStorageVersion === "number")
     && (value.identityName === null || typeof value.identityName === "string")
+    && (value.shortDescription === null || typeof value.shortDescription === "string")
+    && (value.longDescription === null || typeof value.longDescription === "string")
     && (value.currency === null || typeof value.currency === "string")
     && (value.primaryLanguage === null || typeof value.primaryLanguage === "string")
     && (value.timeZone === null || typeof value.timeZone === "string");
@@ -158,7 +161,7 @@ function validateProfile(profile: unknown, identity: ResolvedDestinationIdentity
   if (profile.profileStorageVersion === null) {
     return { ok: false, failure: createFailure("UNSUPPORTED_LEGACY_STATE", identity) };
   }
-  if (profile.profileStorageVersion !== 1) {
+  if (profile.profileStorageVersion !== CURRENT_V31_PROFILE_STORAGE_VERSION) {
     return { ok: false, failure: createFailure("MALFORMED_PERSISTED_STATE", identity) };
   }
   return { ok: true, value: profile };

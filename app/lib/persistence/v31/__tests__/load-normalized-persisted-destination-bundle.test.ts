@@ -17,6 +17,8 @@ type TestProfileRow = {
   readonly destinationKey: string;
   readonly profileStorageVersion: number | null;
   readonly identityName: string | null;
+  readonly shortDescription: string | null;
+  readonly longDescription: string | null;
   readonly currency: string | null;
   readonly primaryLanguage: string | null;
   readonly timeZone: string | null;
@@ -163,6 +165,8 @@ function createDefaultState(overrides: Partial<TestReadPortState> = {}): TestRea
       destinationKey: identity.destinationKey,
       profileStorageVersion: 1,
       identityName: null,
+      shortDescription: null,
+      longDescription: null,
       currency: null,
       primaryLanguage: null,
       timeZone: null,
@@ -323,7 +327,7 @@ describe("loadNormalizedPersistedDestinationBundle", () => {
   });
 
   it("returns UNSUPPORTED_LEGACY_STATE for a legacy profile version", async () => {
-    const readPort = new FakePersistedDestinationReadPort(createDefaultState({ profile: { destinationId: createIdentity().destinationId, destinationKey: createIdentity().destinationKey, profileStorageVersion: null, identityName: null, currency: null, primaryLanguage: null, timeZone: null } }));
+    const readPort = new FakePersistedDestinationReadPort(createDefaultState({ profile: { destinationId: createIdentity().destinationId, destinationKey: createIdentity().destinationKey, profileStorageVersion: null, identityName: null, shortDescription: null, longDescription: null, currency: null, primaryLanguage: null, timeZone: null } }));
     const result = await loadNormalizedPersistedDestinationBundle(createIdentity(), readPort);
     expect(result.outcome).toBe("FAILED");
     if (result.outcome !== "FAILED") {
@@ -342,6 +346,31 @@ describe("loadNormalizedPersistedDestinationBundle", () => {
     expect(result.bundle.editorial.currency).toBeNull();
     expect(result.bundle.editorial.primaryLanguage).toBeNull();
     expect(result.bundle.editorial.timeZone).toBeNull();
+    expect(result.bundle.editorial.shortDescription).toBeNull();
+    expect(result.bundle.editorial.longDescription).toBeNull();
+  });
+
+  it("surfaces the persisted editorial shortDescription/longDescription into the bundle instead of hardcoding null", async () => {
+    const readPort = new FakePersistedDestinationReadPort(createDefaultState({
+      profile: {
+        destinationId: createIdentity().destinationId,
+        destinationKey: createIdentity().destinationKey,
+        profileStorageVersion: 1,
+        identityName: null,
+        shortDescription: "A real persisted short description.",
+        longDescription: "A real persisted long description.",
+        currency: "USD",
+        primaryLanguage: "English",
+        timeZone: "America/Chicago",
+      },
+    }));
+    const result = await loadNormalizedPersistedDestinationBundle(createIdentity(), readPort);
+    expect(result.outcome).toBe("SUCCESS");
+    if (result.outcome !== "SUCCESS") {
+      throw new Error("Expected success");
+    }
+    expect(result.bundle.editorial.shortDescription).toBe("A real persisted short description.");
+    expect(result.bundle.editorial.longDescription).toBe("A real persisted long description.");
   });
 
   it("returns MALFORMED_PERSISTED_STATE when a presence row has a mismatched destinationId", async () => {
@@ -392,6 +421,8 @@ describe("loadNormalizedPersistedDestinationBundle", () => {
         destinationKey: createIdentity().destinationKey,
         profileStorageVersion: 2,
         identityName: null,
+        shortDescription: null,
+        longDescription: null,
         currency: null,
         primaryLanguage: null,
         timeZone: null,

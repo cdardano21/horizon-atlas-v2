@@ -4,6 +4,7 @@ import {
   buildKeyedChildConflictTarget,
   checkExecutionGates,
   executeApprovedDestinationPlanWrite,
+  CURRENT_V31_PROFILE_STORAGE_VERSION,
   type ExecutionGateCheckInput,
   type SqlExecutionClient,
   type SqlQueryResult,
@@ -163,7 +164,9 @@ describe("write-port statement translation", () => {
     expect(statements).toHaveLength(1);
     expect(statements[0].text).toContain("premium_destination_profiles");
     expect(statements[0].text).toContain("summary = $3");
-    expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, "A disposable synthetic test destination."]);
+    expect(statements[0].text).toContain("profile_storage_version");
+    expect(statements[0].text).toContain("greatest(coalesce(premium_destination_profiles.profile_storage_version, 0), excluded.profile_storage_version)");
+    expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, "A disposable synthetic test destination.", CURRENT_V31_PROFILE_STORAGE_VERSION]);
   });
 
   it("translates a scalar CLEAR into setting the column to null explicitly", () => {
@@ -172,13 +175,70 @@ describe("write-port statement translation", () => {
     ];
     const statements = buildDestinationPlanWriteStatements(basePlan({ scalarOperations }));
     expect(statements).toHaveLength(1);
-    expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, null]);
+    expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, null, CURRENT_V31_PROFILE_STORAGE_VERSION]);
   });
 
   it("does not emit any statement for PRESERVE or UNCHANGED scalar operations", () => {
     const scalarOperations: ScalarOperation[] = [
       { kind: "PRESERVE", module: "editorial", fieldPath: "shortDescription", currentValue: "keep me", incomingValue: null },
       { kind: "UNCHANGED", module: "editorial", fieldPath: "currency", currentValue: "USD", incomingValue: "USD" },
+    ];
+    expect(buildDestinationPlanWriteStatements(basePlan({ scalarOperations }))).toEqual([]);
+  });
+
+  it("stamps profile_storage_version forward-safely using GREATEST(coalesce(existing, 0), excluded) rather than an unconditional overwrite", () => {
+    const scalarOperations: ScalarOperation[] = [
+      { kind: "UPDATE", module: "editorial", fieldPath: "shortDescription", currentValue: "old", incomingValue: "new" },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ scalarOperations }));
+    expect(statements).toHaveLength(1);
+    // Never a bare `profile_storage_version = $n` overwrite - always guarded by GREATEST so an
+    // older writer replaying against a row a newer process already advanced can never downgrade it.
+    expect(statements[0].text).toContain(
+      "profile_storage_version = greatest(coalesce(premium_destination_profiles.profile_storage_version, 0), excluded.profile_storage_version)",
+    );
+    expect(statements[0].values.at(-1)).toBe(CURRENT_V31_PROFILE_STORAGE_VERSION);
+  });
+
+  it("does not emit a module-presence row for the editorial module (it is the root profile row, not a REQUIRED_PRESENCE_MODULES entry)", () => {
+    const scalarOperations: ScalarOperation[] = [
+      { kind: "CREATE", module: "editorial", fieldPath: "shortDescription", currentValue: null, incomingValue: "A disposable synthetic test destination." },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ scalarOperations }));
+    expect(statements).toHaveLength(1);
+    expect(statements.some((statement) => statement.text.includes("premium_destination_module_presence"))).toBe(false);
+  });
+
+  it("translates a scalar CREATE on the environmentQuality singleton module into a content upsert plus a module-presence insert", () => {
+    const scalarOperations: ScalarOperation[] = [
+      { kind: "CREATE", module: "environmentQuality", fieldPath: "summary", currentValue: null, incomingValue: "Clean air, low pollution." },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ scalarOperations }));
+    expect(statements).toHaveLength(2);
+    expect(statements[0].text).toContain("premium_environment_quality");
+    expect(statements[0].text).toContain("on conflict (destination_id)");
+    expect(statements[0].text).not.toContain("profile_storage_version");
+    expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, "Clean air, low pollution."]);
+    expect(statements[1].text).toBe(
+      "insert into public.premium_destination_module_presence (destination_id, destination_key, module_key) values ($1, $2, $3) on conflict (destination_id, module_key) do nothing",
+    );
+    expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "environmentQuality"]);
+  });
+
+  it("translates a scalar CREATE on the dailyLifePracticality singleton module into a content upsert plus a module-presence insert", () => {
+    const scalarOperations: ScalarOperation[] = [
+      { kind: "CREATE", module: "dailyLifePracticality", fieldPath: "summary", currentValue: null, incomingValue: "Everyday errands are simple here." },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ scalarOperations }));
+    expect(statements).toHaveLength(2);
+    expect(statements[0].text).toContain("premium_daily_life_practicality");
+    expect(statements[1].text).toContain("premium_destination_module_presence");
+    expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "dailyLifePracticality"]);
+  });
+
+  it("does not emit any statement (content or presence) for a singleton module with only PRESERVE/UNCHANGED scalar operations", () => {
+    const scalarOperations: ScalarOperation[] = [
+      { kind: "PRESERVE", module: "environmentQuality", fieldPath: "summary", currentValue: "keep me", incomingValue: null },
     ];
     expect(buildDestinationPlanWriteStatements(basePlan({ scalarOperations }))).toEqual([]);
   });

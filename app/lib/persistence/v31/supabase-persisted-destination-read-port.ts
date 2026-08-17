@@ -139,11 +139,13 @@ export function createSupabasePersistedDestinationReadPort(
     },
 
     async readProfile(identity) {
-      return readSingleRow(client, "premium_destination_profiles", "destination_id,destination_key,identity_name,currency,primary_language,time_zone,profile_storage_version", identity, (row) => ({
+      return readSingleRow(client, "premium_destination_profiles", "destination_id,destination_key,identity_name,summary,overview,currency,primary_language,time_zone,profile_storage_version", identity, (row) => ({
         destinationId: String(row.destination_id ?? ""),
         destinationKey: String(row.destination_key ?? ""),
         profileStorageVersion: row.profile_storage_version == null ? null : Number(row.profile_storage_version),
         identityName: pickString(row, "identity_name"),
+        shortDescription: pickString(row, "summary"),
+        longDescription: pickString(row, "overview"),
         currency: pickString(row, "currency"),
         primaryLanguage: pickString(row, "primary_language"),
         timeZone: pickString(row, "time_zone"),

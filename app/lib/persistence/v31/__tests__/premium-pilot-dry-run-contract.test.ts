@@ -58,6 +58,8 @@ function createReadPortForDestination(destination: any, destinationId: string) {
     destinationKey: destination.identity.destinationKey,
     profileStorageVersion: 1,
     identityName: destination.identity.name,
+    shortDescription: state.editorial.shortDescription ?? null,
+    longDescription: state.editorial.longDescription ?? null,
     currency: state.editorial.currency,
     primaryLanguage: state.editorial.primaryLanguage,
     timeZone: state.editorial.timeZone,
