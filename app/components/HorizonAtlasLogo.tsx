@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 type HorizonAtlasLogoProps = {
   layout?: "icon" | "horizontal" | "stacked";
   tone?: "light" | "dark" | "monochrome";
@@ -11,35 +13,51 @@ export default function HorizonAtlasLogo({
   tone = "dark",
   className = "",
   iconClassName = "",
+  wordmarkClassName = "",
 }: HorizonAtlasLogoProps) {
   const toneClassName = tone === "monochrome" ? "opacity-80 grayscale" : "";
-  const mark = (
-    <span className={`relative block h-10 w-10 shrink-0 lg:h-11 lg:w-11 ${toneClassName} ${iconClassName}`.trim()} aria-hidden="true">
-      <span className="absolute left-1 top-0 h-8 w-8 -rotate-45 rounded-[50%_50%_50%_0] border-2 border-[#e8b957] bg-[#06203b] shadow-[0_0_16px_rgba(232,185,87,0.2)] lg:h-9 lg:w-9" />
-      <span className="absolute left-[13px] top-[8px] h-3.5 w-3.5 rounded-full bg-[linear-gradient(180deg,#efbe59_0_48%,#2aa7ad_48%)] lg:left-[14px] lg:top-[9px] lg:h-4 lg:w-4" />
-      <span className="absolute bottom-0 left-1.5 h-0.5 w-7 bg-[#2aa7ad] lg:w-8" />
-    </span>
-  );
 
   if (layout === "icon") {
-    return mark;
+    return (
+      <Image
+        src="/brand/destinationfinderai-official-emblem.jpg"
+        alt="DestinationFinderAI"
+        width={340}
+        height={340}
+        sizes="48px"
+        priority
+        className={`h-11 w-11 shrink-0 object-cover lg:h-12 lg:w-12 ${toneClassName} ${iconClassName}`.trim()}
+      />
+    );
   }
 
   if (layout === "stacked") {
     return (
-      <span className={`flex flex-col items-center justify-center gap-3 leading-none ${className}`.trim()}>
-        {mark}
-        <span className="font-serif text-2xl text-current">DestinationFinder<span className="text-[#2aa7ad]">AI</span></span>
+      <span className={`inline-flex items-center ${className}`.trim()}>
+        <Image
+          src="/brand/destinationfinderai-official-lockup.jpg"
+          alt="DestinationFinderAI — Find Your Perfect Destination"
+          width={1300}
+          height={340}
+          sizes="(min-width: 640px) 320px, 280px"
+          priority
+          className={`h-auto w-[280px] sm:w-[320px] ${toneClassName} ${wordmarkClassName}`.trim()}
+        />
       </span>
     );
   }
 
   return (
-    <span className={`inline-flex items-center gap-2.5 leading-none ${className}`.trim()}>
-      {mark}
-      <span className="whitespace-nowrap font-serif text-[1.1rem] font-semibold sm:text-xl lg:text-[1.65rem]">
-        DestinationFinder<span className="text-[#2aa7ad]">AI</span>
-      </span>
+    <span className={`inline-flex items-center ${className}`.trim()}>
+      <Image
+        src="/brand/destinationfinderai-official-lockup.jpg"
+        alt="DestinationFinderAI — Find Your Perfect Destination"
+        width={1300}
+        height={340}
+        sizes="(min-width: 1024px) 270px, (min-width: 640px) 270px, 250px"
+        priority
+        className={`h-auto w-[250px] sm:w-[270px] ${toneClassName} ${wordmarkClassName}`.trim()}
+      />
     </span>
   );
 }
