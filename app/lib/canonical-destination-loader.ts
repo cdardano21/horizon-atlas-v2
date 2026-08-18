@@ -312,6 +312,9 @@ const GOLDEN_PILOT_FIXTURE_SLUG_ALIASES = new Map<string, string>([
   ["summerlin-nevada-united-states", "summerlin-nv-us"],
   ["summerlin-las-vegas-nevada", "summerlin-nv-us"],
   ["summerlin-nv-us", "summerlin-nv-us"],
+  // The live destinations_catalog row's actual slug column - added after the golden-pilot DB
+  // repair confirmed this exact slug was never covered by the aliases above.
+  ["summerlin-nv-usa", "summerlin-nv-us"],
 ]);
 
 const resolvePersistedRuntimeDestinationIdentity = (slug: string, row: Record<string, unknown> | undefined): ResolvedDestinationIdentity | null => {

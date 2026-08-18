@@ -226,6 +226,32 @@ const REPLACE_MODULE_TABLE_CONFIG: Readonly<Record<ReplaceModuleExecutionModuleK
   lifestyleLaws: { table: "premium_lifestyle_laws", keyStrategy: "position", columns: { summary: "summary", legalNotes: "legal_notes" } },
 };
 
+// Columns in REPLACE_MODULE_TABLE_CONFIG that are genuinely `boolean` in the database (per the
+// premium-module storage migration). The persisted-destination read port's own round-trip
+// contract stringifies a boolean column with `String(value)`, producing exactly "true" or "false"
+// - those are therefore the only two string forms ever treated as a recognized boolean write. Any
+// other content (including narrative text authored directly into a source workbook cell, e.g.
+// "Limited" for transportation's public_transit_available) is preserved as null rather than
+// guessing a true/false meaning that was never part of the established contract - never invented,
+// never silently coerced to false.
+const REPLACE_MODULE_BOOLEAN_COLUMNS = new Set<string>(["public_transit_available"]);
+
+function coerceReplaceModuleColumnValue(dbColumn: string, value: unknown): unknown {
+  if (!REPLACE_MODULE_BOOLEAN_COLUMNS.has(dbColumn)) {
+    return value;
+  }
+  if (typeof value === "boolean") {
+    return value;
+  }
+  if (typeof value !== "string") {
+    return null;
+  }
+  const normalized = value.trim().toLowerCase();
+  if (normalized === "true") return true;
+  if (normalized === "false") return false;
+  return null;
+}
+
 function buildReplaceModuleStatements(
   destinationId: DestinationId,
   destinationKey: string,
@@ -252,7 +278,7 @@ function buildReplaceModuleStatements(
       const record = row as Record<string, unknown>;
       const columnEntries = Object.entries(config.columns);
       const columnNames = columnEntries.map(([, dbColumn]) => dbColumn);
-      const columnValues = columnEntries.map(([storedField]) => record[storedField] ?? null);
+      const columnValues = columnEntries.map(([storedField, dbColumn]) => coerceReplaceModuleColumnValue(dbColumn, record[storedField] ?? null));
       const keyColumnName = config.keyStrategy === "record_key" ? "record_key" : "position";
       const keyColumnValue: unknown = config.keyStrategy === "record_key" ? `record-${index + 1}` : index + 1;
 
