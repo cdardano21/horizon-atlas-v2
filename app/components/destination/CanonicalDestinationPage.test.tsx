@@ -1211,5 +1211,226 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     expect(screen.getByText("Neighborhood A Bistro")).toBeInTheDocument();
     expect(screen.getByText("Neighborhood A Coffee Co")).toBeInTheDocument();
   });
+
+  function buildV31DestinationWithManyRestaurantsInOneNeighborhood(): CanonicalDestination {
+    const destination = buildV31Destination();
+    destination.v31Modules = {
+      ...destination.v31Modules!,
+      neighborhoods: [{ neighborhoodKey: "nb-many", name: "Many Restaurants Neighborhood", summary: "Has more than 4 real restaurants.", areaType: "urban" }],
+      places: Array.from({ length: 5 }, (_, i) => ({
+        placeKey: `many-restaurant-${i + 1}`,
+        category: "restaurant",
+        name: `Many Restaurant ${i + 1}`,
+        description: `Real restaurant ${i + 1}.`,
+        neighborhoodKey: "nb-many",
+        websiteUrl: null,
+        googleMapsUrl: null,
+        sourceUrl: null,
+        address: null,
+        phone: null,
+        displayOrder: String(i + 1),
+      })),
+    };
+    return destination;
+  }
+
+  it("shows exactly 4 real places initially per category when more than 4 exist, with a Show more control", () => {
+    render(<CanonicalDestinationPage destination={buildV31DestinationWithManyRestaurantsInOneNeighborhood()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    expect(screen.getByText("Many Restaurant 1")).toBeInTheDocument();
+    expect(screen.getByText("Many Restaurant 4")).toBeInTheDocument();
+    expect(screen.queryByText("Many Restaurant 5")).not.toBeInTheDocument();
+    expect(screen.getAllByText("Show more").length).toBeGreaterThan(0);
+  });
+
+  it("reveals the full real count (never fabricated beyond it) after Show more, and returns to 4 after Show fewer", () => {
+    render(<CanonicalDestinationPage destination={buildV31DestinationWithManyRestaurantsInOneNeighborhood()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    fireEvent.click(screen.getAllByText("Show more")[0]);
+    expect(screen.getByText("Many Restaurant 5")).toBeInTheDocument();
+    expect(screen.queryByText("Show more")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getAllByText("Show fewer")[0]);
+    expect(screen.queryByText("Many Restaurant 5")).not.toBeInTheDocument();
+    expect(screen.getByText("Many Restaurant 1")).toBeInTheDocument();
+  });
+
+  function buildV31DestinationWithUnassignedPlaces(): CanonicalDestination {
+    const destination = buildV31Destination();
+    destination.v31Modules = {
+      ...destination.v31Modules!,
+      neighborhoods: [{ neighborhoodKey: "nb-linked", name: "Linked Neighborhood", summary: "Has a correctly linked real place.", areaType: "urban" }],
+      places: [
+        {
+          placeKey: "linked-restaurant",
+          category: "restaurant",
+          name: "Linked Neighborhood Bistro",
+          description: "A real restaurant correctly tied to its neighborhood.",
+          neighborhoodKey: "nb-linked",
+          websiteUrl: null,
+          googleMapsUrl: null,
+          sourceUrl: null,
+          address: null,
+          phone: null,
+          displayOrder: "1",
+        },
+        {
+          placeKey: "unassigned-golf",
+          category: "golf",
+          name: "Test Destination Golf Club",
+          description: "A real golf course not tied to any single neighborhood.",
+          neighborhoodKey: null,
+          websiteUrl: "https://test-golf.example-test.invalid/",
+          googleMapsUrl: "https://maps.example-test.invalid/test-golf",
+          sourceUrl: null,
+          address: null,
+          phone: null,
+          displayOrder: "1",
+        },
+        {
+          placeKey: "unassigned-sports",
+          category: "sports",
+          name: "Test Sports Complex",
+          description: "A real sports facility not tied to any single neighborhood.",
+          neighborhoodKey: null,
+          websiteUrl: null,
+          googleMapsUrl: null,
+          sourceUrl: null,
+          address: null,
+          phone: null,
+          displayOrder: "1",
+        },
+        // A literal duplicate DB row for the same real place (same placeKey) - proves render-time
+        // deduplication without requiring any DB/workbook cleanup in this task.
+        {
+          placeKey: "unassigned-sports",
+          category: "sports",
+          name: "Test Sports Complex",
+          description: "A duplicate row for the same real sports facility.",
+          neighborhoodKey: null,
+          websiteUrl: null,
+          googleMapsUrl: null,
+          sourceUrl: null,
+          address: null,
+          phone: null,
+          displayOrder: "2",
+        },
+        {
+          placeKey: "unassigned-coworking",
+          category: "coworking",
+          name: "Test Coworking Hub",
+          description: "A real coworking space not tied to any single neighborhood.",
+          neighborhoodKey: null,
+          websiteUrl: null,
+          googleMapsUrl: null,
+          sourceUrl: null,
+          address: null,
+          phone: null,
+          displayOrder: "1",
+        },
+      ],
+    };
+    return destination;
+  }
+
+  describe("destination-level unassigned-place section (Part B recommendation surfacing)", () => {
+    it("renders a golf place with no neighborhoodKey in a destination-level section, reachable without a false neighborhood assignment", () => {
+      render(<CanonicalDestinationPage destination={buildV31DestinationWithUnassignedPlaces()} />);
+      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+      expect(screen.getByText("Test Destination Golf Club")).toBeInTheDocument();
+    });
+
+    it("renders the sports bucket for a real unassigned sports place", () => {
+      render(<CanonicalDestinationPage destination={buildV31DestinationWithUnassignedPlaces()} />);
+      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+      expect(screen.getByText("Test Sports Complex")).toBeInTheDocument();
+      expect(screen.getByText(/Sports & recreation around/)).toBeInTheDocument();
+    });
+
+    it("renders the coworking bucket for a real unassigned coworking place", () => {
+      render(<CanonicalDestinationPage destination={buildV31DestinationWithUnassignedPlaces()} />);
+      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+      expect(screen.getByText("Test Coworking Hub")).toBeInTheDocument();
+      expect(screen.getByText(/Coworking around/)).toBeInTheDocument();
+    });
+
+    it("uses a generic heading built from the destination's own city name, never a hardcoded destination string", () => {
+      const destination = buildV31DestinationWithUnassignedPlaces();
+      render(<CanonicalDestinationPage destination={destination} />);
+      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+      expect(screen.getByText(`Golf around ${destination.city}`)).toBeInTheDocument();
+      expect(screen.queryByText(/Golf around Summerlin/)).not.toBeInTheDocument();
+    });
+
+    it("never renders the linked place inside the destination-level unassigned section", () => {
+      render(<CanonicalDestinationPage destination={buildV31DestinationWithUnassignedPlaces()} />);
+      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+      // The linked place appears exactly once (inside its neighborhood card) - never duplicated
+      // into the destination-level section as well.
+      expect(screen.getAllByText("Linked Neighborhood Bistro")).toHaveLength(1);
+    });
+
+    it("never renders an unassigned place inside any neighborhood card", () => {
+      render(<CanonicalDestinationPage destination={buildV31DestinationWithUnassignedPlaces()} />);
+      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+      // The unassigned golf place's real name never appears more than once (only in the
+      // destination-level section) - it is never duplicated into the linked neighborhood's card,
+      // which has no real golf place of its own.
+      expect(screen.getAllByText("Test Destination Golf Club")).toHaveLength(1);
+    });
+
+    it("deduplicates a literal duplicate DB row so the same real place renders exactly once", () => {
+      render(<CanonicalDestinationPage destination={buildV31DestinationWithUnassignedPlaces()} />);
+      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+      expect(screen.getAllByText("Test Sports Complex")).toHaveLength(1);
+    });
+
+    it("is completely absent when a destination has no unassigned real places", () => {
+      render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+      expect(screen.queryByText("Destination highlights")).not.toBeInTheDocument();
+    });
+
+    it("shows exactly 4 unassigned real places initially per category, with Show more revealing the real remaining count and never fabricating beyond it", () => {
+      const destination = buildV31Destination();
+      destination.v31Modules = {
+        ...destination.v31Modules!,
+        neighborhoods: [],
+        places: Array.from({ length: 5 }, (_, i) => ({
+          placeKey: `unassigned-restaurant-${i + 1}`,
+          category: "restaurant",
+          name: `Unassigned Restaurant ${i + 1}`,
+          description: `Real restaurant ${i + 1} not tied to a neighborhood.`,
+          neighborhoodKey: null,
+          websiteUrl: null,
+          googleMapsUrl: null,
+          sourceUrl: null,
+          address: null,
+          phone: null,
+          displayOrder: String(i + 1),
+        })),
+      };
+      render(<CanonicalDestinationPage destination={destination} />);
+      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+      expect(screen.getByText("Unassigned Restaurant 1")).toBeInTheDocument();
+      expect(screen.getByText("Unassigned Restaurant 4")).toBeInTheDocument();
+      expect(screen.queryByText("Unassigned Restaurant 5")).not.toBeInTheDocument();
+
+      fireEvent.click(screen.getAllByText("Show more")[0]);
+      expect(screen.getByText("Unassigned Restaurant 5")).toBeInTheDocument();
+      expect(screen.queryByText("Unassigned Restaurant 6")).not.toBeInTheDocument();
+    });
+  });
 });
 

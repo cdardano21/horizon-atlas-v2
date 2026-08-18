@@ -469,8 +469,7 @@ function profileSignatureStreets(neighborhoodName: string, cityName: string) {
 // Real persisted category_key -> display bucket mapping, covering every category_key value
 // observed across the real Batch #1 workbook data. A category only ever appears on the page when
 // at least one real, exact-neighborhoodKey-matched place exists for it - never forced, never
-// fabricated. Keys not covered here (e.g. "coworking") are intentionally omitted rather than
-// guessed into an unrelated bucket.
+// fabricated.
 const REAL_PLACE_CATEGORY_BUCKETS: ReadonlyArray<{ key: string; label: string; matches: (category: string) => boolean }> = [
   { key: "restaurants", label: "Restaurants", matches: (category) => category === "restaurant" },
   { key: "coffee", label: "Coffee", matches: (category) => category === "coffee_shop" || category === "bakery" },
@@ -481,14 +480,17 @@ const REAL_PLACE_CATEGORY_BUCKETS: ReadonlyArray<{ key: string; label: string; m
   { key: "entertainment", label: "Entertainment & nightlife", matches: (category) => category === "live_music" || category === "nightlife" || category === "theater" },
   { key: "attractions", label: "Attractions & things to do", matches: (category) => category === "attraction" || category === "museum" || category === "zoo_aquarium" },
   { key: "outdoor", label: "Outdoor recreation", matches: (category) => category === "beach" || category === "water_recreation" || category === "skiing_winter" },
+  { key: "sports", label: "Sports & recreation", matches: (category) => category === "sports" },
+  { key: "coworking", label: "Coworking", matches: (category) => category === "coworking" },
 ];
 
 /**
  * Builds neighborhood-intelligence-style category cards directly from real persisted v3.1 places,
  * filtered by an exact neighborhoodKey match (never fuzzy, never destination-wide). A category is
  * only ever included when it has at least one real matching place - no generic filler, no invented
- * URLs. Places are ordered by their real persisted displayOrder where present, capped at 4 per
- * category to keep cards compact.
+ * URLs. Places are ordered by their real persisted displayOrder where present. The full real count
+ * is returned here - progressive disclosure (initial 4, "Show more") is a presentation concern
+ * handled by CategoryPlaceList at render time, not a data-shape concern.
  */
 function buildRealNeighborhoodPlaceCards(destination: CanonicalDestination, neighborhoodKey: string): NeighborhoodInsightCard[] {
   const allPlaces = destination.v31Modules?.places ?? [];
@@ -501,8 +503,7 @@ function buildRealNeighborhoodPlaceCards(destination: CanonicalDestination, neig
         const orderLeft = left.displayOrder ? Number(left.displayOrder) : Number.MAX_SAFE_INTEGER;
         const orderRight = right.displayOrder ? Number(right.displayOrder) : Number.MAX_SAFE_INTEGER;
         return orderLeft - orderRight;
-      })
-      .slice(0, 4);
+      });
 
     if (matchingPlaces.length === 0) {
       return [];
@@ -538,6 +539,219 @@ function buildRealNeighborhoodPlaceCards(destination: CanonicalDestination, neig
       emptyMessage: "",
     } satisfies NeighborhoodInsightCard];
   });
+}
+
+/**
+ * Destination-level counterpart to buildRealNeighborhoodPlaceCards: groups real persisted places
+ * that have NO neighborhoodKey (never a false/forced neighborhood association) into the same
+ * category buckets, with a generic "${category} around ${city}" heading derived purely from the
+ * bucket label and the current destination's own name - never a hardcoded destination string.
+ * Mutually exclusive with every neighborhood card by construction: a place with a neighborhoodKey
+ * can never appear here, and a place appearing here can never appear in a neighborhood card,
+ * because both read the same boolean condition on the same field.
+ */
+function buildDestinationLevelUnassignedPlaceGroups(destination: CanonicalDestination): NeighborhoodInsightCard[] {
+  const allPlaces = destination.v31Modules?.places ?? [];
+  const unassignedPlaces = allPlaces.filter((place) => !place.neighborhoodKey);
+
+  return REAL_PLACE_CATEGORY_BUCKETS.flatMap((bucket) => {
+    const matchingPlaces = unassignedPlaces
+      .filter((place) => place.category && bucket.matches(place.category) && place.name && place.name.trim().length > 0)
+      .sort((left, right) => {
+        const orderLeft = left.displayOrder ? Number(left.displayOrder) : Number.MAX_SAFE_INTEGER;
+        const orderRight = right.displayOrder ? Number(right.displayOrder) : Number.MAX_SAFE_INTEGER;
+        return orderLeft - orderRight;
+      });
+
+    if (matchingPlaces.length === 0) {
+      return [];
+    }
+
+    const places: NeighborhoodInsightPlace[] = matchingPlaces.map((place) => {
+      const website = place.websiteUrl && place.websiteUrl.trim().length > 0 ? place.websiteUrl : undefined;
+      const mapUrl = place.googleMapsUrl && place.googleMapsUrl.trim().length > 0
+        ? place.googleMapsUrl
+        : website
+        ? undefined
+        : (place.sourceUrl && place.sourceUrl.trim().length > 0 ? place.sourceUrl : undefined);
+
+      return {
+        id: place.placeKey,
+        title: place.name as string,
+        description: place.description ?? `${place.name} is a real place associated with ${destination.city} as a whole.`,
+        neighborhood: destination.city,
+        category: bucket.label,
+        mapUrl,
+        website,
+        address: place.address ?? undefined,
+        phone: place.phone ?? undefined,
+      } satisfies NeighborhoodInsightPlace;
+    });
+
+    return [{
+      key: bucket.key,
+      label: `${bucket.label} around ${destination.city}`,
+      value: bucket.label,
+      description: `Real persisted ${destination.city} places that are not tied to one specific neighborhood.`,
+      places,
+      emptyMessage: "",
+    } satisfies NeighborhoodInsightCard];
+  });
+}
+
+/**
+ * Shared progressive-disclosure list for a category's real places: shows the first 4, then a
+ * "Show more" control reveals the full real count (never fabricated beyond what was passed in),
+ * with an optional "Show fewer" to collapse back. Deduplicates by place id so the same real place
+ * never renders twice within one list.
+ */
+function CategoryPlaceList({ places, onSelect }: { places: NeighborhoodInsightPlace[]; onSelect: (place: NeighborhoodInsightPlace) => void }) {
+  const [visibleCount, setVisibleCount] = useState(4);
+  const deduped = Array.from(new Map(places.map((place) => [place.id, place])).values());
+  const visiblePlaces = deduped.slice(0, visibleCount);
+  const hasMore = deduped.length > visiblePlaces.length;
+  const canShowFewer = visibleCount > 4;
+
+  return (
+    <>
+      <div className="mt-3 divide-y divide-white/10 border-y border-white/10">
+        {visiblePlaces.map((place) => {
+          const linkClasses = "flex w-full items-start justify-between gap-3 px-1 py-3 text-left transition hover:bg-[#0a2745]";
+          const actionLabel = place.isFallback ? "Explore" : "Open";
+
+          if (place.isFallback) {
+            return (
+              <a key={place.id} href={place.mapUrl} target="_blank" rel="noopener noreferrer" className={linkClasses}>
+                <span>
+                  <span className="block text-sm font-semibold text-[#edf2fb]">{place.title}</span>
+                  <span className="mt-1 block text-xs leading-5 text-[#9eb2c6]">{place.description}</span>
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#55c7c9]">{actionLabel}</span>
+              </a>
+            );
+          }
+
+          return (
+            <button key={place.id} type="button" onClick={() => onSelect(place)} className={linkClasses}>
+              <span>
+                <span className="block text-sm font-semibold text-[#edf2fb]">{place.title}</span>
+                <span className="mt-1 block text-xs leading-5 text-[#9eb2c6]">{place.description}</span>
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#55c7c9]">{actionLabel}</span>
+            </button>
+          );
+        })}
+      </div>
+      {hasMore || canShowFewer ? (
+        <div className="mt-2 flex justify-start">
+          <button type="button" onClick={() => setVisibleCount(hasMore ? deduped.length : 4)} className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-1.5 text-[11px] font-semibold text-cyan-200 transition hover:border-cyan-400/40 hover:bg-cyan-500/20">
+            {hasMore ? "Show more" : "Show fewer"}
+          </button>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+/** Shared place-detail modal used by both neighborhood-scoped and destination-level place lists. */
+function PlaceDetailModal({ place, onClose }: { place: NeighborhoodInsightPlace; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/80 px-4 py-6 backdrop-blur-sm">
+      <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-900/95 p-6 shadow-[0_30px_100px_rgba(2,8,23,0.48)]">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-300">{place.category}</p>
+            <h5 className="mt-2 text-2xl font-semibold text-white">{place.title}</h5>
+          </div>
+          <button type="button" onClick={onClose} className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/30 hover:bg-cyan-500/10">
+            Close
+          </button>
+        </div>
+        <div className="mt-5 space-y-4">
+          <p className="text-sm leading-7 text-slate-300">{place.description}</p>
+          {place.aiSummary && place.aiSummary.trim().length > 0 && place.aiSummary !== place.description ? <p className="rounded-2xl border border-white/10 bg-white/5 p-3 text-sm leading-7 text-slate-300">{place.aiSummary}</p> : null}
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Neighborhood</p>
+              <p className="mt-2 text-sm font-semibold text-white">{place.neighborhood}</p>
+            </div>
+            {place.rating ? (
+              <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Rating</p>
+                <p className="mt-2 text-sm font-semibold text-white">{place.rating}</p>
+              </div>
+            ) : null}
+            {place.distance ? (
+              <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Distance</p>
+                <p className="mt-2 text-sm font-semibold text-white">{place.distance}</p>
+              </div>
+            ) : null}
+            {place.metadata && Object.keys(place.metadata).length > 0 ? (
+              <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3 sm:col-span-2">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Why it matters</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {Object.entries(place.metadata).map(([key, value]) => (
+                    <span key={key} className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300">
+                      {key}: {value}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {place.mapUrl ? (
+              <a href={place.mapUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/40 hover:bg-cyan-500/20">
+                Open on Google Maps
+              </a>
+            ) : null}
+            {place.website ? (
+              <a href={place.website} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/30 hover:bg-cyan-500/10">
+                Visit website
+              </a>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Destination-level section for real places with no neighborhoodKey - never invents a
+ * neighborhood association. Absent entirely when no such places exist. Generic across every
+ * destination: headings are built purely from the category bucket label and the destination's own
+ * name, never a hardcoded destination string.
+ */
+function DestinationLevelUnassignedSection({ destination }: { destination: CanonicalDestination }) {
+  const [selectedPlace, setSelectedPlace] = useState<NeighborhoodInsightPlace | null>(null);
+  const groups = useMemo(() => buildDestinationLevelUnassignedPlaceGroups(destination), [destination]);
+
+  if (groups.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Destination highlights</p>
+          <h2 className="mt-3 text-2xl font-semibold text-white">Real recommendations that span all of {destination.city}</h2>
+        </div>
+      </div>
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        {groups.map((group) => (
+          <div key={group.key} className="rounded-[1.5rem] border border-white/10 bg-slate-950/30 p-5">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#eabc5b]">{group.label}</p>
+            <p className="mt-1.5 text-sm leading-6 text-[#9eb2c6]">{group.description}</p>
+            <CategoryPlaceList places={group.places} onSelect={setSelectedPlace} />
+          </div>
+        ))}
+      </div>
+      {selectedPlace ? <PlaceDetailModal place={selectedPlace} onClose={() => setSelectedPlace(null)} /> : null}
+    </section>
+  );
 }
 
 function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighborhoodName: string, neighborhoodKey?: string) {
@@ -986,34 +1200,7 @@ function ExpandableNeighborhoodCard({
                   <p className="mt-1.5 text-sm font-semibold text-[#edf2fb]">{card.value}</p>
                   <p className="mt-1.5 text-sm leading-6 text-[#9eb2c6]">{card.description}</p>
                   {card.places.length > 0 ? (
-                    <div className="mt-3 divide-y divide-white/10 border-y border-white/10">
-                      {Array.from(new Map(card.places.slice(0, 4).map((place) => [place.id, place])).values()).map((place) => {
-                        const linkClasses = "flex w-full items-start justify-between gap-3 px-1 py-3 text-left transition hover:bg-[#0a2745]";
-                        const actionLabel = place.isFallback ? "Explore" : "Open";
-
-                        if (place.isFallback) {
-                          return (
-                            <a key={place.id} href={place.mapUrl} target="_blank" rel="noopener noreferrer" className={linkClasses}>
-                              <span>
-                                <span className="block text-sm font-semibold text-[#edf2fb]">{place.title}</span>
-                                <span className="mt-1 block text-xs leading-5 text-[#9eb2c6]">{place.description}</span>
-                              </span>
-                              <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#55c7c9]">{actionLabel}</span>
-                            </a>
-                          );
-                        }
-
-                        return (
-                          <button key={place.id} type="button" onClick={() => setSelectedPlace(place)} className={linkClasses}>
-                            <span>
-                              <span className="block text-sm font-semibold text-[#edf2fb]">{place.title}</span>
-                              <span className="mt-1 block text-xs leading-5 text-[#9eb2c6]">{place.description}</span>
-                            </span>
-                            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#55c7c9]">{actionLabel}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
+                    <CategoryPlaceList places={card.places} onSelect={setSelectedPlace} />
                   ) : (
                     <p className="mt-3 text-[15px] leading-7 text-slate-300">{card.emptyMessage}</p>
                   )}
@@ -1054,67 +1241,7 @@ function ExpandableNeighborhoodCard({
           </div>
         ) : null}
       </div>
-      {selectedPlace ? (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/80 px-4 py-6 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-900/95 p-6 shadow-[0_30px_100px_rgba(2,8,23,0.48)]">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-300">{selectedPlace.category}</p>
-                <h5 className="mt-2 text-2xl font-semibold text-white">{selectedPlace.title}</h5>
-              </div>
-              <button type="button" onClick={() => setSelectedPlace(null)} className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/30 hover:bg-cyan-500/10">
-                Close
-              </button>
-            </div>
-            <div className="mt-5 space-y-4">
-              <p className="text-sm leading-7 text-slate-300">{selectedPlace.description}</p>
-              {selectedPlace.aiSummary && selectedPlace.aiSummary.trim().length > 0 && selectedPlace.aiSummary !== selectedPlace.description ? <p className="rounded-2xl border border-white/10 bg-white/5 p-3 text-sm leading-7 text-slate-300">{selectedPlace.aiSummary}</p> : null}
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Neighborhood</p>
-                  <p className="mt-2 text-sm font-semibold text-white">{selectedPlace.neighborhood}</p>
-                </div>
-                {selectedPlace.rating ? (
-                  <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Rating</p>
-                    <p className="mt-2 text-sm font-semibold text-white">{selectedPlace.rating}</p>
-                  </div>
-                ) : null}
-                {selectedPlace.distance ? (
-                  <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Distance</p>
-                    <p className="mt-2 text-sm font-semibold text-white">{selectedPlace.distance}</p>
-                  </div>
-                ) : null}
-                {selectedPlace.metadata && Object.keys(selectedPlace.metadata).length > 0 ? (
-                  <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3 sm:col-span-2">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Why it matters</p>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {Object.entries(selectedPlace.metadata).map(([key, value]) => (
-                        <span key={key} className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300">
-                          {key}: {value}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {selectedPlace.mapUrl ? (
-                  <a href={selectedPlace.mapUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/40 hover:bg-cyan-500/20">
-                    Open on Google Maps
-                  </a>
-                ) : null}
-                {selectedPlace.website ? (
-                  <a href={selectedPlace.website} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/30 hover:bg-cyan-500/10">
-                    Visit website
-                  </a>
-                ) : null}
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : null}
+      {selectedPlace ? <PlaceDetailModal place={selectedPlace} onClose={() => setSelectedPlace(null)} /> : null}
     </article>
   );
 }
@@ -1993,6 +2120,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             ) : null}
           </section>
 
+          <DestinationLevelUnassignedSection destination={destination} />
+
           <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
@@ -2097,6 +2226,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               </div>
             ) : null}
           </section>
+
+          <DestinationLevelUnassignedSection destination={destination} />
 
           <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
             <div className="flex flex-wrap items-start justify-between gap-4">
