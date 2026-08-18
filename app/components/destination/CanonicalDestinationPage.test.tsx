@@ -1,9 +1,13 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import CanonicalDestinationPage from "./CanonicalDestinationPage";
 import type { CanonicalDestination } from "../../lib/canonical-destination-model";
 import { buildNeighborhoodIntelligenceSeedData } from "../../lib/neighborhood-intelligence-seed-data";
 import { isPlaceWebsiteVisible } from "../../lib/website-verification";
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ refresh: vi.fn() }),
+}));
 
 const buildDestination = (): CanonicalDestination => ({
   slug: "spearfish-south-dakota-united-states",
@@ -927,7 +931,7 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
 
   function buildV31PlaceLinkedDestination(): CanonicalDestination {
     const destination = buildV31Destination();
-    destination.neighborhoods = ["Neighborhood A", "Neighborhood B", "Neighborhood C", "Neighborhood D", "Neighborhood E"];
+    destination.neighborhoods = ["Neighborhood A", "Neighborhood B", "Neighborhood C", "Neighborhood D", "Neighborhood E", "Neighborhood F", "Neighborhood G", "Neighborhood H"];
     destination.v31Modules = {
       ...destination.v31Modules!,
       neighborhoods: [
@@ -935,7 +939,10 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
         { neighborhoodKey: "nb-b", name: "Neighborhood B", summary: "Second neighborhood.", areaType: "urban" },
         { neighborhoodKey: "nb-c", name: "Neighborhood C", summary: "Third neighborhood.", areaType: "urban" },
         { neighborhoodKey: "nb-d", name: "Neighborhood D", summary: "Fourth neighborhood.", areaType: "urban" },
-        { neighborhoodKey: "nb-e", name: "Neighborhood E", summary: "Fifth neighborhood - should never render.", areaType: "urban" },
+        { neighborhoodKey: "nb-e", name: "Neighborhood E", summary: "Fifth neighborhood - hidden until expanded.", areaType: "urban" },
+        { neighborhoodKey: "nb-f", name: "Neighborhood F", summary: "Sixth neighborhood - hidden until expanded.", areaType: "urban" },
+        { neighborhoodKey: "nb-g", name: "Neighborhood G", summary: "Seventh neighborhood - hidden until expanded.", areaType: "urban" },
+        { neighborhoodKey: "nb-h", name: "Neighborhood H", summary: "Eighth neighborhood - hidden until expanded.", areaType: "urban" },
       ],
       places: [
         {
@@ -994,11 +1001,24 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
           placeKey: "place-e-restaurant",
           category: "restaurant",
           name: "Neighborhood E Cafe",
-          description: "A real restaurant in Neighborhood E - must never render since only the first 4 neighborhoods display.",
+          description: "A real restaurant in Neighborhood E - hidden until the neighborhood list is expanded past the first 4.",
           neighborhoodKey: "nb-e",
           websiteUrl: "https://neighborhood-e-cafe.example-test.invalid/",
           googleMapsUrl: "https://maps.example-test.invalid/neighborhood-e-cafe",
           sourceUrl: "https://neighborhood-e-cafe.example-test.invalid/",
+          address: null,
+          phone: null,
+          displayOrder: "1",
+        },
+        {
+          placeKey: "place-g-golf",
+          category: "golf",
+          name: "Neighborhood G Golf Club",
+          description: "A real golf course in Neighborhood G - only reachable by expanding past the first 4 neighborhoods.",
+          neighborhoodKey: "nb-g",
+          websiteUrl: "https://neighborhood-g-golf.example-test.invalid/",
+          googleMapsUrl: "https://maps.example-test.invalid/neighborhood-g-golf",
+          sourceUrl: "https://neighborhood-g-golf.example-test.invalid/",
           address: null,
           phone: null,
           displayOrder: "1",
@@ -1008,7 +1028,20 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     return destination;
   }
 
-  it("renders only 4 neighborhood cards even when more than 4 are persisted", () => {
+  function buildV31DestinationWithNeighborhoodCount(count: number): CanonicalDestination {
+    const destination = buildV31Destination();
+    const allKeys = ["nb-a", "nb-b", "nb-c", "nb-d", "nb-e", "nb-f", "nb-g", "nb-h"];
+    const allNames = ["Neighborhood A", "Neighborhood B", "Neighborhood C", "Neighborhood D", "Neighborhood E", "Neighborhood F", "Neighborhood G", "Neighborhood H"];
+    destination.neighborhoods = allNames.slice(0, count);
+    destination.v31Modules = {
+      ...destination.v31Modules!,
+      neighborhoods: allKeys.slice(0, count).map((key, index) => ({ neighborhoodKey: key, name: allNames[index], summary: `${allNames[index]} summary.`, areaType: "urban" })),
+      places: [],
+    };
+    return destination;
+  }
+
+  it("renders exactly 4 flagship neighborhood cards initially when more than 4 are persisted", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
     fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
@@ -1017,6 +1050,7 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     expect(screen.getAllByText("Neighborhood C").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Neighborhood D").length).toBeGreaterThan(0);
     expect(screen.queryByText("Neighborhood E")).not.toBeInTheDocument();
+    expect(screen.getAllByText("Explore more neighborhoods").length).toBeGreaterThan(0);
   });
 
   it("selects the same first-4 neighborhoods deterministically across repeated renders", () => {
@@ -1033,6 +1067,59 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     expect(secondRenderHasD).toBe(true);
   });
 
+  it("reveals up to 8 real persisted neighborhoods, in persisted order, after activating Explore more neighborhoods - never fabricating beyond what is persisted", () => {
+    render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    expect(screen.queryByText("Neighborhood E")).not.toBeInTheDocument();
+    fireEvent.click(screen.getAllByText("Explore more neighborhoods")[0]);
+
+    expect(screen.getAllByText("Neighborhood E").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Neighborhood F").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Neighborhood G").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Neighborhood H").length).toBeGreaterThan(0);
+    // Exactly 8 real neighborhoods exist in the fixture - no 9th/fabricated entry can appear, and
+    // no further "Explore more" control remains since every persisted neighborhood is now shown.
+    expect(screen.queryByText("Explore more neighborhoods")).not.toBeInTheDocument();
+  });
+
+  it("returns to the flagship 4 after activating Show fewer neighborhoods", () => {
+    render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+    fireEvent.click(screen.getAllByText("Explore more neighborhoods")[0]);
+    expect(screen.getAllByText("Neighborhood H").length).toBeGreaterThan(0);
+
+    fireEvent.click(screen.getAllByText("Show fewer neighborhoods")[0]);
+
+    expect(screen.queryByText("Neighborhood E")).not.toBeInTheDocument();
+    expect(screen.queryByText("Neighborhood H")).not.toBeInTheDocument();
+    expect(screen.getAllByText("Neighborhood A").length).toBeGreaterThan(0);
+  });
+
+  it("does not show an Explore more neighborhoods control when 4 or fewer real neighborhoods are persisted", () => {
+    render(<CanonicalDestinationPage destination={buildV31DestinationWithNeighborhoodCount(4)} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    expect(screen.getAllByText("Neighborhood D").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Explore more neighborhoods")).not.toBeInTheDocument();
+    expect(screen.queryByText("Show fewer neighborhoods")).not.toBeInTheDocument();
+  });
+
+  it("shows the Explore more control and reveals exactly the real additional count for a destination with 5-8 neighborhoods (no padding to 8)", () => {
+    render(<CanonicalDestinationPage destination={buildV31DestinationWithNeighborhoodCount(6)} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+
+    expect(screen.queryByText("Neighborhood E")).not.toBeInTheDocument();
+    fireEvent.click(screen.getAllByText("Explore more neighborhoods")[0]);
+
+    expect(screen.getAllByText("Neighborhood E").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Neighborhood F").length).toBeGreaterThan(0);
+    // Only 6 real neighborhoods exist - Neighborhood G/H must never appear (no fabrication).
+    expect(screen.queryByText("Neighborhood G")).not.toBeInTheDocument();
+    expect(screen.queryByText("Neighborhood H")).not.toBeInTheDocument();
+    expect(screen.queryByText("Explore more neighborhoods")).not.toBeInTheDocument();
+  });
+
   it("filters real places by exact neighborhoodKey - a Neighborhood A restaurant never appears under Neighborhood B", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
     fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
@@ -1044,11 +1131,25 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     expect(screen.getAllByText("Neighborhood B Grill")).toHaveLength(1);
   });
 
-  it("never renders a place from a neighborhood beyond the 4-neighborhood cap (cross-destination/leakage safety)", () => {
+  it("never renders a place from a neighborhood beyond the currently visible set (cross-destination/leakage safety)", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
     fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
     expect(screen.queryByText("Neighborhood E Cafe")).not.toBeInTheDocument();
+    expect(screen.queryByText("Neighborhood G Golf Club")).not.toBeInTheDocument();
+  });
+
+  it("surfaces a real place tied to a neighborhood outside the flagship 4 (e.g. golf) only once that neighborhood is revealed, with exact neighborhoodKey linkage preserved", () => {
+    render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+    expect(screen.queryByText("Neighborhood G Golf Club")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getAllByText("Explore more neighborhoods")[0]);
+
+    expect(screen.getByText("Neighborhood G Golf Club")).toBeInTheDocument();
+    expect(screen.getAllByText("Neighborhood G Golf Club")).toHaveLength(1);
+    // Still never leaks into an unrelated neighborhood's card.
+    expect(screen.queryByText("Neighborhood A Bistro")).toBeInTheDocument();
   });
 
   it("opens the place modal with a real clickable website link when websiteUrl is present", () => {

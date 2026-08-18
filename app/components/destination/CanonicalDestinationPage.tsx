@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { CanonicalDestination, NeighborhoodIntelligenceGroup, NeighborhoodIntelligenceMetric, NeighborhoodIntelligencePlace, NeighborhoodProfile, NeighborhoodResourceItem } from "../../lib/canonical-destination-model";
@@ -8,6 +9,8 @@ import { getDestinationImageSet, getDestinationImageUrl } from "../../lib/imageF
 import { buildNeighborhoodIntelligenceSeedData } from "../../lib/neighborhood-intelligence-seed-data";
 import { buildPremiumDestinationEditorialPackage } from "../../lib/premium-destination-engine";
 import { isPlaceWebsiteVisible } from "../../lib/website-verification";
+import Footer from "../Footer";
+import Navbar from "../Navbar";
 
 interface CanonicalDestinationPageProps {
   destination: CanonicalDestination;
@@ -926,24 +929,25 @@ function ExpandableNeighborhoodCard({
   ];
 
   return (
-    <div className="rounded-[1.5rem] border border-white/10 bg-slate-900/70 p-5 shadow-[0_18px_50px_rgba(2,8,23,0.16)]">
+    <article className="border border-[#d8ad5548] bg-[#061a32] shadow-[0_18px_45px_rgba(0,0,0,0.2)]">
       <div className="flex items-start justify-between gap-3">
-        <div>
-          <h4 className="text-lg font-semibold text-white">{neighborhood.name}</h4>
-          <p className="mt-2 text-[15px] leading-8 text-slate-300">{neighborhood.whyItWorks}</p>
+        <div className="min-w-0 p-5 sm:p-6">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#55c7c9]">Flagship neighborhood {index + 1}</p>
+          <h4 className="mt-1 font-serif text-2xl text-[#fff8e9]">{neighborhood.name}</h4>
+          <p className="mt-2 max-w-4xl text-sm leading-6 text-[#b7c8d8]">{neighborhood.whyItWorks}</p>
         </div>
-        <button type="button" onClick={() => setExpanded((value) => !value)} className="rounded-full border border-white/10 bg-slate-950/40 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-200">
+        <button type="button" onClick={() => setExpanded((value) => !value)} className="m-4 min-h-10 shrink-0 border border-[#d8ad554f] bg-[#08223c] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#f0c05f] transition hover:border-[#f0c05f] sm:m-5">
           {expanded ? "Collapse" : "Explore"}
         </button>
       </div>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Best for</p>
-          <p className="mt-2 text-[15px] leading-7 text-slate-300">{neighborhood.fit}</p>
+      <div className="grid border-t border-white/10 sm:grid-cols-2">
+        <div className="px-5 py-4 sm:border-r sm:border-white/10 sm:px-6">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#eabc5b]">Best for</p>
+          <p className="mt-1.5 text-sm leading-6 text-[#d5e0ea]">{neighborhood.fit}</p>
         </div>
-        <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Overall vibe</p>
-          <p className="mt-2 text-[15px] leading-7 text-slate-300">{neighborhood.vibe}</p>
+        <div className="border-t border-white/10 px-5 py-4 sm:border-t-0 sm:px-6">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#eabc5b]">Overall vibe</p>
+          <p className="mt-1.5 text-sm leading-6 text-[#d5e0ea]">{neighborhood.vibe}</p>
         </div>
       </div>
       {neighborhoodProfileResources.length > 0 ? (
@@ -958,43 +962,43 @@ function ExpandableNeighborhoodCard({
           </div>
         </div>
       ) : null}
-      <div className={`overflow-hidden transition-all duration-300 ${expanded ? "mt-4 max-h-[4000px] opacity-100" : "max-h-0 opacity-0"}`}>
-        <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+      <div className={`overflow-hidden transition-all duration-300 ${expanded ? "max-h-[4000px] border-t border-white/10 opacity-100" : "max-h-0 opacity-0"}`}>
+        <div className="grid md:grid-cols-2 xl:grid-cols-3">
           {detailMap.map((detail) => (
-            <div key={detail.label} className="rounded-2xl border border-white/10 bg-slate-950/35 p-3">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">{detail.label}</p>
-              <p className="mt-2 text-sm leading-6 text-slate-300">{detail.value}</p>
+            <div key={detail.label} className="border-b border-white/10 px-5 py-3.5 md:border-r md:px-6 xl:[&:nth-child(3n)]:border-r-0">
+              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#55c7c9]">{detail.label}</p>
+              <p className="mt-1.5 text-sm leading-6 text-[#b7c8d8]">{detail.value}</p>
             </div>
           ))}
         </div>
         {neighborhoodInsightCards.length > 0 ? (
-          <div className="mt-4 rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-4">
+          <div className="border-t border-[#d8ad5548] bg-[#04172d] p-5 sm:p-6">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Neighborhood intelligence</p>
                 <h5 className="mt-1 text-lg font-semibold text-white">A curatorial guide to the places that make the neighborhood feel real</h5>
               </div>
             </div>
-            <div className="mt-4 grid gap-3 lg:grid-cols-2">
+            <div className="mt-4 grid border-t border-white/10 lg:grid-cols-2">
               {neighborhoodInsightCards.map((card) => (
-                <div key={card.key} className="rounded-2xl border border-white/10 bg-slate-950/35 p-3.5">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">{card.label}</p>
-                  <p className="mt-2 text-sm font-semibold text-white">{card.value}</p>
-                  <p className="mt-2 text-[15px] leading-7 text-slate-300">{card.description}</p>
+                <div key={card.key} className="border-b border-white/10 py-4 lg:px-4 lg:[&:nth-child(odd)]:border-r">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#eabc5b]">{card.label}</p>
+                  <p className="mt-1.5 text-sm font-semibold text-[#edf2fb]">{card.value}</p>
+                  <p className="mt-1.5 text-sm leading-6 text-[#9eb2c6]">{card.description}</p>
                   {card.places.length > 0 ? (
-                    <div className="mt-3 space-y-2">
+                    <div className="mt-3 divide-y divide-white/10 border-y border-white/10">
                       {Array.from(new Map(card.places.slice(0, 4).map((place) => [place.id, place])).values()).map((place) => {
-                        const linkClasses = "flex w-full items-start justify-between gap-3 rounded-2xl border border-white/10 bg-slate-950/40 px-3 py-2 text-left transition hover:border-cyan-400/30 hover:bg-cyan-500/10";
+                        const linkClasses = "flex w-full items-start justify-between gap-3 px-1 py-3 text-left transition hover:bg-[#0a2745]";
                         const actionLabel = place.isFallback ? "Explore" : "Open";
 
                         if (place.isFallback) {
                           return (
                             <a key={place.id} href={place.mapUrl} target="_blank" rel="noopener noreferrer" className={linkClasses}>
                               <span>
-                                <span className="block text-sm font-semibold text-white">{place.title}</span>
-                                <span className="mt-1 block text-[15px] leading-7 text-slate-300">{place.description}</span>
+                                <span className="block text-sm font-semibold text-[#edf2fb]">{place.title}</span>
+                                <span className="mt-1 block text-xs leading-5 text-[#9eb2c6]">{place.description}</span>
                               </span>
-                              <span className="text-xs uppercase tracking-[0.2em] text-cyan-200">{actionLabel}</span>
+                              <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#55c7c9]">{actionLabel}</span>
                             </a>
                           );
                         }
@@ -1002,10 +1006,10 @@ function ExpandableNeighborhoodCard({
                         return (
                           <button key={place.id} type="button" onClick={() => setSelectedPlace(place)} className={linkClasses}>
                             <span>
-                              <span className="block text-sm font-semibold text-white">{place.title}</span>
-                              <span className="mt-1 block text-[15px] leading-7 text-slate-300">{place.description}</span>
+                              <span className="block text-sm font-semibold text-[#edf2fb]">{place.title}</span>
+                              <span className="mt-1 block text-xs leading-5 text-[#9eb2c6]">{place.description}</span>
                             </span>
-                            <span className="text-xs uppercase tracking-[0.2em] text-cyan-200">{actionLabel}</span>
+                            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#55c7c9]">{actionLabel}</span>
                           </button>
                         );
                       })}
@@ -1111,7 +1115,7 @@ function ExpandableNeighborhoodCard({
           </div>
         </div>
       ) : null}
-    </div>
+    </article>
   );
 }
 
@@ -1121,12 +1125,13 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   const [viewMode, setViewMode] = useState<ViewMode>("guide");
   const [selectedMedia, setSelectedMedia] = useState<GalleryItem | null>(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
+  const [visibleNeighborhoodCount, setVisibleNeighborhoodCount] = useState(4);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const storedView = window.localStorage.getItem("horizon-atlas-view-mode");
     if (storedView === "guide" || storedView === "profile" || storedView === "deep") {
-      setViewMode(storedView as ViewMode);
+      queueMicrotask(() => setViewMode(storedView as ViewMode));
     }
   }, []);
 
@@ -1386,6 +1391,10 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     { label: "Mountains", value: categoryValue(getSpecificCategoryValue("mountain", categoryListValue([destination.knowledgeProfile?.mountains?.join(", ")]), getNamedResourceValues("mountain"))), note: "Mountains and natural landscapes add a layer of weekend escape." },
     { label: "Parks", value: categoryValue(getSpecificCategoryValue("park", categoryListValue([destination.knowledgeProfile?.parks?.join(", ")]), getNamedResourceValues("park"))), note: "Parks shape how a city feels in both weekdays and weekends." },
   ], [destination]);
+  const availableFacts = essentialFacts.filter((fact) => fact.value !== categoryPlaceholder);
+  const heroFacts = availableFacts.slice(0, 4);
+  const heroFactLabels = new Set(heroFacts.map((fact) => fact.label));
+  const detailFacts = essentialFacts.filter((fact) => !heroFactLabels.has(fact.label));
 
   // STEP 8: representative UI for the rich v3.1 modules that have no existing dedicated section -
   // built entirely from real persisted rows. A module with zero rows is simply omitted from this
@@ -1516,8 +1525,9 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   // STEP 6: persisted neighborhood rows are authoritative for a v3.1 destination - never fall
   // back to the legacy engine's generic "${city} center" single entry, and never fabricate one
   // when a destination genuinely has zero persisted neighborhoods (the section is simply empty).
-  // Capped to the first 4 (deterministic persisted order) - the page intentionally shows at most
-  // 4 neighborhood cards for spacing/layout reasons.
+  // Up to 8 real persisted neighborhoods are made available for presentation; only the first
+  // `visibleNeighborhoodCount` (default 4, expandable) are actually rendered - see the two render
+  // sites below and the "Explore more neighborhoods" control.
   const neighborhoods = (hasV31Bundle
     ? (destination.v31Modules?.neighborhoods ?? []).map((item) => ({
         name: item.name ?? item.neighborhoodKey,
@@ -1526,7 +1536,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
         fit: item.areaType ?? "",
         vibe: item.summary ?? "",
       }))
-    : premiumContent.neighborhoodGuides.length > 0 ? premiumContent.neighborhoodGuides : destination.neighborhoods.map((name) => ({ name, whyItWorks: `${name} helps anchor the city’s local character.`, fit: `Best for residents who want a neighborhood identity that feels specific and lived in.`, vibe: `It offers a clear local rhythm and strong daily-life texture.` }))).slice(0, 4).map((item) => {
+    : premiumContent.neighborhoodGuides.length > 0 ? premiumContent.neighborhoodGuides : destination.neighborhoods.map((name) => ({ name, whyItWorks: `${name} helps anchor the city’s local character.`, fit: `Best for residents who want a neighborhood identity that feels specific and lived in.`, vibe: `It offers a clear local rhythm and strong daily-life texture.` }))).slice(0, 8).map((item) => {
     const profile = getNeighborhoodProfile(destination, item.name);
     const summary = profile?.summary?.trim() || item.whyItWorks || `${item.name} helps anchor the city’s local character.`;
     const fit = profile?.intelligence?.find((metric) => /family|pet|remote|transit|walk/i.test(metric.key))?.value || item.fit || `Best for residents who want a neighborhood identity that feels specific and lived in.`;
@@ -1540,6 +1550,9 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
       vibe,
     };
   });
+  const visibleNeighborhoods = neighborhoods.slice(0, visibleNeighborhoodCount);
+  const hasMoreNeighborhoods = neighborhoods.length > visibleNeighborhoods.length;
+  const canShowFewerNeighborhoods = visibleNeighborhoodCount > 4;
   const golfGroups = (destination.neighborhoodIntelligence?.length ? destination.neighborhoodIntelligence : buildNeighborhoodIntelligenceSeedData(destination))
     .filter((group) => /golf/i.test(group.category))
     .slice(0, 4);
@@ -1584,93 +1597,102 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   const developerToggleHref = developerMode
     ? `/destinations/${destination.slug}`
     : `/destinations/${destination.slug}?developer=1`;
+  const destinationLocation = [destination.knowledgeProfile?.adminRegion, destination.country].filter(Boolean).join(" / ");
 
   return (
-    <main className="space-y-10 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.10),_transparent_35%),linear-gradient(180deg,_rgba(10,16,34,0.96),_rgba(15,23,42,0.95))] px-3 py-5 text-slate-100 sm:px-5 sm:py-6 lg:px-8 lg:py-8">
-      <section className="rounded-[2rem] border border-white/15 bg-slate-900/60 p-7 shadow-[0_25px_80px_rgba(2,8,23,0.24)] backdrop-blur sm:p-9">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200">DestinationFinderAI premium guide</span>
-          </div>
-          <div role="tablist" aria-label="Destination page views" className="inline-flex rounded-full border border-white/10 bg-white/5 p-1">
-            {viewTabs.map((tab, index) => {
-              const isActive = viewMode === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  role="tab"
-                  type="button"
-                  aria-selected={isActive}
-                  tabIndex={isActive ? 0 : -1}
-                  onClick={() => setViewMode(tab.id)}
-                  onPointerDown={(event) => {
-                    event.preventDefault();
-                    setViewMode(tab.id);
-                  }}
-                  onKeyDown={(event) => {
-                    if (event.key === "ArrowRight") {
-                      event.preventDefault();
-                      const nextIndex = (index + 1) % viewTabs.length;
-                      setViewMode(viewTabs[nextIndex].id);
-                    }
-                    if (event.key === "ArrowLeft") {
-                      event.preventDefault();
-                      const nextIndex = (index - 1 + viewTabs.length) % viewTabs.length;
-                      setViewMode(viewTabs[nextIndex].id);
-                    }
-                  }}
-                  className={`rounded-full px-4 py-2 text-sm font-semibold transition ${isActive ? "bg-cyan-500/15 text-cyan-200 shadow-[0_0_0_1px_rgba(34,211,238,0.15)]" : "text-slate-300 hover:bg-white/10 hover:text-white"}`}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-        <h1 className="mt-6 text-4xl font-black text-white sm:text-5xl">{destination.title}</h1>
-        <p className="mt-3 text-lg text-slate-300">{destination.subtitle}</p>
-        <p className="mt-6 max-w-4xl text-[15px] leading-8 text-slate-300">{premiumContent.heroIntroduction}</p>
-      </section>
-
-      <section className="rounded-[2rem] border border-white/15 bg-slate-900/60 p-6 shadow-[0_20px_70px_rgba(2,8,23,0.20)] sm:p-8">
-        <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-          <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Executive summary</p>
-            <h2 className="mt-3 text-2xl font-semibold text-white">{destination.title} at a glance</h2>
-            <p className="mt-3 max-w-2xl text-[15px] leading-8 text-slate-300">A 20-second orientation for people deciding whether the city deserves deeper attention. It highlights the essentials without reducing the lived experience to a single score.</p>
-          </div>
-          <div className="space-y-3">
-            <div className="overflow-hidden rounded-[1.5rem] border border-white/15 bg-white/10 shadow-[0_20px_70px_rgba(2,8,23,0.20)]">
-              <img src={executiveSummaryImage.resolvedUrl} alt={executiveSummaryImage.altText || destination.title} className="h-[18rem] w-full object-cover sm:h-[20rem]" loading="lazy" decoding="async" />
-              <div className="p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">Featured image</p>
-                <p className="mt-2 text-sm font-semibold text-white">{destination.city} at a glance</p>
-                <p className="mt-2 text-xs leading-6 text-slate-400">{destination.overview}</p>
+    <>
+      <Navbar />
+      <main className="space-y-7 bg-[linear-gradient(180deg,#03142a_0%,#061d37_45%,#03142a_100%)] pb-10 pt-[72px] text-[#edf2fb] sm:space-y-8 sm:pb-12">
+        <section className="relative isolate min-h-[600px] overflow-hidden border-b border-[#d8ad554f] bg-[#03142a]">
+          <Image src={executiveSummaryImage.resolvedUrl} alt={executiveSummaryImage.altText || destination.title} fill sizes="100vw" preload unoptimized className="z-0 object-cover object-center" />
+          <div className="absolute inset-0 z-10 bg-[linear-gradient(90deg,rgba(2,13,29,0.88)_0%,rgba(3,20,42,0.7)_42%,rgba(3,20,42,0.16)_76%,rgba(2,13,29,0.3)_100%)]" />
+          <div className="absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(2,12,27,0.04)_25%,rgba(2,13,29,0.82)_100%)]" />
+          <div className="relative z-20 mx-auto flex min-h-[600px] max-w-[1440px] flex-col justify-end px-5 pb-6 pt-8 sm:px-8 sm:pb-8 lg:px-10">
+            <div className="grid items-end gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-10">
+              <div className="max-w-3xl">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#f0bd56]">DestinationFinderAI premium guide</p>
+                {destinationLocation ? <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#69d5d4]">{destinationLocation}</p> : null}
+                <h1 className="mt-3 font-serif text-5xl font-semibold leading-none text-[#fff8e9] sm:text-6xl lg:text-7xl">{destination.title}</h1>
+                <p className="mt-4 max-w-2xl text-base font-medium leading-7 text-[#e5edf6] sm:text-lg">{destination.subtitle}</p>
+                <p className="mt-3 max-w-2xl text-sm leading-6 text-[#c7d5e2] sm:text-[15px]">{premiumContent.heroIntroduction}</p>
               </div>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {essentialFacts.slice(0, 8).map((fact) => (
-                <div key={fact.label} className="rounded-2xl border border-white/10 bg-white/10 p-3.5">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">{fact.label}</p>
-                  <p className="mt-2 text-sm font-semibold text-white">{fact.value}</p>
-                  <p className="mt-2 text-xs leading-6 text-slate-400">{fact.note}</p>
+              <aside className="border border-[#d8ad554f] bg-[#03172edb] p-4 shadow-[0_24px_70px_rgba(0,0,0,0.38)] backdrop-blur-xl sm:p-5">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#55c7c9]">Destination intelligence</p>
+                <div className="mt-3 divide-y divide-white/10">
+                  {heroFacts.map((fact) => (
+                    <div key={fact.label} className="grid grid-cols-[110px_1fr] gap-3 py-2.5 text-sm">
+                      <span className="text-[#eabc5b]">{fact.label}</span>
+                      <strong className="text-right font-semibold text-[#edf2fb]">{fact.value}</strong>
+                    </div>
+                  ))}
                 </div>
+              </aside>
+            </div>
+            <div role="tablist" aria-label="Destination page views" className="mt-6 grid w-full grid-cols-3 border border-[#d8ad554f] bg-[#03172ee6] p-1 backdrop-blur-xl sm:w-auto sm:self-start">
+              {viewTabs.map((tab, index) => {
+                const isActive = viewMode === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    role="tab"
+                    type="button"
+                    aria-selected={isActive}
+                    tabIndex={isActive ? 0 : -1}
+                    onClick={() => setViewMode(tab.id)}
+                    onPointerDown={(event) => {
+                      event.preventDefault();
+                      setViewMode(tab.id);
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key === "ArrowRight") {
+                        event.preventDefault();
+                        const nextIndex = (index + 1) % viewTabs.length;
+                        setViewMode(viewTabs[nextIndex].id);
+                      }
+                      if (event.key === "ArrowLeft") {
+                        event.preventDefault();
+                        const nextIndex = (index - 1 + viewTabs.length) % viewTabs.length;
+                        setViewMode(viewTabs[nextIndex].id);
+                      }
+                    }}
+                    className={`min-h-11 px-3 py-2 text-xs font-semibold transition sm:px-5 sm:text-sm ${isActive ? "bg-[#11aeb6] text-white shadow-[0_12px_30px_rgba(0,0,0,0.24)]" : "text-[#d9e4ee] hover:bg-white/10 hover:text-[#f3c666]"}`}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-5 border-y border-[#d8ad5548] bg-[#061a32] sm:mx-8 lg:mx-10">
+          <span className="sr-only">Featured image</span>
+          <div className="mx-auto max-w-[1360px] px-4 py-5 sm:px-6 sm:py-6">
+            <div className="flex flex-wrap items-end justify-between gap-3 border-b border-white/10 pb-4">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#55c7c9]">Executive summary</p>
+                <h2 className="mt-1 font-serif text-2xl text-[#fff8e9]">{destination.title} at a glance</h2>
+              </div>
+              <p className="max-w-xl text-xs leading-5 text-[#9eb2c6]">Essential destination facts, kept compact for quick comparison.</p>
+            </div>
+            <div className="grid md:grid-cols-2 xl:grid-cols-3">
+              {detailFacts.map((fact) => (
+                <details key={fact.label} className="group border-b border-white/10 px-1 py-3 md:px-4 md:[&:nth-child(odd)]:border-r xl:[&:nth-child(odd)]:border-r-0 xl:[&:not(:nth-child(3n))]:border-r">
+                  <summary className="flex cursor-pointer list-none items-start justify-between gap-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#55c7c9]">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#eabc5b]">{fact.label}</p>
+                    <span className="flex max-w-[70%] items-start gap-2 text-right text-sm font-semibold leading-5 text-[#e5edf6]">
+                      {fact.value}
+                      <span className="text-[#55c7c9] transition group-open:rotate-45" aria-hidden="true">+</span>
+                    </span>
+                  </summary>
+                  <p className="mt-2 border-l border-[#55c7c966] pl-3 text-xs leading-5 text-[#8fa6ba]">{fact.note}</p>
+                </details>
               ))}
             </div>
           </div>
-        </div>
-        <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-          {essentialFacts.slice(8).map((fact) => (
-            <div key={fact.label} className="rounded-3xl border border-white/10 bg-slate-950/30 p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">{fact.label}</p>
-              <p className="mt-2 text-sm font-semibold text-white">{fact.value}</p>
-              <p className="mt-2 text-xs leading-6 text-slate-400">{fact.note}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        </section>
 
-      <section className="rounded-[2rem] border border-white/20 bg-slate-900/70 p-8 shadow-[0_20px_70px_rgba(2,8,23,0.22)] sm:p-10">
+        <section className="mx-5 border border-[#d8ad5548] bg-[#061a32] p-5 shadow-[0_20px_55px_rgba(0,0,0,0.18)] sm:mx-8 sm:p-6 lg:mx-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Cost of living snapshot</p>
@@ -1735,11 +1757,12 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
           </div>
           <p className="text-sm text-slate-400">{galleryItems.length} curated assets</p>
         </div>
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className={`mt-5 grid gap-3 ${previewGalleryItems.length > 2 ? "md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-2" : "md:grid-cols-2"}`}>
           {previewGalleryItems.map((item, index) => (
-            <button key={`${item.url}-${index}`} type="button" onClick={() => openGalleryItem(item, index)} className="overflow-hidden rounded-[1.5rem] border border-white/15 bg-white/10 text-left shadow-[0_20px_70px_rgba(2,8,23,0.2)] transition duration-200 hover:-translate-y-1">
-              <img src={item.resolvedUrl} alt={item.altText || item.caption || destination.title} loading="lazy" decoding="async" className="h-56 w-full object-cover" />
-              <div className="p-4 text-sm leading-7 text-slate-300">{item.caption || item.altText || item.kind}</div>
+            <button key={`${item.url}-${index}`} type="button" onClick={() => openGalleryItem(item, index)} className={`group relative min-h-52 overflow-hidden border border-white/10 bg-[#08223c] text-left shadow-[0_16px_40px_rgba(0,0,0,0.22)] ${index === 0 && previewGalleryItems.length > 2 ? "md:col-span-2 lg:row-span-2 lg:min-h-[29rem]" : "lg:min-h-56"}`}>
+              <img src={item.resolvedUrl} alt={item.altText || item.caption || destination.title} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#021326f2] via-transparent to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-4 text-xs leading-5 text-[#d5e0ea]">{item.caption || item.altText || item.kind}</div>
             </button>
           ))}
         </div>
@@ -1750,7 +1773,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             </button>
           </div>
         ) : null}
-      </section>
+        </section>
 
       {selectedMedia ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-4 backdrop-blur-sm" onClick={() => setSelectedMedia(null)}>
@@ -1788,7 +1811,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">Fast overview</p>
                 <p className="mt-3 text-sm leading-8 text-slate-400">{premiumContent.overviewArticle || destination.overview}</p>
                 <div className="mt-4 rounded-2xl border border-cyan-400/20 bg-cyan-500/10 p-4">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">What you'll learn</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">What you&apos;ll learn</p>
                   <ul className="mt-3 space-y-2 text-sm leading-7 text-slate-200">
                     <li>• Whether the destination deserves serious consideration</li>
                     <li>• Which facts matter most before you dig deeper</li>
@@ -1839,12 +1862,17 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             </Link>
           </div>
             </div>
-            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="mt-6 divide-y divide-white/10 border-y border-white/10">
               {scoreCards.map((category) => (
-                <div key={category.name} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
-                  <p className="text-sm font-semibold text-white">{category.name}</p>
-                  <p className="mt-3 text-3xl font-black text-cyan-300">{category.score}/100</p>
-                  <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-400">{hasV31Bundle ? (category as { label?: string }).label ?? "" : `${category.weight}% weight`}</p>
+                <div key={category.name} className="grid items-center gap-3 py-4 sm:grid-cols-[180px_minmax(0,1fr)_90px]">
+                  <div>
+                    <p className="text-sm font-semibold text-[#edf2fb]">{category.name}</p>
+                    <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#eabc5b]">{hasV31Bundle ? (category as { label?: string }).label ?? "Destination attribute" : `${category.weight}% weight`}</p>
+                  </div>
+                  <div className="h-2 overflow-hidden bg-[#03142a]" aria-hidden="true">
+                    <div className="h-full bg-[linear-gradient(90deg,#11aeb6,#55c7c9,#f0bd56)]" style={{ width: `${Math.max(0, Math.min(category.score, 100))}%` }} />
+                  </div>
+                  <p className="text-left font-serif text-3xl text-[#69d5d4] sm:text-right">{category.score}/100</p>
                 </div>
               ))}
             </div>
@@ -1949,13 +1977,20 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                 <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Neighborhood summary</p>
                 <h2 className="mt-3 text-2xl font-semibold text-white">How the city is experienced block by block</h2>
               </div>
-              <div className="rounded-3xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-200">{neighborhoods.length} flagship districts</div>
+              <div className="rounded-3xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-200">{visibleNeighborhoods.length} of {neighborhoods.length} districts</div>
             </div>
             <div className="mt-6 space-y-4">
-              {neighborhoods.map((neighborhood, index) => (
+              {visibleNeighborhoods.map((neighborhood, index) => (
                 <ExpandableNeighborhoodCard key={neighborhood.name} neighborhood={neighborhood} index={index} destination={destination} />
               ))}
             </div>
+            {hasMoreNeighborhoods || canShowFewerNeighborhoods ? (
+              <div className="mt-4 flex justify-center">
+                <button type="button" onClick={() => setVisibleNeighborhoodCount(hasMoreNeighborhoods ? Math.min(8, neighborhoods.length) : 4)} className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-5 py-2.5 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/50 hover:bg-cyan-500/20">
+                  {hasMoreNeighborhoods ? "Explore more neighborhoods" : "Show fewer neighborhoods"}
+                </button>
+              </div>
+            ) : null}
           </section>
 
           <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
@@ -2050,10 +2085,17 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               </div>
             </div>
             <div className="mt-6 space-y-4">
-              {neighborhoods.map((neighborhood, index) => (
+              {visibleNeighborhoods.map((neighborhood, index) => (
                 <ExpandableNeighborhoodCard key={neighborhood.name} neighborhood={neighborhood} index={index} destination={destination} />
               ))}
             </div>
+            {hasMoreNeighborhoods || canShowFewerNeighborhoods ? (
+              <div className="mt-4 flex justify-center">
+                <button type="button" onClick={() => setVisibleNeighborhoodCount(hasMoreNeighborhoods ? Math.min(8, neighborhoods.length) : 4)} className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-5 py-2.5 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/50 hover:bg-cyan-500/20">
+                  {hasMoreNeighborhoods ? "Explore more neighborhoods" : "Show fewer neighborhoods"}
+                </button>
+              </div>
+            ) : null}
           </section>
 
           <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
@@ -2118,13 +2160,13 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                   <h2 className="mt-3 text-2xl font-semibold text-white">Real destination-specific data</h2>
                 </div>
               </div>
-              <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <div className="mt-6 grid border-t border-white/10 md:grid-cols-2">
                 {v31RichModuleCards.map((card) => (
-                  <div key={card.title} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">{card.title}</p>
-                    <ul className="mt-3 space-y-2">
+                  <div key={card.title} className="border-b border-white/10 py-4 md:px-5 md:[&:nth-child(odd)]:border-r">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#eabc5b]">{card.title}</p>
+                    <ul className="mt-2 divide-y divide-white/10">
                       {card.lines.map((line, index) => (
-                        <li key={index} className="text-sm leading-6 text-slate-300">{line}</li>
+                        <li key={index} className="py-2 text-sm leading-6 text-[#b7c8d8]">{line}</li>
                       ))}
                     </ul>
                   </div>
@@ -2200,6 +2242,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
           </div>
         </section>
       ) : null}
-    </main>
+      </main>
+      <Footer />
+    </>
   );
 }
