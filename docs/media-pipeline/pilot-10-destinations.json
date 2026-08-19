@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "pilotId": "missing-card-media-pilot-2026-08",
+  "selectionBasis": "Exact live /destinations cards with no verified image candidate at checkpoint 758f57e1b5cdb8b282e46ce530fda0eb619873d2",
+  "destinations": [
+    { "slug": "beppu-japan", "destinationKey": null, "city": "Beppu", "country": "Japan", "articleTitle": "Beppu", "identityAliases": [] },
+    { "slug": "matsumoto-japan", "destinationKey": null, "city": "Matsumoto", "country": "Japan", "articleTitle": "Matsumoto, Nagano", "identityAliases": [] },
+    { "slug": "novigrad-croatia", "destinationKey": null, "city": "Novigrad", "country": "Croatia", "articleTitle": "Novigrad", "identityAliases": [] },
+    { "slug": "siracusa-italy", "destinationKey": null, "city": "Siracusa", "country": "Italy", "articleTitle": "Syracuse, Sicily", "identityAliases": ["Syracuse"] },
+    { "slug": "kardamyli-greece", "destinationKey": null, "city": "Kardamyli", "country": "Greece", "articleTitle": "Kardamyli", "identityAliases": [] },
+    { "slug": "korcula-town-croatia", "destinationKey": null, "city": "Korčula Town", "country": "Croatia", "articleTitle": "Korčula", "identityAliases": ["Korčula", "Korcula"] },
+    { "slug": "kagoshima-japan", "destinationKey": null, "city": "Kagoshima", "country": "Japan", "articleTitle": "Kagoshima", "identityAliases": [] },
+    { "slug": "agios-nikolaos-greece", "destinationKey": null, "city": "Agios Nikolaos", "country": "Greece", "articleTitle": "Agios Nikolaos, Crete", "identityAliases": [] },
+    { "slug": "ulcinj-montenegro", "destinationKey": null, "city": "Ulcinj", "country": "Montenegro", "articleTitle": "Ulcinj", "identityAliases": [] },
+    { "slug": "ericeira-portugal", "destinationKey": null, "city": "Ericeira", "country": "Portugal", "articleTitle": "Ericeira", "identityAliases": [] }
+  ]
+}

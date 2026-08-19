@@ -1,0 +1,504 @@
+{
+  "schemaVersion": 1,
+  "manifestId": "media-pilot-373148878e0c26b6cfbc2c34",
+  "pilotId": "missing-card-media-pilot-2026-08",
+  "generatedAt": "2026-08-19T05:16:23.543Z",
+  "mode": "stage_only",
+  "productionWritePerformed": false,
+  "runtimeMapsModified": false,
+  "humanApprovalRequired": true,
+  "destinations": [
+    {
+      "slug": "beppu-japan",
+      "destinationKey": null,
+      "city": "Beppu",
+      "country": "Japan",
+      "articleTitle": "Beppu",
+      "identityAliases": []
+    },
+    {
+      "slug": "matsumoto-japan",
+      "destinationKey": null,
+      "city": "Matsumoto",
+      "country": "Japan",
+      "articleTitle": "Matsumoto, Nagano",
+      "identityAliases": []
+    },
+    {
+      "slug": "novigrad-croatia",
+      "destinationKey": null,
+      "city": "Novigrad",
+      "country": "Croatia",
+      "articleTitle": "Novigrad",
+      "identityAliases": []
+    },
+    {
+      "slug": "siracusa-italy",
+      "destinationKey": null,
+      "city": "Siracusa",
+      "country": "Italy",
+      "articleTitle": "Syracuse, Sicily",
+      "identityAliases": [
+        "Syracuse"
+      ]
+    },
+    {
+      "slug": "kardamyli-greece",
+      "destinationKey": null,
+      "city": "Kardamyli",
+      "country": "Greece",
+      "articleTitle": "Kardamyli",
+      "identityAliases": []
+    },
+    {
+      "slug": "korcula-town-croatia",
+      "destinationKey": null,
+      "city": "Korčula Town",
+      "country": "Croatia",
+      "articleTitle": "Korčula",
+      "identityAliases": [
+        "Korčula",
+        "Korcula"
+      ]
+    },
+    {
+      "slug": "kagoshima-japan",
+      "destinationKey": null,
+      "city": "Kagoshima",
+      "country": "Japan",
+      "articleTitle": "Kagoshima",
+      "identityAliases": []
+    },
+    {
+      "slug": "agios-nikolaos-greece",
+      "destinationKey": null,
+      "city": "Agios Nikolaos",
+      "country": "Greece",
+      "articleTitle": "Agios Nikolaos, Crete",
+      "identityAliases": []
+    },
+    {
+      "slug": "ulcinj-montenegro",
+      "destinationKey": null,
+      "city": "Ulcinj",
+      "country": "Montenegro",
+      "articleTitle": "Ulcinj",
+      "identityAliases": []
+    },
+    {
+      "slug": "ericeira-portugal",
+      "destinationKey": null,
+      "city": "Ericeira",
+      "country": "Portugal",
+      "articleTitle": "Ericeira",
+      "identityAliases": []
+    }
+  ],
+  "destinationResults": [
+    {
+      "slug": "beppu-japan",
+      "articleTitle": "Beppu",
+      "candidatesDiscovered": 1,
+      "reason": null
+    },
+    {
+      "slug": "matsumoto-japan",
+      "articleTitle": "Matsumoto, Nagano",
+      "candidatesDiscovered": 1,
+      "reason": null
+    },
+    {
+      "slug": "novigrad-croatia",
+      "articleTitle": "Novigrad, Istria County",
+      "candidatesDiscovered": 1,
+      "reason": null
+    },
+    {
+      "slug": "siracusa-italy",
+      "articleTitle": "Syracuse, Sicily",
+      "candidatesDiscovered": 1,
+      "reason": null
+    },
+    {
+      "slug": "kardamyli-greece",
+      "articleTitle": "Kardamyli",
+      "candidatesDiscovered": 1,
+      "reason": null
+    },
+    {
+      "slug": "korcula-town-croatia",
+      "articleTitle": "Korčula",
+      "candidatesDiscovered": 1,
+      "reason": null
+    },
+    {
+      "slug": "kagoshima-japan",
+      "articleTitle": null,
+      "candidatesDiscovered": 0,
+      "reason": "destination_article_not_resolved"
+    },
+    {
+      "slug": "agios-nikolaos-greece",
+      "articleTitle": null,
+      "candidatesDiscovered": 0,
+      "reason": "destination_article_not_resolved"
+    },
+    {
+      "slug": "ulcinj-montenegro",
+      "articleTitle": null,
+      "candidatesDiscovered": 0,
+      "reason": "destination_article_not_resolved"
+    },
+    {
+      "slug": "ericeira-portugal",
+      "articleTitle": null,
+      "candidatesDiscovered": 0,
+      "reason": "destination_article_not_resolved"
+    }
+  ],
+  "candidates": [
+    {
+      "candidateId": "bb83d473c1fa279c66799f1f",
+      "destinationSlug": "beppu-japan",
+      "destinationKey": null,
+      "city": "Beppu",
+      "country": "Japan",
+      "candidateUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Beppu_City_Hall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "normalizedUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Beppu_City_Hall.jpg",
+      "canonicalSourcePage": "https://commons.wikimedia.org/wiki/File%3ABeppu_City_Hall.jpg",
+      "creator": "大分帰省中",
+      "rightsHolder": "大分帰省中",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "requiredAttribution": "大分帰省中, CC BY 3.0, via Wikimedia Commons",
+      "width": 1600,
+      "height": 1200,
+      "mime": "image/jpeg",
+      "checksum": "8b01c0b9ab7a14007df873ebf4d11564bd0880074a55ea3b800b0be3fd169ed6",
+      "sourceIdentityEvidence": {
+        "destinationSlug": "beppu-japan",
+        "articleTitle": "Beppu",
+        "articleDescription": "City in Kyushu, Japan",
+        "fileTitle": "File:Beppu_City_Hall.jpg",
+        "imageDescription": "Beppu City Hall, Beppu City, Oita Pref., Japan",
+        "cityMatched": true,
+        "countryMatched": true,
+        "matchedTerms": [
+          "Beppu",
+          "Japan"
+        ]
+      },
+      "discoveredAt": "2026-08-19T05:16:23.543Z",
+      "status": "needs_review",
+      "review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null
+      },
+      "rejectionReason": null,
+      "transform": {
+        "resized": false,
+        "cropped": false
+      },
+      "localDerivativePath": null,
+      "http": {
+        "status": 200,
+        "redirected": false,
+        "finalUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Beppu_City_Hall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+      },
+      "validation": {
+        "checkedAt": "2026-08-19T05:16:23.543Z",
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "candidateId": "829eae6165c4f84e51469785",
+      "destinationSlug": "matsumoto-japan",
+      "destinationKey": null,
+      "city": "Matsumoto",
+      "country": "Japan",
+      "candidateUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/250425_Mount_Nabekanmuri_and_Matsumoto_Castle_Matsumoto_Nagano_pref_Japan01s3.jpg/1920px-250425_Mount_Nabekanmuri_and_Matsumoto_Castle_Matsumoto_Nagano_pref_Japan01s3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "normalizedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/250425_Mount_Nabekanmuri_and_Matsumoto_Castle_Matsumoto_Nagano_pref_Japan01s3.jpg/1920px-250425_Mount_Nabekanmuri_and_Matsumoto_Castle_Matsumoto_Nagano_pref_Japan01s3.jpg",
+      "canonicalSourcePage": "https://commons.wikimedia.org/wiki/File%3A250425_Mount_Nabekanmuri_and_Matsumoto_Castle_Matsumoto_Nagano_pref_Japan01s3.jpg",
+      "creator": "663highland",
+      "rightsHolder": "663highland",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "requiredAttribution": "663highland, CC BY-SA 4.0, via Wikimedia Commons",
+      "width": 1600,
+      "height": 1067,
+      "mime": "image/jpeg",
+      "checksum": "63ff835e61fc32726fd72007ce7bafafb7671051d5ba59236f259f121cc965e0",
+      "sourceIdentityEvidence": {
+        "destinationSlug": "matsumoto-japan",
+        "articleTitle": "Matsumoto, Nagano",
+        "articleDescription": "Core city in Nagano, Chūbu, Japan",
+        "fileTitle": "File:250425_Mount_Nabekanmuri_and_Matsumoto_Castle_Matsumoto_Nagano_pref_Japan01s3.jpg",
+        "imageDescription": "Matsumoto Castle and Hida Mountains in Matsumoto , Nagano prefecture , Japan",
+        "cityMatched": true,
+        "countryMatched": true,
+        "matchedTerms": [
+          "Matsumoto",
+          "Japan"
+        ]
+      },
+      "discoveredAt": "2026-08-19T05:16:23.543Z",
+      "status": "needs_review",
+      "review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null
+      },
+      "rejectionReason": null,
+      "transform": {
+        "resized": false,
+        "cropped": false
+      },
+      "localDerivativePath": null,
+      "http": {
+        "status": 200,
+        "redirected": false,
+        "finalUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/250425_Mount_Nabekanmuri_and_Matsumoto_Castle_Matsumoto_Nagano_pref_Japan01s3.jpg/1920px-250425_Mount_Nabekanmuri_and_Matsumoto_Castle_Matsumoto_Nagano_pref_Japan01s3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      },
+      "validation": {
+        "checkedAt": "2026-08-19T05:16:23.543Z",
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "candidateId": "de19e236d78eebb7e7eac869",
+      "destinationSlug": "novigrad-croatia",
+      "destinationKey": null,
+      "city": "Novigrad",
+      "country": "Croatia",
+      "candidateUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Novigrad_%28Istria%29.jpg/1920px-Novigrad_%28Istria%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "normalizedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Novigrad_%28Istria%29.jpg/1920px-Novigrad_%28Istria%29.jpg",
+      "canonicalSourcePage": "https://commons.wikimedia.org/wiki/File%3ANovigrad_(Istria).jpg",
+      "creator": "Petar Milošević",
+      "rightsHolder": "Petar Milošević",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "requiredAttribution": "Petar Milošević, CC BY-SA 4.0, via Wikimedia Commons",
+      "width": 1600,
+      "height": 630,
+      "mime": "text/html",
+      "checksum": "699a3eaea76e54ae5c924c307d7821bca9932610000000000000000000000000",
+      "sourceIdentityEvidence": {
+        "destinationSlug": "novigrad-croatia",
+        "articleTitle": "Novigrad, Istria County",
+        "articleDescription": "Town in Istria, Croatia",
+        "fileTitle": "File:Novigrad_(Istria).jpg",
+        "imageDescription": "Novigrad (Cittanova) in Istria, Croatia. Part of fishing boats are anchored in old harbour.",
+        "cityMatched": true,
+        "countryMatched": true,
+        "matchedTerms": [
+          "Novigrad",
+          "Croatia"
+        ]
+      },
+      "discoveredAt": "2026-08-19T05:16:23.543Z",
+      "status": "validation_failed",
+      "review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null
+      },
+      "rejectionReason": "broken_url, invalid_image_mime",
+      "transform": {
+        "resized": false,
+        "cropped": false
+      },
+      "localDerivativePath": null,
+      "http": {
+        "status": 429,
+        "redirected": false,
+        "finalUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Novigrad_%28Istria%29.jpg/1920px-Novigrad_%28Istria%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      },
+      "validation": {
+        "checkedAt": "2026-08-19T05:16:23.543Z",
+        "errors": [
+          "broken_url",
+          "invalid_image_mime"
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "candidateId": "7a88c78101a848ced959d48a",
+      "destinationSlug": "siracusa-italy",
+      "destinationKey": null,
+      "city": "Siracusa",
+      "country": "Italy",
+      "candidateUrl": "https://upload.wikimedia.org/wikipedia/commons/3/34/Sir_Winston_Churchill_visit_the_British_War_Cemetery_in_Syracuse%2C_1955.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "normalizedUrl": "https://upload.wikimedia.org/wikipedia/commons/3/34/Sir_Winston_Churchill_visit_the_British_War_Cemetery_in_Syracuse%2C_1955.jpg",
+      "canonicalSourcePage": "https://commons.wikimedia.org/wiki/File%3ASir_Winston_Churchill_visit_the_British_War_Cemetery_in_Syracuse%2C_1955.jpg",
+      "creator": "autore della foto sconosciuto",
+      "rightsHolder": "autore della foto sconosciuto",
+      "license": "Public domain",
+      "licenseUrl": "",
+      "requiredAttribution": "autore della foto sconosciuto, Public domain, via Wikimedia Commons",
+      "width": 1600,
+      "height": 992,
+      "mime": "text/html",
+      "checksum": "55515ab86ea8062788d778a1947e3823c6cc524d000000000000000000000000",
+      "sourceIdentityEvidence": {
+        "destinationSlug": "siracusa-italy",
+        "articleTitle": "Syracuse, Sicily",
+        "articleDescription": "City in Sicily, Italy",
+        "fileTitle": "File:Sir_Winston_Churchill_visit_the_British_War_Cemetery_in_Syracuse,_1955.jpg",
+        "imageDescription": "Sir Winston Churchill visit the British War Cemetery in Syracuse, 1955",
+        "cityMatched": true,
+        "countryMatched": true,
+        "matchedTerms": [
+          "Siracusa",
+          "Italy"
+        ]
+      },
+      "discoveredAt": "2026-08-19T05:16:23.543Z",
+      "status": "validation_failed",
+      "review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null
+      },
+      "rejectionReason": "license_url_mismatch, broken_url, invalid_image_mime",
+      "transform": {
+        "resized": false,
+        "cropped": false
+      },
+      "localDerivativePath": null,
+      "http": {
+        "status": 429,
+        "redirected": false,
+        "finalUrl": "https://upload.wikimedia.org/wikipedia/commons/3/34/Sir_Winston_Churchill_visit_the_British_War_Cemetery_in_Syracuse%2C_1955.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+      },
+      "validation": {
+        "checkedAt": "2026-08-19T05:16:23.543Z",
+        "errors": [
+          "license_url_mismatch",
+          "broken_url",
+          "invalid_image_mime"
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "candidateId": "9de2078f55f6485b0c6f5c30",
+      "destinationSlug": "kardamyli-greece",
+      "destinationKey": null,
+      "city": "Kardamyli",
+      "country": "Greece",
+      "candidateUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Kardamyli_02.jpg/1920px-Kardamyli_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "normalizedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Kardamyli_02.jpg/1920px-Kardamyli_02.jpg",
+      "canonicalSourcePage": "https://commons.wikimedia.org/wiki/File%3AKardamyli_02.jpg",
+      "creator": "Harald Rossa",
+      "rightsHolder": "Harald Rossa",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "requiredAttribution": "Harald Rossa, CC BY-SA 3.0, via Wikimedia Commons",
+      "width": 1600,
+      "height": 2400,
+      "mime": "text/html",
+      "checksum": "50964e98758478b668906ab623cba8b278f8809e000000000000000000000000",
+      "sourceIdentityEvidence": {
+        "destinationSlug": "kardamyli-greece",
+        "articleTitle": "Kardamyli",
+        "articleDescription": "Village in Messenia, Greece",
+        "fileTitle": "File:Kardamyli_02.jpg",
+        "imageDescription": "Impression aus Kardamyli",
+        "cityMatched": true,
+        "countryMatched": true,
+        "matchedTerms": [
+          "Kardamyli",
+          "Greece"
+        ]
+      },
+      "discoveredAt": "2026-08-19T05:16:23.543Z",
+      "status": "validation_failed",
+      "review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null
+      },
+      "rejectionReason": "broken_url, invalid_image_mime",
+      "transform": {
+        "resized": false,
+        "cropped": false
+      },
+      "localDerivativePath": null,
+      "http": {
+        "status": 429,
+        "redirected": false,
+        "finalUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Kardamyli_02.jpg/1920px-Kardamyli_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      },
+      "validation": {
+        "checkedAt": "2026-08-19T05:16:23.543Z",
+        "errors": [
+          "broken_url",
+          "invalid_image_mime"
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "candidateId": "e040e48581691637152fd11e",
+      "destinationSlug": "korcula-town-croatia",
+      "destinationKey": null,
+      "city": "Korčula Town",
+      "country": "Croatia",
+      "candidateUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Kor%C4%8Dula_Old_Town%2C_Croatia_%282024%29.jpg/1920px-Kor%C4%8Dula_Old_Town%2C_Croatia_%282024%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "normalizedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Kor%C4%8Dula_Old_Town%2C_Croatia_%282024%29.jpg/1920px-Kor%C4%8Dula_Old_Town%2C_Croatia_%282024%29.jpg",
+      "canonicalSourcePage": "https://commons.wikimedia.org/wiki/File%3AKor%C4%8Dula_Old_Town%2C_Croatia_(2024).jpg",
+      "creator": "Quintin Soloviev",
+      "rightsHolder": "Quintin Soloviev",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+      "requiredAttribution": "Quintin Soloviev, CC BY 4.0, via Wikimedia Commons",
+      "width": 1600,
+      "height": 1233,
+      "mime": "text/html",
+      "checksum": "266ea807c3521e9f7ef1672dc633ef163fe8f5d5000000000000000000000000",
+      "sourceIdentityEvidence": {
+        "destinationSlug": "korcula-town-croatia",
+        "articleTitle": "Korčula",
+        "articleDescription": "Island of Croatia",
+        "fileTitle": "File:Korčula_Old_Town,_Croatia_(2024).jpg",
+        "imageDescription": "Korčula Old Town (2024)",
+        "cityMatched": true,
+        "countryMatched": true,
+        "matchedTerms": [
+          "Korčula Town",
+          "Croatia"
+        ]
+      },
+      "discoveredAt": "2026-08-19T05:16:23.543Z",
+      "status": "validation_failed",
+      "review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null
+      },
+      "rejectionReason": "broken_url, invalid_image_mime",
+      "transform": {
+        "resized": false,
+        "cropped": false
+      },
+      "localDerivativePath": null,
+      "http": {
+        "status": 429,
+        "redirected": false,
+        "finalUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Kor%C4%8Dula_Old_Town%2C_Croatia_%282024%29.jpg/1920px-Kor%C4%8Dula_Old_Town%2C_Croatia_%282024%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      },
+      "validation": {
+        "checkedAt": "2026-08-19T05:16:23.543Z",
+        "errors": [
+          "broken_url",
+          "invalid_image_mime"
+        ],
+        "warnings": []
+      }
+    }
+  ]
+}
