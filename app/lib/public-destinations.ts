@@ -22,7 +22,15 @@ const EXCLUDED_TAGS = new Set([
   "research-pending",
 ]);
 
-const PUBLIC_CATALOG_QUERY_LIMIT = 1000;
+// Page size for paginated Supabase retrieval. This is NOT a total-row ceiling:
+// fetchAllPublishedCatalogRows() loops until a short page is returned, so the
+// full catalog is retrieved regardless of how many rows exist.
+const PUBLIC_CATALOG_PAGE_SIZE = 1000;
+// Defensive guard against a runaway pagination loop (e.g. a misbehaving API
+// response that never returns a short page). Not intended as a realistic
+// product ceiling: it allows up to PUBLIC_CATALOG_PAGE_SIZE * MAX_CATALOG_PAGES
+// rows (10,000,000 at current values).
+const MAX_CATALOG_PAGES = 10000;
 
 const debugPublicCatalog = (...args: unknown[]) => {
   if (process.env.NEXT_PUBLIC_DEBUG_PUBLIC_CATALOG === "1") {
@@ -171,6 +179,59 @@ export const publicDestinationSlugSet = new Set(publicDestinations.map((destinat
 
 export const isPublicDestinationSlug = (slug: string): boolean => publicDestinationSlugSet.has(slug);
 
+type CatalogFetchResult =
+  | { ok: true; rows: DestinationCatalogRow[] }
+  | { ok: false };
+
+// Fetches the entire destinations_catalog table using keyset (cursor) pagination
+// ordered by the primary key `id`, which is deterministic and unique. This
+// removes the old hardcoded 1,000-row ceiling: the loop continues until a page
+// returns fewer rows than the page size, so the result set size is unbounded.
+// Status filtering intentionally stays client-side (see normalizeCatalogRowStatus
+// call sites) to preserve existing case-insensitive/whitespace-tolerant matching
+// semantics exactly; moving to a server-side `status=eq.published` filter would
+// change behavior for non-lowercase status values.
+const fetchAllPublishedCatalogRows = async (): Promise<CatalogFetchResult> => {
+  const rows: DestinationCatalogRow[] = [];
+  let cursor: string | null = null;
+
+  for (let page = 0; page < MAX_CATALOG_PAGES; page += 1) {
+    const cursorClause = cursor ? `&id=gt.${encodeURIComponent(cursor)}` : "";
+    const response = await supabaseFetch(
+      `/rest/v1/destinations_catalog?select=id,slug,city,country,status,description,overview,climate_summary,lifestyle_summary,transportation_summary,metadata&order=id.asc&limit=${PUBLIC_CATALOG_PAGE_SIZE}${cursorClause}`,
+      { cache: "no-store" },
+    );
+
+    if (!response.ok) {
+      debugPublicCatalog("supabase response not ok during pagination; aborting", { status: response.status, page });
+      return { ok: false };
+    }
+
+    const pageRows = (await response.json()) as DestinationCatalogRow[];
+    rows.push(...pageRows);
+
+    debugPublicCatalog("supabase catalog page fetched", {
+      page,
+      pageCount: pageRows.length,
+      totalSoFar: rows.length,
+    });
+
+    if (pageRows.length < PUBLIC_CATALOG_PAGE_SIZE) {
+      return { ok: true, rows };
+    }
+
+    const nextCursor = pageRows[pageRows.length - 1]?.id ?? null;
+    if (!nextCursor) {
+      // No usable cursor on the last row; stop rather than loop forever.
+      return { ok: true, rows };
+    }
+    cursor = nextCursor;
+  }
+
+  debugPublicCatalog("supabase pagination hit MAX_CATALOG_PAGES guard", { rows: rows.length });
+  return { ok: true, rows };
+};
+
 export async function getPublicDestinations(): Promise<Destination[]> {
   const localDestinations = enrichedDestinations.filter((destination) => !hasExcludedTag(destination));
   logLoadedCatalogSummary(localDestinations, "fallback-local");
@@ -199,17 +260,14 @@ export async function getPublicDestinations(): Promise<Destination[]> {
   }
 
   try {
-    const response = await supabaseFetch(
-      `/rest/v1/destinations_catalog?select=id,slug,city,country,status,description,overview,climate_summary,lifestyle_summary,transportation_summary,metadata&limit=${PUBLIC_CATALOG_QUERY_LIMIT}`,
-      { cache: "no-store" },
-    );
+    const catalogResult = await fetchAllPublishedCatalogRows();
 
-    if (!response.ok) {
-      debugPublicCatalog("supabase response not ok; using local fallback dataset", { status: response.status });
+    if (!catalogResult.ok) {
+      debugPublicCatalog("supabase pagination failed; using local fallback dataset", {});
       return localDestinations;
     }
 
-    const rows = (await response.json()) as DestinationCatalogRow[];
+    const rows = catalogResult.rows;
     const publishedRows = [
       ...rows.filter((row) => normalizeCatalogRowStatus(row.status) === "published"),
       ...fallbackDestinations,
