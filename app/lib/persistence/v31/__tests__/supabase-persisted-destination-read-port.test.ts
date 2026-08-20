@@ -203,7 +203,7 @@ describe("createSupabasePersistedDestinationReadPort", () => {
 
     expect(result.value).toEqual({
       facts: [{ destinationId: "dest-id-a", destinationKey: "dest-a", factKey: "fact-1", factGroup: null, valueText: null, displayLabel: null, sourceName: null }],
-      scores: [{ destinationId: "dest-id-a", destinationKey: "dest-a", scoreKey: "score-1", scoreValue: "5", scoreLabel: null, methodologyVersion: null }],
+      scores: [{ destinationId: "dest-id-a", destinationKey: "dest-a", scoreKey: "score-1", scoreValue: "5", scoreLabel: null, methodologyVersion: null, verified: null, verifiedAt: null }],
       neighborhoods: [{ destinationId: "dest-id-a", destinationKey: "dest-a", neighborhoodKey: "hood-1", name: "Old Town", summary: null, areaType: "urban" }],
       places: [{ destinationId: "dest-id-a", destinationKey: "dest-a", placeKey: "place-1", category: "food", name: "Market", description: "Nice market", neighborhoodKey: "hood-1", websiteUrl: "https://example.com/market", googleMapsUrl: "https://maps.example.com/market", sourceUrl: "https://example.com/source-market", address: "123 Main St", phone: "+1 555-1234", displayOrder: "1" }],
       resources: [{ destinationId: "dest-id-a", destinationKey: "dest-a", resourceKey: "resource-1", category: "gov", name: "Visa office", url: "https://example.com" }],
@@ -222,16 +222,16 @@ describe("createSupabasePersistedDestinationReadPort", () => {
       premium_climate_monthly: [{ destination_id: "dest-id-a", destination_key: "dest-a", record_key: "month-1", month_key: "january", avg_high_temp: 20, avg_low_temp: 10, precipitation_mm: 100, humidity_pct: 75 }],
       premium_housing_property: [{ destination_id: "dest-id-a", destination_key: "dest-a", record_key: "housing-1", restrictions_summary: "Limited", buying_process_summary: "Easy", rental_rules_notes: "Strict" }],
       premium_healthcare_insurance: [{ destination_id: "dest-id-a", destination_key: "dest-a", record_key: "health-1", system_summary: "Good", public_access_foreigners: "Easy", international_insurance_notes: "Required" }],
-      premium_visa_residency: [{ destination_id: "dest-id-a", destination_key: "dest-a", record_key: "visa-1", visa_type: "D", permanent_residency_path: "Long", citizenship_path: "Long" }],
+      premium_visa_residency: [{ destination_id: "dest-id-a", destination_key: "dest-a", record_key: "visa-1", visa_type: "D", permanent_residency_path: "Long", citizenship_path: "Long", traveler_nationality: "US" }],
       premium_taxes_finance: [{ destination_id: "dest-id-a", destination_key: "dest-a", record_key: "tax-1", summary: "Simple", notes: "No issues" }],
       premium_lgbtq_inclusivity: [{ destination_id: "dest-id-a", destination_key: "dest-a", position: 2, summary: "Friendly", cultural_notes: "Welcoming" }],
       premium_safety_risks: [{ destination_id: "dest-id-a", destination_key: "dest-a", record_key: "risk-1", topic: "flood", severity: "medium", summary: "Occasional" }],
-      premium_transport_airports: [{ destination_id: "dest-id-a", destination_key: "dest-a", record_key: "transport-1", summary: "Good access", name: "Airport", public_transit_available: true }],
+      premium_transport_airports: [{ destination_id: "dest-id-a", destination_key: "dest-a", record_key: "transport-1", summary: "Good access", name: "Airport", public_transit_available: true, topic: "airport", distance_km: 15, typical_drive_minutes: 20, nonstop_us_service: true, car_needed_rating: "low", parking_notes: "Ample", rideshare_notes: "Available" }],
       premium_connectivity_remote_work: [{ destination_id: "dest-id-a", destination_key: "dest-a", record_key: "remote-1", remote_work_notes: "Fast", avg_download_mbps: 300, fiber_available: "yes", mobile_5g: "yes", utility_reliability: null, coworking_summary: null, us_time_zone_fit: "Good" }],
-      premium_language_integration: [{ destination_id: "dest-id-a", destination_key: "dest-a", position: 1, summary: "English works", english_support: "Good" }],
+      premium_language_integration: [{ destination_id: "dest-id-a", destination_key: "dest-a", position: 1, summary: "English works", english_support: "Good", primary_language: "English", english_proficiency: "Native", government_english_access: "Yes", medical_english_access: "Yes", language_resources: "None needed" }],
       premium_pets: [{ destination_id: "dest-id-a", destination_key: "dest-a", position: 3, summary: "Pet friendly", pet_friendly_notes: "Good" }],
       premium_family_education: [{ destination_id: "dest-id-a", destination_key: "dest-a", position: 4, summary: "Schools", schools_summary: "Great" }],
-      premium_community_social: [{ destination_id: "dest-id-a", destination_key: "dest-a", position: 5, summary: "Social", social_notes: "Active" }],
+      premium_community_social: [{ destination_id: "dest-id-a", destination_key: "dest-a", position: 5, summary: "Social", social_notes: "Active", expat_presence: "High", volunteering: "Common", ease_meeting_people: "Easy", age_mix: "Mixed", transient_vs_rooted: "Rooted" }],
       premium_accessibility: [{ destination_id: "dest-id-a", destination_key: "dest-a", position: 6, summary: "Wheelchair", mobility_notes: "Good" }],
       premium_bureaucracy_setup: [{ destination_id: "dest-id-a", destination_key: "dest-a", position: 7, summary: "Setup", setup_notes: "Easy" }],
       premium_work_business: [{ destination_id: "dest-id-a", destination_key: "dest-a", position: 8, summary: "Work", remote_work_notes: "Easy" }],
@@ -249,20 +249,20 @@ describe("createSupabasePersistedDestinationReadPort", () => {
     }
 
     expect(result.value).toEqual({
-      costOfLiving: [{ destinationId: "dest-id-a", destinationKey: "dest-a", itemKey: "col-1", category: "rent", monthlyLow: "2000", monthlyHigh: "3000", currency: "USD" }],
+      costOfLiving: [{ destinationId: "dest-id-a", destinationKey: "dest-a", itemKey: "col-1", category: "rent", monthlyLow: "2000", monthlyHigh: "3000", currency: "USD", stayModeKey: null, verified: null, verifiedAt: null }],
       climateMonthly: [{ destinationId: "dest-id-a", destinationKey: "dest-a", monthKey: "month-1", avgHighTemp: "20", avgLowTemp: "10", precipitationMm: "100", humidityPct: "75" }],
-      housing: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "Limited", buyingSummary: "Easy", rentalSummary: "Strict" }],
-      healthcare: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "Good", publicAccessSummary: "Easy", insuranceSummary: "Required" }],
-      visaResidency: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "D", residencyPath: "Long", citizenshipPath: "Long" }],
-      taxesFinance: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "Simple", notes: "No issues" }],
-      lgbtqInclusivity: [{ destinationId: "dest-id-a", destinationKey: "dest-a", position: 2, summary: "Friendly", culturalNotes: "Welcoming" }],
-      safetyRisks: [{ destinationId: "dest-id-a", destinationKey: "dest-a", itemKey: "risk-1", topic: "flood", severity: "medium", summary: "Occasional" }],
-      transportation: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "Good access", airportSummary: "Airport", transitSummary: "true" }],
-      remoteWork: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "Fast", internetSummary: "300", timezoneSummary: "Good" }],
-      languageIntegration: [{ destinationId: "dest-id-a", destinationKey: "dest-a", position: 1, summary: "English works", englishSupport: "Good" }],
+      housing: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "Limited", buyingSummary: "Easy", rentalSummary: "Strict", stayModeKey: null, canForeignersBuy: null, residencyRequiredToBuy: null, verified: null, verifiedAt: null }],
+      healthcare: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "Good", publicAccessSummary: "Easy", insuranceSummary: "Required", topic: null, englishSpeakingCare: null, typicalGpVisitCost: null, typicalSpecialistCost: null, verified: null, verifiedAt: null }],
+      visaResidency: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "D", residencyPath: "Long", citizenshipPath: "Long", stayModeKey: null, travelerNationality: "US", verified: null, verifiedAt: null }],
+      taxesFinance: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "Simple", notes: "No issues", verified: null, verifiedAt: null }],
+      lgbtqInclusivity: [{ destinationId: "dest-id-a", destinationKey: "dest-a", position: 2, summary: "Friendly", culturalNotes: "Welcoming", overallRating: null, legalProtections: null, socialAcceptance: null, prideEvents: null, nightlifeSocial: null, healthcareAccess: null, areasResources: null, safetyConsiderations: null, verified: null, verifiedAt: null }],
+      safetyRisks: [{ destinationId: "dest-id-a", destinationKey: "dest-a", itemKey: "risk-1", topic: "flood", severity: "medium", summary: "Occasional", verified: null, verifiedAt: null }],
+      transportation: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "Good access", airportSummary: "Airport", transitSummary: "true", topic: "airport", distanceKm: "15", typicalDriveMinutes: "20", nonstopUsService: "true", carNeededRating: "low", parkingNotes: "Ample", rideshareNotes: "Available", verified: null, verifiedAt: null }],
+      remoteWork: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "Fast", internetSummary: "300", timezoneSummary: "Good", fiberAvailable: "yes", mobile5g: "yes", utilityReliability: null, coworkingSummary: null, verified: null, verifiedAt: null }],
+      languageIntegration: [{ destinationId: "dest-id-a", destinationKey: "dest-a", position: 1, summary: "English works", englishSupport: "Good", primaryLanguage: "English", englishProficiency: "Native", governmentEnglishAccess: "Yes", medicalEnglishAccess: "Yes", languageResources: "None needed", verified: null, verifiedAt: null }],
       pets: [{ destinationId: "dest-id-a", destinationKey: "dest-a", position: 3, summary: "Pet friendly", petFriendlyNotes: "Good" }],
       familyEducation: [{ destinationId: "dest-id-a", destinationKey: "dest-a", position: 4, summary: "Schools", schoolsSummary: "Great" }],
-      communitySocial: [{ destinationId: "dest-id-a", destinationKey: "dest-a", position: 5, summary: "Social", socialNotes: "Active" }],
+      communitySocial: [{ destinationId: "dest-id-a", destinationKey: "dest-a", position: 5, summary: "Social", socialNotes: "Active", expatPresence: "High", volunteering: "Common", easeMeetingPeople: "Easy", ageMix: "Mixed", transientVsRooted: "Rooted", verified: null, verifiedAt: null }],
       accessibility: [{ destinationId: "dest-id-a", destinationKey: "dest-a", position: 6, summary: "Wheelchair", mobilityNotes: "Good" }],
       bureaucracySetup: [{ destinationId: "dest-id-a", destinationKey: "dest-a", position: 7, summary: "Setup", setupNotes: "Easy" }],
       workBusiness: [{ destinationId: "dest-id-a", destinationKey: "dest-a", position: 8, summary: "Work", remoteWorkNotes: "Easy" }],
@@ -297,8 +297,8 @@ describe("createSupabasePersistedDestinationReadPort", () => {
     };
 
     expect(groupedValue.lgbtqInclusivity).toEqual([
-      { destinationId: "dest-id-a", destinationKey: "dest-a", position: 3, summary: "Third", culturalNotes: null },
-      { destinationId: "dest-id-a", destinationKey: "dest-a", position: 1, summary: "First", culturalNotes: null },
+      { destinationId: "dest-id-a", destinationKey: "dest-a", position: 3, summary: "Third", culturalNotes: null, overallRating: null, legalProtections: null, socialAcceptance: null, prideEvents: null, nightlifeSocial: null, healthcareAccess: null, areasResources: null, safetyConsiderations: null, verified: null, verifiedAt: null },
+      { destinationId: "dest-id-a", destinationKey: "dest-a", position: 1, summary: "First", culturalNotes: null, overallRating: null, legalProtections: null, socialAcceptance: null, prideEvents: null, nightlifeSocial: null, healthcareAccess: null, areasResources: null, safetyConsiderations: null, verified: null, verifiedAt: null },
     ]);
   });
 

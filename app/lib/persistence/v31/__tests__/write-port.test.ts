@@ -424,8 +424,8 @@ describe("write-port statement translation", () => {
     expect(statements[0].values).toEqual([DEST_ID, DEST_KEY]);
     expect(statements[1].text).toContain("insert into public.premium_cost_of_living");
     expect(statements[1].text).toContain("record_key");
-    expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "housing", "1200", "1800", "USD"]);
-    expect(statements[2].values).toEqual([DEST_ID, DEST_KEY, "record-2", "groceries", "300", "500", "USD"]);
+    expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "housing", "1200", "1800", "USD", null, null, null]);
+    expect(statements[2].values).toEqual([DEST_ID, DEST_KEY, "record-2", "groceries", "300", "500", "USD", null, null, null]);
     expect(statements[3].text).toContain("premium_destination_module_presence");
     expect(statements[3].values).toEqual([DEST_ID, DEST_KEY, "costOfLiving"]);
   });
@@ -442,7 +442,7 @@ describe("write-port statement translation", () => {
       ];
       const statements = buildDestinationPlanWriteStatements(basePlan({ moduleExecutionOperations }));
       expect(statements[1].text).not.toContain("Limited");
-      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "Airport 30 min away", "Harry Reid International", null]);
+      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "Airport 30 min away", "Harry Reid International", null, null, null, null, null, null, null, null, null, null]);
     });
 
     it("coerces the read port's own round-trip strings 'true'/'false' into real booleans", () => {
@@ -458,8 +458,8 @@ describe("write-port statement translation", () => {
         },
       ];
       const statements = buildDestinationPlanWriteStatements(basePlan({ moduleExecutionOperations }));
-      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "A", "Airport A", true]);
-      expect(statements[2].values).toEqual([DEST_ID, DEST_KEY, "record-2", "B", "Airport B", false]);
+      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "A", "Airport A", true, null, null, null, null, null, null, null, null, null]);
+      expect(statements[2].values).toEqual([DEST_ID, DEST_KEY, "record-2", "B", "Airport B", false, null, null, null, null, null, null, null, null, null]);
     });
 
     it("keeps null/undefined transit data safely null instead of throwing", () => {
@@ -472,7 +472,7 @@ describe("write-port statement translation", () => {
         },
       ];
       const statements = buildDestinationPlanWriteStatements(basePlan({ moduleExecutionOperations }));
-      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "A", "Airport A", null]);
+      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "A", "Airport A", null, null, null, null, null, null, null, null, null, null]);
     });
 
     it("passes an already-boolean value through unchanged", () => {
@@ -485,7 +485,7 @@ describe("write-port statement translation", () => {
         },
       ];
       const statements = buildDestinationPlanWriteStatements(basePlan({ moduleExecutionOperations }));
-      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "A", "Airport A", true]);
+      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "A", "Airport A", true, null, null, null, null, null, null, null, null, null]);
     });
 
     it("does not touch narrative string columns (summary/name) even though the coercion set is checked per-column", () => {
@@ -500,7 +500,7 @@ describe("write-port statement translation", () => {
       const statements = buildDestinationPlanWriteStatements(basePlan({ moduleExecutionOperations }));
       // "summary" and "name" are not in REPLACE_MODULE_BOOLEAN_COLUMNS, so literal "true"/"false"
       // text in those unrelated columns must pass through as plain strings, not booleans.
-      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "true", "false", null]);
+      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "true", "false", null, null, null, null, null, null, null, null, null, null]);
     });
 
     it("leaves every other REPLACE_MODULE module's columns completely unaffected (no unrelated behavior change)", () => {
@@ -508,7 +508,7 @@ describe("write-port statement translation", () => {
         { kind: "REPLACE_MODULE", module: "healthcare", expectedBefore: [], expectedAfter: [{ summary: "true", publicAccessSummary: "false", insuranceSummary: "Limited" }] },
       ];
       const statements = buildDestinationPlanWriteStatements(basePlan({ moduleExecutionOperations }));
-      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "true", "false", "Limited"]);
+      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "true", "false", "Limited", null, null, null, null, null, null]);
     });
   });
 

@@ -134,7 +134,7 @@ interface KeyedChildTableConfig {
 
 const KEYED_CHILD_TABLE_CONFIG: Readonly<Record<KeyedChildModuleKey, KeyedChildTableConfig>> = {
   facts: { table: "premium_destination_facts", stableKeyColumn: "fact_key", columns: { factGroup: "fact_type", valueText: "body", displayLabel: "title", sourceName: "source_ref" }, conflictColumns: ["destination_id", "destination_key", "fact_key"] },
-  scores: { table: "premium_destination_scores", stableKeyColumn: "score_key", columns: { scoreValue: "score_value", scoreLabel: "score_name" }, conflictColumns: ["destination_id", "destination_key", "score_key"] },
+  scores: { table: "premium_destination_scores", stableKeyColumn: "score_key", columns: { scoreValue: "score_value", scoreLabel: "score_name", verified: "verified", verifiedAt: "verified_at" }, conflictColumns: ["destination_id", "destination_key", "score_key"] },
   neighborhoods: { table: "premium_neighborhoods", stableKeyColumn: "neighborhood_key", columns: { name: "neighborhood_name", summary: "summary", areaType: "area_type" }, requiredTextColumn: "neighborhood_name", conflictColumns: ["destination_id", "destination_key", "neighborhood_key"] },
   places: { table: "premium_places", stableKeyColumn: "place_key", columns: { category: "category_key", name: "place_name", description: "description", neighborhoodKey: "neighborhood_key", websiteUrl: "website_url", googleMapsUrl: "google_maps_url", sourceUrl: "source_url", address: "address", phone: "phone", displayOrder: "display_order" }, requiredTextColumn: "place_name", conflictColumns: ["destination_id", "destination_key", "place_key"] },
   resources: { table: "premium_resources", stableKeyColumn: "resource_key", columns: { category: "resource_category", name: "resource_name", url: "url" }, requiredTextColumn: "resource_name", conflictColumns: ["destination_id", "destination_key", "resource_key"] },
@@ -204,21 +204,21 @@ interface ReplaceModuleTableConfig {
 // - "record_key" tables: unique(destination_id, destination_key, record_key)
 // - "position" tables: unique(destination_id, position), position >= 1
 const REPLACE_MODULE_TABLE_CONFIG: Readonly<Record<ReplaceModuleExecutionModuleKey, ReplaceModuleTableConfig>> = {
-  costOfLiving: { table: "premium_cost_of_living", keyStrategy: "record_key", columns: { category: "category", monthlyLow: "monthly_low", monthlyHigh: "monthly_high", currency: "currency" } },
+  costOfLiving: { table: "premium_cost_of_living", keyStrategy: "record_key", columns: { category: "category", monthlyLow: "monthly_low", monthlyHigh: "monthly_high", currency: "currency", stayModeKey: "stay_mode_key", verified: "verified", verifiedAt: "verified_at" } },
   climateMonthly: { table: "premium_climate_monthly", keyStrategy: "record_key", columns: { monthKey: "month_key", avgHighTemp: "avg_high_temp", avgLowTemp: "avg_low_temp", precipitationMm: "precipitation_mm", humidityPct: "humidity_pct" } },
-  housing: { table: "premium_housing_property", keyStrategy: "record_key", columns: { summary: "restrictions_summary", buyingSummary: "buying_process_summary", rentalSummary: "rental_rules_notes" } },
-  healthcare: { table: "premium_healthcare_insurance", keyStrategy: "record_key", columns: { summary: "system_summary", publicAccessSummary: "public_access_foreigners", insuranceSummary: "international_insurance_notes" } },
-  visaResidency: { table: "premium_visa_residency", keyStrategy: "record_key", columns: { summary: "visa_type", residencyPath: "permanent_residency_path", citizenshipPath: "citizenship_path" } },
-  taxesFinance: { table: "premium_taxes_finance", keyStrategy: "record_key", columns: { summary: "summary", notes: "notes" } },
-  safetyRisks: { table: "premium_safety_risks", keyStrategy: "record_key", columns: { topic: "topic", severity: "severity", summary: "summary" } },
-  transportation: { table: "premium_transport_airports", keyStrategy: "record_key", columns: { summary: "summary", airportSummary: "name", transitSummary: "public_transit_available" } },
-  remoteWork: { table: "premium_connectivity_remote_work", keyStrategy: "record_key", columns: { summary: "remote_work_notes", internetSummary: "avg_download_mbps", timezoneSummary: "us_time_zone_fit" } },
+  housing: { table: "premium_housing_property", keyStrategy: "record_key", columns: { summary: "restrictions_summary", buyingSummary: "buying_process_summary", rentalSummary: "rental_rules_notes", stayModeKey: "stay_mode_key", canForeignersBuy: "can_foreigners_buy", residencyRequiredToBuy: "residency_required_to_buy", verified: "verified", verifiedAt: "verified_at" } },
+  healthcare: { table: "premium_healthcare_insurance", keyStrategy: "record_key", columns: { summary: "system_summary", publicAccessSummary: "public_access_foreigners", insuranceSummary: "international_insurance_notes", topic: "topic", englishSpeakingCare: "english_speaking_care", typicalGpVisitCost: "typical_gp_visit_cost", typicalSpecialistCost: "typical_specialist_cost", verified: "verified", verifiedAt: "verified_at" } },
+  visaResidency: { table: "premium_visa_residency", keyStrategy: "record_key", columns: { summary: "visa_type", residencyPath: "permanent_residency_path", citizenshipPath: "citizenship_path", stayModeKey: "stay_mode_key", travelerNationality: "traveler_nationality", verified: "verified", verifiedAt: "verified_at" } },
+  taxesFinance: { table: "premium_taxes_finance", keyStrategy: "record_key", columns: { summary: "summary", notes: "notes", verified: "verified", verifiedAt: "verified_at" } },
+  safetyRisks: { table: "premium_safety_risks", keyStrategy: "record_key", columns: { topic: "topic", severity: "severity", summary: "summary", verified: "verified", verifiedAt: "verified_at" } },
+  transportation: { table: "premium_transport_airports", keyStrategy: "record_key", columns: { summary: "summary", airportSummary: "name", transitSummary: "public_transit_available", topic: "topic", distanceKm: "distance_km", typicalDriveMinutes: "typical_drive_minutes", nonstopUsService: "nonstop_us_service", carNeededRating: "car_needed_rating", parkingNotes: "parking_notes", rideshareNotes: "rideshare_notes", verified: "verified", verifiedAt: "verified_at" } },
+  remoteWork: { table: "premium_connectivity_remote_work", keyStrategy: "record_key", columns: { summary: "remote_work_notes", internetSummary: "avg_download_mbps", timezoneSummary: "us_time_zone_fit", fiberAvailable: "fiber_available", mobile5g: "mobile_5g", utilityReliability: "utility_reliability", coworkingSummary: "coworking_summary", verified: "verified", verifiedAt: "verified_at" } },
   realityCheck: { table: "premium_reality_check", keyStrategy: "record_key", columns: { title: "title", detail: "detail", severity: "severity" } },
-  lgbtqInclusivity: { table: "premium_lgbtq_inclusivity", keyStrategy: "position", columns: { summary: "summary", culturalNotes: "cultural_notes" } },
-  languageIntegration: { table: "premium_language_integration", keyStrategy: "position", columns: { summary: "summary", englishSupport: "english_support" } },
+  lgbtqInclusivity: { table: "premium_lgbtq_inclusivity", keyStrategy: "position", columns: { summary: "summary", culturalNotes: "cultural_notes", overallRating: "overall_rating", legalProtections: "legal_protections", socialAcceptance: "social_acceptance", prideEvents: "pride_events", nightlifeSocial: "nightlife_social", healthcareAccess: "healthcare_access", areasResources: "areas_resources", safetyConsiderations: "safety_considerations", verified: "verified", verifiedAt: "verified_at" } },
+  languageIntegration: { table: "premium_language_integration", keyStrategy: "position", columns: { summary: "summary", englishSupport: "english_support", primaryLanguage: "primary_language", englishProficiency: "english_proficiency", governmentEnglishAccess: "government_english_access", medicalEnglishAccess: "medical_english_access", languageResources: "language_resources", verified: "verified", verifiedAt: "verified_at" } },
   pets: { table: "premium_pets", keyStrategy: "position", columns: { summary: "summary", petFriendlyNotes: "pet_friendly_notes" } },
   familyEducation: { table: "premium_family_education", keyStrategy: "position", columns: { summary: "summary", schoolsSummary: "schools_summary" } },
-  communitySocial: { table: "premium_community_social", keyStrategy: "position", columns: { summary: "summary", socialNotes: "social_notes" } },
+  communitySocial: { table: "premium_community_social", keyStrategy: "position", columns: { summary: "summary", socialNotes: "social_notes", expatPresence: "expat_presence", volunteering: "volunteering", easeMeetingPeople: "ease_meeting_people", ageMix: "age_mix", transientVsRooted: "transient_vs_rooted", verified: "verified", verifiedAt: "verified_at" } },
   accessibility: { table: "premium_accessibility", keyStrategy: "position", columns: { summary: "summary", mobilityNotes: "mobility_notes" } },
   bureaucracySetup: { table: "premium_bureaucracy_setup", keyStrategy: "position", columns: { summary: "summary", setupNotes: "setup_notes" } },
   workBusiness: { table: "premium_work_business", keyStrategy: "position", columns: { summary: "summary", remoteWorkNotes: "remote_work_notes" } },
@@ -229,12 +229,23 @@ const REPLACE_MODULE_TABLE_CONFIG: Readonly<Record<ReplaceModuleExecutionModuleK
 // Columns in REPLACE_MODULE_TABLE_CONFIG that are genuinely `boolean` in the database (per the
 // premium-module storage migration). The persisted-destination read port's own round-trip
 // contract stringifies a boolean column with `String(value)`, producing exactly "true" or "false"
-// - those are therefore the only two string forms ever treated as a recognized boolean write. Any
-// other content (including narrative text authored directly into a source workbook cell, e.g.
-// "Limited" for transportation's public_transit_available) is preserved as null rather than
-// guessing a true/false meaning that was never part of the established contract - never invented,
-// never silently coerced to false.
-const REPLACE_MODULE_BOOLEAN_COLUMNS = new Set<string>(["public_transit_available"]);
+// - those are therefore always-recognized boolean write forms. Any other content (including
+// narrative text authored directly into a source workbook cell, e.g. "Limited" for
+// transportation's public_transit_available) is preserved as null rather than guessing a
+// true/false meaning that was never part of the established contract - never invented, never
+// silently coerced to false.
+const REPLACE_MODULE_BOOLEAN_COLUMNS = new Set<string>(["public_transit_available", "nonstop_us_service", "verified"]);
+
+// The workbook's actual XLSX boolean cells serialize as literal "1"/"0" text for several columns,
+// not just `verified` (confirmed directly against the frozen golden workbook - Lisbon's own
+// TRANSPORT_AIRPORTS rows carry `public_transit_available="1"` and `nonstop_us_service="1"` on one
+// row, and free narrative text like "Yes"/"Limited" on other rows for the same conceptual field).
+// Recognizing only "true"/"false" here would silently coerce those real "1"/"0" cells to null -
+// exactly the kind of silent-drop this hardening pass exists to close. "1"/"0" recognition is
+// therefore extended to every REPLACE_MODULE boolean column, while narrative text ("Yes", "Limited")
+// deliberately remains unrecognized and null - "do not invent values" still applies to anything
+// that isn't an unambiguous boolean literal.
+const NUMERIC_BOOLEAN_COLUMNS = new Set<string>(["public_transit_available", "nonstop_us_service", "verified"]);
 
 function coerceReplaceModuleColumnValue(dbColumn: string, value: unknown): unknown {
   if (!REPLACE_MODULE_BOOLEAN_COLUMNS.has(dbColumn)) {
@@ -249,6 +260,10 @@ function coerceReplaceModuleColumnValue(dbColumn: string, value: unknown): unkno
   const normalized = value.trim().toLowerCase();
   if (normalized === "true") return true;
   if (normalized === "false") return false;
+  if (NUMERIC_BOOLEAN_COLUMNS.has(dbColumn)) {
+    if (normalized === "1") return true;
+    if (normalized === "0") return false;
+  }
   return null;
 }
 
@@ -344,7 +359,7 @@ function buildKeyedChildStatements(
       const child = operation.incomingChild as unknown as Record<string, unknown>;
       const columnEntries = Object.entries(config.columns);
       const columnNames = columnEntries.map(([, dbColumn]) => dbColumn);
-      const columnValues = columnEntries.map(([storedField]) => readChildField(child, storedField, operation.module));
+      const columnValues = columnEntries.map(([storedField, dbColumn]) => coerceReplaceModuleColumnValue(dbColumn, readChildField(child, storedField, operation.module)));
 
       const conflictTarget = buildKeyedChildConflictTarget(operation.module, config.conflictColumns);
       const allColumns = ["destination_id", "destination_key", config.stableKeyColumn, ...columnNames];

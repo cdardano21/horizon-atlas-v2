@@ -163,7 +163,7 @@ export function createSupabasePersistedDestinationReadPort(
     async readKeyedChildren(identity) {
       const queries = [
         ["facts", "premium_destination_facts", "destination_id,destination_key,fact_key,fact_type,title,body,source_ref", "facts"],
-        ["scores", "premium_destination_scores", "destination_id,destination_key,score_key,score_name,score_value,weight,higher_is_better", "scores"],
+        ["scores", "premium_destination_scores", "destination_id,destination_key,score_key,score_name,score_value,weight,higher_is_better,verified,verified_at", "scores"],
         ["neighborhoods", "premium_neighborhoods", "destination_id,destination_key,neighborhood_key,neighborhood_name,area_type,summary", "neighborhoods"],
         ["places", "premium_places", "destination_id,destination_key,place_key,category_key,place_name,description,neighborhood_key,website_url,google_maps_url,source_url,address,phone,display_order", "places"],
         ["resources", "premium_resources", "destination_id,destination_key,resource_key,resource_category,resource_name,url", "resources"],
@@ -196,6 +196,8 @@ export function createSupabasePersistedDestinationReadPort(
                   scoreValue: row.score_value == null ? null : String(row.score_value),
                   scoreLabel: pickString(row, "score_name"),
                   methodologyVersion: null,
+                  verified: row.verified == null ? null : String(row.verified),
+                  verifiedAt: pickString(row, "verified_at"),
                 };
               case "neighborhoods":
                 return {
@@ -361,20 +363,20 @@ export function createSupabasePersistedDestinationReadPort(
 
     async readReplaceModules(identity) {
       const queries = [
-        ["costOfLiving", "premium_cost_of_living", "destination_id,destination_key,record_key,category,monthly_low,monthly_high,currency", "costOfLiving"],
+        ["costOfLiving", "premium_cost_of_living", "destination_id,destination_key,record_key,category,monthly_low,monthly_high,currency,stay_mode_key,verified,verified_at", "costOfLiving"],
         ["climateMonthly", "premium_climate_monthly", "destination_id,destination_key,record_key,month_key,avg_high_temp,avg_low_temp,precipitation_mm,humidity_pct", "climateMonthly"],
-        ["housing", "premium_housing_property", "destination_id,destination_key,record_key,restrictions_summary,buying_process_summary,rental_rules_notes", "housing"],
-        ["healthcare", "premium_healthcare_insurance", "destination_id,destination_key,record_key,system_summary,public_access_foreigners,international_insurance_notes", "healthcare"],
-        ["visaResidency", "premium_visa_residency", "destination_id,destination_key,record_key,visa_type,permanent_residency_path,citizenship_path", "visaResidency"],
-        ["taxesFinance", "premium_taxes_finance", "destination_id,destination_key,record_key,summary,notes", "taxesFinance"],
-        ["lgbtqInclusivity", "premium_lgbtq_inclusivity", "destination_id,destination_key,position,summary,cultural_notes", "lgbtqInclusivity"],
-        ["safetyRisks", "premium_safety_risks", "destination_id,destination_key,record_key,topic,severity,summary", "safetyRisks"],
-        ["transportation", "premium_transport_airports", "destination_id,destination_key,record_key,summary,name,public_transit_available", "transportation"],
-        ["remoteWork", "premium_connectivity_remote_work", "destination_id,destination_key,record_key,remote_work_notes,avg_download_mbps,us_time_zone_fit", "remoteWork"],
-        ["languageIntegration", "premium_language_integration", "destination_id,destination_key,position,summary,english_support", "languageIntegration"],
+        ["housing", "premium_housing_property", "destination_id,destination_key,record_key,restrictions_summary,buying_process_summary,rental_rules_notes,stay_mode_key,can_foreigners_buy,residency_required_to_buy,verified,verified_at", "housing"],
+        ["healthcare", "premium_healthcare_insurance", "destination_id,destination_key,record_key,system_summary,public_access_foreigners,international_insurance_notes,topic,english_speaking_care,typical_gp_visit_cost,typical_specialist_cost,verified,verified_at", "healthcare"],
+        ["visaResidency", "premium_visa_residency", "destination_id,destination_key,record_key,visa_type,permanent_residency_path,citizenship_path,stay_mode_key,traveler_nationality,verified,verified_at", "visaResidency"],
+        ["taxesFinance", "premium_taxes_finance", "destination_id,destination_key,record_key,summary,notes,verified,verified_at", "taxesFinance"],
+        ["lgbtqInclusivity", "premium_lgbtq_inclusivity", "destination_id,destination_key,position,summary,cultural_notes,overall_rating,legal_protections,social_acceptance,pride_events,nightlife_social,healthcare_access,areas_resources,safety_considerations,verified,verified_at", "lgbtqInclusivity"],
+        ["safetyRisks", "premium_safety_risks", "destination_id,destination_key,record_key,topic,severity,summary,verified,verified_at", "safetyRisks"],
+        ["transportation", "premium_transport_airports", "destination_id,destination_key,record_key,summary,name,public_transit_available,topic,distance_km,typical_drive_minutes,nonstop_us_service,car_needed_rating,parking_notes,rideshare_notes,verified,verified_at", "transportation"],
+        ["remoteWork", "premium_connectivity_remote_work", "destination_id,destination_key,record_key,remote_work_notes,avg_download_mbps,us_time_zone_fit,fiber_available,mobile_5g,utility_reliability,coworking_summary,verified,verified_at", "remoteWork"],
+        ["languageIntegration", "premium_language_integration", "destination_id,destination_key,position,summary,english_support,primary_language,english_proficiency,government_english_access,medical_english_access,language_resources,verified,verified_at", "languageIntegration"],
         ["pets", "premium_pets", "destination_id,destination_key,position,summary,pet_friendly_notes", "pets"],
         ["familyEducation", "premium_family_education", "destination_id,destination_key,position,summary,schools_summary", "familyEducation"],
-        ["communitySocial", "premium_community_social", "destination_id,destination_key,position,summary,social_notes", "communitySocial"],
+        ["communitySocial", "premium_community_social", "destination_id,destination_key,position,summary,social_notes,expat_presence,volunteering,ease_meeting_people,age_mix,transient_vs_rooted,verified,verified_at", "communitySocial"],
         ["accessibility", "premium_accessibility", "destination_id,destination_key,position,summary,mobility_notes", "accessibility"],
         ["bureaucracySetup", "premium_bureaucracy_setup", "destination_id,destination_key,position,summary,setup_notes", "bureaucracySetup"],
         ["workBusiness", "premium_work_business", "destination_id,destination_key,position,summary,remote_work_notes", "workBusiness"],
@@ -396,6 +398,9 @@ export function createSupabasePersistedDestinationReadPort(
                   monthlyLow: row.monthly_low == null ? null : String(row.monthly_low),
                   monthlyHigh: row.monthly_high == null ? null : String(row.monthly_high),
                   currency: pickString(row, "currency"),
+                  stayModeKey: pickString(row, "stay_mode_key"),
+                  verified: row.verified == null ? null : String(row.verified),
+                  verifiedAt: pickString(row, "verified_at"),
                 };
               case "climateMonthly":
                 return {
@@ -414,6 +419,11 @@ export function createSupabasePersistedDestinationReadPort(
                   summary: pickString(row, "restrictions_summary"),
                   buyingSummary: pickString(row, "buying_process_summary"),
                   rentalSummary: pickString(row, "rental_rules_notes"),
+                  stayModeKey: pickString(row, "stay_mode_key"),
+                  canForeignersBuy: pickString(row, "can_foreigners_buy"),
+                  residencyRequiredToBuy: pickString(row, "residency_required_to_buy"),
+                  verified: row.verified == null ? null : String(row.verified),
+                  verifiedAt: pickString(row, "verified_at"),
                 };
               case "healthcare":
                 return {
@@ -422,6 +432,12 @@ export function createSupabasePersistedDestinationReadPort(
                   summary: pickString(row, "system_summary"),
                   publicAccessSummary: pickString(row, "public_access_foreigners"),
                   insuranceSummary: pickString(row, "international_insurance_notes"),
+                  topic: pickString(row, "topic"),
+                  englishSpeakingCare: pickString(row, "english_speaking_care"),
+                  typicalGpVisitCost: row.typical_gp_visit_cost == null ? null : String(row.typical_gp_visit_cost),
+                  typicalSpecialistCost: row.typical_specialist_cost == null ? null : String(row.typical_specialist_cost),
+                  verified: row.verified == null ? null : String(row.verified),
+                  verifiedAt: pickString(row, "verified_at"),
                 };
               case "visaResidency":
                 return {
@@ -430,6 +446,10 @@ export function createSupabasePersistedDestinationReadPort(
                   summary: pickString(row, "visa_type"),
                   residencyPath: pickString(row, "permanent_residency_path"),
                   citizenshipPath: pickString(row, "citizenship_path"),
+                  stayModeKey: pickString(row, "stay_mode_key"),
+                  travelerNationality: pickString(row, "traveler_nationality"),
+                  verified: row.verified == null ? null : String(row.verified),
+                  verifiedAt: pickString(row, "verified_at"),
                 };
               case "taxesFinance":
                 return {
@@ -437,6 +457,8 @@ export function createSupabasePersistedDestinationReadPort(
                   destinationKey: String(row.destination_key ?? ""),
                   summary: pickString(row, "summary"),
                   notes: pickString(row, "notes"),
+                  verified: row.verified == null ? null : String(row.verified),
+                  verifiedAt: pickString(row, "verified_at"),
                 };
               case "lgbtqInclusivity":
                 return {
@@ -445,6 +467,16 @@ export function createSupabasePersistedDestinationReadPort(
                   position: pickNumber(row, "position") ?? 0,
                   summary: pickString(row, "summary"),
                   culturalNotes: pickString(row, "cultural_notes"),
+                  overallRating: pickString(row, "overall_rating"),
+                  legalProtections: pickString(row, "legal_protections"),
+                  socialAcceptance: pickString(row, "social_acceptance"),
+                  prideEvents: pickString(row, "pride_events"),
+                  nightlifeSocial: pickString(row, "nightlife_social"),
+                  healthcareAccess: pickString(row, "healthcare_access"),
+                  areasResources: pickString(row, "areas_resources"),
+                  safetyConsiderations: pickString(row, "safety_considerations"),
+                  verified: row.verified == null ? null : String(row.verified),
+                  verifiedAt: pickString(row, "verified_at"),
                 };
               case "safetyRisks":
                 return {
@@ -454,6 +486,8 @@ export function createSupabasePersistedDestinationReadPort(
                   topic: pickString(row, "topic"),
                   severity: pickString(row, "severity"),
                   summary: pickString(row, "summary"),
+                  verified: row.verified == null ? null : String(row.verified),
+                  verifiedAt: pickString(row, "verified_at"),
                 };
               case "transportation":
                 return {
@@ -462,6 +496,15 @@ export function createSupabasePersistedDestinationReadPort(
                   summary: pickString(row, "summary"),
                   airportSummary: pickString(row, "name"),
                   transitSummary: row.public_transit_available == null ? null : String(row.public_transit_available),
+                  topic: pickString(row, "topic"),
+                  distanceKm: row.distance_km == null ? null : String(row.distance_km),
+                  typicalDriveMinutes: row.typical_drive_minutes == null ? null : String(row.typical_drive_minutes),
+                  nonstopUsService: row.nonstop_us_service == null ? null : String(row.nonstop_us_service),
+                  carNeededRating: pickString(row, "car_needed_rating"),
+                  parkingNotes: pickString(row, "parking_notes"),
+                  rideshareNotes: pickString(row, "rideshare_notes"),
+                  verified: row.verified == null ? null : String(row.verified),
+                  verifiedAt: pickString(row, "verified_at"),
                 };
               case "remoteWork":
                 return {
@@ -470,6 +513,12 @@ export function createSupabasePersistedDestinationReadPort(
                   summary: pickString(row, "remote_work_notes"),
                   internetSummary: row.avg_download_mbps == null ? null : String(row.avg_download_mbps),
                   timezoneSummary: pickString(row, "us_time_zone_fit"),
+                  fiberAvailable: pickString(row, "fiber_available"),
+                  mobile5g: pickString(row, "mobile_5g"),
+                  utilityReliability: pickString(row, "utility_reliability"),
+                  coworkingSummary: pickString(row, "coworking_summary"),
+                  verified: row.verified == null ? null : String(row.verified),
+                  verifiedAt: pickString(row, "verified_at"),
                 };
               case "languageIntegration":
                 return {
@@ -478,6 +527,13 @@ export function createSupabasePersistedDestinationReadPort(
                   position: pickNumber(row, "position") ?? 0,
                   summary: pickString(row, "summary"),
                   englishSupport: pickString(row, "english_support"),
+                  primaryLanguage: pickString(row, "primary_language"),
+                  englishProficiency: pickString(row, "english_proficiency"),
+                  governmentEnglishAccess: pickString(row, "government_english_access"),
+                  medicalEnglishAccess: pickString(row, "medical_english_access"),
+                  languageResources: pickString(row, "language_resources"),
+                  verified: row.verified == null ? null : String(row.verified),
+                  verifiedAt: pickString(row, "verified_at"),
                 };
               case "pets":
                 return {
@@ -502,6 +558,13 @@ export function createSupabasePersistedDestinationReadPort(
                   position: pickNumber(row, "position") ?? 0,
                   summary: pickString(row, "summary"),
                   socialNotes: pickString(row, "social_notes"),
+                  expatPresence: pickString(row, "expat_presence"),
+                  volunteering: pickString(row, "volunteering"),
+                  easeMeetingPeople: pickString(row, "ease_meeting_people"),
+                  ageMix: pickString(row, "age_mix"),
+                  transientVsRooted: pickString(row, "transient_vs_rooted"),
+                  verified: row.verified == null ? null : String(row.verified),
+                  verifiedAt: pickString(row, "verified_at"),
                 };
               case "accessibility":
                 return {

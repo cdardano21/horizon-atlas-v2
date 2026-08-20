@@ -323,6 +323,8 @@ function toCanonicalScore(value: DeterministicV31CanonicalDestination["scores"][
     scoreValue: value.scoreValue,
     scoreLabel: value.scoreLabel,
     methodologyVersion: value.methodologyVersion,
+    verified: value.verified,
+    verifiedAt: value.verified_at,
   };
 }
 
@@ -377,6 +379,9 @@ function toCanonicalCostOfLivingItem(value: DeterministicV31CanonicalDestination
     monthlyLow: value.monthly_low,
     monthlyHigh: value.monthly_high,
     currency: value.currency,
+    stayModeKey: value.stay_mode_key,
+    verified: value.verified,
+    verifiedAt: value.verified_at,
   };
 }
 
@@ -395,6 +400,11 @@ function toCanonicalHousingState(value: DeterministicV31CanonicalDestination["ho
     summary: value.restrictions_summary,
     buyingSummary: value.buying_process_summary,
     rentalSummary: value.rental_rules_notes,
+    stayModeKey: value.stay_mode_key,
+    canForeignersBuy: value.can_foreigners_buy,
+    residencyRequiredToBuy: value.residency_required_to_buy,
+    verified: value.verified,
+    verifiedAt: value.verified_at,
   };
 }
 
@@ -412,6 +422,12 @@ function toCanonicalHealthcareState(value: DeterministicV31CanonicalDestination[
     summary: value.system_summary,
     publicAccessSummary: value.public_access_foreigners,
     insuranceSummary: value.international_insurance_notes,
+    topic: value.topic,
+    englishSpeakingCare: value.english_speaking_care,
+    typicalGpVisitCost: value.typical_gp_visit_cost,
+    typicalSpecialistCost: value.typical_specialist_cost,
+    verified: value.verified,
+    verifiedAt: value.verified_at,
   };
 }
 
@@ -420,6 +436,10 @@ function toCanonicalVisaResidencyState(value: DeterministicV31CanonicalDestinati
     summary: value.visa_type,
     residencyPath: value.permanent_residency_path,
     citizenshipPath: value.citizenship_path,
+    stayModeKey: value.stay_mode_key,
+    travelerNationality: value.traveler_nationality,
+    verified: value.verified,
+    verifiedAt: value.verified_at,
   };
 }
 
@@ -427,6 +447,8 @@ function toCanonicalTaxFinanceState(value: DeterministicV31CanonicalDestination[
   return {
     summary: value.summary,
     notes: value.income_tax_notes,
+    verified: value.verified,
+    verifiedAt: value.verified_at,
   };
 }
 
@@ -434,6 +456,16 @@ function toCanonicalLgbtqInclusivityState(value: DeterministicV31CanonicalDestin
   return {
     summary: value.evidence_summary,
     culturalNotes: value.community_scene,
+    overallRating: value.overall_rating,
+    legalProtections: value.legal_protections,
+    socialAcceptance: value.social_acceptance,
+    prideEvents: value.pride_events,
+    nightlifeSocial: value.nightlife_social,
+    healthcareAccess: value.healthcare_access,
+    areasResources: value.areas_resources,
+    safetyConsiderations: value.safety_considerations,
+    verified: value.verified,
+    verifiedAt: value.verified_at,
   };
 }
 
@@ -443,6 +475,8 @@ function toCanonicalSafetyRisk(value: DeterministicV31CanonicalDestination["safe
     topic: value.risk_type,
     severity: value.severity,
     summary: value.summary,
+    verified: value.verified,
+    verifiedAt: value.verified_at,
   };
 }
 
@@ -451,6 +485,15 @@ function toCanonicalTransportationState(value: DeterministicV31CanonicalDestinat
     summary: value.summary,
     airportSummary: value.name,
     transitSummary: value.public_transit_available,
+    topic: value.topic,
+    distanceKm: value.distance_km,
+    typicalDriveMinutes: value.typical_drive_minutes,
+    nonstopUsService: value.nonstop_us_service,
+    carNeededRating: value.car_needed_rating,
+    parkingNotes: value.parking_notes,
+    rideshareNotes: value.rideshare_notes,
+    verified: value.verified,
+    verifiedAt: value.verified_at,
   };
 }
 
@@ -459,6 +502,12 @@ function toCanonicalRemoteWorkState(value: DeterministicV31CanonicalDestination[
     summary: value.remote_work_notes,
     internetSummary: value.avg_download_mbps,
     timezoneSummary: value.us_time_zone_fit,
+    fiberAvailable: value.fiber_available,
+    mobile5g: value.mobile_5g,
+    utilityReliability: value.utility_reliability,
+    coworkingSummary: value.coworking_summary,
+    verified: value.verified,
+    verifiedAt: value.verified_at,
   };
 }
 
@@ -466,6 +515,13 @@ function toCanonicalLanguageIntegrationState(value: DeterministicV31CanonicalDes
   return {
     summary: value.integration_notes,
     englishSupport: value.can_function_in_english,
+    primaryLanguage: value.primary_language,
+    englishProficiency: value.english_proficiency,
+    governmentEnglishAccess: value.government_english_access,
+    medicalEnglishAccess: value.medical_english_access,
+    languageResources: value.language_resources,
+    verified: value.verified,
+    verifiedAt: value.verified_at,
   };
 }
 
@@ -487,6 +543,13 @@ function toCanonicalCommunitySocialState(value: DeterministicV31CanonicalDestina
   return {
     summary: value.summary,
     socialNotes: value.clubs_groups,
+    expatPresence: value.expat_presence,
+    volunteering: value.volunteering,
+    easeMeetingPeople: value.ease_meeting_people,
+    ageMix: value.age_mix,
+    transientVsRooted: value.transient_vs_rooted,
+    verified: value.verified,
+    verifiedAt: value.verified_at,
   };
 }
 

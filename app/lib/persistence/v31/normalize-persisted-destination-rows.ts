@@ -86,6 +86,8 @@ export interface PersistedScoreRow {
   readonly scoreValue: string | null;
   readonly scoreLabel: string | null;
   readonly methodologyVersion: string | null;
+  readonly verified: string | null;
+  readonly verifiedAt: string | null;
 }
 
 export interface PersistedNeighborhoodRow {
@@ -174,6 +176,9 @@ export interface PersistedCostOfLivingRow {
   readonly monthlyLow: string | null;
   readonly monthlyHigh: string | null;
   readonly currency: string | null;
+  readonly stayModeKey: string | null;
+  readonly verified: string | null;
+  readonly verifiedAt: string | null;
 }
 
 export interface PersistedClimateMonthRow {
@@ -192,6 +197,11 @@ export interface PersistedHousingRow {
   readonly summary: string | null;
   readonly buyingSummary: string | null;
   readonly rentalSummary: string | null;
+  readonly stayModeKey: string | null;
+  readonly canForeignersBuy: string | null;
+  readonly residencyRequiredToBuy: string | null;
+  readonly verified: string | null;
+  readonly verifiedAt: string | null;
 }
 
 export interface PersistedHealthcareRow {
@@ -200,6 +210,12 @@ export interface PersistedHealthcareRow {
   readonly summary: string | null;
   readonly publicAccessSummary: string | null;
   readonly insuranceSummary: string | null;
+  readonly topic: string | null;
+  readonly englishSpeakingCare: string | null;
+  readonly typicalGpVisitCost: string | null;
+  readonly typicalSpecialistCost: string | null;
+  readonly verified: string | null;
+  readonly verifiedAt: string | null;
 }
 
 export interface PersistedVisaResidencyRow {
@@ -208,6 +224,10 @@ export interface PersistedVisaResidencyRow {
   readonly summary: string | null;
   readonly residencyPath: string | null;
   readonly citizenshipPath: string | null;
+  readonly stayModeKey: string | null;
+  readonly travelerNationality: string | null;
+  readonly verified: string | null;
+  readonly verifiedAt: string | null;
 }
 
 export interface PersistedTaxFinanceRow {
@@ -215,6 +235,8 @@ export interface PersistedTaxFinanceRow {
   readonly destinationKey: string;
   readonly summary: string | null;
   readonly notes: string | null;
+  readonly verified: string | null;
+  readonly verifiedAt: string | null;
 }
 
 export interface PersistedPositionedRow {
@@ -232,6 +254,8 @@ export interface PersistedSafetyRiskRow {
   readonly topic: string | null;
   readonly severity: string | null;
   readonly summary: string | null;
+  readonly verified: string | null;
+  readonly verifiedAt: string | null;
 }
 
 export interface PersistedTransportationRow {
@@ -240,6 +264,15 @@ export interface PersistedTransportationRow {
   readonly summary: string | null;
   readonly airportSummary: string | null;
   readonly transitSummary: string | null;
+  readonly topic: string | null;
+  readonly distanceKm: string | null;
+  readonly typicalDriveMinutes: string | null;
+  readonly nonstopUsService: string | null;
+  readonly carNeededRating: string | null;
+  readonly parkingNotes: string | null;
+  readonly rideshareNotes: string | null;
+  readonly verified: string | null;
+  readonly verifiedAt: string | null;
 }
 
 export interface PersistedRemoteWorkRow {
@@ -248,6 +281,12 @@ export interface PersistedRemoteWorkRow {
   readonly summary: string | null;
   readonly internetSummary: string | null;
   readonly timezoneSummary: string | null;
+  readonly fiberAvailable: string | null;
+  readonly mobile5g: string | null;
+  readonly utilityReliability: string | null;
+  readonly coworkingSummary: string | null;
+  readonly verified: string | null;
+  readonly verifiedAt: string | null;
 }
 
 export interface PersistedRealityCheckRow {

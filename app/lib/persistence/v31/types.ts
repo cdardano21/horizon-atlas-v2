@@ -86,6 +86,8 @@ export type StoredScoreShape<T extends DeterministicV31CanonicalScore> = {
   readonly scoreValue: CanonicalNullableString<T["scoreValue"]>;
   readonly scoreLabel: CanonicalNullableString<T["scoreLabel"]>;
   readonly methodologyVersion: CanonicalNullableString<T["methodologyVersion"]>;
+  readonly verified: CanonicalNullableString<T["verified"]>;
+  readonly verifiedAt: CanonicalNullableString<T["verified_at"]>;
 };
 
 export type StoredNeighborhoodShape<T extends DeterministicV31CanonicalNeighborhood> = {
@@ -130,6 +132,9 @@ export type StoredCostOfLivingItemShape<T extends DeterministicV31CanonicalCostO
   readonly monthlyLow: CanonicalNullableString<T["monthly_low"]>;
   readonly monthlyHigh: CanonicalNullableString<T["monthly_high"]>;
   readonly currency: CanonicalNullableString<T["currency"]>;
+  readonly stayModeKey: CanonicalNullableString<T["stay_mode_key"]>;
+  readonly verified: CanonicalNullableString<T["verified"]>;
+  readonly verifiedAt: CanonicalNullableString<T["verified_at"]>;
 };
 
 export type StoredClimateMonthShape<T extends DeterministicV31CanonicalClimateMonth> = {
@@ -144,6 +149,11 @@ export type StoredHousingStateShape<T extends DeterministicV31CanonicalHousingSt
   readonly summary: CanonicalNullableString<T["restrictions_summary"]>;
   readonly buyingSummary: CanonicalNullableString<T["buying_process_summary"]>;
   readonly rentalSummary: CanonicalNullableString<T["rental_rules_notes"]>;
+  readonly stayModeKey: CanonicalNullableString<T["stay_mode_key"]>;
+  readonly canForeignersBuy: CanonicalNullableString<T["can_foreigners_buy"]>;
+  readonly residencyRequiredToBuy: CanonicalNullableString<T["residency_required_to_buy"]>;
+  readonly verified: CanonicalNullableString<T["verified"]>;
+  readonly verifiedAt: CanonicalNullableString<T["verified_at"]>;
 };
 
 export type StoredPropertyResourceShape<T extends DeterministicV31CanonicalPropertyResource> = {
@@ -157,22 +167,44 @@ export type StoredHealthcareStateShape<T extends DeterministicV31CanonicalHealth
   readonly summary: CanonicalNullableString<T["system_summary"]>;
   readonly publicAccessSummary: CanonicalNullableString<T["public_access_foreigners"]>;
   readonly insuranceSummary: CanonicalNullableString<T["international_insurance_notes"]>;
+  readonly topic: CanonicalNullableString<T["topic"]>;
+  readonly englishSpeakingCare: CanonicalNullableString<T["english_speaking_care"]>;
+  readonly typicalGpVisitCost: CanonicalNullableString<T["typical_gp_visit_cost"]>;
+  readonly typicalSpecialistCost: CanonicalNullableString<T["typical_specialist_cost"]>;
+  readonly verified: CanonicalNullableString<T["verified"]>;
+  readonly verifiedAt: CanonicalNullableString<T["verified_at"]>;
 };
 
 export type StoredVisaResidencyStateShape<T extends DeterministicV31CanonicalVisaResidencyState> = {
   readonly summary: CanonicalNullableString<T["visa_type"]>;
   readonly residencyPath: CanonicalNullableString<T["permanent_residency_path"]>;
   readonly citizenshipPath: CanonicalNullableString<T["citizenship_path"]>;
+  readonly stayModeKey: CanonicalNullableString<T["stay_mode_key"]>;
+  readonly travelerNationality: CanonicalNullableString<T["traveler_nationality"]>;
+  readonly verified: CanonicalNullableString<T["verified"]>;
+  readonly verifiedAt: CanonicalNullableString<T["verified_at"]>;
 };
 
 export type StoredTaxFinanceStateShape<T extends DeterministicV31CanonicalTaxFinanceState> = {
   readonly summary: CanonicalNullableString<T["summary"]>;
   readonly notes: CanonicalNullableString<T["income_tax_notes"]>;
+  readonly verified: CanonicalNullableString<T["verified"]>;
+  readonly verifiedAt: CanonicalNullableString<T["verified_at"]>;
 };
 
 export type StoredLgbtqInclusivityStateShape<T extends DeterministicV31CanonicalLgbtqInclusivityState> = {
   readonly summary: CanonicalNullableString<T["evidence_summary"]>;
   readonly culturalNotes: CanonicalNullableString<T["community_scene"]>;
+  readonly overallRating: CanonicalNullableString<T["overall_rating"]>;
+  readonly legalProtections: CanonicalNullableString<T["legal_protections"]>;
+  readonly socialAcceptance: CanonicalNullableString<T["social_acceptance"]>;
+  readonly prideEvents: CanonicalNullableString<T["pride_events"]>;
+  readonly nightlifeSocial: CanonicalNullableString<T["nightlife_social"]>;
+  readonly healthcareAccess: CanonicalNullableString<T["healthcare_access"]>;
+  readonly areasResources: CanonicalNullableString<T["areas_resources"]>;
+  readonly safetyConsiderations: CanonicalNullableString<T["safety_considerations"]>;
+  readonly verified: CanonicalNullableString<T["verified"]>;
+  readonly verifiedAt: CanonicalNullableString<T["verified_at"]>;
 };
 
 export type StoredSafetyRiskShape<T extends DeterministicV31CanonicalSafetyRisk> = {
@@ -180,23 +212,47 @@ export type StoredSafetyRiskShape<T extends DeterministicV31CanonicalSafetyRisk>
   readonly topic: CanonicalNullableString<T["risk_type"]>;
   readonly severity: CanonicalNullableString<T["severity"]>;
   readonly summary: CanonicalNullableString<T["summary"]>;
+  readonly verified: CanonicalNullableString<T["verified"]>;
+  readonly verifiedAt: CanonicalNullableString<T["verified_at"]>;
 };
 
 export type StoredTransportationStateShape<T extends DeterministicV31CanonicalTransportationState> = {
   readonly summary: CanonicalNullableString<T["summary"]>;
   readonly airportSummary: CanonicalNullableString<T["name"]>;
   readonly transitSummary: CanonicalNullableString<T["public_transit_available"]>;
+  readonly topic: CanonicalNullableString<T["topic"]>;
+  readonly distanceKm: CanonicalNullableString<T["distance_km"]>;
+  readonly typicalDriveMinutes: CanonicalNullableString<T["typical_drive_minutes"]>;
+  readonly nonstopUsService: CanonicalNullableString<T["nonstop_us_service"]>;
+  readonly carNeededRating: CanonicalNullableString<T["car_needed_rating"]>;
+  readonly parkingNotes: CanonicalNullableString<T["parking_notes"]>;
+  readonly rideshareNotes: CanonicalNullableString<T["rideshare_notes"]>;
+  readonly verified: CanonicalNullableString<T["verified"]>;
+  readonly verifiedAt: CanonicalNullableString<T["verified_at"]>;
 };
 
 export type StoredRemoteWorkStateShape<T extends DeterministicV31CanonicalRemoteWorkState> = {
   readonly summary: CanonicalNullableString<T["remote_work_notes"]>;
   readonly internetSummary: CanonicalNullableString<T["avg_download_mbps"]>;
   readonly timezoneSummary: CanonicalNullableString<T["us_time_zone_fit"]>;
+  readonly fiberAvailable: CanonicalNullableString<T["fiber_available"]>;
+  readonly mobile5g: CanonicalNullableString<T["mobile_5g"]>;
+  readonly utilityReliability: CanonicalNullableString<T["utility_reliability"]>;
+  readonly coworkingSummary: CanonicalNullableString<T["coworking_summary"]>;
+  readonly verified: CanonicalNullableString<T["verified"]>;
+  readonly verifiedAt: CanonicalNullableString<T["verified_at"]>;
 };
 
 export type StoredLanguageIntegrationStateShape<T extends DeterministicV31CanonicalLanguageIntegrationState> = {
   readonly summary: CanonicalNullableString<T["integration_notes"]>;
   readonly englishSupport: CanonicalNullableString<T["can_function_in_english"]>;
+  readonly primaryLanguage: CanonicalNullableString<T["primary_language"]>;
+  readonly englishProficiency: CanonicalNullableString<T["english_proficiency"]>;
+  readonly governmentEnglishAccess: CanonicalNullableString<T["government_english_access"]>;
+  readonly medicalEnglishAccess: CanonicalNullableString<T["medical_english_access"]>;
+  readonly languageResources: CanonicalNullableString<T["language_resources"]>;
+  readonly verified: CanonicalNullableString<T["verified"]>;
+  readonly verifiedAt: CanonicalNullableString<T["verified_at"]>;
 };
 
 export type StoredPetStateShape<T extends DeterministicV31CanonicalPetState> = {
@@ -212,6 +268,13 @@ export type StoredFamilyEducationStateShape<T extends DeterministicV31CanonicalF
 export type StoredCommunitySocialStateShape<T extends DeterministicV31CanonicalCommunitySocialState> = {
   readonly summary: CanonicalNullableString<T["summary"]>;
   readonly socialNotes: CanonicalNullableString<T["clubs_groups"]>;
+  readonly expatPresence: CanonicalNullableString<T["expat_presence"]>;
+  readonly volunteering: CanonicalNullableString<T["volunteering"]>;
+  readonly easeMeetingPeople: CanonicalNullableString<T["ease_meeting_people"]>;
+  readonly ageMix: CanonicalNullableString<T["age_mix"]>;
+  readonly transientVsRooted: CanonicalNullableString<T["transient_vs_rooted"]>;
+  readonly verified: CanonicalNullableString<T["verified"]>;
+  readonly verifiedAt: CanonicalNullableString<T["verified_at"]>;
 };
 
 export type StoredAccessibilityStateShape<T extends DeterministicV31CanonicalAccessibilityState> = {
