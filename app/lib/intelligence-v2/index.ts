@@ -69,6 +69,7 @@ export type {
   LgbtqLegalProtectionFact,
   DestinationHardGateFacts,
   DestinationCostFacts,
+  RetirementIncomeTreatmentFact,
   DestinationFinancialFacts,
   DestinationLifestyleDimensionFacts,
   SyntheticDestinationFixture,
@@ -92,3 +93,11 @@ export {
   ENUM_DERIVED_DIMENSION_KEYS,
   IMPORTANCE_WEIGHT_TABLE,
 } from "./lifestyle-scoring-policy";
+
+export { evaluateFinancialEfficiency } from "./financial-efficiency";
+export {
+  FINANCIAL_EFFICIENCY_POLICY_VERSION,
+  FINANCIAL_FINDING_CATEGORY_ORDER,
+  RETIREMENT_TREATMENT_SEVERITY,
+  TRISTATE_FAVORABLE_SEVERITY,
+} from "./financial-efficiency-policy";

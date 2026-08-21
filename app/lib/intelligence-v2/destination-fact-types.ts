@@ -66,13 +66,28 @@ export interface DestinationCostFacts {
 // Layer 4 facts — tax residency, pension/SS/retirement accounts, property taxes
 // ---------------------------------------------------------------------------
 
+/**
+ * Retirement-income treatment is deliberately richer than a tri-state fact — pension,
+ * Social Security, IRA, and 401(k) treatment must be independently distinguishable
+ * (e.g. one favorable, one taxable, one treaty-dependent) rather than collapsed into
+ * a single "retirement income is tax-friendly" judgment.
+ */
+export type RetirementIncomeTreatmentFact =
+  | "FAVORABLE"
+  | "TAXABLE"
+  | "PARTIALLY_TAXABLE"
+  | "EXEMPT"
+  | "TREATY_DEPENDENT"
+  | "SPECIAL_REGIME"
+  | "UNKNOWN";
+
 export interface DestinationFinancialFacts {
   /** Local day-count threshold that triggers tax residency; null when unknown. */
   readonly taxResidencyTriggerDays: number | null;
-  readonly pensionTaxable: TriStateFact;
-  readonly socialSecurityTaxTreatyBenefit: TriStateFact;
-  readonly iraOrForeignRetirementAccountRecognized: TriStateFact;
-  readonly fourZeroOneKRecognized: TriStateFact;
+  readonly pensionTreatment: RetirementIncomeTreatmentFact;
+  readonly socialSecurityTreatment: RetirementIncomeTreatmentFact;
+  readonly iraTreatment: RetirementIncomeTreatmentFact;
+  readonly retirementAccount401kTreatment: RetirementIncomeTreatmentFact;
   readonly usTaxTreatyInEffect: TriStateFact;
   readonly foreignTaxCreditAvailable: TriStateFact;
   readonly wealthTaxApplicable: TriStateFact;

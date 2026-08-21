@@ -107,6 +107,7 @@ describe("Layer 4 — legal residency and tax residency cannot occupy the same f
     const finding: FinancialFinding = {
       category: "TAX_RESIDENCY_TRIGGER",
       severity: "CAUTION",
+      reasonCode: "TAX_RESIDENCY_THRESHOLD_EXCEEDED",
       factSummary: "Staying beyond 183 days may trigger local tax residency.",
       sourceFactKeys: ["fact:tax-residency-trigger-days"],
     };
@@ -118,6 +119,7 @@ describe("Layer 4 — legal residency and tax residency cannot occupy the same f
     const finding: FinancialFinding = {
       category: "PENSION_TREATMENT",
       severity: "UNKNOWN",
+      reasonCode: "PENSION_TREATMENT_UNKNOWN",
       factSummary: null,
       sourceFactKeys: [],
     };
@@ -130,8 +132,8 @@ describe("Layer 4 — legal residency and tax residency cannot occupy the same f
     const result: FinancialEfficiencyResult = {
       modelVersion: CURRENT_INTELLIGENCE_V2_CONTRACT_VERSIONS.financialModelVersion,
       findings: [
-        { category: "TAX_RESIDENCY_TRIGGER", severity: "CAUTION", factSummary: "183-day trigger", sourceFactKeys: [] },
-        { category: "WEALTH_TAX", severity: "POSITIVE", factSummary: "No wealth tax", sourceFactKeys: [] },
+        { category: "TAX_RESIDENCY_TRIGGER", severity: "CAUTION", reasonCode: "TAX_RESIDENCY_THRESHOLD_EXCEEDED", factSummary: "183-day trigger", sourceFactKeys: [] },
+        { category: "WEALTH_TAX", severity: "POSITIVE", reasonCode: "NO_WEALTH_TAX_REGIME", factSummary: "No wealth tax", sourceFactKeys: [] },
       ],
     };
 

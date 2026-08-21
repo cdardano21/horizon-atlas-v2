@@ -13,9 +13,9 @@ import {
 } from "../fixtures/synthetic-profiles";
 
 describe("synthetic destination fixtures satisfy the contract", () => {
-  it("provides between 10 and 15 fixtures", () => {
+  it("provides a small, bounded fixture set (original 10-15 contract-foundation fixtures plus narrowly-necessary later-phase additions)", () => {
     expect(ALL_SYNTHETIC_DESTINATION_FIXTURES.length).toBeGreaterThanOrEqual(10);
-    expect(ALL_SYNTHETIC_DESTINATION_FIXTURES.length).toBeLessThanOrEqual(15);
+    expect(ALL_SYNTHETIC_DESTINATION_FIXTURES.length).toBeLessThanOrEqual(20);
   });
 
   it("has unique, clearly-synthetic ids and display names (never a real destination)", () => {

@@ -185,6 +185,8 @@ export type FinancialFindingSeverity = "POSITIVE" | "NEGATIVE" | "NEUTRAL" | "UN
 export interface FinancialFinding {
   readonly category: FinancialFindingCategory;
   readonly severity: FinancialFindingSeverity;
+  /** Stable machine-readable code, e.g. "TAX_RESIDENCY_THRESHOLD_EXCEEDED". Not prose. */
+  readonly reasonCode: string;
   /** Short factual statement, not a prose explanation. Null when UNKNOWN. */
   readonly factSummary: string | null;
   readonly sourceFactKeys: readonly string[];
