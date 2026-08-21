@@ -316,6 +316,25 @@ function sortPositionedRows(rows: readonly PersistedPositionedRow[]): readonly P
   return [...rows].sort((left, right) => left.position - right.position);
 }
 
+// The read-port already owns DB -> normalized transformation (snake_case -> camelCase, string
+// coercion, fallbacks); every PersistedXRow arriving here is already the exact runtime shape plus
+// persistence-only identity/ordering metadata. Omitting just that metadata - rather than hand
+// re-listing every remaining field - is what actually prevents a future approved field from
+// silently disappearing here the way verified/verifiedAt and the new structured fields just did.
+function omitIdentity<T extends { readonly destinationId: string; readonly destinationKey: string }>(
+  row: T,
+): Omit<T, "destinationId" | "destinationKey"> {
+  const { destinationId, destinationKey, ...rest } = row;
+  return rest;
+}
+
+function omitPositionedIdentity<T extends { readonly destinationId: string; readonly destinationKey: string; readonly position: number }>(
+  row: T,
+): Omit<T, "destinationId" | "destinationKey" | "position"> {
+  const { destinationId, destinationKey, position, ...rest } = row;
+  return rest;
+}
+
 export function normalizePersistedDestinationRows(input: {
   readonly identity: ResolvedDestinationIdentity;
   readonly root: PersistedRootRow;
@@ -340,49 +359,37 @@ export function normalizePersistedDestinationRows(input: {
       primaryLanguage: input.profile.primaryLanguage,
       timeZone: input.profile.timeZone,
     },
-    facts: input.keyedChildren.facts.map((fact) => ({ factKey: fact.factKey, factGroup: fact.factGroup, valueText: fact.valueText, displayLabel: fact.displayLabel, sourceName: fact.sourceName })),
-    scores: input.keyedChildren.scores.map((score) => ({ scoreKey: score.scoreKey, scoreValue: score.scoreValue, scoreLabel: score.scoreLabel, methodologyVersion: score.methodologyVersion })),
-    neighborhoods: input.keyedChildren.neighborhoods.map((row) => ({ neighborhoodKey: row.neighborhoodKey, name: row.name, summary: row.summary, areaType: row.areaType })),
-    places: input.keyedChildren.places.map((row) => ({
-      placeKey: row.placeKey,
-      category: row.category,
-      name: row.name,
-      description: row.description,
-      neighborhoodKey: row.neighborhoodKey,
-      websiteUrl: row.websiteUrl,
-      googleMapsUrl: row.googleMapsUrl,
-      sourceUrl: row.sourceUrl,
-      address: row.address,
-      phone: row.phone,
-      displayOrder: row.displayOrder,
-    })),
-    resources: input.keyedChildren.resources.map((row) => ({ resourceKey: row.resourceKey, category: row.category, name: row.name, url: row.url })),
-    media: input.keyedChildren.media.map((row) => ({ mediaKey: row.mediaKey, kind: row.kind, url: row.url, caption: row.caption, altText: row.altText })),
-    costOfLiving: input.replaceModules.costOfLiving.map((row) => ({ itemKey: row.itemKey, category: row.category, monthlyLow: row.monthlyLow, monthlyHigh: row.monthlyHigh, currency: row.currency })),
-    climateMonthly: input.replaceModules.climateMonthly.map((row) => ({ monthKey: row.monthKey, avgHighTemp: row.avgHighTemp, avgLowTemp: row.avgLowTemp, precipitationMm: row.precipitationMm, humidityPct: row.humidityPct })),
-    housing: input.replaceModules.housing.map((row) => ({ summary: row.summary, buyingSummary: row.buyingSummary, rentalSummary: row.rentalSummary })),
-    propertyResources: input.keyedChildren.propertyResources.map((row) => ({ itemKey: row.itemKey, category: row.category, name: row.name, url: row.url })),
-    healthcare: input.replaceModules.healthcare.map((row) => ({ summary: row.summary, publicAccessSummary: row.publicAccessSummary, insuranceSummary: row.insuranceSummary })),
-    visaResidency: input.replaceModules.visaResidency.map((row) => ({ summary: row.summary, residencyPath: row.residencyPath, citizenshipPath: row.citizenshipPath })),
-    taxesFinance: input.replaceModules.taxesFinance.map((row) => ({ summary: row.summary, notes: row.notes })),
-    lgbtqInclusivity: sortPositionedRows(input.replaceModules.lgbtqInclusivity).map((row) => ({ summary: row.summary, culturalNotes: (row as { readonly culturalNotes?: string | null }).culturalNotes ?? null })),
-    safetyRisks: input.replaceModules.safetyRisks.map((row) => ({ itemKey: row.itemKey, topic: row.topic, severity: row.severity, summary: row.summary })),
-    transportation: input.replaceModules.transportation.map((row) => ({ summary: row.summary, airportSummary: row.airportSummary, transitSummary: row.transitSummary })),
-    remoteWork: input.replaceModules.remoteWork.map((row) => ({ summary: row.summary, internetSummary: row.internetSummary, timezoneSummary: row.timezoneSummary })),
-    languageIntegration: sortPositionedRows(input.replaceModules.languageIntegration).map((row) => ({ summary: row.summary, englishSupport: (row as { readonly englishSupport?: string | null }).englishSupport ?? null })),
-    pets: sortPositionedRows(input.replaceModules.pets).map((row) => ({ summary: row.summary, petFriendlyNotes: (row as { readonly petFriendlyNotes?: string | null }).petFriendlyNotes ?? null })),
-    familyEducation: sortPositionedRows(input.replaceModules.familyEducation).map((row) => ({ summary: row.summary, schoolsSummary: (row as { readonly schoolsSummary?: string | null }).schoolsSummary ?? null })),
-    communitySocial: sortPositionedRows(input.replaceModules.communitySocial).map((row) => ({ summary: row.summary, socialNotes: (row as { readonly socialNotes?: string | null }).socialNotes ?? null })),
-    accessibility: sortPositionedRows(input.replaceModules.accessibility).map((row) => ({ summary: row.summary, mobilityNotes: (row as { readonly mobilityNotes?: string | null }).mobilityNotes ?? null })),
-    bureaucracySetup: sortPositionedRows(input.replaceModules.bureaucracySetup).map((row) => ({ summary: row.summary, setupNotes: (row as { readonly setupNotes?: string | null }).setupNotes ?? null })),
-    workBusiness: sortPositionedRows(input.replaceModules.workBusiness).map((row) => ({ summary: row.summary, remoteWorkNotes: (row as { readonly remoteWorkNotes?: string | null }).remoteWorkNotes ?? null })),
-    retirementAging: sortPositionedRows(input.replaceModules.retirementAging).map((row) => ({ summary: row.summary, agingNotes: (row as { readonly agingNotes?: string | null }).agingNotes ?? null })),
-    lifestyleLaws: sortPositionedRows(input.replaceModules.lifestyleLaws).map((row) => ({ summary: row.summary, legalNotes: (row as { readonly legalNotes?: string | null }).legalNotes ?? null })),
-    realityCheck: input.replaceModules.realityCheck.map((row) => ({ itemKey: row.itemKey, title: row.title, detail: row.detail, severity: row.severity })),
-    moveChecklist: input.keyedChildren.moveChecklist.map((row) => ({ checklistKey: row.checklistKey, summary: row.summary, checklistNotes: row.checklistNotes })),
-    environmentQuality: input.singletons.environmentQuality.length === 0 ? null : { summary: input.singletons.environmentQuality[0].summary, qualityNotes: input.singletons.environmentQuality[0].qualityNotes },
-    dailyLifePracticality: input.singletons.dailyLifePracticality.length === 0 ? null : { summary: input.singletons.dailyLifePracticality[0].summary, practicalityNotes: input.singletons.dailyLifePracticality[0].practicalityNotes },
-    eventsSeasonality: input.keyedChildren.eventsSeasonality.map((row) => ({ eventSeasonalityKey: row.eventSeasonalityKey, summary: row.summary, seasonalityNotes: row.seasonalityNotes })),
-    sources: input.keyedChildren.sources.map((row) => ({ sourceKey: row.sourceKey, name: row.name, url: row.url, type: row.type })),
+    facts: input.keyedChildren.facts.map(omitIdentity),
+    scores: input.keyedChildren.scores.map(omitIdentity),
+    neighborhoods: input.keyedChildren.neighborhoods.map(omitIdentity),
+    places: input.keyedChildren.places.map(omitIdentity),
+    resources: input.keyedChildren.resources.map(omitIdentity),
+    media: input.keyedChildren.media.map(omitIdentity),
+    costOfLiving: input.replaceModules.costOfLiving.map(omitIdentity),
+    climateMonthly: input.replaceModules.climateMonthly.map(omitIdentity),
+    housing: input.replaceModules.housing.map(omitIdentity),
+    propertyResources: input.keyedChildren.propertyResources.map(omitIdentity),
+    healthcare: input.replaceModules.healthcare.map(omitIdentity),
+    visaResidency: input.replaceModules.visaResidency.map(omitIdentity),
+    taxesFinance: input.replaceModules.taxesFinance.map(omitIdentity),
+    lgbtqInclusivity: sortPositionedRows(input.replaceModules.lgbtqInclusivity).map((row) => omitPositionedIdentity(row) as NormalizedPersistedDestinationBundle["lgbtqInclusivity"][number]),
+    safetyRisks: input.replaceModules.safetyRisks.map(omitIdentity),
+    transportation: input.replaceModules.transportation.map(omitIdentity),
+    remoteWork: input.replaceModules.remoteWork.map(omitIdentity),
+    languageIntegration: sortPositionedRows(input.replaceModules.languageIntegration).map((row) => omitPositionedIdentity(row) as NormalizedPersistedDestinationBundle["languageIntegration"][number]),
+    pets: sortPositionedRows(input.replaceModules.pets).map((row) => omitPositionedIdentity(row) as NormalizedPersistedDestinationBundle["pets"][number]),
+    familyEducation: sortPositionedRows(input.replaceModules.familyEducation).map((row) => omitPositionedIdentity(row) as NormalizedPersistedDestinationBundle["familyEducation"][number]),
+    communitySocial: sortPositionedRows(input.replaceModules.communitySocial).map((row) => omitPositionedIdentity(row) as NormalizedPersistedDestinationBundle["communitySocial"][number]),
+    accessibility: sortPositionedRows(input.replaceModules.accessibility).map((row) => omitPositionedIdentity(row) as NormalizedPersistedDestinationBundle["accessibility"][number]),
+    bureaucracySetup: sortPositionedRows(input.replaceModules.bureaucracySetup).map((row) => omitPositionedIdentity(row) as NormalizedPersistedDestinationBundle["bureaucracySetup"][number]),
+    workBusiness: sortPositionedRows(input.replaceModules.workBusiness).map((row) => omitPositionedIdentity(row) as NormalizedPersistedDestinationBundle["workBusiness"][number]),
+    retirementAging: sortPositionedRows(input.replaceModules.retirementAging).map((row) => omitPositionedIdentity(row) as NormalizedPersistedDestinationBundle["retirementAging"][number]),
+    lifestyleLaws: sortPositionedRows(input.replaceModules.lifestyleLaws).map((row) => omitPositionedIdentity(row) as NormalizedPersistedDestinationBundle["lifestyleLaws"][number]),
+    realityCheck: input.replaceModules.realityCheck.map(omitIdentity),
+    moveChecklist: input.keyedChildren.moveChecklist.map(omitIdentity),
+    environmentQuality: input.singletons.environmentQuality.length === 0 ? null : omitIdentity(input.singletons.environmentQuality[0]),
+    dailyLifePracticality: input.singletons.dailyLifePracticality.length === 0 ? null : omitIdentity(input.singletons.dailyLifePracticality[0]),
+    eventsSeasonality: input.keyedChildren.eventsSeasonality.map(omitIdentity),
+    sources: input.keyedChildren.sources.map(omitIdentity),
   };
 }

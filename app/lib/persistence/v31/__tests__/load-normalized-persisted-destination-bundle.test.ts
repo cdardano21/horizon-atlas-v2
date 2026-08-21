@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { CanonicalDestinationKey, DestinationId, PersistedPresenceModuleKey, ResolvedDestinationIdentity } from "../types";
 import type { PersistedDestinationReadPort } from "../persisted-destination-read-port";
 import { loadNormalizedPersistedDestinationBundle } from "../load-normalized-persisted-destination-bundle";
+import { materializeStoredDestinationStateFromNormalizedPersistedBundle } from "../materialize-stored-destination-state";
 
 type TestRootRow = {
   readonly destinationId: string;
@@ -32,7 +33,7 @@ type TestPresenceRow = {
 
 type TestKeyedChildren = {
   readonly facts: readonly { readonly destinationId: string; readonly destinationKey: string; readonly factKey: string; readonly factGroup: string | null; readonly valueText: string | null; readonly displayLabel: string | null; readonly sourceName: string | null }[];
-  readonly scores: readonly { readonly destinationId: string; readonly destinationKey: string; readonly scoreKey: string; readonly scoreValue: string | null; readonly scoreLabel: string | null; readonly methodologyVersion: string | null }[];
+  readonly scores: readonly { readonly destinationId: string; readonly destinationKey: string; readonly scoreKey: string; readonly scoreValue: string | null; readonly scoreLabel: string | null; readonly methodologyVersion: string | null; readonly verified?: string | null; readonly verifiedAt?: string | null }[];
   readonly neighborhoods: readonly { readonly destinationId: string; readonly destinationKey: string; readonly neighborhoodKey: string; readonly name: string | null; readonly summary: string | null; readonly areaType: string | null }[];
   readonly places: readonly { readonly destinationId: string; readonly destinationKey: string; readonly placeKey: string; readonly category: string | null; readonly name: string | null; readonly description: string | null }[];
   readonly resources: readonly { readonly destinationId: string; readonly destinationKey: string; readonly resourceKey: string; readonly category: string | null; readonly name: string | null; readonly url: string | null }[];
@@ -46,18 +47,18 @@ type TestKeyedChildren = {
 type TestReplaceModules = {
   readonly costOfLiving: readonly { readonly destinationId: string; readonly destinationKey: string; readonly itemKey: string; readonly category: string | null; readonly monthlyLow: string | null; readonly monthlyHigh: string | null; readonly currency: string | null }[];
   readonly climateMonthly: readonly { readonly destinationId: string; readonly destinationKey: string; readonly monthKey: string; readonly avgHighTemp: string | null; readonly avgLowTemp: string | null; readonly precipitationMm: string | null; readonly humidityPct: string | null }[];
-  readonly housing: readonly { readonly destinationId: string; readonly destinationKey: string; readonly summary: string | null; readonly buyingSummary: string | null; readonly rentalSummary: string | null }[];
+  readonly housing: readonly { readonly destinationId: string; readonly destinationKey: string; readonly summary: string | null; readonly buyingSummary: string | null; readonly rentalSummary: string | null; readonly canForeignersBuy?: string | null; readonly residencyRequiredToBuy?: string | null; readonly stayModeKey?: string | null; readonly verified?: string | null; readonly verifiedAt?: string | null }[];
   readonly healthcare: readonly { readonly destinationId: string; readonly destinationKey: string; readonly summary: string | null; readonly publicAccessSummary: string | null; readonly insuranceSummary: string | null }[];
-  readonly visaResidency: readonly { readonly destinationId: string; readonly destinationKey: string; readonly summary: string | null; readonly residencyPath: string | null; readonly citizenshipPath: string | null }[];
+  readonly visaResidency: readonly { readonly destinationId: string; readonly destinationKey: string; readonly summary: string | null; readonly residencyPath: string | null; readonly citizenshipPath: string | null; readonly travelerNationality?: string | null; readonly stayModeKey?: string | null; readonly verified?: string | null; readonly verifiedAt?: string | null }[];
   readonly taxesFinance: readonly { readonly destinationId: string; readonly destinationKey: string; readonly summary: string | null; readonly notes: string | null }[];
   readonly lgbtqInclusivity: readonly { readonly destinationId: string; readonly destinationKey: string; readonly position: number; readonly summary: string | null; readonly culturalNotes: string | null }[];
   readonly safetyRisks: readonly { readonly destinationId: string; readonly destinationKey: string; readonly itemKey: string; readonly topic: string | null; readonly severity: string | null; readonly summary: string | null }[];
-  readonly transportation: readonly { readonly destinationId: string; readonly destinationKey: string; readonly summary: string | null; readonly airportSummary: string | null; readonly transitSummary: string | null }[];
-  readonly remoteWork: readonly { readonly destinationId: string; readonly destinationKey: string; readonly summary: string | null; readonly internetSummary: string | null; readonly timezoneSummary: string | null }[];
-  readonly languageIntegration: readonly { readonly destinationId: string; readonly destinationKey: string; readonly position: number; readonly summary: string | null; readonly englishSupport: string | null }[];
+  readonly transportation: readonly { readonly destinationId: string; readonly destinationKey: string; readonly summary: string | null; readonly airportSummary: string | null; readonly transitSummary: string | null; readonly nonstopUsService?: string | null; readonly topic?: string | null; readonly verified?: string | null; readonly verifiedAt?: string | null }[];
+  readonly remoteWork: readonly { readonly destinationId: string; readonly destinationKey: string; readonly summary: string | null; readonly internetSummary: string | null; readonly timezoneSummary: string | null; readonly fiberAvailable?: string | null; readonly verified?: string | null; readonly verifiedAt?: string | null }[];
+  readonly languageIntegration: readonly { readonly destinationId: string; readonly destinationKey: string; readonly position: number; readonly summary: string | null; readonly englishSupport: string | null; readonly primaryLanguage?: string | null; readonly verified?: string | null; readonly verifiedAt?: string | null }[];
   readonly pets: readonly { readonly destinationId: string; readonly destinationKey: string; readonly position: number; readonly summary: string | null; readonly petFriendlyNotes: string | null }[];
   readonly familyEducation: readonly { readonly destinationId: string; readonly destinationKey: string; readonly position: number; readonly summary: string | null; readonly schoolsSummary: string | null }[];
-  readonly communitySocial: readonly { readonly destinationId: string; readonly destinationKey: string; readonly position: number; readonly summary: string | null; readonly socialNotes: string | null }[];
+  readonly communitySocial: readonly { readonly destinationId: string; readonly destinationKey: string; readonly position: number; readonly summary: string | null; readonly socialNotes: string | null; readonly expatPresence?: string | null; readonly verified?: string | null; readonly verifiedAt?: string | null }[];
   readonly accessibility: readonly { readonly destinationId: string; readonly destinationKey: string; readonly position: number; readonly summary: string | null; readonly mobilityNotes: string | null }[];
   readonly bureaucracySetup: readonly { readonly destinationId: string; readonly destinationKey: string; readonly position: number; readonly summary: string | null; readonly setupNotes: string | null }[];
   readonly workBusiness: readonly { readonly destinationId: string; readonly destinationKey: string; readonly position: number; readonly summary: string | null; readonly remoteWorkNotes: string | null }[];
@@ -268,6 +269,48 @@ describe("loadNormalizedPersistedDestinationBundle", () => {
     expect(result.bundle.facts).toEqual([]);
     expect(result.bundle.environmentQuality).toEqual({ summary: "air quality", qualityNotes: "water quality" });
     expect(result.bundle.dailyLifePracticality).toEqual({ summary: "life is fine", practicalityNotes: "go for it" });
+  });
+
+  it("REQUIRED TEST 7 - preserves representative new parity fields end-to-end through the real bundle assembly", async () => {
+    const identity = createIdentity();
+    const readPort = new FakePersistedDestinationReadPort(createDefaultState({
+      replaceModules: {
+        costOfLiving: [], climateMonthly: [],
+        housing: [{ destinationId: identity.destinationId, destinationKey: identity.destinationKey, summary: "housing summary", buyingSummary: null, rentalSummary: null, canForeignersBuy: "Yes", residencyRequiredToBuy: "No", stayModeKey: "LONG_TERM_PERMANENT", verified: "true", verifiedAt: "2026-08-07" }],
+        healthcare: [],
+        visaResidency: [{ destinationId: identity.destinationId, destinationKey: identity.destinationKey, summary: "visa summary", residencyPath: null, citizenshipPath: null, travelerNationality: "U.S. citizen", stayModeKey: "SHORT_1_3_MONTHS", verified: "true", verifiedAt: "2026-08-07" }],
+        taxesFinance: [], lgbtqInclusivity: [], safetyRisks: [],
+        transportation: [{ destinationId: identity.destinationId, destinationKey: identity.destinationKey, summary: "transport summary", airportSummary: null, transitSummary: null, nonstopUsService: "true", topic: "airport", verified: "true", verifiedAt: "2026-08-09" }],
+        remoteWork: [{ destinationId: identity.destinationId, destinationKey: identity.destinationKey, summary: "remote summary", internetSummary: null, timezoneSummary: null, fiberAvailable: "Widely available", verified: "true", verifiedAt: "2026-08-07" }],
+        languageIntegration: [{ destinationId: identity.destinationId, destinationKey: identity.destinationKey, position: 1, summary: "language summary", englishSupport: null, primaryLanguage: "Portuguese", verified: "true", verifiedAt: "2026-08-08" }],
+        pets: [], familyEducation: [],
+        communitySocial: [{ destinationId: identity.destinationId, destinationKey: identity.destinationKey, position: 1, summary: "community summary", socialNotes: null, expatPresence: "High", verified: "true", verifiedAt: "2026-08-08" }],
+        accessibility: [], bureaucracySetup: [], workBusiness: [], retirementAging: [], lifestyleLaws: [], realityCheck: [],
+        moveChecklist: [], environmentQuality: [], dailyLifePracticality: [], eventsSeasonality: [], sources: [],
+      },
+      keyedChildren: {
+        facts: [], neighborhoods: [], places: [], resources: [], media: [], propertyResources: [], moveChecklist: [], eventsSeasonality: [], sources: [],
+        scores: [{ destinationId: identity.destinationId, destinationKey: identity.destinationKey, scoreKey: "retirement", scoreValue: "90", scoreLabel: "Excellent", methodologyVersion: "pilot-v3", verified: "false", verifiedAt: "2026-08-08" }],
+      },
+    }));
+
+    const result = await loadNormalizedPersistedDestinationBundle(identity, readPort);
+    expect(result.outcome).toBe("SUCCESS");
+    if (result.outcome !== "SUCCESS") {
+      throw new Error("Expected success");
+    }
+
+    const storedState = materializeStoredDestinationStateFromNormalizedPersistedBundle(result.bundle);
+    expect(storedState.visaResidency[0].travelerNationality).toBe("U.S. citizen");
+    expect(storedState.visaResidency[0].stayModeKey).toBe("SHORT_1_3_MONTHS");
+    expect(storedState.visaResidency[0].verified).toBe("true");
+    expect(storedState.housing[0].canForeignersBuy).toBe("Yes");
+    expect(storedState.remoteWork[0].fiberAvailable).toBe("Widely available");
+    expect(storedState.languageIntegration[0].primaryLanguage).toBe("Portuguese");
+    expect(storedState.communitySocial[0].expatPresence).toBe("High");
+    expect(storedState.transportation[0].nonstopUsService).toBe("true");
+    expect(storedState.scores[0].verified).toBe("false");
+    expect(storedState.scores[0].verifiedAt).toBe("2026-08-08");
   });
 
   it("returns DESTINATION_NOT_FOUND when the root record is missing", async () => {
