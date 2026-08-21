@@ -194,7 +194,7 @@ describe("FinalDestinationRecommendationResult — no monolithic four-layer scor
 
     const financialEfficiency: FinancialEfficiencyResult = {
       modelVersion: CURRENT_INTELLIGENCE_V2_CONTRACT_VERSIONS.financialModelVersion,
-      findings: [{ category: "TAX_RESIDENCY_TRIGGER", severity: "CAUTION", factSummary: "183-day trigger", sourceFactKeys: [] }],
+      findings: [{ category: "TAX_RESIDENCY_TRIGGER", severity: "CAUTION", reasonCode: "TAX_RESIDENCY_THRESHOLD_EXCEEDED", factSummary: "183-day trigger", sourceFactKeys: [] }],
     };
 
     const result: FinalDestinationRecommendationResult = {
@@ -204,6 +204,7 @@ describe("FinalDestinationRecommendationResult — no monolithic four-layer scor
       affordability,
       lifestyleFit,
       financialEfficiency,
+      recommendationStatus: "VIABLE",
       excluded: false,
       exclusionReasons: [],
       matchedReasons: ["climate"],
@@ -270,6 +271,7 @@ describe("FinalDestinationRecommendationResult — no monolithic four-layer scor
         coverageRatio: 1,
       },
       financialEfficiency: null,
+      recommendationStatus: "EXCLUDED",
       excluded: true,
       exclusionReasons: ["STAY_LIMIT_EXCEEDED", "NO_LEGAL_PATH"],
       matchedReasons: [],

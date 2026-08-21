@@ -57,6 +57,8 @@ export type {
   FinancialFinding,
   FinancialEfficiencyResult,
   SortRankingValue,
+  RecommendationStatus,
+  RecommendationTradeoff,
   FinalDestinationRecommendationResult,
 } from "./result-types";
 export { unknownHardConstraintResult } from "./result-types";
@@ -101,3 +103,7 @@ export {
   RETIREMENT_TREATMENT_SEVERITY,
   TRISTATE_FAVORABLE_SEVERITY,
 } from "./financial-efficiency-policy";
+
+export { evaluateDestinationForProfile, rankDestinationsForProfile } from "./orchestrator";
+export type { RecommendationRankGroup } from "./ranking-policy";
+export { computeRankGroup, compareForRanking, MATCHED_REASON_FIT_THRESHOLD_PERCENT } from "./ranking-policy";

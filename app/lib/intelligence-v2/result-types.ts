@@ -219,6 +219,34 @@ export interface SortRankingValue {
   readonly value: number;
 }
 
+/**
+ * The richer final state. EXCLUDED (Layer 1 FAIL or Layer 2 hard-budget exclusion)
+ * always wins; NEEDS_VERIFICATION means no FAIL exists but a relevant Layer 1/2
+ * UNKNOWN remains; otherwise VIABLE. Layer 3/4 can never change this — `excluded`
+ * is kept only for backward-compatible convenience (`excluded === (recommendationStatus === "EXCLUDED")`).
+ */
+export type RecommendationStatus = "VIABLE" | "NEEDS_VERIFICATION" | "EXCLUDED";
+
+/**
+ * A combined explanatory tradeoff item, tagged by its source layer so Layer 4
+ * findings are never mistaken for Layer 3 soft-preference mismatches (or used as a
+ * ranking input — tradeoffs are explanatory only).
+ */
+export type RecommendationTradeoff =
+  | {
+      readonly sourceLayer: "LIFESTYLE";
+      readonly dimensionKey: string;
+      readonly importance: PreferenceImportance;
+      readonly fitLevel: "LOW" | "MEDIUM" | "HIGH";
+      readonly note: string;
+    }
+  | {
+      readonly sourceLayer: "FINANCIAL";
+      readonly category: FinancialFindingCategory;
+      readonly severity: FinancialFindingSeverity;
+      readonly reasonCode: string;
+    };
+
 export interface FinalDestinationRecommendationResult {
   readonly destinationId: string;
   readonly contractVersions: IntelligenceV2ContractVersions;
@@ -230,11 +258,12 @@ export interface FinalDestinationRecommendationResult {
   /** Null when excluded before Layer 4 would have run. */
   readonly financialEfficiency: FinancialEfficiencyResult | null;
 
-  /** True iff eligibility.overallStatus === "EXCLUDED" or affordability.status === "UNAFFORDABLE" under a hard ceiling. */
+  readonly recommendationStatus: RecommendationStatus;
+  /** True iff eligibility.overallStatus === "EXCLUDED" or affordability.excludedByAffordability === true. Equivalent to recommendationStatus === "EXCLUDED". */
   readonly excluded: boolean;
   readonly exclusionReasons: readonly string[];
   readonly matchedReasons: readonly string[];
-  readonly tradeoffs: readonly LifestyleTradeoff[];
+  readonly tradeoffs: readonly RecommendationTradeoff[];
   readonly failedConstraints: readonly string[];
   readonly unknownConstraints: readonly string[];
   readonly topScoreContributors: readonly string[];
