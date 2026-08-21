@@ -121,16 +121,23 @@ export interface LifestyleDimensionContribution {
   readonly importance: PreferenceImportance;
   /** The destination's raw value on this dimension; null when unknown. */
   readonly rawDimensionValue: number | null;
-  /** Signed contribution to the total; 0 when the dimension value is unknown. */
+  /** How well the raw value aligns with the stated direction, 0-100, BEFORE weighting; null when unknown. */
+  readonly normalizedFitPercent: number | null;
+  /** Signed, weight-scaled contribution to the total; 0 when the dimension value is unknown. */
   readonly contributionPoints: number;
   readonly isUnknown: boolean;
 }
 
 export interface LifestyleTradeoff {
   readonly dimensionKey: string;
-  /** Short structured tag, e.g. "high cost vs preferred low cost" — not prose. */
+  readonly importance: PreferenceImportance;
+  readonly fitLevel: "LOW" | "MEDIUM" | "HIGH";
+  /** Short structured reason code, e.g. "HIGH_IMPORTANCE_POOR_FIT" — not prose. */
   readonly note: string;
 }
+
+/** SCORED when at least one relevant dimension was known; INSUFFICIENT_DATA when none were — never fabricate a numeric fit from zero data. */
+export type LifestyleScoreStatus = "SCORED" | "INSUFFICIENT_DATA";
 
 /**
  * The personalized utility score. Never contains a hard gate — hard gates live only
@@ -140,12 +147,19 @@ export interface LifestyleTradeoff {
  */
 export interface LifestyleScore {
   readonly modelVersion: ScoringModelVersion;
-  /** Deterministic total, 0-100. */
+  readonly scoreStatus: LifestyleScoreStatus;
+  /** Deterministic total, 0-100 utility index (NOT a probability). Only meaningful when scoreStatus is SCORED. */
   readonly totalScore: number;
   readonly dimensionContributions: readonly LifestyleDimensionContribution[];
   /** dimensionKeys, ranked highest-contribution first. */
   readonly topContributors: readonly string[];
   readonly tradeoffs: readonly LifestyleTradeoff[];
+  /** Number of the profile's relevant dimensions that had known destination data. */
+  readonly scoredDimensionCount: number;
+  /** Number of dimensions the profile expressed a preference for, known or not. */
+  readonly relevantDimensionCount: number;
+  /** scoredDimensionCount / relevantDimensionCount (0 when relevantDimensionCount is 0); coverage is never mixed into totalScore. */
+  readonly coverageRatio: number;
 }
 
 // ---------------------------------------------------------------------------

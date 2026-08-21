@@ -50,6 +50,7 @@ export type {
   AffordabilityResult,
   LifestyleDimensionContribution,
   LifestyleTradeoff,
+  LifestyleScoreStatus,
   LifestyleScore,
   FinancialFindingCategory,
   FinancialFindingSeverity,
@@ -82,3 +83,12 @@ export {
   isValidMoneyRange,
   isValidBudgetAmount,
 } from "./affordability-policy";
+
+export { evaluateLifestyleFit } from "./lifestyle-scorer";
+export type { LifestyleDimensionKey } from "./lifestyle-scoring-policy";
+export {
+  LIFESTYLE_SCORING_POLICY_VERSION,
+  LIFESTYLE_DIMENSION_KEYS,
+  ENUM_DERIVED_DIMENSION_KEYS,
+  IMPORTANCE_WEIGHT_TABLE,
+} from "./lifestyle-scoring-policy";

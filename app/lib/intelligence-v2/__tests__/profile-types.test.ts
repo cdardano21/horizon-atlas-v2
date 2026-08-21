@@ -135,7 +135,7 @@ describe("UserProfileV2 — hard requirements are structurally separate from sof
 
   it("does not activate any hard gate merely because a soft preference has high importance", () => {
     const profile = makeProfile({
-      lifestylePreferences: [{ dimensionKey: "climate", direction: "MORE_IS_BETTER", importance: 5, isHardRequirement: false }],
+      lifestylePreferences: [{ dimensionKey: "climate", direction: "MORE_IS_BETTER", importance: 5, isHardRequirement: false, targetValue: null }],
       hardRequirements: createHardRequirementSelectionsWithNoneActivated(),
     });
 

@@ -180,10 +180,14 @@ describe("FinalDestinationRecommendationResult — no monolithic four-layer scor
 
     const lifestyleFit: LifestyleScore = {
       modelVersion: CURRENT_INTELLIGENCE_V2_CONTRACT_VERSIONS.scoringModelVersion,
+      scoreStatus: "SCORED",
       totalScore: 78,
       dimensionContributions: [],
       topContributors: ["climate"],
       tradeoffs: [],
+      scoredDimensionCount: 1,
+      relevantDimensionCount: 1,
+      coverageRatio: 1,
     };
 
     const financialEfficiency: FinancialEfficiencyResult = {
@@ -254,10 +258,14 @@ describe("FinalDestinationRecommendationResult — no monolithic four-layer scor
       // A very high lifestyle score must NOT be able to undo the Layer 1 exclusion.
       lifestyleFit: {
         modelVersion: CURRENT_INTELLIGENCE_V2_CONTRACT_VERSIONS.scoringModelVersion,
+        scoreStatus: "SCORED",
         totalScore: 99,
         dimensionContributions: [],
         topContributors: [],
         tradeoffs: [],
+        scoredDimensionCount: 1,
+        relevantDimensionCount: 1,
+        coverageRatio: 1,
       },
       financialEfficiency: null,
       excluded: true,

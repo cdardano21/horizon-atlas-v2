@@ -125,6 +125,8 @@ export interface LifestylePreferenceInput {
   readonly direction: PreferenceDirection;
   readonly importance: PreferenceImportance;
   readonly isHardRequirement: boolean;
+  /** Only meaningful when direction is CLOSER_TO_TARGET_IS_BETTER (e.g. settlement urbanness); null otherwise. */
+  readonly targetValue: number | null;
 }
 
 // ---------------------------------------------------------------------------
