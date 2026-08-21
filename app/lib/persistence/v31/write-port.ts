@@ -132,7 +132,7 @@ interface KeyedChildTableConfig {
   readonly conflictColumns: readonly string[];
 }
 
-const KEYED_CHILD_TABLE_CONFIG: Readonly<Record<KeyedChildModuleKey, KeyedChildTableConfig>> = {
+export const KEYED_CHILD_TABLE_CONFIG: Readonly<Record<KeyedChildModuleKey, KeyedChildTableConfig>> = {
   facts: { table: "premium_destination_facts", stableKeyColumn: "fact_key", columns: { factGroup: "fact_type", valueText: "body", displayLabel: "title", sourceName: "source_ref" }, conflictColumns: ["destination_id", "destination_key", "fact_key"] },
   scores: { table: "premium_destination_scores", stableKeyColumn: "score_key", columns: { scoreValue: "score_value", scoreLabel: "score_name", verified: "verified", verifiedAt: "verified_at" }, conflictColumns: ["destination_id", "destination_key", "score_key"] },
   neighborhoods: { table: "premium_neighborhoods", stableKeyColumn: "neighborhood_key", columns: { name: "neighborhood_name", summary: "summary", areaType: "area_type" }, requiredTextColumn: "neighborhood_name", conflictColumns: ["destination_id", "destination_key", "neighborhood_key"] },
@@ -154,7 +154,7 @@ const KEYED_CHILD_TABLE_CONFIG: Readonly<Record<KeyedChildModuleKey, KeyedChildT
 // canonical object used its raw workbook column name instead of a stored-shape alias.
 const KEYED_CHILD_CANONICAL_FALLBACK_FIELD: Readonly<Record<KeyedChildModuleKey, Readonly<Record<string, string>>>> = {
   facts: {},
-  scores: {},
+  scores: { verifiedAt: "verified_at" },
   neighborhoods: { name: "neighborhood_name", areaType: "area_type" },
   places: { category: "category_key", name: "place_name", neighborhoodKey: "neighborhood_key", websiteUrl: "website_url", googleMapsUrl: "google_maps_url", sourceUrl: "source_url", displayOrder: "display_order" },
   resources: { category: "resource_category", name: "resource_name" },
@@ -203,7 +203,7 @@ interface ReplaceModuleTableConfig {
 // tracked premium-module storage migrations' table definitions):
 // - "record_key" tables: unique(destination_id, destination_key, record_key)
 // - "position" tables: unique(destination_id, position), position >= 1
-const REPLACE_MODULE_TABLE_CONFIG: Readonly<Record<ReplaceModuleExecutionModuleKey, ReplaceModuleTableConfig>> = {
+export const REPLACE_MODULE_TABLE_CONFIG: Readonly<Record<ReplaceModuleExecutionModuleKey, ReplaceModuleTableConfig>> = {
   costOfLiving: { table: "premium_cost_of_living", keyStrategy: "record_key", columns: { category: "category", monthlyLow: "monthly_low", monthlyHigh: "monthly_high", currency: "currency", stayModeKey: "stay_mode_key", verified: "verified", verifiedAt: "verified_at" } },
   climateMonthly: { table: "premium_climate_monthly", keyStrategy: "record_key", columns: { monthKey: "month_key", avgHighTemp: "avg_high_temp", avgLowTemp: "avg_low_temp", precipitationMm: "precipitation_mm", humidityPct: "humidity_pct" } },
   housing: { table: "premium_housing_property", keyStrategy: "record_key", columns: { summary: "restrictions_summary", buyingSummary: "buying_process_summary", rentalSummary: "rental_rules_notes", stayModeKey: "stay_mode_key", canForeignersBuy: "can_foreigners_buy", residencyRequiredToBuy: "residency_required_to_buy", verified: "verified", verifiedAt: "verified_at" } },

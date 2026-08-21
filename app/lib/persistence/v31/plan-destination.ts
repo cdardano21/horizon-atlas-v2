@@ -212,6 +212,9 @@ function normalizeReplaceModuleExecutionPayload<M extends ReplaceModuleExecution
         monthlyLow: (record.monthlyLow as string | null | undefined) ?? (record.monthly_low as string | null | undefined) ?? null,
         monthlyHigh: (record.monthlyHigh as string | null | undefined) ?? (record.monthly_high as string | null | undefined) ?? null,
         currency: (record.currency as string | null | undefined) ?? null,
+        stayModeKey: (record.stayModeKey as string | null | undefined) ?? (record.stay_mode_key as string | null | undefined) ?? null,
+        verified: (record.verified as string | null | undefined) ?? null,
+        verifiedAt: (record.verifiedAt as string | null | undefined) ?? (record.verified_at as string | null | undefined) ?? null,
       } as ReplaceModuleExecutionPayload<M>;
     case "climateMonthly":
       return {
@@ -226,28 +229,55 @@ function normalizeReplaceModuleExecutionPayload<M extends ReplaceModuleExecution
         summary: (record.summary as string | null | undefined) ?? (record.restrictions_summary as string | null | undefined) ?? null,
         buyingSummary: (record.buyingSummary as string | null | undefined) ?? (record.buying_process_summary as string | null | undefined) ?? null,
         rentalSummary: (record.rentalSummary as string | null | undefined) ?? (record.rental_rules_notes as string | null | undefined) ?? null,
+        stayModeKey: (record.stayModeKey as string | null | undefined) ?? (record.stay_mode_key as string | null | undefined) ?? null,
+        canForeignersBuy: (record.canForeignersBuy as string | null | undefined) ?? (record.can_foreigners_buy as string | null | undefined) ?? null,
+        residencyRequiredToBuy: (record.residencyRequiredToBuy as string | null | undefined) ?? (record.residency_required_to_buy as string | null | undefined) ?? null,
+        verified: (record.verified as string | null | undefined) ?? null,
+        verifiedAt: (record.verifiedAt as string | null | undefined) ?? (record.verified_at as string | null | undefined) ?? null,
       } as ReplaceModuleExecutionPayload<M>;
     case "healthcare":
       return {
         summary: (record.summary as string | null | undefined) ?? (record.system_summary as string | null | undefined) ?? null,
         publicAccessSummary: (record.publicAccessSummary as string | null | undefined) ?? (record.public_access_foreigners as string | null | undefined) ?? null,
         insuranceSummary: (record.insuranceSummary as string | null | undefined) ?? (record.international_insurance_notes as string | null | undefined) ?? null,
+        topic: (record.topic as string | null | undefined) ?? null,
+        englishSpeakingCare: (record.englishSpeakingCare as string | null | undefined) ?? (record.english_speaking_care as string | null | undefined) ?? null,
+        typicalGpVisitCost: (record.typicalGpVisitCost as string | null | undefined) ?? (record.typical_gp_visit_cost as string | null | undefined) ?? null,
+        typicalSpecialistCost: (record.typicalSpecialistCost as string | null | undefined) ?? (record.typical_specialist_cost as string | null | undefined) ?? null,
+        verified: (record.verified as string | null | undefined) ?? null,
+        verifiedAt: (record.verifiedAt as string | null | undefined) ?? (record.verified_at as string | null | undefined) ?? null,
       } as ReplaceModuleExecutionPayload<M>;
     case "visaResidency":
       return {
         summary: (record.summary as string | null | undefined) ?? (record.visa_type as string | null | undefined) ?? null,
         residencyPath: (record.residencyPath as string | null | undefined) ?? (record.permanent_residency_path as string | null | undefined) ?? null,
         citizenshipPath: (record.citizenshipPath as string | null | undefined) ?? (record.citizenship_path as string | null | undefined) ?? null,
+        stayModeKey: (record.stayModeKey as string | null | undefined) ?? (record.stay_mode_key as string | null | undefined) ?? null,
+        travelerNationality: (record.travelerNationality as string | null | undefined) ?? (record.traveler_nationality as string | null | undefined) ?? null,
+        verified: (record.verified as string | null | undefined) ?? null,
+        verifiedAt: (record.verifiedAt as string | null | undefined) ?? (record.verified_at as string | null | undefined) ?? null,
       } as ReplaceModuleExecutionPayload<M>;
     case "taxesFinance":
       return {
         summary: (record.summary as string | null | undefined) ?? null,
         notes: (record.notes as string | null | undefined) ?? (record.income_tax_notes as string | null | undefined) ?? null,
+        verified: (record.verified as string | null | undefined) ?? null,
+        verifiedAt: (record.verifiedAt as string | null | undefined) ?? (record.verified_at as string | null | undefined) ?? null,
       } as ReplaceModuleExecutionPayload<M>;
     case "lgbtqInclusivity":
       return {
         summary: (record.summary as string | null | undefined) ?? (record.evidence_summary as string | null | undefined) ?? null,
         culturalNotes: (record.culturalNotes as string | null | undefined) ?? (record.community_scene as string | null | undefined) ?? null,
+        overallRating: (record.overallRating as string | null | undefined) ?? (record.overall_rating as string | null | undefined) ?? null,
+        legalProtections: (record.legalProtections as string | null | undefined) ?? (record.legal_protections as string | null | undefined) ?? null,
+        socialAcceptance: (record.socialAcceptance as string | null | undefined) ?? (record.social_acceptance as string | null | undefined) ?? null,
+        prideEvents: (record.prideEvents as string | null | undefined) ?? (record.pride_events as string | null | undefined) ?? null,
+        nightlifeSocial: (record.nightlifeSocial as string | null | undefined) ?? (record.nightlife_social as string | null | undefined) ?? null,
+        healthcareAccess: (record.healthcareAccess as string | null | undefined) ?? (record.healthcare_access as string | null | undefined) ?? null,
+        areasResources: (record.areasResources as string | null | undefined) ?? (record.areas_resources as string | null | undefined) ?? null,
+        safetyConsiderations: (record.safetyConsiderations as string | null | undefined) ?? (record.safety_considerations as string | null | undefined) ?? null,
+        verified: (record.verified as string | null | undefined) ?? null,
+        verifiedAt: (record.verifiedAt as string | null | undefined) ?? (record.verified_at as string | null | undefined) ?? null,
       } as ReplaceModuleExecutionPayload<M>;
     case "safetyRisks":
       return {
@@ -255,23 +285,47 @@ function normalizeReplaceModuleExecutionPayload<M extends ReplaceModuleExecution
         topic: (record.topic as string | null | undefined) ?? (record.risk_type as string | null | undefined) ?? null,
         severity: (record.severity as string | null | undefined) ?? null,
         summary: (record.summary as string | null | undefined) ?? null,
+        verified: (record.verified as string | null | undefined) ?? null,
+        verifiedAt: (record.verifiedAt as string | null | undefined) ?? (record.verified_at as string | null | undefined) ?? null,
       } as ReplaceModuleExecutionPayload<M>;
     case "transportation":
       return {
         summary: (record.summary as string | null | undefined) ?? null,
         airportSummary: (record.airportSummary as string | null | undefined) ?? (record.name as string | null | undefined) ?? null,
         transitSummary: (record.transitSummary as string | null | undefined) ?? (record.public_transit_available as string | null | undefined) ?? null,
+        topic: (record.topic as string | null | undefined) ?? null,
+        distanceKm: (record.distanceKm as string | null | undefined) ?? (record.distance_km as string | null | undefined) ?? null,
+        typicalDriveMinutes: (record.typicalDriveMinutes as string | null | undefined) ?? (record.typical_drive_minutes as string | null | undefined) ?? null,
+        nonstopUsService: (record.nonstopUsService as string | null | undefined) ?? (record.nonstop_us_service as string | null | undefined) ?? null,
+        carNeededRating: (record.carNeededRating as string | null | undefined) ?? (record.car_needed_rating as string | null | undefined) ?? null,
+        parkingNotes: (record.parkingNotes as string | null | undefined) ?? (record.parking_notes as string | null | undefined) ?? null,
+        rideshareNotes: (record.rideshareNotes as string | null | undefined) ?? (record.rideshare_notes as string | null | undefined) ?? null,
+        verified: (record.verified as string | null | undefined) ?? null,
+        verifiedAt: (record.verifiedAt as string | null | undefined) ?? (record.verified_at as string | null | undefined) ?? null,
       } as ReplaceModuleExecutionPayload<M>;
     case "remoteWork":
       return {
         summary: (record.summary as string | null | undefined) ?? (record.remote_work_notes as string | null | undefined) ?? null,
         internetSummary: (record.internetSummary as string | null | undefined) ?? (record.avg_download_mbps as string | null | undefined) ?? null,
         timezoneSummary: (record.timezoneSummary as string | null | undefined) ?? (record.us_time_zone_fit as string | null | undefined) ?? null,
+        fiberAvailable: (record.fiberAvailable as string | null | undefined) ?? (record.fiber_available as string | null | undefined) ?? null,
+        mobile5g: (record.mobile5g as string | null | undefined) ?? (record.mobile_5g as string | null | undefined) ?? null,
+        utilityReliability: (record.utilityReliability as string | null | undefined) ?? (record.utility_reliability as string | null | undefined) ?? null,
+        coworkingSummary: (record.coworkingSummary as string | null | undefined) ?? (record.coworking_summary as string | null | undefined) ?? null,
+        verified: (record.verified as string | null | undefined) ?? null,
+        verifiedAt: (record.verifiedAt as string | null | undefined) ?? (record.verified_at as string | null | undefined) ?? null,
       } as ReplaceModuleExecutionPayload<M>;
     case "languageIntegration":
       return {
         summary: (record.summary as string | null | undefined) ?? (record.integration_notes as string | null | undefined) ?? null,
         englishSupport: (record.englishSupport as string | null | undefined) ?? (record.can_function_in_english as string | null | undefined) ?? null,
+        primaryLanguage: (record.primaryLanguage as string | null | undefined) ?? (record.primary_language as string | null | undefined) ?? null,
+        englishProficiency: (record.englishProficiency as string | null | undefined) ?? (record.english_proficiency as string | null | undefined) ?? null,
+        governmentEnglishAccess: (record.governmentEnglishAccess as string | null | undefined) ?? (record.government_english_access as string | null | undefined) ?? null,
+        medicalEnglishAccess: (record.medicalEnglishAccess as string | null | undefined) ?? (record.medical_english_access as string | null | undefined) ?? null,
+        languageResources: (record.languageResources as string | null | undefined) ?? (record.language_resources as string | null | undefined) ?? null,
+        verified: (record.verified as string | null | undefined) ?? null,
+        verifiedAt: (record.verifiedAt as string | null | undefined) ?? (record.verified_at as string | null | undefined) ?? null,
       } as ReplaceModuleExecutionPayload<M>;
     case "pets":
       return {
@@ -287,6 +341,13 @@ function normalizeReplaceModuleExecutionPayload<M extends ReplaceModuleExecution
       return {
         summary: (record.summary as string | null | undefined) ?? null,
         socialNotes: (record.socialNotes as string | null | undefined) ?? (record.clubs_groups as string | null | undefined) ?? null,
+        expatPresence: (record.expatPresence as string | null | undefined) ?? (record.expat_presence as string | null | undefined) ?? null,
+        volunteering: (record.volunteering as string | null | undefined) ?? null,
+        easeMeetingPeople: (record.easeMeetingPeople as string | null | undefined) ?? (record.ease_meeting_people as string | null | undefined) ?? null,
+        ageMix: (record.ageMix as string | null | undefined) ?? (record.age_mix as string | null | undefined) ?? null,
+        transientVsRooted: (record.transientVsRooted as string | null | undefined) ?? (record.transient_vs_rooted as string | null | undefined) ?? null,
+        verified: (record.verified as string | null | undefined) ?? null,
+        verifiedAt: (record.verifiedAt as string | null | undefined) ?? (record.verified_at as string | null | undefined) ?? null,
       } as ReplaceModuleExecutionPayload<M>;
     case "accessibility":
       return {

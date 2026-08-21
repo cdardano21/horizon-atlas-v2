@@ -237,10 +237,14 @@ export function projectKeyedChildComparableRow(module: KeyedChildModuleKey, valu
         sourceName: pickNullableString(record, ["sourceName", "source_name"]),
       });
     case "scores":
+      // verified/verifiedAt are mutable parity fields, not identity - included here so a
+      // verification-only change is classified UPDATE_CHILD instead of UNCHANGED_CHILD.
       return projectComparableObject({
         scoreKey: pickNullableString(record, ["scoreKey", "score_key"]),
         scoreValue: pickNullableString(record, ["scoreValue", "score_value"]),
         scoreLabel: pickNullableString(record, ["scoreLabel", "score_label"]),
+        verified: pickNullableString(record, ["verified"]),
+        verifiedAt: pickNullableString(record, ["verifiedAt", "verified_at"]),
       });
     case "neighborhoods":
       return projectComparableObject({

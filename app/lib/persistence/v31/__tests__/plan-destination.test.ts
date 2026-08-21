@@ -581,7 +581,7 @@ describe("destination plan assembly", () => {
     }));
 
     const expectedState = createStoredState({
-      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD" }] as Array<StoredDestinationState["costOfLiving"][number]>,
+      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD", stayModeKey: null, verified: null, verifiedAt: null }] as Array<StoredDestinationState["costOfLiving"][number]>,
     });
     expect(plan.expectedComparablePostState).toEqual(projectComparable(expectedState));
   });
@@ -632,14 +632,14 @@ describe("destination plan assembly", () => {
     const expectedState = createStoredState({
       editorial: { shortDescription: "Updated short", longDescription: "Long", currency: "USD", primaryLanguage: "English", timeZone: "UTC" },
       facts: [{ factKey: FACT_ONE_KEY, factGroup: "quality", valueText: "Updated fact", displayLabel: "Updated fact", sourceName: "Source" }],
-      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD" }] as Array<StoredDestinationState["costOfLiving"][number]>,
+      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD", stayModeKey: null, verified: null, verifiedAt: null }] as Array<StoredDestinationState["costOfLiving"][number]>,
     });
     expect(firstPlan.expectedComparablePostState).toEqual(projectComparable(expectedState));
 
     const staleState = createStoredState({
       editorial: { shortDescription: "Original short", longDescription: "Long", currency: "USD", primaryLanguage: "English", timeZone: "UTC" },
       facts: [{ factKey: FACT_ONE_KEY, factGroup: "quality", valueText: "Stored fact", displayLabel: "Stored fact", sourceName: "Source" }],
-      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD" }] as Array<StoredDestinationState["costOfLiving"][number]>,
+      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD", stayModeKey: null, verified: null, verifiedAt: null }] as Array<StoredDestinationState["costOfLiving"][number]>,
     });
     expect(firstPlan.expectedComparablePostState).not.toEqual(projectComparable(staleState));
 
