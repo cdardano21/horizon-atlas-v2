@@ -501,3 +501,60 @@ describe("REQUIRED TEST 7 - real Lisbon frozen-workbook fixture through the real
     expect(scoreStatements.every((statement) => statement.values.includes("2026-08-08"))).toBe(true);
   });
 });
+
+describe("REQUIRED TEST - real Lisbon already-repaired scores produce zero score UPDATE_CHILD (idempotency proof)", () => {
+  it("classifies already-repaired scores against the real workbook as UNCHANGED_CHILD, closing the reported idempotency gap", async () => {
+    const workbookImport = await loadFrozenWorkbookV31DeterministicImport();
+    const lisbon = workbookImport.canonicalDestinations?.find((destination) => destination.identity.destinationKey === "lisbon-pt");
+    expect(lisbon).toBeDefined();
+
+    const lisbonId = "lisbon-fixture-id" as DestinationId;
+    const lisbonKey = "lisbon-pt" as CanonicalDestinationKey;
+    const scope: ApprovedDestinationScope = Object.freeze([Object.freeze({ destinationKey: lisbonKey, destinationId: lisbonId })]);
+
+    // Current DB state mirrors the ACTUAL already-repaired representation confirmed via raw SQL
+    // ground truth: verified is a Postgres boolean stringified back to "true"/"false", verifiedAt
+    // is a timestamptz stringified to a full ISO instant - not the workbook's raw "0"/"1"/bare date.
+    const currentScores = (lisbon!.scores as ReadonlyArray<Record<string, unknown>>).map((score) => {
+      const rawVerified = String(score.verified ?? score.verified);
+      const rawVerifiedAt = (score.verifiedAt ?? score.verified_at) as string | null;
+      return {
+        scoreKey: score.scoreKey ?? score.score_key,
+        scoreValue: score.scoreValue ?? score.score_value,
+        scoreLabel: score.scoreLabel ?? score.score_label,
+        verified: rawVerified.trim() === "1" ? "true" : rawVerified.trim() === "0" ? "false" : null,
+        verifiedAt: rawVerifiedAt ? `${rawVerifiedAt}T00:00:00+00:00` : null,
+      };
+    });
+    const currentState = baseStored({
+      identity: { destinationKey: lisbonKey, slug: "lisbon-portugal", name: "Lisbon", city: "Lisbon", country: "Portugal" },
+      scores: currentScores,
+    });
+
+    const manifestInterpretation = interpretOperationManifest({
+      manifest: { entries: [] },
+      canonicalDestinations: [lisbon as unknown as DeterministicV31CanonicalDestination],
+      approvedScope: scope,
+      storedDestinationStateByKey: { [lisbonKey]: currentState } as never,
+    });
+    expect(manifestInterpretation.valid).toBe(true);
+
+    const destinationPlan = buildDestinationPlan({
+      resolvedDestinationIdentity: { destinationKey: lisbonKey, destinationId: lisbonId },
+      canonicalDestination: lisbon as unknown as DeterministicV31CanonicalDestination,
+      storedDestinationState: currentState,
+      manifestInterpretation,
+      diffPolicy: diffPolicy(),
+      approvedScope: scope,
+    });
+
+    const scoreOps = destinationPlan.childOperations.filter((operation) => operation.module === "scores");
+    expect(scoreOps.length).toBeGreaterThan(0);
+    expect(scoreOps.every((operation) => operation.kind === "UNCHANGED_CHILD")).toBe(true);
+    expect(scoreOps.some((operation) => operation.kind === "UPDATE_CHILD")).toBe(false);
+
+    const statements = buildDestinationPlanWriteStatements(destinationPlan);
+    const scoreStatements = statements.filter((statement) => statement.text.includes(KEYED_CHILD_TABLE_CONFIG.scores.table));
+    expect(scoreStatements).toHaveLength(0);
+  });
+});

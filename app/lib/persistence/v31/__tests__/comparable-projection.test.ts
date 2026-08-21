@@ -778,6 +778,43 @@ describe("Phase 3A.1 comparable projection", () => {
     expect(projectKeyedChildComparableRow("scores", canonicalScore)).toEqual(projectKeyedChildComparableRow("scores", storedScore));
   });
 
+  describe("scores verified/verifiedAt comparison equivalence", () => {
+    it("treats persisted false and workbook \"0\" as equal", () => {
+      const persisted = { scoreKey: "score-1", scoreValue: "90", scoreLabel: "Excellent", verified: "false", verifiedAt: null };
+      const incoming = { score_key: "score-1", score_value: "90", score_label: "Excellent", verified: "0", verified_at: null };
+      expect(projectKeyedChildComparableRow("scores", persisted)).toEqual(projectKeyedChildComparableRow("scores", incoming));
+    });
+
+    it("treats persisted true and workbook \"1\" as equal", () => {
+      const persisted = { scoreKey: "score-1", scoreValue: "90", scoreLabel: "Excellent", verified: "true", verifiedAt: null };
+      const incoming = { score_key: "score-1", score_value: "90", score_label: "Excellent", verified: "1", verified_at: null };
+      expect(projectKeyedChildComparableRow("scores", persisted)).toEqual(projectKeyedChildComparableRow("scores", incoming));
+    });
+
+    it("treats persisted false and workbook \"1\" as genuinely different", () => {
+      const persisted = { scoreKey: "score-1", scoreValue: "90", scoreLabel: "Excellent", verified: "false", verifiedAt: null };
+      const incoming = { score_key: "score-1", score_value: "90", score_label: "Excellent", verified: "1", verified_at: null };
+      expect(projectKeyedChildComparableRow("scores", persisted)).not.toEqual(projectKeyedChildComparableRow("scores", incoming));
+    });
+
+    it("treats a full timestamptz instant and the equivalent bare workbook date as equal", () => {
+      const persisted = { scoreKey: "score-1", scoreValue: "90", scoreLabel: "Excellent", verified: null, verifiedAt: "2026-08-08T00:00:00+00:00" };
+      const incoming = { score_key: "score-1", score_value: "90", score_label: "Excellent", verified: null, verified_at: "2026-08-08" };
+      expect(projectKeyedChildComparableRow("scores", persisted)).toEqual(projectKeyedChildComparableRow("scores", incoming));
+    });
+
+    it("treats a genuinely different verifiedAt calendar day as different", () => {
+      const persisted = { scoreKey: "score-1", scoreValue: "90", scoreLabel: "Excellent", verified: null, verifiedAt: "2026-08-08T00:00:00+00:00" };
+      const incoming = { score_key: "score-1", score_value: "90", score_label: "Excellent", verified: null, verified_at: "2026-08-09" };
+      expect(projectKeyedChildComparableRow("scores", persisted)).not.toEqual(projectKeyedChildComparableRow("scores", incoming));
+    });
+
+    it("does not invent a boolean for narrative verified text", () => {
+      const row = { scoreKey: "score-1", scoreValue: "90", scoreLabel: "Excellent", verified: "Yes", verifiedAt: null };
+      expect(projectKeyedChildComparableRow("scores", row).verified).toBe("Yes");
+    });
+  });
+
   it("treats place optional null and undefined fields as semantically equivalent", () => {
     const canonicalPlace = {
       place_key: "place-1",

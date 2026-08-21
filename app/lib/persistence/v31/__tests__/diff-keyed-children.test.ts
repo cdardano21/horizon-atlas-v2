@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { diffKeyedChildren } from "../diff-keyed-children";
+import { projectKeyedChildComparableRow } from "../comparable-projection";
 import type {
   ChildPayloadByModule,
   ChildStableKeyByModule,
@@ -315,5 +316,40 @@ describe("diffKeyedChildren", () => {
     expect(moveChecklist).toEqual([]);
     expect(eventsSeasonality).toEqual([]);
     expect(sources).toEqual([]);
+  });
+
+  it("classifies a persisted score against its equivalent workbook representation as UNCHANGED_CHILD, not UPDATE_CHILD or a duplicate CREATE_CHILD", () => {
+    const persistedScore = { scoreKey: "retirement", scoreValue: "90", scoreLabel: "Excellent", verified: "false", verifiedAt: "2026-08-08T00:00:00+00:00" };
+    const incomingScore = { score_key: "retirement", score_value: "90", score_label: "Excellent", verified: "0", verified_at: "2026-08-08" };
+
+    const result = diffKeyedChildren({
+      module: "scores",
+      currentChildren: [persistedScore as never],
+      incomingChildren: [incomingScore as never],
+      getStableKey: (child) => (child as { scoreKey?: string; score_key?: string }).scoreKey ?? (child as { score_key?: string }).score_key ?? null,
+      projectChildForComparison: (child) => projectKeyedChildComparableRow("scores", child),
+    });
+
+    expect(result).toHaveLength(1);
+    expect(result[0].kind).toBe("UNCHANGED_CHILD");
+    expect(result[0].stableChildKey).toBe("retirement");
+    expect(result.filter((op) => op.kind === "CREATE_CHILD")).toHaveLength(0);
+  });
+
+  it("still classifies a genuinely changed score verified value as UPDATE_CHILD with the same identity", () => {
+    const persistedScore = { scoreKey: "retirement", scoreValue: "90", scoreLabel: "Excellent", verified: "false", verifiedAt: "2026-08-08T00:00:00+00:00" };
+    const incomingScore = { score_key: "retirement", score_value: "90", score_label: "Excellent", verified: "1", verified_at: "2026-08-08" };
+
+    const result = diffKeyedChildren({
+      module: "scores",
+      currentChildren: [persistedScore as never],
+      incomingChildren: [incomingScore as never],
+      getStableKey: (child) => (child as { scoreKey?: string; score_key?: string }).scoreKey ?? (child as { score_key?: string }).score_key ?? null,
+      projectChildForComparison: (child) => projectKeyedChildComparableRow("scores", child),
+    });
+
+    expect(result).toHaveLength(1);
+    expect(result[0].kind).toBe("UPDATE_CHILD");
+    expect(result[0].stableChildKey).toBe("retirement");
   });
 });

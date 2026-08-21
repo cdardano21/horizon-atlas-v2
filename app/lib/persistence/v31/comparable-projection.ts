@@ -11,7 +11,7 @@ export type ComparableValue = ComparablePrimitive | ComparableObject | Comparabl
 
 export type ComparableProjection = ComparableObject;
 
-export type ComparableScalarPolicy = "ordinary" | "url";
+export type ComparableScalarPolicy = "ordinary" | "url" | "boolean" | "date";
 
 type ComparableScalarValue = ComparablePrimitive;
 type ComparableObjectInput = object;
@@ -72,6 +72,14 @@ const KEYED_CHILD_MODULES = {
 
 const URL_FIELDS = new Set(["url", "source_url", "image_url", "websiteUrl", "googleMapsUrl", "sourceUrl"]);
 
+// verified/verifiedAt carry identical boolean/date semantics on every module's canonical type
+// (confirmed: every DeterministicV31Canonical*State declares them as raw string|null) - a
+// name-based policy here (mirroring URL_FIELDS) lets semantically-equal but differently-formatted
+// representations (workbook "0"/"1" vs DB-stringified "false"/"true"; bare date vs full
+// timestamptz) compare equal without changing what is actually stored.
+const BOOLEAN_FIELDS = new Set(["verified"]);
+const DATE_FIELDS = new Set(["verifiedAt", "verified_at"]);
+
 function normalizeStringValue(value: string): string | null {
   const normalized = value.normalize("NFC").replace(/\r\n?/g, "\n").trim();
   return normalized.length === 0 ? null : normalized;
@@ -115,6 +123,36 @@ function normalizeUrlValue(value: string): string | null {
   }
 }
 
+// Mirrors write-port.ts's coerceReplaceModuleColumnValue exactly, so the comparison layer's idea
+// of "equal" never diverges from what the write layer would actually persist. Narrative text
+// (e.g. "Yes") is never invented into a boolean - it falls through to ordinary string comparison.
+function normalizeBooleanValue(value: string): ComparablePrimitive | null {
+  const normalized = value.trim().toLowerCase();
+  if (normalized === "true" || normalized === "1") {
+    return true;
+  }
+  if (normalized === "false" || normalized === "0") {
+    return false;
+  }
+  return normalizeStringValue(value);
+}
+
+// The workbook only ever supplies a bare calendar date; the DB returns a full timestamptz over
+// the REST API. Day-granularity is therefore the correct comparison boundary for this field - not
+// an invented precision the source data never had. Unparseable values fall through unchanged
+// rather than being coerced into a fabricated date.
+function normalizeDateValue(value: string): ComparablePrimitive | null {
+  const trimmed = value.trim();
+  if (trimmed.length === 0) {
+    return null;
+  }
+  const parsed = new Date(trimmed);
+  if (Number.isNaN(parsed.getTime())) {
+    return normalizeStringValue(value);
+  }
+  return parsed.toISOString().slice(0, 10);
+}
+
 function normalizeScalarValue(value: ComparableInput, policy: ComparableScalarPolicy = "ordinary"): ComparablePrimitive | null {
   if (value === null || value === undefined) {
     return null;
@@ -123,6 +161,12 @@ function normalizeScalarValue(value: ComparableInput, policy: ComparableScalarPo
   if (typeof value === "string") {
     if (policy === "url") {
       return normalizeUrlValue(value);
+    }
+    if (policy === "boolean") {
+      return normalizeBooleanValue(value);
+    }
+    if (policy === "date") {
+      return normalizeDateValue(value);
     }
     return normalizeStringValue(value);
   }
@@ -156,7 +200,16 @@ export function projectComparableObject(value: ComparableObjectInput): Comparabl
 }
 
 function getFieldPolicy(fieldName: string): ComparableScalarPolicy {
-  return URL_FIELDS.has(fieldName) ? "url" : "ordinary";
+  if (URL_FIELDS.has(fieldName)) {
+    return "url";
+  }
+  if (BOOLEAN_FIELDS.has(fieldName)) {
+    return "boolean";
+  }
+  if (DATE_FIELDS.has(fieldName)) {
+    return "date";
+  }
+  return "ordinary";
 }
 
 export function projectComparableValue(value: ComparableInput | unknown, policy: ComparableScalarPolicy = "ordinary"): ComparableValue {
