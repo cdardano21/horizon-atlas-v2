@@ -586,6 +586,94 @@ export const AFFORDABLE_AT_6500_NOT_AT_4500: SyntheticDestinationFixture = {
   lifestyleDimensions: { dimensionValues: { safety: 88, healthcare: 85 } },
 };
 
+/** Layer 2 test fixture: cleanly affordable under a $4,500 hard ceiling. */
+export const LAYER2_TEST_AFFORDABLE_UNDER_HARD_CEILING: SyntheticDestinationFixture = {
+  id: "fixture-layer2-affordable-under-hard-ceiling",
+  displayName: "Fixture: Layer 2 Test — Affordable Under Hard Ceiling",
+  notes: "Estimated monthly cost range ($4,000-$4,400) sits entirely below a $4,500 hard-ceiling budget.",
+  entryAndStay: {
+    touristEntryAllowed: "YES",
+    touristStayLimitDays: 90,
+    extendedStayOrLongStayVisaAvailable: "YES",
+    permanentResidencyPathAvailable: "UNKNOWN",
+    retirementVisaProgramAvailable: "UNKNOWN",
+    remoteWorkOrDigitalNomadVisaAvailable: "UNKNOWN",
+    remoteWorkLegalUnderTouristStatus: "UNKNOWN",
+    foreignPropertyPurchaseAllowed: "YES",
+    propertyPurchaseGrantsResidencyPath: "NO",
+    spouseOrDependentInclusionSupported: "UNKNOWN",
+  },
+  hardGates: {
+    beachAccess: "UNKNOWN",
+    mountainOrSkiAccess: "UNKNOWN",
+    healthcareStandard: "GOOD_PRIVATE_AVAILABLE",
+    safetyStandard: "MODERATE_OR_BETTER",
+    lgbtqLegalProtectionStatus: "UNKNOWN",
+  },
+  cost: {
+    estimatedMonthlyCostRange: { low: 4000, high: 4400, currencyCode: "USD" },
+    householdSizeAssumedForEstimate: 1,
+  },
+  financial: {
+    taxResidencyTriggerDays: null,
+    pensionTaxable: "UNKNOWN",
+    socialSecurityTaxTreatyBenefit: "UNKNOWN",
+    iraOrForeignRetirementAccountRecognized: "UNKNOWN",
+    fourZeroOneKRecognized: "UNKNOWN",
+    usTaxTreatyInEffect: "UNKNOWN",
+    foreignTaxCreditAvailable: "UNKNOWN",
+    wealthTaxApplicable: "UNKNOWN",
+    propertyTaxAnnualRatePercent: null,
+    propertyPurchaseOrTransferTaxPercent: null,
+    buyVsRentBreakEvenYears: null,
+  },
+  lifestyleDimensions: { dimensionValues: {} },
+};
+
+/** Layer 2 test fixture: cost range straddles a $4,500 budget (some of the range fits, some doesn't). */
+export const LAYER2_TEST_BUDGET_STRADDLING_RANGE: SyntheticDestinationFixture = {
+  id: "fixture-layer2-budget-straddling-range",
+  displayName: "Fixture: Layer 2 Test — Budget-Straddling Cost Range",
+  notes: "Estimated monthly cost range ($4,300-$4,900) straddles a $4,500 budget target.",
+  entryAndStay: {
+    touristEntryAllowed: "YES",
+    touristStayLimitDays: 90,
+    extendedStayOrLongStayVisaAvailable: "YES",
+    permanentResidencyPathAvailable: "UNKNOWN",
+    retirementVisaProgramAvailable: "UNKNOWN",
+    remoteWorkOrDigitalNomadVisaAvailable: "UNKNOWN",
+    remoteWorkLegalUnderTouristStatus: "UNKNOWN",
+    foreignPropertyPurchaseAllowed: "YES",
+    propertyPurchaseGrantsResidencyPath: "NO",
+    spouseOrDependentInclusionSupported: "UNKNOWN",
+  },
+  hardGates: {
+    beachAccess: "UNKNOWN",
+    mountainOrSkiAccess: "UNKNOWN",
+    healthcareStandard: "GOOD_PRIVATE_AVAILABLE",
+    safetyStandard: "MODERATE_OR_BETTER",
+    lgbtqLegalProtectionStatus: "UNKNOWN",
+  },
+  cost: {
+    estimatedMonthlyCostRange: { low: 4300, high: 4900, currencyCode: "USD" },
+    householdSizeAssumedForEstimate: 1,
+  },
+  financial: {
+    taxResidencyTriggerDays: null,
+    pensionTaxable: "UNKNOWN",
+    socialSecurityTaxTreatyBenefit: "UNKNOWN",
+    iraOrForeignRetirementAccountRecognized: "UNKNOWN",
+    fourZeroOneKRecognized: "UNKNOWN",
+    usTaxTreatyInEffect: "UNKNOWN",
+    foreignTaxCreditAvailable: "UNKNOWN",
+    wealthTaxApplicable: "UNKNOWN",
+    propertyTaxAnnualRatePercent: null,
+    propertyPurchaseOrTransferTaxPercent: null,
+    buyVsRentBreakEvenYears: null,
+  },
+  lifestyleDimensions: { dimensionValues: {} },
+};
+
 export const ALL_SYNTHETIC_DESTINATION_FIXTURES: readonly SyntheticDestinationFixture[] = [
   CHEAP_BUT_LEGALLY_INFEASIBLE_FOR_LONG_STAY,
   EXPENSIVE_BUT_EXCELLENT_LIFESTYLE,
@@ -598,6 +686,8 @@ export const ALL_SYNTHETIC_DESTINATION_FIXTURES: readonly SyntheticDestinationFi
   WEAK_LGBTQ_LEGAL_SAFETY_OTHERWISE_HIGH_LIFESTYLE,
   MISSING_LEGAL_DATA_UNKNOWN,
   MISSING_FINANCIAL_DATA_UNKNOWN,
+  LAYER2_TEST_AFFORDABLE_UNDER_HARD_CEILING,
+  LAYER2_TEST_BUDGET_STRADDLING_RANGE,
   BUYING_RESTRICTED_BUT_RENTING_EASY,
   AFFORDABLE_AT_6500_NOT_AT_4500,
 ];

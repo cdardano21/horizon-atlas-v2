@@ -174,6 +174,8 @@ describe("FinalDestinationRecommendationResult — no monolithic four-layer scor
       householdSizeAssumed: 1,
       housingAssumption: "RENT",
       marginAmount: 1700,
+      reasonCodes: ["WITHIN_BUDGET_RANGE"],
+      excludedByAffordability: false,
     };
 
     const lifestyleFit: LifestyleScore = {
@@ -246,6 +248,8 @@ describe("FinalDestinationRecommendationResult — no monolithic four-layer scor
         householdSizeAssumed: 1,
         housingAssumption: "RENT",
         marginAmount: 1700,
+        reasonCodes: ["WITHIN_BUDGET_RANGE"],
+        excludedByAffordability: false,
       },
       // A very high lifestyle score must NOT be able to undo the Layer 1 exclusion.
       lifestyleFit: {

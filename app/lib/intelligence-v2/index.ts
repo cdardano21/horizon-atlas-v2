@@ -72,3 +72,13 @@ export type {
   DestinationLifestyleDimensionFacts,
   SyntheticDestinationFixture,
 } from "./destination-fact-types";
+
+export { evaluateEligibility } from "./eligibility-evaluator";
+export { evaluateAffordability } from "./affordability-evaluator";
+export {
+  AFFORDABILITY_POLICY_VERSION,
+  classifyCostRangeAgainstBudget,
+  isExcludedByAffordabilityPolicy,
+  isValidMoneyRange,
+  isValidBudgetAmount,
+} from "./affordability-policy";

@@ -90,8 +90,8 @@ export interface MoneyRange {
 
 /**
  * Structured facts needed later to explain an affordability verdict. No production
- * thresholds are defined here — `status` is the only judgment value, and this phase
- * does not compute it (fixtures set it by hand).
+ * thresholds are defined here — `status` is the decision produced by a versioned,
+ * explicit policy (see affordability-policy.ts), never a hardcoded magic number.
  */
 export interface AffordabilityResult {
   readonly modelVersion: AffordabilityModelVersion;
@@ -105,6 +105,10 @@ export interface AffordabilityResult {
   readonly housingAssumption: "RENT" | "BUY" | "UNSURE";
   /** Budget minus estimated cost midpoint; null when the cost range is unknown. */
   readonly marginAmount: number | null;
+  /** Stable machine-readable codes explaining the verdict, e.g. "COST_RANGE_STRADDLES_BUDGET". */
+  readonly reasonCodes: readonly string[];
+  /** True only when status is UNAFFORDABLE under a HARD_CEILING. UNKNOWN and BORDERLINE never set this true. */
+  readonly excludedByAffordability: boolean;
 }
 
 // ---------------------------------------------------------------------------
