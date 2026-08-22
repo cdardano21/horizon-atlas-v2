@@ -33,6 +33,7 @@ import {
   normalizeSafetyStandard,
   normalizeTouristEntryAllowed,
   parseLeadingInteger,
+  selectBuyTopicHousingRow,
   selectLongStayRow,
   selectTouristRow,
   toNullableNumber,
@@ -104,7 +105,7 @@ export function adaptWorkbookDestinationToIntelligenceV2Facts(canonical: Determi
   const destinationKey = canonical.identity.destinationKey;
 
   const visaRows = scopeRowsToDestination(canonical.visaResidency as VisaResidencyRowV32[], destinationKey);
-  const housingRow = scopeRowsToDestination(canonical.housing as HousingRowV32[], destinationKey)[0] ?? null;
+  const housingRow = selectBuyTopicHousingRow(scopeRowsToDestination(canonical.housing as HousingRowV32[], destinationKey));
   const taxRow = scopeRowsToDestination(canonical.taxesFinance as TaxFinanceRowV32[], destinationKey)[0] ?? null;
   const healthcareRow = scopeRowsToDestination(canonical.healthcare, destinationKey)[0] ?? null;
   const lgbtqRow = scopeRowsToDestination(canonical.lgbtqInclusivity, destinationKey)[0] ?? null;
@@ -141,7 +142,7 @@ export function adaptWorkbookDestinationToIntelligenceV2Facts(canonical: Determi
     hardGates: {
       beachAccess: toStrictEnum(beachAccessRaw, BEACH_ACCESS_TOKENS, "UNKNOWN", "hardGates.beachAccess", "DESTINATIONS", errors),
       mountainOrSkiAccess: toStrictEnum(mountainOrSkiAccessRaw, MOUNTAIN_OR_SKI_ACCESS_TOKENS, "UNKNOWN", "hardGates.mountainOrSkiAccess", "DESTINATIONS", errors),
-      healthcareStandard: normalizeHealthcareStandard(healthcareRow?.private_care_available ?? null),
+      healthcareStandard: normalizeHealthcareStandard(healthcareRow?.private_care_available ?? null, "hardGates.healthcareStandard", "HEALTHCARE_INSURANCE", errors),
       safetyStandard: normalizeSafetyStandard(safetyRows.map((row) => row.severity)),
       lgbtqLegalProtectionStatus: normalizeLgbtqLegalProtectionStatus(lgbtqRow?.legal_protections ?? null),
     },

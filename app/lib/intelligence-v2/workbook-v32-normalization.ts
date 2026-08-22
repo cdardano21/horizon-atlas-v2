@@ -23,13 +23,23 @@ export interface WorkbookAdapterMappingError {
 
 const normalizeCell = (raw: string | null | undefined): string => (raw ?? "").trim();
 
-/** The single canonical Yes/No/Unknown dialect already used by the workbook (e.g. HOUSING_PROPERTY.can_foreigners_buy). Blank -> UNKNOWN. Anything else -> UNKNOWN + a reported mapping error (never a silent guess). */
+/**
+ * The canonical Yes/No/Unknown dialect already used by the workbook (e.g.
+ * HOUSING_PROPERTY.can_foreigners_buy), PLUS the deterministic parser's
+ * confirmed Excel-boolean dialect: a genuine Excel boolean TRUE/FALSE cell is
+ * exposed downstream as the literal text "1"/"0" (see workbook-v31-deterministic-core.ts's
+ * XML cell reader - it never special-cases boolean-typed cells). "1" -> YES and
+ * "0" -> NO are accepted for that reason only - no other truthy/falsy token
+ * ("true", "false", "y", "n", "on", "off", or any other numeric string) is
+ * accepted. Blank -> UNKNOWN. Anything else -> UNKNOWN + a reported mapping
+ * error (never a silent guess).
+ */
 export function toTriState(raw: string | null | undefined, factPath: string, sheet: string, errors: WorkbookAdapterMappingError[]): TriStateFact {
   const value = normalizeCell(raw);
   if (value === "") return "UNKNOWN";
   const lowered = value.toLowerCase();
-  if (lowered === "yes") return "YES";
-  if (lowered === "no") return "NO";
+  if (lowered === "yes" || lowered === "1") return "YES";
+  if (lowered === "no" || lowered === "0") return "NO";
   if (lowered === "unknown") return "UNKNOWN";
   errors.push({ factPath, sheet, rawValue: raw ?? null, message: `Invalid TriState token "${raw}" (expected Yes/No/Unknown/blank).` });
   return "UNKNOWN";
@@ -85,17 +95,27 @@ export const RETIREMENT_INCOME_TREATMENT_TOKENS: readonly RetirementIncomeTreatm
 
 /**
  * Narrow, explicit, generic rule: only the structured `private_care_available`
- * Yes/No field is used. `public_access_foreigners` and `english_speaking_care`
- * are free narrative text in the current workbook (e.g. "Depends on
- * residency/registration") and are NOT structured enough to feed a deterministic
- * rule, so they are deliberately excluded. This rule can never produce
- * INTERNATIONAL_STANDARD - the facts available do not support claiming the
- * highest tier.
+ * Yes/No(/boolean) field is used. `public_access_foreigners` and
+ * `english_speaking_care` are free narrative text in the current workbook (e.g.
+ * "Depends on residency/registration") and are NOT structured enough to feed a
+ * deterministic rule, so they are deliberately excluded. This rule can never
+ * produce INTERNATIONAL_STANDARD - the facts available do not support claiming
+ * the highest tier.
+ *
+ * Delegates to the shared `toTriState` coercion (rather than maintaining an
+ * independent, narrower Yes/No parser) so this field gets the exact same
+ * accepted dialect - including the Excel-boolean "1"/"0" cells - and the exact
+ * same mapping-error diagnostic for a malformed/unrecognized value.
  */
-export function normalizeHealthcareStandard(privateCareAvailable: string | null | undefined): HealthcareMinimumStandard | "UNKNOWN" {
-  const value = normalizeCell(privateCareAvailable).toLowerCase();
-  if (value === "yes") return "GOOD_PRIVATE_AVAILABLE";
-  if (value === "no") return "BASIC_ACCESS";
+export function normalizeHealthcareStandard(
+  privateCareAvailable: string | null | undefined,
+  factPath: string,
+  sheet: string,
+  errors: WorkbookAdapterMappingError[],
+): HealthcareMinimumStandard | "UNKNOWN" {
+  const triState = toTriState(privateCareAvailable, factPath, sheet, errors);
+  if (triState === "YES") return "GOOD_PRIVATE_AVAILABLE";
+  if (triState === "NO") return "BASIC_ACCESS";
   return "UNKNOWN";
 }
 
@@ -197,10 +217,27 @@ export interface CostOfLivingRowInput {
 }
 
 /**
+ * `total_monthly` is a reserved, non-additive rollup category name: it is
+ * itself already the sum of its sibling component rows in the same group, so
+ * it must never be summed on top of them (that would double-count every
+ * category). This is a generic normalization convention, not a Batch #1
+ * special case - any current or future workbook using this category name gets
+ * the same protection.
+ */
+const NON_ADDITIVE_COST_ROLLUP_CATEGORIES: ReadonlySet<string> = new Set(["total_monthly"]);
+
+/** Relative-divergence threshold (percent of the stored rollup value) above which a component-sum-vs-rollup mismatch is worth a non-blocking, informational mapping-error note. Purely diagnostic - never changes the computed range. */
+const COST_ROLLUP_RECONCILIATION_TOLERANCE_PERCENT = 10;
+
+/**
  * Groups rows by (household_type, lifestyle_tier). Only sums when the
  * destination's rows collapse to exactly one such group with distinct
  * categories and a single currency - ambiguous/duplicate/multi-currency data
- * returns null (UNKNOWN) rather than guessing which rows to sum.
+ * returns null (UNKNOWN) rather than guessing which rows to sum. Within the
+ * selected group, `total_monthly` (see `NON_ADDITIVE_COST_ROLLUP_CATEGORIES`)
+ * is excluded from the sum; if no additive component rows remain (a
+ * rollup-only group), the result is null (UNKNOWN) rather than inventing a
+ * component breakdown from the rollup alone.
  */
 export function normalizeMonthlyCostRange(rows: readonly CostOfLivingRowInput[], sheet: string, errors: WorkbookAdapterMappingError[]): MoneyRange | null {
   if (rows.length === 0) return null;
@@ -236,10 +273,13 @@ export function normalizeMonthlyCostRange(rows: readonly CostOfLivingRowInput[],
     return null;
   }
 
+  const componentRows = group.filter((r) => !NON_ADDITIVE_COST_ROLLUP_CATEGORIES.has(normalizeCell(r.category).toLowerCase()));
+  const rollupRows = group.filter((r) => NON_ADDITIVE_COST_ROLLUP_CATEGORIES.has(normalizeCell(r.category).toLowerCase()));
+
   let low = 0;
   let high = 0;
   let sawAnyNumeric = false;
-  for (const row of group) {
+  for (const row of componentRows) {
     const l = toNullableNumber(row.monthlyLow, "cost.estimatedMonthlyCostRange", sheet, errors);
     const h = toNullableNumber(row.monthlyHigh, "cost.estimatedMonthlyCostRange", sheet, errors);
     if (l !== null) {
@@ -252,6 +292,25 @@ export function normalizeMonthlyCostRange(rows: readonly CostOfLivingRowInput[],
     }
   }
   if (!sawAnyNumeric) return null;
+
+  // Lightweight, non-blocking reconciliation diagnostic only - the rollup is never trusted
+  // over the components and never added to them; this only reports a notable disagreement.
+  if (rollupRows.length === 1) {
+    const rollupLow = toNullableNumber(rollupRows[0].monthlyLow, "cost.estimatedMonthlyCostRange", sheet, errors);
+    const rollupHigh = toNullableNumber(rollupRows[0].monthlyHigh, "cost.estimatedMonthlyCostRange", sheet, errors);
+    if (rollupLow !== null && rollupHigh !== null) {
+      const lowDivergencePercent = rollupLow === 0 ? 0 : (Math.abs(low - rollupLow) / rollupLow) * 100;
+      const highDivergencePercent = rollupHigh === 0 ? 0 : (Math.abs(high - rollupHigh) / rollupHigh) * 100;
+      if (lowDivergencePercent > COST_ROLLUP_RECONCILIATION_TOLERANCE_PERCENT || highDivergencePercent > COST_ROLLUP_RECONCILIATION_TOLERANCE_PERCENT) {
+        errors.push({
+          factPath: "cost.estimatedMonthlyCostRange",
+          sheet,
+          rawValue: null,
+          message: `Informational: component sum (${low}-${high}) diverges from the stored total_monthly rollup (${rollupLow}-${rollupHigh}) by more than ${COST_ROLLUP_RECONCILIATION_TOLERANCE_PERCENT}%; the component sum was used (the rollup is informational only and is never added to the components).`,
+        });
+      }
+    }
+  }
 
   const [currencyCode] = Array.from(currencies);
   return { low, high, currencyCode };
@@ -279,6 +338,32 @@ export function selectTouristRow<T extends { stay_mode_key?: string | null }>(ro
 
 export function selectLongStayRow<T extends { stay_mode_key?: string | null }>(rows: readonly T[]): T | null {
   return selectRowByStayModePriority(rows, LONG_STAY_ROW_STAY_MODE_PRIORITY);
+}
+
+// ---------------------------------------------------------------------------
+// HOUSING_PROPERTY row selection (generic, housing_topic driven)
+// ---------------------------------------------------------------------------
+
+/** Both real workbook naming conventions observed for the buy/purchase-topic HOUSING_PROPERTY row: the golden Lisbon/New Braunfels/Summerlin shape ("Buying property") and the Batch #1 shape ("buy"). Case-insensitive. */
+const BUY_TOPIC_TOKENS: ReadonlySet<string> = new Set(["buy", "buying property"]);
+
+/**
+ * Selects the buy/purchase-topic HOUSING_PROPERTY row for a destination. The
+ * four currently-adapted housing facts (can_foreigners_buy,
+ * property_purchase_grants_residency_path, property_tax_annual_rate_percent,
+ * purchase_transfer_tax_percent) are all inherently purchase concepts, so a
+ * single buy-topic selection covers all of them - there is no rent-specific
+ * fact currently read from this sheet.
+ *
+ * Falls back to the first destination-scoped row when no recognized buy-topic
+ * row exists, so a single-row legacy/golden shape (any topic label) keeps
+ * working exactly as before, and multi-row rent+buy shapes (Batch #1) select
+ * the correct row instead of an arbitrary positional [0].
+ */
+export function selectBuyTopicHousingRow<T extends { housing_topic?: string | null }>(rows: readonly T[]): T | null {
+  const match = rows.find((row) => BUY_TOPIC_TOKENS.has(normalizeCell(row.housing_topic).toLowerCase()));
+  if (match) return match;
+  return rows[0] ?? null;
 }
 
 // ---------------------------------------------------------------------------
