@@ -864,12 +864,26 @@ const parseWorkbookRows = (workbookPath: string) => {
   const outputPath = path.join(tempDir, "parsed_workbook.json");
   const script = `
 import json
+import re
 import sys
 import zipfile
 import xml.etree.ElementTree as ET
 
 ns = {'a': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main', 'r': 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'}
 rel_ns = {'r': 'http://schemas.openxmlformats.org/package/2006/relationships'}
+
+# Valid OOXML may omit a cell's <c> element entirely when it is blank - a row's
+# physical cell sequence is therefore not reliable positional evidence of column
+# membership. Every cell instead carries its true column in its r="A1"-style
+# reference, which must be honored to avoid a left-shift once any interior cell
+# is omitted (e.g. Q2 present, R2 omitted, S2 present -> S2 is NOT column R).
+CELL_REF_PATTERN = re.compile(r'^([A-Za-z]+)\\d+$')
+
+def column_letters_to_index(letters):
+    index = 0
+    for ch in letters.upper():
+        index = index * 26 + (ord(ch) - ord('A') + 1)
+    return index - 1
 
 with zipfile.ZipFile(sys.argv[1]) as archive:
     workbook = ET.fromstring(archive.read('xl/workbook.xml'))
@@ -898,21 +912,34 @@ with zipfile.ZipFile(sys.argv[1]) as archive:
         parsed_rows = []
         for row in sheet_xml.findall('.//a:sheetData/a:row', ns):
             values = []
+            next_index = 0
             for cell in row.findall('a:c', ns):
                 cell_type = cell.attrib.get('t')
                 value_node = cell.find('a:v', ns)
                 if cell_type == 's' and value_node is not None and value_node.text is not None:
                     index = int(value_node.text)
-                    values.append(shared_strings[index] if index < len(shared_strings) else '')
+                    cell_value = shared_strings[index] if index < len(shared_strings) else ''
                 elif value_node is not None and value_node.text is not None:
-                    values.append(value_node.text)
+                    cell_value = value_node.text
                 else:
                     inline = cell.find('a:is', ns)
                     if inline is not None:
-                        text = ''.join(node.text or '' for node in inline.iterfind('.//a:t', ns))
-                        values.append(text)
+                        cell_value = ''.join(node.text or '' for node in inline.iterfind('.//a:t', ns))
                     else:
-                        values.append('')
+                        cell_value = ''
+
+                # Resolve this cell's true column from its r="A1"-style reference. A
+                # missing/malformed reference falls back to sequential placement right
+                # after the previously resolved column - defensive compatibility only,
+                # never a crash, matching the deterministic-core's existing philosophy.
+                cell_ref = cell.attrib.get('r')
+                match = CELL_REF_PATTERN.match(cell_ref) if cell_ref else None
+                col_index = column_letters_to_index(match.group(1)) if match else next_index
+
+                while len(values) <= col_index:
+                    values.append('')
+                values[col_index] = cell_value  # last-write-wins on an unexpected duplicate reference
+                next_index = col_index + 1
             parsed_rows.append(values)
         rows_by_sheet[name] = parsed_rows
 
