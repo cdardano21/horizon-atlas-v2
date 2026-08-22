@@ -621,6 +621,8 @@ export type DeterministicV31Destination = {
 export interface DeterministicV31CanonicalDestination {
   identity: DeterministicV31CanonicalIdentity;
   editorial: DeterministicV31CanonicalEditorial;
+  /** Raw DESTINATIONS row keyed by header name, for reading additive columns (e.g. v3.2 fields) not yet promoted into `identity`/`editorial`. Optional so existing fixtures/tests built before this field existed remain valid. */
+  destinationRow?: Readonly<Record<string, string | null>>;
   facts: DeterministicV31CanonicalFact[];
   scores: DeterministicV31CanonicalScore[];
   neighborhoods: DeterministicV31CanonicalNeighborhood[];
@@ -819,6 +821,7 @@ export const buildDeterministicV31CanonicalDestination = (input: {
       primaryLanguage: normalizeBlankValue(destinationRowRecord.primary_language) as string | null,
       timeZone: normalizeBlankValue(destinationRowRecord.time_zone) as string | null,
     },
+    destinationRow: destinationRowRecord as Record<string, string | null>,
     facts: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "DESTINATION_FACTS", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalFact>({ ...record, factKey: record.fact_key, factGroup: record.fact_group, valueText: record.value_text, displayLabel: record.display_label, sourceName: record.source_name })),
     scores: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "DESTINATION_SCORES", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalScore>({ ...record, scoreKey: record.score_key, scoreValue: record.score_value, scoreLabel: record.score_label, methodologyVersion: record.methodology_version })),
     neighborhoods: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "NEIGHBORHOODS", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalNeighborhood>(record)),
