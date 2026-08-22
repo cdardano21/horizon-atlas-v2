@@ -118,6 +118,13 @@ export interface SyntheticDestinationFixture {
   readonly displayName: string;
   /** One-line description of the edge case this fixture represents (test readability only). */
   readonly notes: string;
+  /**
+   * ISO 3166-1 alpha-2 destination country code, when known. Optional so every
+   * existing fixture/test predating this field remains valid. Used only by
+   * `relocation-applicability.ts` to derive whether a profile+destination pair
+   * is a cross-border relocation — never read directly by any evaluator.
+   */
+  readonly countryCode?: string | null;
 
   readonly entryAndStay: DestinationEntryAndStayFacts;
   readonly hardGates: DestinationHardGateFacts;

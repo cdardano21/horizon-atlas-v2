@@ -40,15 +40,21 @@ export function unknownHardConstraintResult(reasonCode: string): HardConstraintR
  * Every criterion that MAY apply. Criteria not activated for a given profile (e.g.
  * remote-work legality for a RETIRED, not-working profile) are null, not UNKNOWN —
  * null means "not evaluated because not applicable to this profile", which is
- * distinct from UNKNOWN ("applicable, but the fact is missing").
+ * distinct from UNKNOWN ("applicable, but the fact is missing"). The same null
+ * convention also covers destination-jurisdiction applicability: for a domestic
+ * (same-country) relocation, international entry/stay/legal-path criteria are
+ * null too — see relocation-applicability.ts.
  *
  * Deliberately excludes tax residency: legal stay eligibility and tax residency are
  * different questions. Tax residency triggers belong exclusively in Layer 4.
  */
 export interface EligibilityCriteria {
-  readonly entryFeasibility: HardConstraintResult;
-  readonly stayDurationFeasibility: HardConstraintResult;
-  readonly requiredLegalPath: HardConstraintResult;
+  /** Null only for a domestic (same-country) relocation — otherwise always evaluated. */
+  readonly entryFeasibility: HardConstraintResult | null;
+  /** Null only for a domestic (same-country) relocation — otherwise always evaluated. */
+  readonly stayDurationFeasibility: HardConstraintResult | null;
+  /** Null only for a domestic (same-country) relocation — otherwise always evaluated. */
+  readonly requiredLegalPath: HardConstraintResult | null;
   readonly remoteWorkLegality: HardConstraintResult | null;
   readonly retirementOrResidencyPath: HardConstraintResult | null;
   readonly spouseOrDependentFeasibility: HardConstraintResult | null;

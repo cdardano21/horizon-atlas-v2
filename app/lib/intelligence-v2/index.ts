@@ -105,6 +105,9 @@ export {
   TRISTATE_FAVORABLE_SEVERITY,
 } from "./financial-efficiency-policy";
 
+export type { RelocationApplicability } from "./relocation-applicability";
+export { deriveRelocationApplicability } from "./relocation-applicability";
+
 export { evaluateDestinationForProfile, rankDestinationsForProfile } from "./orchestrator";
 export type { RecommendationRankGroup } from "./ranking-policy";
 export { computeRankGroup, compareForRanking, MATCHED_REASON_FIT_THRESHOLD_PERCENT } from "./ranking-policy";

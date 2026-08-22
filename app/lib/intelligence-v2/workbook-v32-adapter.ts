@@ -117,11 +117,13 @@ export function adaptWorkbookDestinationToIntelligenceV2Facts(canonical: Determi
 
   const beachAccessRaw = canonical.destinationRow?.beach_access ?? null;
   const mountainOrSkiAccessRaw = canonical.destinationRow?.mountain_or_ski_access ?? null;
+  const countryCodeRaw = canonical.destinationRow?.country_code ?? null;
 
   const facts: IntelligenceV2DestinationFacts = {
     id: destinationKey,
     displayName: canonical.identity.name ?? destinationKey,
     notes: "Real workbook-derived fixture (Workbook v3.2 -> Intelligence v2 adapter).",
+    countryCode: countryCodeRaw && countryCodeRaw.trim() !== "" ? countryCodeRaw : null,
 
     entryAndStay: {
       touristEntryAllowed: normalizeTouristEntryAllowed(touristRow?.visa_free_days ?? null),

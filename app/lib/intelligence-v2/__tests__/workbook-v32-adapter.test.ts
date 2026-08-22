@@ -137,7 +137,7 @@ describe("workbook v3.2 -> Intelligence v2 adapter — Lisbon real fixture", () 
     const result = buildIntelligenceV2FactsFromWorkbookImport(workbookImport, "lisbon-pt");
     const facts = result!.facts as unknown as Record<string, unknown>;
 
-    expect(Object.keys(facts).sort()).toEqual(["cost", "displayName", "entryAndStay", "financial", "hardGates", "id", "lifestyleDimensions", "notes"].sort());
+    expect(Object.keys(facts).sort()).toEqual(["cost", "countryCode", "displayName", "entryAndStay", "financial", "hardGates", "id", "lifestyleDimensions", "notes"].sort());
     for (const forbiddenKey of ["budget", "stayDuration", "activityMode", "citizenship", "household", "tenureIntent", "hardRequirements", "lifestylePreferences", "intendsToWorkDuringStay"]) {
       expect(facts).not.toHaveProperty(forbiddenKey);
     }

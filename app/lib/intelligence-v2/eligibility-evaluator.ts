@@ -8,6 +8,7 @@ import type {
 } from "./profile-types";
 import type { EligibilityCriteria, EligibilityResult, HardConstraintResult, HardConstraintStatus } from "./result-types";
 import type { SyntheticDestinationFixture, TriStateFact } from "./destination-fact-types";
+import { deriveRelocationApplicability, type RelocationApplicability } from "./relocation-applicability";
 import { CURRENT_ELIGIBILITY_MODEL_VERSION } from "./versions";
 
 /**
@@ -20,6 +21,12 @@ import { CURRENT_ELIGIBILITY_MODEL_VERSION } from "./versions";
  * Core rule: DO NOT AVERAGE AWAY A FATAL FLAW. `overallStatus` is a fixed
  * precedence (any activated FAIL -> EXCLUDED; else any activated UNKNOWN ->
  * UNKNOWN_INCOMPLETE; else ELIGIBLE), never a weighted/averaged combination.
+ *
+ * International visa/residency/remote-work-legality criteria are null (not
+ * evaluated) for a DOMESTIC (same-country) relocation — see
+ * relocation-applicability.ts. A domestic move has no immigration question to
+ * answer at all, so these criteria are absent from the overall status
+ * calculation entirely, never a fabricated PASS and never UNKNOWN.
  */
 
 // ---------------------------------------------------------------------------
@@ -84,7 +91,8 @@ const SAFETY_STANDARD_RANK: Record<SafetyMinimumStandard, number> = {
 // Always-activated criteria
 // ---------------------------------------------------------------------------
 
-function evaluateEntryFeasibility(profile: UserProfileV2, destination: SyntheticDestinationFixture): HardConstraintResult {
+function evaluateEntryFeasibility(profile: UserProfileV2, destination: SyntheticDestinationFixture, relocationApplicability: RelocationApplicability): HardConstraintResult | null {
+  if (relocationApplicability === "DOMESTIC") return null; // no immigration entry question for a same-country move
   if (!SUPPORTED_PASSPORT_COUNTRY_CODES.has(profile.citizenship.primaryPassportCountryCode)) {
     return buildResult("UNKNOWN", "PASSPORT_NOT_YET_SUPPORTED", null, []);
   }
@@ -98,7 +106,8 @@ function evaluateEntryFeasibility(profile: UserProfileV2, destination: Synthetic
 }
 
 /** Generic, activity-mode-agnostic: is long-stay possible here AT ALL. */
-function evaluateStayDurationFeasibility(profile: UserProfileV2, destination: SyntheticDestinationFixture): HardConstraintResult {
+function evaluateStayDurationFeasibility(profile: UserProfileV2, destination: SyntheticDestinationFixture, relocationApplicability: RelocationApplicability): HardConstraintResult | null {
+  if (relocationApplicability === "DOMESTIC") return null; // no immigration stay-duration limit for a same-country move
   const { stayDuration } = profile;
   const facts = destination.entryAndStay;
 
@@ -141,7 +150,8 @@ function evaluateStayDurationFeasibility(profile: UserProfileV2, destination: Sy
 }
 
 /** Activity-mode-specific: does a channel THIS profile actually qualifies for exist (presence only, never work legality). */
-function evaluateRequiredLegalPath(profile: UserProfileV2, destination: SyntheticDestinationFixture): HardConstraintResult {
+function evaluateRequiredLegalPath(profile: UserProfileV2, destination: SyntheticDestinationFixture, relocationApplicability: RelocationApplicability): HardConstraintResult | null {
+  if (relocationApplicability === "DOMESTIC") return null; // no immigration legal-path question for a same-country move
   if (profile.activityMode === "NOT_SURE") {
     return buildResult("UNKNOWN", "ACTIVITY_MODE_NOT_SURE", null, []);
   }
@@ -205,8 +215,9 @@ function evaluateActivitySpecificLongTermPath(
 // ---------------------------------------------------------------------------
 
 /** Work-permission only. Kept entirely separate from requiredLegalPath (presence) and from any connectivity/infrastructure quality concept. */
-function evaluateRemoteWorkLegality(profile: UserProfileV2, destination: SyntheticDestinationFixture): HardConstraintResult | null {
+function evaluateRemoteWorkLegality(profile: UserProfileV2, destination: SyntheticDestinationFixture, relocationApplicability: RelocationApplicability): HardConstraintResult | null {
   if (!profile.intendsToWorkDuringStay) return null;
+  if (relocationApplicability === "DOMESTIC") return null; // no tourist-status/digital-nomad work-permission question for a same-country move
 
   const facts = destination.entryAndStay;
   const days = resolveComparisonDays(profile.stayDuration);
@@ -226,8 +237,9 @@ function evaluateRemoteWorkLegality(profile: UserProfileV2, destination: Synthet
 }
 
 /** Retiree-specific detail criterion; mirrors requiredLegalPath's retiree channel so the two never contradict each other. */
-function evaluateRetirementOrResidencyPath(profile: UserProfileV2, destination: SyntheticDestinationFixture): HardConstraintResult | null {
+function evaluateRetirementOrResidencyPath(profile: UserProfileV2, destination: SyntheticDestinationFixture, relocationApplicability: RelocationApplicability): HardConstraintResult | null {
   if (profile.activityMode !== "RETIRED" || profile.stayDuration.band === "SHORT_1_3_MONTHS") return null;
+  if (relocationApplicability === "DOMESTIC") return null; // no retirement-visa/residency question for a same-country move
 
   const facts = destination.entryAndStay;
   return constraintFromTriState(
@@ -239,9 +251,10 @@ function evaluateRetirementOrResidencyPath(profile: UserProfileV2, destination: 
   );
 }
 
-function evaluateSpouseOrDependentFeasibility(profile: UserProfileV2, destination: SyntheticDestinationFixture): HardConstraintResult | null {
+function evaluateSpouseOrDependentFeasibility(profile: UserProfileV2, destination: SyntheticDestinationFixture, relocationApplicability: RelocationApplicability): HardConstraintResult | null {
   const needsDependentPath = profile.household.spouseOrPartnerAccompanying || profile.household.dependentCount > 0;
   if (!needsDependentPath) return null;
+  if (relocationApplicability === "DOMESTIC") return null; // no visa-inclusion question for a same-country move
 
   return constraintFromTriState(
     destination.entryAndStay.spouseOrDependentInclusionSupported,
@@ -252,9 +265,10 @@ function evaluateSpouseOrDependentFeasibility(profile: UserProfileV2, destinatio
   );
 }
 
-/** Activates only when buying is essential — a snowbird/testing renter never triggers this. */
-function evaluateForeignPropertyPurchaseRights(profile: UserProfileV2, destination: SyntheticDestinationFixture): HardConstraintResult | null {
+/** Activates only when buying is essential — a snowbird/testing renter never triggers this. This gate specifically means FOREIGN-purchaser eligibility, so it never applies to a domestic buyer. */
+function evaluateForeignPropertyPurchaseRights(profile: UserProfileV2, destination: SyntheticDestinationFixture, relocationApplicability: RelocationApplicability): HardConstraintResult | null {
   if (profile.tenureIntent !== "BUY" || !profile.hardRequirements.foreignPropertyPurchaseEssential) return null;
+  if (relocationApplicability === "DOMESTIC") return null; // "foreign purchaser" restrictions do not apply to a domestic buyer
 
   return constraintFromTriState(
     destination.entryAndStay.foreignPropertyPurchaseAllowed,
@@ -344,14 +358,16 @@ function computeOverallStatus(criteria: EligibilityCriteria): Pick<EligibilityRe
 // ---------------------------------------------------------------------------
 
 export function evaluateEligibility(profile: UserProfileV2, destination: SyntheticDestinationFixture): EligibilityResult {
+  const relocationApplicability = deriveRelocationApplicability(profile, destination);
+
   const criteria: EligibilityCriteria = {
-    entryFeasibility: evaluateEntryFeasibility(profile, destination),
-    stayDurationFeasibility: evaluateStayDurationFeasibility(profile, destination),
-    requiredLegalPath: evaluateRequiredLegalPath(profile, destination),
-    remoteWorkLegality: evaluateRemoteWorkLegality(profile, destination),
-    retirementOrResidencyPath: evaluateRetirementOrResidencyPath(profile, destination),
-    spouseOrDependentFeasibility: evaluateSpouseOrDependentFeasibility(profile, destination),
-    foreignPropertyPurchaseRights: evaluateForeignPropertyPurchaseRights(profile, destination),
+    entryFeasibility: evaluateEntryFeasibility(profile, destination, relocationApplicability),
+    stayDurationFeasibility: evaluateStayDurationFeasibility(profile, destination, relocationApplicability),
+    requiredLegalPath: evaluateRequiredLegalPath(profile, destination, relocationApplicability),
+    remoteWorkLegality: evaluateRemoteWorkLegality(profile, destination, relocationApplicability),
+    retirementOrResidencyPath: evaluateRetirementOrResidencyPath(profile, destination, relocationApplicability),
+    spouseOrDependentFeasibility: evaluateSpouseOrDependentFeasibility(profile, destination, relocationApplicability),
+    foreignPropertyPurchaseRights: evaluateForeignPropertyPurchaseRights(profile, destination, relocationApplicability),
     healthcareGate: evaluateHealthcareGate(profile, destination),
     safetyGate: evaluateSafetyGate(profile, destination),
     lgbtqLegalSafetyGate: evaluateLgbtqLegalSafetyGate(profile, destination),

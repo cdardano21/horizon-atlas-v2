@@ -1,6 +1,7 @@
 import type { StayDuration, UserProfileV2 } from "./profile-types";
 import type { FinancialEfficiencyResult, FinancialFinding, FinancialFindingSeverity } from "./result-types";
 import type { SyntheticDestinationFixture } from "./destination-fact-types";
+import { deriveRelocationApplicability } from "./relocation-applicability";
 import { CURRENT_FINANCIAL_MODEL_VERSION } from "./versions";
 import {
   BAND_UPPER_BOUND_DAYS,
@@ -22,6 +23,13 @@ import {
  *
  * Never produces a legal-stay verdict, never collapses into one overall score —
  * always a findings list, in fixed category order.
+ *
+ * For a DOMESTIC (same-country) relocation — see relocation-applicability.ts — the
+ * international-only findings (the tax-residency day-threshold trigger, and the
+ * US-tax-treaty/foreign-tax-credit finding) are omitted entirely, never shown as
+ * UNKNOWN/NEUTRAL noise. Domestic financial facts (pension/Social Security/IRA/
+ * 401(k) treatment, wealth tax, property tax, purchase/transfer tax) remain fully
+ * relevant and are never suppressed just because the move is domestic.
  */
 
 function finding(
@@ -80,16 +88,27 @@ function evaluateTaxResidencyTrigger(profile: UserProfileV2, destination: Synthe
 export function evaluateFinancialEfficiency(profile: UserProfileV2, destination: SyntheticDestinationFixture): FinancialEfficiencyResult {
   const financial = destination.financial;
   const findings: FinancialFinding[] = [];
+  const isDomestic = deriveRelocationApplicability(profile, destination) === "DOMESTIC";
 
-  const taxResidencyFinding = evaluateTaxResidencyTrigger(profile, destination);
-  findings.push(taxResidencyFinding);
+  // The international day-count tax-residency concept does not exist for a domestic move -
+  // omit the finding entirely rather than showing it as UNKNOWN noise.
+  let taxResidencyMayApply: boolean;
+  if (isDomestic) {
+    taxResidencyMayApply = false;
+  } else {
+    const taxResidencyFinding = evaluateTaxResidencyTrigger(profile, destination);
+    findings.push(taxResidencyFinding);
+    taxResidencyMayApply = taxResidencyFinding.severity !== "NEUTRAL";
+  }
 
-  const taxResidencyMayApply = taxResidencyFinding.severity !== "NEUTRAL";
   const isUsCitizen = profile.citizenship.primaryPassportCountryCode === "US";
   const isRetired = profile.activityMode === "RETIRED";
   const isBuying = profile.tenureIntent === "BUY";
+  // Domestic retirement-income/wealth-tax facts (e.g. a state's own tax treatment) are
+  // relevant immediately - they never depend on the international day-count trigger.
+  const domesticFinancialFactsRelevant = isDomestic || taxResidencyMayApply;
 
-  if (isRetired && taxResidencyMayApply) {
+  if (isRetired && domesticFinancialFactsRelevant) {
     findings.push(
       finding(
         "PENSION_TREATMENT",
@@ -128,7 +147,7 @@ export function evaluateFinancialEfficiency(profile: UserProfileV2, destination:
     );
   }
 
-  if (isUsCitizen && taxResidencyMayApply) {
+  if (!isDomestic && isUsCitizen && taxResidencyMayApply) {
     findings.push(
       finding(
         "US_TAX_INTERACTION",
@@ -175,7 +194,7 @@ export function evaluateFinancialEfficiency(profile: UserProfileV2, destination:
     }
   }
 
-  if (taxResidencyMayApply) {
+  if (domesticFinancialFactsRelevant) {
     if (financial.wealthTaxApplicable === "NO") {
       findings.push(finding("WEALTH_TAX", "POSITIVE", "NO_WEALTH_TAX_REGIME", "No wealth tax regime applies.", ["financial.wealthTaxApplicable"]));
     } else if (financial.wealthTaxApplicable === "YES") {
