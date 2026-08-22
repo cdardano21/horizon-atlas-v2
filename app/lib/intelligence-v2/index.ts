@@ -47,6 +47,7 @@ export type {
   EligibilityResult,
   AffordabilityStatus,
   MoneyRange,
+  AffordabilityCurrencyConversionEvidence,
   AffordabilityResult,
   LifestyleDimensionContribution,
   LifestyleTradeoff,
@@ -107,3 +108,7 @@ export {
 export { evaluateDestinationForProfile, rankDestinationsForProfile } from "./orchestrator";
 export type { RecommendationRankGroup } from "./ranking-policy";
 export { computeRankGroup, compareForRanking, MATCHED_REASON_FIT_THRESHOLD_PERCENT } from "./ranking-policy";
+
+export type { FxModelVersion, FxRateSnapshot, FxRateTable } from "./fx-types";
+export type { FxConversionFailureReason, FxConversionResult, ConvertibleMoneyRange, FxRangeConversionResult } from "./fx-conversion";
+export { convertAmount, convertMoneyRange } from "./fx-conversion";

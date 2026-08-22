@@ -89,6 +89,24 @@ export interface MoneyRange {
 }
 
 /**
+ * Evidence of a Layer 2 currency conversion, present only when the destination's
+ * cost currency differed from the user's budget currency. Kept minimal and
+ * structural (no prose) - this is also the hook a future assessment-persistence
+ * layer would read to record `fxSnapshotVersion`/`effectiveDate`/`source`
+ * alongside a saved result, without any DB migration required today.
+ */
+export interface AffordabilityCurrencyConversionEvidence {
+  readonly originalCurrencyCode: string;
+  readonly originalRange: MoneyRange;
+  /** Null when conversion did not succeed (paired with status UNKNOWN). */
+  readonly convertedRange: MoneyRange | null;
+  /** Null when no FxRateTable was supplied at all. */
+  readonly fxSnapshotVersion: string | null;
+  readonly effectiveDate: string | null;
+  readonly source: string | null;
+}
+
+/**
  * Structured facts needed later to explain an affordability verdict. No production
  * thresholds are defined here — `status` is the decision produced by a versioned,
  * explicit policy (see affordability-policy.ts), never a hardcoded magic number.
@@ -99,7 +117,7 @@ export interface AffordabilityResult {
   readonly userMonthlyBudgetAmount: number;
   readonly userMonthlyBudgetCurrencyCode: string;
   readonly budgetCeilingType: "HARD_CEILING" | "FLEXIBLE_TARGET";
-  /** Null when the destination's cost data is missing (supports UNKNOWN honestly). */
+  /** Null when the destination's cost data is missing (supports UNKNOWN honestly). The range actually used for classification - i.e. already converted into the budget's currency when a conversion occurred. */
   readonly estimatedMonthlyCostRange: MoneyRange | null;
   readonly householdSizeAssumed: number;
   readonly housingAssumption: "RENT" | "BUY" | "UNSURE";
@@ -109,6 +127,8 @@ export interface AffordabilityResult {
   readonly reasonCodes: readonly string[];
   /** True only when status is UNAFFORDABLE under a HARD_CEILING. UNKNOWN and BORDERLINE never set this true. */
   readonly excludedByAffordability: boolean;
+  /** Null when destination and budget currencies matched (no conversion was needed). */
+  readonly currencyConversion: AffordabilityCurrencyConversionEvidence | null;
 }
 
 // ---------------------------------------------------------------------------

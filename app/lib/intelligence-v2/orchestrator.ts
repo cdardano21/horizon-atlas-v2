@@ -1,6 +1,7 @@
 import type { UserProfileV2 } from "./profile-types";
 import type { AffordabilityResult, EligibilityResult, FinalDestinationRecommendationResult, FinancialEfficiencyResult, LifestyleScore, RecommendationStatus, RecommendationTradeoff, SortRankingValue } from "./result-types";
 import type { SyntheticDestinationFixture } from "./destination-fact-types";
+import type { FxRateTable } from "./fx-types";
 import { evaluateEligibility } from "./eligibility-evaluator";
 import { evaluateAffordability } from "./affordability-evaluator";
 import { evaluateLifestyleFit } from "./lifestyle-scorer";
@@ -23,6 +24,9 @@ import { compareForRanking, MATCHED_REASON_FIT_THRESHOLD_PERCENT } from "./ranki
  * DO NOT AVERAGE AWAY A FATAL FLAW: `excluded`/`recommendationStatus` derive only
  * from Layers 1 and 2. Layer 3 only ever supplies `sortRankingValue` for non-excluded
  * destinations. Layer 4 is advisory-only and never participates in ranking.
+ *
+ * `fxTable` is optional, immutable, caller-supplied currency context consumed
+ * ONLY by Layer 2 (evaluateAffordability). Layers 1, 3, and 4 never receive it.
  */
 
 function assertConsistentModelVersions(
@@ -48,9 +52,10 @@ function assertConsistentModelVersions(
 export function evaluateDestinationForProfile(
   profile: UserProfileV2,
   destination: SyntheticDestinationFixture,
+  fxTable?: FxRateTable,
 ): FinalDestinationRecommendationResult {
   const eligibility = evaluateEligibility(profile, destination);
-  const affordability = evaluateAffordability(profile, destination);
+  const affordability = evaluateAffordability(profile, destination, fxTable);
   const lifestyleFit = evaluateLifestyleFit(profile, destination);
   const financialEfficiency = evaluateFinancialEfficiency(profile, destination);
 
@@ -114,7 +119,8 @@ export function evaluateDestinationForProfile(
 export function rankDestinationsForProfile(
   profile: UserProfileV2,
   destinations: readonly SyntheticDestinationFixture[],
+  fxTable?: FxRateTable,
 ): readonly FinalDestinationRecommendationResult[] {
-  const results = destinations.map((destination) => evaluateDestinationForProfile(profile, destination));
+  const results = destinations.map((destination) => evaluateDestinationForProfile(profile, destination, fxTable));
   return [...results].sort(compareForRanking);
 }

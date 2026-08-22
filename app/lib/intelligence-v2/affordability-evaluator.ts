@@ -1,6 +1,8 @@
 import type { Household, UserProfileV2 } from "./profile-types";
-import type { AffordabilityResult, MoneyRange } from "./result-types";
+import type { AffordabilityCurrencyConversionEvidence, AffordabilityResult, MoneyRange } from "./result-types";
 import type { SyntheticDestinationFixture } from "./destination-fact-types";
+import type { FxRateTable } from "./fx-types";
+import { convertMoneyRange } from "./fx-conversion";
 import { CURRENT_AFFORDABILITY_MODEL_VERSION } from "./versions";
 import {
   classifyCostRangeAgainstBudget,
@@ -17,6 +19,12 @@ import {
  * `destination.hardGates` or `destination.lifestyleDimensions` (Layer 3), or
  * `destination.financial` (Layer 4) — monthly affordability is not legal
  * feasibility, lifestyle fit, or long-term financial efficiency.
+ *
+ * Currency: `fxTable` is an optional, immutable, caller-supplied snapshot — this
+ * evaluator never fetches a live exchange rate. When the destination's cost
+ * currency matches the budget's currency, `fxTable` is not even consulted. When
+ * they differ and no usable rate is found, the result is UNKNOWN, never a guess
+ * or a silent same-number comparison across units.
  */
 
 /** No family multipliers are invented — this is a literal headcount used only to match against the destination's own stated assumption. */
@@ -36,6 +44,7 @@ function unknownResult(
   reasonCode: string,
   estimatedMonthlyCostRange: MoneyRange | null,
   householdSizeAssumed: number,
+  currencyConversion: AffordabilityCurrencyConversionEvidence | null = null,
 ): AffordabilityResult {
   return {
     modelVersion: CURRENT_AFFORDABILITY_MODEL_VERSION,
@@ -49,10 +58,11 @@ function unknownResult(
     marginAmount: null,
     reasonCodes: [reasonCode],
     excludedByAffordability: false,
+    currencyConversion,
   };
 }
 
-export function evaluateAffordability(profile: UserProfileV2, destination: SyntheticDestinationFixture): AffordabilityResult {
+export function evaluateAffordability(profile: UserProfileV2, destination: SyntheticDestinationFixture, fxTable?: FxRateTable): AffordabilityResult {
   const { budget, tenureIntent, household } = profile;
   const cost = destination.cost;
 
@@ -79,9 +89,42 @@ export function evaluateAffordability(profile: UserProfileV2, destination: Synth
     return unknownResult(profile, "HOUSEHOLD_ESTIMATE_MISMATCH", range, cost.householdSizeAssumedForEstimate);
   }
 
-  const status = classifyCostRangeAgainstBudget(range, budget.monthlyTargetAmount);
+  let classificationRange: MoneyRange = range;
+  let currencyConversion: AffordabilityCurrencyConversionEvidence | null = null;
+
+  if (range.currencyCode !== budget.currencyCode) {
+    if (!fxTable) {
+      return unknownResult(profile, "MISSING_FX_RATE_FOR_CURRENCY_PAIR", range, cost.householdSizeAssumedForEstimate, {
+        originalCurrencyCode: range.currencyCode,
+        originalRange: range,
+        convertedRange: null,
+        fxSnapshotVersion: null,
+        effectiveDate: null,
+        source: null,
+      });
+    }
+
+    const conversion = convertMoneyRange(range, budget.currencyCode, fxTable);
+    const conversionEvidenceBase = {
+      originalCurrencyCode: range.currencyCode,
+      originalRange: range,
+      fxSnapshotVersion: fxTable.snapshotVersion,
+      effectiveDate: fxTable.effectiveDate,
+      source: fxTable.source,
+    };
+
+    if (!conversion.ok) {
+      const reasonCode = conversion.reason === "INVALID_RATE_IN_TABLE" ? "INVALID_FX_RATE_FOR_CURRENCY_PAIR" : "MISSING_FX_RATE_FOR_CURRENCY_PAIR";
+      return unknownResult(profile, reasonCode, range, cost.householdSizeAssumedForEstimate, { ...conversionEvidenceBase, convertedRange: null });
+    }
+
+    classificationRange = conversion.range;
+    currencyConversion = { ...conversionEvidenceBase, convertedRange: classificationRange };
+  }
+
+  const status = classifyCostRangeAgainstBudget(classificationRange, budget.monthlyTargetAmount);
   const excludedByAffordability = isExcludedByAffordabilityPolicy(status, budget.ceilingType);
-  const midpoint = (range.low + range.high) / 2;
+  const midpoint = (classificationRange.low + classificationRange.high) / 2;
 
   const reasonCodes: string[] = [
     status === "AFFORDABLE" ? "WITHIN_BUDGET_RANGE" : status === "BORDERLINE" ? "COST_RANGE_STRADDLES_BUDGET" : "COST_RANGE_EXCEEDS_BUDGET",
@@ -95,11 +138,12 @@ export function evaluateAffordability(profile: UserProfileV2, destination: Synth
     userMonthlyBudgetAmount: budget.monthlyTargetAmount,
     userMonthlyBudgetCurrencyCode: budget.currencyCode,
     budgetCeilingType: budget.ceilingType,
-    estimatedMonthlyCostRange: range,
+    estimatedMonthlyCostRange: classificationRange,
     householdSizeAssumed: cost.householdSizeAssumedForEstimate,
     housingAssumption: tenureIntent,
     marginAmount: budget.monthlyTargetAmount - midpoint,
     reasonCodes,
     excludedByAffordability,
+    currencyConversion,
   };
 }

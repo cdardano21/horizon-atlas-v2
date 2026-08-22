@@ -8,6 +8,7 @@ import { evaluateDestinationForProfile } from "../orchestrator";
 import { createHardRequirementSelectionsWithNoneActivated } from "../profile-types";
 import type { UserProfileV2 } from "../profile-types";
 import { CURRENT_PROFILE_CONTRACT_VERSION } from "../versions";
+import type { FxRateTable } from "../fx-types";
 
 /**
  * Phase 10 — real Lisbon workbook facts run through the REAL four-layer engine
@@ -57,7 +58,16 @@ function makeProfile(overrides: Partial<UserProfileV2> = {}): UserProfileV2 {
 }
 
 function run(profile: UserProfileV2) {
-  return evaluateDestinationForProfile(profile, lisbonFacts);
+  // Illustrative test-only FX snapshot (NOT a claim about current market FX) - Lisbon's real cost
+  // range is EUR-denominated and every scenario profile below uses a USD budget, so a frozen FX
+  // context is required for Layer 2 to compare them at all (see fx-types.ts / affordability-evaluator.ts).
+  const ILLUSTRATIVE_TEST_FX_TABLE: FxRateTable = {
+    snapshotVersion: "illustrative-test-fx-snapshot@1",
+    effectiveDate: "2026-08-21",
+    source: "illustrative test fixture - not a claim about current market FX",
+    rates: [{ baseCurrency: "USD", quoteCurrency: "EUR", rate: 0.92 }],
+  };
+  return evaluateDestinationForProfile(profile, lisbonFacts, ILLUSTRATIVE_TEST_FX_TABLE);
 }
 
 describe("Lisbon real four-layer scenarios — no mocks in the chain (real workbook -> real parser -> real adapter -> real orchestrator)", () => {
