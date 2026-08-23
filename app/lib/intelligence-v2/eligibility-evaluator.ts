@@ -288,18 +288,59 @@ function evaluateSpouseOrDependentFeasibility(profile: UserProfileV2, destinatio
   );
 }
 
-/** Activates only when buying is essential — a snowbird/testing renter never triggers this. This gate specifically means FOREIGN-purchaser eligibility, so it never applies to a domestic buyer. */
+/**
+ * Activates only when buying is essential — a snowbird/testing renter never triggers this. This gate
+ * specifically means FOREIGN-purchaser eligibility, so it never applies to a domestic buyer.
+ *
+ * Decision table (foreignPropertyPurchaseAllowed × propertyPurchaseConditionalPathAvailable ×
+ * propertyOwnershipRequirement, per the approved Checkpoint C property design):
+ * - allowed=YES -> PASS regardless of qualifier (ordinary purchase already satisfies any
+ *   requirement weaker than or equal to basic legal residential ownership).
+ * - allowed=NO, conditionalPath=YES: PASS for a permissive qualifier (ANY_LEGAL_RESIDENTIAL_PROPERTY
+ *   or NOT_SURE - a qualifying path is enough); FAIL for a strict qualifier (UNRESTRICTED_FREEHOLD or
+ *   LAND_OWNERSHIP_REQUIRED - a conditional/restricted path does not satisfy it).
+ * - allowed=NO, conditionalPath=NO -> FAIL for every qualifier.
+ * - allowed=NO, conditionalPath=UNKNOWN: UNKNOWN for a permissive qualifier (we don't know whether a
+ *   qualifying path exists); FAIL for a strict qualifier (the stricter requirement is already
+ *   unsatisfiable once ordinary purchase is confirmed NO, regardless of the unresolved conditional fact).
+ * - allowed=UNKNOWN: PASS only for conditionalPath=YES + a permissive qualifier; UNKNOWN otherwise
+ *   (never fabricated PASS/FAIL without decisive evidence).
+ */
 function evaluateForeignPropertyPurchaseRights(profile: UserProfileV2, destination: SyntheticDestinationFixture, relocationApplicability: RelocationApplicability): HardConstraintResult | null {
   if (profile.tenureIntent !== "BUY" || !profile.hardRequirements.foreignPropertyPurchaseEssential) return null;
   if (relocationApplicability === "DOMESTIC") return null; // "foreign purchaser" restrictions do not apply to a domestic buyer
 
-  return constraintFromTriState(
-    destination.entryAndStay.foreignPropertyPurchaseAllowed,
-    "FOREIGN_PROPERTY_PURCHASE_ALLOWED",
-    "FOREIGN_PROPERTY_PURCHASE_NOT_ALLOWED",
-    "FOREIGN_PROPERTY_PURCHASE_UNKNOWN",
-    ["entryAndStay.foreignPropertyPurchaseAllowed"],
-  );
+  const allowed = destination.entryAndStay.foreignPropertyPurchaseAllowed;
+  const conditionalPath = destination.entryAndStay.propertyPurchaseConditionalPathAvailable ?? "UNKNOWN";
+  // Backward-compatible default: an omitted qualifier (legacy profiles/fixtures) is treated the
+  // same as an explicit NOT_SURE - the safe, permissive-but-honest default, never UNRESTRICTED_FREEHOLD.
+  const ownershipRequirement = profile.hardRequirements.propertyOwnershipRequirement ?? "NOT_SURE";
+  const requiresUnrestrictedOwnership = ownershipRequirement === "UNRESTRICTED_FREEHOLD" || ownershipRequirement === "LAND_OWNERSHIP_REQUIRED";
+  const sourceFactKeys = ["entryAndStay.foreignPropertyPurchaseAllowed", "entryAndStay.propertyPurchaseConditionalPathAvailable"];
+
+  if (allowed === "YES") {
+    return buildResult("PASS", "FOREIGN_PROPERTY_PURCHASE_ALLOWED", null, sourceFactKeys);
+  }
+
+  if (allowed === "NO") {
+    if (conditionalPath === "YES") {
+      return requiresUnrestrictedOwnership
+        ? buildResult("FAIL", "PROPERTY_PURCHASE_REQUIRES_UNRESTRICTED_OWNERSHIP", null, sourceFactKeys)
+        : buildResult("PASS", "CONDITIONAL_PROPERTY_PURCHASE_PATH_AVAILABLE", null, sourceFactKeys);
+    }
+    if (conditionalPath === "NO") {
+      return buildResult("FAIL", "FOREIGN_PROPERTY_PURCHASE_NOT_ALLOWED", null, sourceFactKeys);
+    }
+    return requiresUnrestrictedOwnership
+      ? buildResult("FAIL", "PROPERTY_PURCHASE_REQUIRES_UNRESTRICTED_OWNERSHIP", null, sourceFactKeys)
+      : buildResult("UNKNOWN", "PROPERTY_PURCHASE_ELIGIBILITY_UNKNOWN", null, sourceFactKeys);
+  }
+
+  // allowed === "UNKNOWN": only a permissive qualifier + a real conditional-path YES supports PASS.
+  if (conditionalPath === "YES" && !requiresUnrestrictedOwnership) {
+    return buildResult("PASS", "CONDITIONAL_PROPERTY_PURCHASE_PATH_AVAILABLE", null, sourceFactKeys);
+  }
+  return buildResult("UNKNOWN", "PROPERTY_PURCHASE_ELIGIBILITY_UNKNOWN", null, sourceFactKeys);
 }
 
 function evaluateHealthcareGate(profile: UserProfileV2, destination: SyntheticDestinationFixture): HardConstraintResult | null {

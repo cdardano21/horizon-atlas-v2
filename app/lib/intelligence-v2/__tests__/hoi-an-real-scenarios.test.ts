@@ -259,7 +259,7 @@ describe("Hoi An real four-layer scenarios — third Batch #1 cross-border + VND
     expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
   });
 
-  it("SCENARIO 14 — foreign property buyer (hard requirement): foreignPropertyPurchaseAllowed=NO -> real FAIL -> EXCLUDED (first real property-gate FAIL across all Batch #1 destinations tested so far)", () => {
+  it("SCENARIO 14 — foreign property buyer (hard requirement): foreignPropertyPurchaseAllowed=NO, propertyPurchaseConditionalPathAvailable still UNKNOWN (not yet backfilled) -> honest UNKNOWN, no longer a bare FAIL (Checkpoint C conditional-purchase decision table)", () => {
     const result = run(
       makeProfile({
         stayDuration: { band: "LONG_TERM_PERMANENT", intendedStayDurationDays: null },
@@ -267,12 +267,16 @@ describe("Hoi An real four-layer scenarios — third Batch #1 cross-border + VND
         hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true },
       }),
     );
-    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "FAIL", reasonCode: "FOREIGN_PROPERTY_PURCHASE_NOT_ALLOWED" });
-    expect(result.eligibility.overallStatus).toBe("EXCLUDED");
-    expect(result.recommendationStatus).toBe("EXCLUDED");
-    expect(result.excluded).toBe(true);
-    // Workbook prose ("qualifying apartments/units...under statutory caps") is not representable by this
-    // plain TriState - a real, documented PRODUCT/SCHEMA limitation, not fixed here.
+    // No propertyOwnershipRequirement qualifier set -> defaults to NOT_SURE (permissive). With
+    // foreignPropertyPurchaseAllowed=NO and the conditional-path fact still genuinely UNKNOWN in the
+    // real workbook (pending backfill), the honest result is UNKNOWN, never a fabricated FAIL.
+    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "UNKNOWN", reasonCode: "PROPERTY_PURCHASE_ELIGIBILITY_UNKNOWN" });
+    expect(result.eligibility.overallStatus).toBe("UNKNOWN_INCOMPLETE");
+    expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
+    expect(result.excluded).toBe(false);
+    // Workbook prose ("qualifying apartments/units...under statutory caps") is exactly what
+    // propertyPurchaseConditionalPathAvailable now exists to represent - a future backfill task
+    // (not this schema-only checkpoint) populates it, which will resolve this to PASS.
   });
 
   it("SCENARIO 15 — foreign property buyer, property NOT essential: BUY alone does not activate the hard gate; Layer 2 remains UNKNOWN regardless because BUY ownership costs are not modeled (real current contract behavior)", () => {
@@ -416,7 +420,7 @@ describe("Hoi An real four-layer scenarios — third Batch #1 cross-border + VND
     expect(failResult.eligibility.overallStatus).toBe("EXCLUDED");
   });
 
-  it("SCENARIO 24 — property FAIL cannot be averaged away: the property hard gate only activates for tenureIntent=BUY, and BUY unconditionally makes Layer 2 UNKNOWN in the current contract - so an AFFORDABLE Layer 2 co-occurring with an active property FAIL is not reachable; the real, honest proof is EXCLUDED with Layer 2 correctly UNKNOWN, unaffected by pension/treaty/beach positives", () => {
+  it("SCENARIO 24 — property purchase eligibility honestly UNKNOWN pre-backfill: BUY unconditionally makes Layer 2 UNKNOWN in the current contract regardless of the Layer 1 property criterion's own status, so an AFFORDABLE Layer 2 co-occurring with an active property FAIL was never reachable in the first place", () => {
     const result = run(
       makeProfile({
         stayDuration: { band: "LONG_TERM_PERMANENT", intendedStayDurationDays: null },
@@ -425,14 +429,14 @@ describe("Hoi An real four-layer scenarios — third Batch #1 cross-border + VND
         hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true },
       }),
     );
-    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "FAIL" });
-    expect(result.recommendationStatus).toBe("EXCLUDED");
-    expect(result.excluded).toBe(true);
+    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "UNKNOWN" });
+    expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
+    expect(result.excluded).toBe(false);
     // Layer 2 is UNKNOWN (BUY ownership costs not modeled), not AFFORDABLE - confirming the real contract
     // behavior rather than an artificial AFFORDABLE+FAIL combination.
     expect(result.affordability.status).toBe("UNKNOWN");
     expect(result.affordability.reasonCodes).toEqual(["BUY_INTENT_OWNERSHIP_COST_NOT_MODELED"]);
-    // Even with a real positive pension finding and no wealth tax, EXCLUDED is untouched.
+    // Even with a real positive pension finding and no wealth tax, the honest UNKNOWN is untouched.
     expect(result.financialEfficiency.findings.find((f) => f.category === "PENSION_TREATMENT")).toMatchObject({ severity: "POSITIVE" });
   });
 

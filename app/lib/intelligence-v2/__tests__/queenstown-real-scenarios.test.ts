@@ -257,7 +257,7 @@ describe("Queenstown real four-layer scenarios — fourth Batch #1 cross-border 
     expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
   });
 
-  it("SCENARIO 15 — foreign property buyer (hard requirement): foreignPropertyPurchaseAllowed=NO -> real FAIL -> EXCLUDED; the unconsumed residency_required_to_buy=TRUE fact means the simple NO may overexclude a user who could become eligible through a residency/OIA pathway (documented, not fixed)", () => {
+  it("SCENARIO 15 — foreign property buyer (hard requirement): foreignPropertyPurchaseAllowed=NO, propertyPurchaseConditionalPathAvailable still UNKNOWN (not yet backfilled) -> honest UNKNOWN, no longer a bare FAIL (Checkpoint C conditional-purchase decision table); the unconsumed residency_required_to_buy=TRUE fact is exactly what this new conditional-path fact exists to represent, once backfilled", () => {
     const result = run(
       makeProfile({
         stayDuration: { band: "LONG_TERM_PERMANENT", intendedStayDurationDays: null },
@@ -265,9 +265,9 @@ describe("Queenstown real four-layer scenarios — fourth Batch #1 cross-border 
         hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true },
       }),
     );
-    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "FAIL", reasonCode: "FOREIGN_PROPERTY_PURCHASE_NOT_ALLOWED" });
-    expect(result.eligibility.overallStatus).toBe("EXCLUDED");
-    expect(result.recommendationStatus).toBe("EXCLUDED");
+    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "UNKNOWN", reasonCode: "PROPERTY_PURCHASE_ELIGIBILITY_UNKNOWN" });
+    expect(result.eligibility.overallStatus).toBe("UNKNOWN_INCOMPLETE");
+    expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
   });
 
   it("SCENARIO 16 — buyer, property NOT essential: BUY alone does not activate the hard gate; Layer 2 remains UNKNOWN regardless (identical real contract behavior to Hoi An's non-essential BUY scenario)", () => {
@@ -403,7 +403,7 @@ describe("Queenstown real four-layer scenarios — fourth Batch #1 cross-border 
     expect(failResult.eligibility.overallStatus).toBe("EXCLUDED");
   });
 
-  it("SCENARIO 26 — property FAIL cannot be averaged away: EXCLUDED regardless of treaty/ski/beach/retirement positives; an AFFORDABLE+property-FAIL combination is not constructible under the current contract (BUY always forces Layer 2 UNKNOWN)", () => {
+  it("SCENARIO 26 — property purchase eligibility honestly UNKNOWN pre-backfill: an AFFORDABLE+property-FAIL combination is not constructible under the current contract (BUY always forces Layer 2 UNKNOWN), and pre-backfill the property criterion itself is honestly UNKNOWN, not a fabricated FAIL", () => {
     const result = run(
       makeProfile({
         stayDuration: { band: "LONG_TERM_PERMANENT", intendedStayDurationDays: null },
@@ -412,8 +412,8 @@ describe("Queenstown real four-layer scenarios — fourth Batch #1 cross-border 
         hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true },
       }),
     );
-    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "FAIL" });
-    expect(result.recommendationStatus).toBe("EXCLUDED");
+    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "UNKNOWN" });
+    expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
     expect(result.affordability.status).toBe("UNKNOWN");
     expect(result.affordability.reasonCodes).toEqual(["BUY_INTENT_OWNERSHIP_COST_NOT_MODELED"]);
     expect(result.financialEfficiency.findings.find((f) => f.category === "PENSION_TREATMENT")).toMatchObject({ severity: "CAUTION" });

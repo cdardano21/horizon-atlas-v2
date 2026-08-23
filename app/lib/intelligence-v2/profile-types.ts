@@ -136,6 +136,15 @@ export interface LifestylePreferenceInput {
 export type HealthcareMinimumStandard = "BASIC_ACCESS" | "GOOD_PRIVATE_AVAILABLE" | "INTERNATIONAL_STANDARD";
 export type SafetyMinimumStandard = "MODERATE_OR_BETTER" | "HIGH_SAFETY_ONLY";
 
+/**
+ * Distinguishes two materially different "I must be able to buy property" intents:
+ * ANY_LEGAL_RESIDENTIAL_PROPERTY (a qualifying/conditional purchase path is enough) vs.
+ * UNRESTRICTED_FREEHOLD/LAND_OWNERSHIP_REQUIRED (only unrestricted ownership satisfies the
+ * user). Only meaningful when `foreignPropertyPurchaseEssential` is true; ignored otherwise.
+ * NOT_SURE is the safe backward-compatible default - see createHardRequirementSelectionsWithNoneActivated.
+ */
+export type PropertyOwnershipRequirement = "ANY_LEGAL_RESIDENTIAL_PROPERTY" | "UNRESTRICTED_FREEHOLD" | "LAND_OWNERSHIP_REQUIRED" | "NOT_SURE";
+
 export interface MustHaveGeography {
   /** Small set of required region/continent keys, e.g. ["EUROPE"], ["NORTH_AMERICA", "CENTRAL_AMERICA"]. */
   readonly requiredRegionKeys: readonly string[];
@@ -155,6 +164,10 @@ export interface HardRequirementSelections {
   readonly lgbtqLegalSafetyEssential: boolean;
   /** Only meaningful when tenureIntent === "BUY"; ignored by evaluators otherwise. */
   readonly foreignPropertyPurchaseEssential: boolean;
+  /** Only meaningful when foreignPropertyPurchaseEssential is true. Optional for backward
+   * compatibility with existing profiles/fixtures predating this field - evaluators treat an
+   * absent value the same as NOT_SURE, never a validation failure. */
+  readonly propertyOwnershipRequirement?: PropertyOwnershipRequirement;
   readonly mustHaveGeography: MustHaveGeography | null;
 }
 

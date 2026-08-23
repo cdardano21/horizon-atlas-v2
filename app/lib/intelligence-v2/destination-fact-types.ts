@@ -31,6 +31,15 @@ export interface DestinationEntryAndStayFacts {
   /** Can a person legally just work remotely while present on ordinary tourist status. */
   readonly remoteWorkLegalUnderTouristStatus: TriStateFact;
   readonly foreignPropertyPurchaseAllowed: TriStateFact;
+  /**
+   * A legal residential-property purchase path exists for this foreign user only through a
+   * condition, restriction, status, structure, or qualifying property class (e.g. a qualifying
+   * apartment class under statutory caps, or a purchase path contingent on residency status) -
+   * distinct from foreignPropertyPurchaseAllowed, which describes ordinary/unrestricted-like
+   * purchase. Optional for backward compatibility with existing fixtures predating this field;
+   * evaluators treat an absent value the same as UNKNOWN, never fabricated from prose.
+   */
+  readonly propertyPurchaseConditionalPathAvailable?: TriStateFact;
   /** Does foreign property purchase, by itself, grant any residency path. */
   readonly propertyPurchaseGrantsResidencyPath: TriStateFact;
   readonly spouseOrDependentInclusionSupported: TriStateFact;

@@ -70,6 +70,7 @@ type VisaResidencyRowV32 = DeterministicV31CanonicalVisaResidencyState & VisaRes
 
 interface HousingV32Columns {
   property_purchase_grants_residency_path?: string | null;
+  property_purchase_conditional_path_available?: string | null;
   property_tax_annual_rate_percent?: string | null;
   purchase_transfer_tax_percent?: string | null;
 }
@@ -148,6 +149,7 @@ export function adaptWorkbookDestinationToIntelligenceV2Facts(canonical: Determi
       remoteWorkOrDigitalNomadVisaAvailable: toTriState(longStayRow?.digital_nomad_visa_available ?? null, "entryAndStay.remoteWorkOrDigitalNomadVisaAvailable", "VISA_RESIDENCY", errors),
       remoteWorkLegalUnderTouristStatus: toTriState(touristRow?.remote_work_legal_tourist_status ?? null, "entryAndStay.remoteWorkLegalUnderTouristStatus", "VISA_RESIDENCY", errors),
       foreignPropertyPurchaseAllowed: toTriState(housingRow?.can_foreigners_buy ?? null, "entryAndStay.foreignPropertyPurchaseAllowed", "HOUSING_PROPERTY", errors),
+      propertyPurchaseConditionalPathAvailable: toTriState(housingRow?.property_purchase_conditional_path_available ?? null, "entryAndStay.propertyPurchaseConditionalPathAvailable", "HOUSING_PROPERTY", errors),
       propertyPurchaseGrantsResidencyPath: toTriState(housingRow?.property_purchase_grants_residency_path ?? null, "entryAndStay.propertyPurchaseGrantsResidencyPath", "HOUSING_PROPERTY", errors),
       spouseOrDependentInclusionSupported: toTriState(longStayRow?.dependent_inclusion_supported ?? null, "entryAndStay.spouseOrDependentInclusionSupported", "VISA_RESIDENCY", errors),
     },

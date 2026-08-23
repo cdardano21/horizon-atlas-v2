@@ -465,3 +465,166 @@ describe("13. long-stay profile-aware tightening (Checkpoint A) — generic dest
     expect(permanentPathResult.criteria.requiredLegalPath).toMatchObject({ status: "PASS", reasonCode: "PERMANENT_PATH_AVAILABLE" });
   });
 });
+
+describe("14. conditional foreign property purchase semantics (Checkpoint C) — foreignPropertyPurchaseAllowed x propertyPurchaseConditionalPathAvailable x propertyOwnershipRequirement", () => {
+  function makePropertyDestination(
+    foreignPropertyPurchaseAllowed: SyntheticDestinationFixture["entryAndStay"]["foreignPropertyPurchaseAllowed"],
+    propertyPurchaseConditionalPathAvailable: SyntheticDestinationFixture["entryAndStay"]["propertyPurchaseConditionalPathAvailable"],
+  ): SyntheticDestinationFixture {
+    return {
+      id: "fixture-property-decision-table-probe",
+      displayName: "Fixture: Property Decision Table Probe",
+      notes: "Synthetic fixture built solely to exercise the conditional foreign-property-purchase decision table.",
+      entryAndStay: {
+        touristEntryAllowed: "YES",
+        touristStayLimitDays: 90,
+        extendedStayOrLongStayVisaAvailable: "UNKNOWN",
+        permanentResidencyPathAvailable: "UNKNOWN",
+        retirementVisaProgramAvailable: "UNKNOWN",
+        remoteWorkOrDigitalNomadVisaAvailable: "UNKNOWN",
+        remoteWorkLegalUnderTouristStatus: "UNKNOWN",
+        foreignPropertyPurchaseAllowed,
+        propertyPurchaseConditionalPathAvailable,
+        propertyPurchaseGrantsResidencyPath: "UNKNOWN",
+        spouseOrDependentInclusionSupported: "UNKNOWN",
+      },
+      hardGates: {
+        beachAccess: "UNKNOWN",
+        mountainOrSkiAccess: "UNKNOWN",
+        healthcareStandard: "UNKNOWN",
+        safetyStandard: "UNKNOWN",
+        lgbtqLegalProtectionStatus: "UNKNOWN",
+      },
+      cost: { estimatedMonthlyCostRange: null, householdSizeAssumedForEstimate: 1 },
+      financial: {
+        taxResidencyTriggerDays: null,
+        pensionTreatment: "UNKNOWN",
+        socialSecurityTreatment: "UNKNOWN",
+        iraTreatment: "UNKNOWN",
+        retirementAccount401kTreatment: "UNKNOWN",
+        usTaxTreatyInEffect: "UNKNOWN",
+        foreignTaxCreditAvailable: "UNKNOWN",
+        wealthTaxApplicable: "UNKNOWN",
+        propertyTaxAnnualRatePercent: null,
+        propertyPurchaseOrTransferTaxPercent: null,
+        buyVsRentBreakEvenYears: null,
+      },
+      lifestyleDimensions: { dimensionValues: {} },
+    };
+  }
+
+  function makePropertyProfile(overrides: Partial<UserProfileV2> = {}): UserProfileV2 {
+    return makeProfile({
+      tenureIntent: "BUY",
+      hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true },
+      ...overrides,
+    });
+  }
+
+  it("1. purchase not essential -> gate stays null regardless of any destination fact", () => {
+    const notEssentialProfile = makeProfile({ tenureIntent: "BUY" }); // foreignPropertyPurchaseEssential left false
+    const result = evaluateEligibility(notEssentialProfile, makePropertyDestination("NO", "NO"));
+    expect(result.criteria.foreignPropertyPurchaseRights).toBeNull();
+  });
+
+  it("2. foreign purchase YES, conditional UNKNOWN, ANY_LEGAL_RESIDENTIAL_PROPERTY -> PASS", () => {
+    const profile = makePropertyProfile({
+      hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true, propertyOwnershipRequirement: "ANY_LEGAL_RESIDENTIAL_PROPERTY" },
+    });
+    const result = evaluateEligibility(profile, makePropertyDestination("YES", "UNKNOWN"));
+    expect(result.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "PASS", reasonCode: "FOREIGN_PROPERTY_PURCHASE_ALLOWED" });
+  });
+
+  it("3. foreign purchase YES, strict qualifier (UNRESTRICTED_FREEHOLD) -> PASS (current bounded behavior: ordinary purchase satisfies any requirement)", () => {
+    const profile = makePropertyProfile({
+      hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true, propertyOwnershipRequirement: "UNRESTRICTED_FREEHOLD" },
+    });
+    const result = evaluateEligibility(profile, makePropertyDestination("YES", "UNKNOWN"));
+    expect(result.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "PASS", reasonCode: "FOREIGN_PROPERTY_PURCHASE_ALLOWED" });
+  });
+
+  it("4. foreign purchase NO, conditional YES, ANY_LEGAL_RESIDENTIAL_PROPERTY -> PASS", () => {
+    const profile = makePropertyProfile({
+      hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true, propertyOwnershipRequirement: "ANY_LEGAL_RESIDENTIAL_PROPERTY" },
+    });
+    const result = evaluateEligibility(profile, makePropertyDestination("NO", "YES"));
+    expect(result.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "PASS", reasonCode: "CONDITIONAL_PROPERTY_PURCHASE_PATH_AVAILABLE" });
+  });
+
+  it("5. foreign purchase NO, conditional YES, NOT_SURE -> PASS", () => {
+    const profile = makePropertyProfile({
+      hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true, propertyOwnershipRequirement: "NOT_SURE" },
+    });
+    const result = evaluateEligibility(profile, makePropertyDestination("NO", "YES"));
+    expect(result.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "PASS", reasonCode: "CONDITIONAL_PROPERTY_PURCHASE_PATH_AVAILABLE" });
+  });
+
+  it("6. foreign purchase NO, conditional YES, UNRESTRICTED_FREEHOLD -> FAIL", () => {
+    const profile = makePropertyProfile({
+      hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true, propertyOwnershipRequirement: "UNRESTRICTED_FREEHOLD" },
+    });
+    const result = evaluateEligibility(profile, makePropertyDestination("NO", "YES"));
+    expect(result.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "FAIL", reasonCode: "PROPERTY_PURCHASE_REQUIRES_UNRESTRICTED_OWNERSHIP" });
+  });
+
+  it("7. foreign purchase NO, conditional YES, LAND_OWNERSHIP_REQUIRED -> FAIL", () => {
+    const profile = makePropertyProfile({
+      hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true, propertyOwnershipRequirement: "LAND_OWNERSHIP_REQUIRED" },
+    });
+    const result = evaluateEligibility(profile, makePropertyDestination("NO", "YES"));
+    expect(result.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "FAIL", reasonCode: "PROPERTY_PURCHASE_REQUIRES_UNRESTRICTED_OWNERSHIP" });
+  });
+
+  it("8. foreign purchase NO, conditional NO -> FAIL for every qualifier", () => {
+    for (const ownershipRequirement of ["ANY_LEGAL_RESIDENTIAL_PROPERTY", "NOT_SURE", "UNRESTRICTED_FREEHOLD", "LAND_OWNERSHIP_REQUIRED"] as const) {
+      const profile = makePropertyProfile({
+        hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true, propertyOwnershipRequirement: ownershipRequirement },
+      });
+      const result = evaluateEligibility(profile, makePropertyDestination("NO", "NO"));
+      expect(result.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "FAIL", reasonCode: "FOREIGN_PROPERTY_PURCHASE_NOT_ALLOWED" });
+    }
+  });
+
+  it("9. foreign purchase NO, conditional UNKNOWN, ANY_LEGAL_RESIDENTIAL_PROPERTY -> UNKNOWN, never fabricated FAIL", () => {
+    const profile = makePropertyProfile({
+      hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true, propertyOwnershipRequirement: "ANY_LEGAL_RESIDENTIAL_PROPERTY" },
+    });
+    const result = evaluateEligibility(profile, makePropertyDestination("NO", "UNKNOWN"));
+    expect(result.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "UNKNOWN", reasonCode: "PROPERTY_PURCHASE_ELIGIBILITY_UNKNOWN" });
+  });
+
+  it("10. foreign purchase NO, conditional UNKNOWN, UNRESTRICTED_FREEHOLD -> FAIL (the stricter requirement is already unsatisfiable once ordinary purchase is confirmed NO)", () => {
+    const profile = makePropertyProfile({
+      hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true, propertyOwnershipRequirement: "UNRESTRICTED_FREEHOLD" },
+    });
+    const result = evaluateEligibility(profile, makePropertyDestination("NO", "UNKNOWN"));
+    expect(result.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "FAIL", reasonCode: "PROPERTY_PURCHASE_REQUIRES_UNRESTRICTED_OWNERSHIP" });
+  });
+
+  it("11. foreign purchase UNKNOWN, conditional UNKNOWN -> UNKNOWN, never a fabricated PASS or FAIL", () => {
+    const profile = makePropertyProfile();
+    const result = evaluateEligibility(profile, makePropertyDestination("UNKNOWN", "UNKNOWN"));
+    expect(result.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "UNKNOWN", reasonCode: "PROPERTY_PURCHASE_ELIGIBILITY_UNKNOWN" });
+  });
+
+  it("12. legacy profile: foreignPropertyPurchaseEssential=true, propertyOwnershipRequirement omitted entirely -> defaults to NOT_SURE (permissive) semantics, never UNRESTRICTED_FREEHOLD", () => {
+    // Deliberately omits propertyOwnershipRequirement - simulates a pre-Checkpoint-C fixture/profile.
+    const legacyProfile = makeProfile({
+      tenureIntent: "BUY",
+      hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true },
+    });
+    expect(legacyProfile.hardRequirements.propertyOwnershipRequirement).toBeUndefined();
+    const result = evaluateEligibility(legacyProfile, makePropertyDestination("NO", "YES"));
+    // NOT_SURE is permissive, so a conditional path is sufficient - same result as an explicit NOT_SURE.
+    expect(result.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "PASS", reasonCode: "CONDITIONAL_PROPERTY_PURCHASE_PATH_AVAILABLE" });
+  });
+
+  it("also proves: the qualifier never activates or changes anything when purchase is not essential", () => {
+    const notEssentialProfile = makeProfile({
+      tenureIntent: "BUY",
+      hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), propertyOwnershipRequirement: "UNRESTRICTED_FREEHOLD" }, // essential left false
+    });
+    const result = evaluateEligibility(notEssentialProfile, makePropertyDestination("NO", "NO"));
+    expect(result.criteria.foreignPropertyPurchaseRights).toBeNull();
+  });
+});

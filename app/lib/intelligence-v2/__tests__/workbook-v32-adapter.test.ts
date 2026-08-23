@@ -378,3 +378,36 @@ describe("workbook v3.2 -> Intelligence v2 adapter — safe legacy lifestyle-sco
     expect(facts.lifestyleDimensions.dimensionValues).toEqual({});
   });
 });
+
+describe("workbook v3.2 -> Intelligence v2 adapter — propertyPurchaseConditionalPathAvailable (Checkpoint C schema)", () => {
+  it("reads Yes from the buy-topic HOUSING_PROPERTY row's property_purchase_conditional_path_available column", () => {
+    const canonical = makeCanonicalFixture({
+      destinationKey: "synthetic-property",
+      housing: [{ destination_key: "synthetic-property", record_key: "housing-buy", housing_topic: "buy", can_foreigners_buy: "No", property_purchase_conditional_path_available: "Yes" } as never],
+    });
+    const { facts, mappingErrors } = adaptWorkbookDestinationToIntelligenceV2Facts(canonical);
+    expect(facts.entryAndStay.propertyPurchaseConditionalPathAvailable).toBe("YES");
+    expect(mappingErrors.some((e) => e.factPath === "entryAndStay.propertyPurchaseConditionalPathAvailable")).toBe(false);
+  });
+
+  it("blank column normalizes to UNKNOWN, never a fabricated fallback", () => {
+    const canonical = makeCanonicalFixture({
+      destinationKey: "synthetic-property",
+      housing: [{ destination_key: "synthetic-property", record_key: "housing-buy", housing_topic: "buy", can_foreigners_buy: "No" } as never],
+    });
+    const { facts } = adaptWorkbookDestinationToIntelligenceV2Facts(canonical);
+    expect(facts.entryAndStay.propertyPurchaseConditionalPathAvailable).toBe("UNKNOWN");
+  });
+
+  it("only reads the requested destination's row, never another destination's conditional-path value", () => {
+    const canonical = makeCanonicalFixture({
+      destinationKey: "lisbon-pt",
+      housing: [
+        { destination_key: "hoi-an-vn", record_key: "housing-buy-hoi-an", housing_topic: "buy", property_purchase_conditional_path_available: "Yes" } as never,
+        { destination_key: "lisbon-pt", record_key: "housing-buy-lisbon", housing_topic: "buy", property_purchase_conditional_path_available: "No" } as never,
+      ],
+    });
+    const { facts } = adaptWorkbookDestinationToIntelligenceV2Facts(canonical);
+    expect(facts.entryAndStay.propertyPurchaseConditionalPathAvailable).toBe("NO"); // Lisbon's row, not Hoi An's
+  });
+});
