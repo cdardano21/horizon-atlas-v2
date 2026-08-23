@@ -85,10 +85,16 @@ describe("The Villages real four-layer scenarios — no mocks in the chain (real
     expect(villagesFacts.cost.estimatedMonthlyCostRange).toEqual({ low: 3454, high: 6650, currencyCode: "USD" });
     expect(villagesFacts.cost.householdSizeAssumedForEstimate).toBe(1);
     expect(villagesFacts.lifestyleDimensions.dimensionValues.climate).toBe(78);
-    // Unlike Summerlin ("walkability" exact-matched), The Villages' only DESTINATION_SCORES rows use
-    // legacy/miskeyed names (walkability_transport, lifestyle_culture, etc.) - "climate" is the only exact match.
+    // Checkpoint B: connectivity/airport_access are SAFE_ONE_TO_ONE legacy keys, now resolved
+    // via alias fallback (no exact canonical row exists for either at The Villages).
+    expect(villagesFacts.lifestyleDimensions.dimensionValues.connectivityRemoteWork).toBe(82);
+    expect(villagesFacts.lifestyleDimensions.dimensionValues.transportationAirportQuality).toBe(62);
+    // Unlike Summerlin ("walkability" exact-matched), The Villages' only other DESTINATION_SCORES
+    // rows use compound/ambiguous legacy names (walkability_transport, lifestyle_culture, food_social) -
+    // these remain intentionally unmapped, never aliased or split.
     expect(villagesFacts.lifestyleDimensions.dimensionValues.walkability).toBeUndefined();
     expect(villagesFacts.lifestyleDimensions.dimensionValues.culture).toBeUndefined();
+    expect(villagesFacts.lifestyleDimensions.dimensionValues.foodDining).toBeUndefined();
     // international-only fields remain blank
     expect(villagesFacts.entryAndStay.touristStayLimitDays).toBeNull();
     expect(villagesFacts.entryAndStay.remoteWorkLegalUnderTouristStatus).toBe("UNKNOWN");

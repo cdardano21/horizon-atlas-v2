@@ -19,7 +19,7 @@ import type {
   DeterministicV31WorkbookImport,
 } from "../workbook-v31-deterministic-core";
 import type { SyntheticDestinationFixture } from "./destination-fact-types";
-import { ENUM_DERIVED_DIMENSION_KEYS, LIFESTYLE_DIMENSION_KEYS } from "./lifestyle-scoring-policy";
+import { ENUM_DERIVED_DIMENSION_KEYS, LIFESTYLE_DIMENSION_KEYS, type LifestyleDimensionKey } from "./lifestyle-scoring-policy";
 import {
   BEACH_ACCESS_TOKENS,
   MOUNTAIN_OR_SKI_ACCESS_TOKENS,
@@ -89,6 +89,19 @@ type TaxFinanceRowV32 = DeterministicV31CanonicalTaxFinanceState & TaxFinanceV32
 
 /** Non-enum-derived Layer 3 dimension keys eligible for a direct DESTINATION_SCORES exact-key match (the 4 enum-derived keys are computed by the scorer itself from hardGates and must never be duplicated here). */
 const DIRECT_SCORE_DIMENSION_KEYS: ReadonlySet<string> = new Set(LIFESTYLE_DIMENSION_KEYS.filter((key) => !ENUM_DERIVED_DIMENSION_KEYS.has(key)));
+
+/**
+ * Legacy DESTINATION_SCORES source keys proven SAFE_ONE_TO_ONE fallbacks for a canonical
+ * dimension (Layer 3 design sanity review) - each legacy key names a single, unambiguous
+ * concept, unlike the deliberately-excluded compound keys (walkability_transport,
+ * lifestyle_culture, food_social), which combine two concepts and must never be aliased or
+ * split. A legacy alias only fills a genuine gap; it can never overwrite an exact canonical
+ * score (see buildDimensionValues).
+ */
+const SAFE_LEGACY_SCORE_KEY_ALIASES: ReadonlyMap<string, LifestyleDimensionKey> = new Map([
+  ["connectivity", "connectivityRemoteWork"],
+  ["airport_access", "transportationAirportQuality"],
+]);
 
 /**
  * Scopes every module array to the requested destination_key, defensively,
@@ -195,12 +208,33 @@ function buildDimensionValues(
   errors: WorkbookAdapterMappingError[],
 ): Record<string, number> {
   const values: Record<string, number> = {};
+  const legacyAliasCandidates: Array<{ canonicalKey: LifestyleDimensionKey; numeric: number }> = [];
+
   for (const row of scoreRows) {
     const scoreKey = (row.score_key ?? row.scoreKey ?? "").trim();
-    if (!scoreKey || !DIRECT_SCORE_DIMENSION_KEYS.has(scoreKey)) continue; // exact-match only; never alias/invent a mapping
-    const numeric = toNullableNumber(row.score_value ?? row.scoreValue ?? null, `lifestyleDimensions.dimensionValues.${scoreKey}`, "DESTINATION_SCORES", errors);
-    if (numeric !== null) values[scoreKey] = numeric;
+    if (!scoreKey) continue;
+
+    if (DIRECT_SCORE_DIMENSION_KEYS.has(scoreKey)) {
+      // exact-match only; never alias/invent a mapping for a canonical key
+      const numeric = toNullableNumber(row.score_value ?? row.scoreValue ?? null, `lifestyleDimensions.dimensionValues.${scoreKey}`, "DESTINATION_SCORES", errors);
+      if (numeric !== null) values[scoreKey] = numeric;
+      continue;
+    }
+
+    const aliasCanonicalKey = SAFE_LEGACY_SCORE_KEY_ALIASES.get(scoreKey);
+    if (aliasCanonicalKey) {
+      const numeric = toNullableNumber(row.score_value ?? row.scoreValue ?? null, `lifestyleDimensions.dimensionValues.${aliasCanonicalKey}`, "DESTINATION_SCORES", errors);
+      if (numeric !== null) legacyAliasCandidates.push({ canonicalKey: aliasCanonicalKey, numeric });
+    }
+    // any other legacy key (including the deliberately-excluded compound keys) is silently
+    // skipped - never aliased, never invented, never reported as an error.
   }
+
+  // A legacy alias only fills a genuine gap; the exact canonical score always wins.
+  for (const candidate of legacyAliasCandidates) {
+    if (!(candidate.canonicalKey in values)) values[candidate.canonicalKey] = candidate.numeric;
+  }
+
   return values;
 }
 

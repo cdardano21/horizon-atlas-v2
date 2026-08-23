@@ -106,6 +106,14 @@ describe("Hoi An real four-layer scenarios — third Batch #1 cross-border + VND
     expect(hoiAnFacts.financial.wealthTaxApplicable).toBe("NO");
     expect(hoiAnFacts.financial.taxResidencyTriggerDays).toBeNull();
     expect(hoiAnFacts.lifestyleDimensions.dimensionValues.climate).toBe(70);
+    // Checkpoint B: connectivity/airport_access are SAFE_ONE_TO_ONE legacy keys, now resolved
+    // via alias fallback (no exact canonical row exists for either at Hoi An).
+    expect(hoiAnFacts.lifestyleDimensions.dimensionValues.connectivityRemoteWork).toBe(78);
+    expect(hoiAnFacts.lifestyleDimensions.dimensionValues.transportationAirportQuality).toBe(78);
+    // walkability_transport/lifestyle_culture/food_social remain intentionally unmapped compound legacy rows.
+    expect(hoiAnFacts.lifestyleDimensions.dimensionValues.walkability).toBeUndefined();
+    expect(hoiAnFacts.lifestyleDimensions.dimensionValues.culture).toBeUndefined();
+    expect(hoiAnFacts.lifestyleDimensions.dimensionValues.foodDining).toBeUndefined();
   });
 
   it("SCENARIO 1 — 30-day retired renter / $2,500 FLEXIBLE: full four-layer trace, real VND->USD conversion, no-treaty/FTC-yes finding", () => {

@@ -279,3 +279,102 @@ describe("workbook v3.2 -> Intelligence v2 adapter — no cross-destination cont
     expect(facts.lifestyleDimensions.dimensionValues.walkability).toBe(91); // Lisbon's row, not New Braunfels'
   });
 });
+
+describe("workbook v3.2 -> Intelligence v2 adapter — safe legacy lifestyle-score aliases (Checkpoint B)", () => {
+  it("1. legacy connectivity only -> connectivityRemoteWork resolves", () => {
+    const canonical = makeCanonicalFixture({
+      destinationKey: "synthetic-alias",
+      scores: [{ destination_key: "synthetic-alias", score_key: "connectivity", score_value: "82" } as never],
+    });
+    const { facts } = adaptWorkbookDestinationToIntelligenceV2Facts(canonical);
+    expect(facts.lifestyleDimensions.dimensionValues.connectivityRemoteWork).toBe(82);
+  });
+
+  it("2. exact connectivityRemoteWork only -> resolves the exact value", () => {
+    const canonical = makeCanonicalFixture({
+      destinationKey: "synthetic-alias",
+      scores: [{ destination_key: "synthetic-alias", score_key: "connectivityRemoteWork", score_value: "77" } as never],
+    });
+    const { facts } = adaptWorkbookDestinationToIntelligenceV2Facts(canonical);
+    expect(facts.lifestyleDimensions.dimensionValues.connectivityRemoteWork).toBe(77);
+  });
+
+  it("3. both exact connectivityRemoteWork + legacy connectivity present -> the exact canonical score wins, never overwritten by the legacy alias", () => {
+    const canonical = makeCanonicalFixture({
+      destinationKey: "synthetic-alias",
+      scores: [
+        { destination_key: "synthetic-alias", score_key: "connectivity", score_value: "10" } as never,
+        { destination_key: "synthetic-alias", score_key: "connectivityRemoteWork", score_value: "77" } as never,
+      ],
+    });
+    const { facts } = adaptWorkbookDestinationToIntelligenceV2Facts(canonical);
+    expect(facts.lifestyleDimensions.dimensionValues.connectivityRemoteWork).toBe(77);
+  });
+
+  it("4. legacy airport_access only -> transportationAirportQuality resolves", () => {
+    const canonical = makeCanonicalFixture({
+      destinationKey: "synthetic-alias",
+      scores: [{ destination_key: "synthetic-alias", score_key: "airport_access", score_value: "62" } as never],
+    });
+    const { facts } = adaptWorkbookDestinationToIntelligenceV2Facts(canonical);
+    expect(facts.lifestyleDimensions.dimensionValues.transportationAirportQuality).toBe(62);
+  });
+
+  it("5. exact transportationAirportQuality only -> resolves the exact value", () => {
+    const canonical = makeCanonicalFixture({
+      destinationKey: "synthetic-alias",
+      scores: [{ destination_key: "synthetic-alias", score_key: "transportationAirportQuality", score_value: "50" } as never],
+    });
+    const { facts } = adaptWorkbookDestinationToIntelligenceV2Facts(canonical);
+    expect(facts.lifestyleDimensions.dimensionValues.transportationAirportQuality).toBe(50);
+  });
+
+  it("6. both exact transportationAirportQuality + legacy airport_access present -> the exact canonical score wins", () => {
+    const canonical = makeCanonicalFixture({
+      destinationKey: "synthetic-alias",
+      scores: [
+        { destination_key: "synthetic-alias", score_key: "airport_access", score_value: "10" } as never,
+        { destination_key: "synthetic-alias", score_key: "transportationAirportQuality", score_value: "50" } as never,
+      ],
+    });
+    const { facts } = adaptWorkbookDestinationToIntelligenceV2Facts(canonical);
+    expect(facts.lifestyleDimensions.dimensionValues.transportationAirportQuality).toBe(50);
+  });
+
+  it("7. walkability_transport present, walkability absent -> walkability remains genuinely unresolved (compound legacy key, never aliased)", () => {
+    const canonical = makeCanonicalFixture({
+      destinationKey: "synthetic-alias",
+      scores: [{ destination_key: "synthetic-alias", score_key: "walkability_transport", score_value: "88" } as never],
+    });
+    const { facts } = adaptWorkbookDestinationToIntelligenceV2Facts(canonical);
+    expect(facts.lifestyleDimensions.dimensionValues.walkability).toBeUndefined();
+    expect(facts.lifestyleDimensions.dimensionValues.walkability_transport).toBeUndefined();
+  });
+
+  it("8. lifestyle_culture present, culture absent -> culture remains genuinely unresolved (compound legacy key, never aliased)", () => {
+    const canonical = makeCanonicalFixture({
+      destinationKey: "synthetic-alias",
+      scores: [{ destination_key: "synthetic-alias", score_key: "lifestyle_culture", score_value: "90" } as never],
+    });
+    const { facts } = adaptWorkbookDestinationToIntelligenceV2Facts(canonical);
+    expect(facts.lifestyleDimensions.dimensionValues.culture).toBeUndefined();
+  });
+
+  it("9. food_social present, foodDining absent -> foodDining remains genuinely unresolved (compound legacy key, never aliased or split into community)", () => {
+    const canonical = makeCanonicalFixture({
+      destinationKey: "synthetic-alias",
+      scores: [{ destination_key: "synthetic-alias", score_key: "food_social", score_value: "84" } as never],
+    });
+    const { facts } = adaptWorkbookDestinationToIntelligenceV2Facts(canonical);
+    expect(facts.lifestyleDimensions.dimensionValues.foodDining).toBeUndefined();
+    expect(facts.lifestyleDimensions.dimensionValues.community).toBeUndefined();
+  });
+
+  it("10. no score row at all -> connectivityRemoteWork and transportationAirportQuality remain unresolved, nothing fabricated", () => {
+    const canonical = makeCanonicalFixture({ destinationKey: "synthetic-alias", scores: [] });
+    const { facts } = adaptWorkbookDestinationToIntelligenceV2Facts(canonical);
+    expect(facts.lifestyleDimensions.dimensionValues.connectivityRemoteWork).toBeUndefined();
+    expect(facts.lifestyleDimensions.dimensionValues.transportationAirportQuality).toBeUndefined();
+    expect(facts.lifestyleDimensions.dimensionValues).toEqual({});
+  });
+});

@@ -115,9 +115,14 @@ describe("Sofia real four-layer scenarios — second Batch #1 cross-border + EUR
     expect(sofiaFacts.financial.propertyTaxAnnualRatePercent).toBeNull();
     expect(sofiaFacts.financial.propertyPurchaseOrTransferTaxPercent).toBeNull();
     expect(sofiaFacts.lifestyleDimensions.dimensionValues.climate).toBe(65);
+    // Checkpoint B: connectivity/airport_access are SAFE_ONE_TO_ONE legacy keys, now resolved
+    // via alias fallback (no exact canonical row exists for either at Sofia).
+    expect(sofiaFacts.lifestyleDimensions.dimensionValues.connectivityRemoteWork).toBe(88);
+    expect(sofiaFacts.lifestyleDimensions.dimensionValues.transportationAirportQuality).toBe(88);
     expect(sofiaFacts.lifestyleDimensions.dimensionValues.walkability).toBeUndefined();
     expect(sofiaFacts.lifestyleDimensions.dimensionValues.golf).toBeUndefined();
     expect(sofiaFacts.lifestyleDimensions.dimensionValues.culture).toBeUndefined();
+    expect(sofiaFacts.lifestyleDimensions.dimensionValues.foodDining).toBeUndefined();
   });
 
   it("SCENARIO 1/7 — 90-day retired renter / $3,500 FLEXIBLE: full four-layer trace, real EUR->USD conversion, cross-border Layer 4 categories present", () => {

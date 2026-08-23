@@ -115,10 +115,16 @@ describe("Puerto Vallarta real four-layer scenarios — first Batch #1 cross-bor
     expect(pvFacts.financial.propertyTaxAnnualRatePercent).toBeNull();
     expect(pvFacts.financial.propertyPurchaseOrTransferTaxPercent).toBeNull();
     expect(pvFacts.lifestyleDimensions.dimensionValues.climate).toBe(82);
-    // No other exact-match DESTINATION_SCORES key exists for PV (walkability/culture/golf/etc are miskeyed legacy rows).
+    // Checkpoint B: connectivity/airport_access are SAFE_ONE_TO_ONE legacy keys, now resolved
+    // via alias fallback (no exact canonical row exists for either at Puerto Vallarta).
+    expect(pvFacts.lifestyleDimensions.dimensionValues.connectivityRemoteWork).toBe(78);
+    expect(pvFacts.lifestyleDimensions.dimensionValues.transportationAirportQuality).toBe(92);
+    // No other exact-match DESTINATION_SCORES key exists for PV (walkability_transport/lifestyle_culture/
+    // food_social remain intentionally unmapped compound/ambiguous legacy rows).
     expect(pvFacts.lifestyleDimensions.dimensionValues.walkability).toBeUndefined();
     expect(pvFacts.lifestyleDimensions.dimensionValues.golf).toBeUndefined();
     expect(pvFacts.lifestyleDimensions.dimensionValues.culture).toBeUndefined();
+    expect(pvFacts.lifestyleDimensions.dimensionValues.foodDining).toBeUndefined();
   });
 
   it("SCENARIO 1/6 — 90-day retired renter / $4,500 FLEXIBLE: full four-layer trace, real MXN->USD conversion, cross-border Layer 4 categories present", () => {

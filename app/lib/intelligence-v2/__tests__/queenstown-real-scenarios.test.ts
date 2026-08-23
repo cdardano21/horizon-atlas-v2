@@ -109,6 +109,14 @@ describe("Queenstown real four-layer scenarios — fourth Batch #1 cross-border 
     expect(queenstownFacts.financial.wealthTaxApplicable).toBe("NO");
     expect(queenstownFacts.financial.taxResidencyTriggerDays).toBeNull();
     expect(queenstownFacts.lifestyleDimensions.dimensionValues.climate).toBe(72);
+    // Checkpoint B: connectivity/airport_access are SAFE_ONE_TO_ONE legacy keys, now resolved
+    // via alias fallback (no exact canonical row exists for either at Queenstown).
+    expect(queenstownFacts.lifestyleDimensions.dimensionValues.connectivityRemoteWork).toBe(85);
+    expect(queenstownFacts.lifestyleDimensions.dimensionValues.transportationAirportQuality).toBe(80);
+    // walkability_transport/lifestyle_culture/food_social remain intentionally unmapped compound legacy rows.
+    expect(queenstownFacts.lifestyleDimensions.dimensionValues.walkability).toBeUndefined();
+    expect(queenstownFacts.lifestyleDimensions.dimensionValues.culture).toBeUndefined();
+    expect(queenstownFacts.lifestyleDimensions.dimensionValues.foodDining).toBeUndefined();
   });
 
   it("SCENARIO 1 — 30-day retired renter / $5,500 FLEXIBLE: full four-layer trace, real NZD->USD conversion, treaty-YES/FTC-YES finding", () => {
