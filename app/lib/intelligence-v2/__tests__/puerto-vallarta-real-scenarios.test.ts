@@ -340,6 +340,16 @@ describe("Puerto Vallarta real four-layer scenarios — first Batch #1 cross-bor
     expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
   });
 
+  it("SCENARIO 12A — Checkpoint C regression: foreignPropertyPurchaseAllowed=YES still PASSes even with an explicit strict UNRESTRICTED_FREEHOLD qualifier (ordinary purchase already satisfies any requirement weaker than or equal to unrestricted ownership)", () => {
+    const result = run(
+      makeProfile({
+        tenureIntent: "BUY",
+        hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true, propertyOwnershipRequirement: "UNRESTRICTED_FREEHOLD" },
+      }),
+    );
+    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "PASS", reasonCode: "FOREIGN_PROPERTY_PURCHASE_ALLOWED" });
+  });
+
   it("SCENARIO 13 — couple retiree: single-only cost data -> real HOUSEHOLD_ESTIMATE_MISMATCH; spouse-inclusion fact is also genuinely UNKNOWN, no multiplier invented", () => {
     const result = run(
       makeProfile({ household: { type: "COUPLE", dependentCount: 0, spouseOrPartnerAccompanying: true } }),

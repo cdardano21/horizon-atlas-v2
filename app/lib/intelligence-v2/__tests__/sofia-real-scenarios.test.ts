@@ -320,6 +320,16 @@ describe("Sofia real four-layer scenarios — second Batch #1 cross-border + EUR
     expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
   });
 
+  it("SCENARIO 13A — Checkpoint C regression: foreignPropertyPurchaseAllowed=YES still PASSes even with an explicit strict LAND_OWNERSHIP_REQUIRED qualifier (ordinary purchase already satisfies any requirement weaker than or equal to unrestricted ownership)", () => {
+    const result = run(
+      makeProfile({
+        tenureIntent: "BUY",
+        hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true, propertyOwnershipRequirement: "LAND_OWNERSHIP_REQUIRED" },
+      }),
+    );
+    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "PASS", reasonCode: "FOREIGN_PROPERTY_PURCHASE_ALLOWED" });
+  });
+
   it("SCENARIO 14 — couple retiree: single-only cost data -> real HOUSEHOLD_ESTIMATE_MISMATCH; spouse-inclusion fact is also genuinely UNKNOWN", () => {
     const result = run(makeProfile({ household: { type: "COUPLE", dependentCount: 0, spouseOrPartnerAccompanying: true } }));
     expect(result.eligibility.criteria.spouseOrDependentFeasibility).toMatchObject({ status: "UNKNOWN", reasonCode: "SPOUSE_OR_DEPENDENT_INCLUSION_UNKNOWN" });

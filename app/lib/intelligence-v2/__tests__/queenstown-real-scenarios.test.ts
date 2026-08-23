@@ -95,6 +95,9 @@ describe("Queenstown real four-layer scenarios — fourth Batch #1 cross-border 
     expect(queenstownFacts.entryAndStay.extendedStayOrLongStayVisaAvailable).toBe("YES");
     expect(queenstownFacts.entryAndStay.permanentResidencyPathAvailable).toBe("UNKNOWN");
     expect(queenstownFacts.entryAndStay.foreignPropertyPurchaseAllowed).toBe("NO");
+    // Checkpoint C backfill: a genuine qualifying/conditional purchase path exists (workbook's own
+    // residency_required_to_buy=TRUE fact), even though ordinary/unrestricted purchase is NO.
+    expect(queenstownFacts.entryAndStay.propertyPurchaseConditionalPathAvailable).toBe("YES");
     expect(queenstownFacts.hardGates.healthcareStandard).toBe("GOOD_PRIVATE_AVAILABLE");
     expect(queenstownFacts.hardGates.safetyStandard).toBe("UNKNOWN");
     expect(queenstownFacts.hardGates.lgbtqLegalProtectionStatus).toBe("UNKNOWN");
@@ -257,7 +260,7 @@ describe("Queenstown real four-layer scenarios — fourth Batch #1 cross-border 
     expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
   });
 
-  it("SCENARIO 15 — foreign property buyer (hard requirement): foreignPropertyPurchaseAllowed=NO, propertyPurchaseConditionalPathAvailable still UNKNOWN (not yet backfilled) -> honest UNKNOWN, no longer a bare FAIL (Checkpoint C conditional-purchase decision table); the unconsumed residency_required_to_buy=TRUE fact is exactly what this new conditional-path fact exists to represent, once backfilled", () => {
+  it("SCENARIO 15 — foreign property buyer (hard requirement), qualifier omitted (defaults to NOT_SURE): foreignPropertyPurchaseAllowed=NO but propertyPurchaseConditionalPathAvailable=YES (real backfilled fact, derived from the workbook's own residency_required_to_buy=TRUE prose) -> real PASS, closing the proven wrong-exclusion risk", () => {
     const result = run(
       makeProfile({
         stayDuration: { band: "LONG_TERM_PERMANENT", intendedStayDurationDays: null },
@@ -265,9 +268,41 @@ describe("Queenstown real four-layer scenarios — fourth Batch #1 cross-border 
         hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true },
       }),
     );
-    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "UNKNOWN", reasonCode: "PROPERTY_PURCHASE_ELIGIBILITY_UNKNOWN" });
+    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "PASS", reasonCode: "CONDITIONAL_PROPERTY_PURCHASE_PATH_AVAILABLE" });
     expect(result.eligibility.overallStatus).toBe("UNKNOWN_INCOMPLETE");
     expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
+  });
+
+  it("SCENARIO 15A — foreign property buyer, explicit ANY_LEGAL_RESIDENTIAL_PROPERTY qualifier -> real PASS", () => {
+    const result = run(
+      makeProfile({
+        tenureIntent: "BUY",
+        hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true, propertyOwnershipRequirement: "ANY_LEGAL_RESIDENTIAL_PROPERTY" },
+      }),
+    );
+    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "PASS", reasonCode: "CONDITIONAL_PROPERTY_PURCHASE_PATH_AVAILABLE" });
+  });
+
+  it("SCENARIO 15B — foreign property buyer, explicit UNRESTRICTED_FREEHOLD qualifier -> real FAIL (a residency-contingent path does not satisfy an unrestricted-ownership requirement)", () => {
+    const result = run(
+      makeProfile({
+        tenureIntent: "BUY",
+        hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true, propertyOwnershipRequirement: "UNRESTRICTED_FREEHOLD" },
+      }),
+    );
+    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "FAIL", reasonCode: "PROPERTY_PURCHASE_REQUIRES_UNRESTRICTED_OWNERSHIP" });
+    expect(result.excluded).toBe(true);
+  });
+
+  it("SCENARIO 15C — foreign property buyer, explicit LAND_OWNERSHIP_REQUIRED qualifier -> real FAIL", () => {
+    const result = run(
+      makeProfile({
+        tenureIntent: "BUY",
+        hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true, propertyOwnershipRequirement: "LAND_OWNERSHIP_REQUIRED" },
+      }),
+    );
+    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "FAIL", reasonCode: "PROPERTY_PURCHASE_REQUIRES_UNRESTRICTED_OWNERSHIP" });
+    expect(result.excluded).toBe(true);
   });
 
   it("SCENARIO 16 — buyer, property NOT essential: BUY alone does not activate the hard gate; Layer 2 remains UNKNOWN regardless (identical real contract behavior to Hoi An's non-essential BUY scenario)", () => {
@@ -403,17 +438,18 @@ describe("Queenstown real four-layer scenarios — fourth Batch #1 cross-border 
     expect(failResult.eligibility.overallStatus).toBe("EXCLUDED");
   });
 
-  it("SCENARIO 26 — property purchase eligibility honestly UNKNOWN pre-backfill: an AFFORDABLE+property-FAIL combination is not constructible under the current contract (BUY always forces Layer 2 UNKNOWN), and pre-backfill the property criterion itself is honestly UNKNOWN, not a fabricated FAIL", () => {
+  it("SCENARIO 26 — property FAIL (strict qualifier) cannot be averaged away: real FAIL -> EXCLUDED regardless of treaty/ski/beach/retirement positives; Layer 2 stays UNKNOWN (BUY ownership costs not modeled), never an artificial AFFORDABLE+FAIL combination", () => {
     const result = run(
       makeProfile({
         stayDuration: { band: "LONG_TERM_PERMANENT", intendedStayDurationDays: null },
         tenureIntent: "BUY",
         budget: { monthlyTargetAmount: 8000, currencyCode: "USD", ceilingType: "FLEXIBLE_TARGET" },
-        hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true },
+        hardRequirements: { ...createHardRequirementSelectionsWithNoneActivated(), foreignPropertyPurchaseEssential: true, propertyOwnershipRequirement: "UNRESTRICTED_FREEHOLD" },
       }),
     );
-    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "UNKNOWN" });
-    expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
+    expect(result.eligibility.criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "FAIL", reasonCode: "PROPERTY_PURCHASE_REQUIRES_UNRESTRICTED_OWNERSHIP" });
+    expect(result.recommendationStatus).toBe("EXCLUDED");
+    expect(result.excluded).toBe(true);
     expect(result.affordability.status).toBe("UNKNOWN");
     expect(result.affordability.reasonCodes).toEqual(["BUY_INTENT_OWNERSHIP_COST_NOT_MODELED"]);
     expect(result.financialEfficiency.findings.find((f) => f.category === "PENSION_TREATMENT")).toMatchObject({ severity: "CAUTION" });
