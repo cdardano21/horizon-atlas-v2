@@ -159,29 +159,29 @@ describe("Hoi An real four-layer scenarios — third Batch #1 cross-border + VND
     expect(result.eligibility.overallStatus).toBe("ELIGIBLE");
   });
 
-  it("SCENARIO 3 — 91-day retired renter: 1 day past the e-Visa 90-day limit still resolves a real PASS via the generic long-stay fact (KNOWN PRODUCT LIMITATION given Hoi An's own 'no simple retirement visa' prose)", () => {
+  it("SCENARIO 3 — 91-day retired renter: 1 day past the e-Visa 90-day limit now correctly resolves UNKNOWN post-tightening (Hoi An's own 'no simple retirement visa' prose is honestly reflected, not masked by the generic fact)", () => {
     const result = run(makeProfile({ stayDuration: { band: "SHORT_1_3_MONTHS", intendedStayDurationDays: 91 } }));
-    expect(result.eligibility.criteria.stayDurationFeasibility).toMatchObject({ status: "PASS", reasonCode: "GENERIC_LONG_STAY_PATH_AVAILABLE" });
-    expect(result.eligibility.criteria.requiredLegalPath).toMatchObject({ status: "PASS", reasonCode: "ACTIVITY_APPROPRIATE_PATH_AVAILABLE" });
+    expect(result.eligibility.criteria.stayDurationFeasibility).toMatchObject({ status: "UNKNOWN", reasonCode: "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE" });
+    expect(result.eligibility.criteria.requiredLegalPath).toMatchObject({ status: "UNKNOWN", reasonCode: "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE" });
     expect(result.eligibility.criteria.retirementOrResidencyPath).toBeNull(); // band still SHORT_1_3_MONTHS
-    expect(result.eligibility.overallStatus).toBe("ELIGIBLE");
-    expect(result.recommendationStatus).toBe("VIABLE");
+    expect(result.eligibility.overallStatus).toBe("UNKNOWN_INCOMPLETE");
+    expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
   });
 
-  it("SCENARIO 4 — 180-day retiree: tourist path no longer sufficient, generic long-stay fact + retirement path both resolve real PASS (same KNOWN PRODUCT LIMITATION, not fixed)", () => {
+  it("SCENARIO 4 — 180-day retiree: tourist path no longer sufficient, and post-tightening the generic long-stay fact alone no longer rescues an activity-specific UNKNOWN", () => {
     const result = run(makeProfile({ stayDuration: { band: "EXTENDED_6_12_MONTHS", intendedStayDurationDays: 180 } }));
-    expect(result.eligibility.criteria.stayDurationFeasibility).toMatchObject({ status: "PASS", reasonCode: "GENERIC_LONG_STAY_PATH_AVAILABLE" });
-    expect(result.eligibility.criteria.requiredLegalPath).toMatchObject({ status: "PASS", reasonCode: "ACTIVITY_APPROPRIATE_PATH_AVAILABLE" });
-    expect(result.eligibility.criteria.retirementOrResidencyPath).toMatchObject({ status: "PASS", reasonCode: "RETIREMENT_OR_RESIDENCY_PATH_AVAILABLE" });
-    expect(result.eligibility.overallStatus).toBe("ELIGIBLE");
-    expect(result.recommendationStatus).toBe("VIABLE");
+    expect(result.eligibility.criteria.stayDurationFeasibility).toMatchObject({ status: "UNKNOWN", reasonCode: "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE" });
+    expect(result.eligibility.criteria.requiredLegalPath).toMatchObject({ status: "UNKNOWN", reasonCode: "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE" });
+    expect(result.eligibility.criteria.retirementOrResidencyPath).toMatchObject({ status: "UNKNOWN", reasonCode: "RETIREMENT_OR_RESIDENCY_PATH_UNKNOWN" });
+    expect(result.eligibility.overallStatus).toBe("UNKNOWN_INCOMPLETE");
+    expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
   });
 
   it("SCENARIO 5 — permanent retiree: the LONG_TERM_PERMANENT-specific facts are genuinely incomplete -> real UNKNOWN_INCOMPLETE", () => {
     const result = run(makeProfile({ stayDuration: { band: "LONG_TERM_PERMANENT", intendedStayDurationDays: null } }));
     expect(result.eligibility.criteria.stayDurationFeasibility).toMatchObject({ status: "UNKNOWN", reasonCode: "PERMANENT_PATH_UNKNOWN" });
     expect(result.eligibility.criteria.requiredLegalPath).toMatchObject({ status: "UNKNOWN", reasonCode: "PERMANENT_PATH_UNKNOWN" });
-    expect(result.eligibility.criteria.retirementOrResidencyPath).toMatchObject({ status: "PASS", reasonCode: "RETIREMENT_OR_RESIDENCY_PATH_AVAILABLE" });
+    expect(result.eligibility.criteria.retirementOrResidencyPath).toMatchObject({ status: "UNKNOWN", reasonCode: "RETIREMENT_OR_RESIDENCY_PATH_UNKNOWN" });
     expect(result.eligibility.overallStatus).toBe("UNKNOWN_INCOMPLETE");
     expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
 

@@ -184,19 +184,24 @@ describe("Puerto Vallarta real four-layer scenarios — first Batch #1 cross-bor
     expect(result.excluded).toBe(false);
   });
 
-  it("SCENARIO 2 — 210-day retired renter: the generic presence-based long-stay fact (extendedStayOrLongStayVisaAvailable=YES) is sufficient for a real PASS, not NEEDS_VERIFICATION", () => {
+  it("SCENARIO 2 — 210-day retired renter: post-tightening, the generic presence-based long-stay fact ALONE is no longer sufficient — activity-specific facts are UNKNOWN, so the honest result is UNKNOWN/NEEDS_VERIFICATION", () => {
     const result = run(makeProfile({ stayDuration: { band: "EXTENDED_6_12_MONTHS", intendedStayDurationDays: 210 } }));
 
-    // 210 > 180-day tourist limit, so the tourist-path branch does NOT fire; the engine
-    // falls through to the generic long-stay-path combiner, which resolves to PASS
-    // because extendedStayOrLongStayVisaAvailable=YES alone is enough (permanentResidencyPathAvailable
-    // stays UNKNOWN but combineTriStateAnyYes only needs one YES).
-    expect(result.eligibility.criteria.stayDurationFeasibility).toMatchObject({ status: "PASS", reasonCode: "GENERIC_LONG_STAY_PATH_AVAILABLE" });
-    expect(result.eligibility.criteria.requiredLegalPath).toMatchObject({ status: "PASS", reasonCode: "ACTIVITY_APPROPRIATE_PATH_AVAILABLE" });
-    expect(result.eligibility.criteria.retirementOrResidencyPath).toMatchObject({ status: "PASS", reasonCode: "RETIREMENT_OR_RESIDENCY_PATH_AVAILABLE" });
-    expect(result.eligibility.overallStatus).toBe("ELIGIBLE");
-    expect(result.eligibility.unknownReasonCodes).toEqual([]);
-    expect(result.recommendationStatus).toBe("VIABLE");
+    // 210 > 180-day tourist limit, so the tourist-path branch does NOT fire. Post-tightening, the
+    // bare generic extendedStayOrLongStayVisaAvailable=YES fact is no longer sufficient by itself
+    // for a RETIRED profile - a specific retirementVisaProgramAvailable or
+    // permanentResidencyPathAvailable fact is required, and both are UNKNOWN for Puerto Vallarta
+    // today, so the honest result is UNKNOWN, never a fabricated PASS.
+    expect(result.eligibility.criteria.stayDurationFeasibility).toMatchObject({ status: "UNKNOWN", reasonCode: "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE" });
+    expect(result.eligibility.criteria.requiredLegalPath).toMatchObject({ status: "UNKNOWN", reasonCode: "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE" });
+    expect(result.eligibility.criteria.retirementOrResidencyPath).toMatchObject({ status: "UNKNOWN", reasonCode: "RETIREMENT_OR_RESIDENCY_PATH_UNKNOWN" });
+    expect(result.eligibility.overallStatus).toBe("UNKNOWN_INCOMPLETE");
+    expect(result.eligibility.unknownReasonCodes).toEqual([
+      "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE",
+      "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE",
+      "RETIREMENT_OR_RESIDENCY_PATH_UNKNOWN",
+    ]);
+    expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
   });
 
   it("SCENARIO 3 — permanent retiree: the LONG_TERM_PERMANENT-specific facts (permanentResidencyPathAvailable/retirementVisaProgramAvailable) are genuinely incomplete -> real UNKNOWN_INCOMPLETE", () => {
@@ -207,10 +212,11 @@ describe("Puerto Vallarta real four-layer scenarios — first Batch #1 cross-bor
     // both of which are UNKNOWN for Puerto Vallarta today.
     expect(result.eligibility.criteria.stayDurationFeasibility).toMatchObject({ status: "UNKNOWN", reasonCode: "PERMANENT_PATH_UNKNOWN" });
     expect(result.eligibility.criteria.requiredLegalPath).toMatchObject({ status: "UNKNOWN", reasonCode: "PERMANENT_PATH_UNKNOWN" });
-    // retirementOrResidencyPath DOES resolve PASS - it also accepts extendedStayOrLongStayVisaAvailable=YES.
-    expect(result.eligibility.criteria.retirementOrResidencyPath).toMatchObject({ status: "PASS", reasonCode: "RETIREMENT_OR_RESIDENCY_PATH_AVAILABLE" });
+    // Post-tightening, retirementOrResidencyPath no longer accepts the bare generic fact either -
+    // it now requires the same specific retirement/permanent-residency facts, both UNKNOWN here.
+    expect(result.eligibility.criteria.retirementOrResidencyPath).toMatchObject({ status: "UNKNOWN", reasonCode: "RETIREMENT_OR_RESIDENCY_PATH_UNKNOWN" });
     expect(result.eligibility.overallStatus).toBe("UNKNOWN_INCOMPLETE");
-    expect(result.eligibility.unknownReasonCodes).toEqual(["PERMANENT_PATH_UNKNOWN", "PERMANENT_PATH_UNKNOWN"]);
+    expect(result.eligibility.unknownReasonCodes).toEqual(["PERMANENT_PATH_UNKNOWN", "PERMANENT_PATH_UNKNOWN", "RETIREMENT_OR_RESIDENCY_PATH_UNKNOWN"]);
     expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
 
     // Layer 4 retirement/treaty/wealth-tax findings remain fully present and honest regardless.

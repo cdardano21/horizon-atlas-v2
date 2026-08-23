@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { evaluateEligibility } from "../eligibility-evaluator";
 import { createHardRequirementSelectionsWithNoneActivated } from "../profile-types";
 import type { UserProfileV2 } from "../profile-types";
+import type { SyntheticDestinationFixture } from "../destination-fact-types";
 import { CURRENT_PROFILE_CONTRACT_VERSION } from "../versions";
 import {
   ALL_SYNTHETIC_DESTINATION_FIXTURES,
@@ -304,5 +305,163 @@ describe("evaluator runs deterministically across the full fixture matrix", () =
     const first = evaluateEligibility(RETIRED_7_MONTH_RENTER, TOURIST_FRIENDLY_NO_LONG_STAY_PATH);
     const second = evaluateEligibility(RETIRED_7_MONTH_RENTER, TOURIST_FRIENDLY_NO_LONG_STAY_PATH);
     expect(second).toEqual(first);
+  });
+});
+
+describe("13. long-stay profile-aware tightening (Checkpoint A) — generic destination-level availability must never, by itself, prove profile-specific eligibility", () => {
+  const BASE_ENTRY_AND_STAY = {
+    touristEntryAllowed: "YES" as const,
+    touristStayLimitDays: 90,
+    remoteWorkLegalUnderTouristStatus: "UNKNOWN" as const,
+    foreignPropertyPurchaseAllowed: "UNKNOWN" as const,
+    propertyPurchaseGrantsResidencyPath: "UNKNOWN" as const,
+    spouseOrDependentInclusionSupported: "UNKNOWN" as const,
+  };
+
+  function makeDestination(entryAndStayOverrides: Partial<SyntheticDestinationFixture["entryAndStay"]>): SyntheticDestinationFixture {
+    return {
+      id: "fixture-long-stay-tightening-probe",
+      displayName: "Fixture: Long-Stay Tightening Probe",
+      notes: "Synthetic fixture built solely to exercise the profile-aware long-stay tightening rule.",
+      entryAndStay: { ...BASE_ENTRY_AND_STAY, ...entryAndStayOverrides },
+      hardGates: {
+        beachAccess: "UNKNOWN",
+        mountainOrSkiAccess: "UNKNOWN",
+        healthcareStandard: "UNKNOWN",
+        safetyStandard: "UNKNOWN",
+        lgbtqLegalProtectionStatus: "UNKNOWN",
+      },
+      cost: { estimatedMonthlyCostRange: null, householdSizeAssumedForEstimate: 1 },
+      financial: {
+        taxResidencyTriggerDays: null,
+        pensionTreatment: "UNKNOWN",
+        socialSecurityTreatment: "UNKNOWN",
+        iraTreatment: "UNKNOWN",
+        retirementAccount401kTreatment: "UNKNOWN",
+        usTaxTreatyInEffect: "UNKNOWN",
+        foreignTaxCreditAvailable: "UNKNOWN",
+        wealthTaxApplicable: "UNKNOWN",
+        propertyTaxAnnualRatePercent: null,
+        propertyPurchaseOrTransferTaxPercent: null,
+        buyVsRentBreakEvenYears: null,
+      },
+      lifestyleDimensions: { dimensionValues: {} },
+    };
+  }
+
+  // All beyond the 90-day tourist limit (either an exact 210-day count or the LONG_TERM_PERMANENT band).
+  const GENERIC_YES_ALL_SPECIFIC_UNKNOWN = makeDestination({
+    extendedStayOrLongStayVisaAvailable: "YES",
+    permanentResidencyPathAvailable: "UNKNOWN",
+    retirementVisaProgramAvailable: "UNKNOWN",
+    remoteWorkOrDigitalNomadVisaAvailable: "UNKNOWN",
+  });
+  const GENERIC_YES_RETIREMENT_YES = makeDestination({
+    extendedStayOrLongStayVisaAvailable: "YES",
+    permanentResidencyPathAvailable: "UNKNOWN",
+    retirementVisaProgramAvailable: "YES",
+    remoteWorkOrDigitalNomadVisaAvailable: "UNKNOWN",
+  });
+  const GENERIC_YES_PERMANENT_YES = makeDestination({
+    extendedStayOrLongStayVisaAvailable: "YES",
+    permanentResidencyPathAvailable: "YES",
+    retirementVisaProgramAvailable: "UNKNOWN",
+    remoteWorkOrDigitalNomadVisaAvailable: "UNKNOWN",
+  });
+  const GENERIC_YES_DIGITAL_NOMAD_PATH_YES = makeDestination({
+    extendedStayOrLongStayVisaAvailable: "YES",
+    permanentResidencyPathAvailable: "UNKNOWN",
+    retirementVisaProgramAvailable: "UNKNOWN",
+    remoteWorkOrDigitalNomadVisaAvailable: "YES",
+  });
+
+  const beyondTouristLimitProfile = (overrides: Partial<UserProfileV2> = {}) =>
+    makeProfile({ stayDuration: { band: "EXTENDED_6_12_MONTHS", intendedStayDurationDays: 210 }, ...overrides });
+
+  it("1. RETIRED beyond tourist limit: generic YES + retirement-specific UNKNOWN + permanent UNKNOWN -> UNKNOWN, never a fabricated PASS", () => {
+    const result = evaluateEligibility(beyondTouristLimitProfile({ activityMode: "RETIRED" }), GENERIC_YES_ALL_SPECIFIC_UNKNOWN);
+    expect(result.criteria.stayDurationFeasibility).toMatchObject({ status: "UNKNOWN", reasonCode: "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE" });
+    expect(result.criteria.requiredLegalPath).toMatchObject({ status: "UNKNOWN", reasonCode: "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE" });
+    expect(result.criteria.retirementOrResidencyPath).toMatchObject({ status: "UNKNOWN", reasonCode: "RETIREMENT_OR_RESIDENCY_PATH_UNKNOWN" });
+  });
+
+  it("2. RETIRED beyond tourist limit: generic YES + retirementVisaProgramAvailable=YES -> real PASS from the specific fact", () => {
+    const result = evaluateEligibility(beyondTouristLimitProfile({ activityMode: "RETIRED" }), GENERIC_YES_RETIREMENT_YES);
+    expect(result.criteria.stayDurationFeasibility).toMatchObject({ status: "PASS", reasonCode: "PROFILE_COMPATIBLE_LONG_STAY_PATH_AVAILABLE" });
+    expect(result.criteria.requiredLegalPath).toMatchObject({ status: "PASS", reasonCode: "ACTIVITY_APPROPRIATE_PATH_AVAILABLE" });
+    expect(result.criteria.retirementOrResidencyPath).toMatchObject({ status: "PASS", reasonCode: "RETIREMENT_OR_RESIDENCY_PATH_AVAILABLE" });
+  });
+
+  it("3. RETIRED beyond tourist limit: generic YES + permanentResidencyPathAvailable=YES -> real PASS from the specific fact", () => {
+    const result = evaluateEligibility(beyondTouristLimitProfile({ activityMode: "RETIRED" }), GENERIC_YES_PERMANENT_YES);
+    expect(result.criteria.stayDurationFeasibility?.status).toBe("PASS");
+    expect(result.criteria.requiredLegalPath?.status).toBe("PASS");
+    expect(result.criteria.retirementOrResidencyPath?.status).toBe("PASS");
+  });
+
+  it("4. REMOTE_EMPLOYEE beyond tourist limit: generic YES + remote-specific facts UNKNOWN -> UNKNOWN", () => {
+    const result = evaluateEligibility(
+      beyondTouristLimitProfile({ activityMode: "REMOTE_EMPLOYEE", intendsToWorkDuringStay: true }),
+      GENERIC_YES_ALL_SPECIFIC_UNKNOWN,
+    );
+    expect(result.criteria.stayDurationFeasibility?.status).toBe("UNKNOWN");
+    expect(result.criteria.requiredLegalPath?.status).toBe("UNKNOWN");
+  });
+
+  it("5. DIGITAL_NOMAD beyond tourist limit: generic YES + remoteWorkOrDigitalNomadVisaAvailable=YES -> real PASS", () => {
+    const result = evaluateEligibility(
+      beyondTouristLimitProfile({ activityMode: "DIGITAL_NOMAD", intendsToWorkDuringStay: true }),
+      GENERIC_YES_DIGITAL_NOMAD_PATH_YES,
+    );
+    expect(result.criteria.stayDurationFeasibility?.status).toBe("PASS");
+    expect(result.criteria.requiredLegalPath?.status).toBe("PASS");
+  });
+
+  it("6. SELF_EMPLOYED beyond tourist limit: generic YES + permanent UNKNOWN -> UNKNOWN, no fabricated self-employment pathway", () => {
+    const result = evaluateEligibility(beyondTouristLimitProfile({ activityMode: "SELF_EMPLOYED" }), GENERIC_YES_ALL_SPECIFIC_UNKNOWN);
+    expect(result.criteria.stayDurationFeasibility?.status).toBe("UNKNOWN");
+    expect(result.criteria.requiredLegalPath).toMatchObject({ status: "UNKNOWN", reasonCode: "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE" });
+  });
+
+  it("7. LOCAL_EMPLOYMENT beyond tourist limit: generic YES + permanent UNKNOWN -> UNKNOWN, no invented work authorization", () => {
+    const result = evaluateEligibility(beyondTouristLimitProfile({ activityMode: "LOCAL_EMPLOYMENT" }), GENERIC_YES_ALL_SPECIFIC_UNKNOWN);
+    expect(result.criteria.stayDurationFeasibility?.status).toBe("UNKNOWN");
+    // requiredLegalPath keeps its own pre-existing, dedicated UNKNOWN for LOCAL_EMPLOYMENT
+    // (local work authorization is not modeled at all) - untouched by this change.
+    expect(result.criteria.requiredLegalPath).toMatchObject({ status: "UNKNOWN", reasonCode: "LOCAL_EMPLOYMENT_WORK_AUTHORIZATION_NOT_MODELED" });
+  });
+
+  it("8. NOT_SURE beyond tourist limit: generic YES alone -> UNKNOWN, never awarded PASS for an undefined activity profile", () => {
+    const result = evaluateEligibility(beyondTouristLimitProfile({ activityMode: "NOT_SURE" }), GENERIC_YES_ALL_SPECIFIC_UNKNOWN);
+    expect(result.criteria.stayDurationFeasibility?.status).toBe("UNKNOWN");
+    // requiredLegalPath keeps its own pre-existing, dedicated UNKNOWN for NOT_SURE - untouched.
+    expect(result.criteria.requiredLegalPath).toMatchObject({ status: "UNKNOWN", reasonCode: "ACTIVITY_MODE_NOT_SURE" });
+  });
+
+  it("9. within the tourist window: the tightening never activates — tourist-path PASS is unchanged regardless of any generic/specific fact", () => {
+    const withinLimitProfile = makeProfile({ activityMode: "RETIRED", stayDuration: { band: "SHORT_1_3_MONTHS", intendedStayDurationDays: 90 } });
+    const result = evaluateEligibility(withinLimitProfile, GENERIC_YES_ALL_SPECIFIC_UNKNOWN);
+    expect(result.criteria.stayDurationFeasibility).toMatchObject({ status: "PASS", reasonCode: "WITHIN_TOURIST_STAY_LIMIT" });
+    expect(result.criteria.requiredLegalPath).toMatchObject({ status: "PASS", reasonCode: "TOURIST_PATH_SUFFICIENT_FOR_PRESENCE" });
+  });
+
+  it("10. LONG_TERM_PERMANENT: existing permanent-specific behavior is fully unchanged by this tightening", () => {
+    const permanentProfile = makeProfile({ activityMode: "RETIRED", stayDuration: { band: "LONG_TERM_PERMANENT", intendedStayDurationDays: null } });
+
+    const unknownResult = evaluateEligibility(permanentProfile, GENERIC_YES_ALL_SPECIFIC_UNKNOWN);
+    expect(unknownResult.criteria.stayDurationFeasibility).toMatchObject({ status: "UNKNOWN", reasonCode: "PERMANENT_PATH_UNKNOWN" });
+    expect(unknownResult.criteria.requiredLegalPath).toMatchObject({ status: "UNKNOWN", reasonCode: "PERMANENT_PATH_UNKNOWN" });
+
+    // stayDurationFeasibility's permanent branch keys ONLY on permanentResidencyPathAvailable
+    // (pre-existing, untouched behavior) - retirementVisaProgramAvailable=YES alone is not enough here.
+    const retirementOnlyResult = evaluateEligibility(permanentProfile, GENERIC_YES_RETIREMENT_YES);
+    expect(retirementOnlyResult.criteria.stayDurationFeasibility).toMatchObject({ status: "UNKNOWN", reasonCode: "PERMANENT_PATH_UNKNOWN" });
+    // requiredLegalPath's permanent branch (evaluateActivitySpecificLongTermPath) DOES accept
+    // retirementVisaProgramAvailable=YES for a RETIRED profile - also pre-existing, untouched behavior.
+    expect(retirementOnlyResult.criteria.requiredLegalPath).toMatchObject({ status: "PASS", reasonCode: "PERMANENT_PATH_AVAILABLE" });
+
+    const permanentPathResult = evaluateEligibility(permanentProfile, GENERIC_YES_PERMANENT_YES);
+    expect(permanentPathResult.criteria.stayDurationFeasibility).toMatchObject({ status: "PASS", reasonCode: "PERMANENT_PATH_AVAILABLE" });
+    expect(permanentPathResult.criteria.requiredLegalPath).toMatchObject({ status: "PASS", reasonCode: "PERMANENT_PATH_AVAILABLE" });
   });
 });

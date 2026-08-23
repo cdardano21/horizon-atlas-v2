@@ -61,6 +61,23 @@ function constraintFromTriState(
   return buildResult("UNKNOWN", unknownReasonCode, null, sourceFactKeys);
 }
 
+/**
+ * A destination's generic `extendedStayOrLongStayVisaAvailable` fact only proves "some
+ * long-stay legal pathway exists in this destination" — it must never, by itself, prove that
+ * THIS profile's specific activity mode has a compatible pathway. This resolves the
+ * profile-appropriate combination of activity-specific facts only (never the bare generic
+ * fact), and is deliberately shared by evaluateStayDurationFeasibility and
+ * evaluateRequiredLegalPath so the two can never contradict each other from the same gap.
+ */
+function resolveProfileCompatibleLongStayPath(profile: UserProfileV2, facts: SyntheticDestinationFixture["entryAndStay"]): TriStateFact {
+  const candidates: TriStateFact[] = [facts.permanentResidencyPathAvailable];
+  if (profile.activityMode === "RETIRED") candidates.push(facts.retirementVisaProgramAvailable);
+  if (profile.activityMode === "REMOTE_EMPLOYEE" || profile.activityMode === "DIGITAL_NOMAD" || profile.intendsToWorkDuringStay) {
+    candidates.push(facts.remoteWorkOrDigitalNomadVisaAvailable);
+  }
+  return combineTriStateAnyYes(candidates);
+}
+
 /** Conservative day count for comparison: exact when given, else the band's upper bound. Null only for LONG_TERM_PERMANENT/UNSURE. */
 const BAND_UPPER_BOUND_DAYS: Partial<Record<StayDurationBand, number>> = {
   SHORT_1_3_MONTHS: 90,
@@ -140,12 +157,15 @@ function evaluateStayDurationFeasibility(profile: UserProfileV2, destination: Sy
     return buildResult("UNKNOWN", "TOURIST_STAY_LIMIT_UNKNOWN", null, ["entryAndStay.touristStayLimitDays"]);
   }
 
+  // Beyond the tourist limit: the generic long-stay fact alone is never sufficient here — see
+  // resolveProfileCompatibleLongStayPath. extendedStayOrLongStayVisaAvailable remains adapted
+  // and available elsewhere as contextual evidence that SOME pathway exists in the destination.
   return constraintFromTriState(
-    combineTriStateAnyYes([facts.extendedStayOrLongStayVisaAvailable, facts.permanentResidencyPathAvailable]),
-    "GENERIC_LONG_STAY_PATH_AVAILABLE",
+    resolveProfileCompatibleLongStayPath(profile, facts),
+    "PROFILE_COMPATIBLE_LONG_STAY_PATH_AVAILABLE",
     "STAY_DURATION_EXCEEDS_AVAILABLE_PATHS",
-    "STAY_DURATION_PATH_UNKNOWN",
-    ["entryAndStay.extendedStayOrLongStayVisaAvailable", "entryAndStay.permanentResidencyPathAvailable"],
+    "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE",
+    ["entryAndStay.permanentResidencyPathAvailable", "entryAndStay.retirementVisaProgramAvailable", "entryAndStay.remoteWorkOrDigitalNomadVisaAvailable"],
   );
 }
 
@@ -159,7 +179,7 @@ function evaluateRequiredLegalPath(profile: UserProfileV2, destination: Syntheti
     return buildResult("UNKNOWN", "LOCAL_EMPLOYMENT_WORK_AUTHORIZATION_NOT_MODELED", null, []);
   }
 
-  const { stayDuration, activityMode, intendsToWorkDuringStay } = profile;
+  const { stayDuration, activityMode } = profile;
   const facts = destination.entryAndStay;
 
   if (stayDuration.band === "UNSURE" && stayDuration.intendedStayDurationDays === null) {
@@ -181,16 +201,14 @@ function evaluateRequiredLegalPath(profile: UserProfileV2, destination: Syntheti
     );
   }
 
-  const presenceCandidates: TriStateFact[] = [facts.extendedStayOrLongStayVisaAvailable, facts.permanentResidencyPathAvailable];
-  if (activityMode === "RETIRED") presenceCandidates.push(facts.retirementVisaProgramAvailable);
-  if (intendsToWorkDuringStay) presenceCandidates.push(facts.remoteWorkOrDigitalNomadVisaAvailable);
-
+  // Beyond the tourist limit: the generic long-stay fact alone is never sufficient for a
+  // specific activity mode — see resolveProfileCompatibleLongStayPath.
   return constraintFromTriState(
-    combineTriStateAnyYes(presenceCandidates),
+    resolveProfileCompatibleLongStayPath(profile, facts),
     "ACTIVITY_APPROPRIATE_PATH_AVAILABLE",
     "NO_LEGAL_PATH_FOR_ACTIVITY_MODE_AND_DURATION",
-    "REQUIRED_LEGAL_PATH_UNKNOWN",
-    ["entryAndStay.extendedStayOrLongStayVisaAvailable", "entryAndStay.retirementVisaProgramAvailable", "entryAndStay.remoteWorkOrDigitalNomadVisaAvailable"],
+    "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE",
+    ["entryAndStay.permanentResidencyPathAvailable", "entryAndStay.retirementVisaProgramAvailable", "entryAndStay.remoteWorkOrDigitalNomadVisaAvailable"],
   );
 }
 
@@ -236,18 +254,23 @@ function evaluateRemoteWorkLegality(profile: UserProfileV2, destination: Synthet
   );
 }
 
-/** Retiree-specific detail criterion; mirrors requiredLegalPath's retiree channel so the two never contradict each other. */
+/**
+ * Retiree-specific detail criterion; deliberately mirrors requiredLegalPath's/
+ * stayDurationFeasibility's retiree channel (retirement + permanent-residency facts only,
+ * never the bare generic long-stay fact) so none of the three can ever contradict each other
+ * from the same underlying evidence gap.
+ */
 function evaluateRetirementOrResidencyPath(profile: UserProfileV2, destination: SyntheticDestinationFixture, relocationApplicability: RelocationApplicability): HardConstraintResult | null {
   if (profile.activityMode !== "RETIRED" || profile.stayDuration.band === "SHORT_1_3_MONTHS") return null;
   if (relocationApplicability === "DOMESTIC") return null; // no retirement-visa/residency question for a same-country move
 
   const facts = destination.entryAndStay;
   return constraintFromTriState(
-    combineTriStateAnyYes([facts.retirementVisaProgramAvailable, facts.permanentResidencyPathAvailable, facts.extendedStayOrLongStayVisaAvailable]),
+    combineTriStateAnyYes([facts.retirementVisaProgramAvailable, facts.permanentResidencyPathAvailable]),
     "RETIREMENT_OR_RESIDENCY_PATH_AVAILABLE",
     "NO_RETIREMENT_OR_RESIDENCY_PATH_AVAILABLE",
     "RETIREMENT_OR_RESIDENCY_PATH_UNKNOWN",
-    ["entryAndStay.retirementVisaProgramAvailable", "entryAndStay.permanentResidencyPathAvailable", "entryAndStay.extendedStayOrLongStayVisaAvailable"],
+    ["entryAndStay.retirementVisaProgramAvailable", "entryAndStay.permanentResidencyPathAvailable"],
   );
 }
 

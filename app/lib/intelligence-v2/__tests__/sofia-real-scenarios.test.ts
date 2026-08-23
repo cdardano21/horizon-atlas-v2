@@ -176,28 +176,32 @@ describe("Sofia real four-layer scenarios — second Batch #1 cross-border + EUR
     expect(result.excluded).toBe(false);
   });
 
-  it("SCENARIO 2 — 91-day retired renter: 1 day past the Schengen 90-day tourist limit still resolves a real PASS via the generic long-stay fact (SCHENGEN BOUNDARY product finding)", () => {
+  it("SCENARIO 2 — 91-day retired renter: 1 day past the Schengen 90-day tourist limit now correctly resolves UNKNOWN post-tightening (SCHENGEN BOUNDARY product finding, no fabricated PASS from the generic fact alone)", () => {
     const result = run(makeProfile({ stayDuration: { band: "SHORT_1_3_MONTHS", intendedStayDurationDays: 91 } }));
 
-    // 91 > 90, so the tourist-path branch does NOT fire; the engine falls through to
-    // the generic long-stay-path combiner, which resolves PASS purely because
-    // extendedStayOrLongStayVisaAvailable=YES (permanentResidencyPathAvailable stays UNKNOWN).
-    expect(result.eligibility.criteria.stayDurationFeasibility).toMatchObject({ status: "PASS", reasonCode: "GENERIC_LONG_STAY_PATH_AVAILABLE" });
-    expect(result.eligibility.criteria.requiredLegalPath).toMatchObject({ status: "PASS", reasonCode: "ACTIVITY_APPROPRIATE_PATH_AVAILABLE" });
+    // 91 > 90, so the tourist-path branch does NOT fire. Post-tightening, the bare generic
+    // extendedStayOrLongStayVisaAvailable=YES fact is no longer sufficient by itself for a
+    // RETIRED profile - a specific retirementVisaProgramAvailable or permanentResidencyPathAvailable
+    // fact is required, and both are UNKNOWN for Sofia today, so the honest result is UNKNOWN.
+    expect(result.eligibility.criteria.stayDurationFeasibility).toMatchObject({ status: "UNKNOWN", reasonCode: "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE" });
+    expect(result.eligibility.criteria.requiredLegalPath).toMatchObject({ status: "UNKNOWN", reasonCode: "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE" });
     // band is still SHORT_1_3_MONTHS -> retirementOrResidencyPath is not activated.
     expect(result.eligibility.criteria.retirementOrResidencyPath).toBeNull();
-    expect(result.eligibility.overallStatus).toBe("ELIGIBLE");
-    expect(result.eligibility.unknownReasonCodes).toEqual([]);
-    expect(result.recommendationStatus).toBe("VIABLE");
+    expect(result.eligibility.overallStatus).toBe("UNKNOWN_INCOMPLETE");
+    expect(result.eligibility.unknownReasonCodes).toEqual([
+      "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE",
+      "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE",
+    ]);
+    expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
   });
 
-  it("SCENARIO 3 — 210-day retired renter: tourist path no longer sufficient, but the generic long-stay fact + retirement path both resolve real PASS", () => {
+  it("SCENARIO 3 — 210-day retired renter: tourist path no longer sufficient, and post-tightening the generic long-stay fact alone no longer rescues an activity-specific UNKNOWN", () => {
     const result = run(makeProfile({ stayDuration: { band: "EXTENDED_6_12_MONTHS", intendedStayDurationDays: 210 } }));
-    expect(result.eligibility.criteria.stayDurationFeasibility).toMatchObject({ status: "PASS", reasonCode: "GENERIC_LONG_STAY_PATH_AVAILABLE" });
-    expect(result.eligibility.criteria.requiredLegalPath).toMatchObject({ status: "PASS", reasonCode: "ACTIVITY_APPROPRIATE_PATH_AVAILABLE" });
-    expect(result.eligibility.criteria.retirementOrResidencyPath).toMatchObject({ status: "PASS", reasonCode: "RETIREMENT_OR_RESIDENCY_PATH_AVAILABLE" });
-    expect(result.eligibility.overallStatus).toBe("ELIGIBLE");
-    expect(result.recommendationStatus).toBe("VIABLE");
+    expect(result.eligibility.criteria.stayDurationFeasibility).toMatchObject({ status: "UNKNOWN", reasonCode: "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE" });
+    expect(result.eligibility.criteria.requiredLegalPath).toMatchObject({ status: "UNKNOWN", reasonCode: "GENERIC_LONG_STAY_PATH_INSUFFICIENT_FOR_PROFILE" });
+    expect(result.eligibility.criteria.retirementOrResidencyPath).toMatchObject({ status: "UNKNOWN", reasonCode: "RETIREMENT_OR_RESIDENCY_PATH_UNKNOWN" });
+    expect(result.eligibility.overallStatus).toBe("UNKNOWN_INCOMPLETE");
+    expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
     // Layer 4 tax-residency stays UNKNOWN regardless of stay length - no numeric threshold is encoded.
     expect(result.financialEfficiency.findings.find((f) => f.category === "TAX_RESIDENCY_TRIGGER")).toMatchObject({ severity: "UNKNOWN" });
   });
@@ -206,7 +210,7 @@ describe("Sofia real four-layer scenarios — second Batch #1 cross-border + EUR
     const result = run(makeProfile({ stayDuration: { band: "LONG_TERM_PERMANENT", intendedStayDurationDays: null } }));
     expect(result.eligibility.criteria.stayDurationFeasibility).toMatchObject({ status: "UNKNOWN", reasonCode: "PERMANENT_PATH_UNKNOWN" });
     expect(result.eligibility.criteria.requiredLegalPath).toMatchObject({ status: "UNKNOWN", reasonCode: "PERMANENT_PATH_UNKNOWN" });
-    expect(result.eligibility.criteria.retirementOrResidencyPath).toMatchObject({ status: "PASS", reasonCode: "RETIREMENT_OR_RESIDENCY_PATH_AVAILABLE" });
+    expect(result.eligibility.criteria.retirementOrResidencyPath).toMatchObject({ status: "UNKNOWN", reasonCode: "RETIREMENT_OR_RESIDENCY_PATH_UNKNOWN" });
     expect(result.eligibility.overallStatus).toBe("UNKNOWN_INCOMPLETE");
     expect(result.recommendationStatus).toBe("NEEDS_VERIFICATION");
 

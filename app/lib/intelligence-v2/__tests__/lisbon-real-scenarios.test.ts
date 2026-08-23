@@ -99,6 +99,13 @@ describe("Lisbon real four-layer scenarios — no mocks in the chain (real workb
 
     expect(result.eligibility.overallStatus).toBe("ELIGIBLE");
     expect(result.eligibility.criteria.retirementOrResidencyPath?.reasonCode).toBe("RETIREMENT_OR_RESIDENCY_PATH_AVAILABLE");
+    // Post-tightening guardrail: Lisbon's PASS must be driven by a REAL specific fact, never
+    // just the generic long-stay fact alone (see eligibility-evaluator.ts's
+    // resolveProfileCompatibleLongStayPath). Assert the specific fact directly so this can
+    // never silently regress back to depending only on the generic fact.
+    expect(lisbonFacts.entryAndStay.retirementVisaProgramAvailable).toBe("YES");
+    expect(result.eligibility.criteria.stayDurationFeasibility?.reasonCode).toBe("PROFILE_COMPATIBLE_LONG_STAY_PATH_AVAILABLE");
+    expect(result.eligibility.criteria.requiredLegalPath?.reasonCode).toBe("ACTIVITY_APPROPRIATE_PATH_AVAILABLE");
 
     const categories = result.financialEfficiency.findings.map((f) => f.category);
     expect(categories).toEqual([
