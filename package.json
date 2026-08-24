@@ -22,6 +22,7 @@
     "validate:quality": "npm run check:catalog && npm run check:references",
     "validate:destination-blueprint": "node scripts/validate_destination_blueprint.mjs",
     "validate:destination-blueprint:strict": "BLUEPRINT_STRICT=1 node scripts/validate_destination_blueprint.mjs",
+    "validate:expansion-workbooks": "vitest run app/lib/__tests__/expansion-workbook-registry.test.ts -t \"Expansion-workbook registry validation\"",
     "validate:all": "npm run lint && npm exec -- tsc --noEmit && npm run test && npm run test:e2e",
     "audit:production": "node scripts/production_readiness_audit.mjs",
     "audit:production:full": "npm run validate:all && npm run build && npm run audit:production",

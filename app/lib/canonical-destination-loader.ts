@@ -9,6 +9,7 @@ import { loadPremiumWorkbookDestinationData, type PremiumWorkbookNormalizedDesti
 import { loadPersistedDestinationFromRuntime } from "./runtime/persisted-destination-read-runtime";
 import type { NormalizedPersistedDestinationBundle } from "./persistence/v31/materialize-stored-destination-state";
 import type { ResolvedDestinationIdentity } from "./persistence/v31/types";
+import { loadExpansionWorkbookDestinationBundle, loadExpansionWorkbookRawIdentity, resolveExpansionWorkbookDestinationKey } from "./expansion-workbook-registry";
 
 const normalizeTextValue = (value: string | null | undefined) => {
   if (typeof value !== "string") return "";
@@ -480,8 +481,12 @@ export const buildCanonicalDestinationFromPersistedBundle = (
   fallbackDestination: CanonicalDestination,
   bundle: NormalizedPersistedDestinationBundle,
   workbookData?: PremiumWorkbookNormalizedDestinationData | null,
+  rawIdentity?: { readonly population?: string | null; readonly metroPopulation?: string | null; readonly elevationMeters?: string | null } | null,
 ): CanonicalDestination => {
-  const city = normalizeTextValue(bundle.identity.city) || fallbackDestination.city;
+  // The v3.1/v3.2 DESTINATIONS schema has no separate "city" column - destination_name (bundle.identity.name)
+  // IS the real display name. Only fall back to the generic title-cased-slug fallback when neither real
+  // identity field is available (e.g. a destination with no persisted/workbook identity at all).
+  const city = normalizeTextValue(bundle.identity.city) || normalizeTextValue(bundle.identity.name) || fallbackDestination.city;
   const country = normalizeTextValue(bundle.identity.country) || fallbackDestination.country;
   const title = normalizeTextValue(bundle.identity.name) || fallbackDestination.title;
   const subtitle = [city || title, country].filter(Boolean).join(", ");
@@ -575,15 +580,62 @@ export const buildCanonicalDestinationFromPersistedBundle = (
     : "";
   // Scalar identity/finance facts (population, metro population, elevation, currency, time zone)
   // are legitimate 1:1 overrides of the existing scalar knowledgeProfile fields - not "cramming"
-  // rich modules into it, since these were always meant to be single scalar strings.
+  // rich modules into it, since these were always meant to be single scalar strings. Population/
+  // metro population/elevation live on the DESTINATIONS row itself (rawIdentity), not as
+  // DESTINATION_FACTS rows - prefer the real DESTINATIONS-sheet value, then fall back to a
+  // DESTINATION_FACTS-keyed fact for destinations that encode it that way instead.
   const v31KnowledgeProfileOverrides = {
-    population: findFactByKey("population") || undefined,
-    metroPopulation: findFactByKey("metro_population") || undefined,
-    elevation: findFactByKey("elevation") || undefined,
+    population: normalizeTextValue(rawIdentity?.population) || findFactByKey("population") || undefined,
+    metroPopulation: normalizeTextValue(rawIdentity?.metroPopulation) || findFactByKey("metro_population") || undefined,
+    elevation: normalizeTextValue(rawIdentity?.elevationMeters) || findFactByKey("elevation") || undefined,
     timeZone: normalizeTextValue(bundle.editorial.timeZone) || findFactByKey("time_zone") || undefined,
   };
   const v31Currency = normalizeTextValue(bundle.editorial.currency) || findFactByKey("currency");
   const v31PrimaryLanguage = normalizeTextValue(bundle.editorial.primaryLanguage) || findFactByKey("language");
+
+  // Real COST_OF_LIVING rows only: never copy an overall/total figure into invented granular
+  // categories (rent/utilities/food) that have no corresponding real row, and never default to a
+  // hardcoded USD figure when the workbook's real currency is known.
+  const formatMoneyRange = (low: string | null, high: string | null, currency: string | null) => {
+    const cur = normalizeTextValue(currency);
+    if (low != null && high != null) return `${cur}${low}\u2013${cur}${high}/month`;
+    if (low != null) return `${cur}${low}/month`;
+    if (high != null) return `${cur}${high}/month`;
+    return "";
+  };
+  const realCostRows = v31Modules.costOfLiving.filter((item) => item.monthlyLow != null || item.monthlyHigh != null);
+  const realCostCurrency = normalizeTextValue(realCostRows[0]?.currency) || normalizeTextValue(bundle.editorial.currency) || undefined;
+  const v31MonthlyBudgets = realCostRows
+    .map((item) => {
+      const categoryLabel = normalizeTextValue(item.category);
+      return {
+        label: categoryLabel && categoryLabel.toLowerCase() !== "total" ? categoryLabel : "Estimated monthly cost",
+        amount: formatMoneyRange(item.monthlyLow, item.monthlyHigh, item.currency),
+        note: "",
+      };
+    })
+    .filter((budget) => budget.amount);
+  // Only a genuinely distinct, non-"total" category row becomes its own granular category card -
+  // a single "total" row is a budget summary, never split into fabricated rent/utilities/food lines.
+  const v31CostCategories = realCostRows
+    .filter((item) => normalizeTextValue(item.category).toLowerCase() !== "total")
+    .map((item) => ({
+      key: normalizeTextValue(item.category).toLowerCase().replace(/[^a-z0-9]+/g, "-") || "cost",
+      label: normalizeTextValue(item.category) || "Cost category",
+      amount: formatMoneyRange(item.monthlyLow, item.monthlyHigh, item.currency),
+      note: "",
+    }));
+  const v31CostOfLivingProfile = realCostRows.length > 0
+    ? {
+        summary: v31CostOfLiving || "",
+        currency: realCostCurrency || "",
+        methodology: "Based on the destination's reported monthly cost-of-living range.",
+        confidence: "medium" as const,
+        assumptions: [],
+        budgets: v31MonthlyBudgets,
+        categories: v31CostCategories,
+      }
+    : undefined;
 
   return {
     ...fallbackDestination,
@@ -604,6 +656,8 @@ export const buildCanonicalDestinationFromPersistedBundle = (
     safety: v31Safety || fallbackDestination.safety,
     internet: v31Internet || fallbackDestination.internet,
     costOfLiving: v31CostOfLiving || fallbackDestination.costOfLiving,
+    monthlyBudgets: v31MonthlyBudgets.length > 0 ? v31MonthlyBudgets : [],
+    costOfLivingProfile: v31CostOfLivingProfile,
     resources,
     structuredResources: resources,
     videos: [],
@@ -1416,6 +1470,22 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
   const fallbackDestination = buildFallbackCanonicalDestination(normalizedSlug);
 
   logCanonicalDestinationBranch({ phase: "start", slug: normalizedSlug, workbookResolved: Boolean(workbookData), workbookKey: workbookData?.destinationKey ?? null, workbookSlug: workbookData?.slug ?? null });
+
+  // Generic, registry-driven local-only preview path (see expansion-workbook-registry.ts): resolves any
+  // registered preview-environment expansion-workbook destination (Batch #2 today, future batches via
+  // new registry entries only) directly from the real workbook via the real persistence-normalization
+  // contract, entirely in-memory, before ever touching Supabase. Preview-only (disabled in production,
+  // see isExpansionWorkbookPreviewEnabled); never shadows a real persisted-runtime resolution for any
+  // other slug.
+  const expansionWorkbookDestinationKey = await resolveExpansionWorkbookDestinationKey(normalizedSlug);
+  if (expansionWorkbookDestinationKey && fallbackDestination) {
+    const expansionWorkbookBundle = await loadExpansionWorkbookDestinationBundle(expansionWorkbookDestinationKey);
+    if (expansionWorkbookBundle) {
+      const expansionWorkbookRawIdentity = await loadExpansionWorkbookRawIdentity(expansionWorkbookDestinationKey);
+      logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "expansion-workbook-preview", destinationKey: expansionWorkbookDestinationKey });
+      return buildCanonicalDestinationFromPersistedBundle(normalizedSlug, fallbackDestination, expansionWorkbookBundle, null, expansionWorkbookRawIdentity);
+    }
+  }
 
   if (!isSupabaseConfigured()) {
     if (workbookData) {

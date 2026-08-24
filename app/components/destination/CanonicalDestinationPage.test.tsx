@@ -903,14 +903,21 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     expect(screen.queryByText(/is easiest to understand in a normal week rather than on a weekend checklist/i)).not.toBeInTheDocument();
   });
 
-  it("renders the real v3.1 rich module section with representative real content", () => {
-    render(<CanonicalDestinationPage destination={buildV31Destination()} />);
+  it("renders the real v3.1 rich module section with representative real content for an authenticated developer/admin preview only", () => {
+    render(<CanonicalDestinationPage destination={buildV31Destination()} developerMode />);
     fireEvent.pointerDown(screen.getByRole("tab", { name: /Deep Dive/i }));
 
     expect(screen.getByText("Real destination-specific data")).toBeInTheDocument();
     expect(screen.getAllByText(/Real healthcare summary/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Real remote work summary/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Real pets summary/i).length).toBeGreaterThan(0);
+  });
+
+  it("never renders the raw v3.1 rich module debug section to a public (non-developer) visitor, even for a v3.1 destination", () => {
+    render(<CanonicalDestinationPage destination={buildV31Destination()} />);
+    fireEvent.pointerDown(screen.getByRole("tab", { name: /Deep Dive/i }));
+
+    expect(screen.queryByText("Real destination-specific data")).not.toBeInTheDocument();
   });
 
   it("does not render the v3.1 rich module section for a legacy (non-v3.1) destination", () => {
@@ -920,10 +927,10 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     expect(screen.queryByText("Real destination-specific data")).not.toBeInTheDocument();
   });
 
-  it("hides a rich-module category entirely rather than fabricating content when its array is empty", () => {
+  it("hides a rich-module category entirely rather than fabricating content when its array is empty (developer preview)", () => {
     const destination = buildV31Destination();
     destination.v31Modules = { ...destination.v31Modules!, pets: [] };
-    render(<CanonicalDestinationPage destination={destination} />);
+    render(<CanonicalDestinationPage destination={destination} developerMode />);
     fireEvent.pointerDown(screen.getByRole("tab", { name: /Deep Dive/i }));
 
     expect(screen.queryByText("Pets")).not.toBeInTheDocument();

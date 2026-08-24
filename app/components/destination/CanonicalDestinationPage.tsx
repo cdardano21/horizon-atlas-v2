@@ -51,6 +51,25 @@ function getReadTime(text: string) {
   return "2 min read";
 }
 
+// Builds a PremiumSectionBlock body from labeled candidate lines, but never maps the same
+// underlying value into more than one granular label - if a later label would just repeat an
+// earlier one verbatim (case-insensitive), it is silently omitted rather than shown twice. Blank
+// values are omitted outright. This never fabricates replacement content; it only hides
+// duplication that would otherwise misrepresent one real field as several distinct ones.
+function buildDedupedSectionBody(pairs: ReadonlyArray<readonly [string, string | null | undefined]>): string {
+  const seen = new Set<string>();
+  const lines: string[] = [];
+  for (const [label, rawValue] of pairs) {
+    const value = typeof rawValue === "string" ? rawValue.trim() : "";
+    if (!value) continue;
+    const normalized = value.toLowerCase();
+    if (seen.has(normalized)) continue;
+    seen.add(normalized);
+    lines.push(`${label}: ${value}`);
+  }
+  return lines.join("\n\n");
+}
+
 type GalleryItem = {
   kind: string;
   url: string;
@@ -495,6 +514,10 @@ const REAL_PLACE_CATEGORY_BUCKETS: ReadonlyArray<{ key: string; label: string; m
 function buildRealNeighborhoodPlaceCards(destination: CanonicalDestination, neighborhoodKey: string): NeighborhoodInsightCard[] {
   const allPlaces = destination.v31Modules?.places ?? [];
   const neighborhoodPlaces = allPlaces.filter((place) => place.neighborhoodKey === neighborhoodKey);
+  // Resolve the real neighborhood display name from its own persisted record - never the
+  // destination's own name/city, which would misrepresent every place as belonging to the whole
+  // destination rather than this specific neighborhood.
+  const neighborhoodDisplayName = destination.v31Modules?.neighborhoods.find((item) => item.neighborhoodKey === neighborhoodKey)?.name || destination.city;
 
   return REAL_PLACE_CATEGORY_BUCKETS.flatMap((bucket) => {
     const matchingPlaces = neighborhoodPlaces
@@ -521,7 +544,7 @@ function buildRealNeighborhoodPlaceCards(destination: CanonicalDestination, neig
         id: place.placeKey,
         title: place.name as string,
         description: place.description ?? `${place.name} is a real place tied to this neighborhood.`,
-        neighborhood: destination.city,
+        neighborhood: neighborhoodDisplayName,
         category: bucket.label,
         mapUrl,
         website,
@@ -1121,7 +1144,18 @@ function ExpandableNeighborhoodCard({
     ...(neighborhood.profile?.resources ?? []),
     ...(neighborhood.profile?.liveResources ?? []),
   ].filter((resource): resource is NeighborhoodResourceItem => Boolean(resource?.url && resource.url.trim().length > 0))), [neighborhood.profile]);
-  const detailMap = [
+  // A v3.1/v3.2 neighborhood record only ever supplies a summary (whyItWorks/vibe) and an area_type
+  // (fit) - there is no real per-neighborhood breakdown for walkability/transit/dining/coffee/etc.
+  // For a real workbook-backed neighborhood, showing 15 index-based "flavor text" fields would
+  // fabricate distinctions the data never supports; only the fields with a real backing value are
+  // shown, and "Healthcare" is omitted entirely (never a generic placeholder) when genuinely blank.
+  const detailMap = isV31Bundle
+    ? [
+        { label: "Best For", value: neighborhood.fit },
+        { label: "Overall Vibe", value: neighborhood.vibe },
+        ...(destination.healthcare ? [{ label: "Healthcare", value: destination.healthcare }] : []),
+      ].filter((row) => row.value && row.value.trim().length > 0)
+    : [
     { label: "Best For", value: neighborhood.fit },
     { label: "Overall Vibe", value: neighborhood.vibe },
     { label: "Walkability", value: index === 0 ? `Very strong around parks, cafés, and daily errands in ${destination.city}` : index === 1 ? `Practical without a car for many routines in ${destination.city}` : index === 2 ? `Excellent for a foot-first lifestyle near core amenities` : `Solid for most daily needs with a few longer walks to the center` },
@@ -1414,22 +1448,30 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   const costProfile = useMemo(() => {
     const profile = destination.costOfLivingProfile;
     const budgets = profile?.budgets?.length ? profile.budgets : destination.monthlyBudgets.map((budget) => ({ label: budget.label, amount: budget.amount, note: budget.note }));
-    const categories = profile?.categories?.length ? profile.categories : [
-      { key: "housing", label: "Housing", amount: "", note: destination.costOfLiving },
-      { key: "food", label: "Food", amount: "", note: destination.dailyLife },
-      { key: "transport", label: "Transport", amount: "", note: destination.transportation },
-    ].filter((category) => category.note || category.amount);
+    // A v3.1/v3.2 bundle's costOfLivingProfile is built purely from real COST_OF_LIVING rows (see
+    // buildCanonicalDestinationFromPersistedBundle) - an empty categories array there is an honest
+    // "no granular breakdown exists", never a signal to invent Housing/Food/Transport lines from
+    // unrelated narrative fields. That synthetic 3-category fallback is legacy-destination-only.
+    const categories = profile?.categories?.length
+      ? profile.categories
+      : hasV31Bundle
+      ? []
+      : [
+          { key: "housing", label: "Housing", amount: "", note: destination.costOfLiving },
+          { key: "food", label: "Food", amount: "", note: destination.dailyLife },
+          { key: "transport", label: "Transport", amount: "", note: destination.transportation },
+        ].filter((category) => category.note || category.amount);
 
     return {
       summary: profile?.summary || destination.costOfLiving || premiumContent.costOfLivingArticle,
-      currency: profile?.currency || "USD",
+      currency: profile?.currency || destination.knowledgeProfile?.currency || "USD",
       methodology: profile?.methodology || "Modeled from housing, food, transport, and neighborhood assumptions.",
       confidence: profile?.confidence || "medium",
       assumptions: profile?.assumptions || [],
       budgets,
       categories,
     };
-  }, [destination.costOfLiving, destination.costOfLivingProfile, destination.dailyLife, destination.monthlyBudgets, destination.transportation, premiumContent.costOfLivingArticle]);
+  }, [destination.costOfLiving, destination.costOfLivingProfile, destination.dailyLife, destination.monthlyBudgets, destination.transportation, destination.knowledgeProfile?.currency, hasV31Bundle, premiumContent.costOfLivingArticle]);
 
   const narrativeSummary = [destination.heroNarrative, destination.overview, destination.editorial, destination.dailyLife].find((value) => typeof value === "string" && value.trim().length > 0) ?? "A place with a distinct everyday rhythm and a strong sense of local identity.";
   const lifestyleSummary = [destination.dailyLife, destination.overview, destination.heroNarrative, destination.editorial].find((value) => typeof value === "string" && value.trim().length > 0) ?? narrativeSummary;
@@ -1497,7 +1539,12 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     { label: "Walkability", value: categoryValue(destination.knowledgeProfile?.walkability || destination.walkability), note: "Walkability determines whether daily errands can happen on foot or by transit." },
     { label: "Bikeability", value: categoryValue(destination.knowledgeProfile?.bikeFriendliness), note: "Cycling often changes the feel of a city more than most visitors expect." },
     { label: "Transit", value: categoryValue(destination.knowledgeProfile?.publicTransportation || destination.transportation), note: "Transit turns a city into a daily-life system rather than a postcard image." },
-    { label: "Healthcare", value: categoryValue(getSpecificCategoryValue("healthcare", formatListValue(destination.knowledgeProfile?.majorHospitals) || destination.knowledgeProfile?.healthcareQuality || destination.healthcare, getNamedResourceValues("healthcare"))), note: "Healthcare is often the deciding factor for long-stay households and retirees." },
+    // A v3.1/v3.2 bundle's healthcareResources array is always the generic, unconditional
+    // "${city} hospitals"/"${city} clinics" fallback (buildCanonicalDestinationFromPersistedBundle
+    // never populates it from real data) - never let that masquerade as a specific named resource
+    // ahead of the real workbook healthcare summary. Legacy (non-v3.1) destinations may have a
+    // genuinely curated named resource here, so their existing named-resource-first behavior is untouched.
+    { label: "Healthcare", value: categoryValue(getSpecificCategoryValue("healthcare", formatListValue(destination.knowledgeProfile?.majorHospitals) || destination.knowledgeProfile?.healthcareQuality || destination.healthcare, hasV31Bundle ? [] : getNamedResourceValues("healthcare"))), note: "Healthcare is often the deciding factor for long-stay households and retirees." },
     { label: "Safety", value: categoryValue(destination.knowledgeProfile?.safety || destination.safety), note: "A city’s safety is rarely uniform, so district-level context matters." },
     { label: "Internet", value: categoryValue(destination.knowledgeProfile?.internetSpeed || destination.internet), note: "Internet quality matters for remote work, digital nomads, and modern households." },
     { label: "Airport access", value: categoryValue(getSpecificCategoryValue("airport", formatListValue(destination.knowledgeProfile?.majorAirports) || destination.airportInfo, getNamedResourceValues("airport"))), note: "Airport access is a major part of relocation ease for families and frequent travelers." },
@@ -1699,25 +1746,25 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
       title: "Morning rhythm",
       eyebrow: "Daily life",
       summary: premiumContent.dailyLifeArticle || destination.dailyLife,
-      body: `${destination.dailyLife}\n\n${destination.editorial}\n\n${destination.overview}`,
+      body: buildDedupedSectionBody([["Daily life", destination.dailyLife], ["Editorial", destination.editorial], ["Overview", destination.overview]]),
     },
     {
       title: "Afternoon reality",
       eyebrow: "Movement",
       summary: premiumContent.transportationArticle || destination.transportation,
-      body: `${destination.transportation}\n\n${destination.walkability}\n\n${destination.internet}`,
+      body: buildDedupedSectionBody([["Transportation", destination.transportation], ["Walkability", destination.walkability], ["Internet", destination.internet]]),
     },
     {
       title: "Weekend energy",
       eyebrow: "Seasonal living",
       summary: premiumContent.climateArticle || destination.climate,
-      body: `${destination.climate}\n\n${destination.weather}\n\n${destination.outdoorRecreation.slice(0, 4).join(" • ") || destination.overview}`,
+      body: buildDedupedSectionBody([["Climate", destination.climate], ["Weather", destination.weather], ["Outdoor recreation", destination.outdoorRecreation.slice(0, 4).join(" • ") || destination.overview]]),
     },
     {
       title: "Who it suits",
       eyebrow: "Fit and tradeoffs",
       summary: premiumContent.retirementGuide || destination.retirement,
-      body: `${destination.retirement}\n\n${destination.family}\n\n${destination.digitalNomad}\n\n${destination.safety}`,
+      body: buildDedupedSectionBody([["Retirement fit", destination.retirement], ["Family fit", destination.family], ["Digital nomad fit", destination.digitalNomad], ["Safety", destination.safety]]),
     },
   ];
 
@@ -2187,23 +2234,23 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            {premiumContent.dailyLifeArticle ? <PremiumSectionBlock title="Daily life" summary={premiumContent.dailyLifeArticle} body={`Morning: ${destination.heroNarrative}\n\nAfternoon: ${destination.dailyLife}\n\nEvening: ${destination.editorial}\n\nWeekend: ${destination.overview}\n\nSeasonal rhythm: ${destination.climate}`} readTime={getReadTime(premiumContent.dailyLifeArticle)} eyebrow="Living there" /> : null}
+            {premiumContent.dailyLifeArticle ? <PremiumSectionBlock title="Daily life" summary={premiumContent.dailyLifeArticle} body={buildDedupedSectionBody([["Morning", destination.heroNarrative], ["Afternoon", destination.dailyLife], ["Evening", destination.editorial], ["Weekend", destination.overview], ["Seasonal rhythm", destination.climate]])} readTime={getReadTime(premiumContent.dailyLifeArticle)} eyebrow="Living there" /> : null}
             {premiumContent.climateArticle ? <PremiumSectionBlock title="Climate" summary={premiumContent.climateArticle} body={destination.climate} readTime={getReadTime(premiumContent.climateArticle)} eyebrow="Weather" /> : null}
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            {premiumContent.transportationArticle ? <PremiumSectionBlock title="Transportation" summary={premiumContent.transportationArticle} body={`Airport access: ${destination.airportInfo || destination.knowledgeProfile?.majorAirports?.join(", ") || "Regional and international access"}\n\nTransit: ${destination.transportation}\n\nCar dependency: ${destination.transportation}\n\nWalking and cycling: ${destination.walkability}\n\nTypical commute: ${destination.transportation}`} readTime={getReadTime(premiumContent.transportationArticle)} eyebrow="Movement" /> : null}
-            {premiumContent.costOfLivingArticle ? <PremiumSectionBlock title="Cost of living" summary={premiumContent.costOfLivingArticle} body={`Monthly budgets: ${destination.monthlyBudgets.map((budget) => `${budget.label}: ${budget.amount}`).join(" • ")}\n\nRent: ${destination.costOfLiving}\n\nUtilities: ${destination.costOfLiving}\n\nFood: ${destination.dailyLife}\n\nHealthcare: ${destination.healthcare}\n\nTransportation: ${destination.transportation}\n\nEntertainment: ${destination.editorial}\n\nTaxes: ${destination.costOfLiving}`} readTime={getReadTime(premiumContent.costOfLivingArticle)} eyebrow="Economics" /> : null}
+            {premiumContent.transportationArticle ? <PremiumSectionBlock title="Transportation" summary={premiumContent.transportationArticle} body={buildDedupedSectionBody([["Airport access", destination.airportInfo || destination.knowledgeProfile?.majorAirports?.join(", ") || "Regional and international access"], ["Transit", destination.transportation], ["Car dependency", destination.transportation], ["Walking and cycling", destination.walkability], ["Typical commute", destination.transportation]])} readTime={getReadTime(premiumContent.transportationArticle)} eyebrow="Movement" /> : null}
+            {premiumContent.costOfLivingArticle ? <PremiumSectionBlock title="Cost of living" summary={premiumContent.costOfLivingArticle} body={buildDedupedSectionBody([["Monthly budgets", destination.monthlyBudgets.map((budget) => `${budget.label}: ${budget.amount}`).join(" \u2022 ")], ["Rent", destination.costOfLiving], ["Utilities", destination.costOfLiving], ["Food", destination.dailyLife], ["Healthcare", destination.healthcare], ["Transportation", destination.transportation], ["Entertainment", destination.editorial], ["Taxes", destination.costOfLiving]])} readTime={getReadTime(premiumContent.costOfLivingArticle)} eyebrow="Economics" /> : null}
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            {premiumContent.healthcareArticle ? <PremiumSectionBlock title="Healthcare" summary={premiumContent.healthcareArticle} body={`Top hospitals: ${destination.knowledgeProfile?.majorHospitals?.join(", ") || destination.healthcare}\n\nSpecialty care: ${destination.healthcare}\n\nInsurance quality: ${destination.healthcare}\n\nEmergency care: ${destination.healthcare}\n\nRetirement healthcare: ${destination.retirement}\n\nMedical tourism: ${destination.healthcare}`} readTime={getReadTime(premiumContent.healthcareArticle)} eyebrow="Wellness" /> : null}
-            {premiumContent.retirementGuide ? <PremiumSectionBlock title="Retirement" summary={premiumContent.retirementGuide} body={`Ideal retiree profile: ${destination.retirement}\n\nWho should retire here: ${destination.retirement}\n\nWho should not: ${destination.cons.join(", ") || destination.editorial}\n\nBest neighborhoods: ${destination.neighborhoods.join(", ") || "A strong district match matters"}\n\nClimate considerations: ${destination.climate}\n\nHealthcare considerations: ${destination.healthcare}\n\nLifestyle: ${destination.dailyLife}\n\nTaxes: ${destination.costOfLiving}`} readTime={getReadTime(premiumContent.retirementGuide)} eyebrow="Retirement" /> : null}
+            {premiumContent.healthcareArticle ? <PremiumSectionBlock title="Healthcare" summary={premiumContent.healthcareArticle} body={buildDedupedSectionBody([["Top hospitals", destination.knowledgeProfile?.majorHospitals?.join(", ") || destination.healthcare], ["Specialty care", destination.healthcare], ["Insurance quality", destination.healthcare], ["Emergency care", destination.healthcare], ["Retirement healthcare", destination.retirement], ["Medical tourism", destination.healthcare]])} readTime={getReadTime(premiumContent.healthcareArticle)} eyebrow="Wellness" /> : null}
+            {premiumContent.retirementGuide ? <PremiumSectionBlock title="Retirement" summary={premiumContent.retirementGuide} body={buildDedupedSectionBody([["Ideal retiree profile", destination.retirement], ["Who should retire here", destination.retirement], ["Who should not", destination.cons.join(", ") || destination.editorial], ["Best neighborhoods", destination.neighborhoods.join(", ") || "A strong district match matters"], ["Climate considerations", destination.climate], ["Healthcare considerations", destination.healthcare], ["Lifestyle", destination.dailyLife], ["Taxes", destination.costOfLiving]])} readTime={getReadTime(premiumContent.retirementGuide)} eyebrow="Retirement" /> : null}
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            {premiumContent.familyGuide ? <PremiumSectionBlock title="Family" summary={premiumContent.familyGuide} body={`School quality: ${destination.family}\n\nActivities: ${destination.dailyLife}\n\nSafety: ${destination.safety}\n\nParks: ${destination.knowledgeProfile?.parks?.join(", ") || destination.overview}\n\nMuseums: ${destination.knowledgeProfile?.museums?.join(", ") || destination.museums.join(", ") || destination.overview}\n\nSports: ${destination.knowledgeProfile?.sports?.join(", ") || destination.overview}\n\nHealthcare: ${destination.healthcare}\n\nNeighborhood recommendations: ${destination.neighborhoods.join(", ") || destination.city}`} readTime={getReadTime(premiumContent.familyGuide)} eyebrow="Family" /> : null}
-            {premiumContent.digitalNomadGuide ? <PremiumSectionBlock title="Digital nomad" summary={premiumContent.digitalNomadGuide} body={`Internet: ${destination.internet}\n\nCoworking: ${destination.dailyLife}\n\nCoffee shops: ${destination.knowledgeProfile?.coffeeShops?.join(", ") || destination.dailyLife}\n\nRemote work: ${destination.digitalNomad}\n\nCommunity: ${destination.overview}\n\nVisa: ${destination.knowledgeProfile?.visaInfo || "Requirements vary by citizenship"}\n\nMonthly costs: ${destination.monthlyBudgets.map((budget) => `${budget.label}: ${budget.amount}`).join(" • ")}\n\nBest neighborhoods: ${destination.neighborhoods.join(", ") || destination.city}`} readTime={getReadTime(premiumContent.digitalNomadGuide)} eyebrow="Remote work" /> : null}
+            {premiumContent.familyGuide ? <PremiumSectionBlock title="Family" summary={premiumContent.familyGuide} body={buildDedupedSectionBody([["School quality", destination.family], ["Activities", destination.dailyLife], ["Safety", destination.safety], ["Parks", destination.knowledgeProfile?.parks?.join(", ") || destination.overview], ["Museums", destination.knowledgeProfile?.museums?.join(", ") || destination.museums.join(", ") || destination.overview], ["Sports", destination.knowledgeProfile?.sports?.join(", ") || destination.overview], ["Healthcare", destination.healthcare], ["Neighborhood recommendations", destination.neighborhoods.join(", ") || destination.city]])} readTime={getReadTime(premiumContent.familyGuide)} eyebrow="Family" /> : null}
+            {premiumContent.digitalNomadGuide ? <PremiumSectionBlock title="Digital nomad" summary={premiumContent.digitalNomadGuide} body={buildDedupedSectionBody([["Internet", destination.internet], ["Coworking", destination.dailyLife], ["Coffee shops", destination.knowledgeProfile?.coffeeShops?.join(", ") || destination.dailyLife], ["Remote work", destination.digitalNomad], ["Community", destination.overview], ["Visa", destination.knowledgeProfile?.visaInfo || "Requirements vary by citizenship"], ["Monthly costs", destination.monthlyBudgets.map((budget) => `${budget.label}: ${budget.amount}`).join(" \u2022 ")], ["Best neighborhoods", destination.neighborhoods.join(", ") || destination.city]])} readTime={getReadTime(premiumContent.digitalNomadGuide)} eyebrow="Remote work" /> : null}
           </section>
 
           <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
@@ -2283,7 +2330,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             </div>
           </section>
 
-          {hasV31Bundle ? (
+          {/* Raw per-module fields (notes/severity/TriState tokens) - developer/admin diagnostic only, never public. */}
+          {hasV31Bundle && developerMode ? (
             <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
