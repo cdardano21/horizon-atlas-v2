@@ -54,6 +54,13 @@ export interface NormalizedPersistedDestinationBundle {
     readonly category: string | null;
     readonly name: string | null;
     readonly url: string | null;
+    readonly description: string | null;
+    readonly official: string | null;
+    readonly stayModeKey: string | null;
+    readonly sourceName: string | null;
+    readonly sourceUrl: string | null;
+    readonly verified: string | null;
+    readonly verifiedAt: string | null;
   }>;
   readonly media: ReadonlyArray<{
     readonly mediaKey: string;
@@ -94,6 +101,11 @@ export interface NormalizedPersistedDestinationBundle {
     readonly category: string | null;
     readonly name: string | null;
     readonly url: string | null;
+    readonly description: string | null;
+    readonly official: string | null;
+    readonly sourceUrl: string | null;
+    readonly verified: string | null;
+    readonly verifiedAt: string | null;
   }>;
   readonly healthcare: ReadonlyArray<{
     readonly summary: string | null;
@@ -309,6 +321,13 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
       category: asNullableString(resource.category),
       name: asNullableString(resource.name),
       url: asNullableString(resource.url),
+      description: asNullableString(resource.description),
+      official: asNullableString(resource.official),
+      stayModeKey: asNullableString(resource.stayModeKey),
+      sourceName: asNullableString(resource.sourceName),
+      sourceUrl: asNullableString(resource.sourceUrl),
+      verified: asNullableString(resource.verified),
+      verifiedAt: asNullableString(resource.verifiedAt),
     })),
     media: bundle.media.map((media) => ({
       mediaKey: media.mediaKey as StoredDestinationState["media"][number]["mediaKey"],
@@ -349,6 +368,11 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
       category: asNullableString(resource.category),
       name: asNullableString(resource.name),
       url: asNullableString(resource.url),
+      description: asNullableString(resource.description),
+      official: asNullableString(resource.official),
+      sourceUrl: asNullableString(resource.sourceUrl),
+      verified: asNullableString(resource.verified),
+      verifiedAt: asNullableString(resource.verifiedAt),
     })),
     healthcare: bundle.healthcare.map((state) => ({
       summary: asNullableString(state.summary),

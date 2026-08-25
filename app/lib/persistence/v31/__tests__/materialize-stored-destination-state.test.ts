@@ -162,4 +162,95 @@ describe("v31 normalized persisted-bundle materializer", () => {
       country: null,
     });
   });
+
+  it("preserves description, official, stayModeKey, sourceName, sourceUrl, verified, and verifiedAt for resources, and description/official/sourceUrl/verified/verifiedAt for propertyResources", () => {
+    const sourceBundle = {
+      destinationKey: "dest-a" as CanonicalDestinationKey,
+      identity: { slug: null, name: null, city: null, country: null },
+      editorial: { shortDescription: null, longDescription: null, currency: null, primaryLanguage: null, timeZone: null },
+      facts: [],
+      scores: [],
+      neighborhoods: [],
+      places: [],
+      resources: [
+        {
+          resourceKey: "resource-1",
+          category: "hotels",
+          name: "Grand Hotel",
+          url: "https://example.com/grand-hotel",
+          description: "A centrally located hotel.",
+          official: "0",
+          stayModeKey: "SHORT_1_3_MONTHS",
+          sourceName: "Grand Hotel official website",
+          sourceUrl: "https://example.com/grand-hotel/about",
+          verified: "1",
+          verifiedAt: "2026-08-16",
+        },
+      ],
+      media: [],
+      costOfLiving: [],
+      climateMonthly: [],
+      housing: [],
+      propertyResources: [
+        {
+          itemKey: "property-1",
+          category: "rental_agency",
+          name: "Local Rentals Agency",
+          url: "https://example.com/rentals",
+          description: "A local rental agency.",
+          official: "0",
+          sourceUrl: "https://example.com/rentals/about",
+          verified: "1",
+          verifiedAt: "2026-08-16",
+        },
+      ],
+      healthcare: [],
+      visaResidency: [],
+      taxesFinance: [],
+      lgbtqInclusivity: [],
+      safetyRisks: [],
+      transportation: [],
+      remoteWork: [],
+      languageIntegration: [],
+      pets: [],
+      familyEducation: [],
+      communitySocial: [],
+      accessibility: [],
+      bureaucracySetup: [],
+      workBusiness: [],
+      retirementAging: [],
+      lifestyleLaws: [],
+      realityCheck: [],
+      moveChecklist: [],
+      environmentQuality: null,
+      dailyLifePracticality: null,
+      eventsSeasonality: [],
+      sources: [],
+    };
+
+    const state = materializeStoredDestinationStateFromNormalizedPersistedBundle(sourceBundle);
+
+    expect(state.resources[0]).toMatchObject({
+      category: "hotels",
+      name: "Grand Hotel",
+      url: "https://example.com/grand-hotel",
+      description: "A centrally located hotel.",
+      official: "0",
+      stayModeKey: "SHORT_1_3_MONTHS",
+      sourceName: "Grand Hotel official website",
+      sourceUrl: "https://example.com/grand-hotel/about",
+      verified: "1",
+      verifiedAt: "2026-08-16",
+    });
+    expect(state.propertyResources[0]).toMatchObject({
+      category: "rental_agency",
+      name: "Local Rentals Agency",
+      url: "https://example.com/rentals",
+      description: "A local rental agency.",
+      official: "0",
+      sourceUrl: "https://example.com/rentals/about",
+      verified: "1",
+      verifiedAt: "2026-08-16",
+    });
+  });
 });

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import CanonicalDestinationPage from "./CanonicalDestinationPage";
 import type { CanonicalDestination } from "../../lib/canonical-destination-model";
@@ -76,34 +76,127 @@ const buildDestination = (): CanonicalDestination => ({
 });
 
 describe("CanonicalDestinationPage", () => {
-  beforeEach(() => {
-    window.localStorage.clear();
-  });
-
   it("renders a destination guide section for Spearfish", () => {
     render(<CanonicalDestinationPage destination={buildDestination()} />);
 
-    expect(screen.getByText("Destination Guide")).toBeInTheDocument();
+    expect(screen.getAllByText("Destination Guide").length).toBeGreaterThan(0);
     expect(screen.getByText(/A magazine-style introduction to Spearfish/i)).toBeInTheDocument();
     expect(screen.getByText(/What to know first/i)).toBeInTheDocument();
   });
 
-  it("renders the segmented destination views and executive summary", () => {
+  it("renders Destination Guide, Practical Details, and Deep Dive content simultaneously after a single render (no hidden or conditionally mounted panel)", () => {
     render(<CanonicalDestinationPage destination={buildDestination()} />);
 
-    expect(screen.getByRole("tab", { name: /Destination Guide/i })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: /Premium Profile/i })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: /Deep Dive/i })).toBeInTheDocument();
-    expect(screen.getAllByText(/Executive summary/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/A magazine-style introduction to/i)).toBeInTheDocument();
+    expect(screen.getByText(/Scores and fit/i)).toBeInTheDocument();
+    expect(screen.getByText(/Morning rhythm/i)).toBeInTheDocument();
   });
 
-  it("switches to the premium profile view when the tab receives a pointer interaction", () => {
+  it("keeps all 'Continue reading' body content present in the DOM on initial render, inside a native <details> with no React click state gating it", () => {
+    const destination = buildDestination();
+    destination.premiumEditorialContent = {
+      heroIntroduction: "A short hero line for this destination.",
+      whyPeopleLoveIt: ["It has real character."],
+      overviewArticle: "Paragraph one about the destination.\n\nParagraph two continues the story.\n\nParagraph three reveals hidden depth that only used to show after clicking Continue reading.",
+    };
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    const hiddenParagraphs = screen.getAllByText(/Paragraph three reveals hidden depth/i);
+    const detailsEl = hiddenParagraphs.map((el) => el.closest("details")).find((el) => el !== null);
+    expect(detailsEl).not.toBeUndefined();
+    expect(detailsEl?.querySelector("summary")).not.toBeNull();
+    expect(within(detailsEl as HTMLElement).getByText("Continue reading")).toBeInTheDocument();
+  });
+
+  it("keeps all score explanation content present in the DOM on initial render, inside native <details> elements with no React click state gating it", () => {
     render(<CanonicalDestinationPage destination={buildDestination()} />);
 
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
+    const scoresHeading = screen.getByText("Why the destination scores the way it does");
+    const scoresSection = scoresHeading.closest("section") as HTMLElement;
+    const detailsInSection = scoresSection.querySelectorAll("details");
+    expect(detailsInSection.length).toBeGreaterThan(0);
+    detailsInSection.forEach((details) => {
+      expect(details.querySelector("summary")).not.toBeNull();
+      expect(within(details as HTMLElement).getByText("Expand")).toBeInTheDocument();
+    });
+  });
 
-    expect(screen.getByText(/Premium intelligence/i)).toBeInTheDocument();
-    expect(screen.getByText(/Scores and fit/i)).toBeInTheDocument();
+  it("uses only native <details>/<summary> disclosure for score cards, neighborhood exploration, and 'Continue reading' - no button-role controls remain for these interactions", () => {
+    render(<CanonicalDestinationPage destination={buildDestination()} />);
+
+    expect(screen.queryByRole("button", { name: "Expand" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Collapse" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Continue reading/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Explore this neighborhood/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Explore more neighborhoods/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Show more/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Show fewer/i })).not.toBeInTheDocument();
+  });
+
+  it("gives each of the three page sections its exact expected id, exactly once", () => {
+    const { container } = render(<CanonicalDestinationPage destination={buildDestination()} />);
+
+    for (const id of ["destination-guide", "practical-details", "deep-dive"]) {
+      expect(container.querySelectorAll(`#${id}`)).toHaveLength(1);
+    }
+  });
+
+  it("renders a native 'On this page' anchor menu with the three correct hrefs", () => {
+    render(<CanonicalDestinationPage destination={buildDestination()} />);
+
+    const nav = screen.getByRole("navigation", { name: /On this page/i });
+    expect(within(nav).getByRole("link", { name: "Destination Guide" })).toHaveAttribute("href", "#destination-guide");
+    expect(within(nav).getByRole("link", { name: "Practical Details" })).toHaveAttribute("href", "#practical-details");
+    expect(within(nav).getByRole("link", { name: "Deep Dive" })).toHaveAttribute("href", "#deep-dive");
+  });
+
+  it("never reads or writes a tab-preference key to localStorage now that there is no tab state to persist", () => {
+    window.localStorage.clear();
+    const destination = buildDestination();
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    expect(window.localStorage.getItem(`horizon-atlas-view-mode:${destination.slug}`)).toBeNull();
+    expect(window.localStorage.length).toBe(0);
+  });
+
+  it("renders the resource-link groups (hotels, rentals, tours, weather, etc.) exactly once now that Practical Details and Deep Dive are both always visible (regression: this content previously duplicated between the two former tab branches)", () => {
+    const destination = buildDestination();
+    destination.city = "Fairhope";
+    destination.country = "United States";
+    destination.title = "Fairhope";
+    destination.resources = [
+      { label: "Search Airbnb", url: "https://www.airbnb.com/s/Fairhope%2C%20United%20States/homes", category: "vacation-stays", provider: "Airbnb" },
+    ];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    expect(screen.getAllByRole("link", { name: /Search Airbnb/i })).toHaveLength(1);
+  });
+
+  it("renders correct, non-leaking content across sequential re-renders simulating client-side navigation between Batch #1 and Batch #2 destinations (regression: Next.js can reuse the same page component instance across a route change instead of unmounting it)", () => {
+    const batch1Destination = buildDestination();
+    batch1Destination.slug = "queenstown-nz";
+    batch1Destination.title = "Queenstown";
+
+    const batch2Destination = buildDestination();
+    batch2Destination.slug = "ascoli-piceno-it";
+    batch2Destination.title = "Ascoli Piceno";
+
+    const { rerender } = render(<CanonicalDestinationPage destination={batch1Destination} />);
+    expect(screen.getAllByText(/Queenstown/i).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/Ascoli Piceno/i)).not.toBeInTheDocument();
+
+    // Same mounted instance, new destination prop - simulates Next.js reusing the page component
+    // across a client-side route change without unmounting it.
+    rerender(<CanonicalDestinationPage destination={batch2Destination} />);
+    expect(screen.getAllByText(/Ascoli Piceno/i).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/Queenstown/i)).not.toBeInTheDocument();
+
+    rerender(<CanonicalDestinationPage destination={batch1Destination} />);
+    expect(screen.getAllByText(/Queenstown/i).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/Ascoli Piceno/i)).not.toBeInTheDocument();
   });
 
   it("renders premium editorial content from a destination's structured source data", () => {
@@ -136,15 +229,14 @@ describe("CanonicalDestinationPage", () => {
     expect(screen.getAllByText(/Chicago, Illinois/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Chicago is one of the most rewarding cities/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/The city has a striking mix/i).length).toBeGreaterThan(0);
-    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
     expect(screen.getByText(/How the city is experienced block by block/i)).toBeInTheDocument();
     expect(screen.getAllByText("Lakeview").length).toBeGreaterThan(0);
     expect(screen.getByText(/Neighborhood summary/i)).toBeInTheDocument();
     expect(screen.queryByText("Canonical content layer")).not.toBeInTheDocument();
-    expect(screen.getAllByText(/Premium Profile/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Practical Details/i).length).toBeGreaterThan(0);
   });
 
-  it("uses category-specific content rather than reusing the general overview for category cards", () => {
+  it("uses category-specific content rather than reusing the general overview for category cards, hiding a category cleanly instead of leaking overview text into it", () => {
     const destination = buildDestination();
     destination.overview = "This is the general destination overview that should not be reused for unrelated category cards.";
     destination.heroNarrative = "A destination narrative that should stay in the hero and overview sections.";
@@ -152,13 +244,12 @@ describe("CanonicalDestinationPage", () => {
 
     render(<CanonicalDestinationPage destination={destination} />);
 
-    const populationCard = screen.getAllByText("Population")[0].closest("div");
-    const golfCard = screen.getAllByText("Golf")[0].closest("div");
-
-    expect(populationCard?.textContent).toContain("Detailed category information is not available yet.");
-    expect(populationCard?.textContent).not.toContain("This is the general destination overview that should not be reused for unrelated category cards.");
-    expect(golfCard?.textContent).toContain("Detailed category information is not available yet.");
-    expect(golfCard?.textContent).not.toContain("This is the general destination overview that should not be reused for unrelated category cards.");
+    // Neither Population nor Golf has any supporting data for this destination - both are hidden
+    // cleanly rather than rendering with the placeholder sentence repeated across the page, and
+    // critically, neither ever leaks the general destination overview text into its own card.
+    expect(screen.queryByText("Population")).not.toBeInTheDocument();
+    expect(screen.queryByText("Golf")).not.toBeInTheDocument();
+    expect(screen.getAllByText(/This is the general destination overview/i).length).toBeGreaterThan(0);
   });
 
   it("renders structured factual intelligence from the canonical knowledge profile in the existing essential-facts cards", () => {
@@ -242,7 +333,6 @@ describe("CanonicalDestinationPage", () => {
     }];
 
     render(<CanonicalDestinationPage destination={destination} />);
-    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
 
     expect(screen.getAllByText(/A historic district with live music/i).length).toBeGreaterThan(0);
     expect(screen.getAllByRole("link", { name: /Gruene live music guide/i }).length).toBeGreaterThan(0);
@@ -258,7 +348,7 @@ describe("CanonicalDestinationPage", () => {
     render(<CanonicalDestinationPage destination={destination} />);
 
     expect(screen.getAllByRole("img", { name: /Brand New Island/i }).length).toBeGreaterThan(0);
-    expect(screen.getByText(/Editorial destination placeholder/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Editorial destination placeholder/i).length).toBeGreaterThan(0);
   });
 
   it("shows a view-more gallery control when a destination has more than five verified images", () => {
@@ -293,14 +383,63 @@ describe("CanonicalDestinationPage", () => {
     };
 
     render(<CanonicalDestinationPage destination={destination} />);
-    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
-    const exploreButtons = screen.getAllByRole("button", { name: /Explore/i });
-    expect(exploreButtons.length).toBeGreaterThan(0);
-    fireEvent.click(exploreButtons[0]);
 
     expect(screen.getAllByRole("link", { name: /Google Maps/i }).length).toBeGreaterThan(0);
     expect(screen.getByText(/Neighborhood intelligence/i)).toBeInTheDocument();
     expect(screen.getByText(/Overall neighborhood score/i)).toBeInTheDocument();
+  });
+
+  it("never leaks generated Airbnb/airport-transfer travel-search utilities into the neighborhood-scoped 'Live neighborhood resources' widget (regression for a bare /air/ substring match)", () => {
+    const destination = buildDestination();
+    destination.city = "Fairhope";
+    destination.country = "United States";
+    destination.title = "Fairhope";
+    destination.neighborhoods = ["Downtown Fairhope"];
+    destination.webcamUrl = "https://www.google.com/search?q=Fairhope%20United%20States%20webcam";
+    destination.resources = [
+      { label: "Search Airbnb", url: "https://www.airbnb.com/s/Fairhope%2C%20United%20States/homes", category: "vacation-stays", provider: "Airbnb" },
+      { label: "Find airport transfers", url: "https://www.google.com/search?q=airport%20transfer%20Fairhope", category: "transportation", provider: "Web search" },
+      { label: "Check destination weather", url: "https://www.google.com/search?q=weather%20Fairhope", category: "weather", provider: "Web search" },
+    ];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    const liveResourcesLabel = screen.getByText(/Live neighborhood resources/i);
+    const liveResourcesContainer = liveResourcesLabel.parentElement as HTMLElement;
+    expect(liveResourcesContainer).toBeTruthy();
+    expect(within(liveResourcesContainer).queryByRole("link", { name: /Search Airbnb/i })).not.toBeInTheDocument();
+    expect(within(liveResourcesContainer).queryByRole("link", { name: /Find airport transfers/i })).not.toBeInTheDocument();
+    expect(within(liveResourcesContainer).getByRole("link", { name: /Live webcam/i })).toBeInTheDocument();
+    expect(within(liveResourcesContainer).getByRole("link", { name: /Check destination weather/i })).toBeInTheDocument();
+    // Confirm the generated Airbnb/airport-transfer utilities still exist elsewhere on the page
+    // (in the page-level Vacation Rentals / Transportation resource groups) - they are only
+    // excluded from this specific neighborhood-scoped live/weather/webcam widget.
+    expect(screen.getAllByRole("link", { name: /Search Airbnb/i }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("link", { name: /Find airport transfers/i }).length).toBeGreaterThan(0);
+  });
+
+  it("renders two resources in the same group that share a label but have different URLs without a React duplicate-key warning (regression for authored RESOURCES + PROPERTY_RESOURCES entries from the same provider)", () => {
+    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const destination = buildDestination();
+    destination.city = "Hoi An";
+    destination.country = "Vietnam";
+    destination.title = "Hoi An";
+    destination.resources = [
+      { label: "Savills Vietnam", url: "https://industrial.savills.com.vn/can-foreigners-buy-real-estate-in-vietnam/", category: "property", provider: null },
+      { label: "Savills Vietnam", url: "https://www.savills.com.vn/", category: "housing", provider: null },
+    ];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    const savillsLinks = screen.getAllByRole("link", { name: /Savills Vietnam/i });
+    const uniqueHrefs = new Set(savillsLinks.map((link) => link.getAttribute("href")));
+    expect(uniqueHrefs).toEqual(new Set([
+      "https://industrial.savills.com.vn/can-foreigners-buy-real-estate-in-vietnam/",
+      "https://www.savills.com.vn/",
+    ]));
+    const keyWarning = consoleErrorSpy.mock.calls.some((call) => String(call[0]).includes("same key"));
+    expect(keyWarning).toBe(false);
+    consoleErrorSpy.mockRestore();
   });
 
   it("avoids rendering neighborhood names or category labels as fake place cards", () => {
@@ -331,8 +470,6 @@ describe("CanonicalDestinationPage", () => {
     ];
 
     render(<CanonicalDestinationPage destination={destination} />);
-    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
 
     expect(screen.queryByRole("button", { name: /Lincoln Park/i })).not.toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: /Explore coffee shops in Lincoln Park/i }).length).toBeGreaterThan(0);
@@ -348,8 +485,6 @@ describe("CanonicalDestinationPage", () => {
     chicagoDestination.neighborhoods = ["Lincoln Park"];
 
     render(<CanonicalDestinationPage destination={chicagoDestination} />);
-    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
 
     expect(screen.getAllByText(/Colectivo Coffee Lincoln Park/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Lincoln Park/i).length).toBeGreaterThan(0);
@@ -366,7 +501,6 @@ describe("CanonicalDestinationPage", () => {
     chicagoDestination.neighborhoods = ["Lincoln Park", "West Loop", "Wicker Park"];
 
     render(<CanonicalDestinationPage destination={chicagoDestination} />);
-    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
 
     expect(screen.getAllByText(/Signature streets/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Restaurants/i).length).toBeGreaterThan(0);
@@ -385,10 +519,6 @@ describe("CanonicalDestinationPage", () => {
     bangkokDestination.neighborhoods = ["Sathorn", "Silom", "Thonglor"];
 
     render(<CanonicalDestinationPage destination={bangkokDestination} />);
-    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
-    const exploreButtons = screen.getAllByRole("button", { name: /Explore/i });
-    expect(exploreButtons.length).toBeGreaterThan(0);
-    fireEvent.click(exploreButtons[0]);
 
     expect(screen.getAllByText(/Sathorn/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Restaurants/i).length).toBeGreaterThan(0);
@@ -488,8 +618,6 @@ describe("CanonicalDestinationPage", () => {
     ];
 
     render(<CanonicalDestinationPage destination={destination} />);
-    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
 
     const shoppingCard = screen.getByText("Shopping").closest("div");
 
@@ -535,9 +663,6 @@ describe("CanonicalDestinationPage", () => {
     ];
 
     render(<CanonicalDestinationPage destination={destination} />);
-    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Open/i }));
 
     expect(screen.getAllByText(/Golf courses/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Royal Bangkok Sports Club/i).length).toBeGreaterThan(0);
@@ -585,8 +710,6 @@ describe("CanonicalDestinationPage", () => {
     ];
 
     render(<CanonicalDestinationPage destination={destination} />);
-    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
 
     expect(screen.getByText("Nearby Golf Courses")).toBeInTheDocument();
     expect(screen.getAllByText("Lakeview Golf Club").length).toBeGreaterThan(0);
@@ -623,9 +746,6 @@ describe("CanonicalDestinationPage", () => {
     ];
 
     render(<CanonicalDestinationPage destination={destination} />);
-    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Open/i }));
 
     expect(screen.getAllByText("The Promontory").length).toBeGreaterThan(0);
     expect(screen.getByRole("link", { name: /Visit website/i })).toBeInTheDocument();
@@ -661,9 +781,6 @@ describe("CanonicalDestinationPage", () => {
     ];
 
     render(<CanonicalDestinationPage destination={destination} />);
-    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Open/i }));
 
     expect(screen.getByRole("link", { name: /Visit website/i })).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /Open on Google Maps/i })).not.toBeInTheDocument();
@@ -700,9 +817,6 @@ describe("CanonicalDestinationPage", () => {
     ];
 
     render(<CanonicalDestinationPage destination={destination} />);
-    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Open/i }));
 
     expect(screen.queryByRole("link", { name: /Visit website/i })).not.toBeInTheDocument();
   });
@@ -757,9 +871,6 @@ describe("CanonicalDestinationPage", () => {
     ];
 
     render(<CanonicalDestinationPage destination={destination} />);
-    fireEvent.click(screen.getByRole("tab", { name: /Premium Profile/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Explore/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Open/i }));
 
     expect(screen.queryByRole("link", { name: /Visit website/i })).not.toBeInTheDocument();
   });
@@ -877,7 +988,6 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
 
   it("shows real persisted destination-level scores, never the hardcoded 76/74/72/78 fallback", () => {
     render(<CanonicalDestinationPage destination={buildV31Destination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
     expect(screen.getByText("91/100")).toBeInTheDocument();
     expect(screen.getByText("88/100")).toBeInTheDocument();
@@ -889,7 +999,6 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
 
   it("shows real persisted neighborhood names and never a fabricated '${city} center' entry", () => {
     render(<CanonicalDestinationPage destination={buildV31Destination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
     expect(screen.getAllByText("Real Neighborhood One").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Real Neighborhood Two").length).toBeGreaterThan(0);
@@ -905,7 +1014,6 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
 
   it("renders the real v3.1 rich module section with representative real content for an authenticated developer/admin preview only", () => {
     render(<CanonicalDestinationPage destination={buildV31Destination()} developerMode />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Deep Dive/i }));
 
     expect(screen.getByText("Real destination-specific data")).toBeInTheDocument();
     expect(screen.getAllByText(/Real healthcare summary/i).length).toBeGreaterThan(0);
@@ -915,14 +1023,12 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
 
   it("never renders the raw v3.1 rich module debug section to a public (non-developer) visitor, even for a v3.1 destination", () => {
     render(<CanonicalDestinationPage destination={buildV31Destination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Deep Dive/i }));
 
     expect(screen.queryByText("Real destination-specific data")).not.toBeInTheDocument();
   });
 
   it("does not render the v3.1 rich module section for a legacy (non-v3.1) destination", () => {
     render(<CanonicalDestinationPage destination={buildDestination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Deep Dive/i }));
 
     expect(screen.queryByText("Real destination-specific data")).not.toBeInTheDocument();
   });
@@ -931,9 +1037,74 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     const destination = buildV31Destination();
     destination.v31Modules = { ...destination.v31Modules!, pets: [] };
     render(<CanonicalDestinationPage destination={destination} developerMode />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Deep Dive/i }));
 
     expect(screen.queryByText("Pets")).not.toBeInTheDocument();
+  });
+
+  it("renders the public Practical Living Snapshot / Community and Personal Comfort / Reality and Environment sections from real v3.1 module data, sanitizing internal placeholder tokens", () => {
+    const destination = buildV31Destination();
+    destination.v31Modules = {
+      ...destination.v31Modules!,
+      safetyRisks: [{ itemKey: "risk-1", summary: "Seasonal storms require basic preparedness.", topic: "weather", severity: "Medium" }],
+      accessibility: [{ summary: "VARIABLE", mobilityNotes: "Sidewalks are well maintained in the historic core." }],
+      dailyLifePracticality: { summary: "Groceries and pharmacies are within easy walking distance.", practicalityNotes: "UNKNOWN" },
+      environmentQuality: { summary: "Air quality is generally good year-round.", qualityNotes: "CONDITIONAL" },
+      remoteWork: [{ summary: "Reliable fiber internet is available in most central areas.", internetSummary: "UNKNOWN" }],
+      languageIntegration: [{ summary: "English is widely understood in tourist and business areas.", englishSupport: "VARIABLE" }],
+      communitySocial: [{ summary: "A visible, welcoming expat and retiree community.", socialNotes: "UNKNOWN" }],
+      lgbtqInclusivity: [{ summary: "Legal protections follow national law; social comfort varies by neighborhood.", culturalNotes: "CONDITIONAL" }],
+      familyEducation: [{ summary: "International schools are available in the metro area.", schoolsSummary: "VARIABLE" }],
+      realityCheck: [{ summary: "The strongest fit is for residents who value walkability over car convenience.", title: "Conditional fit", severity: "n/a" }],
+    };
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    expect(screen.getByText("Practical Living Snapshot")).toBeInTheDocument();
+    expect(screen.getByText("Community and Personal Comfort")).toBeInTheDocument();
+    expect(screen.getByText("Reality and Environment")).toBeInTheDocument();
+    expect(screen.getAllByText(/Seasonal storms require basic preparedness/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Sidewalks are well maintained/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Groceries and pharmacies are within easy walking distance/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Air quality is generally good year-round/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Reliable fiber internet is available/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/A visible, welcoming expat and retiree community/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Legal protections follow national law/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/not individualized legal advice, and not a guarantee of safety or comfort/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/The strongest fit is for residents who value walkability/i).length).toBeGreaterThan(0);
+
+    // Internal enum/placeholder tokens must never render as if they were real public facts.
+    for (const token of ["VARIABLE", "CONDITIONAL", "UNKNOWN"]) {
+      expect(screen.queryByText(token, { exact: true })).not.toBeInTheDocument();
+    }
+  });
+
+  it("never surfaces a generated 'Find airport transfers' travel-search label as if it were a real Airport access fact", () => {
+    const destination = buildV31Destination();
+    destination.knowledgeProfile = { ...destination.knowledgeProfile, majorAirports: ["Real City International Airport"] };
+    destination.resources = [{ category: "transportation", label: "Find airport transfers", url: "https://www.google.com/search?q=airport%20transfer", provider: "Web search" }];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    expect(screen.getAllByText(/Real City International Airport/i).length).toBeGreaterThan(0);
+    const airportLabel = screen.getByText("Airport access");
+    const airportCard = airportLabel.closest("div");
+    expect(airportCard?.textContent).not.toContain("Find airport transfers");
+  });
+
+  it("hides an optional At-a-glance category cleanly instead of repeating the placeholder sentence across the page", () => {
+    const destination = buildV31Destination();
+    // No bikeability data anywhere on this destination.
+    destination.knowledgeProfile = { ...destination.knowledgeProfile, bikeFriendliness: undefined };
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    // Scoped to the At-a-glance summary specifically (its own intended subject) - the page also
+    // now always renders Practical Details' neighborhood cards, which independently derive their
+    // own optional facts and are out of scope for this assertion.
+    const atAGlanceHeading = screen.getByText("Essential destination facts, kept compact for quick comparison.");
+    const atAGlanceSection = atAGlanceHeading.closest("section") as HTMLElement;
+    expect(within(atAGlanceSection).queryByText("Bikeability")).not.toBeInTheDocument();
+    expect(within(atAGlanceSection).queryByText(/Detailed category information is not available yet/i)).not.toBeInTheDocument();
   });
 
   function buildV31PlaceLinkedDestination(): CanonicalDestination {
@@ -1048,88 +1219,58 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     return destination;
   }
 
-  it("renders exactly 4 flagship neighborhood cards initially when more than 4 are persisted", () => {
+  it("renders all 8 persisted flagship neighborhood cards directly, with no click required to reveal any of them", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
-    expect(screen.getAllByText("Neighborhood A").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Neighborhood B").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Neighborhood C").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Neighborhood D").length).toBeGreaterThan(0);
-    expect(screen.queryByText("Neighborhood E")).not.toBeInTheDocument();
-    expect(screen.getAllByText("Explore more neighborhoods").length).toBeGreaterThan(0);
+    for (const name of ["Neighborhood A", "Neighborhood B", "Neighborhood C", "Neighborhood D", "Neighborhood E", "Neighborhood F", "Neighborhood G", "Neighborhood H"]) {
+      expect(screen.getAllByText(name).length).toBeGreaterThan(0);
+    }
   });
+
+  it("renders each neighborhood card and the destination-level unassigned-places section exactly once now that Practical Details and Deep Dive are both always visible (regression: these previously duplicated between the two former tab branches)", () => {
+    render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+
+    // Scoped to the neighborhood card's own heading - a neighborhood's name legitimately also
+    // appears inside each of its own places' now-always-visible detail rows ("Neighborhood: X"),
+    // which is real, non-duplicate content, not a regression.
+    expect(screen.getAllByRole("heading", { name: "Neighborhood A", level: 4 })).toHaveLength(1);
+    expect(screen.getAllByRole("heading", { name: "Neighborhood B", level: 4 })).toHaveLength(1);
+    expect(screen.getAllByRole("heading", { name: "Neighborhood C", level: 4 })).toHaveLength(1);
+    expect(screen.getAllByRole("heading", { name: "Neighborhood D", level: 4 })).toHaveLength(1);
+    expect(screen.getAllByText("Neighborhood A Bistro")).toHaveLength(1);
+  });
+
 
   it("selects the same first-4 neighborhoods deterministically across repeated renders", () => {
     const { unmount } = render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
     const firstRenderHasD = screen.queryByText("Neighborhood D") !== null;
     unmount();
 
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
     const secondRenderHasD = screen.queryByText("Neighborhood D") !== null;
 
     expect(firstRenderHasD).toBe(true);
     expect(secondRenderHasD).toBe(true);
   });
 
-  it("reveals up to 8 real persisted neighborhoods, in persisted order, after activating Explore more neighborhoods - never fabricating beyond what is persisted", () => {
+  it("never fabricates a 9th neighborhood beyond the 8 real persisted rows", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
-    expect(screen.queryByText("Neighborhood E")).not.toBeInTheDocument();
-    fireEvent.click(screen.getAllByText("Explore more neighborhoods")[0]);
-
-    expect(screen.getAllByText("Neighborhood E").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Neighborhood F").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Neighborhood G").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Neighborhood H").length).toBeGreaterThan(0);
-    // Exactly 8 real neighborhoods exist in the fixture - no 9th/fabricated entry can appear, and
-    // no further "Explore more" control remains since every persisted neighborhood is now shown.
-    expect(screen.queryByText("Explore more neighborhoods")).not.toBeInTheDocument();
+    expect(screen.queryByText("Neighborhood I")).not.toBeInTheDocument();
   });
 
-  it("returns to the flagship 4 after activating Show fewer neighborhoods", () => {
-    render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
-    fireEvent.click(screen.getAllByText("Explore more neighborhoods")[0]);
-    expect(screen.getAllByText("Neighborhood H").length).toBeGreaterThan(0);
-
-    fireEvent.click(screen.getAllByText("Show fewer neighborhoods")[0]);
-
-    expect(screen.queryByText("Neighborhood E")).not.toBeInTheDocument();
-    expect(screen.queryByText("Neighborhood H")).not.toBeInTheDocument();
-    expect(screen.getAllByText("Neighborhood A").length).toBeGreaterThan(0);
-  });
-
-  it("does not show an Explore more neighborhoods control when 4 or fewer real neighborhoods are persisted", () => {
-    render(<CanonicalDestinationPage destination={buildV31DestinationWithNeighborhoodCount(4)} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
-
-    expect(screen.getAllByText("Neighborhood D").length).toBeGreaterThan(0);
-    expect(screen.queryByText("Explore more neighborhoods")).not.toBeInTheDocument();
-    expect(screen.queryByText("Show fewer neighborhoods")).not.toBeInTheDocument();
-  });
-
-  it("shows the Explore more control and reveals exactly the real additional count for a destination with 5-8 neighborhoods (no padding to 8)", () => {
+  it("renders exactly the real persisted neighborhood count for a destination with 5-8 neighborhoods, never padding to 8 (no fabrication)", () => {
     render(<CanonicalDestinationPage destination={buildV31DestinationWithNeighborhoodCount(6)} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
-
-    expect(screen.queryByText("Neighborhood E")).not.toBeInTheDocument();
-    fireEvent.click(screen.getAllByText("Explore more neighborhoods")[0]);
 
     expect(screen.getAllByText("Neighborhood E").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Neighborhood F").length).toBeGreaterThan(0);
     // Only 6 real neighborhoods exist - Neighborhood G/H must never appear (no fabrication).
     expect(screen.queryByText("Neighborhood G")).not.toBeInTheDocument();
     expect(screen.queryByText("Neighborhood H")).not.toBeInTheDocument();
-    expect(screen.queryByText("Explore more neighborhoods")).not.toBeInTheDocument();
   });
 
   it("filters real places by exact neighborhoodKey - a Neighborhood A restaurant never appears under Neighborhood B", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
     expect(screen.getByText("Neighborhood A Bistro")).toBeInTheDocument();
     expect(screen.getByText("Neighborhood B Grill")).toBeInTheDocument();
@@ -1138,20 +1279,15 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     expect(screen.getAllByText("Neighborhood B Grill")).toHaveLength(1);
   });
 
-  it("never renders a place from a neighborhood beyond the currently visible set (cross-destination/leakage safety)", () => {
+  it("renders a place tied to a neighborhood beyond the first 4 without requiring any click, now that all neighborhoods render directly", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
-    expect(screen.queryByText("Neighborhood E Cafe")).not.toBeInTheDocument();
-    expect(screen.queryByText("Neighborhood G Golf Club")).not.toBeInTheDocument();
+    expect(screen.getByText("Neighborhood E Cafe")).toBeInTheDocument();
+    expect(screen.getByText("Neighborhood G Golf Club")).toBeInTheDocument();
   });
 
-  it("surfaces a real place tied to a neighborhood outside the flagship 4 (e.g. golf) only once that neighborhood is revealed, with exact neighborhoodKey linkage preserved", () => {
+  it("surfaces a real place tied to a neighborhood outside the flagship 4 (e.g. golf) exactly once, with exact neighborhoodKey linkage preserved", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
-    expect(screen.queryByText("Neighborhood G Golf Club")).not.toBeInTheDocument();
-
-    fireEvent.click(screen.getAllByText("Explore more neighborhoods")[0]);
 
     expect(screen.getByText("Neighborhood G Golf Club")).toBeInTheDocument();
     expect(screen.getAllByText("Neighborhood G Golf Club")).toHaveLength(1);
@@ -1159,49 +1295,49 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     expect(screen.queryByText("Neighborhood A Bistro")).toBeInTheDocument();
   });
 
-  it("opens the place modal with a real clickable website link when websiteUrl is present", () => {
+  it("renders a real clickable website link in the DOM for a place with websiteUrl, with no click required to reveal it", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
-    fireEvent.click(screen.getByText("Neighborhood A Bistro"));
-
-    const websiteLink = screen.getByText("Visit website").closest("a");
+    const websiteLink = screen.getAllByText("Visit website")[0].closest("a");
     expect(websiteLink).toHaveAttribute("href", "https://neighborhood-a-bistro.example-test.invalid/");
   });
 
-  it("opens the place modal with a real clickable Maps link when googleMapsUrl is present", () => {
+  it("renders a real clickable Maps link in the DOM for a place with googleMapsUrl, with no click required to reveal it", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
-    fireEvent.click(screen.getByText("Neighborhood A Bistro"));
-
-    const mapsLink = screen.getByText("Open on Google Maps").closest("a");
+    const mapsLink = screen.getAllByText("Open on Google Maps")[0].closest("a");
     expect(mapsLink).toHaveAttribute("href", "https://maps.example-test.invalid/neighborhood-a-bistro");
   });
 
   it("shows both Website and Maps actions when a real place has both links", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
-    fireEvent.click(screen.getByText("Neighborhood A Bistro"));
-
-    expect(screen.getByText("Visit website")).toBeInTheDocument();
-    expect(screen.getByText("Open on Google Maps")).toBeInTheDocument();
+    expect(screen.getAllByText("Visit website").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Open on Google Maps").length).toBeGreaterThan(0);
   });
 
   it("does not invent a fake URL when a real place has no website, maps, or source link at all", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
-    fireEvent.click(screen.getByText("Neighborhood A No Link Diner"));
+    const noLinkPlace = screen.getByText("Neighborhood A No Link Diner").closest("details") as HTMLElement;
+    expect(within(noLinkPlace).queryByText("Visit website")).not.toBeInTheDocument();
+    expect(within(noLinkPlace).queryByText("Open on Google Maps")).not.toBeInTheDocument();
+  });
 
-    expect(screen.queryByText("Visit website")).not.toBeInTheDocument();
-    expect(screen.queryByText("Open on Google Maps")).not.toBeInTheDocument();
+  it("removes an editorial 'retain as UNKNOWN' instruction from a place's public description while preserving the rest of the real description text", () => {
+    const destination = buildV31PlaceLinkedDestination();
+    const bistro = destination.v31Modules!.places.find((place) => place.name === "Neighborhood A Bistro")!;
+    (bistro as { description: string }).description = "Mercato Coperto / central food-market search retain as `UNKNOWN` until exact current official operating record is confirmed.";
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    expect(screen.getAllByText(/Mercato Coperto \/ central food-market search/i).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/retain as/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/UNKNOWN/)).not.toBeInTheDocument();
   });
 
   it("omits a category entirely when a neighborhood has zero real places for it (no forced empty category)", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
     // Neighborhood A has no real golf/healthcare/attractions places - these distinctive
     // compound category labels (unique to the real-places grouping) must not appear.
@@ -1212,7 +1348,6 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
 
   it("does not replace real persisted places with generic 'More local detail coming soon' filler for categories that have real data", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
     // Real restaurant/coffee content must be present, not replaced by filler text for those categories.
     expect(screen.getByText("Neighborhood A Bistro")).toBeInTheDocument();
@@ -1241,27 +1376,12 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     return destination;
   }
 
-  it("shows exactly 4 real places initially per category when more than 4 exist, with a Show more control", () => {
+  it("renders every real place in a category directly, with no click required and no artificial cap", () => {
     render(<CanonicalDestinationPage destination={buildV31DestinationWithManyRestaurantsInOneNeighborhood()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
     expect(screen.getByText("Many Restaurant 1")).toBeInTheDocument();
     expect(screen.getByText("Many Restaurant 4")).toBeInTheDocument();
-    expect(screen.queryByText("Many Restaurant 5")).not.toBeInTheDocument();
-    expect(screen.getAllByText("Show more").length).toBeGreaterThan(0);
-  });
-
-  it("reveals the full real count (never fabricated beyond it) after Show more, and returns to 4 after Show fewer", () => {
-    render(<CanonicalDestinationPage destination={buildV31DestinationWithManyRestaurantsInOneNeighborhood()} />);
-    fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
-
-    fireEvent.click(screen.getAllByText("Show more")[0]);
     expect(screen.getByText("Many Restaurant 5")).toBeInTheDocument();
-    expect(screen.queryByText("Show more")).not.toBeInTheDocument();
-
-    fireEvent.click(screen.getAllByText("Show fewer")[0]);
-    expect(screen.queryByText("Many Restaurant 5")).not.toBeInTheDocument();
-    expect(screen.getByText("Many Restaurant 1")).toBeInTheDocument();
   });
 
   function buildV31DestinationWithUnassignedPlaces(): CanonicalDestination {
@@ -1345,14 +1465,12 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
   describe("destination-level unassigned-place section (Part B recommendation surfacing)", () => {
     it("renders a golf place with no neighborhoodKey in a destination-level section, reachable without a false neighborhood assignment", () => {
       render(<CanonicalDestinationPage destination={buildV31DestinationWithUnassignedPlaces()} />);
-      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
       expect(screen.getByText("Test Destination Golf Club")).toBeInTheDocument();
     });
 
     it("renders the sports bucket for a real unassigned sports place", () => {
       render(<CanonicalDestinationPage destination={buildV31DestinationWithUnassignedPlaces()} />);
-      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
       expect(screen.getByText("Test Sports Complex")).toBeInTheDocument();
       expect(screen.getByText(/Sports & recreation around/)).toBeInTheDocument();
@@ -1360,7 +1478,6 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
 
     it("renders the coworking bucket for a real unassigned coworking place", () => {
       render(<CanonicalDestinationPage destination={buildV31DestinationWithUnassignedPlaces()} />);
-      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
       expect(screen.getByText("Test Coworking Hub")).toBeInTheDocument();
       expect(screen.getByText(/Coworking around/)).toBeInTheDocument();
@@ -1369,7 +1486,6 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     it("uses a generic heading built from the destination's own city name, never a hardcoded destination string", () => {
       const destination = buildV31DestinationWithUnassignedPlaces();
       render(<CanonicalDestinationPage destination={destination} />);
-      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
       expect(screen.getByText(`Golf around ${destination.city}`)).toBeInTheDocument();
       expect(screen.queryByText(/Golf around Summerlin/)).not.toBeInTheDocument();
@@ -1377,7 +1493,6 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
 
     it("never renders the linked place inside the destination-level unassigned section", () => {
       render(<CanonicalDestinationPage destination={buildV31DestinationWithUnassignedPlaces()} />);
-      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
       // The linked place appears exactly once (inside its neighborhood card) - never duplicated
       // into the destination-level section as well.
@@ -1386,7 +1501,6 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
 
     it("never renders an unassigned place inside any neighborhood card", () => {
       render(<CanonicalDestinationPage destination={buildV31DestinationWithUnassignedPlaces()} />);
-      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
       // The unassigned golf place's real name never appears more than once (only in the
       // destination-level section) - it is never duplicated into the linked neighborhood's card,
@@ -1396,19 +1510,17 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
 
     it("deduplicates a literal duplicate DB row so the same real place renders exactly once", () => {
       render(<CanonicalDestinationPage destination={buildV31DestinationWithUnassignedPlaces()} />);
-      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
       expect(screen.getAllByText("Test Sports Complex")).toHaveLength(1);
     });
 
     it("is completely absent when a destination has no unassigned real places", () => {
       render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
-      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
       expect(screen.queryByText("Destination highlights")).not.toBeInTheDocument();
     });
 
-    it("shows exactly 4 unassigned real places initially per category, with Show more revealing the real remaining count and never fabricating beyond it", () => {
+    it("shows every unassigned real place directly, with no click required and no artificial cap", () => {
       const destination = buildV31Destination();
       destination.v31Modules = {
         ...destination.v31Modules!,
@@ -1428,14 +1540,11 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
         })),
       };
       render(<CanonicalDestinationPage destination={destination} />);
-      fireEvent.pointerDown(screen.getByRole("tab", { name: /Premium Profile/i }));
 
       expect(screen.getByText("Unassigned Restaurant 1")).toBeInTheDocument();
       expect(screen.getByText("Unassigned Restaurant 4")).toBeInTheDocument();
-      expect(screen.queryByText("Unassigned Restaurant 5")).not.toBeInTheDocument();
-
-      fireEvent.click(screen.getAllByText("Show more")[0]);
       expect(screen.getByText("Unassigned Restaurant 5")).toBeInTheDocument();
+      // Exactly 5 real places exist in this fixture - no 6th/fabricated entry can appear.
       expect(screen.queryByText("Unassigned Restaurant 6")).not.toBeInTheDocument();
     });
   });

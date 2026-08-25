@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { CanonicalDestination, NeighborhoodIntelligenceGroup, NeighborhoodIntelligenceMetric, NeighborhoodIntelligencePlace, NeighborhoodProfile, NeighborhoodResourceItem } from "../../lib/canonical-destination-model";
 import { buildDestinationIntelligenceProfile } from "../../lib/destination-intelligence-engine";
 import { getDestinationImageSet, getDestinationImageUrl } from "../../lib/imageFallback";
@@ -109,6 +109,8 @@ function buildResourceGroups(destination: CanonicalDestination) {
 
   const groups = [
     { title: "Maps", items: resources.filter((resource) => /map|atlas|geo/i.test(resource.category)) },
+    { title: "Hotels", items: resources.filter((resource) => /hotel/i.test(resource.category)) },
+    { title: "Vacation Rentals", items: resources.filter((resource) => /vacation-stays/i.test(resource.category)) },
     { title: "Housing", items: resources.filter((resource) => /housing|real estate|rental|property/i.test(resource.category)) },
     { title: "Healthcare", items: resources.filter((resource) => /health|medical|hospital|clinic|care/i.test(resource.category)) },
     { title: "Government", items: resources.filter((resource) => /gov|municipal|city|county|consul/i.test(resource.category)) },
@@ -125,7 +127,10 @@ function buildResourceGroups(destination: CanonicalDestination) {
     { title: "Consulates", items: resources.filter((resource) => /consul|embassy|visa/i.test(resource.category)) },
     { title: "Digital Nomad Resources", items: resources.filter((resource) => /nomad|remote|cowork|digital/i.test(resource.category)) },
     { title: "Webcams", items: resources.filter((resource) => /webcam|camera|stream/i.test(resource.category)) },
-  ].filter((group) => group.items.length > 0);
+    { title: "Social Discovery", items: resources.filter((resource) => /social-discovery/i.test(resource.category)) },
+  ]
+    .map((group) => ({ ...group, items: dedupeResourceItems(group.items as unknown as NeighborhoodResourceItem[]) }))
+    .filter((group) => group.items.length > 0);
 
   return groups;
 }
@@ -326,7 +331,11 @@ function buildNeighborhoodLiveResources(destination: CanonicalDestination, neigh
   const liveItems = [
     ...(destination.webcamUrl ? [{ label: "Live webcam", url: destination.webcamUrl, kind: "live" as const }] : []),
     ...explicitResources
-      .filter((resource) => /weather|traffic|air|transit|sunrise|sunset|live|webcam|camera/i.test(resource.category) || /weather|traffic|air|transit|sunrise|sunset|live|webcam|camera/i.test(resource.label))
+      // Note: "air" is deliberately "air quality" (not a bare substring) - a bare /air/ pattern
+      // false-matched "Search Airbnb" and "Find airport transfers" (regression introduced by the
+      // generic Travel-resource system's new labels), incorrectly surfacing destination-level
+      // travel-search utilities inside this neighborhood-scoped live/weather/webcam widget.
+      .filter((resource) => /weather|traffic|air quality|transit|sunrise|sunset|live|webcam|camera/i.test(resource.category) || /weather|traffic|air quality|transit|sunrise|sunset|live|webcam|camera/i.test(resource.label))
       .map((resource) => ({ label: resource.label, url: resource.url, kind: "live" as const })),
   ];
 
@@ -362,6 +371,21 @@ type NeighborhoodInsightCard = {
 
 function normalizeText(value: string | undefined | null) {
   return (value ?? "").trim().toLowerCase();
+}
+
+/**
+ * Strips author-facing editorial instructions (e.g. "retain as `UNKNOWN` until ...") and internal
+ * "search_zone" wording that should never reach public place/description text, without altering
+ * any genuinely authored content. Never touches the workbook itself - presentation-layer only.
+ */
+function sanitizePublicPlaceText(value: string | undefined | null): string | undefined {
+  if (typeof value !== "string") return undefined;
+  let text = value.trim();
+  if (!text) return undefined;
+  text = text.replace(/\s*Source:\s*https?:\/\/\S+\s*$/i, "").trim();
+  text = text.replace(/,?\s*retain as `?unknown`?[^.]*\.?/gi, "").trim();
+  text = text.replace(/\bsearch_zone\b/gi, "this area").trim();
+  return text.length > 0 ? text : undefined;
 }
 
 function isShoppingCategory(category: string | undefined) {
@@ -440,7 +464,7 @@ function buildVerifiableInsightPlaces(destination: CanonicalDestination, neighbo
       return {
         id: place.id || `${group.category}-${index}-${place.name}`,
         title: place.name,
-        description: place.description || `${place.name} is a verified ${group.category.toLowerCase()} that helps explain what makes ${neighborhoodName || destination.city} feel distinctive.`,
+        description: sanitizePublicPlaceText(place.description) || `${place.name} is a verified ${group.category.toLowerCase()} that helps explain what makes ${neighborhoodName || destination.city} feel distinctive.`,
         neighborhood: place.neighborhoodName || neighborhoodName || destination.city,
         category: group.category,
         mapUrl: place.googleMapsUrl || undefined,
@@ -543,7 +567,7 @@ function buildRealNeighborhoodPlaceCards(destination: CanonicalDestination, neig
       return {
         id: place.placeKey,
         title: place.name as string,
-        description: place.description ?? `${place.name} is a real place tied to this neighborhood.`,
+        description: sanitizePublicPlaceText(place.description) ?? `${place.name} is a real place tied to this neighborhood.`,
         neighborhood: neighborhoodDisplayName,
         category: bucket.label,
         mapUrl,
@@ -601,7 +625,7 @@ function buildDestinationLevelUnassignedPlaceGroups(destination: CanonicalDestin
       return {
         id: place.placeKey,
         title: place.name as string,
-        description: place.description ?? `${place.name} is a real place associated with ${destination.city} as a whole.`,
+        description: sanitizePublicPlaceText(place.description) ?? `${place.name} is a real place associated with ${destination.city} as a whole.`,
         neighborhood: destination.city,
         category: bucket.label,
         mapUrl,
@@ -628,115 +652,88 @@ function buildDestinationLevelUnassignedPlaceGroups(destination: CanonicalDestin
  * with an optional "Show fewer" to collapse back. Deduplicates by place id so the same real place
  * never renders twice within one list.
  */
-function CategoryPlaceList({ places, onSelect }: { places: NeighborhoodInsightPlace[]; onSelect: (place: NeighborhoodInsightPlace) => void }) {
-  const [visibleCount, setVisibleCount] = useState(4);
+function CategoryPlaceList({ places }: { places: NeighborhoodInsightPlace[] }) {
   const deduped = Array.from(new Map(places.map((place) => [place.id, place])).values());
-  const visiblePlaces = deduped.slice(0, visibleCount);
-  const hasMore = deduped.length > visiblePlaces.length;
-  const canShowFewer = visibleCount > 4;
 
   return (
-    <>
-      <div className="mt-3 divide-y divide-white/10 border-y border-white/10">
-        {visiblePlaces.map((place) => {
-          const linkClasses = "flex w-full items-start justify-between gap-3 px-1 py-3 text-left transition hover:bg-[#0a2745]";
-          const actionLabel = place.isFallback ? "Explore" : "Open";
-
-          if (place.isFallback) {
-            return (
-              <a key={place.id} href={place.mapUrl} target="_blank" rel="noopener noreferrer" className={linkClasses}>
-                <span>
-                  <span className="block text-sm font-semibold text-[#edf2fb]">{place.title}</span>
-                  <span className="mt-1 block text-xs leading-5 text-[#9eb2c6]">{place.description}</span>
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#55c7c9]">{actionLabel}</span>
-              </a>
-            );
-          }
-
+    <div className="mt-3 divide-y divide-white/10 border-y border-white/10">
+      {deduped.map((place) => {
+        if (place.isFallback) {
           return (
-            <button key={place.id} type="button" onClick={() => onSelect(place)} className={linkClasses}>
+            <a key={place.id} href={place.mapUrl} target="_blank" rel="noopener noreferrer" className="flex w-full items-start justify-between gap-3 px-1 py-3 text-left transition hover:bg-[#0a2745]">
               <span>
                 <span className="block text-sm font-semibold text-[#edf2fb]">{place.title}</span>
                 <span className="mt-1 block text-xs leading-5 text-[#9eb2c6]">{place.description}</span>
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#55c7c9]">{actionLabel}</span>
-            </button>
+              <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#55c7c9]">Explore</span>
+            </a>
           );
-        })}
-      </div>
-      {hasMore || canShowFewer ? (
-        <div className="mt-2 flex justify-start">
-          <button type="button" onClick={() => setVisibleCount(hasMore ? deduped.length : 4)} className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-1.5 text-[11px] font-semibold text-cyan-200 transition hover:border-cyan-400/40 hover:bg-cyan-500/20">
-            {hasMore ? "Show more" : "Show fewer"}
-          </button>
-        </div>
-      ) : null}
-    </>
-  );
-}
+        }
 
-/** Shared place-detail modal used by both neighborhood-scoped and destination-level place lists. */
-function PlaceDetailModal({ place, onClose }: { place: NeighborhoodInsightPlace; onClose: () => void }) {
-  return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/80 px-4 py-6 backdrop-blur-sm">
-      <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-900/95 p-6 shadow-[0_30px_100px_rgba(2,8,23,0.48)]">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-300">{place.category}</p>
-            <h5 className="mt-2 text-2xl font-semibold text-white">{place.title}</h5>
-          </div>
-          <button type="button" onClick={onClose} className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/30 hover:bg-cyan-500/10">
-            Close
-          </button>
-        </div>
-        <div className="mt-5 space-y-4">
-          <p className="text-sm leading-7 text-slate-300">{place.description}</p>
-          {place.aiSummary && place.aiSummary.trim().length > 0 && place.aiSummary !== place.description ? <p className="rounded-2xl border border-white/10 bg-white/5 p-3 text-sm leading-7 text-slate-300">{place.aiSummary}</p> : null}
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Neighborhood</p>
-              <p className="mt-2 text-sm font-semibold text-white">{place.neighborhood}</p>
-            </div>
-            {place.rating ? (
-              <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Rating</p>
-                <p className="mt-2 text-sm font-semibold text-white">{place.rating}</p>
-              </div>
-            ) : null}
-            {place.distance ? (
-              <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Distance</p>
-                <p className="mt-2 text-sm font-semibold text-white">{place.distance}</p>
-              </div>
-            ) : null}
-            {place.metadata && Object.keys(place.metadata).length > 0 ? (
-              <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3 sm:col-span-2">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Why it matters</p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {Object.entries(place.metadata).map(([key, value]) => (
-                    <span key={key} className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300">
-                      {key}: {value}
-                    </span>
-                  ))}
+        // Native disclosure - the full detail (rating, distance, website/maps links) is always
+        // present in the DOM from initial render; no React click state gates it.
+        return (
+          <details key={place.id} className="group px-1 py-3">
+            <summary className="flex min-h-11 w-full cursor-pointer list-none items-start justify-between gap-3 text-left">
+              <span>
+                <span className="block text-sm font-semibold text-[#edf2fb]">{place.title}</span>
+                <span className="mt-1 block text-xs leading-5 text-[#9eb2c6]">{place.description}</span>
+              </span>
+              <span className="flex shrink-0 items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#55c7c9]">
+                Open
+                <span className="transition group-open:rotate-45" aria-hidden="true">+</span>
+              </span>
+            </summary>
+            <div className="mt-3 space-y-3">
+              {place.aiSummary && place.aiSummary.trim().length > 0 && place.aiSummary !== place.description ? (
+                <p className="rounded-2xl border border-white/10 bg-white/5 p-3 text-sm leading-7 text-slate-300">{place.aiSummary}</p>
+              ) : null}
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Neighborhood</p>
+                  <p className="mt-2 text-sm font-semibold text-white">{place.neighborhood}</p>
                 </div>
+                {place.rating ? (
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Rating</p>
+                    <p className="mt-2 text-sm font-semibold text-white">{place.rating}</p>
+                  </div>
+                ) : null}
+                {place.distance ? (
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Distance</p>
+                    <p className="mt-2 text-sm font-semibold text-white">{place.distance}</p>
+                  </div>
+                ) : null}
+                {place.metadata && Object.keys(place.metadata).length > 0 ? (
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3 sm:col-span-2">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Why it matters</p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {Object.entries(place.metadata).map(([key, value]) => (
+                        <span key={key} className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300">
+                          {key}: {value}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </div>
-            ) : null}
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {place.mapUrl ? (
-              <a href={place.mapUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/40 hover:bg-cyan-500/20">
-                Open on Google Maps
-              </a>
-            ) : null}
-            {place.website ? (
-              <a href={place.website} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/30 hover:bg-cyan-500/10">
-                Visit website
-              </a>
-            ) : null}
-          </div>
-        </div>
-      </div>
+              <div className="flex flex-wrap gap-2">
+                {place.mapUrl ? (
+                  <a href={place.mapUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/40 hover:bg-cyan-500/20">
+                    Open on Google Maps
+                  </a>
+                ) : null}
+                {place.website ? (
+                  <a href={place.website} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/30 hover:bg-cyan-500/10">
+                    Visit website
+                  </a>
+                ) : null}
+              </div>
+            </div>
+          </details>
+        );
+      })}
     </div>
   );
 }
@@ -748,7 +745,6 @@ function PlaceDetailModal({ place, onClose }: { place: NeighborhoodInsightPlace;
  * name, never a hardcoded destination string.
  */
 function DestinationLevelUnassignedSection({ destination }: { destination: CanonicalDestination }) {
-  const [selectedPlace, setSelectedPlace] = useState<NeighborhoodInsightPlace | null>(null);
   const groups = useMemo(() => buildDestinationLevelUnassignedPlaceGroups(destination), [destination]);
 
   if (groups.length === 0) {
@@ -768,11 +764,10 @@ function DestinationLevelUnassignedSection({ destination }: { destination: Canon
           <div key={group.key} className="rounded-[1.5rem] border border-white/10 bg-slate-950/30 p-5">
             <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#eabc5b]">{group.label}</p>
             <p className="mt-1.5 text-sm leading-6 text-[#9eb2c6]">{group.description}</p>
-            <CategoryPlaceList places={group.places} onSelect={setSelectedPlace} />
+            <CategoryPlaceList places={group.places} />
           </div>
         ))}
       </div>
-      {selectedPlace ? <PlaceDetailModal place={selectedPlace} onClose={() => setSelectedPlace(null)} /> : null}
     </section>
   );
 }
@@ -982,7 +977,6 @@ function PremiumSectionBlock({
   readTime: string;
   eyebrow?: string;
 }) {
-  const [expanded, setExpanded] = useState(false);
   const { intro, body: remainder } = splitEditorialText(summary);
   const hasBody = body.trim().length > 0 || remainder.trim().length > 0;
 
@@ -995,18 +989,22 @@ function PremiumSectionBlock({
           <p className="mt-2 text-xs uppercase tracking-[0.24em] text-slate-400">{readTime}</p>
           <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-slate-500">Estimated completion</p>
         </div>
-        {hasBody ? (
-          <button type="button" onClick={() => setExpanded((value) => !value)} className="rounded-full border border-white/10 bg-slate-950/50 px-4 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/40 hover:bg-cyan-500/10">
-            {expanded ? "▲ Collapse" : "▼ Continue reading"}
-          </button>
-        ) : null}
       </div>
       <div className="mt-5 space-y-4">
         <p className="text-[15px] leading-8 text-slate-300 whitespace-pre-line">{intro}</p>
-        <div className={`overflow-hidden transition-all duration-300 ${expanded ? "max-h-[2200px] opacity-100" : "max-h-0 opacity-0"}`}>
-          {body.trim().length > 0 ? <p className="text-[15px] leading-8 text-slate-300 whitespace-pre-line">{body}</p> : null}
-          {remainder.trim().length > 0 ? <p className="mt-4 text-[15px] leading-8 text-slate-300 whitespace-pre-line">{remainder}</p> : null}
-        </div>
+        {hasBody ? (
+          // Native disclosure - the full body is always present in the DOM from initial render.
+          <details className="group">
+            <summary className="flex min-h-11 w-fit cursor-pointer list-none items-center gap-2 rounded-full border border-white/10 bg-slate-950/50 px-4 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/40 hover:bg-cyan-500/10">
+              Continue reading
+              <span className="transition group-open:rotate-45" aria-hidden="true">+</span>
+            </summary>
+            <div className="mt-4 space-y-4">
+              {body.trim().length > 0 ? <p className="text-[15px] leading-8 text-slate-300 whitespace-pre-line">{body}</p> : null}
+              {remainder.trim().length > 0 ? <p className="text-[15px] leading-8 text-slate-300 whitespace-pre-line">{remainder}</p> : null}
+            </div>
+          </details>
+        ) : null}
       </div>
     </article>
   );
@@ -1031,20 +1029,17 @@ function ExpandableInsightCard({
   avoidFor?: string[];
   similarDestinations?: string[];
 }) {
-  const [expanded, setExpanded] = useState(false);
-
   return (
     <div className="rounded-[1.5rem] border border-white/10 bg-slate-900/70 p-5 shadow-[0_18px_50px_rgba(2,8,23,0.16)]">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h4 className="text-base font-semibold text-white">{title}</h4>
-          <p className="mt-2 text-[15px] leading-8 text-slate-300">{summary}</p>
-        </div>
-        <button type="button" onClick={() => setExpanded((value) => !value)} className="rounded-full border border-white/10 bg-slate-950/40 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-200">
-          {expanded ? "Collapse" : "Expand"}
-        </button>
-      </div>
-      <div className={`overflow-hidden transition-all duration-300 ${expanded ? "mt-4 max-h-[900px] opacity-100" : "max-h-0 opacity-0"}`}>
+      <h4 className="text-base font-semibold text-white">{title}</h4>
+      <p className="mt-2 text-[15px] leading-8 text-slate-300">{summary}</p>
+      {/* Native disclosure - the full body is always present in the DOM from initial render. */}
+      <details className="group mt-3">
+        <summary className="flex min-h-11 w-fit cursor-pointer list-none items-center gap-1.5 rounded-full border border-white/10 bg-slate-950/40 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-200">
+          Expand
+          <span className="transition group-open:rotate-45" aria-hidden="true">+</span>
+        </summary>
+        <div className="mt-4">
         <p className="text-[15px] leading-8 text-slate-300">{body}</p>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
           {strengths && strengths.length > 0 ? (
@@ -1082,7 +1077,8 @@ function ExpandableInsightCard({
             <p className="mt-2 text-sm leading-7 text-slate-300">{similarDestinations.join(" • ")}</p>
           </div>
         ) : null}
-      </div>
+        </div>
+      </details>
     </div>
   );
 }
@@ -1129,8 +1125,6 @@ function ExpandableNeighborhoodCard({
   index: number;
   destination: CanonicalDestination;
 }) {
-  const [expanded, setExpanded] = useState(false);
-  const [selectedPlace, setSelectedPlace] = useState<NeighborhoodInsightPlace | null>(null);
   // A v3.1 destination's neighborhood category signals come from real persisted places only -
   // suppress the legacy synthetic Google-search-link resource groups entirely for v3.1 bundles
   // (never a per-neighborhood generic fallback, which has no real neighborhoodKey scoping and can
@@ -1178,15 +1172,10 @@ function ExpandableNeighborhoodCard({
 
   return (
     <article className="border border-[#d8ad5548] bg-[#061a32] shadow-[0_18px_45px_rgba(0,0,0,0.2)]">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0 p-5 sm:p-6">
-          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#55c7c9]">Flagship neighborhood {index + 1}</p>
-          <h4 className="mt-1 font-serif text-2xl text-[#fff8e9]">{neighborhood.name}</h4>
-          <p className="mt-2 max-w-4xl text-sm leading-6 text-[#b7c8d8]">{neighborhood.whyItWorks}</p>
-        </div>
-        <button type="button" onClick={() => setExpanded((value) => !value)} className="m-4 min-h-10 shrink-0 border border-[#d8ad554f] bg-[#08223c] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#f0c05f] transition hover:border-[#f0c05f] sm:m-5">
-          {expanded ? "Collapse" : "Explore"}
-        </button>
+      <div className="min-w-0 p-5 sm:p-6">
+        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#55c7c9]">Flagship neighborhood {index + 1}</p>
+        <h4 className="mt-1 font-serif text-2xl text-[#fff8e9]">{neighborhood.name}</h4>
+        <p className="mt-2 max-w-4xl text-sm leading-6 text-[#b7c8d8]">{neighborhood.whyItWorks}</p>
       </div>
       <div className="grid border-t border-white/10 sm:grid-cols-2">
         <div className="px-5 py-4 sm:border-r sm:border-white/10 sm:px-6">
@@ -1210,7 +1199,13 @@ function ExpandableNeighborhoodCard({
           </div>
         </div>
       ) : null}
-      <div className={`overflow-hidden transition-all duration-300 ${expanded ? "max-h-[4000px] border-t border-white/10 opacity-100" : "max-h-0 opacity-0"}`}>
+      {/* Native disclosure - the full neighborhood detail is always present in the DOM from initial render. */}
+      <details className="group">
+        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-center gap-1.5 border-t border-white/10 bg-slate-950/40 px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-200">
+          Explore this neighborhood
+          <span className="transition group-open:rotate-45" aria-hidden="true">+</span>
+        </summary>
+        <div className="border-t border-white/10">
         <div className="grid md:grid-cols-2 xl:grid-cols-3">
           {detailMap.map((detail) => (
             <div key={detail.label} className="border-b border-white/10 px-5 py-3.5 md:border-r md:px-6 xl:[&:nth-child(3n)]:border-r-0">
@@ -1234,7 +1229,7 @@ function ExpandableNeighborhoodCard({
                   <p className="mt-1.5 text-sm font-semibold text-[#edf2fb]">{card.value}</p>
                   <p className="mt-1.5 text-sm leading-6 text-[#9eb2c6]">{card.description}</p>
                   {card.places.length > 0 ? (
-                    <CategoryPlaceList places={card.places} onSelect={setSelectedPlace} />
+                    <CategoryPlaceList places={card.places} />
                   ) : (
                     <p className="mt-3 text-[15px] leading-7 text-slate-300">{card.emptyMessage}</p>
                   )}
@@ -1274,32 +1269,15 @@ function ExpandableNeighborhoodCard({
             ))}
           </div>
         ) : null}
-      </div>
-      {selectedPlace ? <PlaceDetailModal place={selectedPlace} onClose={() => setSelectedPlace(null)} /> : null}
+        </div>
+      </details>
     </article>
   );
 }
 
 export default function CanonicalDestinationPage({ destination, developerMode = false }: CanonicalDestinationPageProps) {
-  type ViewMode = "guide" | "profile" | "deep";
-
-  const [viewMode, setViewMode] = useState<ViewMode>("guide");
   const [selectedMedia, setSelectedMedia] = useState<GalleryItem | null>(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
-  const [visibleNeighborhoodCount, setVisibleNeighborhoodCount] = useState(4);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const storedView = window.localStorage.getItem("horizon-atlas-view-mode");
-    if (storedView === "guide" || storedView === "profile" || storedView === "deep") {
-      queueMicrotask(() => setViewMode(storedView as ViewMode));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    window.localStorage.setItem("horizon-atlas-view-mode", viewMode);
-  }, [viewMode]);
 
   const sectionEntries = Object.values(destination.sections ?? {}).sort((left, right) => left.title.localeCompare(right.title));
   const galleryItems = buildGalleryItems(destination).slice(0, 10);
@@ -1477,12 +1455,41 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   const lifestyleSummary = [destination.dailyLife, destination.overview, destination.heroNarrative, destination.editorial].find((value) => typeof value === "string" && value.trim().length > 0) ?? narrativeSummary;
   const outdoorSummary = [destination.overview, destination.heroNarrative, destination.editorial, destination.weather].find((value) => typeof value === "string" && value.trim().length > 0) ?? narrativeSummary;
   const categoryPlaceholder = "Detailed category information is not available yet.";
+  // The generic Travel-resource system (destination-travel-resources.ts) adds labels like "Find
+  // airport transfers" to every destination's resources array - a substring match on "airport"
+  // would wrongly surface that generated search-utility label as if it were a real airport-access
+  // fact. v3.1/v3.2 bundles must never let a named-resource match stand in for real workbook facts
+  // for categories the generic system also generates (airport, healthcare already had this fix).
+  const GENERIC_UTILITY_COLLISION_CATEGORIES = new Set(["airport", "healthcare"]);
+  // A small, precise list of internal workbook enum/placeholder tokens that must never render as a
+  // polished public fact (never a broad heuristic - legitimate short labels like severity ratings
+  // "HIGH"/"MEDIUM"/"LOW" must keep rendering normally).
+  const PLACEHOLDER_TOKENS = new Set(["variable", "conditional", "unknown", "tbd", "n/a", "na", "pending", "search_zone"]);
+  const sanitizePublicText = (value?: string | null): string | null => {
+    if (typeof value !== "string") return null;
+    let text = value.trim();
+    if (!text) return null;
+    // Move embedded "Source: <url>" citations out of public prose - the URL belongs in a structured
+    // source field, not appended to visible text.
+    text = text.replace(/\s*Source:\s*https?:\/\/\S+\s*$/i, "").trim();
+    // Strip author-facing editorial instructions that should never have reached public copy.
+    text = text.replace(/\(?retain as unknown\)?/gi, "").trim();
+    text = text.replace(/\bsearch_zone\b/gi, "this area").trim();
+    if (!text) return null;
+    const normalized = text.toLowerCase().replace(/[_\s]+/g, "");
+    if (PLACEHOLDER_TOKENS.has(normalized)) return null;
+    // A bare number (e.g. a raw "0"/"1" flag value with no unit or sentence context) is never a
+    // meaningful standalone public fact when mixed into a prose list.
+    if (/^-?\d+(\.\d+)?$/.test(text)) return null;
+    return text;
+  };
   const categoryValue = (value?: string | null) => (typeof value === "string" && value.trim().length > 0 ? value : categoryPlaceholder);
   const categoryListValue = (values: Array<string | undefined | null>) => {
     const firstMatch = values.find((value) => typeof value === "string" && value.trim().length > 0);
     return firstMatch ?? categoryPlaceholder;
   };
   const getNamedResourceValues = (category: string) => {
+    if (hasV31Bundle && GENERIC_UTILITY_COLLISION_CATEGORIES.has(category.toLowerCase())) return [];
     const normalizedCategory = category.toLowerCase();
     return [
       ...destination.resources,
@@ -1530,7 +1537,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     return destination.knowledgeProfile?.climateClassification || destination.climate || undefined;
   };
 
-  const essentialFacts = useMemo(() => [
+  const essentialFacts = useMemo(() => {
+    return [
     { label: "Population", value: categoryValue(formatPopulationValue(destination.knowledgeProfile?.population)), note: "Population helps frame the city’s scale and whether it feels intimate or metropolitan." },
     { label: "Metro population", value: categoryValue(formatPopulationValue(destination.knowledgeProfile?.metroPopulation)), note: "The metro explains how far the city’s labor, healthcare, and airport ecosystems extend." },
     { label: "Climate", value: categoryValue(formatClimateValue()), note: "Climate influences daily life, outdoor behavior, and long-stay comfort." },
@@ -1545,9 +1553,12 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     // ahead of the real workbook healthcare summary. Legacy (non-v3.1) destinations may have a
     // genuinely curated named resource here, so their existing named-resource-first behavior is untouched.
     { label: "Healthcare", value: categoryValue(getSpecificCategoryValue("healthcare", formatListValue(destination.knowledgeProfile?.majorHospitals) || destination.knowledgeProfile?.healthcareQuality || destination.healthcare, hasV31Bundle ? [] : getNamedResourceValues("healthcare"))), note: "Healthcare is often the deciding factor for long-stay households and retirees." },
-    { label: "Safety", value: categoryValue(destination.knowledgeProfile?.safety || destination.safety), note: "A city’s safety is rarely uniform, so district-level context matters." },
+    // Safety reflects the real workbook risk-assessment content, which combines everyday practical
+    // considerations with environmental/natural-hazard notes rather than a distinct crime rating -
+    // see "Reality and Environment" below for the complete, separately-labeled hazard breakdown.
+    { label: "Safety", value: categoryValue(sanitizePublicText(destination.knowledgeProfile?.safety) || sanitizePublicText(destination.safety)), note: "Reflects notable practical and environmental considerations, not a crime rate or an individualized safety guarantee - see Reality and Environment for the full hazard breakdown." },
     { label: "Internet", value: categoryValue(destination.knowledgeProfile?.internetSpeed || destination.internet), note: "Internet quality matters for remote work, digital nomads, and modern households." },
-    { label: "Airport access", value: categoryValue(getSpecificCategoryValue("airport", formatListValue(destination.knowledgeProfile?.majorAirports) || destination.airportInfo, getNamedResourceValues("airport"))), note: "Airport access is a major part of relocation ease for families and frequent travelers." },
+    { label: "Airport access", value: categoryValue(getSpecificCategoryValue("airport", formatListValue(destination.knowledgeProfile?.majorAirports) || destination.airportInfo || sanitizePublicText(destination.v31Modules?.transportation.find((row) => row.airportSummary)?.airportSummary), getNamedResourceValues("airport"))), note: "Airport access is a major part of relocation ease for families and frequent travelers." },
     { label: "Currency", value: categoryValue(destination.knowledgeProfile?.currency || (destination.country === "United States" ? "USD" : destination.country === "United Kingdom" ? "GBP" : destination.country === "Japan" ? "JPY" : destination.country === "Thailand" ? "THB" : undefined)), note: "Currency affects budgeting, transfers, and how a budget feels in practice." },
     { label: "Language", value: categoryValue(destination.knowledgeProfile?.primaryLanguage || (destination.country === "United States" ? "English" : destination.country === "Spain" ? "Spanish" : destination.country === "France" ? "French" : destination.country === "Italy" ? "Italian" : destination.country === "Croatia" ? "Croatian" : undefined)), note: "Language shapes the ease of everyday administration and local immersion." },
     { label: "Time zone", value: categoryValue(destination.knowledgeProfile?.timeZone), note: "Time-zone fit affects travel, work, and family communication." },
@@ -1564,11 +1575,14 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     { label: "Beach", value: categoryValue(getSpecificCategoryValue("beach", categoryListValue([destination.knowledgeProfile?.beaches?.join(", ")]), getNamedResourceValues("beach"))), note: "Beach access can strongly shape recreation and weekend life." },
     { label: "Mountains", value: categoryValue(getSpecificCategoryValue("mountain", categoryListValue([destination.knowledgeProfile?.mountains?.join(", ")]), getNamedResourceValues("mountain"))), note: "Mountains and natural landscapes add a layer of weekend escape." },
     { label: "Parks", value: categoryValue(getSpecificCategoryValue("park", categoryListValue([destination.knowledgeProfile?.parks?.join(", ")]), getNamedResourceValues("park"))), note: "Parks shape how a city feels in both weekdays and weekends." },
-  ], [destination]);
+  ];
+  }, [destination]);
   const availableFacts = essentialFacts.filter((fact) => fact.value !== categoryPlaceholder);
   const heroFacts = availableFacts.slice(0, 4);
   const heroFactLabels = new Set(heroFacts.map((fact) => fact.label));
-  const detailFacts = essentialFacts.filter((fact) => !heroFactLabels.has(fact.label));
+  // Optional categories with genuinely no supported value are hidden entirely here rather than
+  // repeating the placeholder sentence down the page - only facts with a real value are shown.
+  const detailFacts = availableFacts.filter((fact) => !heroFactLabels.has(fact.label));
 
   // STEP 8: representative UI for the rich v3.1 modules that have no existing dedicated section -
   // built entirely from real persisted rows. A module with zero rows is simply omitted from this
@@ -1646,6 +1660,75 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     return cards.filter((card) => card.lines.length > 0);
   }, [destination.v31Modules]);
 
+  // Compact, public-facing curated sections built from the same real v3.1 modules as the
+  // developer-only debug list above - sanitized (no internal enum tokens) and never fabricated;
+  // a section/line only appears when real, sanitized content exists for it.
+  const singletonSanitizedLines = (rows: ReadonlyArray<{ summary: string | null } & Record<string, string | null>> | undefined, extraKeys: string[] = []) =>
+    (rows ?? [])
+      .flatMap((row) => [row.summary, ...extraKeys.map((key) => row[key])])
+      .map((value) => sanitizePublicText(value))
+      .filter((value): value is string => value !== null)
+      .filter((value, index, all) => all.indexOf(value) === index);
+
+  const practicalLivingSnapshot = useMemo(() => {
+    const modules = destination.v31Modules;
+    if (!modules) return [] as Array<{ label: string; lines: string[] }>;
+    const items: Array<{ label: string; lines: string[] }> = [];
+    const safetyLines = singletonSanitizedLines(modules.safetyRisks as unknown as Array<{ summary: string | null } & Record<string, string | null>>).slice(0, 2);
+    if (safetyLines.length > 0) items.push({ label: "Safety", lines: safetyLines });
+    const walkabilityLines = singletonSanitizedLines(modules.accessibility, ["mobilityNotes"]);
+    if (walkabilityLines.length > 0) items.push({ label: "Walkability and terrain", lines: walkabilityLines });
+    const accessibilityLines = singletonSanitizedLines(modules.accessibility, ["mobilityNotes"]);
+    if (accessibilityLines.length > 0) items.push({ label: "Accessibility", lines: accessibilityLines });
+    const dailyLines = singletonSanitizedLines(modules.dailyLifePracticality ? [modules.dailyLifePracticality] : [], ["practicalityNotes"]);
+    if (dailyLines.length > 0) items.push({ label: "Daily errands and convenience", lines: dailyLines });
+    const transportLines = singletonSanitizedLines(modules.transportation, ["airportSummary", "transitSummary"]);
+    if (transportLines.length > 0) items.push({ label: "Local transportation and airport access", lines: transportLines });
+    const internetLines = singletonSanitizedLines(modules.remoteWork, ["internetSummary"]);
+    if (internetLines.length > 0) items.push({ label: "Internet and remote-work reliability", lines: internetLines });
+    const languageLines = singletonSanitizedLines(modules.languageIntegration, ["englishSupport"]);
+    if (languageLines.length > 0) items.push({ label: "Language ease", lines: languageLines });
+    const healthcareLines = singletonSanitizedLines(modules.healthcare, ["publicAccessSummary", "insuranceSummary"]);
+    if (healthcareLines.length > 0) items.push({ label: "Healthcare access", lines: healthcareLines });
+    return items;
+  }, [destination.v31Modules]);
+
+  const communityAndPersonalComfort = useMemo(() => {
+    const modules = destination.v31Modules;
+    if (!modules) return [] as Array<{ label: string; lines: string[] }>;
+    const items: Array<{ label: string; lines: string[] }> = [];
+    const communityLines = singletonSanitizedLines(modules.communitySocial, ["socialNotes"]);
+    if (communityLines.length > 0) items.push({ label: "Social integration and community character", lines: communityLines });
+    const lgbtqLines = singletonSanitizedLines(modules.lgbtqInclusivity, ["culturalNotes"]);
+    if (lgbtqLines.length > 0) {
+      items.push({ label: "LGBTQ+ considerations", lines: [...lgbtqLines, "This reflects general legal and cultural context only - not individualized legal advice, and not a guarantee of safety or comfort."] });
+    }
+    const familyLines = singletonSanitizedLines(modules.familyEducation, ["schoolsSummary"]);
+    if (familyLines.length > 0) items.push({ label: "Family", lines: familyLines });
+    const petLines = singletonSanitizedLines(modules.pets, ["petFriendlyNotes"]);
+    if (petLines.length > 0) items.push({ label: "Pets", lines: petLines });
+    return items;
+  }, [destination.v31Modules]);
+
+  const realityAndEnvironment = useMemo(() => {
+    const modules = destination.v31Modules;
+    if (!modules) return [] as Array<{ label: string; lines: string[] }>;
+    const items: Array<{ label: string; lines: string[] }> = [];
+    const climateLines = modules.climateMonthly.length > 0
+      ? [`Typical monthly range: ${modules.climateMonthly.map((item) => `${item.avgLowTemp ?? "?"}\u2013${item.avgHighTemp ?? "?"}\u00b0`).slice(0, 3).join(", ")}`]
+      : singletonSanitizedLines(destination.climate ? [{ summary: destination.climate }] : []);
+    if (climateLines.length > 0) items.push({ label: "Climate realities", lines: climateLines });
+    const environmentLines = singletonSanitizedLines(modules.environmentQuality ? [modules.environmentQuality] : [], ["qualityNotes"]);
+    const hazardLines = singletonSanitizedLines(modules.safetyRisks as unknown as Array<{ summary: string | null } & Record<string, string | null>>);
+    const combinedHazardLines = [...environmentLines, ...hazardLines].filter((value, index, all) => all.indexOf(value) === index);
+    if (combinedHazardLines.length > 0) items.push({ label: "Environmental and natural-hazard risks", lines: combinedHazardLines });
+    const seasonalityLines = modules.eventsSeasonality.map((item) => sanitizePublicText(item.seasonalityNotes) || sanitizePublicText(item.summary)).filter((value): value is string => value !== null);
+    if (seasonalityLines.length > 0) items.push({ label: "Crowds and seasonality", lines: seasonalityLines.slice(0, 3) });
+    const realityLines = modules.realityCheck.map((item) => sanitizePublicText(item.summary)).filter((value): value is string => value !== null);
+    if (realityLines.length > 0) items.push({ label: "Who tends to love or struggle with this destination", lines: realityLines });
+    return items;
+  }, [destination.v31Modules, destination.climate]);
+
   const intelligenceProfile = buildDestinationIntelligenceProfile({
     slug: destination.slug,
     city: destination.city,
@@ -1699,9 +1782,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   // STEP 6: persisted neighborhood rows are authoritative for a v3.1 destination - never fall
   // back to the legacy engine's generic "${city} center" single entry, and never fabricate one
   // when a destination genuinely has zero persisted neighborhoods (the section is simply empty).
-  // Up to 8 real persisted neighborhoods are made available for presentation; only the first
-  // `visibleNeighborhoodCount` (default 4, expandable) are actually rendered - see the two render
-  // sites below and the "Explore more neighborhoods" control.
+  // Up to 8 real persisted neighborhoods are made available and all are rendered directly.
   const neighborhoods = (hasV31Bundle
     ? (destination.v31Modules?.neighborhoods ?? []).map((item) => ({
         name: item.name ?? item.neighborhoodKey,
@@ -1724,9 +1805,6 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
       vibe,
     };
   });
-  const visibleNeighborhoods = neighborhoods.slice(0, visibleNeighborhoodCount);
-  const hasMoreNeighborhoods = neighborhoods.length > visibleNeighborhoods.length;
-  const canShowFewerNeighborhoods = visibleNeighborhoodCount > 4;
   const golfGroups = (destination.neighborhoodIntelligence?.length ? destination.neighborhoodIntelligence : buildNeighborhoodIntelligenceSeedData(destination))
     .filter((group) => /golf/i.test(group.category))
     .slice(0, 4);
@@ -1734,12 +1812,6 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     destination.knowledgeProfile?.golf?.join(", ") || destination.golf?.join(", ") || null,
     golfGroups.length > 0 ? `${golfGroups.length} verified golf-focused neighborhood records` : null,
   ].filter(Boolean).join(" • ");
-
-  const viewTabs: Array<{ id: ViewMode; label: string }> = [
-    { id: "guide", label: "Destination Guide" },
-    { id: "profile", label: "Premium Profile" },
-    { id: "deep", label: "Deep Dive" },
-  ];
 
   const deepDiveSections = [
     {
@@ -1802,42 +1874,33 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                 </div>
               </aside>
             </div>
-            <div role="tablist" aria-label="Destination page views" className="mt-6 grid w-full grid-cols-3 border border-[#d8ad554f] bg-[#03172ee6] p-1 backdrop-blur-xl sm:w-auto sm:self-start">
-              {viewTabs.map((tab, index) => {
-                const isActive = viewMode === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    role="tab"
-                    type="button"
-                    aria-selected={isActive}
-                    tabIndex={isActive ? 0 : -1}
-                    onClick={() => setViewMode(tab.id)}
-                    onPointerDown={(event) => {
-                      event.preventDefault();
-                      setViewMode(tab.id);
-                    }}
-                    onKeyDown={(event) => {
-                      if (event.key === "ArrowRight") {
-                        event.preventDefault();
-                        const nextIndex = (index + 1) % viewTabs.length;
-                        setViewMode(viewTabs[nextIndex].id);
-                      }
-                      if (event.key === "ArrowLeft") {
-                        event.preventDefault();
-                        const nextIndex = (index - 1 + viewTabs.length) % viewTabs.length;
-                        setViewMode(viewTabs[nextIndex].id);
-                      }
-                    }}
-                    className={`min-h-11 px-3 py-2 text-xs font-semibold transition sm:px-5 sm:text-sm ${isActive ? "bg-[#11aeb6] text-white shadow-[0_12px_30px_rgba(0,0,0,0.24)]" : "text-[#d9e4ee] hover:bg-white/10 hover:text-[#f3c666]"}`}
-                  >
-                    {tab.label}
-                  </button>
-                );
-              })}
-            </div>
           </div>
         </section>
+
+        {/* Plain native anchors, no JS state/scroll-spy - mirrors the proven DestinationStickyNav
+            pattern used on the legacy destination page, kept as a sibling of (not nested inside)
+            the hero so sticky positioning is not fighting the hero's flex-col justify-end layout. */}
+        <nav aria-label="On this page" className="sticky top-[72px] z-30 border-y border-[#d8ad5548] bg-[#03172ee6] backdrop-blur-2xl">
+          <div className="mx-auto max-w-[1440px] overflow-x-auto px-5 py-3 sm:px-8 lg:px-10">
+            <ul className="flex min-w-max items-center gap-2 text-sm">
+              <li>
+                <a href="#destination-guide" className="inline-flex rounded-full border border-[#d8ad554f] bg-white/5 px-3 py-1.5 font-medium text-[#d9e4ee] transition hover:border-cyan-400/40 hover:text-[#f3c666]">
+                  Destination Guide
+                </a>
+              </li>
+              <li>
+                <a href="#practical-details" className="inline-flex rounded-full border border-[#d8ad554f] bg-white/5 px-3 py-1.5 font-medium text-[#d9e4ee] transition hover:border-cyan-400/40 hover:text-[#f3c666]">
+                  Practical Details
+                </a>
+              </li>
+              <li>
+                <a href="#deep-dive" className="inline-flex rounded-full border border-[#d8ad554f] bg-white/5 px-3 py-1.5 font-medium text-[#d9e4ee] transition hover:border-cyan-400/40 hover:text-[#f3c666]">
+                  Deep Dive
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
 
         <section className="mx-5 border-y border-[#d8ad5548] bg-[#061a32] sm:mx-8 lg:mx-10">
           <span className="sr-only">Featured image</span>
@@ -1971,9 +2034,9 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
         </div>
       ) : null}
 
-      {viewMode === "guide" ? (
-        <>
-          <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
+      <section id="destination-guide" className="scroll-mt-28 space-y-8">
+        <h2 className="font-serif text-3xl text-[#fff8e9]">Destination Guide</h2>
+        <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Destination guide</p>
@@ -1996,7 +2059,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">What to know first</p>
                 <div className="mt-3 space-y-2">
-                  {essentialFacts.slice(0, 6).map((fact) => (
+                  {availableFacts.slice(0, 6).map((fact) => (
                     <div key={fact.label} className="flex items-start justify-between gap-4 rounded-2xl border border-white/10 bg-slate-950/40 px-3 py-3">
                       <span className="text-sm text-slate-400">{fact.label}</span>
                       <span className="text-right text-sm font-semibold text-white">{fact.value}</span>
@@ -2020,16 +2083,17 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               ))}
             </div>
           </section>
-        </>
-      ) : viewMode === "profile" ? (
-        <>
-          <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Premium intelligence</p>
-                <h2 className="mt-3 text-2xl font-semibold text-white">Scores and fit</h2>
-              </div>
-              <div className="flex flex-wrap items-center gap-3">
+      </section>
+
+      <section id="practical-details" className="scroll-mt-28 space-y-8">
+        <h2 className="font-serif text-3xl text-[#fff8e9]">Practical Details</h2>
+        <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Premium intelligence</p>
+              <h2 className="mt-3 text-2xl font-semibold text-white">Scores and fit</h2>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
             <div className="rounded-3xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-200">{scoreCards.length} decision lenses</div>
             <Link href={developerToggleHref} className="rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/40 hover:text-cyan-200">
               {developerMode ? "Exit developer view" : "Open developer view"}
@@ -2151,20 +2215,13 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                 <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Neighborhood summary</p>
                 <h2 className="mt-3 text-2xl font-semibold text-white">How the city is experienced block by block</h2>
               </div>
-              <div className="rounded-3xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-200">{visibleNeighborhoods.length} of {neighborhoods.length} districts</div>
+              <div className="rounded-3xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-200">{neighborhoods.length} districts</div>
             </div>
             <div className="mt-6 space-y-4">
-              {visibleNeighborhoods.map((neighborhood, index) => (
+              {neighborhoods.map((neighborhood, index) => (
                 <ExpandableNeighborhoodCard key={neighborhood.name} neighborhood={neighborhood} index={index} destination={destination} />
               ))}
             </div>
-            {hasMoreNeighborhoods || canShowFewerNeighborhoods ? (
-              <div className="mt-4 flex justify-center">
-                <button type="button" onClick={() => setVisibleNeighborhoodCount(hasMoreNeighborhoods ? Math.min(8, neighborhoods.length) : 4)} className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-5 py-2.5 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/50 hover:bg-cyan-500/20">
-                  {hasMoreNeighborhoods ? "Explore more neighborhoods" : "Show fewer neighborhoods"}
-                </button>
-              </div>
-            ) : null}
           </section>
 
           <DestinationLevelUnassignedSection destination={destination} />
@@ -2193,7 +2250,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                     <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">{group.title}</p>
                     <div className="mt-3 space-y-2">
                       {group.items.filter((resource) => resource.url && resource.url.trim().length > 0).slice(0, 4).map((resource) => (
-                        <a key={`${group.title}-${resource.label}`} href={resource.url} target="_blank" rel="noopener noreferrer" className="block rounded-2xl border border-white/10 bg-slate-950/30 px-3 py-3 text-sm text-slate-300">
+                        <a key={`${group.title}-${resource.label}-${resource.url}`} href={resource.url} target="_blank" rel="noopener noreferrer" className="block rounded-2xl border border-white/10 bg-slate-950/30 px-3 py-3 text-sm text-slate-300">
                           {resource.label}
                         </a>
                       ))}
@@ -2203,9 +2260,10 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               </div>
             </div>
           </section>
-        </>
-      ) : (
-        <div className="space-y-8">
+        </section>
+
+        <section id="deep-dive" className="scroll-mt-28 space-y-8">
+          <h2 className="font-serif text-3xl text-[#fff8e9]">Deep Dive</h2>
           <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
@@ -2218,6 +2276,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               {premiumContent.overviewArticle ? <PremiumSectionBlock title="Overview" summary={premiumContent.overviewArticle} body="" readTime={getReadTime(premiumContent.overviewArticle)} eyebrow="Editorial" /> : null}
             </div>
           </section>
+
 
           <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
             <div className="flex flex-wrap items-start justify-between gap-4">
@@ -2256,29 +2315,6 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
           <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Flagship neighborhoods</p>
-                <h2 className="mt-3 text-2xl font-semibold text-white">Premium neighborhood cards</h2>
-              </div>
-            </div>
-            <div className="mt-6 space-y-4">
-              {visibleNeighborhoods.map((neighborhood, index) => (
-                <ExpandableNeighborhoodCard key={neighborhood.name} neighborhood={neighborhood} index={index} destination={destination} />
-              ))}
-            </div>
-            {hasMoreNeighborhoods || canShowFewerNeighborhoods ? (
-              <div className="mt-4 flex justify-center">
-                <button type="button" onClick={() => setVisibleNeighborhoodCount(hasMoreNeighborhoods ? Math.min(8, neighborhoods.length) : 4)} className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-5 py-2.5 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/50 hover:bg-cyan-500/20">
-                  {hasMoreNeighborhoods ? "Explore more neighborhoods" : "Show fewer neighborhoods"}
-                </button>
-              </div>
-            ) : null}
-          </section>
-
-          <DestinationLevelUnassignedSection destination={destination} />
-
-          <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
                 <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Scores and explanations</p>
                 <h2 className="mt-3 text-2xl font-semibold text-white">Why the destination scores the way it does</h2>
               </div>
@@ -2295,40 +2331,27 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             </div>
           </section>
 
-          <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Resources</p>
-                <h2 className="mt-3 text-2xl font-semibold text-white">Maps, housing, healthcare, and local intelligence</h2>
-              </div>
-            </div>
-            <div className="mt-6 grid gap-4 lg:grid-cols-2">
-              {coreLinks.length > 0 ? (
-                <div className="space-y-3 rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
-                  {coreLinks.map((item) => (
-                    <a key={item.label} href={item.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-sm text-slate-300">
-                      <span>{item.label}</span>
-                      <span className="text-cyan-300">Open</span>
-                    </a>
-                  ))}
-                </div>
-              ) : null}
-              <div className="space-y-4">
-                {resourceGroups.map((group) => (
-                  <div key={group.title} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">{group.title}</p>
-                    <div className="mt-3 space-y-2">
-                      {group.items.filter((resource) => resource.url && resource.url.trim().length > 0).slice(0, 4).map((resource) => (
-                        <a key={`${group.title}-${resource.label}`} href={resource.url} target="_blank" rel="noopener noreferrer" className="block rounded-2xl border border-white/10 bg-slate-950/30 px-3 py-3 text-sm text-slate-300">
-                          {resource.label}
-                        </a>
+          {[
+            { title: "Practical Living Snapshot", items: practicalLivingSnapshot },
+            { title: "Community and Personal Comfort", items: communityAndPersonalComfort },
+            { title: "Reality and Environment", items: realityAndEnvironment },
+          ].filter((panel) => panel.items.length > 0).map((panel) => (
+            <section key={panel.title} className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
+              <h2 className="text-2xl font-semibold text-white">{panel.title}</h2>
+              <div className="mt-6 grid gap-4 md:grid-cols-2">
+                {panel.items.map((item) => (
+                  <div key={item.label} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
+                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">{item.label}</p>
+                    <ul className="mt-3 space-y-2">
+                      {item.lines.map((line, index) => (
+                        <li key={index} className="text-sm leading-6 text-slate-300">{line}</li>
                       ))}
-                    </div>
+                    </ul>
                   </div>
                 ))}
               </div>
-            </div>
-          </section>
+            </section>
+          ))}
 
           {/* Raw per-module fields (notes/severity/TriState tokens) - developer/admin diagnostic only, never public. */}
           {hasV31Bundle && developerMode ? (
@@ -2379,8 +2402,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               </div>
             </section>
           ) : null}
-        </div>
-      )}
+        </section>
 
       {developerMode ? (
         <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">

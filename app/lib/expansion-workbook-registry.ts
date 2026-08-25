@@ -35,6 +35,13 @@ export interface ExpansionWorkbookRegistryEntry {
 
 export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntry[] = [
   {
+    registryId: "batch-01",
+    workbookPath: "data/DestinationFinderAI_Expansion_Batch_01_5_Destinations_v3.2.xlsx",
+    environment: "preview",
+    expectedDestinationKeys: ["the-villages-fl-us", "sofia-bg", "puerto-vallarta-mx", "hoi-an-vn", "queenstown-nz"],
+    expectedSha256: "bbf101ee758733349109943510369d07c666fca1decee30250a9d2fa73016a4a",
+  },
+  {
     registryId: "batch-02",
     workbookPath: "data/DestinationFinderAI_Expansion_Batch_02_5_Destinations_v3.2.xlsx",
     environment: "preview",
@@ -163,7 +170,13 @@ export async function loadExpansionWorkbookDestinationBundle(
 export async function loadExpansionWorkbookRawIdentity(
   destinationKey: string,
   registry: readonly ExpansionWorkbookRegistryEntry[] = EXPANSION_WORKBOOK_REGISTRY,
-): Promise<{ readonly population: string | null; readonly metroPopulation: string | null; readonly elevationMeters: string | null } | null> {
+): Promise<{
+  readonly population: string | null;
+  readonly metroPopulation: string | null;
+  readonly elevationMeters: string | null;
+  readonly officialTourismUrl: string | null;
+  readonly googleMapsUrl: string | null;
+} | null> {
   if (!isExpansionWorkbookPreviewEnabled()) return null;
   const entry = findOwningEntry(destinationKey, registry);
   if (!entry) return null;
@@ -176,6 +189,10 @@ export async function loadExpansionWorkbookRawIdentity(
     population: canonical.identity.population ?? null,
     metroPopulation: canonical.identity.metroPopulation ?? null,
     elevationMeters: canonical.identity.elevationMeters ?? null,
+    // These two DESTINATIONS-sheet columns are real, authored links (unlike youtube/tiktok/instagram/
+    // webcam, which have no workbook column at all in any schema version) - never fabricated here.
+    officialTourismUrl: canonical.destinationRow?.official_tourism_url ?? null,
+    googleMapsUrl: canonical.destinationRow?.google_maps_url ?? null,
   };
 }
 

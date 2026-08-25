@@ -241,4 +241,141 @@ describe("v31 canonical-to-stored-state adapter", () => {
       displayOrder: null,
     });
   });
+
+  it("preserves description, official, stayModeKey, sourceName, sourceUrl, verified, and verifiedAt for a real RESOURCES row", () => {
+    const canonicalDestination = createCanonicalDestination({
+      resources: [
+        {
+          destination_key: "dest-a",
+          resource_key: "resource-1",
+          resource_category: "hotels",
+          resource_name: "Grand Hotel",
+          description: "A centrally located hotel.",
+          url: "https://example.com/grand-hotel",
+          official: "0",
+          stay_mode_key: "SHORT_1_3_MONTHS",
+          display_order: "1",
+          source_name: "Grand Hotel official website",
+          source_url: "https://example.com/grand-hotel/about",
+          verified: "1",
+          verified_at: "2026-08-16",
+        } as unknown as DeterministicV31CanonicalDestination["resources"][number],
+      ],
+    });
+
+    const result = mapCanonicalDestinationToStoredState(canonicalDestination);
+
+    expect(result.resources).toHaveLength(1);
+    expect(result.resources[0]).toMatchObject({
+      category: "hotels",
+      name: "Grand Hotel",
+      url: "https://example.com/grand-hotel",
+      description: "A centrally located hotel.",
+      official: "0",
+      stayModeKey: "SHORT_1_3_MONTHS",
+      sourceName: "Grand Hotel official website",
+      sourceUrl: "https://example.com/grand-hotel/about",
+      verified: "1",
+      verifiedAt: "2026-08-16",
+    });
+  });
+
+  it("leaves description/official/stayModeKey/sourceName/sourceUrl/verified/verifiedAt null when the canonical RESOURCES row has no value, without fabricating any of them", () => {
+    const canonicalDestination = createCanonicalDestination({
+      resources: [
+        {
+          destination_key: "dest-a",
+          resource_key: "resource-1",
+          resource_category: "hotels",
+          resource_name: "Grand Hotel",
+          description: null,
+          url: "https://example.com/grand-hotel",
+          official: null,
+          stay_mode_key: null,
+          display_order: null,
+          source_name: null,
+          source_url: null,
+          verified: null,
+          verified_at: null,
+        } as unknown as DeterministicV31CanonicalDestination["resources"][number],
+      ],
+    });
+
+    const result = mapCanonicalDestinationToStoredState(canonicalDestination);
+
+    expect(result.resources[0]).toMatchObject({
+      description: null,
+      official: null,
+      stayModeKey: null,
+      sourceName: null,
+      sourceUrl: null,
+      verified: null,
+      verifiedAt: null,
+    });
+  });
+
+  it("preserves description, official, sourceUrl, verified, and verifiedAt for a real PROPERTY_RESOURCES row", () => {
+    const canonicalDestination = createCanonicalDestination({
+      propertyResources: [
+        {
+          destination_key: "dest-a",
+          resource_key: "property-1",
+          transaction_type: "rent",
+          resource_name: "Local Rentals Agency",
+          resource_type: "rental_agency",
+          url: "https://example.com/rentals",
+          official: "0",
+          description: "A local rental agency.",
+          source_url: "https://example.com/rentals/about",
+          verified: "1",
+          verified_at: "2026-08-16",
+        } as unknown as DeterministicV31CanonicalDestination["propertyResources"][number],
+      ],
+    });
+
+    const result = mapCanonicalDestinationToStoredState(canonicalDestination);
+
+    expect(result.propertyResources).toHaveLength(1);
+    expect(result.propertyResources[0]).toMatchObject({
+      category: "rental_agency",
+      name: "Local Rentals Agency",
+      url: "https://example.com/rentals",
+      description: "A local rental agency.",
+      official: "0",
+      sourceUrl: "https://example.com/rentals/about",
+      verified: "1",
+      verifiedAt: "2026-08-16",
+    });
+  });
+
+  it("leaves description/official/sourceUrl/verified/verifiedAt null when the canonical PROPERTY_RESOURCES row has no value, without fabricating any of them", () => {
+    const canonicalDestination = createCanonicalDestination({
+      propertyResources: [
+        {
+          destination_key: "dest-a",
+          resource_key: "property-1",
+          transaction_type: "rent",
+          resource_name: "Local Rentals Agency",
+          resource_type: "rental_agency",
+          url: "https://example.com/rentals",
+          official: null,
+          description: null,
+          source_url: null,
+          verified: null,
+          verified_at: null,
+        } as unknown as DeterministicV31CanonicalDestination["propertyResources"][number],
+      ],
+    });
+
+    const result = mapCanonicalDestinationToStoredState(canonicalDestination);
+
+    expect(result.propertyResources[0]).toMatchObject({
+      description: null,
+      official: null,
+      sourceUrl: null,
+      verified: null,
+      verifiedAt: null,
+    });
+  });
 });
+

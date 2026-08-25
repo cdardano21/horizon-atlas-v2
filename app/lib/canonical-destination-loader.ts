@@ -10,6 +10,7 @@ import { loadPersistedDestinationFromRuntime } from "./runtime/persisted-destina
 import type { NormalizedPersistedDestinationBundle } from "./persistence/v31/materialize-stored-destination-state";
 import type { ResolvedDestinationIdentity } from "./persistence/v31/types";
 import { loadExpansionWorkbookDestinationBundle, loadExpansionWorkbookRawIdentity, resolveExpansionWorkbookDestinationKey } from "./expansion-workbook-registry";
+import { buildGeneratedScalarDiscoveryLinks, buildGeneratedTravelResources, mergeAuthoredAndGeneratedResources } from "./destination-travel-resources";
 
 const normalizeTextValue = (value: string | null | undefined) => {
   if (typeof value !== "string") return "";
@@ -394,9 +395,11 @@ const mapCostAndClimate = (bundle: NormalizedPersistedDestinationBundle): { cost
   housing: bundle.housing.map((item) => ({ summary: item.summary, buyingSummary: item.buyingSummary, rentalSummary: item.rentalSummary })),
 });
 
-const mapHealthcareAndSafety = (bundle: NormalizedPersistedDestinationBundle): { healthcare: CanonicalDestinationV31Modules["healthcare"]; safetyRisks: CanonicalDestinationV31Modules["safetyRisks"] } => ({
+const mapHealthcareAndSafety = (bundle: NormalizedPersistedDestinationBundle): { healthcare: CanonicalDestinationV31Modules["healthcare"]; safetyRisks: CanonicalDestinationV31Modules["safetyRisks"]; environmentQuality: CanonicalDestinationV31Modules["environmentQuality"]; dailyLifePracticality: CanonicalDestinationV31Modules["dailyLifePracticality"] } => ({
   healthcare: bundle.healthcare.map((item) => ({ summary: item.summary, publicAccessSummary: item.publicAccessSummary, insuranceSummary: item.insuranceSummary })),
   safetyRisks: bundle.safetyRisks.map((item) => ({ itemKey: item.itemKey, summary: item.summary, topic: item.topic, severity: item.severity })),
+  environmentQuality: bundle.environmentQuality ? { summary: bundle.environmentQuality.summary, qualityNotes: bundle.environmentQuality.qualityNotes } : null,
+  dailyLifePracticality: bundle.dailyLifePracticality ? { summary: bundle.dailyLifePracticality.summary, practicalityNotes: bundle.dailyLifePracticality.practicalityNotes } : null,
 });
 
 const mapVisaTaxesAndBureaucracy = (bundle: NormalizedPersistedDestinationBundle): { visaResidency: CanonicalDestinationV31Modules["visaResidency"]; taxesFinance: CanonicalDestinationV31Modules["taxesFinance"]; bureaucracySetup: CanonicalDestinationV31Modules["bureaucracySetup"]; lgbtqInclusivity: CanonicalDestinationV31Modules["lgbtqInclusivity"] } => ({
@@ -455,6 +458,8 @@ export const buildCanonicalDestinationV31Modules = (bundle: NormalizedPersistedD
     housing: costAndClimate.housing,
     healthcare: healthcareAndSafety.healthcare,
     safetyRisks: healthcareAndSafety.safetyRisks,
+    environmentQuality: healthcareAndSafety.environmentQuality,
+    dailyLifePracticality: healthcareAndSafety.dailyLifePracticality,
     visaResidency: visaTaxesAndBureaucracy.visaResidency,
     taxesFinance: visaTaxesAndBureaucracy.taxesFinance,
     bureaucracySetup: visaTaxesAndBureaucracy.bureaucracySetup,
@@ -481,7 +486,13 @@ export const buildCanonicalDestinationFromPersistedBundle = (
   fallbackDestination: CanonicalDestination,
   bundle: NormalizedPersistedDestinationBundle,
   workbookData?: PremiumWorkbookNormalizedDestinationData | null,
-  rawIdentity?: { readonly population?: string | null; readonly metroPopulation?: string | null; readonly elevationMeters?: string | null } | null,
+  rawIdentity?: {
+    readonly population?: string | null;
+    readonly metroPopulation?: string | null;
+    readonly elevationMeters?: string | null;
+    readonly officialTourismUrl?: string | null;
+    readonly googleMapsUrl?: string | null;
+  } | null,
 ): CanonicalDestination => {
   // The v3.1/v3.2 DESTINATIONS schema has no separate "city" column - destination_name (bundle.identity.name)
   // IS the real display name. Only fall back to the generic title-cased-slug fallback when neither real
@@ -493,6 +504,21 @@ export const buildCanonicalDestinationFromPersistedBundle = (
   const heroNarrative = normalizeTextValue(bundle.editorial.shortDescription) || normalizeTextValue(workbookData?.heroNarrative) || fallbackDestination.heroNarrative;
   const overview = normalizeTextValue(bundle.editorial.longDescription) || normalizeTextValue(workbookData?.overview) || fallbackDestination.overview;
   const editorial = normalizeTextValue(bundle.editorial.longDescription) || normalizeTextValue(workbookData?.editorial) || fallbackDestination.editorial;
+
+  // Real, authored destination-level links take priority; a deterministic, clearly-labeled search
+  // utility (never claimed as "official"/"verified") fills any remaining gap rather than leaving a
+  // permanently blank/hidden slot. officialTourismUrl is the one exception: its UI label says
+  // "Official tourism website" verbatim, so it stays real-only (blank when no authored value exists)
+  // - a generated search utility for tourism info is offered separately via the resources array below.
+  const generatedScalarLinks = buildGeneratedScalarDiscoveryLinks({ publicName: title, country });
+  const v31OfficialTourismUrl = normalizeTextValue(workbookData?.officialTourismUrl) || normalizeTextValue(rawIdentity?.officialTourismUrl);
+  const v31GoogleMapsUrl = normalizeTextValue(workbookData?.googleMapsUrl) || normalizeTextValue(rawIdentity?.googleMapsUrl) || generatedScalarLinks.googleMapsUrl;
+  const v31GoogleEarthUrl = normalizeTextValue(workbookData?.googleEarthUrl) || generatedScalarLinks.googleEarthUrl;
+  const v31WikipediaUrl = normalizeTextValue(workbookData?.wikipediaUrl) || generatedScalarLinks.wikipediaUrl;
+  const v31YoutubeUrl = generatedScalarLinks.youtubeUrl;
+  const v31TiktokUrl = generatedScalarLinks.tiktokUrl;
+  const v31InstagramUrl = generatedScalarLinks.instagramUrl;
+  const v31WebcamUrl = generatedScalarLinks.webcamUrl;
 
   const persistedMedia = bundle.media
     .map((item) => ({
@@ -536,7 +562,27 @@ export const buildCanonicalDestinationFromPersistedBundle = (
       url: normalizeTextValue(item.url) || "",
     }))
     .filter((item) => item.url);
-  const resources = selectRicherPersistedArraySource(persistedResources, workbookResources, fallbackDestination.resources ?? []);
+  // Authored PROPERTY_RESOURCES rows (buy/rent portals, agencies) are real estate/housing resources -
+  // tagged with the same "housing" category the generated long-term-rental/property-for-sale search
+  // utilities use, so an authored property resource takes priority over its generated equivalent
+  // (via mergeAuthoredAndGeneratedResources's category-exact-match suppression) instead of the two
+  // coexisting redundantly, and both render in the same existing Housing resource group.
+  const persistedPropertyResources = bundle.propertyResources
+    .map((item) => ({
+      category: "housing",
+      label: normalizeTextValue(item.name) || "Property resource",
+      provider: null,
+      url: normalizeTextValue(item.url) || "",
+    }))
+    .filter((item) => item.url);
+  // The permanent, destination-agnostic Travel-resource system (see destination-travel-resources.ts):
+  // an authored resource (from the workbook RESOURCES sheet or premium workbook data) always overrides
+  // a generated utility for the same category; a destination with zero authored resources still
+  // receives the full generated set, keyed only by its real public name/country - never a stale
+  // slug-derived name, never a Batch-specific branch.
+  const authoredResources = [...persistedResources, ...workbookResources, ...persistedPropertyResources];
+  const generatedTravelResources = buildGeneratedTravelResources({ publicName: title, country });
+  const resources = mergeAuthoredAndGeneratedResources(authoredResources, generatedTravelResources);
 
   const persistedNeighborhoods = bundle.neighborhoods
     .map((item) => normalizeTextValue(item.name))
@@ -647,6 +693,14 @@ export const buildCanonicalDestinationFromPersistedBundle = (
     heroNarrative,
     overview,
     editorial,
+    officialTourismUrl: v31OfficialTourismUrl,
+    googleMapsUrl: v31GoogleMapsUrl,
+    googleEarthUrl: v31GoogleEarthUrl,
+    wikipediaUrl: v31WikipediaUrl,
+    youtubeUrl: v31YoutubeUrl,
+    tiktokUrl: v31TiktokUrl,
+    instagramUrl: v31InstagramUrl,
+    webcamUrl: v31WebcamUrl,
     climate: v31Climate || fallbackDestination.climate,
     transportation: v31Transportation || fallbackDestination.transportation,
     healthcare: v31Healthcare || fallbackDestination.healthcare,
@@ -660,6 +714,16 @@ export const buildCanonicalDestinationFromPersistedBundle = (
     costOfLivingProfile: v31CostOfLivingProfile,
     resources,
     structuredResources: resources,
+    // The generic Travel-resource system above already covers housing/rental/property, healthcare,
+    // weather and visa/government search utilities (all correctly keyed by the real public name) - these
+    // legacy arrays are cleared for a resolved v3.1/v3.2 bundle rather than inheriting
+    // fallbackDestination's stale slug-derived-name versions of the same content (the prior
+    // "Ascoli Piceno It"-style suffix leak).
+    realEstateResources: [],
+    rentalResources: [],
+    healthcareResources: [],
+    weatherResources: [],
+    visaResources: [],
     videos: [],
     media: normalizedMedia,
     heroImages: normalizedMedia,

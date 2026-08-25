@@ -425,6 +425,23 @@ describe("canonical destination loader", () => {
     expect(destination?.media[0]?.url).toBe("https://cdn.dfai-assets.com/lisbon.jpg");
     expect(destination?.resources[0]?.label).toBe("Visit Lisboa");
     expect(mockedLoadPersistedDestinationFromRuntime).toHaveBeenCalled();
+
+    // Regression: youtube/tiktok/instagram/webcam have no authored workbook column in any known
+    // schema version - a resolved persisted-bundle destination must now receive a deterministic,
+    // clearly-generated search-style utility link for them (never left blank/broken), generated
+    // generically off the destination's real title/country, even for an approved golden pilot.
+    expect(destination?.youtubeUrl).toContain("youtube.com/results");
+    expect(destination?.tiktokUrl).toContain("tiktok.com/search");
+    expect(destination?.instagramUrl).toContain("instagram.com/explore/tags/");
+    expect(destination?.webcamUrl).toContain("google.com/search");
+    // officialTourismUrl must be either a real authored value or blank - it always keeps a
+    // dedicated "Official tourism website" UI label, so it must never receive a generated substitute.
+    expect(destination?.officialTourismUrl ?? "").toBe("");
+    // googleMapsUrl/googleEarthUrl/wikipediaUrl now fall back to a deterministic generated utility
+    // when no authored value exists, since Lisbon's title/country are known.
+    expect(destination?.googleMapsUrl).toContain("google.com/maps");
+    expect(destination?.googleEarthUrl).toContain("earth.google.com/web/search/");
+    expect(destination?.wikipediaUrl).toContain("en.wikipedia.org/wiki/");
   });
 
   it("resolves a brand-new, non-pilot destination through the persisted runtime path using only its real destination_key, with no source-code allowlist entry required", async () => {
@@ -433,12 +450,12 @@ describe("canonical destination loader", () => {
       json: async () => [{
         id: "dest-future-batch",
         destination_id: "dest-future-batch",
-        destination_key: "sofia-bg",
-        slug: "sofia-bulgaria",
-        city: "Sofia",
+        destination_key: "plovdiv-bg",
+        slug: "plovdiv-bulgaria",
+        city: "Plovdiv",
         country: "Bulgaria",
-        title: "Sofia",
-        subtitle: "Sofia, Bulgaria",
+        title: "Plovdiv",
+        subtitle: "Plovdiv, Bulgaria",
         neighborhoods: [],
         resources: [],
         videos: [],
@@ -451,11 +468,11 @@ describe("canonical destination loader", () => {
     mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
       outcome: "SUCCESS",
       bundle: {
-        destinationKey: "sofia-bg",
-        identity: { slug: "sofia-bulgaria", name: "Sofia", city: "Sofia", country: "Bulgaria" },
+        destinationKey: "plovdiv-bg",
+        identity: { slug: "plovdiv-bulgaria", name: "Plovdiv", city: "Plovdiv", country: "Bulgaria" },
         editorial: {
-          shortDescription: "Persisted Sofia short description",
-          longDescription: "Persisted Sofia long description",
+          shortDescription: "Persisted Plovdiv short description",
+          longDescription: "Persisted Plovdiv long description",
           currency: "BGN",
           primaryLanguage: "Bulgarian",
           timeZone: "EET",
@@ -495,12 +512,12 @@ describe("canonical destination loader", () => {
       },
     } as never);
 
-    const destination = await getCanonicalDestination("sofia-bulgaria");
+    const destination = await getCanonicalDestination("plovdiv-bulgaria");
 
     expect(destination).not.toBeNull();
-    expect(destination?.title).toBe("Sofia");
-    expect(destination?.heroNarrative).toBe("Persisted Sofia short description");
-    expect(mockedLoadPersistedDestinationFromRuntime).toHaveBeenCalledWith(expect.objectContaining({ destinationKey: "sofia-bg" }));
+    expect(destination?.title).toBe("Plovdiv");
+    expect(destination?.heroNarrative).toBe("Persisted Plovdiv short description");
+    expect(mockedLoadPersistedDestinationFromRuntime).toHaveBeenCalledWith(expect.objectContaining({ destinationKey: "plovdiv-bg" }));
     // The runtime must never live-parse the frozen workbook for a non-golden-pilot destination.
     expect(mockedLoadPremiumWorkbookDestinationData).not.toHaveBeenCalled();
   });
@@ -1775,14 +1792,14 @@ describe("STEP 11: renderer-integration authority contract", () => {
   });
 
   describe("identity resolution safety", () => {
-    it("the-villages-florida-united-states can never resolve to Athens", async () => {
+    it("the-meadowlands-florida-united-states can never resolve to Athens", async () => {
       // No exact slug row, no exact destination_key row - simulates the real RLS-blocked draft
       // scenario. Historically this fell through to a fuzzy substring search that matched the
       // bare token "the" against a published "Athens" row.
       mockedSupabaseFetch.mockResolvedValue({ ok: true, json: async () => [] } as Response);
       mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "FAILED", failure: { reason: "DB_READ_FAILED", destinationIdentity: { destinationKey: "", destinationId: "" } } } as never);
 
-      const destination = await getCanonicalDestination("the-villages-florida-united-states");
+      const destination = await getCanonicalDestination("the-meadowlands-florida-united-states");
 
       expect(destination).not.toBeNull();
       expect(destination?.city).not.toBe("Athens");
@@ -1795,11 +1812,11 @@ describe("STEP 11: renderer-integration authority contract", () => {
       }
     });
 
-    it("puerto-vallarta-mexico can never resolve to Puerto Escondido", async () => {
+    it("puerto-esperanza-mexico can never resolve to Puerto Escondido", async () => {
       mockedSupabaseFetch.mockResolvedValue({ ok: true, json: async () => [] } as Response);
       mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "FAILED", failure: { reason: "DB_READ_FAILED", destinationIdentity: { destinationKey: "", destinationId: "" } } } as never);
 
-      const destination = await getCanonicalDestination("puerto-vallarta-mexico");
+      const destination = await getCanonicalDestination("puerto-esperanza-mexico");
 
       expect(destination).not.toBeNull();
       expect(destination?.city).not.toBe("Puerto Escondido");
@@ -1811,17 +1828,17 @@ describe("STEP 11: renderer-integration authority contract", () => {
         if (path.includes("/rest/v1/destinations_catalog?slug=eq.")) {
           return { ok: true, json: async () => [] } as Response;
         }
-        if (path.includes("/rest/v1/destinations_catalog?destination_key=eq.hoi-an-vn")) {
-          return { ok: true, json: async () => [{ id: "id-hoi-an", destination_id: "id-hoi-an", destination_key: "hoi-an-vn", slug: "hoi-an-vietnam", city: "", country: "", neighborhoods: [], resources: [], videos: [], media: [], sections: {}, scoring: [] }] } as Response;
+        if (path.includes("/rest/v1/destinations_catalog?destination_key=eq.da-nang-vn")) {
+          return { ok: true, json: async () => [{ id: "id-da-nang", destination_id: "id-da-nang", destination_key: "da-nang-vn", slug: "da-nang-vietnam", city: "", country: "", neighborhoods: [], resources: [], videos: [], media: [], sections: {}, scoring: [] }] } as Response;
         }
         return { ok: true, json: async () => [] } as Response;
       });
-      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "hoi-an-vn", identity: { slug: "hoi-an-vietnam", name: "Hoi An", city: "Hoi An", country: "Vietnam" } }) } as never);
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "da-nang-vn", identity: { slug: "da-nang-vietnam", name: "Da Nang", city: "Da Nang", country: "Vietnam" } }) } as never);
 
-      const destination = await getCanonicalDestination("hoi-an-vn");
+      const destination = await getCanonicalDestination("da-nang-vn");
 
-      expect(destination?.city).toBe("Hoi An");
-      expect(destination?.v31DestinationKey).toBe("hoi-an-vn");
+      expect(destination?.city).toBe("Da Nang");
+      expect(destination?.v31DestinationKey).toBe("da-nang-vn");
     });
 
     it("exact legacy slugs continue to resolve unaffected", async () => {
@@ -1867,10 +1884,10 @@ describe("STEP 11: renderer-integration authority contract", () => {
 
   describe("real facts mapping", () => {
     it("maps persisted population, healthcare, and climate facts into the view model", async () => {
-      mockExactCatalogRow("the-villages-fl-us", "the-villages-florida-united-states");
-      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "the-villages-fl-us" }) } as never);
+      mockExactCatalogRow("the-meadowlands-fl-us", "the-meadowlands-florida-united-states");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "the-meadowlands-fl-us" }) } as never);
 
-      const destination = await getCanonicalDestination("the-villages-florida-united-states");
+      const destination = await getCanonicalDestination("the-meadowlands-florida-united-states");
 
       expect(destination?.knowledgeProfile?.population).toBe("123,456");
       expect(destination?.knowledgeProfile?.metroPopulation).toBe("Metro area: 200,000");
@@ -1883,10 +1900,10 @@ describe("STEP 11: renderer-integration authority contract", () => {
 
   describe("destination-level score mapping (STEP 5 - display mapping only, no quiz/recommendation logic)", () => {
     it("maps real persisted DESTINATION_SCORES rows into v31Modules.scores", async () => {
-      mockExactCatalogRow("sofia-bg", "sofia-bulgaria");
-      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "sofia-bg" }) } as never);
+      mockExactCatalogRow("plovdiv-bg", "plovdiv-bulgaria");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "plovdiv-bg" }) } as never);
 
-      const destination = await getCanonicalDestination("sofia-bulgaria");
+      const destination = await getCanonicalDestination("plovdiv-bulgaria");
 
       expect(destination?.v31Modules?.scores).toEqual([
         { scoreKey: "retirement", scoreValue: "91", scoreLabel: "Excellent" },
@@ -1895,10 +1912,10 @@ describe("STEP 11: renderer-integration authority contract", () => {
     });
 
     it("the hardcoded 76/74/72/78 fallback scores are not present anywhere in a resolved v3.1 destination's scoring", async () => {
-      mockExactCatalogRow("sofia-bg", "sofia-bulgaria");
-      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "sofia-bg" }) } as never);
+      mockExactCatalogRow("plovdiv-bg", "plovdiv-bulgaria");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "plovdiv-bg" }) } as never);
 
-      const destination = await getCanonicalDestination("sofia-bulgaria");
+      const destination = await getCanonicalDestination("plovdiv-bulgaria");
       const scoreValues = (destination?.v31Modules?.scores ?? []).map((score) => score.scoreValue);
       expect(scoreValues).not.toContain("76");
       expect(scoreValues).not.toContain("74");
@@ -1907,10 +1924,10 @@ describe("STEP 11: renderer-integration authority contract", () => {
     });
 
     it("does not introduce any personalized quiz/match/recommendation scoring field or module", async () => {
-      mockExactCatalogRow("sofia-bg", "sofia-bulgaria");
-      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "sofia-bg" }) } as never);
+      mockExactCatalogRow("plovdiv-bg", "plovdiv-bulgaria");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "plovdiv-bg" }) } as never);
 
-      const destination = await getCanonicalDestination("sofia-bulgaria");
+      const destination = await getCanonicalDestination("plovdiv-bulgaria");
       const serialized = JSON.stringify(destination);
       expect(serialized.toLowerCase()).not.toContain("matchpercentage");
       expect(serialized.toLowerCase()).not.toContain("quizanswer");
@@ -1921,10 +1938,10 @@ describe("STEP 11: renderer-integration authority contract", () => {
 
   describe("real neighborhoods mapping (STEP 6)", () => {
     it("maps persisted neighborhoods and never fabricates a generic city-center entry", async () => {
-      mockExactCatalogRow("hoi-an-vn", "hoi-an-vietnam");
-      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "hoi-an-vn", identity: { slug: "hoi-an-vietnam", name: "Hoi An", city: "Hoi An", country: "Vietnam" } }) } as never);
+      mockExactCatalogRow("da-nang-vn", "da-nang-vietnam");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "da-nang-vn", identity: { slug: "da-nang-vietnam", name: "Da Nang", city: "Da Nang", country: "Vietnam" } }) } as never);
 
-      const destination = await getCanonicalDestination("hoi-an-vietnam");
+      const destination = await getCanonicalDestination("da-nang-vietnam");
 
       expect(destination?.v31Modules?.neighborhoods.map((n) => n.name)).toEqual(["Real Neighborhood One", "Real Neighborhood Two"]);
       expect(destination?.neighborhoods).toEqual(["Real Neighborhood One", "Real Neighborhood Two"]);
@@ -1932,10 +1949,10 @@ describe("STEP 11: renderer-integration authority contract", () => {
     });
 
     it("omits neighborhoods rather than fabricating one when a v3.1 destination genuinely has zero persisted rows", async () => {
-      mockExactCatalogRow("queenstown-nz", "queenstown-new-zealand");
-      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "queenstown-nz", neighborhoods: [] }) } as never);
+      mockExactCatalogRow("wanaka-nz", "wanaka-new-zealand");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "wanaka-nz", neighborhoods: [] }) } as never);
 
-      const destination = await getCanonicalDestination("queenstown-new-zealand");
+      const destination = await getCanonicalDestination("wanaka-new-zealand");
 
       expect(destination?.v31Modules?.neighborhoods).toEqual([]);
     });
@@ -1943,10 +1960,10 @@ describe("STEP 11: renderer-integration authority contract", () => {
 
   describe("real media mapping (STEP 7)", () => {
     it("maps persisted media and never falls back to generic stock photos when real media exists", async () => {
-      mockExactCatalogRow("puerto-vallarta-mx", "puerto-vallarta-mexico");
-      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "puerto-vallarta-mx" }) } as never);
+      mockExactCatalogRow("puerto-esperanza-mx", "puerto-esperanza-mexico");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "puerto-esperanza-mx" }) } as never);
 
-      const destination = await getCanonicalDestination("puerto-vallarta-mexico");
+      const destination = await getCanonicalDestination("puerto-esperanza-mexico");
 
       expect(destination?.media.map((item) => item.url)).toEqual([
         "https://commons.wikimedia.org/wiki/Special:FilePath/Real1.jpg",
@@ -1961,10 +1978,10 @@ describe("STEP 11: renderer-integration authority contract", () => {
     });
 
     it("omits media (empty array) rather than using generic stock photos when a v3.1 destination genuinely has zero persisted/workbook media", async () => {
-      mockExactCatalogRow("the-villages-fl-us", "the-villages-florida-united-states");
-      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "the-villages-fl-us", media: [] }) } as never);
+      mockExactCatalogRow("the-meadowlands-fl-us", "the-meadowlands-florida-united-states");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "the-meadowlands-fl-us", media: [] }) } as never);
 
-      const destination = await getCanonicalDestination("the-villages-florida-united-states");
+      const destination = await getCanonicalDestination("the-meadowlands-florida-united-states");
 
       expect(destination?.media).toEqual([]);
       const stockPhotoIds = ["photo-1500530855697-b586d89ba3ee", "photo-1499856871958-5b9627545d1a"];
@@ -1976,10 +1993,10 @@ describe("STEP 11: renderer-integration authority contract", () => {
 
   describe("rich module representative mapping (STEP 8)", () => {
     it("maps representative cost of living, transportation, remote work, pets, family, and retirement rows", async () => {
-      mockExactCatalogRow("the-villages-fl-us", "the-villages-florida-united-states");
-      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "the-villages-fl-us" }) } as never);
+      mockExactCatalogRow("the-meadowlands-fl-us", "the-meadowlands-florida-united-states");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "the-meadowlands-fl-us" }) } as never);
 
-      const destination = await getCanonicalDestination("the-villages-florida-united-states");
+      const destination = await getCanonicalDestination("the-meadowlands-florida-united-states");
 
       expect(destination?.v31Modules?.costOfLiving[0]).toMatchObject({ category: "housing", monthlyLow: "1000", monthlyHigh: "2000" });
       expect(destination?.v31Modules?.transportation[0]?.summary).toContain("Real transportation module summary");
@@ -1992,14 +2009,46 @@ describe("STEP 11: renderer-integration authority contract", () => {
       expect(destination?.retirement).toContain("Real retirement module summary");
       expect(destination?.digitalNomad).toContain("Real remote work module summary");
     });
+
+    it("maps environmentQuality and dailyLifePracticality singleton modules into v31Modules (previously parsed/persisted but silently dropped before reaching the UI)", async () => {
+      mockExactCatalogRow("environment-quality-test-key", "environment-quality-test-slug");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
+        outcome: "SUCCESS",
+        bundle: buildFullNormalizedBundle({
+          destinationKey: "environment-quality-test-key",
+          environmentQuality: { summary: "Generally good air quality with seasonal pollen.", qualityNotes: "Water quality is municipally treated and reliable." },
+          dailyLifePracticality: { summary: "Groceries and pharmacies are easy to reach on foot.", practicalityNotes: "Most residents rely on a car for regional errands." },
+        }),
+      } as never);
+
+      const destination = await getCanonicalDestination("environment-quality-test-slug");
+
+      expect(destination?.v31Modules?.environmentQuality?.summary).toBe("Generally good air quality with seasonal pollen.");
+      expect(destination?.v31Modules?.environmentQuality?.qualityNotes).toBe("Water quality is municipally treated and reliable.");
+      expect(destination?.v31Modules?.dailyLifePracticality?.summary).toBe("Groceries and pharmacies are easy to reach on foot.");
+      expect(destination?.v31Modules?.dailyLifePracticality?.practicalityNotes).toBe("Most residents rely on a car for regional errands.");
+    });
+
+    it("environmentQuality/dailyLifePracticality are null (never fabricated) when the persisted bundle genuinely has none", async () => {
+      mockExactCatalogRow("no-environment-quality-test-key", "no-environment-quality-test-slug");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
+        outcome: "SUCCESS",
+        bundle: buildFullNormalizedBundle({ destinationKey: "no-environment-quality-test-key", environmentQuality: null, dailyLifePracticality: null }),
+      } as never);
+
+      const destination = await getCanonicalDestination("no-environment-quality-test-slug");
+
+      expect(destination?.v31Modules?.environmentQuality).toBeNull();
+      expect(destination?.v31Modules?.dailyLifePracticality).toBeNull();
+    });
   });
 
   describe("fallback policy: real data > omit > fabricated prose", () => {
     it("an absent persisted module is represented as an empty array, never fabricated content", async () => {
-      mockExactCatalogRow("puerto-vallarta-mx", "puerto-vallarta-mexico");
-      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "puerto-vallarta-mx", visaResidency: [], taxesFinance: [], lgbtqInclusivity: [] }) } as never);
+      mockExactCatalogRow("puerto-esperanza-mx", "puerto-esperanza-mexico");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "puerto-esperanza-mx", visaResidency: [], taxesFinance: [], lgbtqInclusivity: [] }) } as never);
 
-      const destination = await getCanonicalDestination("puerto-vallarta-mexico");
+      const destination = await getCanonicalDestination("puerto-esperanza-mexico");
 
       expect(destination?.v31Modules?.visaResidency).toEqual([]);
       expect(destination?.v31Modules?.taxesFinance).toEqual([]);
@@ -2007,9 +2056,9 @@ describe("STEP 11: renderer-integration authority contract", () => {
     });
 
     it("v31Modules is present for a resolved v3.1 destination and absent for a legacy destination", async () => {
-      mockExactCatalogRow("puerto-vallarta-mx", "puerto-vallarta-mexico");
-      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "puerto-vallarta-mx" }) } as never);
-      const v31Destination = await getCanonicalDestination("puerto-vallarta-mexico");
+      mockExactCatalogRow("puerto-esperanza-mx", "puerto-esperanza-mexico");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "puerto-esperanza-mx" }) } as never);
+      const v31Destination = await getCanonicalDestination("puerto-esperanza-mexico");
       expect(v31Destination?.v31Modules).toBeDefined();
 
       mockedSupabaseFetch.mockResolvedValue({
@@ -2020,5 +2069,72 @@ describe("STEP 11: renderer-integration authority contract", () => {
       const legacyDestination = await getCanonicalDestination("barcelona-spain");
       expect(legacyDestination?.v31Modules).toBeUndefined();
     });
+  });
+});
+
+describe("PROPERTY_RESOURCES surfacing (Housing/Property resource presentation)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockedLoadPremiumWorkbookDestinationData.mockResolvedValue(null);
+  });
+
+  it("authored PROPERTY_RESOURCES rows reach the canonical destination's resources array in the Housing category, with name/url preserved", async () => {
+    mockExactCatalogRow("property-resource-test-key", "property-resource-test-slug");
+    mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
+      outcome: "SUCCESS",
+      bundle: buildFullNormalizedBundle({
+        destinationKey: "property-resource-test-key",
+        propertyResources: [
+          { itemKey: "pr-1", category: "official", name: "Homefinder Portal", url: "https://example.com/homefinder", description: "Official new-home search tool.", official: "true", sourceUrl: null, verified: "true", verifiedAt: "2026-01-01" },
+          { itemKey: "pr-2", category: "listing", name: "Realtor Listings", url: "https://example.com/realtor", description: null, official: "false", sourceUrl: null, verified: null, verifiedAt: null },
+        ],
+      }),
+    } as never);
+
+    const destination = await getCanonicalDestination("property-resource-test-slug");
+
+    const housingItems = destination?.resources.filter((resource) => resource.category === "housing") ?? [];
+    expect(housingItems.some((item) => item.label === "Homefinder Portal" && item.url === "https://example.com/homefinder")).toBe(true);
+    expect(housingItems.some((item) => item.label === "Realtor Listings" && item.url === "https://example.com/realtor")).toBe(true);
+  });
+
+  it("authored PROPERTY_RESOURCES take priority over the generated long-term-rental/property-for-sale search utilities for the same destination (no duplication)", async () => {
+    mockExactCatalogRow("property-resource-test-key-2", "property-resource-test-slug-2");
+    mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
+      outcome: "SUCCESS",
+      bundle: buildFullNormalizedBundle({
+        destinationKey: "property-resource-test-key-2",
+        identity: { slug: "property-resource-test-slug-2", name: "Property Test City", city: "Property Test City", country: "Testland" },
+        propertyResources: [
+          { itemKey: "pr-1", category: "agency", name: "Test City Realty", url: "https://example.com/test-city-realty", description: null, official: null, sourceUrl: null, verified: null, verifiedAt: null },
+        ],
+      }),
+    } as never);
+
+    const destination = await getCanonicalDestination("property-resource-test-slug-2");
+
+    const housingItems = destination?.resources.filter((resource) => resource.category === "housing") ?? [];
+    expect(housingItems).toHaveLength(1);
+    expect(housingItems[0]?.label).toBe("Test City Realty");
+    expect(housingItems.some((item) => item.label === "Search long-term rentals")).toBe(false);
+    expect(housingItems.some((item) => item.label === "Search property for sale")).toBe(false);
+  });
+
+  it("a destination with blank PROPERTY_RESOURCES continues to show the generated long-term-rental/property-for-sale search utilities", async () => {
+    mockExactCatalogRow("no-property-resource-test-key", "no-property-resource-test-slug");
+    mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
+      outcome: "SUCCESS",
+      bundle: buildFullNormalizedBundle({
+        destinationKey: "no-property-resource-test-key",
+        identity: { slug: "no-property-resource-test-slug", name: "No Property City", city: "No Property City", country: "Testland" },
+        propertyResources: [],
+      }),
+    } as never);
+
+    const destination = await getCanonicalDestination("no-property-resource-test-slug");
+
+    const housingItems = destination?.resources.filter((resource) => resource.category === "housing") ?? [];
+    expect(housingItems.some((item) => item.label === "Search long-term rentals")).toBe(true);
+    expect(housingItems.some((item) => item.label === "Search property for sale")).toBe(true);
   });
 });

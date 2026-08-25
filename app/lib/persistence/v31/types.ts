@@ -116,6 +116,13 @@ export type StoredResourceShape<T extends DeterministicV31CanonicalResource> = {
   readonly category: CanonicalNullableString<T["resource_category"]>;
   readonly name: CanonicalNullableString<T["resource_name"]>;
   readonly url: CanonicalNullableString<T["url"]>;
+  readonly description: CanonicalNullableString<T["description"]>;
+  readonly official: CanonicalNullableString<T["official"]>;
+  readonly stayModeKey: CanonicalNullableString<T["stay_mode_key"]>;
+  readonly sourceName: CanonicalNullableString<T["source_name"]>;
+  readonly sourceUrl: CanonicalNullableString<T["source_url"]>;
+  readonly verified: CanonicalNullableString<T["verified"]>;
+  readonly verifiedAt: CanonicalNullableString<T["verified_at"]>;
 };
 
 export type StoredMediaShape<T extends DeterministicV31CanonicalMedia> = {
@@ -161,6 +168,11 @@ export type StoredPropertyResourceShape<T extends DeterministicV31CanonicalPrope
   readonly category: CanonicalNullableString<T["resource_type"]>;
   readonly name: CanonicalNullableString<T["resource_name"]>;
   readonly url: CanonicalNullableString<T["url"]>;
+  readonly description: CanonicalNullableString<T["description"]>;
+  readonly official: CanonicalNullableString<T["official"]>;
+  readonly sourceUrl: CanonicalNullableString<T["source_url"]>;
+  readonly verified: CanonicalNullableString<T["verified"]>;
+  readonly verifiedAt: CanonicalNullableString<T["verified_at"]>;
 };
 
 export type StoredHealthcareStateShape<T extends DeterministicV31CanonicalHealthcareState> = {
@@ -392,12 +404,12 @@ type ModuleFieldMapping = {
   scores: { scoreKey: "scoreKey"; scoreValue: "scoreValue"; scoreLabel: "scoreLabel"; methodologyVersion: "methodologyVersion" };
   neighborhoods: { neighborhood_key: "neighborhoodKey"; neighborhood_name: "name"; summary: "summary"; area_type: "areaType" };
   places: { place_key: "placeKey"; category_key: "category"; place_name: "name"; description: "description" };
-  resources: { resource_key: "resourceKey"; resource_category: "category"; resource_name: "name"; url: "url" };
+  resources: { resource_key: "resourceKey"; resource_category: "category"; resource_name: "name"; url: "url"; description: "description"; official: "official"; stay_mode_key: "stayModeKey"; source_name: "sourceName"; source_url: "sourceUrl"; verified: "verified"; verified_at: "verifiedAt" };
   media: { media_key: "mediaKey"; media_type: "kind"; image_url: "url"; caption: "caption"; subject: "altText" };
   costOfLiving: { record_key: "itemKey"; category: "category"; monthly_low: "monthlyLow"; monthly_high: "monthlyHigh"; currency: "currency" };
   climateMonthly: { month: "monthKey"; avg_high_c: "avgHighTemp"; avg_low_c: "avgLowTemp"; rainfall_mm: "precipitationMm"; humidity_pct: "humidityPct" };
   housing: { restrictions_summary: "summary"; buying_process_summary: "buyingSummary"; rental_rules_notes: "rentalSummary" };
-  propertyResources: { resource_key: "itemKey"; resource_type: "category"; resource_name: "name"; url: "url" };
+  propertyResources: { resource_key: "itemKey"; resource_type: "category"; resource_name: "name"; url: "url"; description: "description"; official: "official"; source_url: "sourceUrl"; verified: "verified"; verified_at: "verifiedAt" };
   healthcare: { system_summary: "summary"; public_access_foreigners: "publicAccessSummary"; international_insurance_notes: "insuranceSummary" };
   visaResidency: { visa_type: "summary"; permanent_residency_path: "residencyPath"; citizenship_path: "citizenshipPath" };
   taxesFinance: { summary: "summary"; income_tax_notes: "notes" };

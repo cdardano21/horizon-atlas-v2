@@ -291,6 +291,8 @@ export type CanonicalDestinationV31Modules = {
   readonly housing: readonly CanonicalDestinationV31Singleton[];
   readonly propertyResources: readonly CanonicalDestinationV31Resource[];
   readonly healthcare: readonly CanonicalDestinationV31Singleton[];
+  readonly environmentQuality: CanonicalDestinationV31Singleton | null;
+  readonly dailyLifePracticality: CanonicalDestinationV31Singleton | null;
   readonly visaResidency: readonly CanonicalDestinationV31Singleton[];
   readonly taxesFinance: readonly CanonicalDestinationV31Singleton[];
   readonly lgbtqInclusivity: readonly CanonicalDestinationV31Singleton[];

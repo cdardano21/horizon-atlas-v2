@@ -35,6 +35,16 @@ const mockedLoadPersistedDestinationFromRuntime = vi.mocked(loadPersistedDestina
 
 const BATCH_02_ENTRY = EXPANSION_WORKBOOK_REGISTRY.find((entry) => entry.registryId === "batch-02")!;
 const BATCH02_PATH = path.resolve(process.cwd(), BATCH_02_ENTRY.workbookPath);
+const BATCH_01_ENTRY = EXPANSION_WORKBOOK_REGISTRY.find((entry) => entry.registryId === "batch-01")!;
+const BATCH01_PATH = path.resolve(process.cwd(), BATCH_01_ENTRY.workbookPath);
+
+const EXPECTED_BATCH01 = {
+  "the-villages-fl-us": { title: "The Villages", country: "United States", neighborhoods: 8, places: 28, media: 4, sources: 17 },
+  "sofia-bg": { title: "Sofia", country: "Bulgaria", neighborhoods: 8, places: 26, media: 3, sources: 18 },
+  "puerto-vallarta-mx": { title: "Puerto Vallarta", country: "Mexico", neighborhoods: 8, places: 26, media: 4, sources: 20 },
+  "hoi-an-vn": { title: "Hoi An", country: "Vietnam", neighborhoods: 8, places: 26, media: 4, sources: 19 },
+  "queenstown-nz": { title: "Queenstown", country: "New Zealand", neighborhoods: 8, places: 31, media: 5, sources: 23 },
+} as const;
 
 const EXPECTED = {
   "ascoli-piceno-it": { title: "Ascoli Piceno", country: "Italy", neighborhoods: 7, places: 20, media: 5, sources: 9 },
@@ -158,8 +168,8 @@ describe("Expansion-workbook preview resolver (registry-driven, generic getCanon
     expect(destinationViaAlias!.title).toBe(destinationViaKey!.title);
   }, 30000);
 
-  it("Batch #1 and pilot destination keys are untouched by the expansion-workbook resolver (returns null, falls through to existing logic)", async () => {
-    for (const untouchedSlug of ["lisbon-pt", "new-braunfels-tx-us", "summerlin-nv-us", "hoi-an-vn", "queenstown-nz", "the-villages-fl-us", "sofia-bg", "puerto-vallarta-mx"]) {
+  it("golden-pilot destination keys are untouched by the expansion-workbook resolver (returns null, falls through to existing logic)", async () => {
+    for (const untouchedSlug of ["lisbon-pt", "new-braunfels-tx-us", "summerlin-nv-us"]) {
       expect(await resolveExpansionWorkbookDestinationKey(untouchedSlug)).toBeNull();
       expect(await loadExpansionWorkbookDestinationBundle(untouchedSlug)).toBeNull();
     }
@@ -167,7 +177,8 @@ describe("Expansion-workbook preview resolver (registry-driven, generic getCanon
 
   it("the resolver never returns a key outside the registry's own declared expectedDestinationKeys", () => {
     const allRegisteredKeys = EXPANSION_WORKBOOK_REGISTRY.flatMap((entry) => entry.expectedDestinationKeys);
-    expect(allRegisteredKeys.slice().sort()).toEqual(["ascoli-piceno-it", "sarande-al", "dumaguete-ph", "las-terrenas-do", "fairhope-al-us"].sort());
+    const expectedKeys = ["the-villages-fl-us", "sofia-bg", "puerto-vallarta-mx", "hoi-an-vn", "queenstown-nz", "ascoli-piceno-it", "sarande-al", "dumaguete-ph", "las-terrenas-do", "fairhope-al-us"];
+    expect(allRegisteredKeys.slice().sort()).toEqual(expectedKeys.sort());
   });
 
   it("re-resolving the same destination twice returns identical, deterministic content (no stale/randomized bundle)", async () => {
@@ -175,6 +186,92 @@ describe("Expansion-workbook preview resolver (registry-driven, generic getCanon
     const second = await getCanonicalDestination("dumaguete-ph");
     const stableView = (destination: typeof first) => ({ ...destination, ai: undefined });
     expect(stableView(first)).toEqual(stableView(second));
+  });
+});
+
+const BATCH01_FOREIGN_TOKENS = ["lisbon", "summerlin", "braunfels", "ascoli", "piceno", "sarand", "dumaguete", "terrenas", "fairhope"];
+
+describe("Batch #1 preview resolution (registry-driven, generic getCanonicalDestination integration - proves the same generic architecture used for Batch #2, zero new loader code)", () => {
+  beforeEach(() => {
+    mockedSupabaseFetch.mockClear();
+    mockedLoadPersistedDestinationFromRuntime.mockClear();
+  });
+
+  for (const [destinationKey, expected] of Object.entries(EXPECTED_BATCH01)) {
+    it(`${destinationKey}: resolves through the same generic registry/resolver/loader used for Batch #2, entirely bypassing Supabase`, async () => {
+      const destination = await getCanonicalDestination(destinationKey);
+      expect(destination).not.toBeNull();
+      expect(destination!.title).toBe(expected.title);
+      expect(destination!.country).toBe(expected.country);
+      expect(destination!.v31DestinationKey).toBe(destinationKey);
+      expect(mockedSupabaseFetch).not.toHaveBeenCalled();
+      expect(mockedLoadPersistedDestinationFromRuntime).not.toHaveBeenCalled();
+    });
+
+    it(`${destinationKey}: rendered v31Modules contain exactly this destination's own neighborhoods/places/media/sources (no cross-contamination, no truncation)`, async () => {
+      const destination = await getCanonicalDestination(destinationKey);
+      expect(destination!.v31Modules!.neighborhoods).toHaveLength(expected.neighborhoods);
+      expect(destination!.v31Modules!.places).toHaveLength(expected.places);
+      expect(destination!.v31Modules!.media).toHaveLength(expected.media);
+      expect(destination!.v31Modules!.sources).toHaveLength(expected.sources);
+    });
+
+    it(`${destinationKey}: no rendered text/media/resource field contains another destination's name or key`, async () => {
+      const destination = await getCanonicalDestination(destinationKey);
+      const haystack = JSON.stringify(destination).toLowerCase();
+      for (const token of BATCH01_FOREIGN_TOKENS) {
+        expect(haystack).not.toContain(token);
+      }
+    });
+  }
+
+  it("the-villages-fl-us resolves as the real public destination name 'The Villages', never the slug-derived fallback 'The Villages Fl Us'", async () => {
+    const destination = await getCanonicalDestination("the-villages-fl-us");
+    expect(destination!.title).toBe("The Villages");
+    expect(destination!.subtitle).toBe("The Villages, United States");
+    expect(destination!.title).not.toBe("The Villages Fl Us");
+    expect(destination!.subtitle).not.toMatch(/\bFl Us\b/);
+  });
+
+  it("real Batch #1 media reaches the canonical destination (never an empty gallery, never a generic canyon/desert placeholder)", async () => {
+    for (const destinationKey of Object.keys(EXPECTED_BATCH01)) {
+      const destination = await getCanonicalDestination(destinationKey);
+      expect(destination!.media.length).toBeGreaterThan(0);
+    }
+  }, 30000);
+
+  it("real Batch #1 authored RESOURCES and PROPERTY_RESOURCES reach the canonical destination's resources array", async () => {
+    for (const destinationKey of Object.keys(EXPECTED_BATCH01)) {
+      const destination = await getCanonicalDestination(destinationKey);
+      // Every destination has 10 authored RESOURCES rows and 3 authored PROPERTY_RESOURCES rows in
+      // the raw workbook (confirmed via direct parser inspection) - both must be represented.
+      expect(destination!.resources.length).toBeGreaterThanOrEqual(10);
+      const housingGroupItems = destination!.resources.filter((resource) => resource.category === "housing");
+      expect(housingGroupItems.length).toBeGreaterThanOrEqual(3);
+    }
+  }, 30000);
+
+  it("registering Batch #1 required no new loader branch - the same resolveExpansionWorkbookDestinationKey/loadExpansionWorkbookDestinationBundle functions used for Batch #2 also resolve Batch #1", async () => {
+    expect(await resolveExpansionWorkbookDestinationKey("the-villages-fl-us")).toBe("the-villages-fl-us");
+    const bundle = await loadExpansionWorkbookDestinationBundle("the-villages-fl-us");
+    expect(bundle).not.toBeNull();
+    const rawIdentity = await loadExpansionWorkbookRawIdentity("the-villages-fl-us");
+    expect(rawIdentity).not.toBeNull();
+  });
+
+  it("getCanonicalDestination never takes the expansion-workbook preview branch for Batch #1 in production (falls through toward the Supabase-backed path instead)", async () => {
+    const originalNodeEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = "production";
+    mockedSupabaseFetch.mockResolvedValueOnce({ ok: false, json: async () => [] } as unknown as Response);
+    mockedSupabaseFetch.mockResolvedValueOnce({ ok: false, json: async () => [] } as unknown as Response);
+    try {
+      const destination = await getCanonicalDestination("the-villages-fl-us");
+      expect(mockedSupabaseFetch).toHaveBeenCalled();
+      expect(destination?.title).not.toBe("The Villages");
+    } finally {
+      process.env.NODE_ENV = originalNodeEnv;
+      mockedSupabaseFetch.mockClear();
+    }
   });
 });
 
@@ -228,6 +325,56 @@ describe("Batch #2 cost-of-living correctness (regression for fake Rent/Utilitie
       }
     });
   }
+});
+
+const EXPECTED_LINKS = {
+  "ascoli-piceno-it": { officialTourismUrl: "https://www.comune.ap.it/", googleMapsUrlContains: "Ascoli+Piceno" },
+  "sarande-al": { officialTourismUrl: "https://akt.gov.al/", googleMapsUrlContains: "Sarande" },
+  "dumaguete-ph": { officialTourismUrl: "https://dumaguetecity.gov.ph/", googleMapsUrlContains: "Dumaguete" },
+  "las-terrenas-do": { officialTourismUrl: "https://www.godominicanrepublic.com/destinations/las-terrenas", googleMapsUrlContains: "Las+Terrenas" },
+  "fairhope-al-us": { officialTourismUrl: "https://www.fairhopeal.gov/", googleMapsUrlContains: "Fairhope" },
+} as const;
+
+describe("Batch #2 destination-level link preservation (regression for synthetic search-URL fabrication)", () => {
+  for (const [destinationKey, expected] of Object.entries(EXPECTED_LINKS)) {
+    it(`${destinationKey}: real workbook-authored officialTourismUrl and googleMapsUrl survive, never a generated search substitute`, async () => {
+      const destination = await getCanonicalDestination(destinationKey);
+      expect(destination!.officialTourismUrl).toBe(expected.officialTourismUrl);
+      expect(destination!.googleMapsUrl).toContain(expected.googleMapsUrlContains);
+      expect(destination!.googleMapsUrl).toContain("google.com/maps");
+    });
+
+    it(`${destinationKey}: googleEarthUrl and wikipediaUrl fall back to a deterministic, clearly-generated search utility (no v3.2 workbook column exists, but the field is never left broken/blank when a real name is known)`, async () => {
+      const destination = await getCanonicalDestination(destinationKey);
+      expect(destination!.googleEarthUrl).toContain("earth.google.com/web/search/");
+      expect(destination!.wikipediaUrl).toContain("en.wikipedia.org/wiki/");
+    });
+
+    it(`${destinationKey}: youtubeUrl/tiktokUrl/instagramUrl/webcamUrl are populated by the generic generated Travel-resource system - no authored column exists in any known workbook schema, so these are always deterministic search utilities, never fabricated as "official"`, async () => {
+      const destination = await getCanonicalDestination(destinationKey);
+      expect(destination!.youtubeUrl).toContain("youtube.com/results");
+      expect(destination!.tiktokUrl).toContain("tiktok.com/search");
+      expect(destination!.instagramUrl).toContain("instagram.com/explore/tags/");
+      expect(destination!.webcamUrl).toContain("google.com/search");
+    });
+  }
+
+  it("no destination's officialTourismUrl/googleMapsUrl leaks into another destination's record (no cross-destination contamination)", async () => {
+    const destinations = await Promise.all(Object.keys(EXPECTED_LINKS).map((key) => getCanonicalDestination(key)));
+    const tourismUrls = destinations.map((d) => d!.officialTourismUrl);
+    const mapsUrls = destinations.map((d) => d!.googleMapsUrl);
+    expect(new Set(tourismUrls).size).toBe(tourismUrls.length);
+    expect(new Set(mapsUrls).size).toBe(mapsUrls.length);
+  }, 30000);
+
+  it("this fix is fully generic - the registry resolver contains no Batch #2-specific runtime behavior for link fields", async () => {
+    // Proven structurally: resolveExpansionWorkbookDestinationKey/loadExpansionWorkbookDestinationBundle/
+    // loadExpansionWorkbookRawIdentity all operate purely off the registry's expectedDestinationKeys and
+    // the workbook's own DESTINATIONS row - there is no batch-02-keyed branch anywhere in this file.
+    expect(await resolveExpansionWorkbookDestinationKey("ascoli-piceno-it")).toBe("ascoli-piceno-it");
+    const rawIdentity = await loadExpansionWorkbookRawIdentity("ascoli-piceno-it");
+    expect(rawIdentity?.officialTourismUrl).toBe("https://www.comune.ap.it/");
+  });
 });
 
 describe("Batch #2 recommendation-modal neighborhood label (regression for destination.city leaking into place cards)", () => {
