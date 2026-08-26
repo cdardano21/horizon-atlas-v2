@@ -22,7 +22,7 @@ import { CURRENT_PROFILE_CONTRACT_VERSION } from "../versions";
  */
 
 const BATCH02_PATH = path.resolve(process.cwd(), "data/DestinationFinderAI_Expansion_Batch_02_5_Destinations_v3.2.xlsx");
-const EXPECTED_SHA256 = "14ee480419498df8f74f454f08e5d856daea3ec0ab3c808bcda63b1b6036d4e9";
+const EXPECTED_SHA256 = "347afe628d5ceb3bbf0bc1b0b44a358b24bf575214946b40f4297fd3b6a80fe1";
 
 const APPROVED_KEYS = ["ascoli-piceno-it", "sarande-al", "dumaguete-ph", "las-terrenas-do", "fairhope-al-us"] as const;
 type ApprovedKey = (typeof APPROVED_KEYS)[number];
@@ -122,8 +122,8 @@ const EXPECTED_ENTRY_AND_STAY: Record<ApprovedKey, IntelligenceV2DestinationFact
     retirementVisaProgramAvailable: "YES",
     remoteWorkOrDigitalNomadVisaAvailable: "NO",
     remoteWorkLegalUnderTouristStatus: "UNKNOWN",
-    foreignPropertyPurchaseAllowed: "YES",
-    propertyPurchaseConditionalPathAvailable: "UNKNOWN",
+    foreignPropertyPurchaseAllowed: "NO",
+    propertyPurchaseConditionalPathAvailable: "YES",
     propertyPurchaseGrantsResidencyPath: "NO",
     spouseOrDependentInclusionSupported: "YES",
   },
@@ -411,15 +411,25 @@ describe("Batch #2 real adapter/parser probe (R1) — isolation, identity, no-fa
       });
     });
 
-    it("dumaguete-ph / las-terrenas-do: YES + conditional UNKNOWN -> PASS for both permissive and strict (unrestricted ownership genuinely allowed)", () => {
-      for (const key of ["dumaguete-ph", "las-terrenas-do"] as const) {
-        const facts = factsByKey.get(key)!;
-        expect(evaluateEligibility(permissiveProfile(), facts).criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "PASS" });
-        expect(evaluateEligibility(strictProfile(), facts).criteria.foreignPropertyPurchaseRights).toMatchObject({
-          status: "PASS",
-          reasonCode: "FOREIGN_PROPERTY_PURCHASE_ALLOWED",
-        });
-      }
+    it("dumaguete-ph: NO + conditional YES -> permissive PASS, strict FAIL (Wave 1 correction: land ownership is restricted, condo ownership is the qualifying path per RA 4726)", () => {
+      const facts = factsByKey.get("dumaguete-ph")!;
+      expect(evaluateEligibility(permissiveProfile(), facts).criteria.foreignPropertyPurchaseRights).toMatchObject({
+        status: "PASS",
+        reasonCode: "CONDITIONAL_PROPERTY_PURCHASE_PATH_AVAILABLE",
+      });
+      expect(evaluateEligibility(strictProfile(), facts).criteria.foreignPropertyPurchaseRights).toMatchObject({
+        status: "FAIL",
+        reasonCode: "PROPERTY_PURCHASE_REQUIRES_UNRESTRICTED_OWNERSHIP",
+      });
+    });
+
+    it("las-terrenas-do: YES + conditional UNKNOWN -> PASS for both permissive and strict (unrestricted ownership genuinely allowed)", () => {
+      const facts = factsByKey.get("las-terrenas-do")!;
+      expect(evaluateEligibility(permissiveProfile(), facts).criteria.foreignPropertyPurchaseRights).toMatchObject({ status: "PASS" });
+      expect(evaluateEligibility(strictProfile(), facts).criteria.foreignPropertyPurchaseRights).toMatchObject({
+        status: "PASS",
+        reasonCode: "FOREIGN_PROPERTY_PURCHASE_ALLOWED",
+      });
     });
 
     it("fairhope-al-us: a US-citizen buyer relocating within the US is DOMESTIC -> the foreign-purchaser gate correctly does not apply (null, not fabricated PASS/FAIL)", () => {

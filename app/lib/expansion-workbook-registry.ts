@@ -46,7 +46,7 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     workbookPath: "data/DestinationFinderAI_Expansion_Batch_02_5_Destinations_v3.2.xlsx",
     environment: "preview",
     expectedDestinationKeys: ["ascoli-piceno-it", "sarande-al", "dumaguete-ph", "las-terrenas-do", "fairhope-al-us"],
-    expectedSha256: "14ee480419498df8f74f454f08e5d856daea3ec0ab3c808bcda63b1b6036d4e9",
+    expectedSha256: "347afe628d5ceb3bbf0bc1b0b44a358b24bf575214946b40f4297fd3b6a80fe1",
   },
 ];
 
