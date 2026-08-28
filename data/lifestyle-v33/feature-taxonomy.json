@@ -1,0 +1,852 @@
+{
+  "global_controlled_values": {
+    "availability_level": [
+      "STRONG",
+      "MODERATE",
+      "LIMITED",
+      "NONE",
+      "UNKNOWN",
+      "NOT_APPLICABLE"
+    ],
+    "proximity_band": [
+      "IN_DESTINATION",
+      "WITHIN_30_MIN",
+      "WITHIN_60_MIN",
+      "OVER_60_MIN",
+      "NONE",
+      "UNKNOWN",
+      "NOT_APPLICABLE"
+    ],
+    "confidence": [
+      "HIGH",
+      "MEDIUM",
+      "LOW"
+    ],
+    "boolean_columns": [
+      "YES",
+      "NO"
+    ]
+  },
+  "feature_groups": [
+    "community_form",
+    "natural_setting",
+    "water_and_boating",
+    "outdoor_recreation",
+    "culture_and_daily_life"
+  ],
+  "total_feature_key_count": 49,
+  "feature_key_count_by_group": {
+    "community_form": 8,
+    "natural_setting": 9,
+    "water_and_boating": 11,
+    "outdoor_recreation": 10,
+    "culture_and_daily_life": 11
+  },
+  "features": [
+    {
+      "feature_group": "community_form",
+      "feature_key": "settlement_type",
+      "allowed_feature_values": [
+        "MAJOR_URBAN_CORE",
+        "MID_SIZE_CITY",
+        "SMALL_CITY",
+        "SMALL_TOWN",
+        "SUBURBAN_COMMUNITY",
+        "RURAL_COUNTRYSIDE",
+        "RESORT_COMMUNITY",
+        "MIXED",
+        "UNKNOWN"
+      ],
+      "uses_availability_level": false,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": true,
+      "min_evidence_for_none": "N/A - this key never uses NONE (settlement_type is always exactly one of the enum values or UNKNOWN).",
+      "min_evidence_for_high_confidence": "Official population/administrative classification (e.g. city/comune/municipality charter) or a clearly reliable general encyclopedia entry describing built character.",
+      "display_wording": "Community type",
+      "notes": "Repeatable: exactly one row per destination must be marked PRIMARY in `notes`; additional legitimate characteristics may be added as SECONDARY rows rather than forcing a single label."
+    },
+    {
+      "feature_group": "community_form",
+      "feature_key": "suburban_character",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "Clear evidence the destination is not suburban in form (e.g. historic urban core or rural/resort character confirmed).",
+      "min_evidence_for_high_confidence": "Official municipal description or reliable encyclopedia characterization of built form.",
+      "display_wording": "Suburban character",
+      "notes": "availability_level expresses strength of suburban character; feature_value stays NOT_APPLICABLE."
+    },
+    {
+      "feature_group": "community_form",
+      "feature_key": "resort_orientation",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "Evidence the local economy/character is not resort/tourism-oriented.",
+      "min_evidence_for_high_confidence": "Official tourism-board or municipal economic description.",
+      "display_wording": "Resort orientation",
+      "notes": "availability_level expresses strength; STRONG = tourism/resort identity is a defining part of local life."
+    },
+    {
+      "feature_group": "community_form",
+      "feature_key": "retirement_orientation",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "Evidence retirees are not a notable share of residents/visitors.",
+      "min_evidence_for_high_confidence": "Official/government recognition (e.g. named a top retirement destination) or clear demographic evidence.",
+      "display_wording": "Retirement-community character",
+      "notes": "availability_level expresses strength."
+    },
+    {
+      "feature_group": "community_form",
+      "feature_key": "college_town_character",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No significant college/university presence.",
+      "min_evidence_for_high_confidence": "Confirmed major university enrollment relative to city population from an encyclopedia or official source.",
+      "display_wording": "College-town character",
+      "notes": "availability_level expresses strength."
+    },
+    {
+      "feature_group": "community_form",
+      "feature_key": "master_planned_or_gated_character",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No notable master-planned/gated development found in the destination's residential fabric.",
+      "min_evidence_for_high_confidence": "Named, verifiable master-planned or gated development(s) confirmed by an official or reliable source.",
+      "display_wording": "Master-planned / gated community presence",
+      "notes": "availability_level expresses strength/prevalence, not a single project's existence."
+    },
+    {
+      "feature_group": "community_form",
+      "feature_key": "community_energy",
+      "allowed_feature_values": [
+        "QUIET",
+        "BALANCED",
+        "ENERGETIC",
+        "SEASONALLY_VARIABLE",
+        "UNKNOWN"
+      ],
+      "uses_availability_level": false,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "N/A - use UNKNOWN, not NONE, when evidence is insufficient.",
+      "min_evidence_for_high_confidence": "Multiple consistent descriptive sources (official + reputable secondary) characterizing daily pace/atmosphere.",
+      "display_wording": "Everyday atmosphere",
+      "notes": "Qualitative descriptor, not a strength scale; NONE is never a valid value for this key."
+    },
+    {
+      "feature_group": "community_form",
+      "feature_key": "tourism_seasonality",
+      "allowed_feature_values": [
+        "LOW_SEASONALITY",
+        "MODERATE_SEASONALITY",
+        "HIGH_SEASONALITY",
+        "UNKNOWN"
+      ],
+      "uses_availability_level": false,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "N/A - use UNKNOWN, not NONE.",
+      "min_evidence_for_high_confidence": "Official tourism-board seasonal visitor data or clearly documented peak-season crowding/pricing pattern.",
+      "display_wording": "Tourist-season variability",
+      "notes": "Distinct from EVENTS_SEASONALITY (event-level); this is a whole-destination crowding/atmosphere signal."
+    },
+    {
+      "feature_group": "natural_setting",
+      "feature_key": "coastal_setting",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "Destination confirmed landlocked with no coastal frontage.",
+      "min_evidence_for_high_confidence": "Official geographic description or encyclopedia confirming direct coastal frontage.",
+      "display_wording": "Coastal setting",
+      "notes": null
+    },
+    {
+      "feature_group": "natural_setting",
+      "feature_key": "beach_access",
+      "allowed_feature_values": [
+        "DIRECT_ACCESS",
+        "NEARBY",
+        "NONE",
+        "UNKNOWN"
+      ],
+      "uses_availability_level": false,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "NO",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "N/A - always mirrored, never independently set to NONE.",
+      "min_evidence_for_high_confidence": "N/A - mirrors DESTINATIONS.beach_access verbatim (HIGH confidence by construction).",
+      "display_wording": "Beach access",
+      "notes": "feature_value MUST mirror the existing authoritative DESTINATIONS.beach_access field verbatim, never independently re-researched or contradicted. matching_enabled=NO because the real hard-gate/profile-matching field is DESTINATIONS.beach_access itself; this row exists for display/narrative parity only."
+    },
+    {
+      "feature_group": "natural_setting",
+      "feature_key": "mountain_access",
+      "allowed_feature_values": [
+        "SKI_RESORT_ACCESS",
+        "MOUNTAIN_SCENIC_ONLY",
+        "NONE",
+        "UNKNOWN"
+      ],
+      "uses_availability_level": false,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "NO",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "N/A - always mirrored, never independently set to NONE.",
+      "min_evidence_for_high_confidence": "N/A - mirrors DESTINATIONS.mountain_or_ski_access verbatim (HIGH confidence by construction).",
+      "display_wording": "Mountain access",
+      "notes": "feature_value MUST mirror the existing authoritative DESTINATIONS.mountain_or_ski_access field verbatim. matching_enabled=NO for the same reason as beach_access."
+    },
+    {
+      "feature_group": "natural_setting",
+      "feature_key": "lake_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No named lake within a reasonable regional radius found in any reliable source.",
+      "min_evidence_for_high_confidence": "Official/park-authority source naming a specific lake and its distance.",
+      "display_wording": "Lake access",
+      "notes": null
+    },
+    {
+      "feature_group": "natural_setting",
+      "feature_key": "river_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No named river within a reasonable regional radius found in any reliable source.",
+      "min_evidence_for_high_confidence": "Official/geographic source naming the specific river and confirming access.",
+      "display_wording": "River access",
+      "notes": null
+    },
+    {
+      "feature_group": "natural_setting",
+      "feature_key": "forest_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "Confirmed absence of forest/woodland within a reasonable regional radius.",
+      "min_evidence_for_high_confidence": "Named national/regional park or forest confirmed by an official source.",
+      "display_wording": "Forest / woodland access",
+      "notes": null
+    },
+    {
+      "feature_group": "natural_setting",
+      "feature_key": "desert_setting",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "Confirmed non-arid Koppen climate classification or equivalent.",
+      "min_evidence_for_high_confidence": "Official climatological classification (e.g. Koppen) from a government meteorological source.",
+      "display_wording": "Desert setting",
+      "notes": null
+    },
+    {
+      "feature_group": "natural_setting",
+      "feature_key": "countryside_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "Destination confirmed to have no meaningful rural/agricultural hinterland nearby.",
+      "min_evidence_for_high_confidence": "Official geographic/land-use description confirming surrounding rural character.",
+      "display_wording": "Countryside access",
+      "notes": null
+    },
+    {
+      "feature_group": "natural_setting",
+      "feature_key": "snow_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "Climate/elevation evidence makes seasonal snow at or near the destination implausible (e.g. tropical climate at low elevation).",
+      "min_evidence_for_high_confidence": "Official climate-normal data showing measurable snowfall, or a named, currently-operating snow area.",
+      "display_wording": "Snow / winter-scenery access",
+      "notes": null
+    },
+    {
+      "feature_group": "water_and_boating",
+      "feature_key": "marina_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "A specific search for a marina/small-craft harbor found only commercial/ferry port infrastructure with no leisure-boat facilities.",
+      "min_evidence_for_high_confidence": "Official marina/port-authority source naming the facility and confirming leisure-boat services (slips, fuel, moorings).",
+      "display_wording": "Marina access",
+      "notes": "Must not be inferred from beach_access alone; a commercial ferry/cargo port is not a marina."
+    },
+    {
+      "feature_group": "water_and_boating",
+      "feature_key": "boat_launch_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No public boat ramp/launch identified in any reliable local or official source.",
+      "min_evidence_for_high_confidence": "Named public boat ramp confirmed by a municipal/parks source.",
+      "display_wording": "Boat ramp / launch access",
+      "notes": null
+    },
+    {
+      "feature_group": "water_and_boating",
+      "feature_key": "slip_or_mooring_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "Confirmed marina/harbor exists but offers no slips/moorings, or no marina exists at all.",
+      "min_evidence_for_high_confidence": "Marina operator source listing slip/mooring capacity or rates.",
+      "display_wording": "Boat slip / mooring availability",
+      "notes": null
+    },
+    {
+      "feature_group": "water_and_boating",
+      "feature_key": "powerboating_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No powerboat rental/tour/launch operator identified and no boating infrastructure found.",
+      "min_evidence_for_high_confidence": "Named operator or public launch confirmed by an official/reputable source.",
+      "display_wording": "Powerboating",
+      "notes": null
+    },
+    {
+      "feature_group": "water_and_boating",
+      "feature_key": "sailing_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No sailing club/operator identified and no evidence of sailing activity.",
+      "min_evidence_for_high_confidence": "Named sailing club/operator with current, verifiable services.",
+      "display_wording": "Sailing",
+      "notes": null
+    },
+    {
+      "feature_group": "water_and_boating",
+      "feature_key": "fishing_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No fishing access point (pier, charter, known local fishing area) identified.",
+      "min_evidence_for_high_confidence": "Named fishing pier/charter operator or official fisheries-access source.",
+      "display_wording": "Fishing access",
+      "notes": null
+    },
+    {
+      "feature_group": "water_and_boating",
+      "feature_key": "kayaking_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No kayak rental/put-in point identified and no evidence of the activity.",
+      "min_evidence_for_high_confidence": "Named outfitter or official park/reserve source confirming a kayaking route.",
+      "display_wording": "Kayaking",
+      "notes": null
+    },
+    {
+      "feature_group": "water_and_boating",
+      "feature_key": "paddleboarding_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No paddleboard rental/operator identified and no evidence of the activity.",
+      "min_evidence_for_high_confidence": "Named outfitter confirmed by an official/reputable source.",
+      "display_wording": "Paddleboarding",
+      "notes": null
+    },
+    {
+      "feature_group": "water_and_boating",
+      "feature_key": "swimming_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "Named swim spots explicitly found unsuitable/closed (e.g. water-quality or safety notice) with no alternative nearby.",
+      "min_evidence_for_high_confidence": "Official beach/water-quality authority confirming safe designated swimming.",
+      "display_wording": "Swimming access",
+      "notes": "Distinct from beach_access - a destination can have beach access without confirmed safe/practical swimming (e.g. surf, currents, water quality)."
+    },
+    {
+      "feature_group": "water_and_boating",
+      "feature_key": "surfing_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No surf break/school identified and coastal conditions make surf unlikely.",
+      "min_evidence_for_high_confidence": "Named surf break/school confirmed by a reputable surf-specific or official source.",
+      "display_wording": "Surfing",
+      "notes": null
+    },
+    {
+      "feature_group": "water_and_boating",
+      "feature_key": "scuba_snorkeling_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No dive/snorkel site or operator identified and reef/visibility conditions are not documented.",
+      "min_evidence_for_high_confidence": "Named, independently recognized dive site (e.g. marine-protected area, ranked dive-site list) or certified dive operator.",
+      "display_wording": "Scuba diving / snorkeling",
+      "notes": null
+    },
+    {
+      "feature_group": "outdoor_recreation",
+      "feature_key": "golf_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No golf course identified within a reasonable regional radius.",
+      "min_evidence_for_high_confidence": "Named, operating golf course confirmed by an official/course-operator source (existing PLACES entries qualify).",
+      "display_wording": "Golf access",
+      "notes": "Where a PLACES row with category_key='golf' already exists for the destination, reuse it directly rather than re-researching."
+    },
+    {
+      "feature_group": "outdoor_recreation",
+      "feature_key": "pickleball_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No pickleball court/club identified.",
+      "min_evidence_for_high_confidence": "Named public/club courts confirmed by a municipal parks & recreation or club source.",
+      "display_wording": "Pickleball",
+      "notes": null
+    },
+    {
+      "feature_group": "outdoor_recreation",
+      "feature_key": "tennis_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No tennis court/club identified.",
+      "min_evidence_for_high_confidence": "Named public/club courts confirmed by a municipal or club source.",
+      "display_wording": "Tennis",
+      "notes": null
+    },
+    {
+      "feature_group": "outdoor_recreation",
+      "feature_key": "skiing_snowboarding_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "Climate/elevation makes any ski operation implausible, or all previously known ski areas are confirmed closed.",
+      "min_evidence_for_high_confidence": "Named, currently operating ski area confirmed by its own official source.",
+      "display_wording": "Skiing / snowboarding",
+      "notes": null
+    },
+    {
+      "feature_group": "outdoor_recreation",
+      "feature_key": "hiking_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No hiking trail/trailhead identified within a reasonable regional radius.",
+      "min_evidence_for_high_confidence": "Named trail confirmed by an official park/trail-authority source (existing PLACES trail rows qualify).",
+      "display_wording": "Hiking",
+      "notes": null
+    },
+    {
+      "feature_group": "outdoor_recreation",
+      "feature_key": "trail_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No walking/multi-use trail identified.",
+      "min_evidence_for_high_confidence": "Named, mapped trail confirmed by a municipal/park source.",
+      "display_wording": "Walking / multi-use trails",
+      "notes": "Distinct from hiking_access, which implies more rugged/natural terrain; trail_access covers everyday walking/biking corridors."
+    },
+    {
+      "feature_group": "outdoor_recreation",
+      "feature_key": "road_cycling_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No road-cycling infrastructure or documented route identified, and road conditions are documented as unsafe/impractical.",
+      "min_evidence_for_high_confidence": "Named cycling route/lane confirmed by a municipal or cycling-organization source.",
+      "display_wording": "Road cycling",
+      "notes": null
+    },
+    {
+      "feature_group": "outdoor_recreation",
+      "feature_key": "mountain_biking_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No mountain-bike trail/park identified.",
+      "min_evidence_for_high_confidence": "Named mountain-bike trail system confirmed by an official/trail-authority source.",
+      "display_wording": "Mountain biking",
+      "notes": null
+    },
+    {
+      "feature_group": "outdoor_recreation",
+      "feature_key": "hunting_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "General lawful recreational hunting access is confirmed unavailable or heavily restricted regionally.",
+      "min_evidence_for_high_confidence": "Official wildlife/hunting-authority source confirming general lawful recreational access exists regionally.",
+      "display_wording": "Recreational hunting access (general/regional only)",
+      "notes": "Record only general lawful recreational access and regional proximity - never personalized licensing, season, or weapons-law advice."
+    },
+    {
+      "feature_group": "outdoor_recreation",
+      "feature_key": "parks_open_space_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No public park/open space identified.",
+      "min_evidence_for_high_confidence": "Named, existing PLACES park row(s) or an official municipal parks source.",
+      "display_wording": "Parks & open space",
+      "notes": "Where PLACES already has park rows for the destination, reuse them directly."
+    },
+    {
+      "feature_group": "culture_and_daily_life",
+      "feature_key": "arts_culture_strength",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No arts/culture venue or activity identified.",
+      "min_evidence_for_high_confidence": "Multiple named, verifiable venues/institutions (existing PLACES museum/theater/gallery rows qualify).",
+      "display_wording": "Arts & culture strength",
+      "notes": "No new external research this phase - derive only from existing PLACES/neighborhood/narrative content per the approved scope."
+    },
+    {
+      "feature_group": "culture_and_daily_life",
+      "feature_key": "museum_gallery_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No museum/gallery identified.",
+      "min_evidence_for_high_confidence": "Existing PLACES museum rows or an official cultural-institution source.",
+      "display_wording": "Museums & galleries",
+      "notes": "Derive from existing PLACES category_key='museum' rows."
+    },
+    {
+      "feature_group": "culture_and_daily_life",
+      "feature_key": "live_music_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No live-music venue identified.",
+      "min_evidence_for_high_confidence": "Existing PLACES live_music rows or a named, currently operating venue.",
+      "display_wording": "Live music",
+      "notes": null
+    },
+    {
+      "feature_group": "culture_and_daily_life",
+      "feature_key": "festival_event_strength",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No recurring festival/event identified.",
+      "min_evidence_for_high_confidence": "Named, recurring, officially documented festival(s).",
+      "display_wording": "Festivals & events",
+      "notes": null
+    },
+    {
+      "feature_group": "culture_and_daily_life",
+      "feature_key": "dining_strength",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No meaningful dining options identified.",
+      "min_evidence_for_high_confidence": "Existing PLACES restaurant rows in meaningful quantity/variety.",
+      "display_wording": "Dining",
+      "notes": "Derive from existing PLACES restaurant/dining counts."
+    },
+    {
+      "feature_group": "culture_and_daily_life",
+      "feature_key": "cafe_strength",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No cafe/coffee shop identified.",
+      "min_evidence_for_high_confidence": "Existing PLACES coffee_shop rows.",
+      "display_wording": "Cafe culture",
+      "notes": null
+    },
+    {
+      "feature_group": "culture_and_daily_life",
+      "feature_key": "nightlife_strength",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No nightlife venue identified.",
+      "min_evidence_for_high_confidence": "Existing PLACES nightlife rows or multiple named venues.",
+      "display_wording": "Nightlife",
+      "notes": null
+    },
+    {
+      "feature_group": "culture_and_daily_life",
+      "feature_key": "farmers_market_access",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": true,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "No farmers/traditional market identified.",
+      "min_evidence_for_high_confidence": "Existing PLACES farmers_market/market rows or an official market schedule.",
+      "display_wording": "Farmers markets",
+      "notes": null
+    },
+    {
+      "feature_group": "culture_and_daily_life",
+      "feature_key": "newcomer_social_ease",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "Documented friction/isolation for newcomers with no offsetting community infrastructure.",
+      "min_evidence_for_high_confidence": "Existing DAILY_LIFE_PRACTICALITY.newcomer_friction narrative plus corroborating community/expat-organization evidence.",
+      "display_wording": "Newcomer social ease",
+      "notes": "Reuse existing DAILY_LIFE_PRACTICALITY/COMMUNITY_SOCIAL narrative first."
+    },
+    {
+      "feature_group": "culture_and_daily_life",
+      "feature_key": "family_oriented_character",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "Documented lack of family-oriented infrastructure (schools, childcare, family activities).",
+      "min_evidence_for_high_confidence": "Existing FAMILY_EDUCATION sheet content.",
+      "display_wording": "Family-oriented character",
+      "notes": "Reuse existing FAMILY_EDUCATION sheet content first."
+    },
+    {
+      "feature_group": "culture_and_daily_life",
+      "feature_key": "pet_friendly_character",
+      "allowed_feature_values": [
+        "NOT_APPLICABLE"
+      ],
+      "uses_availability_level": true,
+      "uses_proximity_band": false,
+      "matching_enabled_default": "YES",
+      "display_enabled_default": "YES",
+      "repeatable_per_destination": false,
+      "min_evidence_for_none": "Documented lack of pet-friendly infrastructure/rentals.",
+      "min_evidence_for_high_confidence": "Existing PETS sheet content.",
+      "display_wording": "Pet-friendly character",
+      "notes": "Reuse existing PETS sheet content first."
+    }
+  ]
+}

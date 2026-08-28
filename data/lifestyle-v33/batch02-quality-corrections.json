@@ -1,0 +1,1258 @@
+{
+  "total_corrections": 179,
+  "corrections": [
+    {
+      "record_key": "lf_ascoli_piceno_it_coastal_setting",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_desert_setting",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_retirement_orientation",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Source is an official award, but only known via a Wikipedia citation, not a directly-verified primary page; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_college_town_character",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_coastal_setting",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_desert_setting",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_snow_access",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "PAGASA data known only via a Wikipedia citation, not directly verified; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_skiing_snowboarding_access",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "PAGASA data known only via a Wikipedia citation, not directly verified; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_resort_orientation",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_coastal_setting",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_snow_access",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_skiing_snowboarding_access",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_settlement_type_2",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_suburban_character",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_coastal_setting",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_desert_setting",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_snow_access",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_skiing_snowboarding_access",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_hiking_access",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "STRONG rating rests on a single named trail (Colle San Marco); existence is solid but the STRONG degree is a generous single-entry judgment, not an unambiguous exact-classification fact."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_trail_access",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Same single-entry basis as hiking_access; downgraded for consistency."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_arts_culture_strength",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Rating blends genuine PLACES rows with an external, Wikipedia-only UNESCO fact used to support a generous STRONG rating; downgraded."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_farmers_market_access",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "STRONG rating rests on a single named market row; a single entry does not unambiguously support the STRONG degree."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_suburban_character",
+      "field": "availability_level",
+      "previous_value": "NONE",
+      "corrected_value": "UNKNOWN",
+      "reason": "No suburban district was identified, but that is a search-failure result, not affirmative evidence of absence."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_suburban_character",
+      "field": "confidence",
+      "previous_value": "MEDIUM",
+      "corrected_value": "LOW",
+      "reason": "Converted to UNKNOWN; confidence adjusted to match."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_suburban_character",
+      "field": "evidence_summary",
+      "previous_value": "Historic travertine urban core surrounded by mountains; no suburban-form districts identified.",
+      "corrected_value": "No search this pass found or ruled out suburban-form districts; the existing historic-urban-core narrative is insufficient to affirmatively conclude the absence of any suburban character.",
+      "reason": "Reworded to reflect an evidence gap rather than a confirmed absence."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_boat_launch_access",
+      "field": "availability_level",
+      "previous_value": "NONE",
+      "corrected_value": "UNKNOWN",
+      "reason": "No boat ramp identified in this pass is a search-failure result, not affirmative evidence of absence."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_boat_launch_access",
+      "field": "confidence",
+      "previous_value": "MEDIUM",
+      "corrected_value": "LOW",
+      "reason": "Converted to UNKNOWN; confidence adjusted to match."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_boat_launch_access",
+      "field": "evidence_summary",
+      "previous_value": "No boat ramp identified; consistent with inland river-only water access.",
+      "corrected_value": "No boat ramp was identified in this pass; absence from a search is not affirmative evidence of absence and this remains unconfirmed.",
+      "reason": "Reworded to reflect an evidence gap rather than a confirmed absence."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_powerboating_access",
+      "field": "availability_level",
+      "previous_value": "NONE",
+      "corrected_value": "UNKNOWN",
+      "reason": "No powerboating operator identified is a search-failure result; the river being used for swimming does not itself rule out any powerboating use."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_powerboating_access",
+      "field": "confidence",
+      "previous_value": "MEDIUM",
+      "corrected_value": "LOW",
+      "reason": "Converted to UNKNOWN; confidence adjusted to match."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_powerboating_access",
+      "field": "evidence_summary",
+      "previous_value": "No powerboating operator/infrastructure identified; River Castellano is a shallow bathing site, not a boating river.",
+      "corrected_value": "No powerboating operator or infrastructure was identified in this pass; this is a research gap, not a confirmed absence.",
+      "reason": "Reworded to reflect an evidence gap rather than a confirmed absence."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_sailing_access",
+      "field": "availability_level",
+      "previous_value": "NONE",
+      "corrected_value": "UNKNOWN",
+      "reason": "No sailing club/operator identified is a search-failure result, not affirmative evidence of absence."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_sailing_access",
+      "field": "confidence",
+      "previous_value": "MEDIUM",
+      "corrected_value": "LOW",
+      "reason": "Converted to UNKNOWN; confidence adjusted to match."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_sailing_access",
+      "field": "evidence_summary",
+      "previous_value": "No sailing club/operator identified; not applicable to an inland river city.",
+      "corrected_value": "No sailing club or operator was identified in this pass; absence from a search is not affirmative evidence of absence.",
+      "reason": "Reworded to reflect an evidence gap rather than a confirmed absence."
+    },
+    {
+      "record_key": "lf_sarande_al_college_town_character",
+      "field": "availability_level",
+      "previous_value": "NONE",
+      "corrected_value": "UNKNOWN",
+      "reason": "An official tourism profile's silence on universities is not affirmative evidence that none exists."
+    },
+    {
+      "record_key": "lf_sarande_al_college_town_character",
+      "field": "confidence",
+      "previous_value": "MEDIUM",
+      "corrected_value": "LOW",
+      "reason": "Converted to UNKNOWN; confidence adjusted to match."
+    },
+    {
+      "record_key": "lf_sarande_al_college_town_character",
+      "field": "evidence_summary",
+      "previous_value": "No university presence identified.",
+      "corrected_value": "The official tourism-agency city profile does not mention a university, but a tourism-oriented profile's silence on this topic is not affirmative evidence that no institution exists.",
+      "reason": "Reworded to reflect an evidence gap rather than a confirmed absence."
+    },
+    {
+      "record_key": "lf_sarande_al_surfing_access",
+      "field": "availability_level",
+      "previous_value": "NONE",
+      "corrected_value": "UNKNOWN",
+      "reason": "No source describing surf conditions/culture is a search-failure result, not affirmative evidence of absence."
+    },
+    {
+      "record_key": "lf_sarande_al_surfing_access",
+      "field": "evidence_summary",
+      "previous_value": "Ionian Sea in this area is not documented as a surf destination; no evidence of surf culture found.",
+      "corrected_value": "No source describing surf conditions or culture was found in this pass; this reflects a research gap, not a confirmed absence.",
+      "reason": "Reworded to reflect an evidence gap rather than a confirmed absence."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_college_town_character",
+      "field": "availability_level",
+      "previous_value": "NONE",
+      "corrected_value": "UNKNOWN",
+      "reason": "A short Wikipedia town profile not mentioning a university is not affirmative evidence that none exists."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_college_town_character",
+      "field": "confidence",
+      "previous_value": "MEDIUM",
+      "corrected_value": "LOW",
+      "reason": "Converted to UNKNOWN; confidence adjusted to match."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_college_town_character",
+      "field": "evidence_summary",
+      "previous_value": "No university presence identified.",
+      "corrected_value": "Wikipedia's short town profile does not mention a university, but article silence on this topic is not affirmative evidence that no institution exists.",
+      "reason": "Reworded to reflect an evidence gap rather than a confirmed absence."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_surfing_access",
+      "field": "availability_level",
+      "previous_value": "NONE",
+      "corrected_value": "UNKNOWN",
+      "reason": "No source describing a surf break/school is a search-failure result, not affirmative evidence of absence."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_surfing_access",
+      "field": "evidence_summary",
+      "previous_value": "No evidence of a surf break/school found; Bohol Sea/Tanon Strait coastline here is not documented as a surf destination.",
+      "corrected_value": "No source describing a surf break or school was found in this pass; this reflects a research gap, not a confirmed absence.",
+      "reason": "Reworded to reflect an evidence gap rather than a confirmed absence."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_marina_access",
+      "field": "source_url",
+      "previous_value": "",
+      "corrected_value": "https://en.wikipedia.org/wiki/Ascoli_Piceno",
+      "reason": "Added the citation already used for the underlying coastal_setting fact; this row was missing it."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_marina_access",
+      "field": "evidence_summary",
+      "previous_value": "Inland city with no coastal or lake frontage; no marina possible at the destination itself.",
+      "corrected_value": "Confirmed inland location at the confluence of the Tronto and Castellano rivers, with no coastal or lake frontage (see coastal_setting); a marina requires coastal, lake, or harbor access that is not present here.",
+      "reason": "Reworded to state the decisive geographic basis explicitly rather than a general assertion."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_surfing_access",
+      "field": "evidence_summary",
+      "previous_value": "No coastal frontage at the destination itself.",
+      "corrected_value": "The destination is confirmed inland with no ocean coastline (see coastal_setting); surfing requires open-ocean coastal access, which is definitionally absent here.",
+      "reason": "Reworded to state the decisive geographic basis explicitly, avoiding unsupported filler phrasing."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_scuba_snorkeling_access",
+      "field": "evidence_summary",
+      "previous_value": "No dive site identified at an inland city with no lake/coast.",
+      "corrected_value": "The destination is confirmed inland with no coastal or lake frontage (see coastal_setting); recreational diving/snorkeling requires a body of water with sufficient depth and visibility, which is not present here.",
+      "reason": "Reworded to state the decisive geographic basis explicitly, avoiding unsupported filler phrasing."
+    },
+    {
+      "record_key": "lf_sarande_al_skiing_snowboarding_access",
+      "field": "source_name",
+      "previous_value": "",
+      "corrected_value": "DESTINATIONS.mountain_or_ski_access (existing authoritative field)",
+      "reason": "Re-attributed to the actual decisive source: the existing authoritative field already classifies mountain access as scenic-only."
+    },
+    {
+      "record_key": "lf_sarande_al_skiing_snowboarding_access",
+      "field": "confidence",
+      "previous_value": "LOW",
+      "corrected_value": "MEDIUM",
+      "reason": "Now grounded in the existing authoritative field rather than an unsourced inference; MEDIUM reflects that the conclusion extends slightly beyond the city itself to the wider region."
+    },
+    {
+      "record_key": "lf_sarande_al_skiing_snowboarding_access",
+      "field": "evidence_summary",
+      "previous_value": "No ski area identified regionally; coastal city with only scenic mountain access.",
+      "corrected_value": "The existing authoritative DESTINATIONS.mountain_or_ski_access field already classifies this destination's mountain access as MOUNTAIN_SCENIC_ONLY (scenic access without ski-resort infrastructure), which directly establishes the absence of local skiing.",
+      "reason": "Reworded to cite the decisive existing field directly instead of an unsupported general claim."
+    },
+    {
+      "record_key": "lf_sarande_al_desert_setting",
+      "field": "confidence",
+      "previous_value": "MEDIUM",
+      "corrected_value": "LOW",
+      "reason": "No source URL is attached; general reasoning without a citation must not be treated as externally verified evidence."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_desert_setting",
+      "field": "confidence",
+      "previous_value": "MEDIUM",
+      "corrected_value": "LOW",
+      "reason": "No source URL is attached; general reasoning without a citation must not be treated as externally verified evidence."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_snow_access",
+      "field": "source_url",
+      "previous_value": "",
+      "corrected_value": "https://en.wikipedia.org/wiki/Las_Terrenas",
+      "reason": "Attached the same citation already used elsewhere for this destination's geography, which was missing from this row."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_snow_access",
+      "field": "evidence_summary",
+      "previous_value": "Tropical climate; snow is climatologically implausible.",
+      "corrected_value": "Tropical coastal climate at low elevation in the Caribbean (Wikipedia); snow is not climatically feasible at this latitude and elevation.",
+      "reason": "Reworded to state the decisive climatic basis explicitly, avoiding unsupported filler phrasing."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_skiing_snowboarding_access",
+      "field": "source_url",
+      "previous_value": "",
+      "corrected_value": "https://en.wikipedia.org/wiki/Las_Terrenas",
+      "reason": "Attached the same citation already used elsewhere for this destination's geography, which was missing from this row."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_skiing_snowboarding_access",
+      "field": "evidence_summary",
+      "previous_value": "Tropical climate; no ski facility exists or is plausible.",
+      "corrected_value": "Tropical coastal climate at low elevation with no sub-freezing temperatures or snowfall; a ski facility is not climatically feasible here.",
+      "reason": "Reworded to state the decisive climatic basis explicitly, avoiding unsupported filler phrasing."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_snow_access",
+      "field": "evidence_summary",
+      "previous_value": "Tropical lowland/highland climate; snow is climatologically implausible.",
+      "corrected_value": "PAGASA climate-normal data (via Wikipedia citation) shows a tropical monsoon climate with no recorded sub-freezing temperatures; snowfall is not climatically feasible.",
+      "reason": "Reworded to state the decisive climatic basis explicitly, avoiding unsupported filler phrasing."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_skiing_snowboarding_access",
+      "field": "evidence_summary",
+      "previous_value": "Tropical climate; no ski facility exists or is plausible.",
+      "corrected_value": "PAGASA climate-normal data (via Wikipedia citation) shows a tropical monsoon climate with no sub-freezing temperatures or snowfall; a ski facility is not climatically feasible.",
+      "reason": "Reworded to state the decisive climatic basis explicitly, avoiding unsupported filler phrasing."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_lake_access",
+      "field": "source_url",
+      "previous_value": "",
+      "corrected_value": "https://en.wikipedia.org/wiki/Fairhope,_Alabama",
+      "reason": "Attached the same citation already used elsewhere for this destination's geography, which was missing from this row."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_lake_access",
+      "field": "source_name",
+      "previous_value": "",
+      "corrected_value": "Wikipedia",
+      "reason": "Added the source_name citation to match the newly-attached source_url; the row previously had neither."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_lake_access",
+      "field": "confidence",
+      "previous_value": "LOW",
+      "corrected_value": "MEDIUM",
+      "reason": "The bay-vs-lake distinction is a decisive, source-backed definitional fact, not a bare unsupported assertion; raised from LOW."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_lake_access",
+      "field": "evidence_summary",
+      "previous_value": "No named freestanding lake identified; Mobile Bay is a bay/estuary, not a lake (see notes).",
+      "corrected_value": "The destination's defining waterbody, Mobile Bay, is a saltwater bay/estuary rather than a freshwater lake (Wikipedia); no separate freestanding lake is documented within the destination.",
+      "reason": "Reworded to state the decisive geographic/definitional basis explicitly."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_skiing_snowboarding_access",
+      "field": "evidence_summary",
+      "previous_value": "Gulf Coast climate; no ski facility exists or is plausible.",
+      "corrected_value": "Humid subtropical Gulf Coast climate (Wikipedia) with no sub-freezing winter temperatures or snowfall; a ski facility is not climatically feasible.",
+      "reason": "Reworded to state the decisive climatic basis explicitly, avoiding unsupported filler phrasing."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_surfing_access",
+      "field": "evidence_summary",
+      "previous_value": "Mobile Bay is a sheltered estuary, not a surf environment; no evidence of surf culture found.",
+      "corrected_value": "Mobile Bay is a sheltered, shallow estuary rather than an open-ocean coastline (Wikipedia); surfing requires ocean swell, which is definitionally not present in a sheltered bay.",
+      "reason": "Reworded to state the decisive geographic basis explicitly."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_scuba_snorkeling_access",
+      "field": "evidence_summary",
+      "previous_value": "Apo Island (marine sanctuary since 1982, 650+ documented fish species, ranked among Sport Diver Magazine's global top-100 dive sites) is reached via a short drive plus a ~30-minute boat ride from Malatapay near Dumaguete; existing PLACES already flags 'Dauin/Apo Island diving - premier regional diving access south of the city.'",
+      "corrected_value": "Apo Island is a recognized diving and snorkeling destination: a community-managed marine sanctuary since 1982 with over 400 documented coral species and 650+ documented fish species (Wikipedia). It is reached via a short drive plus a boat ride from Malatapay near Dumaguete; existing PLACES already references 'Dauin/Apo Island diving' as a regional recreation asset.",
+      "reason": "Removed unsupported superlative/promotional wording ('globally ranked top-100 dive site', 'premier') per the preferred factual phrasing."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_scuba_snorkeling_access",
+      "field": "proximity_band",
+      "previous_value": "WITHIN_60_MIN",
+      "corrected_value": "UNKNOWN",
+      "reason": "The overall door-to-door travel time (drive to Malatapay plus a boat ride) was not confirmed as a single reliable travel-time figure; only the boat-ride segment (~30 minutes) is directly sourced, so the total is downgraded from an asserted band to UNKNOWN rather than assumed."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_powerboating_access",
+      "field": "proximity_band",
+      "previous_value": "WITHIN_60_MIN",
+      "corrected_value": "UNKNOWN",
+      "reason": "Same reasoning as scuba_snorkeling_access: only the boat-ride segment is directly sourced; the total door-to-door time was not confirmed."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_lake_access",
+      "field": "proximity_band",
+      "previous_value": "WITHIN_30_MIN",
+      "corrected_value": "WITHIN_60_MIN",
+      "reason": "Source states 14.5 km without specifying road vs. straight-line distance, and the terrain is hilly/mountainous; widened from WITHIN_30_MIN to the more conservative band rather than asserting precise driving time."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_countryside_access",
+      "field": "proximity_band",
+      "previous_value": "WITHIN_30_MIN",
+      "corrected_value": "UNKNOWN",
+      "reason": "No specific place or distance was cited for this claim beyond general county character; downgraded from an asserted WITHIN_30_MIN band to UNKNOWN."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_settlement_type_2",
+      "field": "evidence_summary",
+      "previous_value": "Wikipedia explicitly describes the town's evolution into a 'boutique resort and affluent suburb of Mobile'; it is a principal city of the Daphne-Fairhope-Foley metropolitan area.",
+      "corrected_value": "Wikipedia describes Fairhope's evolution as including a shift toward being 'an affluent suburb of Mobile' and notes its status as a principal city of the Daphne-Fairhope-Foley metropolitan area. This reflects Fairhope's regional relationship to Mobile, not its independent local identity as a historic single-tax colony and arts/intellectual community with its own distinct downtown character.",
+      "reason": "Reworded so the secondary characteristic is clearly framed as a metro-relationship fact, not a claim about Fairhope's own primary character, per the Fairhope classification correction."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_suburban_character",
+      "field": "availability_level",
+      "previous_value": "STRONG",
+      "corrected_value": "MODERATE",
+      "reason": "STRONG overstated the suburban framing relative to Fairhope's distinct, independent municipal identity (historic single-tax colony, arts community, compact downtown); MODERATE reflects a real but non-dominant characteristic."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_suburban_character",
+      "field": "evidence_summary",
+      "previous_value": "Same 'affluent suburb of Mobile' characterization plus principal-city status in the metro area.",
+      "corrected_value": "Fairhope has a genuine metro-area relationship to Mobile (principal city of the Daphne-Fairhope-Foley metro area; Wikipedia describes it as having become 'an affluent suburb of Mobile'), but this is secondary to its distinct, independent identity as a historic single-tax colony and arts/intellectual community with its own compact downtown core.",
+      "reason": "Reworded to keep Fairhope's independent local character distinct from its broader metropolitan relationship, per the Fairhope classification correction."
+    },
+    {
+      "record_key": "place::dumaguete-ph::Apo Island Marine Sanctuary (via Malatapay boat departure)",
+      "field": "confidence",
+      "previous_value": "HIGH",
+      "corrected_value": "MEDIUM",
+      "reason": "Wikipedia alone cannot independently support HIGH confidence; capped at MEDIUM."
+    },
+    {
+      "record_key": "place::dumaguete-ph::Apo Island Marine Sanctuary (via Malatapay boat departure)",
+      "field": "short_description",
+      "previous_value": "Community-managed marine sanctuary and globally recognized dive/snorkel site off Dauin municipality; reached via a short drive plus ~30-minute boat ride from Malatapay.",
+      "corrected_value": "A recognized diving and snorkeling destination: a community-managed marine sanctuary off Dauin municipality, reached via a short drive plus a boat ride from Malatapay.",
+      "reason": "Removed unsupported superlative wording ('globally recognized') per the preferred factual phrasing."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_suburban_character",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_master_planned_or_gated_character",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_lake_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_snow_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_boat_launch_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_powerboating_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_sailing_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_fishing_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_kayaking_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_paddleboarding_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_paddleboarding_access",
+      "field": "display_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: a LOW-confidence row with no informative, qualified evidence_summary provides no useful consumer context and should not display."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_golf_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_pickleball_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_pickleball_access",
+      "field": "display_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: a LOW-confidence row with no informative, qualified evidence_summary provides no useful consumer context and should not display."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_tennis_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_skiing_snowboarding_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_road_cycling_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_mountain_biking_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_mountain_biking_access",
+      "field": "display_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: a LOW-confidence row with no informative, qualified evidence_summary provides no useful consumer context and should not display."
+    },
+    {
+      "record_key": "lf_ascoli_piceno_it_hunting_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_retirement_orientation",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_college_town_character",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_master_planned_or_gated_character",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_river_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_desert_setting",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_snow_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_boat_launch_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_slip_or_mooring_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_powerboating_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_sailing_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_fishing_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_kayaking_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_paddleboarding_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_surfing_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_scuba_snorkeling_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_golf_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_pickleball_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_pickleball_access",
+      "field": "display_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: a LOW-confidence row with no informative, qualified evidence_summary provides no useful consumer context and should not display."
+    },
+    {
+      "record_key": "lf_sarande_al_tennis_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_tennis_access",
+      "field": "display_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: a LOW-confidence row with no informative, qualified evidence_summary provides no useful consumer context and should not display."
+    },
+    {
+      "record_key": "lf_sarande_al_road_cycling_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_road_cycling_access",
+      "field": "display_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: a LOW-confidence row with no informative, qualified evidence_summary provides no useful consumer context and should not display."
+    },
+    {
+      "record_key": "lf_sarande_al_mountain_biking_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_mountain_biking_access",
+      "field": "display_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: a LOW-confidence row with no informative, qualified evidence_summary provides no useful consumer context and should not display."
+    },
+    {
+      "record_key": "lf_sarande_al_hunting_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_sarande_al_dining_strength",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_master_planned_or_gated_character",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_tourism_seasonality",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_boat_launch_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_slip_or_mooring_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_sailing_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_kayaking_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_paddleboarding_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_paddleboarding_access",
+      "field": "display_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: a LOW-confidence row with no informative, qualified evidence_summary provides no useful consumer context and should not display."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_surfing_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_golf_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_pickleball_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_pickleball_access",
+      "field": "display_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: a LOW-confidence row with no informative, qualified evidence_summary provides no useful consumer context and should not display."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_tennis_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_trail_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_road_cycling_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_mountain_biking_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_mountain_biking_access",
+      "field": "display_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: a LOW-confidence row with no informative, qualified evidence_summary provides no useful consumer context and should not display."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_hunting_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_dumaguete_ph_dining_strength",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_retirement_orientation",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_college_town_character",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_master_planned_or_gated_character",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_tourism_seasonality",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_lake_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_river_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_desert_setting",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_marina_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_boat_launch_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_slip_or_mooring_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_powerboating_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_sailing_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_kayaking_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_paddleboarding_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_scuba_snorkeling_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_golf_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_pickleball_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_pickleball_access",
+      "field": "display_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: a LOW-confidence row with no informative, qualified evidence_summary provides no useful consumer context and should not display."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_tennis_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_trail_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_road_cycling_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_mountain_biking_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_mountain_biking_access",
+      "field": "display_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: a LOW-confidence row with no informative, qualified evidence_summary provides no useful consumer context and should not display."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_hunting_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_parks_open_space_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_arts_culture_strength",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_las_terrenas_do_farmers_market_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_tourism_seasonality",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_river_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_slip_or_mooring_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_sailing_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_kayaking_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_paddleboarding_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_swimming_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_scuba_snorkeling_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_pickleball_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_tennis_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_mountain_biking_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    },
+    {
+      "record_key": "lf_fairhope_al_us_hunting_access",
+      "field": "matching_enabled",
+      "previous_value": "YES",
+      "corrected_value": "NO",
+      "reason": "Mechanical rule: UNKNOWN/LOW-confidence (and mirrored beach/mountain) rows must never be matching_enabled=YES."
+    }
+  ]
+}
