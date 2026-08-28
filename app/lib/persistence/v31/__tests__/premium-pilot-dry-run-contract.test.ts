@@ -36,6 +36,7 @@ const requiredPresenceModules = [
   "realityCheck",
   "environmentQuality",
   "dailyLifePracticality",
+  "lifestyleFeatures",
 ] as const;
 
 function readDryRunPayload() {

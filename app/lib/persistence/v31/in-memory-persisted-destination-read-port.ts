@@ -23,6 +23,7 @@ const REPLACE_MODULE_KEYS = [
   "retirementAging",
   "lifestyleLaws",
   "realityCheck",
+  "lifestyleFeatures",
 ] as const;
 const SINGLETON_MODULE_KEYS = ["environmentQuality", "dailyLifePracticality"] as const;
 const ALL_PRESENCE_MODULE_KEYS: readonly PersistedPresenceModuleKey[] = [...KEYED_CHILD_MODULE_KEYS, ...REPLACE_MODULE_KEYS, ...SINGLETON_MODULE_KEYS];

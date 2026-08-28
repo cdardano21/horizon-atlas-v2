@@ -10,6 +10,7 @@ import { buildNeighborhoodIntelligenceSeedData } from "../../lib/neighborhood-in
 import { buildPremiumDestinationEditorialPackage } from "../../lib/premium-destination-engine";
 import { isPlaceWebsiteVisible } from "../../lib/website-verification";
 import Footer from "../Footer";
+import LifestyleRecreationSection from "./LifestyleRecreationSection";
 import Navbar from "../Navbar";
 
 interface CanonicalDestinationPageProps {
@@ -2352,6 +2353,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               </div>
             </section>
           ))}
+
+          {destination.v31Modules ? <LifestyleRecreationSection lifestyleFeatures={destination.v31Modules.lifestyleFeatures ?? []} /> : null}
 
           {/* Raw per-module fields (notes/severity/TriState tokens) - developer/admin diagnostic only, never public. */}
           {hasV31Bundle && developerMode ? (

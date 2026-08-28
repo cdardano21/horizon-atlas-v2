@@ -435,6 +435,23 @@ const mapMoveChecklistEventsAndSources = (bundle: NormalizedPersistedDestination
   sources: bundle.sources.map((item) => ({ sourceKey: item.sourceKey, name: item.name, url: item.url, type: item.type })),
 });
 
+const mapLifestyleFeatures = (bundle: NormalizedPersistedDestinationBundle): CanonicalDestinationV31Modules["lifestyleFeatures"] =>
+  (bundle.lifestyleFeatures ?? []).map((item) => ({
+    recordKey: item.recordKey,
+    featureGroup: item.featureGroup,
+    featureKey: item.featureKey,
+    featureValue: item.featureValue,
+    availabilityLevel: item.availabilityLevel,
+    proximityBand: item.proximityBand,
+    displayLabel: item.displayLabel,
+    evidenceSummary: item.evidenceSummary,
+    sourceName: item.sourceName,
+    sourceUrl: item.sourceUrl,
+    confidence: item.confidence,
+    matchingEnabled: item.matchingEnabled,
+    displayEnabled: item.displayEnabled,
+  }));
+
 export const buildCanonicalDestinationV31Modules = (bundle: NormalizedPersistedDestinationBundle): CanonicalDestinationV31Modules => {
   const placesAndResources = mapPlacesAndResources(bundle);
   const costAndClimate = mapCostAndClimate(bundle);
@@ -478,6 +495,7 @@ export const buildCanonicalDestinationV31Modules = (bundle: NormalizedPersistedD
     moveChecklist: moveChecklistEventsAndSources.moveChecklist,
     eventsSeasonality: moveChecklistEventsAndSources.eventsSeasonality,
     sources: moveChecklistEventsAndSources.sources,
+    lifestyleFeatures: mapLifestyleFeatures(bundle),
   };
 };
 

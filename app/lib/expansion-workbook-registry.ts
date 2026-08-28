@@ -36,17 +36,17 @@ export interface ExpansionWorkbookRegistryEntry {
 export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntry[] = [
   {
     registryId: "batch-01",
-    workbookPath: "data/DestinationFinderAI_Expansion_Batch_01_5_Destinations_v3.2.xlsx",
+    workbookPath: "data/DestinationFinderAI_Expansion_Batch_01_5_Destinations_v3.3.xlsx",
     environment: "preview",
     expectedDestinationKeys: ["the-villages-fl-us", "sofia-bg", "puerto-vallarta-mx", "hoi-an-vn", "queenstown-nz"],
-    expectedSha256: "bbf101ee758733349109943510369d07c666fca1decee30250a9d2fa73016a4a",
+    expectedSha256: "2a0a7087123f9b4ff6eb57c3a20087e3ad966877bdef5bcd6a651787182499b8",
   },
   {
     registryId: "batch-02",
-    workbookPath: "data/DestinationFinderAI_Expansion_Batch_02_5_Destinations_v3.2.xlsx",
+    workbookPath: "data/DestinationFinderAI_Expansion_Batch_02_5_Destinations_v3.3.xlsx",
     environment: "preview",
     expectedDestinationKeys: ["ascoli-piceno-it", "sarande-al", "dumaguete-ph", "las-terrenas-do", "fairhope-al-us"],
-    expectedSha256: "347afe628d5ceb3bbf0bc1b0b44a358b24bf575214946b40f4297fd3b6a80fe1",
+    expectedSha256: "8abcd297014c88a884784e4f1bd2169141f3fda5750ebab36d6943c2c6925a03",
   },
 ];
 

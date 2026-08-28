@@ -312,6 +312,22 @@ export type CanonicalDestinationV31Modules = {
   readonly moveChecklist: readonly { readonly checklistKey: string; readonly summary: string | null; readonly checklistNotes: string | null }[];
   readonly eventsSeasonality: readonly { readonly eventSeasonalityKey: string; readonly summary: string | null; readonly seasonalityNotes: string | null }[];
   readonly sources: readonly { readonly sourceKey: string; readonly name: string | null; readonly url: string | null; readonly type: string | null }[];
+  /** LIFESTYLE_FEATURES (v3.3, additive, display-only) - not yet connected to Intelligence v2/scoring. */
+  readonly lifestyleFeatures: readonly {
+    readonly recordKey: string;
+    readonly featureGroup: string | null;
+    readonly featureKey: string | null;
+    readonly featureValue: string | null;
+    readonly availabilityLevel: string | null;
+    readonly proximityBand: string | null;
+    readonly displayLabel: string | null;
+    readonly evidenceSummary: string | null;
+    readonly sourceName: string | null;
+    readonly sourceUrl: string | null;
+    readonly confidence: string | null;
+    readonly matchingEnabled: string | null;
+    readonly displayEnabled: string | null;
+  }[];
 };
 
 export type CanonicalDestination = {

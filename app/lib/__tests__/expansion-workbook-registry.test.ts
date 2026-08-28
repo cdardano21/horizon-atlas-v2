@@ -41,13 +41,13 @@ const BATCH01_PATH = path.resolve(process.cwd(), BATCH_01_ENTRY.workbookPath);
 const EXPECTED_BATCH01 = {
   "the-villages-fl-us": { title: "The Villages", country: "United States", neighborhoods: 8, places: 28, media: 4, sources: 17 },
   "sofia-bg": { title: "Sofia", country: "Bulgaria", neighborhoods: 8, places: 26, media: 3, sources: 18 },
-  "puerto-vallarta-mx": { title: "Puerto Vallarta", country: "Mexico", neighborhoods: 8, places: 26, media: 4, sources: 20 },
-  "hoi-an-vn": { title: "Hoi An", country: "Vietnam", neighborhoods: 8, places: 26, media: 4, sources: 19 },
+  "puerto-vallarta-mx": { title: "Puerto Vallarta", country: "Mexico", neighborhoods: 8, places: 27, media: 4, sources: 20 },
+  "hoi-an-vn": { title: "Hoi An", country: "Vietnam", neighborhoods: 8, places: 27, media: 4, sources: 19 },
   "queenstown-nz": { title: "Queenstown", country: "New Zealand", neighborhoods: 8, places: 31, media: 5, sources: 23 },
 } as const;
 
 const EXPECTED = {
-  "ascoli-piceno-it": { title: "Ascoli Piceno", country: "Italy", neighborhoods: 7, places: 20, media: 5, sources: 9 },
+  "ascoli-piceno-it": { title: "Ascoli Piceno", country: "Italy", neighborhoods: 7, places: 21, media: 5, sources: 9 },
   "sarande-al": { title: "Sarandë", country: "Albania", neighborhoods: 6, places: 20, media: 5, sources: 21 },
   "dumaguete-ph": { title: "Dumaguete City", country: "Philippines", neighborhoods: 7, places: 20, media: 5, sources: 16 },
   "las-terrenas-do": { title: "Las Terrenas", country: "Dominican Republic", neighborhoods: 7, places: 20, media: 5, sources: 17 },

@@ -62,6 +62,8 @@ export interface PersistedReplaceModulesRows {
   readonly retirementAging: readonly PersistedPositionedRow[];
   readonly lifestyleLaws: readonly PersistedPositionedRow[];
   readonly realityCheck: readonly PersistedRealityCheckRow[];
+  /** Optional for backward compatibility with callers/fixtures predating LIFESTYLE_FEATURES (v3.3, additive, display-only). */
+  readonly lifestyleFeatures?: readonly PersistedLifestyleFeatureRow[];
 }
 
 export interface PersistedSingletonsRows {
@@ -298,6 +300,27 @@ export interface PersistedRealityCheckRow {
   readonly severity: string | null;
 }
 
+/** LIFESTYLE_FEATURES (v3.3, additive, display-only) - every field preserved verbatim. */
+export interface PersistedLifestyleFeatureRow {
+  readonly destinationId: string;
+  readonly destinationKey: string;
+  readonly recordKey: string;
+  readonly featureGroup: string | null;
+  readonly featureKey: string | null;
+  readonly featureValue: string | null;
+  readonly availabilityLevel: string | null;
+  readonly proximityBand: string | null;
+  readonly displayLabel: string | null;
+  readonly evidenceSummary: string | null;
+  readonly sourceName: string | null;
+  readonly sourceUrl: string | null;
+  readonly sourceAsOfDate: string | null;
+  readonly confidence: string | null;
+  readonly matchingEnabled: string | null;
+  readonly displayEnabled: string | null;
+  readonly notes: string | null;
+}
+
 export interface PersistedEnvironmentQualityRow {
   readonly destinationId: string;
   readonly destinationKey: string;
@@ -391,5 +414,6 @@ export function normalizePersistedDestinationRows(input: {
     dailyLifePracticality: input.singletons.dailyLifePracticality.length === 0 ? null : omitIdentity(input.singletons.dailyLifePracticality[0]),
     eventsSeasonality: input.keyedChildren.eventsSeasonality.map(omitIdentity),
     sources: input.keyedChildren.sources.map(omitIdentity),
+    lifestyleFeatures: (input.replaceModules.lifestyleFeatures ?? []).map(omitIdentity),
   };
 }

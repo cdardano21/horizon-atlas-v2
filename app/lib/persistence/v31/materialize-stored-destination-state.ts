@@ -260,6 +260,24 @@ export interface NormalizedPersistedDestinationBundle {
     readonly url: string | null;
     readonly type: string | null;
   }>;
+  /** LIFESTYLE_FEATURES (v3.3, additive, display-only) - preserves every field verbatim, including "UNKNOWN", confidence, matching_enabled, display_enabled. Empty for v3.2-only workbooks. Optional for backward compatibility with bundles/fixtures predating this module. */
+  readonly lifestyleFeatures?: ReadonlyArray<{
+    readonly recordKey: string;
+    readonly featureGroup: string | null;
+    readonly featureKey: string | null;
+    readonly featureValue: string | null;
+    readonly availabilityLevel: string | null;
+    readonly proximityBand: string | null;
+    readonly displayLabel: string | null;
+    readonly evidenceSummary: string | null;
+    readonly sourceName: string | null;
+    readonly sourceUrl: string | null;
+    readonly sourceAsOfDate: string | null;
+    readonly confidence: string | null;
+    readonly matchingEnabled: string | null;
+    readonly displayEnabled: string | null;
+    readonly notes: string | null;
+  }>;
 }
 
 function asNullableString(value: string | null): string | null {
@@ -526,6 +544,23 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
       name: asNullableString(source.name),
       url: asNullableString(source.url),
       type: asNullableString(source.type),
+    })),
+    lifestyleFeatures: (bundle.lifestyleFeatures ?? []).map((feature) => ({
+      recordKey: feature.recordKey as StoredDestinationState["lifestyleFeatures"][number]["recordKey"],
+      featureGroup: asNullableString(feature.featureGroup),
+      featureKey: asNullableString(feature.featureKey),
+      featureValue: asNullableString(feature.featureValue),
+      availabilityLevel: asNullableString(feature.availabilityLevel),
+      proximityBand: asNullableString(feature.proximityBand),
+      displayLabel: asNullableString(feature.displayLabel),
+      evidenceSummary: asNullableString(feature.evidenceSummary),
+      sourceName: asNullableString(feature.sourceName),
+      sourceUrl: asNullableString(feature.sourceUrl),
+      sourceAsOfDate: asNullableString(feature.sourceAsOfDate),
+      confidence: asNullableString(feature.confidence),
+      matchingEnabled: asNullableString(feature.matchingEnabled),
+      displayEnabled: asNullableString(feature.displayEnabled),
+      notes: asNullableString(feature.notes),
     })),
   };
 }

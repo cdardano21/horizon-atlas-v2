@@ -205,6 +205,7 @@ function createDefaultState(overrides: Partial<TestReadPortState> = {}): TestRea
       { destinationId: identity.destinationId, destinationKey: identity.destinationKey, module: "realityCheck" },
       { destinationId: identity.destinationId, destinationKey: identity.destinationKey, module: "environmentQuality" },
       { destinationId: identity.destinationId, destinationKey: identity.destinationKey, module: "dailyLifePracticality" },
+      { destinationId: identity.destinationId, destinationKey: identity.destinationKey, module: "lifestyleFeatures" },
     ],
     keyedChildren: {
       facts: [],

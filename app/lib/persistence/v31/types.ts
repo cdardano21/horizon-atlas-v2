@@ -18,6 +18,7 @@ import type {
   DeterministicV31CanonicalHousingState,
   DeterministicV31CanonicalIdentity,
   DeterministicV31CanonicalLanguageIntegrationState,
+  DeterministicV31CanonicalLifestyleFeature,
   DeterministicV31CanonicalLifestyleLawState,
   DeterministicV31CanonicalLgbtqInclusivityState,
   DeterministicV31CanonicalMedia,
@@ -50,6 +51,7 @@ export type PlaceKey = StableChildKey & { readonly __placeKeyBrand: true };
 export type ResourceKey = StableChildKey & { readonly __resourceKeyBrand: true };
 export type MediaKey = StableChildKey & { readonly __mediaKeyBrand: true };
 export type SourceKey = StableChildKey & { readonly __sourceKeyBrand: true };
+export type LifestyleFeatureKey = StableChildKey & { readonly __lifestyleFeatureKeyBrand: true };
 export type CostOfLivingItemKey = StableChildKey & { readonly __costOfLivingItemKeyBrand: true };
 export type PropertyResourceKey = StableChildKey & { readonly __propertyResourceKeyBrand: true };
 export type SafetyRiskKey = StableChildKey & { readonly __safetyRiskKeyBrand: true };
@@ -350,6 +352,25 @@ export type StoredSourceShape<T extends DeterministicV31CanonicalSource> = {
   readonly type: CanonicalNullableString<T["source_type"]>;
 };
 
+/** Preserves every LIFESTYLE_FEATURES field verbatim (including "UNKNOWN", confidence, matching_enabled, display_enabled) - display-only, not yet connected to scoring. */
+export type StoredLifestyleFeatureShape<T extends DeterministicV31CanonicalLifestyleFeature> = {
+  readonly recordKey: LifestyleFeatureKey;
+  readonly featureGroup: CanonicalNullableString<T["feature_group"]>;
+  readonly featureKey: CanonicalNullableString<T["feature_key"]>;
+  readonly featureValue: CanonicalNullableString<T["feature_value"]>;
+  readonly availabilityLevel: CanonicalNullableString<T["availability_level"]>;
+  readonly proximityBand: CanonicalNullableString<T["proximity_band"]>;
+  readonly displayLabel: CanonicalNullableString<T["display_label"]>;
+  readonly evidenceSummary: CanonicalNullableString<T["evidence_summary"]>;
+  readonly sourceName: CanonicalNullableString<T["source_name"]>;
+  readonly sourceUrl: CanonicalNullableString<T["source_url"]>;
+  readonly sourceAsOfDate: CanonicalNullableString<T["source_as_of_date"]>;
+  readonly confidence: CanonicalNullableString<T["confidence"]>;
+  readonly matchingEnabled: CanonicalNullableString<T["matching_enabled"]>;
+  readonly displayEnabled: CanonicalNullableString<T["display_enabled"]>;
+  readonly notes: CanonicalNullableString<T["notes"]>;
+};
+
 type StoredDestinationStateShape<T extends DeterministicV31CanonicalDestination> = {
   readonly identity: {
     readonly destinationKey: CanonicalDestinationKey;
@@ -391,6 +412,7 @@ type StoredDestinationStateShape<T extends DeterministicV31CanonicalDestination>
   readonly dailyLifePracticality: StoredDailyLifePracticalityStateShape<T["dailyLifePracticality"]> | null;
   readonly eventsSeasonality: readonly StoredEventsSeasonalityStateShape<T["eventsSeasonality"][number]>[];
   readonly sources: readonly StoredSourceShape<T["sources"][number]>[];
+  readonly lifestyleFeatures: readonly StoredLifestyleFeatureShape<T["lifestyleFeatures"][number]>[];
 };
 
 type CanonicalModuleCardinality<M extends keyof DeterministicV31CanonicalDestination> = DeterministicV31CanonicalDestination[M] extends ReadonlyArray<infer _> ? "array" : "singleton";
@@ -525,6 +547,8 @@ export type StoredEventsSeasonalityState = StoredEventsSeasonalityStateShape<Det
 
 export type StoredSource = StoredSourceShape<DeterministicV31CanonicalSource>;
 
+export type StoredLifestyleFeature = StoredLifestyleFeatureShape<DeterministicV31CanonicalLifestyleFeature>;
+
 export type StoredDestinationState = StoredDestinationStateShape<DeterministicV31CanonicalDestination>;
 
 /**
@@ -650,7 +674,8 @@ export type CanonicalRepeatableModuleKey =
   | "environmentQuality"
   | "dailyLifePracticality"
   | "eventsSeasonality"
-  | "sources";
+  | "sources"
+  | "lifestyleFeatures";
 
 export type KeyedChildModuleKey =
   | "facts"
@@ -694,6 +719,7 @@ export type PersistedPresenceModuleKey =
   | "retirementAging"
   | "lifestyleLaws"
   | "realityCheck"
+  | "lifestyleFeatures"
   | SingletonModuleKey;
 
 export type ReplaceModuleExecutionModuleKey = Exclude<CanonicalRepeatableModuleKey, KeyedChildModuleKey | SingletonModuleKey>;
@@ -731,6 +757,7 @@ export interface ReplaceModuleExecutionPayloadByModule {
   dailyLifePracticality: StoredDailyLifePracticalityState;
   eventsSeasonality: StoredEventsSeasonalityState;
   sources: StoredSource;
+  lifestyleFeatures: StoredLifestyleFeature;
 }
 
 export type ReplaceModuleExecutionPayload<M extends ReplaceModuleExecutionModuleKey> = ReplaceModuleExecutionPayloadByModule[M];
@@ -806,6 +833,7 @@ type _PersistedPresenceModuleKeySet = AssertTrue<IsEqual<PersistedPresenceModule
   | "retirementAging"
   | "lifestyleLaws"
   | "realityCheck"
+  | "lifestyleFeatures"
   | "environmentQuality"
   | "dailyLifePracticality"
 >>;

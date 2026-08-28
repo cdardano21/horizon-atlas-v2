@@ -7,17 +7,17 @@ import { EXPANSION_WORKBOOK_REGISTRY } from "../expansion-workbook-registry";
 
 /**
  * Final (not proof-of-concept) preservation check for the Lifestyle v3.3
- * candidate workbooks, both Batch #1 and Batch #2. Proves that each new,
- * LOCAL-ONLY, not-yet-registered v3.3 workbook is a strict superset of its
- * untouched v3.2 baseline: every pre-existing sheet/header/row/cell/hyperlink
- * is unchanged, the only new sheet is LIFESTYLE_FEATURES populated with that
- * batch's final validated evidence rows, PLACES gained only the
- * already-reviewed additive rows, and the only tolerated pre-existing-row
- * change is the approved WORKBOOK_METADATA.schema_version bump ("3.2" -> "3.3").
+ * candidate workbooks, both Batch #1 and Batch #2. Proves that each new
+ * v3.3 workbook is a strict superset of its untouched v3.2 baseline: every
+ * pre-existing sheet/header/row/cell/hyperlink is unchanged, the only new
+ * sheet is LIFESTYLE_FEATURES populated with that batch's final validated
+ * evidence rows, PLACES gained only the already-reviewed additive rows, and
+ * the only tolerated pre-existing-row change is the approved
+ * WORKBOOK_METADATA.schema_version bump ("3.2" -> "3.3").
  *
- * These v3.3 files are intentionally not committed to be activated (they are
- * inactive candidates, not registered in expansion-workbook-registry.ts), so
- * this suite skips gracefully when either is absent rather than failing.
+ * As of Phase 4 these v3.3 files are registered in expansion-workbook-registry.ts
+ * for LOCAL PREVIEW ONLY (never production/Supabase). This suite still skips
+ * gracefully when either file is absent rather than failing.
  */
 
 const COMPARATOR_SCRIPT_PATH = path.resolve(process.cwd(), "scripts/compare_workbook_semantic_preservation.py");
@@ -106,19 +106,20 @@ const runComparator = (v32Path: string, v33Path: string): SemanticPreservationRe
 
 const allFilesExist = BATCHES.every((batch) => existsSync(batch.v32Path) && existsSync(batch.v33Path));
 
-describe.skipIf(!allFilesExist)("Lifestyle v3.3 candidate workbooks - final semantic preservation (Batch #1 and Batch #2, not yet registered)", () => {
+describe.skipIf(!allFilesExist)("Lifestyle v3.3 candidate workbooks - final semantic preservation (Batch #1 and Batch #2, registered for local preview in Phase 4)", () => {
   for (const batch of BATCHES) {
     describe(batch.label, () => {
-      it("v3.2 baseline is still byte-identical to its pinned registry SHA-256", () => {
+      it("v3.2 baseline file on disk is still byte-identical to its previously-pinned hash (the untouched original, kept only for comparison)", () => {
         const actualSha256 = createHash("sha256").update(readFileSync(batch.v32Path)).digest("hex");
         expect(actualSha256).toBe(batch.v32ExpectedSha256);
-        const registryEntry = EXPANSION_WORKBOOK_REGISTRY.find((entry) => entry.registryId === batch.registryId);
-        expect(registryEntry?.expectedSha256).toBe(batch.v32ExpectedSha256);
       });
 
-      it("v3.3 candidate matches its expected, previously-validated SHA-256", () => {
+      it("v3.3 candidate matches its expected, previously-validated SHA-256, and the real preview registry now pins that exact same hash (Phase 4 registration)", () => {
         const actualSha256 = createHash("sha256").update(readFileSync(batch.v33Path)).digest("hex");
         expect(actualSha256).toBe(batch.v33ExpectedSha256);
+        const registryEntry = EXPANSION_WORKBOOK_REGISTRY.find((entry) => entry.registryId === batch.registryId);
+        expect(registryEntry?.expectedSha256).toBe(batch.v33ExpectedSha256);
+        expect(registryEntry?.workbookPath).toContain("v3.3");
       });
 
       it("every pre-existing sheet/header/row/cell/hyperlink is unchanged, tolerating only the approved schema_version bump and additive PLACES rows", () => {
@@ -142,9 +143,10 @@ describe.skipIf(!allFilesExist)("Lifestyle v3.3 candidate workbooks - final sema
     });
   }
 
-  it("the real registry does not reference either v3.3 candidate file", () => {
+  it("the real preview registry now references both v3.3 candidate files (Phase 4 registration), never the retired v3.2 paths", () => {
     for (const entry of EXPANSION_WORKBOOK_REGISTRY) {
-      expect(entry.workbookPath).not.toContain("v3.3");
+      expect(entry.workbookPath).toContain("v3.3");
+      expect(entry.workbookPath).not.toContain("v3.2");
     }
   });
 

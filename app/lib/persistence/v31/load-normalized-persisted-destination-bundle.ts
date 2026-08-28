@@ -40,6 +40,18 @@ const REQUIRED_PRESENCE_MODULES: readonly PersistedPresenceModuleKey[] = [
   "dailyLifePracticality",
 ];
 
+/**
+ * Additive, v3.3-only modules that are NOT required for a persisted destination's presence set to be
+ * considered complete/current. Real, pre-existing Supabase-backed production destinations were persisted
+ * before this module existed and must keep resolving successfully (never UNSUPPORTED_LEGACY_STATE) purely
+ * because they predate an additive module. When a presence row for one of these modules IS present (e.g.
+ * the in-memory preview read port, which always emits one), it is still recognized as valid - it is simply
+ * never required.
+ */
+const OPTIONAL_PRESENCE_MODULES: readonly PersistedPresenceModuleKey[] = ["lifestyleFeatures"];
+
+const KNOWN_PRESENCE_MODULES: readonly PersistedPresenceModuleKey[] = [...REQUIRED_PRESENCE_MODULES, ...OPTIONAL_PRESENCE_MODULES];
+
 function createFailure(reason: "DESTINATION_NOT_FOUND" | "DB_READ_FAILED" | "UNSUPPORTED_LEGACY_STATE" | "INCOMPLETE_PERSISTED_STATE" | "MALFORMED_PERSISTED_STATE", identity: ResolvedDestinationIdentity, module?: PersistedPresenceModuleKey | null): PersistedDestinationReadFailure {
   if (module == null) {
     return { reason, destinationIdentity: identity };
@@ -112,7 +124,7 @@ function isPersistedPresenceRow(value: unknown): value is PersistedPresenceRow {
     && typeof value.destinationId === "string"
     && typeof value.destinationKey === "string"
     && typeof value.module === "string"
-    && REQUIRED_PRESENCE_MODULES.includes(value.module as PersistedPresenceModuleKey);
+    && KNOWN_PRESENCE_MODULES.includes(value.module as PersistedPresenceModuleKey);
 }
 
 function isPersistedPresenceRows(value: unknown): value is readonly PersistedPresenceRow[] {
@@ -320,6 +332,7 @@ export async function loadNormalizedPersistedDestinationBundle(identity: Resolve
     validatePositionedModule(replaceModules.retirementAging, identity),
     validatePositionedModule(replaceModules.lifestyleLaws, identity),
     validateModuleRows(replaceModules.realityCheck, identity),
+    validateModuleRows(replaceModules.lifestyleFeatures ?? [], identity, "recordKey"),
   ];
 
   for (const validation of replaceModulesValidation) {

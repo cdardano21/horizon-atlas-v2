@@ -596,6 +596,26 @@ export interface DeterministicV31CanonicalSource {
   notes: DeterministicV31CanonicalStringValue;
 }
 
+/** LIFESTYLE_FEATURES (v3.3, additive) - one row per destination/feature_key. Optional sheet: absent in v3.2 workbooks, which yields an empty array, never a fabricated default. */
+export interface DeterministicV31CanonicalLifestyleFeature {
+  destination_key: string;
+  record_key: DeterministicV31CanonicalStringValue;
+  feature_group: DeterministicV31CanonicalStringValue;
+  feature_key: DeterministicV31CanonicalStringValue;
+  feature_value: DeterministicV31CanonicalStringValue;
+  availability_level: DeterministicV31CanonicalStringValue;
+  proximity_band: DeterministicV31CanonicalStringValue;
+  display_label: DeterministicV31CanonicalStringValue;
+  evidence_summary: DeterministicV31CanonicalStringValue;
+  source_name: DeterministicV31CanonicalStringValue;
+  source_url: DeterministicV31CanonicalStringValue;
+  source_as_of_date: DeterministicV31CanonicalStringValue;
+  confidence: DeterministicV31CanonicalStringValue;
+  matching_enabled: DeterministicV31CanonicalStringValue;
+  display_enabled: DeterministicV31CanonicalStringValue;
+  notes: DeterministicV31CanonicalStringValue;
+}
+
 export type DeterministicV31Destination = {
   destinationKey: string;
   slug: string;
@@ -655,6 +675,7 @@ export interface DeterministicV31CanonicalDestination {
   dailyLifePracticality: DeterministicV31CanonicalDailyLifePracticalityState | null;
   eventsSeasonality: DeterministicV31CanonicalEventsSeasonalityState[];
   sources: DeterministicV31CanonicalSource[];
+  lifestyleFeatures: DeterministicV31CanonicalLifestyleFeature[];
 }
 
 export type DeterministicV31ImportPlan = {
@@ -854,6 +875,7 @@ export const buildDeterministicV31CanonicalDestination = (input: {
     dailyLifePracticality: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "DAILY_LIFE_PRACTICALITY", destinationKey)[0] ? asCanonicalModuleRow<DeterministicV31CanonicalDailyLifePracticalityState>(getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "DAILY_LIFE_PRACTICALITY", destinationKey)[0]) : null,
     eventsSeasonality: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "EVENTS_SEASONALITY", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalEventsSeasonalityState>(record)),
     sources: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "SOURCES", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalSource>(record)),
+    lifestyleFeatures: getSheetRowsForDestination(input.sheetRows, input.headersBySheet, "LIFESTYLE_FEATURES", destinationKey).map((record) => asCanonicalModuleRow<DeterministicV31CanonicalLifestyleFeature>(record)),
   } as DeterministicV31CanonicalDestination;
 };
 
@@ -1038,7 +1060,7 @@ export const loadFrozenWorkbookV31DeterministicImport = async (explicitWorkbookP
       const aliasHeaders = aliasSheetRows[0] ?? [];
       const aliasRows = aliasSheetRows.slice(1);
 
-      const moduleSheetNames = ["NEIGHBORHOODS", "PLACES", "RESOURCES", "MEDIA", "COST_OF_LIVING", "CLIMATE_MONTHLY", "HOUSING_PROPERTY", "PROPERTY_RESOURCES", "HEALTHCARE_INSURANCE", "VISA_RESIDENCY", "TAXES_FINANCE", "LGBTQ_INCLUSIVITY", "SAFETY_RISKS", "TRANSPORT_AIRPORTS", "CONNECTIVITY_REMOTE_WORK", "LANGUAGE_INTEGRATION", "PETS", "FAMILY_EDUCATION", "COMMUNITY_SOCIAL", "ACCESSIBILITY", "BUREAUCRACY_SETUP", "WORK_BUSINESS", "RETIREMENT_AGING", "LIFESTYLE_LAWS", "REALITY_CHECK", "MOVE_CHECKLIST", "ENVIRONMENT_QUALITY", "DAILY_LIFE_PRACTICALITY", "EVENTS_SEASONALITY", "SOURCES"];
+      const moduleSheetNames = ["NEIGHBORHOODS", "PLACES", "RESOURCES", "MEDIA", "COST_OF_LIVING", "CLIMATE_MONTHLY", "HOUSING_PROPERTY", "PROPERTY_RESOURCES", "HEALTHCARE_INSURANCE", "VISA_RESIDENCY", "TAXES_FINANCE", "LGBTQ_INCLUSIVITY", "SAFETY_RISKS", "TRANSPORT_AIRPORTS", "CONNECTIVITY_REMOTE_WORK", "LANGUAGE_INTEGRATION", "PETS", "FAMILY_EDUCATION", "COMMUNITY_SOCIAL", "ACCESSIBILITY", "BUREAUCRACY_SETUP", "WORK_BUSINESS", "RETIREMENT_AGING", "LIFESTYLE_LAWS", "REALITY_CHECK", "MOVE_CHECKLIST", "ENVIRONMENT_QUALITY", "DAILY_LIFE_PRACTICALITY", "EVENTS_SEASONALITY", "SOURCES", "LIFESTYLE_FEATURES"];
 
       const aliasResolution = Object.fromEntries(
         aliasRows
@@ -1118,7 +1140,7 @@ export const loadFrozenWorkbookV31DeterministicImport = async (explicitWorkbookP
       }
 
       const orphanedChildRows = [] as string[];
-      for (const sheetName of ["DESTINATION_FACTS", "DESTINATION_SCORES", "NEIGHBORHOODS", "PLACES", "RESOURCES", "MEDIA", "COST_OF_LIVING", "CLIMATE_MONTHLY", "HOUSING_PROPERTY", "PROPERTY_RESOURCES", "HEALTHCARE_INSURANCE", "VISA_RESIDENCY", "TAXES_FINANCE", "LGBTQ_INCLUSIVITY", "SAFETY_RISKS", "TRANSPORT_AIRPORTS", "CONNECTIVITY_REMOTE_WORK", "LANGUAGE_INTEGRATION", "PETS", "FAMILY_EDUCATION", "COMMUNITY_SOCIAL", "ACCESSIBILITY", "BUREAUCRACY_SETUP", "WORK_BUSINESS", "RETIREMENT_AGING", "LIFESTYLE_LAWS", "REALITY_CHECK", "MOVE_CHECKLIST", "ENVIRONMENT_QUALITY", "DAILY_LIFE_PRACTICALITY", "EVENTS_SEASONALITY", "SOURCES"]) {
+      for (const sheetName of ["DESTINATION_FACTS", "DESTINATION_SCORES", "NEIGHBORHOODS", "PLACES", "RESOURCES", "MEDIA", "COST_OF_LIVING", "CLIMATE_MONTHLY", "HOUSING_PROPERTY", "PROPERTY_RESOURCES", "HEALTHCARE_INSURANCE", "VISA_RESIDENCY", "TAXES_FINANCE", "LGBTQ_INCLUSIVITY", "SAFETY_RISKS", "TRANSPORT_AIRPORTS", "CONNECTIVITY_REMOTE_WORK", "LANGUAGE_INTEGRATION", "PETS", "FAMILY_EDUCATION", "COMMUNITY_SOCIAL", "ACCESSIBILITY", "BUREAUCRACY_SETUP", "WORK_BUSINESS", "RETIREMENT_AGING", "LIFESTYLE_LAWS", "REALITY_CHECK", "MOVE_CHECKLIST", "ENVIRONMENT_QUALITY", "DAILY_LIFE_PRACTICALITY", "EVENTS_SEASONALITY", "SOURCES", "LIFESTYLE_FEATURES"]) {
         const rows = (sheetRows.get(sheetName) ?? []).slice(1);
         if (rows.length === 0) continue;
         const headers = (sheetRows.get(sheetName) ?? [])[0] ?? [];
@@ -1215,7 +1237,7 @@ export const loadFrozenWorkbookV31DeterministicImport = async (explicitWorkbookP
   const aliasHeaders = aliasSheetRows[0] ?? [];
   const aliasRows = aliasSheetRows.slice(1);
 
-  const moduleSheetNames = ["NEIGHBORHOODS", "PLACES", "RESOURCES", "MEDIA", "COST_OF_LIVING", "CLIMATE_MONTHLY", "HOUSING_PROPERTY", "PROPERTY_RESOURCES", "HEALTHCARE_INSURANCE", "VISA_RESIDENCY", "TAXES_FINANCE", "LGBTQ_INCLUSIVITY", "SAFETY_RISKS", "TRANSPORT_AIRPORTS", "CONNECTIVITY_REMOTE_WORK", "LANGUAGE_INTEGRATION", "PETS", "FAMILY_EDUCATION", "COMMUNITY_SOCIAL", "ACCESSIBILITY", "BUREAUCRACY_SETUP", "WORK_BUSINESS", "RETIREMENT_AGING", "LIFESTYLE_LAWS", "REALITY_CHECK", "MOVE_CHECKLIST", "ENVIRONMENT_QUALITY", "DAILY_LIFE_PRACTICALITY", "EVENTS_SEASONALITY", "SOURCES"];
+  const moduleSheetNames = ["NEIGHBORHOODS", "PLACES", "RESOURCES", "MEDIA", "COST_OF_LIVING", "CLIMATE_MONTHLY", "HOUSING_PROPERTY", "PROPERTY_RESOURCES", "HEALTHCARE_INSURANCE", "VISA_RESIDENCY", "TAXES_FINANCE", "LGBTQ_INCLUSIVITY", "SAFETY_RISKS", "TRANSPORT_AIRPORTS", "CONNECTIVITY_REMOTE_WORK", "LANGUAGE_INTEGRATION", "PETS", "FAMILY_EDUCATION", "COMMUNITY_SOCIAL", "ACCESSIBILITY", "BUREAUCRACY_SETUP", "WORK_BUSINESS", "RETIREMENT_AGING", "LIFESTYLE_LAWS", "REALITY_CHECK", "MOVE_CHECKLIST", "ENVIRONMENT_QUALITY", "DAILY_LIFE_PRACTICALITY", "EVENTS_SEASONALITY", "SOURCES", "LIFESTYLE_FEATURES"];
 
   const aliasResolution = Object.fromEntries(
     aliasRows
@@ -1295,7 +1317,7 @@ export const loadFrozenWorkbookV31DeterministicImport = async (explicitWorkbookP
   }
 
   const orphanedChildRows = [] as string[];
-  for (const sheetName of ["DESTINATION_FACTS", "DESTINATION_SCORES", "NEIGHBORHOODS", "PLACES", "RESOURCES", "MEDIA", "COST_OF_LIVING", "CLIMATE_MONTHLY", "HOUSING_PROPERTY", "PROPERTY_RESOURCES", "HEALTHCARE_INSURANCE", "VISA_RESIDENCY", "TAXES_FINANCE", "LGBTQ_INCLUSIVITY", "SAFETY_RISKS", "TRANSPORT_AIRPORTS", "CONNECTIVITY_REMOTE_WORK", "LANGUAGE_INTEGRATION", "PETS", "FAMILY_EDUCATION", "COMMUNITY_SOCIAL", "ACCESSIBILITY", "BUREAUCRACY_SETUP", "WORK_BUSINESS", "RETIREMENT_AGING", "LIFESTYLE_LAWS", "REALITY_CHECK", "MOVE_CHECKLIST", "ENVIRONMENT_QUALITY", "DAILY_LIFE_PRACTICALITY", "EVENTS_SEASONALITY", "SOURCES"]) {
+  for (const sheetName of ["DESTINATION_FACTS", "DESTINATION_SCORES", "NEIGHBORHOODS", "PLACES", "RESOURCES", "MEDIA", "COST_OF_LIVING", "CLIMATE_MONTHLY", "HOUSING_PROPERTY", "PROPERTY_RESOURCES", "HEALTHCARE_INSURANCE", "VISA_RESIDENCY", "TAXES_FINANCE", "LGBTQ_INCLUSIVITY", "SAFETY_RISKS", "TRANSPORT_AIRPORTS", "CONNECTIVITY_REMOTE_WORK", "LANGUAGE_INTEGRATION", "PETS", "FAMILY_EDUCATION", "COMMUNITY_SOCIAL", "ACCESSIBILITY", "BUREAUCRACY_SETUP", "WORK_BUSINESS", "RETIREMENT_AGING", "LIFESTYLE_LAWS", "REALITY_CHECK", "MOVE_CHECKLIST", "ENVIRONMENT_QUALITY", "DAILY_LIFE_PRACTICALITY", "EVENTS_SEASONALITY", "SOURCES", "LIFESTYLE_FEATURES"]) {
     const rows = (sheetRows.get(sheetName) ?? []).slice(1);
     if (rows.length === 0) continue;
     const headers = (sheetRows.get(sheetName) ?? [])[0] ?? [];

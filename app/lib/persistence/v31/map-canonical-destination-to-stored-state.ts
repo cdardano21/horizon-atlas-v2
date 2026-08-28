@@ -42,6 +42,8 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
   const moveChecklist = ensureUniqueChildRows(canonicalDestination.moveChecklist, "checklist_key");
   const eventsSeasonality = ensureUniqueChildRows(canonicalDestination.eventsSeasonality, "event_season_key");
   const sources = ensureUniqueChildRows(canonicalDestination.sources, "source_key");
+  // Optional for backward compatibility with fixtures/tests predating LIFESTYLE_FEATURES (v3.3, additive, display-only).
+  const lifestyleFeatures = ensureUniqueChildRows(canonicalDestination.lifestyleFeatures ?? [], "record_key");
 
   return {
     identity: {
@@ -302,6 +304,23 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       name: asStoredNullableString(source.source_name),
       url: asStoredNullableString(source.source_url),
       type: asStoredNullableString(source.source_type),
+    })),
+    lifestyleFeatures: lifestyleFeatures.map((feature) => ({
+      recordKey: asStoredKey<StoredDestinationState["lifestyleFeatures"][number]["recordKey"]>(asStoredChild(feature, "record_key")),
+      featureGroup: asStoredNullableString(feature.feature_group),
+      featureKey: asStoredNullableString(feature.feature_key),
+      featureValue: asStoredNullableString(feature.feature_value),
+      availabilityLevel: asStoredNullableString(feature.availability_level),
+      proximityBand: asStoredNullableString(feature.proximity_band),
+      displayLabel: asStoredNullableString(feature.display_label),
+      evidenceSummary: asStoredNullableString(feature.evidence_summary),
+      sourceName: asStoredNullableString(feature.source_name),
+      sourceUrl: asStoredNullableString(feature.source_url),
+      sourceAsOfDate: asStoredNullableString(feature.source_as_of_date),
+      confidence: asStoredNullableString(feature.confidence),
+      matchingEnabled: asStoredNullableString(feature.matching_enabled),
+      displayEnabled: asStoredNullableString(feature.display_enabled),
+      notes: asStoredNullableString(feature.notes),
     })),
   };
 }

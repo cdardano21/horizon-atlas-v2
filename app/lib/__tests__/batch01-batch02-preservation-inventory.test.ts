@@ -102,7 +102,11 @@ describe("Batch #2 preservation inventory - raw workbook vs. resolved canonical 
       for (const name of rawPlaceNames) {
         expect(resolvedPlaceNames.has(name)).toBe(true);
       }
-      expect(destination!.v31Modules?.places.length).toBe(canonical.places.length);
+      // The resolved path reads through the local preview registry (now pointed at the v3.3
+      // workbook, Phase 4), which is a strict superset of this hardcoded-path v3.2 baseline: it may
+      // additionally contain the reviewed, additive PLACES rows introduced in v3.3, but must never
+      // contain fewer places than the v3.2 baseline.
+      expect(destination!.v31Modules?.places.length).toBeGreaterThanOrEqual(canonical.places.length);
 
       // No neighborhood/place name from this destination ever collides with the destination's own
       // suffix-bearing key/slug (proves the public-label suffix-leak fix holds across the full set).
