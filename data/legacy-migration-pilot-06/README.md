@@ -1,8 +1,10 @@
-# legacy-migration-pilot-06 (Phase 5A + 5B: identity, Supabase check, and complete v3.3 skeleton)
+# legacy-migration-pilot-06 (Phase 5A + 5B + 5C: identity, Supabase check, complete v3.3 skeleton, and Wave 1 evidence population)
 
-**Status: pre-migration.** No destination in this package is `migrated`, `enriched`,
-`display_ready`, or `scoring_ready`. No web research has been performed. This package exists to
-establish a trustworthy, verified starting point before any research begins.
+**Status: pre-migration, partially researched.** No destination in this package is `migrated`,
+`enriched`, `display_ready`, or `scoring_ready`. As of Phase 5C, exactly 2 of the 6 destinations
+(The Hague, Kyoto - "Wave 1") have evidence-backed `DESTINATIONS` identity/geography fields and
+`CLIMATE_MONTHLY` data populated from cited, authoritative sources. The other 4 destinations remain
+untouched, identity-only skeletons exactly as built in Phase 5A/5B.
 
 ## What this is
 
@@ -42,9 +44,17 @@ destinations:
   (`docs/destination-expansion-proposed-300.json`, recovered via `git show`), for the 2
   destinations (The Hague, Santa Fe) that appeared in it. Labeled `WAVE1_UNVERIFIED_LEAD`.
   Not present for the other 4 destinations because no Wave 1 record was found for them.
-- `DestinationFinderAI_LegacyMigrationPilot06_v3.3_SKELETON.xlsx` - the empty, structurally valid
-  six-destination v3.3-compatible workbook (see below).
+- `DestinationFinderAI_LegacyMigrationPilot06_v3.3_SKELETON.xlsx` - the six-destination v3.3-compatible
+  workbook (see below). Despite the filename, as of Phase 5C it is no longer a pure empty skeleton
+  for The Hague/Kyoto - it carries their evidence-backed identity/geography/climate rows. The name
+  was kept unchanged to avoid an unnecessary rename/churn of a tracked binary file.
 - `validation-report.json` - output of `scripts/validate_legacy_pilot06_workbook.py`.
+- `research-ledger/*.json` (Phase 5C) - per-destination research ledgers (`the-hague-netherlands.json`,
+  `kyoto-japan.json`) recording every populated fact with its `sourceName`, `sourceUrl`,
+  `retrievedAt`, and an explicit `notResearchedThisPass` list of categories deliberately left blank.
+  `the-hague-netherlands-climate.json` / `kyoto-japan-climate.json` hold the 12-month KNMI/JMA
+  climate-normal data consumed by the builder script. `wave1-identity-fields.json` holds the clean
+  DESTINATIONS-column mapping consumed by the builder script.
 
 ## Supabase results (Phase 5B)
 
@@ -105,21 +115,71 @@ new destination-key convention."
 ## Validation performed
 
 1. **Structural validator** (`scripts/validate_legacy_pilot06_workbook.py`): sheet-shape, exact
-   destination-key set, uniqueness, and "every content sheet is empty" checks. All passed -
-   see `validation-report.json`.
+   destination-key set, uniqueness checks, plus (Phase 5C) a nuanced check that every content sheet
+   other than `CLIMATE_MONTHLY`/`SOURCES` remains empty, that `CLIMATE_MONTHLY`/`SOURCES` rows exist
+   ONLY for the two Wave 1 destination_keys (exactly 12 `CLIMATE_MONTHLY` rows each), and that the
+   other 4 destinations' `DESTINATIONS` rows have ONLY their 4 identity fields populated. All passed
+   - see `validation-report.json`.
 2. **Real deterministic parser** (`app/lib/__tests__/legacy-pilot06-skeleton.test.ts`): the actual
    production `loadFrozenWorkbookV31DeterministicImport` function (no new/second importer was
-   written) parses this workbook directly, asserting: exactly 6 destinations resolved, zero
-   validation errors, zero orphaned rows, every non-identity module empty, and identity fields
-   match the legacy source exactly. All 4 tests passed.
-3. **Existing workbook preservation**: the 4 committed v3.2/v3.3 expansion workbooks were
-   SHA-256-hash-verified unchanged both before and after this package was built.
+   written) parses this workbook directly. 7 tests, all passing: exactly 6 destinations resolved
+   with zero validation errors; every non-climate/non-sources module empty for all 6 destinations;
+   `CLIMATE_MONTHLY`/`SOURCES` populated only for the two Wave 1 keys (12 climate rows each); no
+   cross-destination leakage in any child module; The Hague's and Kyoto's evidence-backed identity
+   fields match the research ledger exactly while their narrative/editorial fields remain blank;
+   and the other 4 destinations remain completely untouched (identity-only).
+3. **Existing workbook preservation**: the 4 committed v3.2/v3.3 expansion workbooks (plus the 2
+   master pilot workbooks and 2 other batch workbooks - 8 total tracked `.xlsx` files outside this
+   package) show zero `git diff` and were SHA-256-hash-verified unchanged both before and after this
+   package was rebuilt.
+
+## Phase 5C: Wave 1 evidence-based population (The Hague, Kyoto)
+
+Researched and populated ONLY evidence-supported fields for the two Wave 1 pilot destinations,
+using current, authoritative, directly-fetched sources (never AI-generated summaries or
+search-result snippets):
+
+- **The Hague**: population (549,163, municipality, 1 Jan 2021, Statistics Netherlands/CBS via
+  Wikipedia infobox citation), metro population (2,390,101, Rotterdam-The Hague metro area),
+  coordinates (52.08, 4.31), elevation (1 m), time zone (`Europe/Amsterdam`), currency (`EUR`),
+  primary language (`Dutch`), official tourism URL (`https://www.denhaag.nl/en/`, confirmed live),
+  and 12 months of `CLIMATE_MONTHLY` data (avg high/low, rainfall, humidity, sunshine hours) from
+  the Royal Netherlands Meteorological Institute (KNMI) 1981-2010 normal for the Valkenburg
+  station, the nearest station representing The Hague.
+- **Kyoto**: population (1,431,419, city proper, 1 Jan 2026, City of Kyoto Estimated Population),
+  metro population (3,783,014, Greater Kyoto metropolitan area), coordinates (35.01, 135.77),
+  time zone (`Asia/Tokyo`), currency (`JPY`), primary language (`Japanese`), official tourism URL
+  (`https://kyoto.travel/en/`), and 12 months of `CLIMATE_MONTHLY` data from the Japan
+  Meteorological Agency (JMA) 1991-2020 normal. Elevation was deliberately left blank: the only
+  source found gives a highest/lowest terrain range (9 m-971 m), not a single representative
+  city-center figure, and picking one would have been a fabrication.
+- **Deliberately NOT researched or populated this pass** (see each destination's `research-ledger/
+  *.json` `notResearchedThisPass` array for the full list): `VISA_RESIDENCY`, `TAXES_FINANCE`,
+  `HEALTHCARE_INSURANCE`, `TRANSPORT_AIRPORTS`, all narrative/editorial description fields, and
+  every other content sheet (`NEIGHBORHOODS`, `PLACES`, `COST_OF_LIVING`, etc.). Two visa-source
+  fetch attempts failed (`netherlandsandyou.nl` short-stay-visa page returned HTTP 404;
+  `travel.state.gov` returned HTTP 403) and were not retried further within this pass's scope -
+  left genuinely blank rather than cited indirectly or fabricated.
+- **Isolation proven**: `CLIMATE_MONTHLY` and `SOURCES` contain rows only for
+  `the-hague-netherlands` and `kyoto-japan`; the other 4 destinations' rows in every content sheet
+  remain zero, and their `DESTINATIONS` rows carry only the original 4 identity fields. The Hague's
+  and Kyoto's own data are mutually isolated (each `CLIMATE_MONTHLY`/`SOURCES` row's
+  `destination_key` matches its parent, verified by the real production parser).
+- **Pre-existing conflicts** (from Phase 5B, e.g. Kyoto's `narrative_description` triple-variant
+  and the flagged "Dardano Retirement Index 7.0" fabricated-looking scorecard) were NOT resolved
+  this pass - no narrative or scoring content was touched. See `pilot-manifest.json` for the full
+  conflict record, unchanged except for `validation_result`/`last_updated_at`/`last_updated_by`.
 
 ## What was intentionally NOT done in this phase
 
-- No web research. No destination fact, score, neighborhood, place, image, or recommendation was
-  populated.
-- No Supabase write of any kind - only the 12 read-only exact-match GET requests described above.
+- No web research and no content population for the 4 non-Wave-1 destinations (Santa Fe, St.
+  Cloud, San Ramón, St. John's) - they remain untouched identity-only skeletons.
+- For The Hague and Kyoto: no `VISA_RESIDENCY`, `TAXES_FINANCE`, `HEALTHCARE_INSURANCE`,
+  `TRANSPORT_AIRPORTS`, narrative/editorial description, or any other content-sheet field was
+  populated - only `DESTINATIONS` identity/geography and `CLIMATE_MONTHLY` (see the Phase 5C
+  section above).
+- No Supabase write of any kind this pass - Phase 5B's 12 read-only exact-match GET requests
+  remain the only Supabase interaction anywhere in this package.
 - No registration in `app/lib/expansion-workbook-registry.ts` and no preview activation.
 - No change to any existing legacy TypeScript record, any existing v3.2/v3.3 workbook, the
   questionnaire, Retirement DNA, Intelligence v2, scoring, ranking, or any production destination

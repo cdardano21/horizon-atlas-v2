@@ -1,0 +1,106 @@
+{
+  "destinationKey": "kyoto-japan",
+  "researchedAt": "2026-08-28",
+  "researchedBy": "phase5c-wave1-research",
+  "scopeNote": "This pass researched and populated only identity/geography and monthly climate normals. Visa/tax/healthcare/airport categories were NOT populated this pass - left genuinely blank per the non-negotiable rules, not fabricated.",
+  "facts": [
+    {
+      "field": "DESTINATIONS.country",
+      "value": "Japan",
+      "sourceName": "Wikipedia (Kyoto) infobox",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Kyoto",
+      "retrievedAt": "2026-08-28",
+      "note": "Matches legacy destinations.ts and existing Supabase row exactly - no conflict."
+    },
+    {
+      "field": "DESTINATIONS.state_region",
+      "value": "Kyoto Prefecture",
+      "sourceName": "Wikipedia (Kyoto) infobox: Prefecture = Kyoto Prefecture",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Kyoto",
+      "retrievedAt": "2026-08-28"
+    },
+    {
+      "field": "DESTINATIONS.latitude",
+      "value": 35.01,
+      "field_longitude": "DESTINATIONS.longitude",
+      "value_longitude": 135.77,
+      "sourceName": "Wikipedia (Kyoto) infobox coordinates (35°00'42\"N 135°46'05\"E)",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Kyoto",
+      "retrievedAt": "2026-08-28"
+    },
+    {
+      "field": "DESTINATIONS.elevation_m",
+      "value": null,
+      "sourceName": "Wikipedia (Kyoto) infobox gives only a highest-point (971 m) and lowest-point (9 m) range for the municipality, not a single representative city-center elevation",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Kyoto",
+      "retrievedAt": "2026-08-28",
+      "note": "Left blank rather than arbitrarily pick a value from the range - would be an inference, not a fact."
+    },
+    {
+      "field": "DESTINATIONS.population",
+      "value": 1431419,
+      "geographicLevel": "city (municipality)",
+      "asOfDate": "2026-01-01",
+      "sourceName": "City of Kyoto, Estimated Population (推計人口), via Wikipedia infobox citation",
+      "sourceUrl": "https://www2.city.kyoto.lg.jp/sogo/toukei/Population/Suikei/",
+      "retrievedAt": "2026-08-28",
+      "note": "City-proper figure, 9th-largest city in Japan by population per the same source. Distinct from the metro figure - do not mix levels."
+    },
+    {
+      "field": "DESTINATIONS.metro_population",
+      "value": "3,783,014 (Greater Kyoto metropolitan statistical area)",
+      "sourceName": "Wikipedia (Kyoto) infobox, Metro row, citing Japan Statistics Bureau / regional definitions",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Kyoto",
+      "retrievedAt": "2026-08-28",
+      "note": "Explicitly the Greater Kyoto metropolitan area, distinct from the smaller city-proper population and the larger Keihanshin (Kyoto-Osaka-Kobe) metropolitan area, which was not used here."
+    },
+    {
+      "field": "DESTINATIONS.time_zone",
+      "value": "Asia/Tokyo",
+      "sourceName": "Wikipedia (Kyoto) infobox: Time zone UTC+09:00 (Japan Standard Time, no DST)",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Kyoto",
+      "retrievedAt": "2026-08-28"
+    },
+    {
+      "field": "DESTINATIONS.currency",
+      "value": "JPY",
+      "sourceName": "National currency of Japan (uncontroversial national fact)",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Kyoto",
+      "retrievedAt": "2026-08-28"
+    },
+    {
+      "field": "DESTINATIONS.primary_language",
+      "value": "Japanese",
+      "sourceName": "Official language of Japan (uncontroversial national fact)",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Kyoto",
+      "retrievedAt": "2026-08-28"
+    },
+    {
+      "field": "DESTINATIONS.official_tourism_url",
+      "value": "https://kyoto.travel/en/",
+      "sourceName": "Kyoto City Official Travel Guide - City of Kyoto and Kyoto City Tourism Association",
+      "sourceUrl": "https://kyoto.travel/en/",
+      "retrievedAt": "2026-08-28",
+      "note": "Distinct from https://www.city.kyoto.lg.jp/ (the general municipal government site, Japanese-language) - chose the official tourism-specific English site as the more appropriate official_tourism_url value."
+    },
+    {
+      "field": "CLIMATE_MONTHLY (all 12 months: avg_high_c, avg_low_c, rainfall_mm)",
+      "sourceName": "Japan Meteorological Agency (JMA), climate normal 1991-2020, station block_no 47759, via Wikipedia's cited climate table",
+      "sourceUrl": "https://www.data.jma.go.jp/obd/stats/etrn/index.php?prec_no=61&block_no=47759&year=&month=&day=&view=",
+      "retrievedAt": "2026-08-28",
+      "effectivePeriod": "1991-2020 normal (extremes: 1880-present)",
+      "note": "avg_high_c and avg_low_c from 'Mean daily maximum'/'Mean daily minimum'; rainfall_mm from 'Average precipitation'; humidity_pct and sunshine_hours and snowfall_cm also available and populated from the same official JMA-sourced table."
+    }
+  ],
+  "notResearchedThisPass": [
+    "VISA_RESIDENCY (Japan visa policy for US citizens - not fetched this pass)",
+    "TAXES_FINANCE, HEALTHCARE_INSURANCE, TRANSPORT_AIRPORTS - not fetched this pass (Kyoto has no commercial airport of its own; Kansai International Airport access via JR Haruka train was mentioned in Wikipedia but not independently verified against KIX's own official site this pass)",
+    "NEIGHBORHOODS, PLACES, RESOURCES, MEDIA, COST_OF_LIVING, HOUSING_PROPERTY, PROPERTY_RESOURCES, LGBTQ_INCLUSIVITY, SAFETY_RISKS, CONNECTIVITY_REMOTE_WORK, LANGUAGE_INTEGRATION, PETS, FAMILY_EDUCATION, COMMUNITY_SOCIAL, ACCESSIBILITY, BUREAUCRACY_SETUP, WORK_BUSINESS, RETIREMENT_AGING, LIFESTYLE_LAWS, REALITY_CHECK, MOVE_CHECKLIST, DESTINATION_FACTS, DESTINATION_SCORES, ENVIRONMENT_QUALITY, DAILY_LIFE_PRACTICALITY, EVENTS_SEASONALITY, LIFESTYLE_FEATURES - out of scope for this pass"
+  ],
+  "conflictsWithLegacySources": [
+    {
+      "field": "narrative_description",
+      "description": "Unresolved from Phase 5B: three independently-written narrative variants exist (destinations.ts, destination-enrichment.ts primary tier, destination-enrichment.ts regional-fallback tier). This pass did not attempt to resolve this - no new narrative/prose field was populated in the workbook for Kyoto this pass; DESTINATIONS.short_description/long_description remain blank."
+    }
+  ]
+}

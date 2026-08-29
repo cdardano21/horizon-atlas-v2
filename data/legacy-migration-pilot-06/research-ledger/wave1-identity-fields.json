@@ -1,0 +1,30 @@
+{
+  "the-hague-netherlands": {
+    "country_code": "NL",
+    "state_region": "South Holland",
+    "currency": "EUR",
+    "primary_language": "Dutch",
+    "time_zone": "Europe/Amsterdam",
+    "population": 549163,
+    "metro_population": "Rotterdam-The Hague metropolitan area (2,390,101, CBS/COROP, 1 Jan 2021)",
+    "elevation_m": 1,
+    "latitude": 52.08,
+    "longitude": 4.31,
+    "official_tourism_url": "https://www.denhaag.nl/en/",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=The+Hague%2C+Netherlands"
+  },
+  "kyoto-japan": {
+    "country_code": "JP",
+    "state_region": "Kyoto Prefecture",
+    "currency": "JPY",
+    "primary_language": "Japanese",
+    "time_zone": "Asia/Tokyo",
+    "population": 1431419,
+    "metro_population": "Greater Kyoto metropolitan area (3,783,014, Japan Statistics Bureau)",
+    "elevation_m": null,
+    "latitude": 35.01,
+    "longitude": 135.77,
+    "official_tourism_url": "https://kyoto.travel/en/",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Kyoto%2C+Japan"
+  }
+}

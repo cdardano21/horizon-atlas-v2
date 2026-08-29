@@ -1,0 +1,19 @@
+{
+  "destinationKey": "the-hague-netherlands",
+  "sourceName": "Royal Netherlands Meteorological Institute (KNMI), Valkenburg station, 1981-2010 normal",
+  "sourceUrl": "https://web.archive.org/web/20171010161642/http://www.klimaatatlas.nl/tabel/stationsdata/klimtab_8110_210.pdf",
+  "months": [
+    {"month": 1, "avg_high_c": 6.4, "avg_low_c": 1.5, "rainfall_mm": 70.0, "humidity_pct": 86, "sunshine_hours": 71.7},
+    {"month": 2, "avg_high_c": 6.9, "avg_low_c": 1.2, "rainfall_mm": 59.4, "humidity_pct": 84, "sunshine_hours": 96.7},
+    {"month": 3, "avg_high_c": 9.8, "avg_low_c": 2.7, "rainfall_mm": 52.8, "humidity_pct": 83, "sunshine_hours": 152.0},
+    {"month": 4, "avg_high_c": 13.6, "avg_low_c": 4.8, "rainfall_mm": 41.6, "humidity_pct": 79, "sunshine_hours": 207.2},
+    {"month": 5, "avg_high_c": 17.0, "avg_low_c": 8.3, "rainfall_mm": 52.7, "humidity_pct": 78, "sunshine_hours": 240.5},
+    {"month": 6, "avg_high_c": 19.6, "avg_low_c": 11.2, "rainfall_mm": 62.8, "humidity_pct": 79, "sunshine_hours": 229.3},
+    {"month": 7, "avg_high_c": 21.6, "avg_low_c": 13.5, "rainfall_mm": 72.7, "humidity_pct": 80, "sunshine_hours": 237.5},
+    {"month": 8, "avg_high_c": 21.8, "avg_low_c": 13.4, "rainfall_mm": 84.0, "humidity_pct": 80, "sunshine_hours": 213.4},
+    {"month": 9, "avg_high_c": 18.9, "avg_low_c": 10.9, "rainfall_mm": 89.2, "humidity_pct": 83, "sunshine_hours": 160.0},
+    {"month": 10, "avg_high_c": 14.7, "avg_low_c": 7.9, "rainfall_mm": 89.9, "humidity_pct": 84, "sunshine_hours": 116.7},
+    {"month": 11, "avg_high_c": 10.2, "avg_low_c": 4.7, "rainfall_mm": 90.4, "humidity_pct": 87, "sunshine_hours": 68.2},
+    {"month": 12, "avg_high_c": 7.1, "avg_low_c": 2.1, "rainfall_mm": 76.4, "humidity_pct": 87, "sunshine_hours": 56.5}
+  ]
+}

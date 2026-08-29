@@ -10,7 +10,8 @@
     "destination_keys_unique": true,
     "destination_keys_nonblank": true,
     "slug_equals_destination_key_convention": true,
-    "all_content_sheets_empty": true
+    "all_content_sheets_empty_except_wave1_source_backed": true,
+    "non_wave1_destinations_identity_only": true
   },
   "expectedDestinationKeys": [
     "kyoto-japan",

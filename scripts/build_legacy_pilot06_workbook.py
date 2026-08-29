@@ -19,6 +19,14 @@ Every other DESTINATIONS column is left blank.
 As of Phase 5B, LIFESTYLE_FEATURES is included with its real headers and zero data rows, completing
 the full 48-sheet v3.3 structure.
 
+As of Phase 5C, the two Wave 1 destinations (The Hague, Kyoto) have evidence-backed DESTINATIONS
+identity/geography fields and 12-month CLIMATE_MONTHLY rows populated from
+data/legacy-migration-pilot-06/research-ledger/*.json (KNMI, JMA, CBS, City of Kyoto, and the
+municipal/tourism official sites cited therein), with corresponding SOURCES rows. The other 4 pilot
+destinations remain completely untouched, empty identity-only skeletons. No field is ever populated
+with a fabricated placeholder ("N/A", "TBD", "unknown", 0-as-filler, generic prose) - unresearched
+fields are left as genuinely blank cells.
+
 Usage:
   python3 scripts/build_legacy_pilot06_workbook.py
 """
@@ -32,6 +40,21 @@ REFERENCE_WORKBOOK = REPO_ROOT / "data" / "DestinationFinderAI_Expansion_Batch_0
 PILOT_DIR = REPO_ROOT / "data" / "legacy-migration-pilot-06"
 PILOT_DESTINATIONS_JSON = PILOT_DIR / "pilot-destinations.json"
 OUTPUT_WORKBOOK = PILOT_DIR / "DestinationFinderAI_LegacyMigrationPilot06_v3.3_SKELETON.xlsx"
+
+# Phase 5C: Wave 1 (The Hague, Kyoto) evidence-backed research ledger inputs. Only these two
+# destination_keys receive any DESTINATIONS/CLIMATE_MONTHLY/SOURCES population - the other 4
+# pilot destinations remain identity-only skeletons, exactly as in Phase 5A/5B.
+RESEARCH_LEDGER_DIR = PILOT_DIR / "research-ledger"
+WAVE1_IDENTITY_FIELDS_JSON = RESEARCH_LEDGER_DIR / "wave1-identity-fields.json"
+WAVE1_DESTINATION_KEYS = ["the-hague-netherlands", "kyoto-japan"]
+WAVE1_CLIMATE_JSON = {
+    "the-hague-netherlands": RESEARCH_LEDGER_DIR / "the-hague-netherlands-climate.json",
+    "kyoto-japan": RESEARCH_LEDGER_DIR / "kyoto-japan-climate.json",
+}
+WAVE1_LEDGER_JSON = {
+    "the-hague-netherlands": RESEARCH_LEDGER_DIR / "the-hague-netherlands.json",
+    "kyoto-japan": RESEARCH_LEDGER_DIR / "kyoto-japan.json",
+}
 
 # Sheets copied verbatim from the reference workbook - true workbook-level constants, never
 # destination-specific, never modified here. Order matches the real workbook's own sheet order.
@@ -119,7 +142,12 @@ def main():
     for name in VERBATIM_REFERENCE_SHEETS_EARLY:
         copy_sheet_verbatim(ref_wb, out_wb, name)
 
-    # 2) DESTINATIONS - 6 rows, identity-only fields.
+    # 2) DESTINATIONS - 6 rows, identity-only fields, PLUS Phase 5C evidence-backed
+    # identity/geography fields for the two Wave 1 destinations (The Hague, Kyoto) only.
+    wave1_identity = {}
+    if WAVE1_IDENTITY_FIELDS_JSON.exists():
+        wave1_identity = json.loads(WAVE1_IDENTITY_FIELDS_JSON.read_text(encoding="utf-8"))
+
     dest_headers = get_header(ref_wb, "DESTINATIONS")
     ws = out_wb.create_sheet("DESTINATIONS")
     for col_idx, header in enumerate(dest_headers, start=1):
@@ -133,14 +161,90 @@ def main():
         ws.cell(row=row_idx, column=name_col, value=dest["city"])
         ws.cell(row=row_idx, column=country_col, value=dest["country"])
         ws.cell(row=row_idx, column=slug_col, value=dest["slug"])
-        # every other DESTINATIONS column is left blank - not yet migrated.
+        # every other DESTINATIONS column is left blank - not yet migrated -
+        # EXCEPT the Phase 5C evidence-backed fields for the two Wave 1 destinations below.
+        fields = wave1_identity.get(dest["destinationKey"])
+        if fields:
+            for field_name, field_value in fields.items():
+                if field_name in dest_headers and field_value is not None:
+                    ws.cell(row=row_idx, column=dest_headers.index(field_name) + 1, value=field_value)
 
-    # 3) Empty content sheets - real headers, zero data rows.
+    # 3) Empty content sheets - real headers, zero data rows for 4 destinations; Phase 5C
+    # populates CLIMATE_MONTHLY rows for the two Wave 1 destinations only (below, after this loop).
     for name in EMPTY_CONTENT_SHEETS:
         headers = get_header(ref_wb, name)
         content_ws = out_wb.create_sheet(name)
         for col_idx, header in enumerate(headers, start=1):
             content_ws.cell(row=1, column=col_idx, value=header)
+
+    # 3b) Phase 5C: CLIMATE_MONTHLY - 12 rows each for The Hague and Kyoto, evidence-backed
+    # from KNMI (The Hague) and JMA (Kyoto) climate normals. The other 4 destinations get
+    # zero CLIMATE_MONTHLY rows, exactly as before.
+    climate_ws = out_wb["CLIMATE_MONTHLY"]
+    climate_headers = get_header(ref_wb, "CLIMATE_MONTHLY")
+    climate_row_idx = 2
+    sources_rows = []  # (destination_key, source_name, source_url, source_type) accumulated for SOURCES sheet
+    seen_source_urls_per_dest = {}  # dest_key -> set of urls already recorded, to avoid duplicate SOURCES rows
+    for dest_key in WAVE1_DESTINATION_KEYS:
+        climate_path = WAVE1_CLIMATE_JSON[dest_key]
+        if not climate_path.exists():
+            continue
+        climate_data = json.loads(climate_path.read_text(encoding="utf-8"))
+        source_name = climate_data["sourceName"]
+        source_url = climate_data["sourceUrl"]
+        for month_row in climate_data["months"]:
+            row_values = {
+                "destination_key": dest_key,
+                "month": month_row["month"],
+                "avg_high_c": month_row.get("avg_high_c"),
+                "avg_low_c": month_row.get("avg_low_c"),
+                "rainfall_mm": month_row.get("rainfall_mm"),
+                "humidity_pct": month_row.get("humidity_pct"),
+                "sunshine_hours": month_row.get("sunshine_hours"),
+                "snowfall_cm": month_row.get("snowfall_cm"),
+                "source_name": source_name,
+                "source_url": source_url,
+                "verified": "TRUE",
+            }
+            for field_name, field_value in row_values.items():
+                if field_name in climate_headers and field_value is not None:
+                    climate_ws.cell(row=climate_row_idx, column=climate_headers.index(field_name) + 1, value=field_value)
+            climate_row_idx += 1
+        sources_rows.append((dest_key, source_name, source_url, "official_climate_normal"))
+        seen_source_urls_per_dest.setdefault(dest_key, set()).add(source_url)
+
+    # 3c) Phase 5C: SOURCES - one row per distinct citation used for the two Wave 1 destinations'
+    # DESTINATIONS/CLIMATE_MONTHLY population this pass. The other 4 destinations get zero rows.
+    for dest_key in WAVE1_DESTINATION_KEYS:
+        ledger_path = WAVE1_LEDGER_JSON[dest_key]
+        if not ledger_path.exists():
+            continue
+        ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
+        seen_urls = seen_source_urls_per_dest.setdefault(dest_key, set())
+        for fact in ledger.get("facts", []):
+            url = fact.get("sourceUrl")
+            if not url or url in seen_urls:
+                continue
+            seen_urls.add(url)
+            sources_rows.append((dest_key, fact.get("sourceName", ""), url, "research_citation"))
+
+    sources_ws = out_wb["SOURCES"]
+    sources_headers = get_header(ref_wb, "SOURCES")
+    for row_idx, (dest_key, source_name, source_url, source_type) in enumerate(sources_rows, start=2):
+        row_values = {
+            "source_key": f"{dest_key}__source_{row_idx - 1}",
+            "destination_key": dest_key,
+            "source_name": source_name,
+            "source_url": source_url,
+            "source_type": source_type,
+            "accessed_at": "2026-08-28",
+            "verified": "TRUE",
+        }
+        for field_name, field_value in row_values.items():
+            if field_name in sources_headers and field_value is not None:
+                sources_ws.cell(row=row_idx, column=sources_headers.index(field_name) + 1, value=field_value)
+
+
 
     # 4) SCHEMA_INDEX, PREMIUM_REQUIREMENTS, IMPORT_CONTRACT, VALIDATION_RULES, DATA_DICTIONARY - verbatim,
     # each copied exactly once here (not in step 1).
@@ -163,10 +267,11 @@ def main():
         ("batch_id", "legacy-migration-pilot-06", "Phase 5A pilot package identifier"),
         ("batch_keys", "; ".join(d["destinationKey"] for d in destinations), "Six legacy-catalog pilot destinations"),
         ("created_from", "app/lib/destinations.ts (legacy TypeScript catalog)", "Identity fields only - no editorial content ported yet"),
-        ("contract_updated_at", "2026-08-28", "Skeleton package creation date"),
-        ("population_strategy", "empty_skeleton_pending_research", "No destination content has been researched or populated yet"),
+        ("contract_updated_at", "2026-08-28", "Phase 5C update date"),
+        ("population_strategy", "wave1_evidence_backed_partial", "The Hague and Kyoto have evidence-backed DESTINATIONS identity/geography + CLIMATE_MONTHLY fields; the other 4 destinations remain an empty identity skeleton"),
         ("source_policy", "authoritative_urls_required", "No invented fallback content; blanks remain blanks when evidence is unavailable"),
-        ("batch_revision", "PHASE_5A_IDENTITY_SKELETON", "Structural identity + empty content sheets only; see pilot-manifest.json for status"),
+        ("batch_revision", "PHASE_5C_WAVE1_EVIDENCE_POPULATION", "Wave 1 (The Hague, Kyoto) identity/geography/climate populated from cited sources; see pilot-manifest.json and research-ledger/ for provenance"),
+        ("wave1_researched_keys", "; ".join(WAVE1_DESTINATION_KEYS), "Only these destination_keys received Phase 5C content population"),
     ]
     for row_idx, row in enumerate(wm_rows, start=2):
         for col_idx, value in enumerate(row, start=1):
@@ -181,14 +286,23 @@ def main():
     cl.cell(row=2, column=2, value="Created empty six-destination legacy-migration-pilot-06 identity skeleton.")
     cl.cell(row=2, column=3, value="No destination research populated. Structural validation only.")
     cl.cell(row=2, column=4, value="2026-08-28")
+    cl.cell(row=3, column=1, value="3.3-pilot06-phase5c")
+    cl.cell(row=3, column=2, value="Populated evidence-backed DESTINATIONS identity/geography and CLIMATE_MONTHLY (12 rows each) for The Hague and Kyoto (Wave 1), citing KNMI/JMA/CBS/City of Kyoto/Wikipedia-relayed-official-sources; added SOURCES rows.")
+    cl.cell(row=3, column=3, value="The other 4 pilot destinations remain untouched, identity-only skeletons. See research-ledger/ for full provenance and notResearchedThisPass fields.")
+    cl.cell(row=3, column=4, value="2026-08-28")
 
-    # 7) PILOT_STATUS - fresh, honest, one row per destination.
+    # 7) PILOT_STATUS - fresh, honest, one row per destination. Phase 5C marks the two Wave 1
+    # destinations as partially researched (identity + climate only) - the other 4 are untouched.
     ps = out_wb.create_sheet("PILOT_STATUS")
     ps_headers = get_header(ref_wb, "PILOT_STATUS")
     for col_idx, header in enumerate(ps_headers, start=1):
         ps.cell(row=1, column=col_idx, value=header)
     for row_idx, dest in enumerate(destinations, start=2):
-        values = [dest["city"], "NOT_STARTED", "0", "0", "0", "0", "PRE_MIGRATION_NOT_YET_RESEARCHED", "3.3", "legacy-migration-pilot-06"]
+        if dest["destinationKey"] in WAVE1_DESTINATION_KEYS:
+            values = [dest["city"], "PARTIAL (identity + climate only)", "0", "0", "0", "0",
+                      "WAVE1_IDENTITY_AND_CLIMATE_RESEARCHED", "3.3", "legacy-migration-pilot-06"]
+        else:
+            values = [dest["city"], "NOT_STARTED", "0", "0", "0", "0", "PRE_MIGRATION_NOT_YET_RESEARCHED", "3.3", "legacy-migration-pilot-06"]
         for col_idx, value in enumerate(values, start=1):
             ps.cell(row=row_idx, column=col_idx, value=value)
 

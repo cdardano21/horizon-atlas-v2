@@ -1,0 +1,19 @@
+{
+  "destinationKey": "kyoto-japan",
+  "sourceName": "Japan Meteorological Agency (JMA), station block_no 47759, 1991-2020 normal",
+  "sourceUrl": "https://www.data.jma.go.jp/obd/stats/etrn/index.php?prec_no=61&block_no=47759&year=&month=&day=&view=",
+  "months": [
+    {"month": 1, "avg_high_c": 9.1, "avg_low_c": 1.5, "rainfall_mm": 53.3, "humidity_pct": 67, "sunshine_hours": 123.5, "snowfall_cm": 5},
+    {"month": 2, "avg_high_c": 10.0, "avg_low_c": 1.6, "rainfall_mm": 65.1, "humidity_pct": 65, "sunshine_hours": 122.2, "snowfall_cm": 7},
+    {"month": 3, "avg_high_c": 14.1, "avg_low_c": 4.3, "rainfall_mm": 106.2, "humidity_pct": 61, "sunshine_hours": 155.4, "snowfall_cm": 1},
+    {"month": 4, "avg_high_c": 20.1, "avg_low_c": 9.2, "rainfall_mm": 117.0, "humidity_pct": 59, "sunshine_hours": 177.3, "snowfall_cm": 0},
+    {"month": 5, "avg_high_c": 25.1, "avg_low_c": 14.5, "rainfall_mm": 151.4, "humidity_pct": 60, "sunshine_hours": 182.4, "snowfall_cm": 0},
+    {"month": 6, "avg_high_c": 28.1, "avg_low_c": 19.2, "rainfall_mm": 199.7, "humidity_pct": 66, "sunshine_hours": 133.1, "snowfall_cm": 0},
+    {"month": 7, "avg_high_c": 32.0, "avg_low_c": 23.6, "rainfall_mm": 223.6, "humidity_pct": 69, "sunshine_hours": 142.7, "snowfall_cm": 0},
+    {"month": 8, "avg_high_c": 33.7, "avg_low_c": 24.7, "rainfall_mm": 153.8, "humidity_pct": 66, "sunshine_hours": 182.7, "snowfall_cm": 0},
+    {"month": 9, "avg_high_c": 29.2, "avg_low_c": 20.7, "rainfall_mm": 178.5, "humidity_pct": 67, "sunshine_hours": 142.7, "snowfall_cm": 0},
+    {"month": 10, "avg_high_c": 23.4, "avg_low_c": 14.4, "rainfall_mm": 143.2, "humidity_pct": 68, "sunshine_hours": 156.0, "snowfall_cm": 0},
+    {"month": 11, "avg_high_c": 17.3, "avg_low_c": 8.4, "rainfall_mm": 73.9, "humidity_pct": 68, "sunshine_hours": 140.7, "snowfall_cm": 0},
+    {"month": 12, "avg_high_c": 11.6, "avg_low_c": 3.5, "rainfall_mm": 57.3, "humidity_pct": 68, "sunshine_hours": 134.4, "snowfall_cm": 2}
+  ]
+}

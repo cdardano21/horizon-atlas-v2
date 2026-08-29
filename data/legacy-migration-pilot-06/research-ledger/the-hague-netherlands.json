@@ -1,0 +1,104 @@
+{
+  "destinationKey": "the-hague-netherlands",
+  "researchedAt": "2026-08-28",
+  "researchedBy": "phase5c-wave1-research",
+  "scopeNote": "This pass researched and populated only identity/geography and monthly climate normals. Visa/tax/healthcare/airport categories were identified as researchable but NOT populated this pass due to source-fetch time constraints - left genuinely blank, not fabricated, per the non-negotiable rules. See 'notResearchedThisPass' below.",
+  "facts": [
+    {
+      "field": "DESTINATIONS.country",
+      "value": "Netherlands",
+      "sourceName": "Wikipedia (The Hague) infobox, citing the municipality's own administrative status",
+      "sourceUrl": "https://en.wikipedia.org/wiki/The_Hague",
+      "retrievedAt": "2026-08-28",
+      "note": "Matches legacy destinations.ts and existing Supabase row exactly - no conflict."
+    },
+    {
+      "field": "DESTINATIONS.state_region",
+      "value": "South Holland",
+      "sourceName": "Wikipedia (The Hague) infobox: Province = South Holland",
+      "sourceUrl": "https://en.wikipedia.org/wiki/The_Hague",
+      "retrievedAt": "2026-08-28",
+      "note": "This is the province, not a smaller region - matches the Wave 1 unverified lead's 'South Holland' value (now independently corroborated, no longer just an unverified lead for this specific field)."
+    },
+    {
+      "field": "DESTINATIONS.latitude",
+      "value": 52.08,
+      "field_longitude": "DESTINATIONS.longitude",
+      "value_longitude": 4.31,
+      "sourceName": "Wikipedia (The Hague) infobox coordinates (52°04'48\"N 04°18'36\"E)",
+      "sourceUrl": "https://en.wikipedia.org/wiki/The_Hague",
+      "retrievedAt": "2026-08-28",
+      "note": "Rounded to 2 decimal places from the DMS coordinate for the municipality centroid."
+    },
+    {
+      "field": "DESTINATIONS.elevation_m",
+      "value": 1,
+      "sourceName": "Wikipedia (The Hague) infobox: Elevation = 1 m",
+      "sourceUrl": "https://en.wikipedia.org/wiki/The_Hague",
+      "retrievedAt": "2026-08-28"
+    },
+    {
+      "field": "DESTINATIONS.population",
+      "value": 549163,
+      "geographicLevel": "municipality",
+      "asOfDate": "2021-01-01",
+      "sourceName": "Statistics Netherlands (CBS), via Wikipedia infobox citation",
+      "sourceUrl": "https://opendata.cbs.nl/statline/#/CBS/en/dataset/37259eng/table",
+      "retrievedAt": "2026-08-28",
+      "note": "Municipality-level population as of 1 January 2021 (most recent figure with a clean CBS citation obtained this pass). Not the urban (883,720) or metro (2,390,101) figure - do not mix levels."
+    },
+    {
+      "field": "DESTINATIONS.metro_population",
+      "value": "2,390,101 (Rotterdam-The Hague metropolitan area, per COROP)",
+      "asOfDate": "2021-01-01",
+      "sourceName": "Wikipedia (The Hague) infobox, Metro population row, citing Statistics Netherlands / COROP regional definitions",
+      "sourceUrl": "https://en.wikipedia.org/wiki/The_Hague",
+      "retrievedAt": "2026-08-28",
+      "note": "Explicitly the Rotterdam-The Hague metropolitan area, not the municipality or the smaller 'urban' figure - kept distinct per the geographic-level rule."
+    },
+    {
+      "field": "DESTINATIONS.time_zone",
+      "value": "Europe/Amsterdam",
+      "sourceName": "Wikipedia (The Hague) infobox: Time zone UTC+01:00 (CET) / UTC+02:00 (CEST) summer",
+      "sourceUrl": "https://en.wikipedia.org/wiki/The_Hague",
+      "retrievedAt": "2026-08-28"
+    },
+    {
+      "field": "DESTINATIONS.currency",
+      "value": "EUR",
+      "sourceName": "Netherlands is a Eurozone member state (uncontroversial, well-established national fact)",
+      "sourceUrl": "https://www.government.nl/topics/immigration-to-the-netherlands",
+      "retrievedAt": "2026-08-28"
+    },
+    {
+      "field": "DESTINATIONS.primary_language",
+      "value": "Dutch",
+      "sourceName": "Official language of the Netherlands (uncontroversial national fact)",
+      "sourceUrl": "https://en.wikipedia.org/wiki/The_Hague",
+      "retrievedAt": "2026-08-28"
+    },
+    {
+      "field": "DESTINATIONS.official_tourism_url",
+      "value": "https://www.denhaag.nl/en/",
+      "sourceName": "Municipality of The Hague official website (confirmed live and reachable this session)",
+      "sourceUrl": "https://www.denhaag.nl/en/",
+      "retrievedAt": "2026-08-28"
+    },
+    {
+      "field": "CLIMATE_MONTHLY (all 12 months: avg_high_c, avg_low_c, rainfall_mm)",
+      "sourceName": "Royal Netherlands Meteorological Institute (KNMI), climate normal 1981-2010 (precipitation), via Wikipedia's cited climate table for Valkenburg station (nearest representative station for The Hague)",
+      "sourceUrl": "https://web.archive.org/web/20171010161642/http://www.klimaatatlas.nl/tabel/stationsdata/klimtab_8110_210.pdf",
+      "retrievedAt": "2026-08-28",
+      "effectivePeriod": "1981-2010 normal (precipitation days/snow: 1971-2000 normal)",
+      "note": "avg_high_c and avg_low_c taken from the 'Mean daily maximum' and 'Mean daily minimum' rows of the KNMI-sourced table; rainfall_mm from 'Average precipitation'. humidity_pct and sunshine_hours also available from the same table and populated. This is the nearest weather station representing The Hague, not a citywide average - noted."
+    }
+  ],
+  "notResearchedThisPass": [
+    "VISA_RESIDENCY (Schengen 90/180 rule for US travelers - well-known but a clean, live, official-source citation was not obtained this session after two failed fetch attempts against netherlandsandyou.nl (404) and travel.state.gov (403 blocked); left blank rather than cite indirectly)",
+    "TAXES_FINANCE (Belastingdienst overview - not fetched this pass)",
+    "HEALTHCARE_INSURANCE (Dutch healthcare system overview - not fetched this pass)",
+    "TRANSPORT_AIRPORTS (Rotterdam The Hague Airport's official site was confirmed live/reachable, and Amsterdam Schiphol is the more-used airport per Wikipedia, but distance/drive-time figures were not independently fetched this pass - left blank)",
+    "NEIGHBORHOODS, PLACES, RESOURCES, MEDIA, COST_OF_LIVING, HOUSING_PROPERTY, PROPERTY_RESOURCES, LGBTQ_INCLUSIVITY, SAFETY_RISKS, CONNECTIVITY_REMOTE_WORK, LANGUAGE_INTEGRATION, PETS, FAMILY_EDUCATION, COMMUNITY_SOCIAL, ACCESSIBILITY, BUREAUCRACY_SETUP, WORK_BUSINESS, RETIREMENT_AGING, LIFESTYLE_LAWS, REALITY_CHECK, MOVE_CHECKLIST, DESTINATION_FACTS, DESTINATION_SCORES, ENVIRONMENT_QUALITY, DAILY_LIFE_PRACTICALITY, EVENTS_SEASONALITY, LIFESTYLE_FEATURES - out of scope for this pass entirely, would require substantial additional named-entity research (specific restaurants, specific visa document lists, specific tax rates, etc.) beyond what this pass's time budget allows"
+  ],
+  "conflictsWithLegacySources": []
+}

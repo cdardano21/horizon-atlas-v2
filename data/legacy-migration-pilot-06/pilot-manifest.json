@@ -1,5 +1,5 @@
 {
-  "manifestVersion": "legacy-migration-pilot-06-phase5b",
+  "manifestVersion": "legacy-migration-pilot-06-phase5c",
   "generatedAt": "2026-08-28",
   "supabaseCheckNote": "Phase 5B performed exact-match (slug and destination_key) read-only GET requests against destinations_catalog for all 6 destinations, via the app's own supabaseFetch() anon-key path (app/lib/supabase.ts). All 6 returned exactly one row by slug (zero by destination_key, since destination_key is null on all 6 rows today) - see source-snapshots/{slug}-supabase.json for verbatim results. No write, RPC, or mutation of any kind was performed. Records were not automatically merged with the destinations.ts snapshots.",
   "statusFieldNote": "The agreed status vocabulary (migrated, enriched, display_ready, scoring_ready) has no defined value for a destination that has not yet begun migration. Per the Phase 5A instructions, no new status vocabulary is introduced here. Every row's \"status\" is explicitly null (not a string), meaning: not yet migrated. This is not the same as an omitted/missing field - it is a deliberate, explicit representation of the pre-migration state using the existing four-value design's absence, not a fifth invented value.",
@@ -14,7 +14,9 @@
         "destinations_ts": "see source-snapshots/the-hague-netherlands.json#sha256",
         "curated_city_images": "see source-snapshots/the-hague-netherlands.json#sha256",
         "curated_city_image_galleries": "see source-snapshots/the-hague-netherlands.json#sha256",
-        "supabase_destinations_catalog": "a14503e227cd89abd9eca882f8a286b0b949b9d2dabcc72c78a7cb9677ea18b7"
+        "supabase_destinations_catalog": "a14503e227cd89abd9eca882f8a286b0b949b9d2dabcc72c78a7cb9677ea18b7",
+        "research_ledger": "2da67bb65440384cb27e52d8190c1b58fb1bb918113af2f9c5622dea3f71aad0",
+        "research_ledger_climate": "0ce132e436b37d4363706adeac9620215ef2bddcbee51525e8f0eb1ea3b0975c"
       },
       "status": null,
       "conflicts": [
@@ -24,9 +26,9 @@
           "description": "A Supabase destinations_catalog row already exists (status=published, tier=launch, destination_key=null, metadata.source=workbook_import) with content matching app/lib/destinations.ts near-verbatim. This is NOT a blank-slate destination - it is already live/published today via the legacy (non-v3.1) Supabase path. Any future migration must UPDATE this existing row, never insert a duplicate."
         }
       ],
-      "validation_result": "NOT_YET_RUN_FOR_CONTENT - structural workbook validation only (see validation-report.json); no destination content exists yet to validate for correctness.",
+      "validation_result": "PHASE_5C_PARTIAL - DESTINATIONS identity/geography (population, coordinates, elevation, currency, language, time zone, official tourism URL) and CLIMATE_MONTHLY (12 rows) are now evidence-backed and cited; see research-ledger/the-hague-netherlands.json for full provenance and the notResearchedThisPass list (visa, tax, healthcare, transport, and all narrative/editorial fields remain genuinely blank).",
       "last_updated_at": "2026-08-28",
-      "last_updated_by": "phase5b-supabase-check"
+      "last_updated_by": "phase5c-wave1-research"
     },
     {
       "destination_key": "kyoto-japan",
@@ -39,7 +41,9 @@
         "curated_city_images": "see source-snapshots/kyoto-japan.json#sha256",
         "curated_city_image_galleries": "see source-snapshots/kyoto-japan.json#sha256",
         "destination_enrichment": "see source-snapshots/kyoto-japan.json#sha256",
-        "supabase_destinations_catalog": "b58956a957e38679180850d51abf599f92abd51fb8510e0b850a4109b056026d"
+        "supabase_destinations_catalog": "b58956a957e38679180850d51abf599f92abd51fb8510e0b850a4109b056026d",
+        "research_ledger": "3531f042a97e86946d2bcb79493afe05ae4b9eb0cd54f326f8bbf1331c1edb2f",
+        "research_ledger_climate": "68816e5c87407b4949eca9c01818b85e3f709add57ac9f2c30a7acfe9f40e429"
       },
       "status": null,
       "conflicts": [
@@ -59,9 +63,9 @@
           "description": "A Supabase destinations_catalog row already exists (status=published, tier=launch, destination_key=null, metadata.source=workbook_import) with content matching app/lib/destinations.ts near-verbatim. This is NOT a blank-slate destination - it is already live/published today via the legacy (non-v3.1) Supabase path. Any future migration must UPDATE this existing row, never insert a duplicate."
         }
       ],
-      "validation_result": "NOT_YET_RUN_FOR_CONTENT - structural workbook validation only.",
+      "validation_result": "PHASE_5C_PARTIAL - DESTINATIONS identity/geography (population, coordinates, currency, language, time zone, official tourism URL; elevation deliberately left blank - source only gave a range) and CLIMATE_MONTHLY (12 rows) are now evidence-backed and cited; see research-ledger/kyoto-japan.json for full provenance and the notResearchedThisPass list. The pre-existing narrative_description conflict is unresolved and unaffected by this pass.",
       "last_updated_at": "2026-08-28",
-      "last_updated_by": "phase5b-supabase-check"
+      "last_updated_by": "phase5c-wave1-research"
     },
     {
       "destination_key": "santa-fe-new-mexico-united-states",
