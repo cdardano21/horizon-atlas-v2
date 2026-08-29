@@ -1,0 +1,54 @@
+{
+  "destinationKey": "the-hague-netherlands",
+  "queriedVia": "app/lib/supabase.ts supabaseFetch() - the same real, anon-key, RLS-protected GET path the live application uses",
+  "queryBySlug": "/rest/v1/destinations_catalog?slug=eq.the-hague-netherlands&select=*",
+  "queryByDestinationKey": "/rest/v1/destinations_catalog?destination_key=eq.the-hague-netherlands&select=*",
+  "rowCountBySlug": 1,
+  "rowCountByDestinationKey": 0,
+  "verbatimRowsBySlug": [
+    {
+      "id": "8ee783cd-d4c3-43e6-a727-b06f86de9aaf",
+      "slug": "the-hague-netherlands",
+      "city": "The Hague",
+      "country": "Netherlands",
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "tier": "launch",
+      "status": "published",
+      "hero_image_url": null,
+      "description": "The Hague is the Netherlands’ seat of government, combining stately institutions, international courts and North Sea beaches.",
+      "overview": "The Binnenhof, Mauritshuis, Scheveningen and international organizations shape the city. It is polished, multilingual and slightly calmer than Amsterdam.",
+      "climate_summary": "Oceanic coastal climate with cool summers, mild winters and frequent wind.",
+      "lifestyle_summary": "Best for diplomats, legal professionals, families and residents wanting urban life with beach access.",
+      "healthcare_summary": null,
+      "housing_summary": null,
+      "cost_summary": null,
+      "tax_summary": null,
+      "visa_summary": null,
+      "transportation_summary": "Trams, buses and rail offer excellent coverage. Rotterdam and Schiphol airports are accessible by train.",
+      "metadata": {
+        "tags": [
+          "Netherlands",
+          "government",
+          "international law",
+          "beach",
+          "diplomacy",
+          "transit",
+          "quality of life"
+        ],
+        "emoji": "🌍",
+        "match": 0,
+        "source": "workbook_import"
+      },
+      "published_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "created_at": "2026-08-03T02:23:08.690456+00:00",
+      "updated_at": "2026-08-03T02:23:08.690456+00:00",
+      "destination_key": null
+    }
+  ],
+  "sha256OfVerbatimRowsBySlug": "a14503e227cd89abd9eca882f8a286b0b949b9d2dabcc72c78a7cb9677ea18b7",
+  "note": "verbatimRowsBySlug is the exact JSON returned by Supabase for this exact-slug-match GET request, with keys sorted only for stable hashing - no field was renamed, normalized, or altered. Never automatically merged with the destinations.ts snapshot in the same directory."
+}

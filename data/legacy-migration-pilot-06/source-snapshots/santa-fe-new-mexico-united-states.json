@@ -1,0 +1,9 @@
+{
+  "destinationKey": "santa-fe-new-mexico-united-states",
+  "slug": "santa-fe-new-mexico-united-states",
+  "extractedFrom": "app/lib/destinations.ts",
+  "extractedAtLine": 9390,
+  "verbatimTypeScriptObjectLiteral": "  {\n    slug: \"santa-fe-new-mexico-united-states\",\n    city: \"Santa Fe\",\n    country: \"United States\",\n    emoji: \"12\",\n    match: 0.0,\n    description: \"Santa Fe is New Mexico’s historic high-desert capital, known for adobe architecture, art and strong regional identity.\",\n    overview: \"The Plaza, Canyon Road, museums and nearby mountains create exceptional cultural depth; housing costs and altitude are tradeoffs.\",\n    climate: \"Semi-arid highland climate with warm summers, cold winters and strong sun.\",\n    lifestyle: \"Best for artists, retirees and culture lovers seeking a distinctive small capital.\",\n    transportation: \"Santa Fe Trails buses and Rail Runner service connect the city; Albuquerque is the main air gateway.\",\n    images: [\n      {\n        src: \"\",\n        alt: \"Santa Fe city view\",\n        caption: \"Santa Fe, United States\",\n      },\n    ],\n    tags: [\"New Mexico\", \"capital\", \"adobe\", \"art\", \"high desert\"],\n  },\n",
+  "sha256OfVerbatimBlock": "af7404ef19c737e64b881181512c68c15ccf6d9434f4f5b724a58c6a3db5592c",
+  "note": "verbatimTypeScriptObjectLiteral is the exact, unmodified TypeScript object literal text as it appears in the committed file, captured read-only. No field was normalized, corrected, or reformatted."
+}

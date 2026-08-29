@@ -1,0 +1,210 @@
+{
+  "packageId": "legacy-migration-pilot-06",
+  "purpose": "Phase 5A: identity/source inventory + empty structural skeleton for a 6-destination legacy-catalog migration pilot. No destination research has been performed. No destination is migrated, enriched, display_ready, or scoring_ready.",
+  "createdAt": "2026-08-28",
+  "schemaVersion": "3.3",
+  "canonicalSchemaSource": "app/lib/workbook-v31-deterministic-core.ts (locked v3.1/v3.3 deterministic workbook contract) - not modified, not competing with, this package only adds new destination-identity rows using the existing schema/headers/key convention.",
+  "keyGenerationConvention": "destination_key = slug = the exact legacy app/lib/destinations.ts slug, used verbatim. No abbreviated/new destination_key form was invented because none already exists anywhere in the repository for these 6 destinations (verified: no match in expansion-workbook-registry.ts, canonical-destination-loader.ts golden-pilot aliases, or any committed .xlsx workbook).",
+  "destinations": [
+    {
+      "destinationKey": "the-hague-netherlands",
+      "slug": "the-hague-netherlands",
+      "city": "The Hague",
+      "country": "Netherlands",
+      "regionOrState": null,
+      "regionOrStateNote": "Not present in the legacy app/lib/destinations.ts schema (no region/state field exists on the Destination type at all). A Wave 1 (deleted, unverified) proposal listed \"South Holland\" - see wave1Lead below - not carried into this package as a fact.",
+      "coordinates": null,
+      "coordinatesNote": "Not present anywhere in the legacy schema for this destination.",
+      "aliases": [],
+      "existingDestinationKeyElsewhere": false,
+      "existingWorkbookPresence": {
+        "anyCommittedWorkbook": false,
+        "note": "Scanned all 8 committed .xlsx files' DESTINATIONS sheets (v3.1 FROZEN pilot, v3.2 pilot, Batch #1 v3.1_V2/v3.2/v3.3, Batch #2 v3.2/v3.3/v3.3_POC) for 'the hague'/'the-hague'/'den haag' - zero matches."
+      },
+      "legacySources": {
+        "destinationsTs": { "present": true, "file": "app/lib/destinations.ts", "lineStart": 10850, "richness": "thin (1-sentence description/overview/climate/lifestyle/transportation fields)" },
+        "curatedCityImages": { "present": true, "file": "app/lib/curatedCityImages.ts", "line": 474, "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Beest_Street_in_The_Hague.jpg/1280px-Beest_Street_in_The_Hague.jpg" },
+        "curatedCityImageGalleries": { "present": true, "file": "app/lib/curatedCityImageGalleries.ts", "line": 3198, "imageCount": 3 },
+        "destinationEnrichment": { "present": false },
+        "generatedCommandCenterSeeds": { "present": false },
+        "generatedDestinationCardFacts": { "present": false },
+        "regionalCommandCenterSeeds": { "present": false }
+      },
+      "wave1Lead": {
+        "label": "WAVE1_UNVERIFIED_LEAD",
+        "recoveredFrom": "git show e69130a:docs/destination-expansion-proposed-300.json (commit e69130a, later wholly deleted at commit 40abaa5)",
+        "content": { "additionGroup": "INTERNATIONAL", "city": "The Hague", "stateOrRegion": "South Holland", "country": "Netherlands", "slug": "the-hague-netherlands", "tierTarget": "TIER_2" },
+        "trustLevel": "UNVERIFIED - cite-and-reverify only, never import as fact per source-precedence rule 3"
+      },
+      "confirmedDefectsOrPlaceholders": [
+        "match: 0.0 (universal legacy placeholder across the whole catalog, not a real computed score)",
+        "images[0].src: '' (empty string - no actual image URL stored in destinations.ts itself, despite a real image existing in curatedCityImages.ts)"
+      ],
+      "relatedNameRisk": {
+        "riskClass": "identity_resolution_edge_case",
+        "description": "slug begins with the token 'the-', the exact prefix pattern that historically caused a documented fuzzy-match bug (the-villages-florida-united-states incorrectly matched an unrelated 'Athens' row). Must be resolved by exact destination_key/slug match only, per VALIDATION_RULES.no_fuzzy_identity."
+      }
+    },
+    {
+      "destinationKey": "kyoto-japan",
+      "slug": "kyoto-japan",
+      "city": "Kyoto",
+      "country": "Japan",
+      "regionOrState": null,
+      "regionOrStateNote": "Not present in the legacy schema.",
+      "coordinates": null,
+      "coordinatesNote": "Not present anywhere in the legacy schema for this destination.",
+      "aliases": [],
+      "existingDestinationKeyElsewhere": false,
+      "existingWorkbookPresence": {
+        "anyCommittedWorkbook": false,
+        "note": "Scanned all 8 committed .xlsx files' DESTINATIONS sheets for 'kyoto' - zero matches."
+      },
+      "legacySources": {
+        "destinationsTs": { "present": true, "file": "app/lib/destinations.ts", "lineStart": 1449, "richness": "richest of the 6 pilots - multi-sentence, specific-detail paragraphs (named temples/districts)" },
+        "curatedCityImages": { "present": true, "file": "app/lib/curatedCityImages.ts", "line": 236, "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Kyoto%2C_Japan_%2849667780482%29.jpg/1280px-Kyoto%2C_Japan_%2849667780482%29.jpg" },
+        "curatedCityImageGalleries": { "present": true, "file": "app/lib/curatedCityImageGalleries.ts", "line": 1590, "imageCount": 5 },
+        "destinationEnrichment": { "present": true, "file": "app/lib/destination-enrichment.ts", "lines": [274, 576], "note": "TWO separate entries in the same file (flagshipNarrativeOverrides primary tier + a nested regional-fallback tier), each independently written, similar but not identical prose. Not a literal duplicate-object-key error (different nesting level), but a real near-duplicate-content note worth a conflict entry." },
+        "generatedCommandCenterSeeds": { "present": true, "file": "app/lib/generated-command-center-seeds.ts", "line": 125, "trustLevel": "CONFIRMED_NOT_TRUSTWORTHY", "note": "Contains an algorithmically-generated 'Dardano Retirement Index 7.0' model scorecard (e.g. 'Safety: 96', 'Model input: 9.597489636216475 / 10') with every single claim citing the SAME generic sourceUrl (travel.state.gov international-travel page) and verificationStatus='estimated'. This is model output, not per-destination research, and must never be imported as verified fact for this pilot." },
+        "generatedDestinationCardFacts": { "present": true, "file": "app/lib/generated-destination-card-facts.ts", "line": 3456 },
+        "regionalCommandCenterSeeds": { "present": true, "file": "app/lib/regional-command-center-seeds.ts" }
+      },
+      "wave1Lead": { "label": "WAVE1_UNVERIFIED_LEAD", "recoveredFrom": null, "content": null, "trustLevel": "NOT_FOUND - Kyoto does not appear in the recovered docs/destination-expansion-proposed-300.json (consistent with Kyoto being part of the ORIGINAL 300-destination catalog rather than a Wave 1 proposed addition)." },
+      "confirmedDefectsOrPlaceholders": [
+        "match: 0.0 (universal legacy placeholder)",
+        "images[0].src: '' in destinations.ts (empty, despite real images existing in curatedCityImages/curatedCityImageGalleries)",
+        "generated-command-center-seeds.ts scorecard: fabricated-appearing precision (e.g. 9.597489636216475/10) attributed to a single generic non-destination-specific sourceUrl - flagged, not imported"
+      ],
+      "relatedNameRisk": { "riskClass": "none_identified" }
+    },
+    {
+      "destinationKey": "santa-fe-new-mexico-united-states",
+      "slug": "santa-fe-new-mexico-united-states",
+      "city": "Santa Fe",
+      "country": "United States",
+      "regionOrState": null,
+      "regionOrStateNote": "Not present in the legacy destinations.ts schema. A Wave 1 (deleted, unverified) proposal listed \"New Mexico\" - see wave1Lead below - not carried into this package as a fact.",
+      "coordinates": null,
+      "coordinatesNote": "Not present anywhere in the legacy schema for this destination.",
+      "aliases": [],
+      "existingDestinationKeyElsewhere": false,
+      "existingWorkbookPresence": {
+        "anyCommittedWorkbook": false,
+        "note": "Scanned all 8 committed .xlsx files' DESTINATIONS sheets for 'santa fe'/'santa-fe' - zero matches. Confirmed no other Santa Fe (e.g. Argentina, Spain) entry exists anywhere in app/lib/destinations.ts either."
+      },
+      "legacySources": {
+        "destinationsTs": { "present": true, "file": "app/lib/destinations.ts", "lineStart": 9390, "richness": "thin (1-sentence fields)" },
+        "curatedCityImages": { "present": true, "file": "app/lib/curatedCityImages.ts", "line": 420, "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Palace_of_the_Governors.jpg/1280px-Palace_of_the_Governors.jpg" },
+        "curatedCityImageGalleries": { "present": true, "file": "app/lib/curatedCityImageGalleries.ts", "line": 2826, "imageCount": 5 },
+        "destinationEnrichment": { "present": false },
+        "generatedCommandCenterSeeds": { "present": false },
+        "generatedDestinationCardFacts": { "present": false },
+        "regionalCommandCenterSeeds": { "present": false }
+      },
+      "wave1Lead": {
+        "label": "WAVE1_UNVERIFIED_LEAD",
+        "recoveredFrom": "git show e69130a:docs/destination-expansion-proposed-300.json (commit e69130a, later wholly deleted at commit 40abaa5)",
+        "content": { "additionGroup": "US", "city": "Santa Fe", "stateOrRegion": "New Mexico", "country": "United States", "slug": "santa-fe-new-mexico-united-states", "tierTarget": "TIER_3" },
+        "trustLevel": "UNVERIFIED - cite-and-reverify only, never import as fact per source-precedence rule 3"
+      },
+      "confirmedDefectsOrPlaceholders": [
+        "match: 0.0 (universal legacy placeholder)",
+        "emoji: \"12\" - a numeric placeholder/leaked value, not a real emoji; a confirmed real data defect, not repaired here",
+        "images[0].src: '' in destinations.ts (empty, despite real images existing in curatedCityImages/curatedCityImageGalleries)"
+      ],
+      "relatedNameRisk": { "riskClass": "none_identified", "note": "No other 'san-ramon'/'santa-fe' slug variant currently exists in the legacy catalog to collide with." }
+    },
+    {
+      "destinationKey": "st-cloud-minnesota-united-states",
+      "slug": "st-cloud-minnesota-united-states",
+      "city": "St. Cloud",
+      "country": "United States",
+      "regionOrState": null,
+      "regionOrStateNote": "Not present in the legacy schema.",
+      "coordinates": null,
+      "coordinatesNote": "Not present anywhere in the legacy schema for this destination.",
+      "aliases": [],
+      "existingDestinationKeyElsewhere": false,
+      "existingWorkbookPresence": { "anyCommittedWorkbook": false, "note": "Scanned all 8 committed .xlsx files' DESTINATIONS sheets for 'st. cloud'/'st cloud'/'saint cloud' - zero matches." },
+      "legacySources": {
+        "destinationsTs": { "present": true, "file": "app/lib/destinations.ts", "lineStart": 16247, "richness": "thin, with 2 minor confirmed defects (see below)" },
+        "curatedCityImages": { "present": false },
+        "curatedCityImageGalleries": { "present": false },
+        "destinationEnrichment": { "present": false },
+        "generatedCommandCenterSeeds": { "present": false },
+        "generatedDestinationCardFacts": { "present": false },
+        "regionalCommandCenterSeeds": { "present": false }
+      },
+      "wave1Lead": { "label": "WAVE1_UNVERIFIED_LEAD", "recoveredFrom": null, "content": null, "trustLevel": "NOT_FOUND - St. Cloud does not appear in the recovered docs/destination-expansion-proposed-300.json." },
+      "confirmedDefectsOrPlaceholders": [
+        "match: 0.0 (universal legacy placeholder)",
+        "images[0].src: '' (no image exists anywhere in the legacy system for this destination - genuinely absent, not just unlinked)",
+        "tags: [\"Minnesota\", \"Minnesota\", ...] - a literal duplicate tag entry, a confirmed real data defect, not repaired here",
+        "climate/transportation field text missing a trailing sentence period (minor formatting inconsistency, not repaired here)"
+      ],
+      "relatedNameRisk": { "riskClass": "none_identified" }
+    },
+    {
+      "destinationKey": "san-ramon-costa-rica",
+      "slug": "san-ramon-costa-rica",
+      "city": "San Ramón",
+      "country": "Costa Rica",
+      "regionOrState": null,
+      "regionOrStateNote": "Not present in the legacy schema.",
+      "coordinates": null,
+      "coordinatesNote": "Not present anywhere in the legacy schema for this destination.",
+      "aliases": [],
+      "existingDestinationKeyElsewhere": false,
+      "existingWorkbookPresence": { "anyCommittedWorkbook": false, "note": "Scanned all 8 committed .xlsx files' DESTINATIONS sheets for 'san ramón'/'san ramon' - zero matches." },
+      "legacySources": {
+        "destinationsTs": { "present": true, "file": "app/lib/destinations.ts", "lineStart": 14107, "richness": "thin" },
+        "curatedCityImages": { "present": false },
+        "curatedCityImageGalleries": { "present": false },
+        "destinationEnrichment": { "present": false },
+        "generatedCommandCenterSeeds": { "present": false },
+        "generatedDestinationCardFacts": { "present": false },
+        "regionalCommandCenterSeeds": { "present": false }
+      },
+      "wave1Lead": { "label": "WAVE1_UNVERIFIED_LEAD", "recoveredFrom": null, "content": null, "trustLevel": "NOT_FOUND - San Ramón does not appear in the recovered docs/destination-expansion-proposed-300.json." },
+      "confirmedDefectsOrPlaceholders": [
+        "match: 0.0 (universal legacy placeholder)",
+        "images[0].src: '' (no image exists anywhere in the legacy system for this destination)"
+      ],
+      "relatedNameRisk": {
+        "riskClass": "same_name_different_place_risk_NOT_currently_present",
+        "description": "San Ramon, California (US) is a real, commonly-known place that could be confused with San Ramón, Costa Rica in future free-text research, but no 'san-ramon-california...' slug currently exists in app/lib/destinations.ts to collide with today. Flagged as a forward-looking caution for the research phase, not a currently-confirmed conflict."
+      }
+    },
+    {
+      "destinationKey": "st-john-s-canada",
+      "slug": "st-john-s-canada",
+      "city": "St. John's",
+      "country": "Canada",
+      "regionOrState": null,
+      "regionOrStateNote": "Not present in the legacy schema (St. John's is in Newfoundland and Labrador - a well-known fact, but not carried into this package as a structured value since no source field for it exists in the legacy schema).",
+      "coordinates": null,
+      "coordinatesNote": "Not present anywhere in the legacy schema for this destination.",
+      "aliases": [],
+      "existingDestinationKeyElsewhere": false,
+      "existingWorkbookPresence": { "anyCommittedWorkbook": false, "note": "Scanned all 8 committed .xlsx files' DESTINATIONS sheets for \"st. john's\"/'st johns' - zero matches." },
+      "legacySources": {
+        "destinationsTs": { "present": true, "file": "app/lib/destinations.ts", "lineStart": 19127, "richness": "thin" },
+        "curatedCityImages": { "present": false },
+        "curatedCityImageGalleries": { "present": false },
+        "destinationEnrichment": { "present": false },
+        "generatedCommandCenterSeeds": { "present": false },
+        "generatedDestinationCardFacts": { "present": false },
+        "regionalCommandCenterSeeds": { "present": false }
+      },
+      "wave1Lead": { "label": "WAVE1_UNVERIFIED_LEAD", "recoveredFrom": null, "content": null, "trustLevel": "NOT_FOUND - St. John's does not appear in the recovered docs/destination-expansion-proposed-300.json." },
+      "confirmedDefectsOrPlaceholders": [
+        "match: 0.0 (universal legacy placeholder)",
+        "images[0].src: '' (no image exists anywhere in the legacy system for this destination)"
+      ],
+      "relatedNameRisk": {
+        "riskClass": "confirmed_related_name_collision_in_repo",
+        "description": "app/lib/destinations.ts (line 17228) ALSO already contains a separate, real, different destination: slug 'saint-john-canada' (Saint John, New Brunswick) - a different real Canadian city from St. John's, Newfoundland and Labrador. Both exist in the legacy catalog today under different slugs; this is a live, confirmed example of the exact identity-ambiguity class this pilot must resolve by exact-match only, never fuzzy/substring."
+      }
+    }
+  ]
+}

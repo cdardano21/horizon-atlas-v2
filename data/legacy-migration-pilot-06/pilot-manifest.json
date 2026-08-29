@@ -1,0 +1,172 @@
+{
+  "manifestVersion": "legacy-migration-pilot-06-phase5b",
+  "generatedAt": "2026-08-28",
+  "supabaseCheckNote": "Phase 5B performed exact-match (slug and destination_key) read-only GET requests against destinations_catalog for all 6 destinations, via the app's own supabaseFetch() anon-key path (app/lib/supabase.ts). All 6 returned exactly one row by slug (zero by destination_key, since destination_key is null on all 6 rows today) - see source-snapshots/{slug}-supabase.json for verbatim results. No write, RPC, or mutation of any kind was performed. Records were not automatically merged with the destinations.ts snapshots.",
+  "statusFieldNote": "The agreed status vocabulary (migrated, enriched, display_ready, scoring_ready) has no defined value for a destination that has not yet begun migration. Per the Phase 5A instructions, no new status vocabulary is introduced here. Every row's \"status\" is explicitly null (not a string), meaning: not yet migrated. This is not the same as an omitted/missing field - it is a deliberate, explicit representation of the pre-migration state using the existing four-value design's absence, not a fifth invented value.",
+  "rows": [
+    {
+      "destination_key": "the-hague-netherlands",
+      "slug": "the-hague-netherlands",
+      "source_system": "legacy_ts",
+      "batch_id": "legacy-migration-pilot-06",
+      "schema_version": "3.3",
+      "source_content_hash": {
+        "destinations_ts": "see source-snapshots/the-hague-netherlands.json#sha256",
+        "curated_city_images": "see source-snapshots/the-hague-netherlands.json#sha256",
+        "curated_city_image_galleries": "see source-snapshots/the-hague-netherlands.json#sha256",
+        "supabase_destinations_catalog": "a14503e227cd89abd9eca882f8a286b0b949b9d2dabcc72c78a7cb9677ea18b7"
+      },
+      "status": null,
+      "conflicts": [
+        {
+          "field": "supabase_presence",
+          "sources": ["destinations_catalog row id 8ee783cd-d4c3-43e6-a727-b06f86de9aaf"],
+          "description": "A Supabase destinations_catalog row already exists (status=published, tier=launch, destination_key=null, metadata.source=workbook_import) with content matching app/lib/destinations.ts near-verbatim. This is NOT a blank-slate destination - it is already live/published today via the legacy (non-v3.1) Supabase path. Any future migration must UPDATE this existing row, never insert a duplicate."
+        }
+      ],
+      "validation_result": "NOT_YET_RUN_FOR_CONTENT - structural workbook validation only (see validation-report.json); no destination content exists yet to validate for correctness.",
+      "last_updated_at": "2026-08-28",
+      "last_updated_by": "phase5b-supabase-check"
+    },
+    {
+      "destination_key": "kyoto-japan",
+      "slug": "kyoto-japan",
+      "source_system": "legacy_ts",
+      "batch_id": "legacy-migration-pilot-06",
+      "schema_version": "3.3",
+      "source_content_hash": {
+        "destinations_ts": "see source-snapshots/kyoto-japan.json#sha256",
+        "curated_city_images": "see source-snapshots/kyoto-japan.json#sha256",
+        "curated_city_image_galleries": "see source-snapshots/kyoto-japan.json#sha256",
+        "destination_enrichment": "see source-snapshots/kyoto-japan.json#sha256",
+        "supabase_destinations_catalog": "b58956a957e38679180850d51abf599f92abd51fb8510e0b850a4109b056026d"
+      },
+      "status": null,
+      "conflicts": [
+        {
+          "field": "narrative_description",
+          "sources": ["app/lib/destinations.ts:1449", "app/lib/destination-enrichment.ts:274", "app/lib/destination-enrichment.ts:576"],
+          "description": "Three independently-written narrative variants exist for the same 5 prose fields (description/overview/climate/lifestyle/transportation). Similar themes, different wording. Not auto-resolved - a human/senior-agent must pick or synthesize during the research phase."
+        },
+        {
+          "field": "quantitative_scores",
+          "sources": ["app/lib/generated-command-center-seeds.ts:125"],
+          "description": "An algorithmically-generated 'Dardano Retirement Index 7.0' scorecard exists with a single shared, non-destination-specific sourceUrl across dozens of unrelated claims (verificationStatus='estimated'). CONFIRMED NOT TRUSTWORTHY - flagged so it is never silently imported as verified fact."
+        },
+        {
+          "field": "supabase_presence",
+          "sources": ["destinations_catalog row id 9dfff8b1-7804-48ed-a56a-b872a5e0629e"],
+          "description": "A Supabase destinations_catalog row already exists (status=published, tier=launch, destination_key=null, metadata.source=workbook_import) with content matching app/lib/destinations.ts near-verbatim. This is NOT a blank-slate destination - it is already live/published today via the legacy (non-v3.1) Supabase path. Any future migration must UPDATE this existing row, never insert a duplicate."
+        }
+      ],
+      "validation_result": "NOT_YET_RUN_FOR_CONTENT - structural workbook validation only.",
+      "last_updated_at": "2026-08-28",
+      "last_updated_by": "phase5b-supabase-check"
+    },
+    {
+      "destination_key": "santa-fe-new-mexico-united-states",
+      "slug": "santa-fe-new-mexico-united-states",
+      "source_system": "legacy_ts",
+      "batch_id": "legacy-migration-pilot-06",
+      "schema_version": "3.3",
+      "source_content_hash": {
+        "destinations_ts": "see source-snapshots/santa-fe-new-mexico-united-states.json#sha256",
+        "curated_city_images": "see source-snapshots/santa-fe-new-mexico-united-states.json#sha256",
+        "curated_city_image_galleries": "see source-snapshots/santa-fe-new-mexico-united-states.json#sha256",
+        "supabase_destinations_catalog": "c52d86e77fa99d38c35788fd9d612df02eb8f927928a8f9eeb4bfa50dfeb772c"
+      },
+      "status": null,
+      "conflicts": [
+        {
+          "field": "emoji",
+          "sources": ["app/lib/destinations.ts:9394"],
+          "description": "Confirmed legacy defect: emoji field contains the literal string \"12\" (a leaked/placeholder numeric value, not a real emoji). Preserved verbatim in the source snapshot; not silently repaired."
+        },
+        {
+          "field": "supabase_presence",
+          "sources": ["destinations_catalog row id fe265532-5508-4633-b349-50857c9f4f91"],
+          "description": "A Supabase destinations_catalog row already exists (status=published, tier=launch, destination_key=null, metadata.source=workbook_import), and it carries the SAME emoji=\"12\" defect as destinations.ts - confirming both share a common origin. Any future migration must UPDATE this existing row, never insert a duplicate, and must decide whether to repair the emoji defect (not decided here)."
+        }
+      ],
+      "validation_result": "NOT_YET_RUN_FOR_CONTENT - structural workbook validation only.",
+      "last_updated_at": "2026-08-28",
+      "last_updated_by": "phase5b-supabase-check"
+    },
+    {
+      "destination_key": "st-cloud-minnesota-united-states",
+      "slug": "st-cloud-minnesota-united-states",
+      "source_system": "legacy_ts",
+      "batch_id": "legacy-migration-pilot-06",
+      "schema_version": "3.3",
+      "source_content_hash": {
+        "destinations_ts": "see source-snapshots/st-cloud-minnesota-united-states.json#sha256",
+        "supabase_destinations_catalog": "8a0213c9d43ebf74d63eb776be0401f33005e291ed134da1184c916e5e7d9734"
+      },
+      "status": null,
+      "conflicts": [
+        {
+          "field": "tags",
+          "sources": ["app/lib/destinations.ts:16264"],
+          "description": "Confirmed legacy defect: tags array contains a literal duplicate entry (\"Minnesota\" appears twice). Preserved verbatim in the source snapshot; not silently repaired."
+        },
+        {
+          "field": "supabase_presence",
+          "sources": ["destinations_catalog row id d8ae7acc-7ab5-48c8-9c1b-0dd1cd956e72"],
+          "description": "A Supabase destinations_catalog row already exists (status=published, tier=launch, destination_key=null, metadata.source=workbook_import), carrying the SAME duplicate-tag defect as destinations.ts. Any future migration must UPDATE this existing row, never insert a duplicate."
+        }
+      ],
+      "validation_result": "NOT_YET_RUN_FOR_CONTENT - structural workbook validation only.",
+      "last_updated_at": "2026-08-28",
+      "last_updated_by": "phase5b-supabase-check"
+    },
+    {
+      "destination_key": "san-ramon-costa-rica",
+      "slug": "san-ramon-costa-rica",
+      "source_system": "legacy_ts",
+      "batch_id": "legacy-migration-pilot-06",
+      "schema_version": "3.3",
+      "source_content_hash": {
+        "destinations_ts": "see source-snapshots/san-ramon-costa-rica.json#sha256",
+        "supabase_destinations_catalog": "7a1303a8c173356417e4288dc617354fd5e0cb39390c878c19a23ec25b7ee1ad"
+      },
+      "status": null,
+      "conflicts": [
+        {
+          "field": "supabase_presence",
+          "sources": ["destinations_catalog row id bb7574d2-0712-4977-95f8-79d3001c7731"],
+          "description": "A Supabase destinations_catalog row already exists (status=published, tier=launch, destination_key=null, metadata.source=workbook_import) with content matching app/lib/destinations.ts near-verbatim. Any future migration must UPDATE this existing row, never insert a duplicate."
+        }
+      ],
+      "validation_result": "NOT_YET_RUN_FOR_CONTENT - structural workbook validation only.",
+      "last_updated_at": "2026-08-28",
+      "last_updated_by": "phase5b-supabase-check"
+    },
+    {
+      "destination_key": "st-john-s-canada",
+      "slug": "st-john-s-canada",
+      "source_system": "legacy_ts",
+      "batch_id": "legacy-migration-pilot-06",
+      "schema_version": "3.3",
+      "source_content_hash": {
+        "destinations_ts": "see source-snapshots/st-john-s-canada.json#sha256",
+        "supabase_destinations_catalog": "e75f8c2e9b0868c52d6facf833fcd7d2a0250f1f518e744d29171aefab1c954c"
+      },
+      "status": null,
+      "conflicts": [
+        {
+          "field": "identity_disambiguation",
+          "sources": ["app/lib/destinations.ts:19127", "app/lib/destinations.ts:17228"],
+          "description": "app/lib/destinations.ts already contains a separate, real, different Canadian city ('saint-john-canada' = Saint John, New Brunswick) that is easily confused with 'st-john-s-canada' = St. John's, Newfoundland and Labrador. Both slugs are distinct and correct today; flagged so future research/scoring never merges or conflates the two."
+        },
+        {
+          "field": "supabase_presence",
+          "sources": ["destinations_catalog row id fc30a81a-0159-4905-9976-5ea8e90ddad8"],
+          "description": "A Supabase destinations_catalog row already exists (status=published, tier=launch, destination_key=null, metadata.source=workbook_import) with content matching app/lib/destinations.ts near-verbatim. Any future migration must UPDATE this existing row, never insert a duplicate."
+        }
+      ],
+      "validation_result": "NOT_YET_RUN_FOR_CONTENT - structural workbook validation only.",
+      "last_updated_at": "2026-08-28",
+      "last_updated_by": "phase5b-supabase-check"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "destinationKey": "st-john-s-canada",
+  "slug": "st-john-s-canada",
+  "extractedFrom": "app/lib/destinations.ts",
+  "extractedAtLine": 19127,
+  "verbatimTypeScriptObjectLiteral": "  {\n    slug: \"st-john-s-canada\",\n    city: \"St. John's\",\n    country: \"Canada\",\n    emoji: \"\",\n    match: 0.0,\n    description: \"St. John's is known for a colorful Atlantic harbor, universities and strong healthcare.\",\n    overview: \"The local economy is supported by government, healthcare and education. Key tradeoffs include wind, fog and geographic isolation.\",\n    climate: \"Cool oceanic climate with mild summers and cold wet winters\",\n    lifestyle: \"Best for coastal scenery and small-city services.\",\n    transportation: \"St. John's International Airport provides broad Canadian connections\",\n    images: [\n      {\n        src: \"\",\n        alt: \"St. John's city view\",\n        caption: \"St. John's, Canada\",\n      },\n    ],\n    tags: [\"Canada\", \"Newfoundland\", \"coast\", \"culture\"],\n  },\n",
+  "sha256OfVerbatimBlock": "680bff82928acc458213594d61a0bbfb997ab38663c0a91ce48a80dea8a6eabb",
+  "note": "verbatimTypeScriptObjectLiteral is the exact, unmodified TypeScript object literal text as it appears in the committed file, captured read-only. No field was normalized, corrected, or reformatted."
+}

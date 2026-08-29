@@ -1,0 +1,51 @@
+{
+  "destinationKey": "st-john-s-canada",
+  "queriedVia": "app/lib/supabase.ts supabaseFetch() - the same real, anon-key, RLS-protected GET path the live application uses",
+  "queryBySlug": "/rest/v1/destinations_catalog?slug=eq.st-john-s-canada&select=*",
+  "queryByDestinationKey": "/rest/v1/destinations_catalog?destination_key=eq.st-john-s-canada&select=*",
+  "rowCountBySlug": 1,
+  "rowCountByDestinationKey": 0,
+  "verbatimRowsBySlug": [
+    {
+      "id": "fc30a81a-0159-4905-9976-5ea8e90ddad8",
+      "slug": "st-john-s-canada",
+      "city": "St. John's",
+      "country": "Canada",
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "tier": "launch",
+      "status": "published",
+      "hero_image_url": null,
+      "description": "St. John's is known for a colorful Atlantic harbor, universities and strong healthcare.",
+      "overview": "The local economy is supported by government, healthcare and education. Key tradeoffs include wind, fog and geographic isolation.",
+      "climate_summary": "Cool oceanic climate with mild summers and cold wet winters",
+      "lifestyle_summary": "Best for coastal scenery and small-city services.",
+      "healthcare_summary": null,
+      "housing_summary": null,
+      "cost_summary": null,
+      "tax_summary": null,
+      "visa_summary": null,
+      "transportation_summary": "St. John's International Airport provides broad Canadian connections",
+      "metadata": {
+        "tags": [
+          "Canada",
+          "Newfoundland",
+          "coast",
+          "culture"
+        ],
+        "emoji": "",
+        "match": 0,
+        "source": "workbook_import"
+      },
+      "published_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "created_at": "2026-08-03T02:23:09.499276+00:00",
+      "updated_at": "2026-08-03T02:23:09.499276+00:00",
+      "destination_key": null
+    }
+  ],
+  "sha256OfVerbatimRowsBySlug": "e75f8c2e9b0868c52d6facf833fcd7d2a0250f1f518e744d29171aefab1c954c",
+  "note": "verbatimRowsBySlug is the exact JSON returned by Supabase for this exact-slug-match GET request, with keys sorted only for stable hashing - no field was renamed, normalized, or altered. Never automatically merged with the destinations.ts snapshot in the same directory."
+}

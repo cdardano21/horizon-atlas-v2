@@ -1,0 +1,9 @@
+{
+  "destinationKey": "san-ramon-costa-rica",
+  "slug": "san-ramon-costa-rica",
+  "extractedFrom": "app/lib/destinations.ts",
+  "extractedAtLine": 14107,
+  "verbatimTypeScriptObjectLiteral": "  {\n    slug: \"san-ramon-costa-rica\",\n    city: \"San Ramón\",\n    country: \"Costa Rica\",\n    emoji: \"\",\n    match: 0.0,\n    description: \"San Ramón is a cooler highland town with healthcare access, moderate costs and proximity to San José and Pacific beaches.\",\n    overview: \"A walkable center, coffee-country scenery and local medical services shape daily life, while agriculture, education, healthcare and services support the local economy. Important tradeoffs include limited nightlife and slower infrastructure.\",\n    climate: \"Tropical highland climate with mild temperatures and a pronounced rainy season\",\n    lifestyle: \"Best for retirees seeking a practical, less touristy Costa Rican base.\",\n    transportation: \"Regional buses connect San Ramón with San José; the international airport is roughly 90 minutes away\",\n    images: [\n      {\n        src: \"\",\n        alt: \"San Ramón city view\",\n        caption: \"San Ramón, Costa Rica\",\n      },\n    ],\n    tags: [\"Costa Rica\", \"international\", \"livability\", \"safety\", \"value\", \"quality of life\"],\n  },\n",
+  "sha256OfVerbatimBlock": "f50ca79c077b0eb14402207d86d106ebcddec170d6801163932154668a6cc3d5",
+  "note": "verbatimTypeScriptObjectLiteral is the exact, unmodified TypeScript object literal text as it appears in the committed file, captured read-only. No field was normalized, corrected, or reformatted."
+}

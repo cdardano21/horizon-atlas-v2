@@ -1,0 +1,53 @@
+{
+  "destinationKey": "san-ramon-costa-rica",
+  "queriedVia": "app/lib/supabase.ts supabaseFetch() - the same real, anon-key, RLS-protected GET path the live application uses",
+  "queryBySlug": "/rest/v1/destinations_catalog?slug=eq.san-ramon-costa-rica&select=*",
+  "queryByDestinationKey": "/rest/v1/destinations_catalog?destination_key=eq.san-ramon-costa-rica&select=*",
+  "rowCountBySlug": 1,
+  "rowCountByDestinationKey": 0,
+  "verbatimRowsBySlug": [
+    {
+      "id": "bb7574d2-0712-4977-95f8-79d3001c7731",
+      "slug": "san-ramon-costa-rica",
+      "city": "San Ramón",
+      "country": "Costa Rica",
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "tier": "launch",
+      "status": "published",
+      "hero_image_url": null,
+      "description": "San Ramón is a cooler highland town with healthcare access, moderate costs and proximity to San José and Pacific beaches.",
+      "overview": "A walkable center, coffee-country scenery and local medical services shape daily life, while agriculture, education, healthcare and services support the local economy. Important tradeoffs include limited nightlife and slower infrastructure.",
+      "climate_summary": "Tropical highland climate with mild temperatures and a pronounced rainy season",
+      "lifestyle_summary": "Best for retirees seeking a practical, less touristy Costa Rican base.",
+      "healthcare_summary": null,
+      "housing_summary": null,
+      "cost_summary": null,
+      "tax_summary": null,
+      "visa_summary": null,
+      "transportation_summary": "Regional buses connect San Ramón with San José; the international airport is roughly 90 minutes away",
+      "metadata": {
+        "tags": [
+          "Costa Rica",
+          "international",
+          "livability",
+          "safety",
+          "value",
+          "quality of life"
+        ],
+        "emoji": "",
+        "match": 0,
+        "source": "workbook_import"
+      },
+      "published_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "created_at": "2026-08-03T02:23:08.871567+00:00",
+      "updated_at": "2026-08-03T02:23:08.871567+00:00",
+      "destination_key": null
+    }
+  ],
+  "sha256OfVerbatimRowsBySlug": "7a1303a8c173356417e4288dc617354fd5e0cb39390c878c19a23ec25b7ee1ad",
+  "note": "verbatimRowsBySlug is the exact JSON returned by Supabase for this exact-slug-match GET request, with keys sorted only for stable hashing - no field was renamed, normalized, or altered. Never automatically merged with the destinations.ts snapshot in the same directory."
+}

@@ -1,0 +1,21 @@
+{
+  "label": "WAVE1_UNVERIFIED_LEAD",
+  "destinationKey": "santa-fe-new-mexico-united-states",
+  "recoveredFrom": {
+    "gitCommit": "e69130a",
+    "commitMessage": "chore(data): add wave1 generation pipeline, artifacts, and seed exports",
+    "path": "docs/destination-expansion-proposed-300.json",
+    "recoveryCommand": "git show e69130a:docs/destination-expansion-proposed-300.json",
+    "note": "This entire docs/destination-expansion-wave1-* artifact set, including this file, was wholly deleted at commit 40abaa5 (\"Checkpoint: Chicago Premium Guide Reference Architecture before Final Polish\", Aug 6 2026). It is recoverable only via git history, not present in the working tree."
+  },
+  "recoveredContent": {
+    "additionGroup": "US",
+    "city": "Santa Fe",
+    "stateOrRegion": "New Mexico",
+    "country": "United States",
+    "slug": "santa-fe-new-mexico-united-states",
+    "tierTarget": "TIER_3"
+  },
+  "trustLevel": "UNVERIFIED",
+  "usageRule": "Cite as a lead only. Never import stateOrRegion or tierTarget (or any other field) into a canonical record as a verified fact without independent re-verification, per Part 3 source-precedence rule 3 (Wave 1 leads are never authoritative)."
+}

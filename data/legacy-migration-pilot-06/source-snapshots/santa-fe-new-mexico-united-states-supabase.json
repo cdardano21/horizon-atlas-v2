@@ -1,0 +1,52 @@
+{
+  "destinationKey": "santa-fe-new-mexico-united-states",
+  "queriedVia": "app/lib/supabase.ts supabaseFetch() - the same real, anon-key, RLS-protected GET path the live application uses",
+  "queryBySlug": "/rest/v1/destinations_catalog?slug=eq.santa-fe-new-mexico-united-states&select=*",
+  "queryByDestinationKey": "/rest/v1/destinations_catalog?destination_key=eq.santa-fe-new-mexico-united-states&select=*",
+  "rowCountBySlug": 1,
+  "rowCountByDestinationKey": 0,
+  "verbatimRowsBySlug": [
+    {
+      "id": "fe265532-5508-4633-b349-50857c9f4f91",
+      "slug": "santa-fe-new-mexico-united-states",
+      "city": "Santa Fe",
+      "country": "United States",
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "tier": "launch",
+      "status": "published",
+      "hero_image_url": null,
+      "description": "Santa Fe is New Mexico’s historic high-desert capital, known for adobe architecture, art and strong regional identity.",
+      "overview": "The Plaza, Canyon Road, museums and nearby mountains create exceptional cultural depth; housing costs and altitude are tradeoffs.",
+      "climate_summary": "Semi-arid highland climate with warm summers, cold winters and strong sun.",
+      "lifestyle_summary": "Best for artists, retirees and culture lovers seeking a distinctive small capital.",
+      "healthcare_summary": null,
+      "housing_summary": null,
+      "cost_summary": null,
+      "tax_summary": null,
+      "visa_summary": null,
+      "transportation_summary": "Santa Fe Trails buses and Rail Runner service connect the city; Albuquerque is the main air gateway.",
+      "metadata": {
+        "tags": [
+          "New Mexico",
+          "capital",
+          "adobe",
+          "art",
+          "high desert"
+        ],
+        "emoji": "12",
+        "match": 0,
+        "source": "workbook_import"
+      },
+      "published_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "created_at": "2026-08-03T02:23:08.522969+00:00",
+      "updated_at": "2026-08-03T02:23:08.522969+00:00",
+      "destination_key": null
+    }
+  ],
+  "sha256OfVerbatimRowsBySlug": "c52d86e77fa99d38c35788fd9d612df02eb8f927928a8f9eeb4bfa50dfeb772c",
+  "note": "verbatimRowsBySlug is the exact JSON returned by Supabase for this exact-slug-match GET request, with keys sorted only for stable hashing - no field was renamed, normalized, or altered. Never automatically merged with the destinations.ts snapshot in the same directory."
+}

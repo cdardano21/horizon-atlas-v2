@@ -1,0 +1,23 @@
+{
+  "ok": true,
+  "issues": [],
+  "checks": {
+    "required_base_sheets_present": true,
+    "lifestyle_features_present_with_zero_rows": true,
+    "total_sheet_count_is_48": true,
+    "destination_count_is_6": true,
+    "destination_keys_match_expected_set": true,
+    "destination_keys_unique": true,
+    "destination_keys_nonblank": true,
+    "slug_equals_destination_key_convention": true,
+    "all_content_sheets_empty": true
+  },
+  "expectedDestinationKeys": [
+    "kyoto-japan",
+    "san-ramon-costa-rica",
+    "santa-fe-new-mexico-united-states",
+    "st-cloud-minnesota-united-states",
+    "st-john-s-canada",
+    "the-hague-netherlands"
+  ]
+}

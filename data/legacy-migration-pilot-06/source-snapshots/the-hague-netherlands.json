@@ -1,0 +1,9 @@
+{
+  "destinationKey": "the-hague-netherlands",
+  "slug": "the-hague-netherlands",
+  "extractedFrom": "app/lib/destinations.ts",
+  "extractedAtLine": 10850,
+  "verbatimTypeScriptObjectLiteral": "  {\n    slug: \"the-hague-netherlands\",\n    city: \"The Hague\",\n    country: \"Netherlands\",\n    emoji: \"🌍\",\n    match: 0.0,\n    description: \"The Hague is the Netherlands’ seat of government, combining stately institutions, international courts and North Sea beaches.\",\n    overview: \"The Binnenhof, Mauritshuis, Scheveningen and international organizations shape the city. It is polished, multilingual and slightly calmer than Amsterdam.\",\n    climate: \"Oceanic coastal climate with cool summers, mild winters and frequent wind.\",\n    lifestyle: \"Best for diplomats, legal professionals, families and residents wanting urban life with beach access.\",\n    transportation: \"Trams, buses and rail offer excellent coverage. Rotterdam and Schiphol airports are accessible by train.\",\n    images: [\n      {\n        src: \"\",\n        alt: \"The Hague city view\",\n        caption: \"The Hague, Netherlands\",\n      },\n    ],\n    tags: [\"Netherlands\", \"government\", \"international law\", \"beach\", \"diplomacy\", \"transit\", \"quality of life\"],\n  },\n",
+  "sha256OfVerbatimBlock": "1cd1bd6e9b2d14538fda7904b285f02833e58fe152b570640db329ee9d838ba5",
+  "note": "verbatimTypeScriptObjectLiteral is the exact, unmodified TypeScript object literal text as it appears in the committed file, captured read-only. No field was normalized, corrected, or reformatted."
+}

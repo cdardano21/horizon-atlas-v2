@@ -1,0 +1,53 @@
+{
+  "destinationKey": "st-cloud-minnesota-united-states",
+  "queriedVia": "app/lib/supabase.ts supabaseFetch() - the same real, anon-key, RLS-protected GET path the live application uses",
+  "queryBySlug": "/rest/v1/destinations_catalog?slug=eq.st-cloud-minnesota-united-states&select=*",
+  "queryByDestinationKey": "/rest/v1/destinations_catalog?destination_key=eq.st-cloud-minnesota-united-states&select=*",
+  "rowCountBySlug": 1,
+  "rowCountByDestinationKey": 0,
+  "verbatimRowsBySlug": [
+    {
+      "id": "d8ae7acc-7ab5-48c8-9c1b-0dd1cd956e72",
+      "slug": "st-cloud-minnesota-united-states",
+      "city": "St. Cloud",
+      "country": "United States",
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "tier": "launch",
+      "status": "published",
+      "hero_image_url": null,
+      "description": "St. Cloud is a central Minnesota regional center with universities, healthcare and attainable housing.",
+      "overview": "Mississippi River trails, parks and a strong local services base. The local economy is supported by healthcare, education, manufacturing and logistics. Key tradeoffs include cold winters and car dependence.",
+      "climate_summary": "Humid continental climate with warm summers and very cold winters",
+      "lifestyle_summary": "Best for families and professionals seeking lower costs near the Twin Cities corridor.",
+      "healthcare_summary": null,
+      "housing_summary": null,
+      "cost_summary": null,
+      "tax_summary": null,
+      "visa_summary": null,
+      "transportation_summary": "Metro Bus serves the area; Minneapolis-Saint Paul airport is the main hub",
+      "metadata": {
+        "tags": [
+          "Minnesota",
+          "Minnesota",
+          "affordable",
+          "healthcare",
+          "university",
+          "family friendly"
+        ],
+        "emoji": "",
+        "match": 0,
+        "source": "workbook_import"
+      },
+      "published_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "created_at": "2026-08-03T02:23:09.063471+00:00",
+      "updated_at": "2026-08-03T02:23:09.063471+00:00",
+      "destination_key": null
+    }
+  ],
+  "sha256OfVerbatimRowsBySlug": "8a0213c9d43ebf74d63eb776be0401f33005e291ed134da1184c916e5e7d9734",
+  "note": "verbatimRowsBySlug is the exact JSON returned by Supabase for this exact-slug-match GET request, with keys sorted only for stable hashing - no field was renamed, normalized, or altered. Never automatically merged with the destinations.ts snapshot in the same directory."
+}

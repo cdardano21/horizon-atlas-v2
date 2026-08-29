@@ -1,0 +1,9 @@
+{
+  "destinationKey": "st-cloud-minnesota-united-states",
+  "slug": "st-cloud-minnesota-united-states",
+  "extractedFrom": "app/lib/destinations.ts",
+  "extractedAtLine": 16247,
+  "verbatimTypeScriptObjectLiteral": "  {\n    slug: \"st-cloud-minnesota-united-states\",\n    city: \"St. Cloud\",\n    country: \"United States\",\n    emoji: \"\",\n    match: 0.0,\n    description: \"St. Cloud is a central Minnesota regional center with universities, healthcare and attainable housing.\",\n    overview: \"Mississippi River trails, parks and a strong local services base. The local economy is supported by healthcare, education, manufacturing and logistics. Key tradeoffs include cold winters and car dependence.\",\n    climate: \"Humid continental climate with warm summers and very cold winters\",\n    lifestyle: \"Best for families and professionals seeking lower costs near the Twin Cities corridor.\",\n    transportation: \"Metro Bus serves the area; Minneapolis-Saint Paul airport is the main hub\",\n    images: [\n      {\n        src: \"\",\n        alt: \"St. Cloud city view\",\n        caption: \"St. Cloud, United States\",\n      },\n    ],\n    tags: [\"Minnesota\", \"Minnesota\", \"affordable\", \"healthcare\", \"university\", \"family friendly\"],\n  },\n",
+  "sha256OfVerbatimBlock": "1067cf0bab3c74f77388d08ef8b5332761f2de78d61cc6b8d586a1b016db4ffa",
+  "note": "verbatimTypeScriptObjectLiteral is the exact, unmodified TypeScript object literal text as it appears in the committed file, captured read-only. No field was normalized, corrected, or reformatted."
+}
