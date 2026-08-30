@@ -11,6 +11,7 @@ import type { NormalizedPersistedDestinationBundle } from "./persistence/v31/mat
 import type { ResolvedDestinationIdentity } from "./persistence/v31/types";
 import { loadExpansionWorkbookDestinationBundle, loadExpansionWorkbookRawIdentity, resolveExpansionWorkbookDestinationKey } from "./expansion-workbook-registry";
 import { buildGeneratedScalarDiscoveryLinks, buildGeneratedTravelResources, mergeAuthoredAndGeneratedResources } from "./destination-travel-resources";
+import { sanitizePublicText } from "./sanitize-public-text";
 
 const normalizeTextValue = (value: string | null | undefined) => {
   if (typeof value !== "string") return "";
@@ -366,7 +367,20 @@ const mapScores = (bundle: NormalizedPersistedDestinationBundle): CanonicalDesti
   bundle.scores.map((score) => ({ scoreKey: score.scoreKey, scoreValue: score.scoreValue, scoreLabel: score.scoreLabel }));
 
 const mapNeighborhoods = (bundle: NormalizedPersistedDestinationBundle): CanonicalDestinationV31Modules["neighborhoods"] =>
-  bundle.neighborhoods.map((item) => ({ neighborhoodKey: item.neighborhoodKey, name: item.name, summary: item.summary, areaType: item.areaType }));
+  bundle.neighborhoods.map((item) => ({
+    neighborhoodKey: item.neighborhoodKey,
+    name: item.name,
+    summary: item.summary,
+    areaType: item.areaType,
+    bestFor: item.bestFor,
+    walkabilityRating: item.walkabilityRating,
+    safetyRating: item.safetyRating,
+    transitRating: item.transitRating,
+    housingCharacter: item.housingCharacter,
+    pros: item.pros,
+    cons: item.cons,
+    googleMapsUrl: item.googleMapsUrl,
+  }));
 
 const mapPlacesAndResources = (bundle: NormalizedPersistedDestinationBundle): { places: CanonicalDestinationV31Modules["places"]; resources: CanonicalDestinationV31Modules["resources"]; propertyResources: CanonicalDestinationV31Modules["propertyResources"] } => ({
   places: bundle.places.map((item) => ({
@@ -390,7 +404,7 @@ const mapMedia = (bundle: NormalizedPersistedDestinationBundle): CanonicalDestin
   bundle.media.map((item) => ({ mediaKey: item.mediaKey, kind: item.kind, url: item.url, caption: item.caption, altText: item.altText }));
 
 const mapCostAndClimate = (bundle: NormalizedPersistedDestinationBundle): { costOfLiving: CanonicalDestinationV31Modules["costOfLiving"]; climateMonthly: CanonicalDestinationV31Modules["climateMonthly"]; housing: CanonicalDestinationV31Modules["housing"] } => ({
-  costOfLiving: bundle.costOfLiving.map((item) => ({ itemKey: item.itemKey, category: item.category, monthlyLow: item.monthlyLow, monthlyHigh: item.monthlyHigh, currency: item.currency })),
+  costOfLiving: bundle.costOfLiving.map((item) => ({ itemKey: item.itemKey, category: item.category, monthlyLow: item.monthlyLow, monthlyHigh: item.monthlyHigh, currency: item.currency, householdType: item.householdType, lifestyleTier: item.lifestyleTier })),
   climateMonthly: bundle.climateMonthly.map((item) => ({ monthKey: item.monthKey, avgHighTemp: item.avgHighTemp, avgLowTemp: item.avgLowTemp, precipitationMm: item.precipitationMm, humidityPct: item.humidityPct })),
   housing: bundle.housing.map((item) => ({ summary: item.summary, buyingSummary: item.buyingSummary, rentalSummary: item.rentalSummary })),
 });
@@ -538,6 +552,13 @@ export const buildCanonicalDestinationFromPersistedBundle = (
   const v31InstagramUrl = generatedScalarLinks.instagramUrl;
   const v31WebcamUrl = generatedScalarLinks.webcamUrl;
 
+  // A real sourced image (e.g. Wikimedia Commons) always carries its license/author/source page -
+  // compose a single human-readable attribution line once here rather than in every consumer.
+  const buildMediaAttribution = (sourceName: string | null, licenseNotes: string | null) => {
+    const parts = [normalizeTextValue(sourceName), normalizeTextValue(licenseNotes)].filter((part): part is string => Boolean(part));
+    return parts.length > 0 ? parts.join(", ") : undefined;
+  };
+
   const persistedMedia = bundle.media
     .map((item) => ({
       kind: normalizeTextValue(item.kind) || "image",
@@ -545,6 +566,8 @@ export const buildCanonicalDestinationFromPersistedBundle = (
       altText: normalizeTextValue(item.altText) || title || city || "Destination media",
       caption: normalizeTextValue(item.caption) || title || city || "Destination media",
       isPrimary: false,
+      sourceUrl: normalizeTextValue(item.sourceUrl) || undefined,
+      attribution: buildMediaAttribution(item.sourceName, item.licenseNotes),
     }))
     .filter((item) => item.url && !isReservedExampleDomainUrl(item.url));
   const workbookMedia = (workbookData?.media ?? [])
@@ -638,9 +661,48 @@ export const buildCanonicalDestinationFromPersistedBundle = (
   const v31DigitalNomad = firstSummary(v31Modules.remoteWork);
   const v31Safety = firstSummary(v31Modules.safetyRisks) || findFactValue("safety");
   const v31Internet = normalizeTextValue(v31Modules.remoteWork.find((row) => normalizeTextValue(row.internetSummary))?.internetSummary);
-  const firstCostOfLivingItem = v31Modules.costOfLiving[0];
+  // A COST_OF_LIVING category/household_type is a controlled workbook vocabulary token
+  // (e.g. "total_planning_band", "rent_1br_center") - it must never reach a customer verbatim.
+  // Known tokens get a specific human label; any future/unmapped token still gets a safe
+  // generic Title Case conversion rather than showing raw snake_case.
+  const KNOWN_COST_CATEGORY_LABELS: Record<string, string> = {
+    total_planning_band: "Monthly planning total",
+    rent_1br_center: "1BR rent (city center)",
+    rent_1br_outside: "1BR rent (outside center)",
+    rent_3br_center: "3BR rent (city center)",
+  };
+  const KNOWN_HOUSEHOLD_LABELS: Record<string, string> = {
+    single: "Single",
+    couple: "Couple",
+    family4: "Family of 4",
+  };
+  const humanizeToken = (token: string) => token.trim().replace(/[_-]+/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+  const humanizeCostCategory = (token: string) => KNOWN_COST_CATEGORY_LABELS[token.toLowerCase()] || humanizeToken(token);
+  const humanizeHousehold = (token: string) => KNOWN_HOUSEHOLD_LABELS[token.toLowerCase()] || humanizeToken(token);
+  const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "cost";
+  // Real COST_OF_LIVING rows only: never copy an overall/total figure into invented granular
+  // categories (rent/utilities/food) that have no corresponding real row, and never default to a
+  // hardcoded USD figure when the workbook's real currency is known.
+  const CURRENCY_SYMBOLS: Record<string, string> = { USD: "$", EUR: "\u20ac", GBP: "\u00a3", CAD: "$", AUD: "$", JPY: "\u00a5" };
+  const formatCurrencyAmount = (raw: string, currencyCode: string | null) => {
+    const numeric = Number(raw.replace(/,/g, ""));
+    if (!Number.isFinite(numeric)) return raw;
+    const symbol = currencyCode ? CURRENCY_SYMBOLS[currencyCode] : undefined;
+    const formatted = new Intl.NumberFormat("en-US").format(numeric);
+    return symbol ? `${symbol}${formatted}` : formatted;
+  };
+  const formatMoneyRange = (low: string | null, high: string | null, currency: string | null) => {
+    const currencyCode = normalizeTextValue(currency)?.toUpperCase() || null;
+    const suffix = currencyCode ? ` (${currencyCode})` : "";
+    if (low != null && high != null) return `${formatCurrencyAmount(low, currencyCode)}\u2013${formatCurrencyAmount(high, currencyCode)} per month${suffix}`;
+    if (low != null) return `${formatCurrencyAmount(low, currencyCode)} per month${suffix}`;
+    if (high != null) return `${formatCurrencyAmount(high, currencyCode)} per month${suffix}`;
+    return "";
+  };
+
+  const firstCostOfLivingItem = v31Modules.costOfLiving.find((item) => normalizeTextValue(item.category).toLowerCase().includes("total")) || v31Modules.costOfLiving[0];
   const v31CostOfLiving = firstCostOfLivingItem
-    ? `${firstCostOfLivingItem.category ?? "Housing"}: ${firstCostOfLivingItem.currency ?? ""}${firstCostOfLivingItem.monthlyLow ?? ""}\u2013${firstCostOfLivingItem.currency ?? ""}${firstCostOfLivingItem.monthlyHigh ?? ""}/month`
+    ? `${humanizeCostCategory(normalizeTextValue(firstCostOfLivingItem.category) || "Housing")}: ${formatMoneyRange(firstCostOfLivingItem.monthlyLow, firstCostOfLivingItem.monthlyHigh, firstCostOfLivingItem.currency)}`
     : "";
   // Scalar identity/finance facts (population, metro population, elevation, currency, time zone)
   // are legitimate 1:1 overrides of the existing scalar knowledgeProfile fields - not "cramming"
@@ -648,47 +710,77 @@ export const buildCanonicalDestinationFromPersistedBundle = (
   // metro population/elevation live on the DESTINATIONS row itself (rawIdentity), not as
   // DESTINATION_FACTS rows - prefer the real DESTINATIONS-sheet value, then fall back to a
   // DESTINATION_FACTS-keyed fact for destinations that encode it that way instead.
+  const rawElevation = normalizeTextValue(rawIdentity?.elevationMeters) || findFactByKey("elevation") || undefined;
+  // LIFESTYLE_FEATURES has a distinct, real feature_key row for "walkability" and "transit" - a
+  // generic legacy knowledgeProfile fallback must never take priority over this real per-feature
+  // evidence, and the two must never show the same combined text (the prior bug: both chips showed
+  // the same generic transit/airport paragraph).
+  const findLifestyleFeature = (featureKey: string) => v31Modules.lifestyleFeatures.find((row) => row.featureKey === featureKey);
+  const lifestyleFeatureText = (featureKey: string) => {
+    const row = findLifestyleFeature(featureKey);
+    if (!row) return undefined;
+    return sanitizePublicText(row.evidenceSummary) || sanitizePublicText(row.displayLabel) || undefined;
+  };
+  const v31Walkability = lifestyleFeatureText("walkability");
+  const v31PublicTransportation = lifestyleFeatureText("transit");
+  // "Average temperatures" is a genuinely distinct derived statistic from the descriptive "Climate"
+  // fact - computed from the real CLIMATE_MONTHLY rows (never fabricated, and never left to fall
+  // back to the same text already shown under "Climate").
+  const formatAverageTemperatures = () => {
+    const lows = v31Modules.climateMonthly.map((month) => Number(month.avgLowTemp)).filter((value) => Number.isFinite(value));
+    const highs = v31Modules.climateMonthly.map((month) => Number(month.avgHighTemp)).filter((value) => Number.isFinite(value));
+    if (lows.length === 0 || highs.length === 0) return undefined;
+    const overallLow = Math.min(...lows);
+    const overallHigh = Math.max(...highs);
+    const round1 = (value: number) => Math.round(value * 10) / 10;
+    return `Monthly averages range from ${round1(overallLow)}\u00b0C to ${round1(overallHigh)}\u00b0C across the year`;
+  };
+  const v31AverageTemperatures = formatAverageTemperatures();
   const v31KnowledgeProfileOverrides = {
     population: normalizeTextValue(rawIdentity?.population) || findFactByKey("population") || undefined,
     metroPopulation: normalizeTextValue(rawIdentity?.metroPopulation) || findFactByKey("metro_population") || undefined,
-    elevation: normalizeTextValue(rawIdentity?.elevationMeters) || findFactByKey("elevation") || undefined,
+    // A bare numeric elevation value (e.g. "1") needs its unit for the figure to be meaningful -
+    // never re-labeled or converted, only given the "m" the workbook's own elevation_m column implies.
+    elevation: rawElevation ? (/^-?\d+(\.\d+)?$/.test(rawElevation) ? `${rawElevation} m` : rawElevation) : undefined,
     timeZone: normalizeTextValue(bundle.editorial.timeZone) || findFactByKey("time_zone") || undefined,
+    walkability: v31Walkability,
+    publicTransportation: v31PublicTransportation,
+    averageTemperatures: v31AverageTemperatures,
   };
   const v31Currency = normalizeTextValue(bundle.editorial.currency) || findFactByKey("currency");
   const v31PrimaryLanguage = normalizeTextValue(bundle.editorial.primaryLanguage) || findFactByKey("language");
 
-  // Real COST_OF_LIVING rows only: never copy an overall/total figure into invented granular
-  // categories (rent/utilities/food) that have no corresponding real row, and never default to a
-  // hardcoded USD figure when the workbook's real currency is known.
-  const formatMoneyRange = (low: string | null, high: string | null, currency: string | null) => {
-    const cur = normalizeTextValue(currency);
-    if (low != null && high != null) return `${cur}${low}\u2013${cur}${high}/month`;
-    if (low != null) return `${cur}${low}/month`;
-    if (high != null) return `${cur}${high}/month`;
-    return "";
-  };
   const realCostRows = v31Modules.costOfLiving.filter((item) => item.monthlyLow != null || item.monthlyHigh != null);
   const realCostCurrency = normalizeTextValue(realCostRows[0]?.currency) || normalizeTextValue(bundle.editorial.currency) || undefined;
+  const isTotalCostRow = (item: (typeof realCostRows)[number]) => normalizeTextValue(item.category).toLowerCase().includes("total");
+  // Each "total" row is a distinct household-type budget summary (single/couple/family4) - never
+  // collapsed into one label/key, and never showing the raw category token as the visible label.
   const v31MonthlyBudgets = realCostRows
+    .filter(isTotalCostRow)
     .map((item) => {
-      const categoryLabel = normalizeTextValue(item.category);
+      const household = normalizeTextValue(item.householdType);
+      const label = household ? `${humanizeHousehold(household)} total` : humanizeCostCategory(normalizeTextValue(item.category) || "");
       return {
-        label: categoryLabel && categoryLabel.toLowerCase() !== "total" ? categoryLabel : "Estimated monthly cost",
+        label,
         amount: formatMoneyRange(item.monthlyLow, item.monthlyHigh, item.currency),
         note: "",
       };
     })
     .filter((budget) => budget.amount);
-  // Only a genuinely distinct, non-"total" category row becomes its own granular category card -
-  // a single "total" row is a budget summary, never split into fabricated rent/utilities/food lines.
+  // Only genuinely distinct, non-total category rows become their own granular category cards -
+  // a "total" row is a budget summary, never split into fabricated rent/utilities/food lines.
   const v31CostCategories = realCostRows
-    .filter((item) => normalizeTextValue(item.category).toLowerCase() !== "total")
-    .map((item) => ({
-      key: normalizeTextValue(item.category).toLowerCase().replace(/[^a-z0-9]+/g, "-") || "cost",
-      label: normalizeTextValue(item.category) || "Cost category",
-      amount: formatMoneyRange(item.monthlyLow, item.monthlyHigh, item.currency),
-      note: "",
-    }));
+    .filter((item) => !isTotalCostRow(item))
+    .map((item) => {
+      const category = normalizeTextValue(item.category) || "";
+      const household = normalizeTextValue(item.householdType);
+      return {
+        key: slugify(`${category}-${household}`),
+        label: humanizeCostCategory(category) || "Cost category",
+        amount: formatMoneyRange(item.monthlyLow, item.monthlyHigh, item.currency),
+        note: "",
+      };
+    });
   const v31CostOfLivingProfile = realCostRows.length > 0
     ? {
         summary: v31CostOfLiving || "",
@@ -719,14 +811,17 @@ export const buildCanonicalDestinationFromPersistedBundle = (
     tiktokUrl: v31TiktokUrl,
     instagramUrl: v31InstagramUrl,
     webcamUrl: v31WebcamUrl,
-    climate: v31Climate || fallbackDestination.climate,
-    transportation: v31Transportation || fallbackDestination.transportation,
-    healthcare: v31Healthcare || fallbackDestination.healthcare,
-    retirement: v31Retirement || fallbackDestination.retirement,
-    family: v31Family || fallbackDestination.family,
-    digitalNomad: v31DigitalNomad || fallbackDestination.digitalNomad,
-    safety: v31Safety || fallbackDestination.safety,
-    internet: v31Internet || fallbackDestination.internet,
+    // Sanitized once here (sheet-name mentions, "Rating: CODE." prefixes, raw snake_case risk
+    // tokens humanized) so every consumer - the essentialFacts chips AND the Deep Dive section
+    // bodies that read these same scalar fields directly - gets clean text, not just one call site.
+    climate: sanitizePublicText(v31Climate) || fallbackDestination.climate,
+    transportation: sanitizePublicText(v31Transportation) || fallbackDestination.transportation,
+    healthcare: sanitizePublicText(v31Healthcare) || fallbackDestination.healthcare,
+    retirement: sanitizePublicText(v31Retirement) || fallbackDestination.retirement,
+    family: sanitizePublicText(v31Family) || fallbackDestination.family,
+    digitalNomad: sanitizePublicText(v31DigitalNomad) || fallbackDestination.digitalNomad,
+    safety: sanitizePublicText(v31Safety) || fallbackDestination.safety,
+    internet: sanitizePublicText(v31Internet) || fallbackDestination.internet,
     costOfLiving: v31CostOfLiving || fallbackDestination.costOfLiving,
     monthlyBudgets: v31MonthlyBudgets.length > 0 ? v31MonthlyBudgets : [],
     costOfLivingProfile: v31CostOfLivingProfile,

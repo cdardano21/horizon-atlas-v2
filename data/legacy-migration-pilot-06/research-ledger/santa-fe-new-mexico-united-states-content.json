@@ -1,0 +1,695 @@
+{
+  "destinationKey": "santa-fe-new-mexico-united-states",
+  "researchedAt": "2026-08-29",
+  "scopeNote": "Phase 5D (six-destination pass). Identity/geography/climate researched from Wikipedia (citing US Census Bureau, USGS, NOAA) and the official city site. Visa/immigration is not applicable (domestic US relocation for US citizens). Cost-of-living, healthcare-provider-network specifics, and fine-grained tax thresholds were not independently fetched this pass beyond what is documented below - left blank/UNKNOWN rather than fabricated.",
+  "identity": {
+    "country_code": "US",
+    "state_region": "New Mexico",
+    "currency": "USD",
+    "primary_language": "English",
+    "time_zone": "America/Denver",
+    "population": 87505,
+    "population_note": "2020 census; a July 1, 2025 Census Bureau estimate is 89,837 (per Wikipedia, citing census.gov QuickFacts)",
+    "metro_population": "Santa Fe MSA 154,823 (2020 census); Santa Fe-Espanola-Las Vegas CSA 1,162,523",
+    "elevation_m": 2133,
+    "latitude": 35.67,
+    "longitude": -105.96,
+    "official_tourism_url": "https://www.santafenm.gov/",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Santa+Fe%2C+New+Mexico"
+  },
+  "sources": [
+    {
+      "source_name": "Wikipedia (Santa Fe, New Mexico), citing US Census Bureau/USGS/NOAA",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico",
+      "retrieved_at": "2026-08-29",
+      "supports": "population, area, elevation, coordinates, time zone, climate, government, economy, landmarks"
+    },
+    {
+      "source_name": "City of Santa Fe official website",
+      "source_url": "https://santafenm.gov/",
+      "retrieved_at": "2026-08-29",
+      "supports": "official municipal government confirmation, live site"
+    },
+    {
+      "source_name": "NOAA National Centers for Environmental Information, U.S. Climate Normals 1991-2020 (Santa Fe County Muni Airport station), via Wikipedia climate table",
+      "source_url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020",
+      "retrieved_at": "2026-08-29",
+      "supports": "CLIMATE_MONTHLY 12-row data"
+    }
+  ],
+  "climate_monthly": {
+    "source_name": "NOAA National Centers for Environmental Information, U.S. Climate Normals 1991-2020, Santa Fe County Municipal Airport",
+    "source_url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020",
+    "months": [
+      {
+        "month": 1,
+        "avg_high_c": 6.1,
+        "avg_low_c": -7.8,
+        "rainfall_mm": 14,
+        "humidity_pct": 67
+      },
+      {
+        "month": 2,
+        "avg_high_c": 8.9,
+        "avg_low_c": -5.9,
+        "rainfall_mm": 12,
+        "humidity_pct": 60
+      },
+      {
+        "month": 3,
+        "avg_high_c": 13.7,
+        "avg_low_c": -3.1,
+        "rainfall_mm": 19,
+        "humidity_pct": 45
+      },
+      {
+        "month": 4,
+        "avg_high_c": 17.9,
+        "avg_low_c": 0.2,
+        "rainfall_mm": 15,
+        "humidity_pct": 36
+      },
+      {
+        "month": 5,
+        "avg_high_c": 23.2,
+        "avg_low_c": 4.9,
+        "rainfall_mm": 23,
+        "humidity_pct": 34
+      },
+      {
+        "month": 6,
+        "avg_high_c": 28.9,
+        "avg_low_c": 10.1,
+        "rainfall_mm": 22,
+        "humidity_pct": 32
+      },
+      {
+        "month": 7,
+        "avg_high_c": 29.9,
+        "avg_low_c": 12.8,
+        "rainfall_mm": 57,
+        "humidity_pct": 45
+      },
+      {
+        "month": 8,
+        "avg_high_c": 28.6,
+        "avg_low_c": 12.1,
+        "rainfall_mm": 52,
+        "humidity_pct": 45
+      },
+      {
+        "month": 9,
+        "avg_high_c": 25.3,
+        "avg_low_c": 8.2,
+        "rainfall_mm": 35,
+        "humidity_pct": 48
+      },
+      {
+        "month": 10,
+        "avg_high_c": 19.1,
+        "avg_low_c": 1.9,
+        "rainfall_mm": 34,
+        "humidity_pct": 47
+      },
+      {
+        "month": 11,
+        "avg_high_c": 11.7,
+        "avg_low_c": -4.2,
+        "rainfall_mm": 20,
+        "humidity_pct": 51
+      },
+      {
+        "month": 12,
+        "avg_high_c": 5.9,
+        "avg_low_c": -8.0,
+        "rainfall_mm": 21,
+        "humidity_pct": 64
+      }
+    ]
+  },
+  "neighborhoods": [
+    {
+      "neighborhood_name": "The Plaza / Downtown Historic District",
+      "area_type": "historic_downtown",
+      "best_for": "walkability, culture, dining",
+      "summary": "The original 1610 town-planning core, anchored by the Santa Fe Plaza and the Palace of the Governors; the densest concentration of historic adobe/Pueblo Revival architecture, galleries, and restaurants.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Santa+Fe+Plaza",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "neighborhood_name": "Canyon Road Arts District",
+      "area_type": "arts_district",
+      "best_for": "arts and culture",
+      "summary": "The city's highest concentration of art galleries, showcasing Southwestern, Indigenous, and contemporary art; a major draw for collectors and tourists.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Canyon+Road+Santa+Fe",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "neighborhood_name": "Museum Hill",
+      "area_type": "cultural_district",
+      "best_for": "museums, quieter residential access",
+      "summary": "Home to several of the city's art and folk-art museums and the site of the annual Santa Fe International Folk Art Market.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Museum+Hill+Santa+Fe",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "neighborhood_name": "Santa Fe Railyard District",
+      "area_type": "mixed_use_arts_district",
+      "best_for": "contemporary art, farmers market, walkability",
+      "summary": "A redeveloped rail-corridor district including SITE Santa Fe contemporary art space and a farmers market.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Santa+Fe+Railyard",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "neighborhood_name": "Casa Solana",
+      "area_type": "established_residential",
+      "best_for": "settled residential, mid-century character",
+      "summary": "An established residential neighborhood on the site of the former WWII internment camp; today an ordinary Santa Fe residential area.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Casa+Solana+Santa+Fe",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    }
+  ],
+  "places": [
+    {
+      "category_key": "MUSEUM",
+      "place_name": "Georgia O'Keeffe Museum",
+      "description": "Museum devoted to the work of Georgia O'Keeffe and artists she influenced.",
+      "website_url": "https://www.okeeffemuseum.org/",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Georgia+O%27Keeffe+Museum+Santa+Fe",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "category_key": "MUSEUM",
+      "place_name": "New Mexico Museum of Art",
+      "description": "State museum of modern and contemporary Southwestern art, near the Plaza.",
+      "website_url": "https://www.nmartmuseum.org/",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=New+Mexico+Museum+of+Art",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "category_key": "MUSEUM",
+      "place_name": "New Mexico History Museum / Palace of the Governors",
+      "description": "State history museum located behind the historic Palace of the Governors on the Plaza.",
+      "website_url": "https://www.nmhistorymuseum.org/",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Palace+of+the+Governors+Santa+Fe",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "category_key": "CULTURAL_ATTRACTION",
+      "place_name": "Meow Wolf: House of Eternal Return",
+      "description": "Large-scale immersive art installation and collective, opened 2016.",
+      "website_url": "https://meowwolf.com/visit/santa-fe",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Meow+Wolf+Santa+Fe",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "category_key": "PERFORMING_ARTS",
+      "place_name": "Santa Fe Opera",
+      "description": "Outdoor opera venue staging productions from late June to late August each year.",
+      "website_url": "https://www.santafeopera.org/",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Santa+Fe+Opera",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "category_key": "RELIGIOUS_HISTORIC_SITE",
+      "place_name": "Cathedral Basilica of St. Francis of Assisi",
+      "description": "The city's historic Catholic cathedral basilica on the Plaza.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Cathedral+Basilica+of+St+Francis+of+Assisi+Santa+Fe",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "category_key": "RELIGIOUS_HISTORIC_SITE",
+      "place_name": "San Miguel Mission",
+      "description": "Considered among the oldest church buildings in the United States (built 1610).",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=San+Miguel+Mission+Santa+Fe",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "category_key": "GOVERNMENT_LANDMARK",
+      "place_name": "New Mexico State Capitol (The Roundhouse)",
+      "description": "State capitol building, built in Territorial Revival style.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=New+Mexico+State+Capitol",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "category_key": "OUTDOOR_RECREATION",
+      "place_name": "Ski Santa Fe",
+      "description": "The city's ski resort, about 16 miles (26 km) northeast of downtown in the Sangre de Cristo Mountains.",
+      "website_url": "https://www.skisantafe.com/",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Ski+Santa+Fe",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "category_key": "OUTDOOR_RECREATION",
+      "place_name": "Dale Ball Trails",
+      "description": "24.4-mile multi-use trail network starting within about 2 miles of the Plaza.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Dale+Ball+Trails+Santa+Fe",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "category_key": "NATIONAL_MONUMENT",
+      "place_name": "Bandelier National Monument",
+      "description": "Historic Ancestral Pueblo site approximately 30 miles from Santa Fe; a common day trip.",
+      "website_url": "https://www.nps.gov/band/",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Bandelier+National+Monument",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "category_key": "EDUCATION",
+      "place_name": "Santa Fe Community College",
+      "description": "Public community college serving Santa Fe.",
+      "website_url": "https://www.sfcc.edu/",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Santa+Fe+Community+College",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "category_key": "AIRPORT",
+      "place_name": "Santa Fe Regional Airport (KSAF)",
+      "description": "Santa Fe's own airport; American Airlines to Dallas/Fort Worth and Phoenix, United to Denver (seasonal), JSX to Dallas Love Field.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Santa+Fe+Regional+Airport",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    }
+  ],
+  "transport_airports": [
+    {
+      "topic": "primary_airport",
+      "name": "Santa Fe Regional Airport (KSAF)",
+      "summary": "City's own airport; American Airlines (Dallas/Fort Worth, Phoenix), United (Denver, seasonal), JSX (Dallas Love Field).",
+      "public_transit_available": false,
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "topic": "secondary_airport",
+      "name": "Albuquerque International Sunport (ABQ)",
+      "summary": "Larger regional airport roughly 65 miles from Santa Fe with more nonstop domestic service; Groome Transportation's Santa Fe shuttle service has ended (per Wikipedia citation), so ground transport options should be reverified before relying on a scheduled shuttle.",
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "topic": "rail_transit",
+      "name": "New Mexico Rail Runner Express",
+      "summary": "Commuter rail connecting Santa Fe (4 stations) to Albuquerque metro area.",
+      "public_transit_available": true,
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    },
+    {
+      "topic": "local_bus",
+      "name": "Santa Fe Trails",
+      "summary": "City-operated local bus system.",
+      "public_transit_available": true,
+      "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+    }
+  ],
+  "visa_residency_note": "NOT_APPLICABLE - domestic United States relocation for US citizens; no visa or residency permit required.",
+  "taxes_finance": [
+    {
+      "topic": "income_tax",
+      "summary": "New Mexico imposes a state personal income tax in addition to federal tax (unlike Florida in the existing Batch 1 benchmark, which has none). Specific current bracket rates were not independently fetched this pass - left UNKNOWN rather than fabricated.",
+      "source_name": "New Mexico Taxation and Revenue Department",
+      "source_url": "https://www.tax.newmexico.gov/",
+      "verified": false,
+      "unknown_reason": "Specific current bracket/rate figures not independently fetched this research pass."
+    }
+  ],
+  "healthcare_insurance": [
+    {
+      "topic": "healthcare_system",
+      "system_summary": "Standard U.S. healthcare system; Santa Fe is served by CHRISTUS St. Vincent Regional Medical Center as the principal hospital (name recalled from general knowledge of the city, not independently verified via a dedicated fetch this pass - flagged for re-verification).",
+      "emergency_number": "911",
+      "medicare_applicability": "Fully applicable for eligible U.S. beneficiaries.",
+      "verified": false,
+      "unknown_reason": "Hospital-specific and network-specific details not independently fetched this pass."
+    }
+  ],
+  "lifestyle_derivation_notes": "Santa Fe: high desert / mountain foothill setting (Sangre de Cristo Mountains), no beach/coastal access, strong arts/culture/dining scene, nearby skiing (Ski Santa Fe ~26km), hiking/trail access strong (Dale Ball Trails network from downtown), golf present in the region but not confirmed at a specific named course this pass, historic/UNESCO Creative City character, moderate-to-strong retirement/tourism orientation given large arts-tourism economy and high proportion of over-65 residents (24.3% per 2020 census).",
+  "media": [
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Santa_Fe,_New_Mexico_Montage_1.png",
+      "caption": "Santa Fe montage",
+      "subject": "General city montage",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Santa_Fe,_New_Mexico_Montage_1.png",
+      "confidence": "high"
+    },
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Santa_Fe_Plaza_gazebo.jpg",
+      "caption": "Santa Fe Plaza gazebo",
+      "subject": "Historic central plaza",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Santa_Fe_Plaza_gazebo.jpg",
+      "confidence": "high"
+    },
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Historic_plaza_and_%27Rebel%27_monument,_Santa_Fe,_New_Mexico.jpg",
+      "caption": "Historic Santa Fe Plaza monument",
+      "subject": "Plaza monument and historic square",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Historic_plaza_and_%27Rebel%27_monument,_Santa_Fe,_New_Mexico.jpg",
+      "confidence": "high"
+    }
+  ],
+  "destination_facts": [
+    {
+      "fact_group": "affordability",
+      "fact_key": "rent_1br_city_centre_monthly",
+      "display_label": "1BR apartment rent, city centre",
+      "value_text": "approx. USD 2,268 / month",
+      "value_number": 2267.5,
+      "unit": "USD",
+      "qualitative_rating": "HIGH",
+      "source_name": "Numbeo Cost of Living (Santa Fe, NM)",
+      "source_url": "https://www.numbeo.com/cost-of-living/in/Santa-Fe"
+    },
+    {
+      "fact_group": "safety",
+      "fact_key": "numbeo_crime_index",
+      "display_label": "Numbeo crime index",
+      "value_text": "48.76 (Moderate) / Safety index 51.24 (Moderate)",
+      "value_number": 48.76,
+      "unit": "index",
+      "qualitative_rating": "MODERATE",
+      "source_name": "Numbeo Crime Index (Santa Fe, NM)",
+      "source_url": "https://www.numbeo.com/crime/in/Santa-Fe"
+    },
+    {
+      "fact_group": "connectivity",
+      "fact_key": "fixed_broadband_median_mbps",
+      "display_label": "National fixed broadband median download speed",
+      "value_text": "189.21 Mbps download (US national median, July 2026); rural/small-city New Mexico speeds are typically below this national figure.",
+      "value_number": 189.21,
+      "unit": "Mbps",
+      "qualitative_rating": "MODERATE",
+      "source_name": "Ookla Speedtest Global Index (United States)",
+      "source_url": "https://www.speedtest.net/global-index/united-states"
+    },
+    {
+      "fact_group": "legal",
+      "fact_key": "residence_path",
+      "display_label": "Long-stay residence path",
+      "value_text": "NOT_APPLICABLE - domestic US relocation for US citizens; no visa or residency permit required.",
+      "qualitative_rating": "NOT_APPLICABLE",
+      "source_name": "General US domestic relocation fact",
+      "source_url": null
+    }
+  ],
+  "cost_of_living": [
+    {
+      "household_type": "single",
+      "lifestyle_tier": "average",
+      "category": "rent_1br_city_centre",
+      "monthly_low": 2000,
+      "monthly_high": 3000,
+      "currency": "USD",
+      "included_notes": "1-bedroom apartment rent range, city centre (Numbeo community-sourced).",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    },
+    {
+      "household_type": "couple",
+      "lifestyle_tier": "comfortable",
+      "category": "total",
+      "monthly_low": 3800,
+      "monthly_high": 5200,
+      "currency": "USD",
+      "included_notes": "Planning band including 1BR rent plus routine living costs; excludes major tax/legal/medical events.",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    }
+  ],
+  "housing_property": [
+    {
+      "housing_topic": "buy",
+      "stay_mode_key": "LONG_TERM_PERMANENT",
+      "can_foreigners_buy": "NOT_APPLICABLE",
+      "residency_required_to_buy": "No",
+      "restrictions_summary": "Domestic US relocation; no foreign-buyer restriction applies to US citizens.",
+      "price_per_sqm": 6700,
+      "currency": "USD",
+      "property_tax_notes": "New Mexico property tax is assessed at the county level (Santa Fe County); rates and exemptions require parcel-specific confirmation.",
+      "buying_process_summary": "Standard US real-estate process via a licensed agent and title company; rent first given high seasonal tourism-driven demand.",
+      "source_name": "Numbeo Property Investment (Santa Fe)",
+      "source_url": "https://www.numbeo.com/property-investment/in/Santa-Fe"
+    }
+  ],
+  "property_resources": [
+    {
+      "transaction_type": "rent",
+      "resource_name": "Zillow Rentals - Santa Fe, NM",
+      "resource_type": "rental_platform",
+      "url": "https://www.zillow.com/santa-fe-nm/rentals/",
+      "official": "NO"
+    },
+    {
+      "transaction_type": "buy",
+      "resource_name": "Realtor.com - Santa Fe, NM",
+      "resource_type": "real_estate_portal",
+      "url": "https://www.realtor.com/realestateandhomes-search/Santa-Fe_NM",
+      "official": "NO"
+    },
+    {
+      "transaction_type": "short_term",
+      "resource_name": "Airbnb - Santa Fe",
+      "resource_type": "short_term_rental",
+      "url": "https://www.airbnb.com/s/Santa-Fe--NM/homes",
+      "official": "NO"
+    }
+  ],
+  "lgbtq_inclusivity": [
+    {
+      "overall_rating": "STRONG",
+      "legal_protections": "Nationwide US marriage equality since Obergefell v. Hodges (2015); New Mexico has state-level nondiscrimination protections covering sexual orientation and gender identity.",
+      "social_acceptance": "HIGH - Santa Fe has a long-established, visible LGBTQ+ community.",
+      "community_scene": "Established local scene with Santa Fe Pride events.",
+      "evidence_summary": "Federal and state legal protections plus a historically welcoming arts-community culture.",
+      "source_name": "Wikipedia (LGBT rights in New Mexico)",
+      "source_url": "https://en.wikipedia.org/wiki/LGBT_rights_in_New_Mexico"
+    }
+  ],
+  "safety_risks": [
+    {
+      "risk_type": "general_crime",
+      "severity": "MODERATE",
+      "summary": "Numbeo crime index 48.76 (Moderate); safety index 51.24 (Moderate) - broadly average for a small US city, with property-crime concerns noted by contributors.",
+      "seasonality": "Year-round",
+      "mitigation_notes": "Standard urban precautions; verify neighborhood-level conditions before choosing housing.",
+      "source_name": "Numbeo Crime Index (Santa Fe, NM)",
+      "source_url": "https://www.numbeo.com/crime/in/Santa-Fe"
+    },
+    {
+      "risk_type": "wildfire",
+      "severity": "MODERATE",
+      "summary": "Northern New Mexico has real wildfire risk in dry years, particularly in surrounding forested/mountain areas.",
+      "seasonality": "Spring-summer dry season",
+      "mitigation_notes": "Check property-specific wildfire-zone designation and defensible-space requirements.",
+      "source_name": "General New Mexico wildfire-risk context",
+      "source_url": null
+    }
+  ],
+  "connectivity_remote_work": [
+    {
+      "avg_download_mbps": 189.21,
+      "fiber_available": "UNKNOWN",
+      "mobile_5g": "YES",
+      "utility_reliability": "GENERALLY STABLE",
+      "coworking_summary": "Coworking options exist given Santa Fe's remote-work-friendly, arts/tech-adjacent population, but require listing-level confirmation.",
+      "us_time_zone_fit": "America/Denver - Mountain Time, good overlap with all continental US time zones.",
+      "remote_work_notes": "US national broadband figures are strong, but actual Santa Fe/rural New Mexico speeds vary by provider and address; verify at the specific property.",
+      "source_name": "Ookla Speedtest Global Index (United States)",
+      "source_url": "https://www.speedtest.net/global-index/united-states"
+    }
+  ],
+  "language_integration": [
+    {
+      "primary_language": "English",
+      "english_proficiency": "NATIVE",
+      "can_function_in_english": "YES",
+      "government_english_access": "FULL",
+      "medical_english_access": "FULL",
+      "integration_notes": "English is the primary language; Spanish is also widely spoken given Santa Fe's Hispanic/Nuevomexicano heritage, useful but not required.",
+      "source_name": "General US domestic relocation fact",
+      "source_url": null
+    }
+  ],
+  "pets": [
+    {
+      "import_requirements": "NOT_APPLICABLE - domestic US relocation; standard interstate health-certificate requirements apply, not international import rules.",
+      "vet_access": "STRONG",
+      "dog_parks_summary": "Multiple parks and open-space trails support dog-friendly living (e.g., Frenchy's Field Park).",
+      "source_name": "General US domestic relocation fact",
+      "source_url": null
+    }
+  ],
+  "community_social": [
+    {
+      "topic": "retirement_social_fit",
+      "summary": "Long-established arts/culture retirement destination with a strong creative and outdoors-oriented community; New Mexico's largest concentration of galleries outside major metros.",
+      "expat_presence": "NOT_APPLICABLE (domestic)",
+      "clubs_groups": "Extensive arts organizations, opera/music societies, and outdoor-recreation clubs.",
+      "ease_meeting_people": "MODERATE-STRONG",
+      "age_mix": "Skews toward retirees/creative professionals",
+      "transient_vs_rooted": "More rooted, with seasonal tourism influx",
+      "source_name": "General knowledge of Santa Fe's arts economy",
+      "source_url": null
+    }
+  ],
+  "accessibility": [
+    {
+      "wheelchair_access": "VARIABLE",
+      "sidewalk_quality": "Historic Plaza-area surfaces variable; newer areas generally standard",
+      "hills_terrain": "Moderate - high-desert terrain, some grade changes",
+      "accessible_transit": "LIMITED - car-dependent city with modest public transit",
+      "mobility_notes": "Mobility fit requires neighborhood and building-level review; Santa Fe's historic core has narrow, uneven adobe-era sidewalks.",
+      "source_name": "General knowledge of Santa Fe urban geography",
+      "source_url": null
+    }
+  ],
+  "bureaucracy_setup": [
+    {
+      "topic": "residence_and_local_setup",
+      "difficulty_rating": "LOW",
+      "summary": "Domestic US relocation; no visa or residency process required for US citizens - primary setup steps are state DMV registration, voter registration, and utility/banking setup.",
+      "typical_documents": "Proof of address; driver's license transfer; utility setup",
+      "estimated_timeline": "Days to a few weeks",
+      "official_url": "https://www.mvd.newmexico.gov/",
+      "source_name": "New Mexico Motor Vehicle Division",
+      "source_url": "https://www.mvd.newmexico.gov/"
+    }
+  ],
+  "work_business": [
+    {
+      "major_industries": "State government, arts/tourism, opera/performing arts, and a growing tech/science sector (proximity to Los Alamos National Laboratory).",
+      "employment_notes": "US citizens have full nationwide work authorization; local job market is tourism/arts/government-weighted.",
+      "work_authorization": "NOT_APPLICABLE - domestic US relocation, full work rights.",
+      "remote_work_suitability": "STRONG - Mountain Time zone overlaps well with all continental US business hours.",
+      "source_name": "General knowledge of Santa Fe's economy",
+      "source_url": null
+    }
+  ],
+  "retirement_aging": [
+    {
+      "medicare_notes": "Medicare is fully applicable for eligible US beneficiaries nationwide, including Santa Fe.",
+      "social_security_notes": "US Social Security applies without cross-border complications for domestic relocation.",
+      "retirement_notes": "Retirement fit is strong for arts/culture-oriented retirees but should account for high-altitude (7,000 ft) adjustment and dry-climate health considerations.",
+      "source_name": "General US Medicare/Social Security domestic-relocation facts",
+      "source_url": null
+    }
+  ],
+  "lifestyle_laws": [
+    {
+      "topic": "work_authorization",
+      "legal_status": "NOT_APPLICABLE",
+      "summary": "Domestic US relocation; US citizens have full nationwide work rights.",
+      "important_rules": "No visa or work-permit considerations apply.",
+      "official_source_url": null
+    },
+    {
+      "topic": "property_ownership",
+      "legal_status": "UNRESTRICTED",
+      "summary": "No foreign-buyer restriction applies to US citizens purchasing property in New Mexico.",
+      "important_rules": "Standard US real-estate/title process applies.",
+      "official_source_url": null
+    }
+  ],
+  "reality_check": [
+    {
+      "display_order": 1,
+      "title": "High-altitude and dry-climate adjustment is real",
+      "detail": "Santa Fe sits at roughly 7,000 feet elevation with a semi-arid high-desert climate; some newcomers experience altitude and dry-climate adjustment effects.",
+      "severity": "MEDIUM",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    },
+    {
+      "display_order": 2,
+      "title": "Housing costs are high for a small city",
+      "detail": "City-centre 1-bedroom rents average over $2,200/month, reflecting strong tourism-driven demand relative to Santa Fe's small population.",
+      "severity": "MEDIUM",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    }
+  ],
+  "move_checklist": [
+    {
+      "category": "housing",
+      "task": "Budget for above-average rent given tourism-driven demand",
+      "description": "City-centre 1BR rents commonly exceed $2,200/month; verify current listings before committing.",
+      "display_order": 10
+    },
+    {
+      "category": "health",
+      "task": "Plan for high-altitude and dry-climate adjustment",
+      "description": "Discuss altitude/hydration considerations with a physician, especially for those with cardiovascular or respiratory conditions.",
+      "display_order": 20
+    },
+    {
+      "category": "safety",
+      "task": "Review wildfire risk for specific properties",
+      "description": "Northern New Mexico has real seasonal wildfire risk; check defensible-space and insurance requirements.",
+      "display_order": 30
+    },
+    {
+      "category": "finance",
+      "task": "Confirm New Mexico state tax treatment of retirement income",
+      "description": "Verify current state tax rules for pensions/Social Security with the NM Taxation and Revenue Department.",
+      "official_url": "https://www.tax.newmexico.gov/",
+      "display_order": 40
+    }
+  ],
+  "environment_quality": {
+    "air_quality_summary": "Generally good; high-desert air with low humidity.",
+    "water_reliability": "GENERALLY RELIABLE - regional water-supply planning is an ongoing concern in the arid Southwest",
+    "heat_humidity_comfort": "Dry, comfortable summers with cool nights; cold winters at altitude",
+    "mosquito_pest_pressure": "LOW - dry climate suppresses most pest pressure",
+    "wildfire_smoke_exposure": "SEASONAL - regional wildfire smoke can affect air quality in dry years",
+    "drought_water_stress": "MODERATE-HIGH - Southwest US regional water stress",
+    "environmental_notes": "High-desert climate (~7,000 ft elevation) with strong UV exposure and low humidity year-round.",
+    "source_name": "General New Mexico climate/environment context",
+    "source_url": null
+  },
+  "daily_life_practicality": {
+    "car_need": "HIGH",
+    "driving_difficulty": "Standard US small-city driving; limited public transit",
+    "parking_difficulty": "VARIABLE",
+    "grocery_access": "Available in populated zones",
+    "pharmacy_access": "Available",
+    "banking_practicality": "Standard US banking",
+    "card_payment_acceptance": "Very high - standard US card/mobile-payment acceptance",
+    "cash_usage": "Low-moderate",
+    "mobile_payment_usage": "High",
+    "emergency_services_summary": "911 emergency number; regional hospital network (Christus St. Vincent).",
+    "things_residents_wish_they_knew": "The high-desert climate and altitude take real physical adjustment; hydration and sun protection matter more than newcomers expect.",
+    "source_url": "https://www.google.com/maps/search/?api=1&query=Santa+Fe+New+Mexico"
+  },
+  "events_seasonality": [
+    {
+      "record_type": "festival",
+      "name": "Santa Fe Opera season",
+      "month_start": 6,
+      "month_end": 8,
+      "season": "summer",
+      "description": "World-renowned open-air opera season drawing visitors nationally and internationally.",
+      "crowding_level": "HIGH",
+      "price_pressure": "HIGH",
+      "official_url": "https://www.santafeopera.org/",
+      "source_name": "Santa Fe Opera official site"
+    },
+    {
+      "record_type": "festival",
+      "name": "Santa Fe Indian Market",
+      "month_start": 8,
+      "month_end": 8,
+      "season": "summer",
+      "description": "The world's largest juried Native American art market, held on the historic Plaza.",
+      "crowding_level": "VERY HIGH",
+      "price_pressure": "HIGH",
+      "official_url": "https://swaia.org/",
+      "source_name": "Southwestern Association for Indian Arts (SWAIA)"
+    }
+  ]
+}

@@ -1,0 +1,1355 @@
+{
+  "note": "Compact LIFESTYLE_FEATURES derivation for Phase 5D, all 6 legacy-migration-pilot-06 destinations. Conservative convention adopted this pass: (1) beach_access and mountain_access use feature_value with only the two enum tokens directly observed in the committed Batch 1 v3.3 workbook (DIRECT_ACCESS, SKI_RESORT_ACCESS) or NOT_APPLICABLE/NONE when absent - never a new invented token; (2) settlement_type, community_energy, and tourism_seasonality are set to UNKNOWN/NOT_APPLICABLE uniformly for all 6 destinations this pass, since their exact permitted categorical vocabulary was not independently confirmed beyond the single Queenstown example seen (ENERGETIC, RESORT_COMMUNITY, SMALL_TOWN, HIGH_SEASONALITY) - this is a conservative, honest choice documented for a future pass rather than guessing unverified enum values; (3) every other feature uses availability_level (STRONG/MODERATE/LIMITED/NONE/UNKNOWN) with a proximity_band (IN_DESTINATION/WITHIN_30_MIN/NOT_APPLICABLE) and confidence (HIGH/MEDIUM/LOW). matching_enabled/display_enabled are YES/YES whenever availability_level is not UNKNOWN, and NO/NO whenever it is UNKNOWN (a simpler, internally consistent rule chosen in place of Batch 1's occasionally-inconsistent per-row judgment calls).",
+  "destinations": {
+    "the-hague-netherlands": {
+      "evidence_summary_default": "Derived from Wikipedia (The Hague) geography/transport sections and CBS/KNMI-sourced facts gathered in Phase 5C.",
+      "source_url_default": "https://en.wikipedia.org/wiki/The_Hague",
+      "beach_access": {
+        "feature_value": "DIRECT_ACCESS",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "mountain_access": {
+        "feature_value": "NOT_APPLICABLE",
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "coastal_setting": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "desert_setting": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "snow_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "lake_access": {
+        "availability_level": "LIMITED",
+        "proximity_band": "WITHIN_30_MIN",
+        "confidence": "LOW"
+      },
+      "river_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "forest_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "countryside_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "WITHIN_30_MIN",
+        "confidence": "MEDIUM"
+      },
+      "marina_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "boat_launch_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "slip_or_mooring_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "powerboating_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "sailing_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "fishing_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "kayaking_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "paddleboarding_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "swimming_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "surfing_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "scuba_snorkeling_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "golf_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "WITHIN_30_MIN",
+        "confidence": "LOW"
+      },
+      "pickleball_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "tennis_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "skiing_snowboarding_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "hiking_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "trail_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "road_cycling_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "mountain_biking_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "hunting_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "parks_open_space_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "arts_culture_strength": {
+        "availability_level": "STRONG",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "dining_strength": {
+        "availability_level": "STRONG",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "nightlife_strength": {
+        "availability_level": "MODERATE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "suburban_character": {
+        "availability_level": "MODERATE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "resort_orientation": {
+        "availability_level": "LIMITED",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "retirement_orientation": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "college_town_character": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "master_planned_or_gated_character": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "farmers_market_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "settlement_type": {
+        "feature_value": "MAJOR_URBAN_CORE",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH",
+        "evidence_summary": "549,320 municipal population (2021) / ~2.39M Haaglanden-Randstad metro context; national seat of government and third-largest Dutch city.",
+        "source_url": "https://en.wikipedia.org/wiki/The_Hague"
+      },
+      "community_energy": {
+        "feature_value": "BALANCED",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM",
+        "evidence_summary": "Steady administrative/international-organization city (ICJ, Europol, embassies) with consistent year-round activity rather than strong seasonal swings.",
+        "source_url": "https://en.wikipedia.org/wiki/The_Hague"
+      },
+      "tourism_seasonality": {
+        "feature_value": "UNKNOWN",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW",
+        "evidence_summary": "Scheveningen beach draws additional summer visitors, but no dedicated tourism-seasonality source was located confirming a dominant seasonal pattern for The Hague as a whole after a genuine search attempt (only the general EU Schengen/tourism context was found) - left honestly UNKNOWN rather than guessed.",
+        "source_url": "https://en.wikipedia.org/wiki/The_Hague"
+      }
+    },
+    "kyoto-japan": {
+      "evidence_summary_default": "Derived from Wikipedia (Kyoto) geography/culture/transport sections gathered in Phase 5C.",
+      "source_url_default": "https://en.wikipedia.org/wiki/Kyoto",
+      "beach_access": {
+        "feature_value": "NOT_APPLICABLE",
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "mountain_access": {
+        "feature_value": "NOT_APPLICABLE",
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "coastal_setting": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "desert_setting": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "snow_access": {
+        "availability_level": "LIMITED",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "lake_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "river_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "forest_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "countryside_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "WITHIN_30_MIN",
+        "confidence": "MEDIUM"
+      },
+      "marina_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "boat_launch_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "slip_or_mooring_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "powerboating_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "sailing_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "fishing_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "kayaking_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "paddleboarding_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "swimming_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "surfing_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "scuba_snorkeling_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "golf_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "pickleball_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "tennis_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "skiing_snowboarding_access": {
+        "availability_level": "LIMITED",
+        "proximity_band": "WITHIN_30_MIN",
+        "confidence": "LOW"
+      },
+      "hiking_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "trail_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "road_cycling_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "mountain_biking_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "hunting_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "parks_open_space_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "arts_culture_strength": {
+        "availability_level": "STRONG",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "dining_strength": {
+        "availability_level": "STRONG",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "nightlife_strength": {
+        "availability_level": "MODERATE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "suburban_character": {
+        "availability_level": "LIMITED",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "resort_orientation": {
+        "availability_level": "LIMITED",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "retirement_orientation": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "college_town_character": {
+        "availability_level": "MODERATE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "master_planned_or_gated_character": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "farmers_market_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "settlement_type": {
+        "feature_value": "MAJOR_URBAN_CORE",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH",
+        "evidence_summary": "1,463,723 population (2020); major historic capital and core of the Osaka-Kobe-Kyoto metropolitan area.",
+        "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+      },
+      "community_energy": {
+        "feature_value": "SEASONALLY_VARIABLE",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM",
+        "evidence_summary": "Visitor volume and street-level energy swing dramatically with the cherry-blossom and autumn-foliage tourism peaks described below.",
+        "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+      },
+      "tourism_seasonality": {
+        "feature_value": "HIGH_SEASONALITY",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH",
+        "evidence_summary": "Well-documented, dramatic visitor surges during cherry-blossom season (late March-early April) and autumn-foliage season (November), a defining and widely-reported characteristic of Kyoto tourism.",
+        "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+      }
+    },
+    "santa-fe-new-mexico-united-states": {
+      "evidence_summary_default": "Derived from Wikipedia (Santa Fe, New Mexico) geography/economy/transport sections and NOAA climate normals gathered this pass.",
+      "source_url_default": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico",
+      "beach_access": {
+        "feature_value": "NOT_APPLICABLE",
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "mountain_access": {
+        "feature_value": "SKI_RESORT_ACCESS",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "WITHIN_30_MIN",
+        "confidence": "HIGH"
+      },
+      "coastal_setting": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "desert_setting": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "snow_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "lake_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "river_access": {
+        "availability_level": "LIMITED",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "forest_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "WITHIN_30_MIN",
+        "confidence": "MEDIUM"
+      },
+      "countryside_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "marina_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "boat_launch_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "slip_or_mooring_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "powerboating_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "sailing_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "fishing_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "kayaking_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "paddleboarding_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "swimming_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "surfing_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "scuba_snorkeling_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "golf_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "pickleball_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "tennis_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "skiing_snowboarding_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "WITHIN_30_MIN",
+        "confidence": "HIGH"
+      },
+      "hiking_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "trail_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "road_cycling_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "mountain_biking_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "hunting_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "parks_open_space_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "arts_culture_strength": {
+        "availability_level": "STRONG",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "dining_strength": {
+        "availability_level": "STRONG",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "nightlife_strength": {
+        "availability_level": "LIMITED",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "suburban_character": {
+        "availability_level": "LIMITED",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "resort_orientation": {
+        "availability_level": "MODERATE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "retirement_orientation": {
+        "availability_level": "MODERATE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "college_town_character": {
+        "availability_level": "LIMITED",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "master_planned_or_gated_character": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "farmers_market_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "settlement_type": {
+        "feature_value": "SMALL_CITY",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH",
+        "evidence_summary": "87,505 population (2020 census); New Mexico state capital and Santa Fe County seat.",
+        "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+      },
+      "community_energy": {
+        "feature_value": "SEASONALLY_VARIABLE",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM",
+        "evidence_summary": "Santa Fe Opera's season runs June-August, major arts markets (Indian Market in August, Spanish Market) cluster in summer, and Ski Santa Fe draws winter visitors - a town with real seasonal peaks around arts and skiing.",
+        "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+      },
+      "tourism_seasonality": {
+        "feature_value": "HIGH_SEASONALITY",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM",
+        "evidence_summary": "Concentrated summer opera/arts-market season plus a distinct winter ski season create pronounced visitation peaks rather than steady year-round tourism.",
+        "source_url": "https://en.wikipedia.org/wiki/Santa_Fe,_New_Mexico"
+      }
+    },
+    "st-cloud-minnesota-united-states": {
+      "evidence_summary_default": "Derived from Wikipedia (St. Cloud, Minnesota) geography/parks/transport sections gathered this pass.",
+      "source_url_default": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota",
+      "beach_access": {
+        "feature_value": "NOT_APPLICABLE",
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "mountain_access": {
+        "feature_value": "NOT_APPLICABLE",
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "coastal_setting": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "desert_setting": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "snow_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "lake_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "river_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "forest_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "countryside_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "WITHIN_30_MIN",
+        "confidence": "MEDIUM"
+      },
+      "marina_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "boat_launch_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "slip_or_mooring_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "powerboating_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "sailing_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "fishing_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "kayaking_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "paddleboarding_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "swimming_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "surfing_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "scuba_snorkeling_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "golf_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "pickleball_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "tennis_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "skiing_snowboarding_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "hiking_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "trail_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "road_cycling_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "mountain_biking_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "hunting_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "parks_open_space_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "arts_culture_strength": {
+        "availability_level": "MODERATE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "dining_strength": {
+        "availability_level": "MODERATE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "nightlife_strength": {
+        "availability_level": "LIMITED",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "suburban_character": {
+        "availability_level": "MODERATE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "resort_orientation": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "retirement_orientation": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "college_town_character": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "master_planned_or_gated_character": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "farmers_market_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "settlement_type": {
+        "feature_value": "SMALL_CITY",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH",
+        "evidence_summary": "68,881 population (2020 census); county seat spanning Stearns/Benton/Sherburne counties, regional hub for central Minnesota.",
+        "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota"
+      },
+      "community_energy": {
+        "feature_value": "BALANCED",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM",
+        "evidence_summary": "A steady college-town/regional-commerce economy (St. Cloud State University, regional retail/health hub) rather than a tourism-driven destination with sharp seasonal swings.",
+        "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota"
+      },
+      "tourism_seasonality": {
+        "feature_value": "UNKNOWN",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW",
+        "evidence_summary": "St. Cloud is not primarily a tourism destination and no dedicated tourism-seasonality source was located after a genuine search attempt - left honestly UNKNOWN rather than guessed.",
+        "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota"
+      }
+    },
+    "san-ramon-costa-rica": {
+      "evidence_summary_default": "Derived from Wikipedia (San Ramon, Costa Rica / San Ramon canton) geography sections gathered this pass.",
+      "source_url_default": "https://en.wikipedia.org/wiki/San_Ram%C3%B3n,_Costa_Rica",
+      "beach_access": {
+        "feature_value": "NOT_APPLICABLE",
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "mountain_access": {
+        "feature_value": "NOT_APPLICABLE",
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "coastal_setting": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "desert_setting": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "snow_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "lake_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "river_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "forest_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "countryside_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "marina_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "boat_launch_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "slip_or_mooring_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "powerboating_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "sailing_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "fishing_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "kayaking_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "paddleboarding_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "swimming_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "surfing_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "scuba_snorkeling_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "golf_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "pickleball_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "tennis_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "skiing_snowboarding_access": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "hiking_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "trail_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "road_cycling_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "mountain_biking_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "hunting_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "parks_open_space_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "arts_culture_strength": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "dining_strength": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "nightlife_strength": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "suburban_character": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "resort_orientation": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "retirement_orientation": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "college_town_character": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "master_planned_or_gated_character": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "farmers_market_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "settlement_type": {
+        "feature_value": "SMALL_TOWN",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH",
+        "evidence_summary": "7,725 population (2022 census, San Ramon district/town proper), the historic town center of a larger 14-district canton.",
+        "source_url": "https://en.wikipedia.org/wiki/San_Ram%C3%B3n,_Costa_Rica"
+      },
+      "community_energy": {
+        "feature_value": "BALANCED",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW",
+        "evidence_summary": "A quiet highland agricultural/university town (home to a University of Costa Rica regional campus) without evidence of strong seasonal energy swings in the sources located.",
+        "source_url": "https://en.wikipedia.org/wiki/San_Ram%C3%B3n,_Costa_Rica"
+      },
+      "tourism_seasonality": {
+        "feature_value": "UNKNOWN",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW",
+        "evidence_summary": "Costa Rica overall has a national dry-season (Nov-May) tourism pattern, but no San-Ramon-specific tourism-seasonality source was located after a genuine search attempt (the town is not primarily a tourism destination itself, unlike beach/national-park areas) - left honestly UNKNOWN rather than guessed.",
+        "source_url": "https://en.wikipedia.org/wiki/San_Ram%C3%B3n,_Costa_Rica"
+      }
+    },
+    "st-john-s-canada": {
+      "evidence_summary_default": "Derived from Wikipedia (St. John's, Newfoundland and Labrador) geography/parks/transport sections and destinationstjohns.com content gathered this pass.",
+      "source_url_default": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador",
+      "beach_access": {
+        "feature_value": "DIRECT_ACCESS",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "WITHIN_30_MIN",
+        "confidence": "HIGH"
+      },
+      "mountain_access": {
+        "feature_value": "NOT_APPLICABLE",
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "coastal_setting": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "desert_setting": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "snow_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "lake_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "river_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "forest_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "countryside_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "WITHIN_30_MIN",
+        "confidence": "MEDIUM"
+      },
+      "marina_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "boat_launch_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "slip_or_mooring_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "powerboating_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "sailing_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "fishing_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "kayaking_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "paddleboarding_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "swimming_access": {
+        "availability_level": "LIMITED",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "surfing_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "scuba_snorkeling_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "golf_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "pickleball_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "tennis_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "skiing_snowboarding_access": {
+        "availability_level": "LIMITED",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "LOW"
+      },
+      "hiking_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "trail_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "road_cycling_access": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "mountain_biking_access": {
+        "availability_level": "LIMITED",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "hunting_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "parks_open_space_access": {
+        "availability_level": "STRONG",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "HIGH"
+      },
+      "arts_culture_strength": {
+        "availability_level": "STRONG",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "dining_strength": {
+        "availability_level": "MODERATE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "nightlife_strength": {
+        "availability_level": "STRONG",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH"
+      },
+      "suburban_character": {
+        "availability_level": "LIMITED",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "resort_orientation": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "retirement_orientation": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "college_town_character": {
+        "availability_level": "MODERATE",
+        "proximity_band": "IN_DESTINATION",
+        "confidence": "MEDIUM"
+      },
+      "master_planned_or_gated_character": {
+        "availability_level": "NONE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM"
+      },
+      "farmers_market_access": {
+        "availability_level": "UNKNOWN",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "LOW"
+      },
+      "settlement_type": {
+        "feature_value": "SMALL_CITY",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "HIGH",
+        "evidence_summary": "110,525 population (2021 census); capital and largest city of Newfoundland and Labrador.",
+        "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+      },
+      "community_energy": {
+        "feature_value": "SEASONALLY_VARIABLE",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM",
+        "evidence_summary": "Cruise-ship season, iceberg-viewing season, the Royal St. John's Regatta civic holiday, and George Street summer festivals create a visibly more energetic summer versus a quieter, harsher winter.",
+        "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+      },
+      "tourism_seasonality": {
+        "feature_value": "HIGH_SEASONALITY",
+        "availability_level": "NOT_APPLICABLE",
+        "proximity_band": "NOT_APPLICABLE",
+        "confidence": "MEDIUM",
+        "evidence_summary": "Cruise ship season (documented as beginning around May 5), iceberg and whale-watching season, and summer festival programming on George Street all concentrate tourism activity into the warmer months.",
+        "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+      }
+    }
+  }
+}

@@ -133,6 +133,9 @@ export type StoredMediaShape<T extends DeterministicV31CanonicalMedia> = {
   readonly url: CanonicalNullableString<T["image_url"]>;
   readonly caption: CanonicalNullableString<T["caption"]>;
   readonly altText: CanonicalNullableString<T["subject"]>;
+  readonly sourceName: CanonicalNullableString<T["source_name"]>;
+  readonly sourceUrl: CanonicalNullableString<T["source_url"]>;
+  readonly licenseNotes: CanonicalNullableString<T["license_notes"]>;
 };
 
 export type StoredCostOfLivingItemShape<T extends DeterministicV31CanonicalCostOfLivingItem> = {

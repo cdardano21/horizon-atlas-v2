@@ -9,6 +9,7 @@ import { getDestinationImageSet, getDestinationImageUrl } from "../../lib/imageF
 import { buildNeighborhoodIntelligenceSeedData } from "../../lib/neighborhood-intelligence-seed-data";
 import { buildPremiumDestinationEditorialPackage } from "../../lib/premium-destination-engine";
 import { isPlaceWebsiteVisible } from "../../lib/website-verification";
+import { sanitizePublicText } from "../../lib/sanitize-public-text";
 import Footer from "../Footer";
 import LifestyleRecreationSection from "./LifestyleRecreationSection";
 import Navbar from "../Navbar";
@@ -45,13 +46,6 @@ function splitEditorialText(text: string) {
   };
 }
 
-function getReadTime(text: string) {
-  const words = text.trim().split(/\s+/).filter(Boolean).length;
-  if (words > 260) return "5 min read";
-  if (words > 140) return "3 min read";
-  return "2 min read";
-}
-
 // Builds a PremiumSectionBlock body from labeled candidate lines, but never maps the same
 // underlying value into more than one granular label - if a later label would just repeat an
 // earlier one verbatim (case-insensitive), it is silently omitted rather than shown twice. Blank
@@ -71,6 +65,106 @@ function buildDedupedSectionBody(pairs: ReadonlyArray<readonly [string, string |
   return lines.join("\n\n");
 }
 
+// Within a single rendered grid, two differently-labeled cards can end up carrying the exact same
+// underlying evidence (e.g. two cards both built from the same source module). This compares each
+// card's complete, normalized line content against every earlier card in the same list and drops
+// an exact repeat - never a fuzzy/partial match, and never a card that merely shares one sentence.
+function dedupeCardsByNormalizedValue<T extends { lines: readonly string[] }>(cards: readonly T[]): T[] {
+  const seen = new Set<string>();
+  return cards.filter((card) => {
+    const normalized = card.lines.map((line) => line.trim().toLowerCase().replace(/\s+/g, " ")).join("\n");
+    if (!normalized) return true;
+    if (seen.has(normalized)) return false;
+    seen.add(normalized);
+    return true;
+  });
+}
+
+// The workbook's SAFETY_RISKS sheet is a mixed-content sheet: most rows describe environmental/
+// natural-hazard risk (flood, earthquake, heat, storms, wind, isolation, etc.), but a real
+// personal-safety/crime-relevant risk_type occasionally appears (e.g. "petty_theft", "fraud", or a
+// composite like "hurricane-flood-crime"). Classifying by the structured risk_type token itself -
+// never by reading/guessing from the free-text summary - keeps this deterministic.
+const PERSONAL_SAFETY_TOPIC_PATTERN = /theft|fraud|crime|mugg|robbery|assault|scam|burglary|pickpocket|violent/i;
+function isPersonalSafetyTopic(topic: string | null): boolean {
+  return Boolean(topic) && PERSONAL_SAFETY_TOPIC_PATTERN.test(topic as string);
+}
+// A composite topic (e.g. "hurricane-flood-crime") is genuinely about both categories, so it is
+// never excluded from the environmental bucket just because it also matches the personal-safety
+// pattern - only a row whose topic is exclusively personal-safety content is excluded from here.
+const ENVIRONMENTAL_TOPIC_PATTERN = /flood|storm|hurricane|earthquake|seismic|heat|cold|snow|ice|wind|fog|wildfire|drought|typhoon|volcano|landslide|traffic|altitude|humidity|monsoon|air_pollution|outdoor_risk|isolation|infrastructure/i;
+function isEnvironmentallyRelevantTopic(topic: string | null): boolean {
+  if (!topic) return true;
+  if (ENVIRONMENTAL_TOPIC_PATTERN.test(topic)) return true;
+  return !isPersonalSafetyTopic(topic);
+}
+
+// A destination-level score dimension can be authored on either a 0-10 or a 0-100 scale (see
+// scoreCards below) - this shared normalizer is used for both the public score bars and the
+// personal-safety plain-language distinction so the same rule is applied everywhere a raw score
+// value needs to become a 0-100 figure. The stored workbook value itself is never altered.
+function normalizeScoreToHundred(rawValue: number): number {
+  return rawValue > 0 && rawValue <= 10 ? Math.round(rawValue * 10) : Math.round(rawValue);
+}
+
+// Neighborhood-level safety_rating vocabulary is not identical across every workbook (pilot-06
+// uses Good/Very good/Mixed; Batch #2 uses High/Moderate/etc.) - classify by an explicit known-term
+// lookup rather than guessing, so an unrecognized value never silently reads as either tier.
+const POSITIVE_SAFETY_RATING_TERMS = new Set(["good", "very good", "high", "very high", "excellent", "strong"]);
+const CAUTION_SAFETY_RATING_TERMS = new Set(["mixed", "moderate", "fair", "variable", "low", "poor", "very low"]);
+function classifySafetyRatingTier(value: string): "positive" | "caution" | "unknown" {
+  const normalized = value.trim().toLowerCase();
+  if (POSITIVE_SAFETY_RATING_TERMS.has(normalized)) return "positive";
+  if (CAUTION_SAFETY_RATING_TERMS.has(normalized)) return "caution";
+  return "unknown";
+}
+
+const PERSONAL_SAFETY_NOT_DOCUMENTED = "PERSONAL SAFETY NOT YET DOCUMENTED for this destination - treat as unknown, not as safe or unsafe.";
+
+// Correct field-to-label mapping for "Personal safety", applied identically for every workbook-
+// backed destination (Batch #1, Batch #2, and the legacy migrations): prefers a real crime/theft-
+// relevant SAFETY_RISKS narrative, then a destination-level "safety" score dimension where one
+// exists, then real per-neighborhood safety_rating variation - never weather/environmental content,
+// and never a guess when none of these exist.
+function buildPersonalSafetySignal(destination: CanonicalDestination): { value: string; documented: boolean } {
+  const modules = destination.v31Modules;
+  const narrativeLines = modules
+    ? modules.safetyRisks
+        .filter((row) => isPersonalSafetyTopic(row.topic))
+        .map((row) => sanitizePublicText(row.summary))
+        .filter((value): value is string => value !== null)
+    : [];
+
+  const safetyScore = modules?.scores.find((score) => score.scoreKey === "safety");
+  const scoreDistinction = (() => {
+    if (!safetyScore?.scoreValue) return null;
+    const raw = Number(safetyScore.scoreValue);
+    if (!Number.isFinite(raw)) return null;
+    const scaled = normalizeScoreToHundred(raw);
+    if (scaled >= 80) return "The destination's overall safety score suggests generally low personal-safety concern.";
+    if (scaled >= 60) return "The destination's overall safety score suggests normal urban precautions are appropriate.";
+    return "The destination's overall safety score suggests heightened personal-safety caution is warranted.";
+  })();
+
+  const neighborhoodRatings = (modules?.neighborhoods ?? [])
+    .map((item) => item.safetyRating)
+    .filter((value): value is string => typeof value === "string" && value.trim().length > 0);
+  const tiers = neighborhoodRatings.map(classifySafetyRatingTier);
+  const neighborhoodNote = tiers.length === 0
+    ? null
+    : tiers.includes("caution")
+    ? "Neighborhood-level evidence shows meaningful variation - some areas warrant more caution than others, especially after dark."
+    : tiers.every((tier) => tier === "positive")
+    ? "Neighborhood-level evidence is consistently favorable across the districts covered here."
+    : "Neighborhood-level safety evidence exists and varies by district - check the specific area before assuming citywide consistency.";
+
+  const parts = [...narrativeLines, scoreDistinction, neighborhoodNote].filter((value): value is string => Boolean(value));
+  if (parts.length === 0) {
+    return { value: PERSONAL_SAFETY_NOT_DOCUMENTED, documented: false };
+  }
+  return { value: parts.join(" "), documented: true };
+}
+
 type GalleryItem = {
   kind: string;
   url: string;
@@ -78,6 +172,8 @@ type GalleryItem = {
   caption: string;
   isPrimary?: boolean;
   resolvedUrl: string;
+  attribution?: string;
+  sourceUrl?: string;
 };
 
 function getScoreReason(categoryName: string, destination: CanonicalDestination) {
@@ -97,6 +193,31 @@ function getScoreReason(categoryName: string, destination: CanonicalDestination)
   return `${destination.title} is weighted by how well the destination balances atmosphere, ease of living, and practical day-to-day quality. That means the score reflects both the emotional appeal and the operational reality of living there.`;
 }
 
+// Structured PLACES categories that represent a genuine clinical healthcare facility (hospital,
+// clinic, urgent care) - matched against the structured category_key field only, never derived
+// from narrative text. Deliberately excludes non-clinical categories like "wellness" (spas, cloud
+// forest resorts, etc. observed in the source data) so a wellness/resort venue is never presented
+// as a hospital or clinic.
+const HEALTHCARE_PLACE_CATEGORIES = new Set(["hospital", "healthcare", "urgent_care"]);
+
+// Real, structured named facilities (from the destination's own persisted PLACES rows) only - never
+// a researched or invented facility, and never rendered at all when a destination has none.
+function buildStructuredHealthcareFacilityItems(destination: CanonicalDestination): NeighborhoodResourceItem[] {
+  const places = destination.v31Modules?.places ?? [];
+  const seenNames = new Set<string>();
+  const items: NeighborhoodResourceItem[] = [];
+  for (const place of places) {
+    if (!place.category || !HEALTHCARE_PLACE_CATEGORIES.has(place.category)) continue;
+    const name = (place.name ?? "").trim();
+    if (!name || seenNames.has(name)) continue;
+    seenNames.add(name);
+    const generatedUrl = buildNeighborhoodSearchUrl([name, destination.city, destination.country].filter(Boolean).join(" "), "maps");
+    const url = place.websiteUrl || place.googleMapsUrl || generatedUrl;
+    items.push({ category: "healthcare", label: name, url, kind: place.websiteUrl || place.googleMapsUrl ? "dataset" : "generated" });
+  }
+  return items;
+}
+
 function buildResourceGroups(destination: CanonicalDestination) {
   const resources = [
     ...destination.resources,
@@ -113,7 +234,7 @@ function buildResourceGroups(destination: CanonicalDestination) {
     { title: "Hotels", items: resources.filter((resource) => /hotel/i.test(resource.category)) },
     { title: "Vacation Rentals", items: resources.filter((resource) => /vacation-stays/i.test(resource.category)) },
     { title: "Housing", items: resources.filter((resource) => /housing|real estate|rental|property/i.test(resource.category)) },
-    { title: "Healthcare", items: resources.filter((resource) => /health|medical|hospital|clinic|care/i.test(resource.category)) },
+    { title: "Healthcare", items: [...resources.filter((resource) => /health|medical|hospital|clinic|care/i.test(resource.category)), ...buildStructuredHealthcareFacilityItems(destination)] },
     { title: "Government", items: resources.filter((resource) => /gov|municipal|city|county|consul/i.test(resource.category)) },
     { title: "Tourism", items: resources.filter((resource) => /tour|visit|tourism|travel/i.test(resource.category)) },
     { title: "Transportation", items: resources.filter((resource) => /transport|transit|airport|train|bus/i.test(resource.category)) },
@@ -969,17 +1090,30 @@ function PremiumSectionBlock({
   title,
   summary,
   body,
-  readTime,
   eyebrow,
 }: {
   title: string;
   summary: string;
   body: string;
-  readTime: string;
   eyebrow?: string;
 }) {
   const { intro, body: remainder } = splitEditorialText(summary);
-  const hasBody = body.trim().length > 0 || remainder.trim().length > 0;
+  // Never repeat the visible preview sentence inside the expanded area - a labeled body line or
+  // extra paragraph that's identical (ignoring whitespace/case) to what's already shown in `intro`
+  // is dropped rather than shown twice. "Continue reading" only appears when genuinely additional,
+  // non-duplicate content survives this filter.
+  const normalize = (value: string) => value.trim().toLowerCase().replace(/\s+/g, " ");
+  const normalizedIntro = normalize(intro);
+  const uniqueBodyLines = body
+    .split("\n\n")
+    .map((line) => line.trim())
+    .filter((line) => {
+      if (!line) return false;
+      const value = line.includes(": ") ? line.slice(line.indexOf(": ") + 2) : line;
+      return normalize(value) !== normalizedIntro;
+    });
+  const uniqueRemainder = normalize(remainder) !== normalizedIntro ? remainder.trim() : "";
+  const hasBody = uniqueBodyLines.length > 0 || uniqueRemainder.length > 0;
 
   return (
     <article className="rounded-[1.75rem] border border-white/10 bg-slate-900/70 p-6 shadow-[0_18px_50px_rgba(2,8,23,0.16)]">
@@ -987,8 +1121,6 @@ function PremiumSectionBlock({
         <div>
           {eyebrow ? <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-cyan-300">{eyebrow}</p> : null}
           <h3 className="mt-2 text-xl font-semibold text-white">{title}</h3>
-          <p className="mt-2 text-xs uppercase tracking-[0.24em] text-slate-400">{readTime}</p>
-          <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-slate-500">Estimated completion</p>
         </div>
       </div>
       <div className="mt-5 space-y-4">
@@ -1001,8 +1133,8 @@ function PremiumSectionBlock({
               <span className="transition group-open:rotate-45" aria-hidden="true">+</span>
             </summary>
             <div className="mt-4 space-y-4">
-              {body.trim().length > 0 ? <p className="text-[15px] leading-8 text-slate-300 whitespace-pre-line">{body}</p> : null}
-              {remainder.trim().length > 0 ? <p className="text-[15px] leading-8 text-slate-300 whitespace-pre-line">{remainder}</p> : null}
+              {uniqueBodyLines.length > 0 ? <p className="text-[15px] leading-8 text-slate-300 whitespace-pre-line">{uniqueBodyLines.join("\n\n")}</p> : null}
+              {uniqueRemainder.length > 0 ? <p className="text-[15px] leading-8 text-slate-300 whitespace-pre-line">{uniqueRemainder}</p> : null}
             </div>
           </details>
         ) : null}
@@ -1122,7 +1254,21 @@ function ExpandableNeighborhoodCard({
   index,
   destination,
 }: {
-  neighborhood: { name: string; neighborhoodKey?: string; whyItWorks: string; fit: string; vibe: string; profile?: NeighborhoodProfile };
+  neighborhood: {
+    name: string;
+    neighborhoodKey?: string;
+    whyItWorks: string;
+    fit: string;
+    vibe: string;
+    profile?: NeighborhoodProfile;
+    walkabilityRating?: string | null;
+    safetyRating?: string | null;
+    transitRating?: string | null;
+    housingCharacter?: string | null;
+    pros?: string | null;
+    cons?: string | null;
+    googleMapsUrl?: string | null;
+  };
   index: number;
   destination: CanonicalDestination;
 }) {
@@ -1138,7 +1284,10 @@ function ExpandableNeighborhoodCard({
   const neighborhoodProfileResources = useMemo(() => dedupeResourceItems([
     ...(neighborhood.profile?.resources ?? []),
     ...(neighborhood.profile?.liveResources ?? []),
-  ].filter((resource): resource is NeighborhoodResourceItem => Boolean(resource?.url && resource.url.trim().length > 0))), [neighborhood.profile]);
+    // Real per-neighborhood Google Maps link from the workbook's own NEIGHBORHOODS row - never a
+    // generated search-query fallback (those stay suppressed for v3.1 bundles, see above).
+    ...(neighborhood.googleMapsUrl ? [{ label: "Google Maps", url: neighborhood.googleMapsUrl, category: "navigation", kind: "dataset" as const }] : []),
+  ].filter((resource): resource is NeighborhoodResourceItem => Boolean(resource?.url && resource.url.trim().length > 0))), [neighborhood.profile, neighborhood.googleMapsUrl]);
   // A v3.1/v3.2 neighborhood record only ever supplies a summary (whyItWorks/vibe) and an area_type
   // (fit) - there is no real per-neighborhood breakdown for walkability/transit/dining/coffee/etc.
   // For a real workbook-backed neighborhood, showing 15 index-based "flavor text" fields would
@@ -1148,6 +1297,12 @@ function ExpandableNeighborhoodCard({
     ? [
         { label: "Best For", value: neighborhood.fit },
         { label: "Overall Vibe", value: neighborhood.vibe },
+        { label: "Walkability", value: neighborhood.walkabilityRating },
+        { label: "Transit", value: neighborhood.transitRating },
+        { label: "Safety", value: neighborhood.safetyRating },
+        { label: "Housing", value: neighborhood.housingCharacter },
+        { label: "Pros", value: neighborhood.pros },
+        { label: "Cons", value: neighborhood.cons },
         ...(destination.healthcare ? [{ label: "Healthcare", value: destination.healthcare }] : []),
       ].filter((row) => row.value && row.value.trim().length > 0)
     : [
@@ -1293,16 +1448,27 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     ].map((image) => ({ src: image.url, alt: image.altText })),
   } as unknown as Parameters<typeof getDestinationImageSet>[0]), [destination]);
   const resolvedGalleryItems = useMemo(() => {
+    // A real, curated media row (with its own caption/altText/attribution - e.g. a sourced
+    // Wikimedia Commons photo) must never be overwritten by the generic "skyline and civic
+    // identity" template below - the template is a last-resort label for a destination that
+    // genuinely has no real per-image metadata yet.
+    const realItemByUrl = new Map(galleryItems.map((item) => [item.url, item]));
     const imageSet = getDestinationImageSet(mediaDestination, 5);
     if (imageSet.length > 0) {
-      return imageSet.slice(0, 10).map((imageUrl, index) => ({
-        kind: index === 0 ? "featured" : "gallery",
-        url: imageUrl,
-        altText: destination.title,
-        caption: index === 0 ? `${destination.title} skyline and civic identity` : `${destination.title} streetscape and daily-life texture`,
-        isPrimary: index === 0,
-        resolvedUrl: getDestinationImageUrl({ src: imageUrl, alt: destination.title }, mediaDestination),
-      }));
+      return imageSet.slice(0, 10).map((imageUrl, index) => {
+        const real = realItemByUrl.get(imageUrl);
+        const altText = real?.altText || destination.title;
+        return {
+          kind: real?.kind || (index === 0 ? "featured" : "gallery"),
+          url: imageUrl,
+          altText,
+          caption: real?.caption || (index === 0 ? `${destination.title} skyline and civic identity` : `${destination.title} streetscape and daily-life texture`),
+          isPrimary: real?.isPrimary ?? index === 0,
+          resolvedUrl: getDestinationImageUrl({ src: imageUrl, alt: altText }, mediaDestination),
+          attribution: real?.attribution,
+          sourceUrl: real?.sourceUrl,
+        };
+      });
     }
 
     const fallbackUrl = getDestinationImageUrl({ src: "", alt: destination.title }, mediaDestination);
@@ -1314,7 +1480,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
       isPrimary: true,
       resolvedUrl: fallbackUrl,
     }];
-  }, [destination.title, mediaDestination]);
+  }, [galleryItems, destination.title, mediaDestination]);
   const previewGalleryItems = resolvedGalleryItems.slice(0, 5);
   const galleryModalItems = resolvedGalleryItems.slice(0, 10);
   const hasMoreGalleryItems = resolvedGalleryItems.length > 5;
@@ -1462,29 +1628,10 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   // fact. v3.1/v3.2 bundles must never let a named-resource match stand in for real workbook facts
   // for categories the generic system also generates (airport, healthcare already had this fix).
   const GENERIC_UTILITY_COLLISION_CATEGORIES = new Set(["airport", "healthcare"]);
-  // A small, precise list of internal workbook enum/placeholder tokens that must never render as a
-  // polished public fact (never a broad heuristic - legitimate short labels like severity ratings
-  // "HIGH"/"MEDIUM"/"LOW" must keep rendering normally).
-  const PLACEHOLDER_TOKENS = new Set(["variable", "conditional", "unknown", "tbd", "n/a", "na", "pending", "search_zone"]);
-  const sanitizePublicText = (value?: string | null): string | null => {
-    if (typeof value !== "string") return null;
-    let text = value.trim();
-    if (!text) return null;
-    // Move embedded "Source: <url>" citations out of public prose - the URL belongs in a structured
-    // source field, not appended to visible text.
-    text = text.replace(/\s*Source:\s*https?:\/\/\S+\s*$/i, "").trim();
-    // Strip author-facing editorial instructions that should never have reached public copy.
-    text = text.replace(/\(?retain as unknown\)?/gi, "").trim();
-    text = text.replace(/\bsearch_zone\b/gi, "this area").trim();
-    if (!text) return null;
-    const normalized = text.toLowerCase().replace(/[_\s]+/g, "");
-    if (PLACEHOLDER_TOKENS.has(normalized)) return null;
-    // A bare number (e.g. a raw "0"/"1" flag value with no unit or sentence context) is never a
-    // meaningful standalone public fact when mixed into a prose list.
-    if (/^-?\d+(\.\d+)?$/.test(text)) return null;
-    return text;
+  const categoryValue = (value?: string | null) => {
+    const sanitized = sanitizePublicText(value);
+    return sanitized && sanitized.trim().length > 0 ? sanitized : categoryPlaceholder;
   };
-  const categoryValue = (value?: string | null) => (typeof value === "string" && value.trim().length > 0 ? value : categoryPlaceholder);
   const categoryListValue = (values: Array<string | undefined | null>) => {
     const firstMatch = values.find((value) => typeof value === "string" && value.trim().length > 0);
     return firstMatch ?? categoryPlaceholder;
@@ -1544,7 +1691,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     { label: "Metro population", value: categoryValue(formatPopulationValue(destination.knowledgeProfile?.metroPopulation)), note: "The metro explains how far the city’s labor, healthcare, and airport ecosystems extend." },
     { label: "Climate", value: categoryValue(formatClimateValue()), note: "Climate influences daily life, outdoor behavior, and long-stay comfort." },
     { label: "Elevation", value: categoryValue(destination.knowledgeProfile?.elevation), note: "Elevation influences weather, views, and how the city feels on the ground." },
-    { label: "Average temperatures", value: categoryValue(destination.weather || destination.knowledgeProfile?.rainfall || destination.climate), note: "Temperature patterns are one of the clearest differences between visiting and living somewhere." },
+    { label: "Average temperatures", value: categoryValue(destination.knowledgeProfile?.averageTemperatures), note: "Temperature patterns are one of the clearest differences between visiting and living somewhere." },
     { label: "Walkability", value: categoryValue(destination.knowledgeProfile?.walkability || destination.walkability), note: "Walkability determines whether daily errands can happen on foot or by transit." },
     { label: "Bikeability", value: categoryValue(destination.knowledgeProfile?.bikeFriendliness), note: "Cycling often changes the feel of a city more than most visitors expect." },
     { label: "Transit", value: categoryValue(destination.knowledgeProfile?.publicTransportation || destination.transportation), note: "Transit turns a city into a daily-life system rather than a postcard image." },
@@ -1554,10 +1701,12 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     // ahead of the real workbook healthcare summary. Legacy (non-v3.1) destinations may have a
     // genuinely curated named resource here, so their existing named-resource-first behavior is untouched.
     { label: "Healthcare", value: categoryValue(getSpecificCategoryValue("healthcare", formatListValue(destination.knowledgeProfile?.majorHospitals) || destination.knowledgeProfile?.healthcareQuality || destination.healthcare, hasV31Bundle ? [] : getNamedResourceValues("healthcare"))), note: "Healthcare is often the deciding factor for long-stay households and retirees." },
-    // Safety reflects the real workbook risk-assessment content, which combines everyday practical
-    // considerations with environmental/natural-hazard notes rather than a distinct crime rating -
-    // see "Reality and Environment" below for the complete, separately-labeled hazard breakdown.
-    { label: "Safety", value: categoryValue(sanitizePublicText(destination.knowledgeProfile?.safety) || sanitizePublicText(destination.safety)), note: "Reflects notable practical and environmental considerations, not a crime rate or an individualized safety guarantee - see Reality and Environment for the full hazard breakdown." },
+    // Personal safety uses the shared buildPersonalSafetySignal mapping (crime/theft-relevant
+    // SAFETY_RISKS rows, a destination-level "safety" score, and neighborhood-level variation) -
+    // never weather/environmental content, and never silently replaced with a guess when the
+    // destination genuinely has none. See "Reality and Environment" for the separate weather and
+    // natural-hazard breakdown.
+    { label: "Personal safety", value: categoryValue(buildPersonalSafetySignal(destination).value), note: "Reflects documented personal-safety evidence (crime context, neighborhood variation, and any safety score) - not weather or an individualized guarantee." },
     { label: "Internet", value: categoryValue(destination.knowledgeProfile?.internetSpeed || destination.internet), note: "Internet quality matters for remote work, digital nomads, and modern households." },
     { label: "Airport access", value: categoryValue(getSpecificCategoryValue("airport", formatListValue(destination.knowledgeProfile?.majorAirports) || destination.airportInfo || sanitizePublicText(destination.v31Modules?.transportation.find((row) => row.airportSummary)?.airportSummary), getNamedResourceValues("airport"))), note: "Airport access is a major part of relocation ease for families and frequent travelers." },
     { label: "Currency", value: categoryValue(destination.knowledgeProfile?.currency || (destination.country === "United States" ? "USD" : destination.country === "United Kingdom" ? "GBP" : destination.country === "Japan" ? "JPY" : destination.country === "Thailand" ? "THB" : undefined)), note: "Currency affects budgeting, transfers, and how a budget feels in practice." },
@@ -1675,8 +1824,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     const modules = destination.v31Modules;
     if (!modules) return [] as Array<{ label: string; lines: string[] }>;
     const items: Array<{ label: string; lines: string[] }> = [];
-    const safetyLines = singletonSanitizedLines(modules.safetyRisks as unknown as Array<{ summary: string | null } & Record<string, string | null>>).slice(0, 2);
-    if (safetyLines.length > 0) items.push({ label: "Safety", lines: safetyLines });
+    const personalSafety = buildPersonalSafetySignal(destination);
+    if (personalSafety.documented) items.push({ label: "Personal safety", lines: [personalSafety.value] });
     const walkabilityLines = singletonSanitizedLines(modules.accessibility, ["mobilityNotes"]);
     if (walkabilityLines.length > 0) items.push({ label: "Walkability and terrain", lines: walkabilityLines });
     const accessibilityLines = singletonSanitizedLines(modules.accessibility, ["mobilityNotes"]);
@@ -1691,8 +1840,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     if (languageLines.length > 0) items.push({ label: "Language ease", lines: languageLines });
     const healthcareLines = singletonSanitizedLines(modules.healthcare, ["publicAccessSummary", "insuranceSummary"]);
     if (healthcareLines.length > 0) items.push({ label: "Healthcare access", lines: healthcareLines });
-    return items;
-  }, [destination.v31Modules]);
+    return dedupeCardsByNormalizedValue(items);
+  }, [destination.v31Modules, destination]);
 
   const communityAndPersonalComfort = useMemo(() => {
     const modules = destination.v31Modules;
@@ -1708,7 +1857,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     if (familyLines.length > 0) items.push({ label: "Family", lines: familyLines });
     const petLines = singletonSanitizedLines(modules.pets, ["petFriendlyNotes"]);
     if (petLines.length > 0) items.push({ label: "Pets", lines: petLines });
-    return items;
+    return dedupeCardsByNormalizedValue(items);
   }, [destination.v31Modules]);
 
   const realityAndEnvironment = useMemo(() => {
@@ -1720,15 +1869,18 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
       : singletonSanitizedLines(destination.climate ? [{ summary: destination.climate }] : []);
     if (climateLines.length > 0) items.push({ label: "Climate realities", lines: climateLines });
     const environmentLines = singletonSanitizedLines(modules.environmentQuality ? [modules.environmentQuality] : [], ["qualityNotes"]);
-    const hazardLines = singletonSanitizedLines(modules.safetyRisks as unknown as Array<{ summary: string | null } & Record<string, string | null>>);
+    // Personal-safety-only rows (e.g. petty_theft, fraud) are excluded here - they belong under
+    // Personal Safety, not Environmental risk; a composite row (e.g. hurricane-flood-crime) still
+    // legitimately appears in both since it is genuinely about both.
+    const hazardLines = singletonSanitizedLines(modules.safetyRisks.filter((row) => isEnvironmentallyRelevantTopic(row.topic)) as unknown as Array<{ summary: string | null } & Record<string, string | null>>);
     const combinedHazardLines = [...environmentLines, ...hazardLines].filter((value, index, all) => all.indexOf(value) === index);
     if (combinedHazardLines.length > 0) items.push({ label: "Environmental and natural-hazard risks", lines: combinedHazardLines });
-    const seasonalityLines = modules.eventsSeasonality.map((item) => sanitizePublicText(item.seasonalityNotes) || sanitizePublicText(item.summary)).filter((value): value is string => value !== null);
+    const seasonalityLines = modules.eventsSeasonality.map((item) => sanitizePublicText(item.seasonalityNotes) || sanitizePublicText(item.summary)).filter((value): value is string => value !== null).filter((value, index, all) => all.indexOf(value) === index);
     if (seasonalityLines.length > 0) items.push({ label: "Crowds and seasonality", lines: seasonalityLines.slice(0, 3) });
     const realityLines = modules.realityCheck.map((item) => sanitizePublicText(item.summary)).filter((value): value is string => value !== null);
     if (realityLines.length > 0) items.push({ label: "Who tends to love or struggle with this destination", lines: realityLines });
-    return items;
-  }, [destination.v31Modules, destination.climate]);
+    return dedupeCardsByNormalizedValue(items);
+  }, [destination.v31Modules, destination]);
 
   const intelligenceProfile = buildDestinationIntelligenceProfile({
     slug: destination.slug,
@@ -1751,11 +1903,15 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   // resolved v3.1 destination. This is a display mapping only - no personalized quiz/match/
   // recommendation scoring logic is introduced here.
   const v31ScoreLabel = (scoreKey: string) => scoreKey.split("_").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
+  // The workbook's real DESTINATION_SCORES values are on a 0-10 scale (e.g. 7, 9) - the UI always
+  // displays "/100", so a sub-11 raw value is scaled up ×10 for display only; the stored workbook
+  // value itself is never altered. A value already above 10 (a future 0-100-scale workbook) is
+  // left as-is. Shared with buildPersonalSafetySignal's safety-score distinction above.
   const scoreCards = hasV31Bundle
     ? (destination.v31Modules?.scores ?? []).map((score) => ({
         name: v31ScoreLabel(score.scoreKey),
         weight: 0,
-        score: score.scoreValue ? Math.round(Number(score.scoreValue)) : 0,
+        score: score.scoreValue ? normalizeScoreToHundred(Number(score.scoreValue)) : 0,
         label: score.scoreLabel ?? undefined,
       }))
     : destination.scoring.length > 0
@@ -1789,8 +1945,17 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
         name: item.name ?? item.neighborhoodKey,
         neighborhoodKey: item.neighborhoodKey as string | undefined,
         whyItWorks: item.summary ?? "",
-        fit: item.areaType ?? "",
+        // Real human-authored "best for" copy only - areaType is an internal category token
+        // (e.g. "downtown_core") and must never be shown to a customer in this slot.
+        fit: item.bestFor ?? "",
         vibe: item.summary ?? "",
+        walkabilityRating: item.walkabilityRating,
+        safetyRating: item.safetyRating,
+        transitRating: item.transitRating,
+        housingCharacter: item.housingCharacter,
+        pros: item.pros,
+        cons: item.cons,
+        googleMapsUrl: item.googleMapsUrl,
       }))
     : premiumContent.neighborhoodGuides.length > 0 ? premiumContent.neighborhoodGuides : destination.neighborhoods.map((name) => ({ name, whyItWorks: `${name} helps anchor the city’s local character.`, fit: `Best for residents who want a neighborhood identity that feels specific and lived in.`, vibe: `It offers a clear local rhythm and strong daily-life texture.` }))).slice(0, 8).map((item) => {
     const profile = getNeighborhoodProfile(destination, item.name);
@@ -1814,32 +1979,42 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     golfGroups.length > 0 ? `${golfGroups.length} verified golf-focused neighborhood records` : null,
   ].filter(Boolean).join(" • ");
 
+  // A "Daily life" living-rhythm card used to render here too, but its title and visible preview
+  // (premiumContent.dailyLifeArticle || destination.dailyLife) were identical to the standalone
+  // "Daily life" Guide card below - which carries genuinely richer, section-specific
+  // Morning/Afternoon/Evening/Seasonal-rhythm body content. The redundant version is suppressed
+  // here rather than duplicated; the richer Guide card is the one retained.
   const deepDiveSections = [
     {
-      title: "Morning rhythm",
-      eyebrow: "Daily life",
-      summary: premiumContent.dailyLifeArticle || destination.dailyLife,
-      body: buildDedupedSectionBody([["Daily life", destination.dailyLife], ["Editorial", destination.editorial], ["Overview", destination.overview]]),
-    },
-    {
-      title: "Afternoon reality",
+      title: "Getting around",
       eyebrow: "Movement",
       summary: premiumContent.transportationArticle || destination.transportation,
       body: buildDedupedSectionBody([["Transportation", destination.transportation], ["Walkability", destination.walkability], ["Internet", destination.internet]]),
     },
     {
-      title: "Weekend energy",
+      title: "Climate and recreation",
       eyebrow: "Seasonal living",
       summary: premiumContent.climateArticle || destination.climate,
-      body: buildDedupedSectionBody([["Climate", destination.climate], ["Weather", destination.weather], ["Outdoor recreation", destination.outdoorRecreation.slice(0, 4).join(" • ") || destination.overview]]),
+      body: buildDedupedSectionBody([["Climate", destination.climate], ["Weather", destination.weather], ["Outdoor recreation", destination.outdoorRecreation.slice(0, 4).join(" • ")]]),
     },
     {
       title: "Who it suits",
       eyebrow: "Fit and tradeoffs",
       summary: premiumContent.retirementGuide || destination.retirement,
-      body: buildDedupedSectionBody([["Retirement fit", destination.retirement], ["Family fit", destination.family], ["Digital nomad fit", destination.digitalNomad], ["Safety", destination.safety]]),
+      body: buildDedupedSectionBody([["Retirement fit", destination.retirement], ["Family fit", destination.family], ["Digital nomad fit", destination.digitalNomad], ["Personal safety", buildPersonalSafetySignal(destination).value]]),
     },
   ];
+  // Three "living rhythm" headings are always offered, but the destination's underlying facts don't
+  // always support three genuinely distinct summaries - never repeat the same real sentence under a
+  // second heading just to fill the grid; a section is dropped rather than duplicated.
+  const seenDeepDiveSummaries = new Set<string>();
+  const dedupedDeepDiveSections = deepDiveSections.filter((section) => {
+    const normalized = (section.summary ?? "").trim().toLowerCase();
+    if (!normalized) return true;
+    if (seenDeepDiveSummaries.has(normalized)) return false;
+    seenDeepDiveSummaries.add(normalized);
+    return true;
+  });
 
   const developerToggleHref = developerMode
     ? `/destinations/${destination.slug}`
@@ -1930,6 +2105,17 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
           </div>
         </section>
 
+        {/* The full editorial overview - shown once, in full, immediately after the hero/key-facts
+            area. This is the single canonical rendering; every other place that used to repeat
+            this same text has been removed rather than duplicated. */}
+        {(premiumContent.overviewArticle || destination.overview) ? (
+          <section className="mx-5 border border-[#d8ad5548] bg-[#061a32] p-5 shadow-[0_20px_55px_rgba(0,0,0,0.18)] sm:mx-8 sm:p-6 lg:mx-10">
+            <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Overview</p>
+            <h2 className="mt-2 text-2xl font-semibold text-white">The complete picture of {destination.title}</h2>
+            <p className="mt-4 text-sm leading-8 text-slate-300 whitespace-pre-line">{premiumContent.overviewArticle || destination.overview}</p>
+          </section>
+        ) : null}
+
         <section className="mx-5 border border-[#d8ad5548] bg-[#061a32] p-5 shadow-[0_20px_55px_rgba(0,0,0,0.18)] sm:mx-8 sm:p-6 lg:mx-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -1948,8 +2134,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             </div>
           </div>
           <div className="space-y-3 rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
-            {costProfile.budgets.length > 0 ? costProfile.budgets.map((budget) => (
-              <div key={budget.label} className="rounded-2xl border border-white/10 bg-slate-950/40 p-4">
+            {costProfile.budgets.length > 0 ? costProfile.budgets.map((budget, index) => (
+              <div key={`${budget.label}-${index}`} className="rounded-2xl border border-white/10 bg-slate-950/40 p-4">
                 <p className="text-sm font-semibold text-white">{budget.label}</p>
                 <p className="mt-2 text-lg font-semibold text-cyan-300">{budget.amount}</p>
                 {budget.note ? <p className="mt-2 text-sm leading-7 text-slate-300">{budget.note}</p> : null}
@@ -2031,6 +2217,15 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               <img src={selectedMedia.resolvedUrl ?? selectedMedia.url} alt={selectedMedia.altText || selectedMedia.caption || destination.title} className="max-h-[72vh] w-full rounded-[1.5rem] object-contain transition duration-300" />
             </div>
             <p className="mt-3 px-2 text-sm leading-7 text-slate-300">{selectedMedia.caption || selectedMedia.altText || selectedMedia.kind}</p>
+            {selectedMedia.attribution ? (
+              <p className="mt-1 px-2 text-xs leading-6 text-slate-500">
+                {selectedMedia.sourceUrl ? (
+                  <a href={selectedMedia.sourceUrl} target="_blank" rel="noopener noreferrer nofollow" className="underline decoration-slate-600 underline-offset-2 hover:text-slate-300">
+                    {selectedMedia.attribution}
+                  </a>
+                ) : selectedMedia.attribution}
+              </p>
+            ) : null}
           </div>
         </div>
       ) : null}
@@ -2046,9 +2241,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             </div>
             <div className="mt-6 grid gap-4 xl:grid-cols-2">
               <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">Fast overview</p>
-                <p className="mt-3 text-sm leading-8 text-slate-400">{premiumContent.overviewArticle || destination.overview}</p>
-                <div className="mt-4 rounded-2xl border border-cyan-400/20 bg-cyan-500/10 p-4">
+                <div className="rounded-2xl border border-cyan-400/20 bg-cyan-500/10 p-4">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">What you&apos;ll learn</p>
                   <ul className="mt-3 space-y-2 text-sm leading-7 text-slate-200">
                     <li>• Whether the destination deserves serious consideration</li>
@@ -2176,8 +2369,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                 )) : null}
               </div>
               <div className="mt-6 space-y-4">
-                {costProfile.budgets.length > 0 ? costProfile.budgets.map((budget) => (
-                  <div key={budget.label} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
+                {costProfile.budgets.length > 0 ? costProfile.budgets.map((budget, index) => (
+                  <div key={`${budget.label}-${index}`} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
                     <p className="text-sm font-semibold text-white">{budget.label}</p>
                     <p className="mt-2 text-lg font-semibold text-cyan-300">{budget.amount}</p>
                     {budget.note ? <p className="mt-2 text-sm leading-7 text-slate-300">{budget.note}</p> : null}
@@ -2265,19 +2458,6 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
 
         <section id="deep-dive" className="scroll-mt-28 space-y-8">
           <h2 className="font-serif text-3xl text-[#fff8e9]">Deep Dive</h2>
-          <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Editorial overview</p>
-                <h2 className="mt-3 text-2xl font-semibold text-white">Overview</h2>
-              </div>
-              <div className="rounded-3xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-200">{getReadTime(premiumContent.overviewArticle)}</div>
-            </div>
-            <div className="mt-6 space-y-4">
-              {premiumContent.overviewArticle ? <PremiumSectionBlock title="Overview" summary={premiumContent.overviewArticle} body="" readTime={getReadTime(premiumContent.overviewArticle)} eyebrow="Editorial" /> : null}
-            </div>
-          </section>
-
 
           <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
             <div className="flex flex-wrap items-start justify-between gap-4">
@@ -2287,50 +2467,56 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               </div>
             </div>
             <div className="mt-6 grid gap-4 xl:grid-cols-2">
-              {deepDiveSections.map((section) => (
-                <PremiumSectionBlock key={section.title} title={section.title} summary={section.summary} body={section.body} readTime={getReadTime(section.body)} eyebrow={section.eyebrow} />
+              {dedupedDeepDiveSections.map((section) => (
+                <PremiumSectionBlock key={section.title} title={section.title} summary={section.summary} body={section.body} eyebrow={section.eyebrow} />
               ))}
             </div>
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            {premiumContent.dailyLifeArticle ? <PremiumSectionBlock title="Daily life" summary={premiumContent.dailyLifeArticle} body={buildDedupedSectionBody([["Morning", destination.heroNarrative], ["Afternoon", destination.dailyLife], ["Evening", destination.editorial], ["Weekend", destination.overview], ["Seasonal rhythm", destination.climate]])} readTime={getReadTime(premiumContent.dailyLifeArticle)} eyebrow="Living there" /> : null}
-            {premiumContent.climateArticle ? <PremiumSectionBlock title="Climate" summary={premiumContent.climateArticle} body={destination.climate} readTime={getReadTime(premiumContent.climateArticle)} eyebrow="Weather" /> : null}
+            {premiumContent.dailyLifeArticle ? <PremiumSectionBlock title="Daily life" summary={premiumContent.dailyLifeArticle} body={buildDedupedSectionBody([["Morning", destination.heroNarrative], ["Afternoon", destination.dailyLife], ["Evening", destination.editorial], ["Seasonal rhythm", destination.climate]])} eyebrow="Living there" /> : null}
+            {premiumContent.climateArticle ? <PremiumSectionBlock title="Climate" summary={premiumContent.climateArticle} body={destination.climate} eyebrow="Weather" /> : null}
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            {premiumContent.transportationArticle ? <PremiumSectionBlock title="Transportation" summary={premiumContent.transportationArticle} body={buildDedupedSectionBody([["Airport access", destination.airportInfo || destination.knowledgeProfile?.majorAirports?.join(", ") || "Regional and international access"], ["Transit", destination.transportation], ["Car dependency", destination.transportation], ["Walking and cycling", destination.walkability], ["Typical commute", destination.transportation]])} readTime={getReadTime(premiumContent.transportationArticle)} eyebrow="Movement" /> : null}
-            {premiumContent.costOfLivingArticle ? <PremiumSectionBlock title="Cost of living" summary={premiumContent.costOfLivingArticle} body={buildDedupedSectionBody([["Monthly budgets", destination.monthlyBudgets.map((budget) => `${budget.label}: ${budget.amount}`).join(" \u2022 ")], ["Rent", destination.costOfLiving], ["Utilities", destination.costOfLiving], ["Food", destination.dailyLife], ["Healthcare", destination.healthcare], ["Transportation", destination.transportation], ["Entertainment", destination.editorial], ["Taxes", destination.costOfLiving]])} readTime={getReadTime(premiumContent.costOfLivingArticle)} eyebrow="Economics" /> : null}
+            {premiumContent.transportationArticle ? <PremiumSectionBlock title="Transportation" summary={premiumContent.transportationArticle} body={buildDedupedSectionBody([["Airport access", destination.airportInfo || destination.knowledgeProfile?.majorAirports?.join(", ") || "Regional and international access"], ["Transit", destination.transportation], ["Car dependency", destination.transportation], ["Walking and cycling", destination.walkability], ["Typical commute", destination.transportation]])} eyebrow="Movement" /> : null}
+            {premiumContent.costOfLivingArticle ? <PremiumSectionBlock title="Cost of living" summary={premiumContent.costOfLivingArticle} body={buildDedupedSectionBody([["Monthly budgets", destination.monthlyBudgets.map((budget) => `${budget.label}: ${budget.amount}`).join(" \u2022 ")], ["Rent", destination.costOfLiving], ["Utilities", destination.costOfLiving], ["Food", destination.dailyLife], ["Healthcare", destination.healthcare], ["Transportation", destination.transportation], ["Entertainment", destination.editorial], ["Taxes", destination.costOfLiving]])} eyebrow="Economics" /> : null}
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            {premiumContent.healthcareArticle ? <PremiumSectionBlock title="Healthcare" summary={premiumContent.healthcareArticle} body={buildDedupedSectionBody([["Top hospitals", destination.knowledgeProfile?.majorHospitals?.join(", ") || destination.healthcare], ["Specialty care", destination.healthcare], ["Insurance quality", destination.healthcare], ["Emergency care", destination.healthcare], ["Retirement healthcare", destination.retirement], ["Medical tourism", destination.healthcare]])} readTime={getReadTime(premiumContent.healthcareArticle)} eyebrow="Wellness" /> : null}
-            {premiumContent.retirementGuide ? <PremiumSectionBlock title="Retirement" summary={premiumContent.retirementGuide} body={buildDedupedSectionBody([["Ideal retiree profile", destination.retirement], ["Who should retire here", destination.retirement], ["Who should not", destination.cons.join(", ") || destination.editorial], ["Best neighborhoods", destination.neighborhoods.join(", ") || "A strong district match matters"], ["Climate considerations", destination.climate], ["Healthcare considerations", destination.healthcare], ["Lifestyle", destination.dailyLife], ["Taxes", destination.costOfLiving]])} readTime={getReadTime(premiumContent.retirementGuide)} eyebrow="Retirement" /> : null}
+            {premiumContent.healthcareArticle ? <PremiumSectionBlock title="Healthcare" summary={premiumContent.healthcareArticle} body={buildDedupedSectionBody([["Top hospitals", destination.knowledgeProfile?.majorHospitals?.join(", ") || destination.healthcare], ["Specialty care", destination.healthcare], ["Insurance quality", destination.healthcare], ["Emergency care", destination.healthcare], ["Retirement healthcare", destination.retirement], ["Medical tourism", destination.healthcare]])} eyebrow="Wellness" /> : null}
+            {premiumContent.retirementGuide ? <PremiumSectionBlock title="Retirement" summary={premiumContent.retirementGuide} body={buildDedupedSectionBody([["Ideal retiree profile", destination.retirement], ["Who should retire here", destination.retirement], ["Who should not", destination.cons.join(", ") || destination.editorial], ["Best neighborhoods", destination.neighborhoods.join(", ") || "A strong district match matters"], ["Climate considerations", destination.climate], ["Healthcare considerations", destination.healthcare], ["Lifestyle", destination.dailyLife], ["Taxes", destination.costOfLiving]])} eyebrow="Retirement" /> : null}
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            {premiumContent.familyGuide ? <PremiumSectionBlock title="Family" summary={premiumContent.familyGuide} body={buildDedupedSectionBody([["School quality", destination.family], ["Activities", destination.dailyLife], ["Safety", destination.safety], ["Parks", destination.knowledgeProfile?.parks?.join(", ") || destination.overview], ["Museums", destination.knowledgeProfile?.museums?.join(", ") || destination.museums.join(", ") || destination.overview], ["Sports", destination.knowledgeProfile?.sports?.join(", ") || destination.overview], ["Healthcare", destination.healthcare], ["Neighborhood recommendations", destination.neighborhoods.join(", ") || destination.city]])} readTime={getReadTime(premiumContent.familyGuide)} eyebrow="Family" /> : null}
-            {premiumContent.digitalNomadGuide ? <PremiumSectionBlock title="Digital nomad" summary={premiumContent.digitalNomadGuide} body={buildDedupedSectionBody([["Internet", destination.internet], ["Coworking", destination.dailyLife], ["Coffee shops", destination.knowledgeProfile?.coffeeShops?.join(", ") || destination.dailyLife], ["Remote work", destination.digitalNomad], ["Community", destination.overview], ["Visa", destination.knowledgeProfile?.visaInfo || "Requirements vary by citizenship"], ["Monthly costs", destination.monthlyBudgets.map((budget) => `${budget.label}: ${budget.amount}`).join(" \u2022 ")], ["Best neighborhoods", destination.neighborhoods.join(", ") || destination.city]])} readTime={getReadTime(premiumContent.digitalNomadGuide)} eyebrow="Remote work" /> : null}
+            {premiumContent.familyGuide ? <PremiumSectionBlock title="Family" summary={premiumContent.familyGuide} body={buildDedupedSectionBody([["School quality", destination.family], ["Activities", destination.dailyLife], ["Safety", destination.safety], ["Parks", destination.knowledgeProfile?.parks?.join(", ")], ["Museums", destination.knowledgeProfile?.museums?.join(", ") || destination.museums.join(", ")], ["Sports", destination.knowledgeProfile?.sports?.join(", ")], ["Healthcare", destination.healthcare], ["Neighborhood recommendations", destination.neighborhoods.join(", ") || destination.city]])} eyebrow="Family" /> : null}
+            {premiumContent.digitalNomadGuide ? <PremiumSectionBlock title="Digital nomad" summary={premiumContent.digitalNomadGuide} body={buildDedupedSectionBody([["Internet", destination.internet], ["Coworking", destination.dailyLife], ["Coffee shops", destination.knowledgeProfile?.coffeeShops?.join(", ") || destination.dailyLife], ["Remote work", destination.digitalNomad], ["Visa", destination.knowledgeProfile?.visaInfo || "Requirements vary by citizenship"], ["Monthly costs", destination.monthlyBudgets.map((budget) => `${budget.label}: ${budget.amount}`).join(" \u2022 ")], ["Best neighborhoods", destination.neighborhoods.join(", ") || destination.city]])} eyebrow="Remote work" /> : null}
           </section>
 
-          <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Scores and explanations</p>
-                <h2 className="mt-3 text-2xl font-semibold text-white">Why the destination scores the way it does</h2>
+          {/* For a v3.1/workbook-backed destination, this grid used to just restate the exact
+              same score number already shown in "Scores and fit" above - no genuinely unique
+              explanation exists to preserve, so it's only rendered for legacy destinations, where
+              getScoreReason/scoringNotes provide real explanatory prose the bars don't carry. */}
+          {!hasV31Bundle ? (
+            <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Scores and explanations</p>
+                  <h2 className="mt-3 text-2xl font-semibold text-white">Why the destination scores the way it does</h2>
+                </div>
               </div>
-            </div>
-            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {scoreCards.map((category) => (
-                <ExpandableInsightCard
-                  key={category.name}
-                  title={category.name}
-                  summary={hasV31Bundle ? `${category.score}/100${(category as { label?: string }).label ? ` — ${(category as { label?: string }).label}` : ""}` : `${category.score}/100 — ${category.weight}% weight`}
-                  body={hasV31Bundle ? `Real persisted destination-level score: ${category.score}/100${(category as { label?: string }).label ? ` (${(category as { label?: string }).label})` : ""}.` : (premiumContent.scoringNotes.find((note) => note.category.toLowerCase() === category.name.toLowerCase())?.note || getScoreReason(category.name, destination))}
-                />
-              ))}
-            </div>
-          </section>
+              <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                {scoreCards.map((category) => (
+                  <ExpandableInsightCard
+                    key={category.name}
+                    title={category.name}
+                    summary={`${category.score}/100 — ${category.weight}% weight`}
+                    body={premiumContent.scoringNotes.find((note) => note.category.toLowerCase() === category.name.toLowerCase())?.note || getScoreReason(category.name, destination)}
+                  />
+                ))}
+              </div>
+            </section>
+          ) : null}
 
           {[
             { title: "Practical Living Snapshot", items: practicalLivingSnapshot },
@@ -2354,7 +2540,15 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             </section>
           ))}
 
-          {destination.v31Modules ? <LifestyleRecreationSection lifestyleFeatures={destination.v31Modules.lifestyleFeatures ?? []} /> : null}
+          {destination.v31Modules ? (
+            <LifestyleRecreationSection
+              lifestyleFeatures={destination.v31Modules.lifestyleFeatures ?? []}
+              places={destination.v31Modules.places ?? []}
+              destinationCity={destination.city}
+              destinationCountry={destination.country}
+              overviewText={premiumContent.overviewArticle || destination.overview || ""}
+            />
+          ) : null}
 
           {/* Raw per-module fields (notes/severity/TriState tokens) - developer/admin diagnostic only, never public. */}
           {hasV31Bundle && developerMode ? (
@@ -2400,7 +2594,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               <h2 className="text-2xl font-semibold text-white">Structured editorial sections</h2>
               <div className="mt-6 space-y-4">
                 {sectionEntries.map((section) => (
-                  <PremiumSectionBlock key={section.id} title={section.title} summary={section.content} body={section.content} readTime={getReadTime(section.content)} eyebrow="Editorial section" />
+                  <PremiumSectionBlock key={section.id} title={section.title} summary={section.content} body={section.content} eyebrow="Editorial section" />
                 ))}
               </div>
             </section>

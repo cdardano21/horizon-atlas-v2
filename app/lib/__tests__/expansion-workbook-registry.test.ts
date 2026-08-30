@@ -177,7 +177,12 @@ describe("Expansion-workbook preview resolver (registry-driven, generic getCanon
 
   it("the resolver never returns a key outside the registry's own declared expectedDestinationKeys", () => {
     const allRegisteredKeys = EXPANSION_WORKBOOK_REGISTRY.flatMap((entry) => entry.expectedDestinationKeys);
-    const expectedKeys = ["the-villages-fl-us", "sofia-bg", "puerto-vallarta-mx", "hoi-an-vn", "queenstown-nz", "ascoli-piceno-it", "sarande-al", "dumaguete-ph", "las-terrenas-do", "fairhope-al-us"];
+    const expectedKeys = [
+      "the-villages-fl-us", "sofia-bg", "puerto-vallarta-mx", "hoi-an-vn", "queenstown-nz",
+      "ascoli-piceno-it", "sarande-al", "dumaguete-ph", "las-terrenas-do", "fairhope-al-us",
+      "the-hague-netherlands", "kyoto-japan", "santa-fe-new-mexico-united-states",
+      "st-cloud-minnesota-united-states", "san-ramon-costa-rica", "st-john-s-canada",
+    ];
     expect(allRegisteredKeys.slice().sort()).toEqual(expectedKeys.sort());
   });
 
@@ -304,20 +309,26 @@ describe("Batch #2 identity/subtitle correctness (regression for the destination
     it(`${destinationKey}: real population/elevation are restored from the DESTINATIONS row (previously silently dropped), while genuinely-blank metro population stays blank`, async () => {
       const destination = await getCanonicalDestination(destinationKey);
       expect(destination!.knowledgeProfile?.population).toBe(expected.population);
-      expect(destination!.knowledgeProfile?.elevation).toBe(expected.elevation);
+      // Elevation now carries its unit ("154 m", not a bare "154") so the figure is meaningful on
+      // its own wherever it's displayed - see canonical-destination-loader.ts's v31KnowledgeProfileOverrides.
+      expect(destination!.knowledgeProfile?.elevation).toBe(`${expected.elevation} m`);
       expect(destination!.knowledgeProfile?.metroPopulation).toBeUndefined();
     });
   }
 });
 
 describe("Batch #2 cost-of-living correctness (regression for fake Rent/Utilities/Food + wrong currency defect)", () => {
+  // The cost-of-living summary now renders amounts with thousands separators (e.g. "2,250", not
+  // "2250") - see formatCurrencyAmount in canonical-destination-loader.ts.
+  const withThousandsSeparators = (raw: string) => new Intl.NumberFormat("en-US").format(Number(raw));
+
   for (const [destinationKey, expected] of Object.entries(EXPECTED_COST)) {
     it(`${destinationKey}: real currency and real total range are used; no fabricated per-category breakdown is invented`, async () => {
       const destination = await getCanonicalDestination(destinationKey);
       expect(destination!.costOfLivingProfile?.currency).toBe(expected.currency);
       expect(destination!.costOfLivingProfile?.summary).toContain(expected.currency);
-      expect(destination!.costOfLivingProfile?.summary).toContain(expected.low);
-      expect(destination!.costOfLivingProfile?.summary).toContain(expected.high);
+      expect(destination!.costOfLivingProfile?.summary).toContain(withThousandsSeparators(expected.low));
+      expect(destination!.costOfLivingProfile?.summary).toContain(withThousandsSeparators(expected.high));
       expect(destination!.costOfLivingProfile?.categories ?? []).toEqual([]);
       expect(destination!.monthlyBudgets.length).toBeGreaterThan(0);
       for (const budget of destination!.monthlyBudgets) {

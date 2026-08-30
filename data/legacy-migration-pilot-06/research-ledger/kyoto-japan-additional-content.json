@@ -1,0 +1,545 @@
+{
+  "destinationKey": "kyoto-japan",
+  "researchedAt": "2026-08-29",
+  "scopeNote": "Phase 5D addendum to the Phase 5C identity/climate ledger (kyoto-japan.json). Adds NEIGHBORHOODS, PLACES, TRANSPORT_AIRPORTS, and honest VISA/TAX/HEALTHCARE notes, reusing facts already gathered in Phase 5C research (Wikipedia Kyoto article's Culture/Transportation/Geography sections). Does not modify or duplicate the Phase 5C identity/climate content.",
+  "neighborhoods": [
+    {
+      "neighborhood_name": "Higashiyama-ku (Eastern hills)",
+      "area_type": "historic_cultural",
+      "best_for": "temples, traditional streets, walkability",
+      "summary": "Home to Kiyomizu-dera, Gion, and the Philosopher's Walk; the highest concentration of historic temples and traditional streetscapes.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Higashiyama+Kyoto",
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    },
+    {
+      "neighborhood_name": "Gion",
+      "area_type": "historic_entertainment_district",
+      "best_for": "traditional culture, dining",
+      "summary": "Kyoto's famous geisha district, with preserved machiya townhouses and traditional teahouses.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Gion+Kyoto",
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    },
+    {
+      "neighborhood_name": "Arashiyama",
+      "area_type": "scenic_suburb",
+      "best_for": "nature, tourism, quieter residential edges",
+      "summary": "Western district known for its bamboo grove, river, and mountain scenery.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Arashiyama+Kyoto",
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    },
+    {
+      "neighborhood_name": "Nakagyo-ku (Central business district)",
+      "area_type": "downtown_core",
+      "best_for": "shopping, city hall, walkability",
+      "summary": "Kyoto's central business district, location of the city hall and main shopping arcades (Teramachi, Shinkyogoku).",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Nakagyo-ku+Kyoto",
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    },
+    {
+      "neighborhood_name": "Kamigyo-ku",
+      "area_type": "historic_residential",
+      "best_for": "imperial history, quieter residential",
+      "summary": "Northern-central ward containing the Kyoto Imperial Palace grounds and the prefectural government offices.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Kamigyo-ku+Kyoto",
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    }
+  ],
+  "places": [
+    {
+      "category_key": "RELIGIOUS_LANDMARK",
+      "place_name": "Kiyomizu-dera",
+      "description": "Wooden temple supported by pillars on a mountain slope; one of Kyoto's most famous temples.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera",
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    },
+    {
+      "category_key": "RELIGIOUS_LANDMARK",
+      "place_name": "Kinkaku-ji (Temple of the Golden Pavilion)",
+      "description": "Iconic gold-leaf-covered Zen temple.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Kinkaku-ji",
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    },
+    {
+      "category_key": "RELIGIOUS_LANDMARK",
+      "place_name": "Fushimi Inari-Taisha",
+      "description": "Shinto shrine famous for its thousands of vermillion torii gates.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Fushimi+Inari-Taisha",
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    },
+    {
+      "category_key": "PALACE_LANDMARK",
+      "place_name": "Kyoto Imperial Palace",
+      "description": "Former imperial residence, within the Kyoto Gyoen national garden grounds.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Kyoto+Imperial+Palace",
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    },
+    {
+      "category_key": "NATURE_ATTRACTION",
+      "place_name": "Arashiyama Bamboo Grove",
+      "description": "Famous bamboo forest path in western Kyoto.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Arashiyama+Bamboo+Grove",
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    },
+    {
+      "category_key": "MUSEUM",
+      "place_name": "Kyoto National Museum",
+      "description": "National museum near Kiyomizu-dera housing art and antiquities.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Kyoto+National+Museum",
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    },
+    {
+      "category_key": "EDUCATION",
+      "place_name": "Kyoto University",
+      "description": "Second-oldest university in Japan, with multiple Nobel-laureate alumni.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Kyoto+University",
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    },
+    {
+      "category_key": "AIRPORT",
+      "place_name": "Kansai International Airport (via JR Haruka train)",
+      "description": "Kyoto has no airport of its own; the limited express Haruka connects Kansai International Airport to Kyoto Station in 73 minutes.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Kansai+International+Airport",
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    }
+  ],
+  "transport_airports": [
+    {
+      "topic": "nearest_airport",
+      "name": "Kansai International Airport (KIX)",
+      "summary": "Kyoto has no commercial airport of its own; the JR West limited express Haruka train carries passengers from Kansai International Airport to Kyoto Station in 73 minutes.",
+      "typical_drive_minutes": null,
+      "public_transit_available": true,
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    },
+    {
+      "topic": "high_speed_rail",
+      "name": "Tokaido Shinkansen (Kyoto Station)",
+      "summary": "High-speed rail linking Kyoto with Nagoya, Yokohama, Tokyo, and Osaka; onward San'yo Shinkansen service continues to Kobe, Okayama, and beyond.",
+      "public_transit_available": true,
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    },
+    {
+      "topic": "local_subway",
+      "name": "Kyoto Municipal Subway",
+      "summary": "Two lines (Karasuma and Tozai) operated by the Kyoto Municipal Transportation Bureau.",
+      "public_transit_available": true,
+      "source_url": "https://en.wikipedia.org/wiki/Kyoto"
+    }
+  ],
+  "visa_residency_note": "Japan generally allows US citizens visa-free entry for short-term tourism (a well-established, commonly cited policy), but specific current visa-exempt stay duration and any long-term residency-visa pathway details (e.g. long-stay/retirement visa options) were not independently and reliably fetched this pass - left UNKNOWN rather than cited from memory alone.",
+  "taxes_finance": [
+    {
+      "topic": "national_tax_authority",
+      "summary": "Japan's national tax authority is the National Tax Agency (NTA). Specific current income-tax bracket rates and residency-based tax-treatment rules for foreign retirees were not independently fetched this pass - left UNKNOWN.",
+      "source_name": "National Tax Agency (Japan)",
+      "source_url": "https://www.nta.go.jp/english/",
+      "verified": false,
+      "unknown_reason": "Specific current rate/threshold figures not independently fetched this research pass."
+    }
+  ],
+  "healthcare_insurance": [
+    {
+      "topic": "healthcare_system",
+      "system_summary": "Japan has a universal healthcare system (National Health Insurance / Employees' Health Insurance) that legal residents are generally required to join. Specific enrollment costs/procedures for foreign retirees in Kyoto were not independently fetched this pass - left UNKNOWN.",
+      "emergency_number": "119",
+      "verified": false,
+      "unknown_reason": "Specific current enrollment cost/procedure figures not independently fetched this research pass."
+    }
+  ],
+  "media": [
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Kinkaku-ji_2009-03-22.jpg",
+      "caption": "Kinkaku-ji (Golden Pavilion)",
+      "subject": "Iconic Zen Buddhist temple",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Kinkaku-ji_2009-03-22.jpg",
+      "confidence": "high"
+    },
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Fushimi_Inari_Taisha_2023.jpg",
+      "caption": "Fushimi Inari Taisha torii gates",
+      "subject": "Famous shrine and torii gate pathway",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Fushimi_Inari_Taisha_2023.jpg",
+      "confidence": "high"
+    },
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/The_Lake_Biwa_Canal_Ebisugawa_Lock_Gate.jpg",
+      "caption": "Lake Biwa Canal, Ebisugawa Lock Gate",
+      "subject": "Historic waterway infrastructure",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:The_Lake_Biwa_Canal_Ebisugawa_Lock_Gate.jpg",
+      "confidence": "high"
+    }
+  ],
+  "destination_facts": [
+    {
+      "fact_group": "affordability",
+      "fact_key": "rent_1br_city_centre_monthly",
+      "display_label": "1BR apartment rent, city centre",
+      "value_text": "approx. JPY 89,459 / month",
+      "value_number": 89459,
+      "unit": "JPY",
+      "qualitative_rating": "MODERATE",
+      "source_name": "Numbeo Cost of Living (Kyoto)",
+      "source_url": "https://www.numbeo.com/cost-of-living/in/Kyoto"
+    },
+    {
+      "fact_group": "safety",
+      "fact_key": "numbeo_crime_index",
+      "display_label": "Numbeo crime index",
+      "value_text": "14.24 (Very Low) / Safety index 85.76 (Very High)",
+      "value_number": 14.24,
+      "unit": "index",
+      "qualitative_rating": "STRONG",
+      "source_name": "Numbeo Crime Index (Kyoto)",
+      "source_url": "https://www.numbeo.com/crime/in/Kyoto"
+    },
+    {
+      "fact_group": "connectivity",
+      "fact_key": "fixed_broadband_median_mbps",
+      "display_label": "National fixed broadband median download speed",
+      "value_text": "67.97 Mbps download / 9.99 Mbps upload (national median, July 2026)",
+      "value_number": 67.97,
+      "unit": "Mbps",
+      "qualitative_rating": "MODERATE",
+      "source_name": "Ookla Speedtest Global Index (Japan)",
+      "source_url": "https://www.speedtest.net/global-index/japan"
+    },
+    {
+      "fact_group": "legal",
+      "fact_key": "residence_path",
+      "display_label": "Long-stay residence path",
+      "value_text": "Japan has no dedicated retirement visa; long-term stay typically requires a work, spousal, or long-term-resident visa category - a materially important constraint for US retirees.",
+      "qualitative_rating": "HIGH_DIFFICULTY",
+      "source_name": "Immigration Services Agency of Japan",
+      "source_url": "https://www.moj.go.jp/isa/"
+    },
+    {
+      "fact_group": "language",
+      "fact_key": "english_proficiency",
+      "display_label": "English proficiency",
+      "value_text": "Japan ranks moderate-to-low on the EF English Proficiency Index relative to other developed nations; daily English use outside major hotels/tourist areas is limited.",
+      "qualitative_rating": "LIMITED",
+      "source_name": "EF English Proficiency Index",
+      "source_url": "https://www.ef.com/wwen/epi/"
+    }
+  ],
+  "cost_of_living": [
+    {
+      "household_type": "single",
+      "lifestyle_tier": "average",
+      "category": "rent_1br_city_centre",
+      "monthly_low": 50000,
+      "monthly_high": 130753,
+      "currency": "JPY",
+      "included_notes": "1-bedroom apartment rent range, city centre (Numbeo community-sourced).",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    },
+    {
+      "household_type": "couple",
+      "lifestyle_tier": "comfortable",
+      "category": "total",
+      "monthly_low": 200000,
+      "monthly_high": 320000,
+      "currency": "JPY",
+      "included_notes": "Planning band including 1BR rent plus routine living costs; excludes major tax/legal/medical events.",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    }
+  ],
+  "housing_property": [
+    {
+      "housing_topic": "buy",
+      "stay_mode_key": "LONG_TERM_PERMANENT",
+      "can_foreigners_buy": "YES",
+      "residency_required_to_buy": "No",
+      "restrictions_summary": "Japan imposes no nationality-based restriction on foreign real-estate ownership - a common misconception; the real constraint is financing, not legal eligibility.",
+      "foreigner_mortgage_notes": "Mortgage financing for non-permanent-resident foreigners is difficult; most non-resident buyers purchase in cash.",
+      "buying_process_summary": "Rent first via a licensed agent (fudousan); property purchase does not itself grant any residence status.",
+      "source_name": "General Japanese real-estate law; Numbeo Property Investment (Kyoto)",
+      "source_url": "https://www.numbeo.com/property-investment/in/Kyoto"
+    }
+  ],
+  "property_resources": [
+    {
+      "transaction_type": "rent",
+      "resource_name": "SUUMO (major Japanese rental/property listing portal)",
+      "resource_type": "rental_platform",
+      "url": "https://suumo.jp/",
+      "official": "NO"
+    },
+    {
+      "transaction_type": "buy",
+      "resource_name": "HOME'S (real estate listing portal)",
+      "resource_type": "real_estate_portal",
+      "url": "https://www.homes.co.jp/",
+      "official": "NO"
+    },
+    {
+      "transaction_type": "short_term",
+      "resource_name": "Airbnb - Kyoto",
+      "resource_type": "short_term_rental",
+      "url": "https://www.airbnb.com/s/Kyoto--Japan/homes",
+      "official": "NO"
+    }
+  ],
+  "lgbtq_inclusivity": [
+    {
+      "overall_rating": "MODERATE",
+      "legal_protections": "Japan has no national same-sex marriage law as of 2026; some municipalities (Kyoto has offered a partnership-certificate system since 2020) recognize partnership certificates with limited legal effect.",
+      "social_acceptance": "MODERATE - generally low overt hostility but limited formal legal recognition",
+      "community_scene": "Smaller and less visible than Tokyo's; a niche but present scene exists.",
+      "evidence_summary": "Legally more conditional than Western-country benchmarks - an important, nuanced caution for LGBTQ+ retirees.",
+      "source_name": "Wikipedia (LGBT rights in Japan)",
+      "source_url": "https://en.wikipedia.org/wiki/LGBT_rights_in_Japan"
+    }
+  ],
+  "safety_risks": [
+    {
+      "risk_type": "general_crime",
+      "severity": "LOW",
+      "summary": "Numbeo crime index 14.24 (Very Low); safety index 85.76 (Very High) - among the safest cities in the Numbeo global dataset.",
+      "seasonality": "Year-round",
+      "mitigation_notes": "Standard urban precautions; natural-disaster risk (earthquakes, typhoons) is a national baseline consideration.",
+      "source_name": "Numbeo Crime Index (Kyoto)",
+      "source_url": "https://www.numbeo.com/crime/in/Kyoto"
+    },
+    {
+      "risk_type": "natural_disaster",
+      "severity": "MODERATE",
+      "summary": "Japan-wide earthquake risk; Kyoto is inland and has comparatively lower typhoon/tsunami direct exposure than coastal cities, but seismic preparedness still applies.",
+      "seasonality": "Year-round, with typhoon season roughly June-October",
+      "mitigation_notes": "Follow national/municipal disaster-preparedness guidance; verify building-level seismic standards.",
+      "source_name": "General Japan natural-hazard context",
+      "source_url": null
+    }
+  ],
+  "connectivity_remote_work": [
+    {
+      "avg_download_mbps": 67.97,
+      "fiber_available": "YES",
+      "mobile_5g": "YES",
+      "utility_reliability": "STRONG",
+      "coworking_summary": "Coworking spaces exist in central Kyoto given its university and tourism economy, though the scene is smaller than Tokyo/Osaka.",
+      "us_time_zone_fit": "Asia/Tokyo - 13-14 hour offset from US Eastern (essentially opposite work hours).",
+      "remote_work_notes": "Solid national broadband infrastructure, but remote work for a foreign employer while resident in Japan is a separate visa-status question from tourism.",
+      "source_name": "Ookla Speedtest Global Index (Japan)",
+      "source_url": "https://www.speedtest.net/global-index/japan"
+    }
+  ],
+  "language_integration": [
+    {
+      "primary_language": "Japanese",
+      "english_proficiency": "LIMITED",
+      "can_function_in_english": "CONDITIONAL",
+      "government_english_access": "LIMITED",
+      "medical_english_access": "LIMITED - improving at major hospitals",
+      "integration_notes": "Japanese-language ability materially improves daily life, government interactions, and healthcare access; Kyoto's tourism economy provides more English signage than most Japanese cities, but this does not equal fluency-level government/medical support.",
+      "language_resources": "Municipal and university-affiliated Japanese-language courses are available.",
+      "source_name": "EF English Proficiency Index",
+      "source_url": "https://www.ef.com/wwen/epi/"
+    }
+  ],
+  "pets": [
+    {
+      "import_requirements": "Among the world's strictest: ISO microchip, two rabies vaccinations, blood-titer test, and an advance import notification to Japanese Animal Quarantine Service typically 180 days before arrival.",
+      "quarantine_notes": "Non-compliant animals face lengthy quarantine at the port of entry.",
+      "vet_access": "STRONG",
+      "dog_parks_summary": "Limited dedicated off-leash dog parks by Western standards; leash laws are strictly enforced.",
+      "source_name": "Japan Animal Quarantine Service",
+      "source_url": "https://www.maff.go.jp/aqs/english/index.html"
+    }
+  ],
+  "community_social": [
+    {
+      "topic": "retirement_social_fit",
+      "summary": "A major historic/university city with a large tourism and international-student presence, but a comparatively small Western-retiree community versus Tokyo or coastal Southeast Asian retirement hubs.",
+      "expat_presence": "MODERATE (student/tourism-driven, not retiree-driven)",
+      "clubs_groups": "University-affiliated and tourism-adjacent international groups exist.",
+      "ease_meeting_people": "CONDITIONAL - language ability is the key variable",
+      "age_mix": "Skews younger (students, tourism workers) relative to a dedicated retiree hub",
+      "transient_vs_rooted": "Mixed - large tourist/student churn, stable historic Japanese resident base",
+      "source_name": "General knowledge of Kyoto's university/tourism economy",
+      "source_url": null
+    }
+  ],
+  "accessibility": [
+    {
+      "wheelchair_access": "VARIABLE",
+      "sidewalk_quality": "Modern areas good; historic temple districts often have stairs, gravel, and uneven traditional stonework",
+      "hills_terrain": "Basin with surrounding hills; central city is comparatively flat",
+      "accessible_transit": "MODERATE-STRONG - major stations have elevators post-2020 Olympics upgrades",
+      "elevator_access": "Verify building-specific elevator access, especially in older machiya-style buildings",
+      "mobility_notes": "National barrier-free transit investment ahead of the 2020 Olympics improved major-station accessibility, but many historic temples and traditional streets remain genuinely difficult for wheelchair users.",
+      "source_name": "General knowledge of Japan's barrier-free transit initiatives",
+      "source_url": null
+    }
+  ],
+  "bureaucracy_setup": [
+    {
+      "topic": "residence_and_local_setup",
+      "difficulty_rating": "HIGH",
+      "summary": "Requires a valid residence status (zairyu card) for stays beyond 90 days; Japan has no simple retirement visa, making long-term residence status the central practical obstacle for US retirees.",
+      "typical_documents": "Passport; residence card; municipal registration (juminhyo); My Number enrollment",
+      "estimated_timeline": "Visa-category dependent, often months",
+      "official_url": "https://www.moj.go.jp/isa/",
+      "source_name": "Immigration Services Agency of Japan",
+      "source_url": "https://www.moj.go.jp/isa/"
+    }
+  ],
+  "work_business": [
+    {
+      "major_industries": "Tourism, traditional crafts, education/university sector, and technology/manufacturing in the wider Kansai region.",
+      "employment_notes": "Do not assume local employment availability without Japanese-language fluency and an appropriate work visa.",
+      "work_authorization": "Employment requires a specific work-visa category; tourism status forbids work.",
+      "remote_work_suitability": "CONDITIONAL - solid broadband but a 13-14 hour US time-zone offset limits real-time collaboration.",
+      "source_name": "Immigration Services Agency of Japan",
+      "source_url": "https://www.moj.go.jp/isa/"
+    }
+  ],
+  "retirement_aging": [
+    {
+      "medicare_notes": "US Medicare is not accepted for routine care in Japan; residents with valid status must enroll in Japan's National Health Insurance (Kokuho) or employer-based insurance.",
+      "social_security_notes": "US Social Security continues abroad under standard federal rules; a US-Japan totalization agreement addresses dual-system contribution issues.",
+      "retirement_notes": "Japan lacks a simple retirement visa, making long-term residence status - not healthcare quality - the central retirement-planning obstacle.",
+      "source_name": "Japan National Health Insurance program; Immigration Services Agency",
+      "source_url": "https://www.moj.go.jp/isa/"
+    }
+  ],
+  "lifestyle_laws": [
+    {
+      "topic": "work_authorization",
+      "legal_status": "RESTRICTED",
+      "summary": "Tourism status strictly forbids employment; a specific work-visa category is required.",
+      "important_rules": "Visa category, residence, and tax status are all separate legal questions.",
+      "official_source_url": "https://www.moj.go.jp/isa/"
+    },
+    {
+      "topic": "property_ownership",
+      "legal_status": "UNRESTRICTED",
+      "summary": "No nationality-based restriction on foreign real-estate ownership in Japan, though financing access is limited for non-residents.",
+      "important_rules": "Purchase never creates residence-status rights.",
+      "official_source_url": null
+    }
+  ],
+  "reality_check": [
+    {
+      "display_order": 1,
+      "title": "There is no simple Japanese retirement visa",
+      "detail": "Long-term residence for US retirees typically requires a work, spousal, or long-term-resident visa category; this is the single biggest practical obstacle, independent of healthcare or cost considerations.",
+      "severity": "HIGH",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    },
+    {
+      "display_order": 2,
+      "title": "Language ability changes daily life substantially",
+      "detail": "English proficiency outside major hotels and tourist zones is limited; government, healthcare, and lease processes are materially easier with Japanese-language ability.",
+      "severity": "MEDIUM",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    }
+  ],
+  "move_checklist": [
+    {
+      "category": "legal",
+      "task": "Determine a realistic visa/residence-status route before committing",
+      "description": "Japan has no dedicated retirement visa; confirm eligibility for a work, spousal, or long-term-resident category with the Immigration Services Agency.",
+      "official_url": "https://www.moj.go.jp/isa/",
+      "display_order": 10
+    },
+    {
+      "category": "language",
+      "task": "Begin Japanese-language study well before relocating",
+      "description": "English access is limited outside tourism contexts; language ability materially affects government, healthcare, and lease processes.",
+      "display_order": 20
+    },
+    {
+      "category": "pets",
+      "task": "Start the pet-import process at least 7-8 months in advance",
+      "description": "Japan's rabies quarantine/import process is among the world's strictest and requires long lead time.",
+      "official_url": "https://www.maff.go.jp/aqs/english/index.html",
+      "display_order": 30
+    },
+    {
+      "category": "housing",
+      "task": "Rent through a licensed fudousan agent before buying",
+      "description": "Property purchase is legally unrestricted for foreigners but financing is difficult without permanent residency.",
+      "display_order": 40
+    }
+  ],
+  "environment_quality": {
+    "air_quality_summary": "Generally good; basin geography can trap summer humidity and haze.",
+    "water_reliability": "STRONG - tap water is potable nationwide",
+    "heat_humidity_comfort": "Hot, humid summers; distinct four-season climate with cold winters",
+    "noise_summary": "Tourist-district noise seasonal; residential areas generally quiet",
+    "mosquito_pest_pressure": "SEASONAL",
+    "environmental_notes": "Basin geography creates temperature extremes (hot humid summers, cool winters) relative to coastal Japanese cities.",
+    "source_name": "Japan Meteorological Agency (general climate context)",
+    "source_url": "https://www.jma.go.jp/jma/indexe.html"
+  },
+  "daily_life_practicality": {
+    "car_need": "LOW",
+    "driving_difficulty": "Extensive rail/bus network reduces car necessity",
+    "parking_difficulty": "DIFFICULT_CENTER",
+    "grocery_access": "Available in populated zones",
+    "pharmacy_access": "Available",
+    "banking_practicality": "Status-dependent (residence card required for most accounts)",
+    "card_payment_acceptance": "Growing but still more cash-reliant than Western expectations",
+    "cash_usage": "High - Japan remains comparatively cash-reliant",
+    "mobile_payment_usage": "Growing (IC cards, PayPay)",
+    "emergency_services_summary": "119 for fire/ambulance, 110 for police; strong national healthcare and emergency infrastructure.",
+    "things_residents_wish_they_knew": "Bring more cash than expected; many smaller shops and traditional businesses remain cash-only despite Japan's tech reputation.",
+    "source_url": "https://www.google.com/maps/search/?api=1&query=Kyoto+Japan"
+  },
+  "events_seasonality": [
+    {
+      "record_type": "natural_phenomenon",
+      "name": "Cherry blossom season (sakura)",
+      "month_start": 3,
+      "month_end": 4,
+      "season": "spring",
+      "description": "Peak tourism season with major crowds at temples and parks (Maruyama Park, Philosopher's Path).",
+      "crowding_level": "VERY HIGH",
+      "price_pressure": "HIGH",
+      "official_url": "https://www.kyoto.travel/en",
+      "source_name": "Kyoto official tourism site"
+    },
+    {
+      "record_type": "festival",
+      "name": "Gion Matsuri",
+      "month_start": 7,
+      "month_end": 7,
+      "season": "summer",
+      "description": "Kyoto's most famous festival, month-long with major float processions.",
+      "crowding_level": "HIGH",
+      "price_pressure": "HIGH",
+      "official_url": "https://www.kyoto.travel/en",
+      "source_name": "Kyoto official tourism site"
+    },
+    {
+      "record_type": "natural_phenomenon",
+      "name": "Autumn foliage (koyo)",
+      "month_start": 11,
+      "month_end": 11,
+      "season": "autumn",
+      "description": "Second major tourism peak with vivid foliage at temples across the Higashiyama district.",
+      "crowding_level": "VERY HIGH",
+      "price_pressure": "HIGH",
+      "official_url": "https://www.kyoto.travel/en",
+      "source_name": "Kyoto official tourism site"
+    }
+  ]
+}

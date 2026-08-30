@@ -1,0 +1,32 @@
+{
+  "ok": true,
+  "issues": [],
+  "checks": {
+    "total_sheet_count_is_48": true,
+    "destination_count_is_6": true,
+    "destination_keys_match_expected_set": true,
+    "destination_keys_unique": true,
+    "slug_equals_destination_key_convention": true,
+    "destinations_core_identity_geography_covered": true,
+    "unresearched_sheets_empty": true,
+    "climate_monthly_correct_per_destination": true,
+    "all_six_destinations_covered_in_researched_sheets": true,
+    "no_cross_destination_contamination": true,
+    "lifestyle_features_complete_and_valid": true
+  },
+  "expectedDestinationKeys": [
+    "kyoto-japan",
+    "san-ramon-costa-rica",
+    "santa-fe-new-mexico-united-states",
+    "st-cloud-minnesota-united-states",
+    "st-john-s-canada",
+    "the-hague-netherlands"
+  ],
+  "climatePopulatedKeys": [
+    "kyoto-japan",
+    "santa-fe-new-mexico-united-states",
+    "st-cloud-minnesota-united-states",
+    "st-john-s-canada",
+    "the-hague-netherlands"
+  ]
+}

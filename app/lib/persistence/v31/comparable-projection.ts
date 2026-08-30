@@ -334,6 +334,9 @@ export function projectKeyedChildComparableRow(module: KeyedChildModuleKey, valu
         url: pickNullableString(record, ["url", "image_url"]),
         caption: pickNullableString(record, ["caption"]),
         altText: pickNullableString(record, ["altText", "subject"]),
+        sourceName: pickNullableString(record, ["sourceName", "source_name"]),
+        sourceUrl: pickNullableString(record, ["sourceUrl", "source_url"]),
+        licenseNotes: pickNullableString(record, ["licenseNotes", "license_notes"]),
       });
     case "propertyResources":
       return projectComparableObject({
@@ -391,6 +394,14 @@ function toCanonicalNeighborhood(value: DeterministicV31CanonicalDestination["ne
     name: value.neighborhood_name,
     summary: value.summary,
     areaType: value.area_type,
+    bestFor: value.best_for,
+    walkabilityRating: value.walkability_rating,
+    safetyRating: value.safety_rating,
+    transitRating: value.transit_rating,
+    housingCharacter: value.housing_character,
+    pros: value.pros,
+    cons: value.cons,
+    googleMapsUrl: value.google_maps_url,
   };
 }
 
@@ -426,6 +437,9 @@ function toCanonicalMedia(value: DeterministicV31CanonicalDestination["media"][n
     url: value.image_url,
     caption: value.caption,
     altText: value.subject,
+    sourceName: value.source_name,
+    sourceUrl: value.source_url,
+    licenseNotes: value.license_notes,
   };
 }
 
@@ -436,6 +450,8 @@ function toCanonicalCostOfLivingItem(value: DeterministicV31CanonicalDestination
     monthlyLow: value.monthly_low,
     monthlyHigh: value.monthly_high,
     currency: value.currency,
+    householdType: value.household_type,
+    lifestyleTier: value.lifestyle_tier,
     stayModeKey: value.stay_mode_key,
     verified: value.verified,
     verifiedAt: value.verified_at,

@@ -118,6 +118,7 @@ export type CanonicalDestinationKnowledgeProfile = {
   rainfall?: string;
   sunshineHours?: string;
   humidity?: string;
+  averageTemperatures?: string;
   airQuality?: string;
   walkability?: string;
   bikeFriendliness?: string;
@@ -259,7 +260,22 @@ export type CanonicalDestinationPremiumV2Modules = Record<string, Array<Record<s
  */
 export type CanonicalDestinationV31Fact = { readonly factKey: string; readonly factGroup: string | null; readonly valueText: string | null; readonly displayLabel: string | null; readonly sourceName: string | null };
 export type CanonicalDestinationV31Score = { readonly scoreKey: string; readonly scoreValue: string | null; readonly scoreLabel: string | null };
-export type CanonicalDestinationV31Neighborhood = { readonly neighborhoodKey: string; readonly name: string | null; readonly summary: string | null; readonly areaType: string | null };
+export type CanonicalDestinationV31Neighborhood = {
+  readonly neighborhoodKey: string;
+  readonly name: string | null;
+  readonly summary: string | null;
+  readonly areaType: string | null;
+  // Real, human-authored fields (NEIGHBORHOODS sheet) - areaType is an internal category token and
+  // must never substitute for these in customer-facing copy.
+  readonly bestFor: string | null;
+  readonly walkabilityRating: string | null;
+  readonly safetyRating: string | null;
+  readonly transitRating: string | null;
+  readonly housingCharacter: string | null;
+  readonly pros: string | null;
+  readonly cons: string | null;
+  readonly googleMapsUrl: string | null;
+};
 export type CanonicalDestinationV31Place = {
   readonly placeKey: string;
   readonly category: string | null;
@@ -275,7 +291,15 @@ export type CanonicalDestinationV31Place = {
 };
 export type CanonicalDestinationV31Resource = { readonly resourceKey: string; readonly category: string | null; readonly name: string | null; readonly url: string | null };
 export type CanonicalDestinationV31Media = { readonly mediaKey: string; readonly kind: string | null; readonly url: string | null; readonly caption: string | null; readonly altText: string | null };
-export type CanonicalDestinationV31CostOfLivingItem = { readonly itemKey: string; readonly category: string | null; readonly monthlyLow: string | null; readonly monthlyHigh: string | null; readonly currency: string | null };
+export type CanonicalDestinationV31CostOfLivingItem = {
+  readonly itemKey: string;
+  readonly category: string | null;
+  readonly monthlyLow: string | null;
+  readonly monthlyHigh: string | null;
+  readonly currency: string | null;
+  readonly householdType: string | null;
+  readonly lifestyleTier: string | null;
+};
 export type CanonicalDestinationV31ClimateMonth = { readonly monthKey: string; readonly avgHighTemp: string | null; readonly avgLowTemp: string | null; readonly precipitationMm: string | null; readonly humidityPct: string | null };
 export type CanonicalDestinationV31Singleton = { readonly summary: string | null } & Record<string, string | null>;
 

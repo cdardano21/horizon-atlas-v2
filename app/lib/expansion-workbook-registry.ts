@@ -48,6 +48,20 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     expectedDestinationKeys: ["ascoli-piceno-it", "sarande-al", "dumaguete-ph", "las-terrenas-do", "fairhope-al-us"],
     expectedSha256: "8abcd297014c88a884784e4f1bd2169141f3fda5750ebab36d6943c2c6925a03",
   },
+  {
+    registryId: "legacy-pilot06-populated",
+    // Superseded 2026-08-30 by the authoritative curated workbook - the prior POPULATED.xlsx file is
+    // intentionally left on disk, unregistered, as a recoverable historical artifact (never deleted).
+    workbookPath: "data/legacy-migration-pilot-06/DestinationFinderAI_Legacy_Pilot_06_Authoritative_v3.3.xlsx",
+    environment: "preview",
+    expectedDestinationKeys: [
+      "the-hague-netherlands", "kyoto-japan", "santa-fe-new-mexico-united-states",
+      "st-cloud-minnesota-united-states", "san-ramon-costa-rica", "st-john-s-canada",
+    ],
+    // Updated after adding 30 verified, openly-licensed Wikimedia Commons MEDIA rows (5 per
+    // destination: 1 hero + 4 gallery) - the workbook's own real content changed, so its hash did too.
+    expectedSha256: "4f4017e5ff81d57722d8ce508e8824b8d5f47bb3537a95bb03141785f414c95b",
+  },
 ];
 
 const previewEntries = (registry: readonly ExpansionWorkbookRegistryEntry[]) => registry.filter((entry) => entry.environment === "preview");

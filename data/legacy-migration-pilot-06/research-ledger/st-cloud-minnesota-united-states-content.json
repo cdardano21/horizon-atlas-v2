@@ -1,0 +1,659 @@
+{
+  "destinationKey": "st-cloud-minnesota-united-states",
+  "researchedAt": "2026-08-29",
+  "scopeNote": "Phase 5D continuation. Identity/geography researched from Wikipedia (citing US Census Bureau, USGS) and official city/tourism sites. CLIMATE_MONTHLY populated via direct fetch of the NOAA NCEI U.S. Climate Normals API (1991-2020 monthly normals) for station USW00014926 (St. Cloud Regional Airport) - a genuine primary-source retry after the Wikipedia table rendered empty twice.",
+  "identity": {
+    "country_code": "US",
+    "state_region": "Minnesota",
+    "currency": "USD",
+    "primary_language": "English",
+    "time_zone": "America/Chicago",
+    "population": 68881,
+    "population_note": "2020 census; 2025 estimate 71,118 (per Wikipedia, citing US Census Bureau)",
+    "metro_population": "St. Cloud, MN Metropolitan Statistical Area 201,868 (2020 census)",
+    "elevation_m": 313,
+    "latitude": 45.53,
+    "longitude": -94.17,
+    "official_tourism_url": "https://www.visitstcloud.com/",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=St.+Cloud%2C+Minnesota"
+  },
+  "sources": [
+    {
+      "source_name": "Wikipedia (St. Cloud, Minnesota), citing US Census Bureau/USGS/NOAA",
+      "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota",
+      "retrieved_at": "2026-08-29",
+      "supports": "population, area, elevation, coordinates, time zone, climate summary, government, economy, parks, education"
+    },
+    {
+      "source_name": "City of St. Cloud official website",
+      "source_url": "https://www.ci.stcloud.mn.us/",
+      "retrieved_at": "2026-08-29",
+      "supports": "official municipal government confirmation, live site"
+    },
+    {
+      "source_name": "Visit Greater St. Cloud (St. Cloud Area Convention and Visitors Bureau), official tourism site",
+      "source_url": "https://www.visitstcloud.com/",
+      "retrieved_at": "2026-08-29",
+      "supports": "NEIGHBORHOODS area descriptions (Downtown, East Side, West Side, Waite Park, Sauk Rapids, Sartell, St. Joseph)"
+    },
+    {
+      "source_name": "NOAA NCEI U.S. Climate Normals 1991-2020 (St. Cloud Regional Airport, station USW00014926)",
+      "source_url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00014926&format=json",
+      "retrieved_at": "2026-08-29",
+      "supports": "CLIMATE_MONTHLY 12-month normals"
+    }
+  ],
+  "climate_monthly": {
+    "source_name": "NOAA NCEI U.S. Climate Normals 1991-2020 (St. Cloud Regional Airport, station USW00014926)",
+    "source_url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00014926&format=json",
+    "note": "Koppen Dfb (warm-summer humid continental). See climate_monthly_rows for the 12-month normals table (avg high/low C, precip mm, snowfall cm).",
+    "months": [
+      {
+        "month": 1,
+        "avg_high_c": -6.3,
+        "avg_low_c": -16.2,
+        "rainfall_mm": 17.0,
+        "snowfall_cm": 22.4
+      },
+      {
+        "month": 2,
+        "avg_high_c": -3.5,
+        "avg_low_c": -14.2,
+        "rainfall_mm": 19.3,
+        "snowfall_cm": 22.6
+      },
+      {
+        "month": 3,
+        "avg_high_c": 3.6,
+        "avg_low_c": -6.8,
+        "rainfall_mm": 39.9,
+        "snowfall_cm": 20.8
+      },
+      {
+        "month": 4,
+        "avg_high_c": 12.4,
+        "avg_low_c": 0.2,
+        "rainfall_mm": 66.3,
+        "snowfall_cm": 11.9
+      },
+      {
+        "month": 5,
+        "avg_high_c": 19.9,
+        "avg_low_c": 7.0,
+        "rainfall_mm": 93.0,
+        "snowfall_cm": 0.3
+      },
+      {
+        "month": 6,
+        "avg_high_c": 25.1,
+        "avg_low_c": 12.7,
+        "rainfall_mm": 95.3,
+        "snowfall_cm": 0.0
+      },
+      {
+        "month": 7,
+        "avg_high_c": 27.6,
+        "avg_low_c": 14.9,
+        "rainfall_mm": 91.4,
+        "snowfall_cm": 0.0
+      },
+      {
+        "month": 8,
+        "avg_high_c": 26.2,
+        "avg_low_c": 13.5,
+        "rainfall_mm": 101.6,
+        "snowfall_cm": 0.0
+      },
+      {
+        "month": 9,
+        "avg_high_c": 21.7,
+        "avg_low_c": 8.9,
+        "rainfall_mm": 76.5,
+        "snowfall_cm": 0.0
+      },
+      {
+        "month": 10,
+        "avg_high_c": 13.3,
+        "avg_low_c": 1.9,
+        "rainfall_mm": 66.3,
+        "snowfall_cm": 2.5
+      },
+      {
+        "month": 11,
+        "avg_high_c": 4.1,
+        "avg_low_c": -5.2,
+        "rainfall_mm": 34.8,
+        "snowfall_cm": 17.5
+      },
+      {
+        "month": 12,
+        "avg_high_c": -3.4,
+        "avg_low_c": -12.3,
+        "rainfall_mm": 22.4,
+        "snowfall_cm": 23.6
+      }
+    ]
+  },
+  "neighborhoods": [
+    {
+      "neighborhood_name": "Downtown St. Cloud",
+      "area_type": "downtown_core",
+      "best_for": "arts, dining, walkability",
+      "summary": "The cultural heartbeat of St. Cloud with the Paramount Center for the Arts, local boutiques, cafes, and nightlife, plus scenic Mississippi River views.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Downtown+St+Cloud+Minnesota",
+      "source_url": "https://www.visitstcloud.com/"
+    },
+    {
+      "neighborhood_name": "East Side St. Cloud",
+      "area_type": "historic_industrial",
+      "best_for": "local character, quieter parks",
+      "summary": "Where history meets creativity, with restored industrial spaces (Harvester Square), community murals, and quiet parks.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=East+Side+St+Cloud+Minnesota",
+      "source_url": "https://www.visitstcloud.com/"
+    },
+    {
+      "neighborhood_name": "West Side / Crossroads Area",
+      "area_type": "shopping_commercial",
+      "best_for": "shopping, sports/events",
+      "summary": "Primary shopping destination of the Crossroads Center mall (Macy's, Target, Scheels) with the MAC sports and events complex nearby.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Crossroads+Center+St+Cloud",
+      "source_url": "https://www.visitstcloud.com/"
+    },
+    {
+      "neighborhood_name": "Waite Park",
+      "area_type": "adjacent_suburb",
+      "best_for": "outdoor recreation, shopping",
+      "summary": "Adventure-friendly area known for shopping, entertainment, and outdoor recreation, home to Quarry Park & Nature Preserve and The Ledge Amphitheater.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Waite+Park+Minnesota",
+      "source_url": "https://www.visitstcloud.com/"
+    },
+    {
+      "neighborhood_name": "Sartell",
+      "area_type": "adjacent_suburb",
+      "best_for": "parks and recreation, family growth",
+      "summary": "Historically a lumber/paper-industry hub along the Mississippi River; today a growing community with a strong focus on parks, recreation, and business.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Sartell+Minnesota",
+      "source_url": "https://www.visitstcloud.com/"
+    },
+    {
+      "neighborhood_name": "St. Joseph",
+      "area_type": "college_town_adjacent",
+      "best_for": "college-town atmosphere, boutiques",
+      "summary": "Historic area near the College of St. Benedict and St. John's Abbey, with local boutiques and a vibrant college-town feel.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=St+Joseph+Minnesota",
+      "source_url": "https://www.visitstcloud.com/"
+    }
+  ],
+  "places": [
+    {
+      "category_key": "PARK",
+      "place_name": "Munsinger Gardens and Clemens Gardens",
+      "description": "Extensive formal floral display gardens along the Mississippi River, dating to the 1930s.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Munsinger+and+Clemens+Gardens+St+Cloud",
+      "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota"
+    },
+    {
+      "category_key": "MUSEUM",
+      "place_name": "Stearns History Museum",
+      "description": "American Alliance of Museums-accredited local history museum set within a 100-acre nature park.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Stearns+History+Museum",
+      "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota"
+    },
+    {
+      "category_key": "PERFORMING_ARTS",
+      "place_name": "Paramount Center for the Arts",
+      "description": "Restored 706-seat 1921 theatre, the focal point for performing and visual arts in the region.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Paramount+Center+for+the+Arts+St+Cloud",
+      "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota"
+    },
+    {
+      "category_key": "RELIGIOUS_LANDMARK",
+      "place_name": "Cathedral of Saint Mary",
+      "description": "1920s Italian Romanesque cathedral, the largest church in the area and mother church of the Diocese of Saint Cloud.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Cathedral+of+Saint+Mary+St+Cloud",
+      "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota"
+    },
+    {
+      "category_key": "PARK",
+      "place_name": "Quarry Park & Nature Preserve",
+      "description": "Former granite-quarry site turned nature preserve with swimming quarries and trails, in Waite Park.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Quarry+Park+and+Nature+Preserve",
+      "source_url": "https://www.visitstcloud.com/"
+    },
+    {
+      "category_key": "PARK",
+      "place_name": "Whitney Memorial Park",
+      "description": "St. Cloud's largest developed park, on the former city-airport site, with a senior recreation center and a dog park.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Whitney+Memorial+Park+St+Cloud",
+      "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota"
+    },
+    {
+      "category_key": "EDUCATION",
+      "place_name": "St. Cloud State University",
+      "description": "Minnesota's third-largest public university.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=St+Cloud+State+University",
+      "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota"
+    },
+    {
+      "category_key": "AIRPORT",
+      "place_name": "St. Cloud Regional Airport",
+      "description": "Local regional airport; Allegiant Air nonstop service to Phoenix-Mesa Gateway.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=St+Cloud+Regional+Airport",
+      "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota"
+    }
+  ],
+  "transport_airports": [
+    {
+      "topic": "primary_airport",
+      "name": "St. Cloud Regional Airport",
+      "summary": "Local airport with Allegiant Air nonstop service to Phoenix-Mesa Gateway; prior Delta Connection service to Minneapolis-St. Paul was discontinued January 2010.",
+      "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota"
+    },
+    {
+      "topic": "rail",
+      "name": "Amtrak Empire Builder (St. Cloud station)",
+      "summary": "St. Cloud is a stop on Amtrak's Empire Builder long-distance passenger line.",
+      "public_transit_available": true,
+      "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota"
+    },
+    {
+      "topic": "local_bus",
+      "name": "St. Cloud Metro Bus",
+      "summary": "City transit system, recognized in 2007 as the best transit system of its size in North America; note the separate Northstar Link commuter bus to the Twin Cities closed in 2026.",
+      "public_transit_available": true,
+      "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota"
+    }
+  ],
+  "visa_residency_note": "NOT_APPLICABLE - domestic United States relocation for US citizens; no visa or residency permit required.",
+  "taxes_finance": [
+    {
+      "topic": "income_tax",
+      "summary": "Minnesota imposes a state personal income tax in addition to federal tax. Specific current bracket rates were not independently fetched this pass - left UNKNOWN rather than fabricated.",
+      "source_name": "Minnesota Department of Revenue",
+      "source_url": "https://www.revenue.state.mn.us/",
+      "verified": false,
+      "unknown_reason": "Specific current bracket/rate figures not independently fetched this research pass."
+    }
+  ],
+  "healthcare_insurance": [
+    {
+      "topic": "healthcare_system",
+      "system_summary": "St. Cloud Hospital, part of CentraCare Health, founded 1886, anchors a regional health system with outreach/outpatient clinics across central Minnesota.",
+      "emergency_number": "911",
+      "medicare_applicability": "Fully applicable for eligible U.S. beneficiaries.",
+      "source_name": "Wikipedia (St. Cloud, Minnesota), citing CentraCare Health",
+      "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota",
+      "verified": true
+    }
+  ],
+  "lifestyle_derivation_notes": "St. Cloud: built on both banks of the Mississippi River (strong river access, kayaking/canoeing at Beaver Islands), Lake George downtown (small lake access), granite-quarry heritage with Quarry Park swimming/climbing, cold-winter humid-continental climate with heavy snowfall (strong snow access, moderate skiing/snowboarding not a major draw), college-town character (St. Cloud State University), no beach/coastal or mountain access, strong parks/trail network (95 city parks).",
+  "media": [
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/St._Cloud_Winter_Riverfront_-_Minnesota_(24185300296).jpg",
+      "caption": "St. Cloud winter riverfront",
+      "subject": "Mississippi River winter view",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:St._Cloud_Winter_Riverfront_-_Minnesota_(24185300296).jpg",
+      "confidence": "high"
+    },
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Stcloudaerial.JPG",
+      "caption": "Aerial view of St. Cloud",
+      "subject": "Aerial cityscape",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Stcloudaerial.JPG",
+      "confidence": "high"
+    },
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/St._Cloud_VA_Wind_Turbine,_Saint_Cloud,_Minnesota_(23535003064).jpg",
+      "caption": "St. Cloud VA wind turbine",
+      "subject": "Local landmark/infrastructure",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:St._Cloud_VA_Wind_Turbine,_Saint_Cloud,_Minnesota_(23535003064).jpg",
+      "confidence": "high"
+    }
+  ],
+  "destination_facts": [
+    {
+      "fact_group": "affordability",
+      "fact_key": "rent_1br_city_centre_monthly",
+      "display_label": "1BR apartment rent, city centre",
+      "value_text": "approx. USD 990 / month (low-sample Numbeo estimate - only 4 contributors, treat as directional)",
+      "value_number": 989.5,
+      "unit": "USD",
+      "qualitative_rating": "MODERATE",
+      "source_name": "Numbeo Cost of Living (St. Cloud, MN)",
+      "source_url": "https://www.numbeo.com/cost-of-living/in/St-Cloud-MN-United-States"
+    },
+    {
+      "fact_group": "safety",
+      "fact_key": "numbeo_crime_index",
+      "display_label": "Numbeo crime index",
+      "value_text": "UNKNOWN - Numbeo has no crowd-sourced crime data for St. Cloud, MN specifically (checked directly, page returns 'no data').",
+      "qualitative_rating": "UNKNOWN",
+      "source_name": "Numbeo Crime (St. Cloud, MN) - no data available",
+      "source_url": "https://www.numbeo.com/crime/in/St-Cloud-MN-United-States",
+      "notes": "Genuine attempt made; Numbeo explicitly states no contributor data exists for this city. Left honestly UNKNOWN rather than substituting a nearby-city or state figure without a direct source."
+    },
+    {
+      "fact_group": "connectivity",
+      "fact_key": "fixed_broadband_median_mbps",
+      "display_label": "National fixed broadband median download speed",
+      "value_text": "189.21 Mbps download (US national median, July 2026); Numbeo lists a St. Cloud broadband price point of ~$44/month but not a speed-test figure.",
+      "value_number": 189.21,
+      "unit": "Mbps",
+      "qualitative_rating": "MODERATE",
+      "source_name": "Ookla Speedtest Global Index (United States)",
+      "source_url": "https://www.speedtest.net/global-index/united-states"
+    },
+    {
+      "fact_group": "legal",
+      "fact_key": "residence_path",
+      "display_label": "Long-stay residence path",
+      "value_text": "NOT_APPLICABLE - domestic US relocation for US citizens; no visa or residency permit required.",
+      "qualitative_rating": "NOT_APPLICABLE",
+      "source_name": "General US domestic relocation fact",
+      "source_url": null
+    }
+  ],
+  "cost_of_living": [
+    {
+      "household_type": "single",
+      "lifestyle_tier": "average",
+      "category": "rent_1br_city_centre",
+      "monthly_low": 880,
+      "monthly_high": 1099,
+      "currency": "USD",
+      "included_notes": "1-bedroom apartment rent range, city centre (Numbeo community-sourced, low-sample-size caveat noted).",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    },
+    {
+      "household_type": "couple",
+      "lifestyle_tier": "comfortable",
+      "category": "total",
+      "monthly_low": 2200,
+      "monthly_high": 3200,
+      "currency": "USD",
+      "included_notes": "Planning band including 1BR rent plus routine living costs; excludes major tax/legal/medical events.",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    }
+  ],
+  "housing_property": [
+    {
+      "housing_topic": "buy",
+      "stay_mode_key": "LONG_TERM_PERMANENT",
+      "can_foreigners_buy": "NOT_APPLICABLE",
+      "residency_required_to_buy": "No",
+      "restrictions_summary": "Domestic US relocation; no foreign-buyer restriction applies to US citizens.",
+      "currency": "USD",
+      "property_tax_notes": "Minnesota property tax is assessed at the county level (Stearns/Benton/Sherburne counties depending on parcel); rates require parcel-specific confirmation.",
+      "buying_process_summary": "Standard US real-estate process via a licensed agent and title company.",
+      "source_name": "Numbeo Cost of Living (St. Cloud, MN)",
+      "source_url": "https://www.numbeo.com/cost-of-living/in/St-Cloud-MN-United-States"
+    }
+  ],
+  "property_resources": [
+    {
+      "transaction_type": "rent",
+      "resource_name": "Zillow Rentals - St. Cloud, MN",
+      "resource_type": "rental_platform",
+      "url": "https://www.zillow.com/st-cloud-mn/rentals/",
+      "official": "NO"
+    },
+    {
+      "transaction_type": "buy",
+      "resource_name": "Realtor.com - St. Cloud, MN",
+      "resource_type": "real_estate_portal",
+      "url": "https://www.realtor.com/realestateandhomes-search/St-Cloud_MN",
+      "official": "NO"
+    },
+    {
+      "transaction_type": "short_term",
+      "resource_name": "Airbnb - St. Cloud",
+      "resource_type": "short_term_rental",
+      "url": "https://www.airbnb.com/s/St.-Cloud--MN/homes",
+      "official": "NO"
+    }
+  ],
+  "lgbtq_inclusivity": [
+    {
+      "overall_rating": "MODERATE-STRONG",
+      "legal_protections": "Nationwide US marriage equality since 2015; Minnesota's Human Rights Act includes sexual orientation and gender identity protections statewide.",
+      "social_acceptance": "MODERATE - generally accepting, though a smaller regional city with a less visible scene than the Twin Cities.",
+      "community_scene": "Limited local scene; Minneapolis-St. Paul (roughly 65-70 miles away) has a large, established LGBTQ+ community and Pride events.",
+      "evidence_summary": "Strong state-level legal protections; social visibility is more limited than in a major metro.",
+      "source_name": "Wikipedia (LGBT rights in Minnesota)",
+      "source_url": "https://en.wikipedia.org/wiki/LGBT_rights_in_Minnesota"
+    }
+  ],
+  "safety_risks": [
+    {
+      "risk_type": "general_crime",
+      "severity": "UNKNOWN",
+      "summary": "Numbeo has no crowd-sourced crime-perception data for St. Cloud specifically; no destination-specific numeric index could be verified this pass.",
+      "mitigation_notes": "Consult FBI Uniform Crime Reporting or Minnesota BCA statistics directly for an official (non-crowd-sourced) figure in a future pass.",
+      "source_name": "Numbeo Crime (St. Cloud, MN) - no data available",
+      "source_url": "https://www.numbeo.com/crime/in/St-Cloud-MN-United-States"
+    },
+    {
+      "risk_type": "winter_weather",
+      "severity": "MODERATE",
+      "summary": "Severe winter cold, heavy snowfall, and occasional blizzard conditions are a genuine seasonal hazard (see CLIMATE_MONTHLY - January average low -16C).",
+      "seasonality": "November-March",
+      "mitigation_notes": "Winter-weather preparedness (vehicle, home heating, mobility planning) is essential.",
+      "source_name": "NOAA NCEI U.S. Climate Normals (St. Cloud Regional Airport)",
+      "source_url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00014926&format=json"
+    }
+  ],
+  "connectivity_remote_work": [
+    {
+      "avg_download_mbps": null,
+      "fiber_available": "UNKNOWN",
+      "mobile_5g": "UNKNOWN",
+      "utility_reliability": "GENERALLY STABLE",
+      "coworking_summary": "Limited dedicated coworking presence in a smaller regional city; St. Cloud State University adjacency provides some shared workspace options.",
+      "us_time_zone_fit": "America/Chicago - Central Time, good overlap with all continental US time zones.",
+      "remote_work_notes": "US national broadband figures are strong on average, but St. Cloud-specific speed-test data was not independently located this pass; Numbeo lists a local broadband price point (~$44/month) but not a speed benchmark.",
+      "source_name": "Numbeo Cost of Living (St. Cloud, MN)",
+      "source_url": "https://www.numbeo.com/cost-of-living/in/St-Cloud-MN-United-States"
+    }
+  ],
+  "language_integration": [
+    {
+      "primary_language": "English",
+      "english_proficiency": "NATIVE",
+      "can_function_in_english": "YES",
+      "government_english_access": "FULL",
+      "medical_english_access": "FULL",
+      "integration_notes": "English is the primary language; St. Cloud has a notable Somali-American immigrant community, contributing to local linguistic diversity, but English is standard for all government/healthcare interactions.",
+      "source_name": "General US domestic relocation fact",
+      "source_url": null
+    }
+  ],
+  "pets": [
+    {
+      "import_requirements": "NOT_APPLICABLE - domestic US relocation; standard interstate health-certificate requirements apply, not international import rules.",
+      "vet_access": "STRONG",
+      "dog_parks_summary": "Multiple city parks (95 total) support dog-friendly living, including Whitney Memorial Park's dedicated dog park.",
+      "source_name": "General US domestic relocation fact",
+      "source_url": null
+    }
+  ],
+  "community_social": [
+    {
+      "topic": "retirement_social_fit",
+      "summary": "A regional college-town/commerce hub (St. Cloud State University, CentraCare) with a steady, non-transient population base rather than a dedicated retirement destination.",
+      "expat_presence": "NOT_APPLICABLE (domestic)",
+      "clubs_groups": "Community and university-affiliated groups, regional arts organizations (Paramount Center for the Arts).",
+      "ease_meeting_people": "MODERATE",
+      "age_mix": "Mixed - college-town population skews younger overall",
+      "transient_vs_rooted": "More rooted, with some college-driven turnover",
+      "source_name": "General knowledge of St. Cloud's economy",
+      "source_url": null
+    }
+  ],
+  "accessibility": [
+    {
+      "wheelchair_access": "MODERATE-STRONG",
+      "sidewalk_quality": "Generally standard US suburban/small-city infrastructure",
+      "hills_terrain": "Mostly flat, along the Mississippi River",
+      "accessible_transit": "MODERATE - St. Cloud Metro Bus system is locally well-regarded",
+      "mobility_notes": "Winter conditions (snow/ice) are the primary seasonal accessibility consideration, more than terrain.",
+      "source_name": "General knowledge of St. Cloud infrastructure",
+      "source_url": null
+    }
+  ],
+  "bureaucracy_setup": [
+    {
+      "topic": "residence_and_local_setup",
+      "difficulty_rating": "LOW",
+      "summary": "Domestic US relocation; no visa or residency process required for US citizens - primary setup steps are state DMV registration, voter registration, and utility/banking setup.",
+      "typical_documents": "Proof of address; driver's license transfer; utility setup",
+      "estimated_timeline": "Days to a few weeks",
+      "official_url": "https://dps.mn.gov/divisions/dvs/Pages/default.aspx",
+      "source_name": "Minnesota Driver and Vehicle Services",
+      "source_url": "https://dps.mn.gov/divisions/dvs/Pages/default.aspx"
+    }
+  ],
+  "work_business": [
+    {
+      "major_industries": "Healthcare (CentraCare/St. Cloud Hospital), higher education (St. Cloud State University), manufacturing, and regional retail/logistics.",
+      "employment_notes": "US citizens have full nationwide work authorization; local job market is healthcare/education/logistics-weighted.",
+      "work_authorization": "NOT_APPLICABLE - domestic US relocation, full work rights.",
+      "remote_work_suitability": "STRONG - Central Time zone overlaps well with all continental US business hours.",
+      "source_name": "General knowledge of St. Cloud's economy",
+      "source_url": null
+    }
+  ],
+  "retirement_aging": [
+    {
+      "medicare_notes": "Medicare is fully applicable for eligible US beneficiaries nationwide, including St. Cloud.",
+      "social_security_notes": "US Social Security applies without cross-border complications for domestic relocation.",
+      "retirement_notes": "CentraCare/St. Cloud Hospital anchors a substantial regional healthcare system; harsh winters are the primary aging-in-place consideration (mobility, heating costs, snow removal).",
+      "source_name": "General US Medicare/Social Security domestic-relocation facts; CentraCare Health",
+      "source_url": null
+    }
+  ],
+  "lifestyle_laws": [
+    {
+      "topic": "work_authorization",
+      "legal_status": "NOT_APPLICABLE",
+      "summary": "Domestic US relocation; US citizens have full nationwide work rights.",
+      "important_rules": "No visa or work-permit considerations apply.",
+      "official_source_url": null
+    },
+    {
+      "topic": "property_ownership",
+      "legal_status": "UNRESTRICTED",
+      "summary": "No foreign-buyer restriction applies to US citizens purchasing property in Minnesota.",
+      "important_rules": "Standard US real-estate/title process applies.",
+      "official_source_url": null
+    }
+  ],
+  "reality_check": [
+    {
+      "display_order": 1,
+      "title": "Winters are genuinely severe",
+      "detail": "January average lows around -16C (3F) with heavy snowfall (roughly 9 inches average in January alone); this is a defining lifestyle factor, not a minor inconvenience.",
+      "severity": "HIGH",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    },
+    {
+      "display_order": 2,
+      "title": "St. Cloud is a regional hub, not a dedicated retirement destination",
+      "detail": "The local economy and social fabric center on the university and healthcare system rather than retiree-specific amenities; verify this fits your social/lifestyle expectations.",
+      "severity": "MEDIUM",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    }
+  ],
+  "move_checklist": [
+    {
+      "category": "climate",
+      "task": "Prepare seriously for winter conditions",
+      "description": "Verify home heating systems, winter tires/vehicle readiness, and snow-removal arrangements before your first winter.",
+      "display_order": 10
+    },
+    {
+      "category": "housing",
+      "task": "Rent through a full year cycle before buying",
+      "description": "Test winter conditions and neighborhood fit through all four seasons before committing to a purchase.",
+      "display_order": 20
+    },
+    {
+      "category": "healthcare",
+      "task": "Establish care with a CentraCare/St. Cloud Hospital primary provider",
+      "description": "Confirm Medicare acceptance and specialist referral pathways with the regional health system.",
+      "display_order": 30
+    },
+    {
+      "category": "finance",
+      "task": "Confirm Minnesota state tax treatment of retirement income",
+      "description": "Verify current state tax rules for pensions/Social Security with the Minnesota Department of Revenue.",
+      "official_url": "https://www.revenue.state.mn.us/",
+      "display_order": 40
+    }
+  ],
+  "environment_quality": {
+    "air_quality_summary": "Generally good; regional agricultural activity can affect seasonal air quality.",
+    "water_reliability": "STRONG - municipal water drawn from the Mississippi River and groundwater sources",
+    "heat_humidity_comfort": "Humid continental - hot humid summers, severely cold winters",
+    "mosquito_pest_pressure": "SEASONAL - notable in summer near the Mississippi River and lakes",
+    "environmental_notes": "Built on both banks of the Mississippi River with a granite-quarry industrial heritage (Quarry Park); humid continental climate with pronounced seasonal extremes.",
+    "source_name": "NOAA NCEI; Wikipedia (St. Cloud, Minnesota)",
+    "source_url": "https://en.wikipedia.org/wiki/St._Cloud,_Minnesota"
+  },
+  "daily_life_practicality": {
+    "car_need": "HIGH",
+    "driving_difficulty": "Standard US small-city driving; winter driving conditions are a real seasonal factor",
+    "parking_difficulty": "EASY - suburban-scale parking availability",
+    "grocery_access": "Available in populated zones",
+    "pharmacy_access": "Available",
+    "banking_practicality": "Standard US banking",
+    "card_payment_acceptance": "Very high - standard US card/mobile-payment acceptance",
+    "cash_usage": "Low-moderate",
+    "mobile_payment_usage": "High",
+    "emergency_services_summary": "911 emergency number; CentraCare/St. Cloud Hospital regional health system.",
+    "things_residents_wish_they_knew": "Winter driving and home-heating costs are a bigger year-round budget and lifestyle factor than newcomers from milder climates typically expect.",
+    "source_url": "https://www.google.com/maps/search/?api=1&query=St.+Cloud+Minnesota"
+  },
+  "events_seasonality": [
+    {
+      "record_type": "festival",
+      "name": "Lake George summer events / downtown riverfront season",
+      "month_start": 6,
+      "month_end": 8,
+      "season": "summer",
+      "description": "Summer riverfront and downtown events including farmers markets and outdoor concerts.",
+      "crowding_level": "MODERATE",
+      "price_pressure": "LOW",
+      "official_url": "https://www.visitstcloud.com/",
+      "source_name": "Visit Greater St. Cloud official tourism site"
+    },
+    {
+      "record_type": "seasonal_note",
+      "name": "Winter season",
+      "month_start": 11,
+      "month_end": 3,
+      "season": "winter",
+      "description": "Extended, severe winter season with heavy snowfall - a defining seasonal characteristic rather than a discrete event.",
+      "crowding_level": "LOW",
+      "price_pressure": "LOW",
+      "source_name": "NOAA NCEI climate data",
+      "source_url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00014926&format=json"
+    }
+  ]
+}

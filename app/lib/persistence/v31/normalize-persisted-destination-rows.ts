@@ -99,6 +99,14 @@ export interface PersistedNeighborhoodRow {
   readonly name: string | null;
   readonly summary: string | null;
   readonly areaType: string | null;
+  readonly bestFor: string | null;
+  readonly walkabilityRating: string | null;
+  readonly safetyRating: string | null;
+  readonly transitRating: string | null;
+  readonly housingCharacter: string | null;
+  readonly pros: string | null;
+  readonly cons: string | null;
+  readonly googleMapsUrl: string | null;
 }
 
 export interface PersistedPlaceRow {
@@ -134,6 +142,9 @@ export interface PersistedMediaRow {
   readonly url: string | null;
   readonly caption: string | null;
   readonly altText: string | null;
+  readonly sourceName: string | null;
+  readonly sourceUrl: string | null;
+  readonly licenseNotes: string | null;
 }
 
 export interface PersistedPropertyResourceRow {
@@ -178,6 +189,8 @@ export interface PersistedCostOfLivingRow {
   readonly monthlyLow: string | null;
   readonly monthlyHigh: string | null;
   readonly currency: string | null;
+  readonly householdType: string | null;
+  readonly lifestyleTier: string | null;
   readonly stayModeKey: string | null;
   readonly verified: string | null;
   readonly verifiedAt: string | null;

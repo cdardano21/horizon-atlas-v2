@@ -1,0 +1,2809 @@
+{
+  "batch01_v3.3": {
+    "sheetOrder": [
+      "README",
+      "CATEGORIES",
+      "SCORING_DIMENSIONS",
+      "STAY_MODES",
+      "DESTINATIONS",
+      "DESTINATION_FACTS",
+      "DESTINATION_SCORES",
+      "NEIGHBORHOODS",
+      "PLACES",
+      "RESOURCES",
+      "MEDIA",
+      "COST_OF_LIVING",
+      "CLIMATE_MONTHLY",
+      "HOUSING_PROPERTY",
+      "PROPERTY_RESOURCES",
+      "HEALTHCARE_INSURANCE",
+      "VISA_RESIDENCY",
+      "TAXES_FINANCE",
+      "LGBTQ_INCLUSIVITY",
+      "SAFETY_RISKS",
+      "TRANSPORT_AIRPORTS",
+      "CONNECTIVITY_REMOTE_WORK",
+      "LANGUAGE_INTEGRATION",
+      "PETS",
+      "FAMILY_EDUCATION",
+      "COMMUNITY_SOCIAL",
+      "ACCESSIBILITY",
+      "BUREAUCRACY_SETUP",
+      "WORK_BUSINESS",
+      "RETIREMENT_AGING",
+      "LIFESTYLE_LAWS",
+      "REALITY_CHECK",
+      "MOVE_CHECKLIST",
+      "SOURCES",
+      "SCHEMA_INDEX",
+      "PREMIUM_REQUIREMENTS",
+      "CHANGELOG",
+      "PILOT_STATUS",
+      "IMPORT_CONTRACT",
+      "WORKBOOK_METADATA",
+      "IMPORT_MANIFEST",
+      "DESTINATION_ALIASES",
+      "VALIDATION_RULES",
+      "DATA_DICTIONARY",
+      "ENVIRONMENT_QUALITY",
+      "DAILY_LIFE_PRACTICALITY",
+      "EVENTS_SEASONALITY",
+      "LIFESTYLE_FEATURES"
+    ],
+    "sheets": {
+      "README": {
+        "headers": [
+          "DestinationFinderAI Expansion Batch #1 \u2014 v3.1 Rich Workbook"
+        ],
+        "rowCount": 10
+      },
+      "CATEGORIES": {
+        "headers": [
+          "category_key",
+          "parent_category",
+          "display_name",
+          "enabled",
+          "display_order",
+          "scoreable",
+          "description"
+        ],
+        "rowCount": 38
+      },
+      "SCORING_DIMENSIONS": {
+        "headers": [
+          "score_key",
+          "display_name",
+          "enabled",
+          "default_weight",
+          "min_score",
+          "max_score",
+          "higher_is_better",
+          "description"
+        ],
+        "rowCount": 23
+      },
+      "STAY_MODES": {
+        "headers": [
+          "stay_mode_key",
+          "display_name",
+          "enabled",
+          "display_order",
+          "emphasis_notes"
+        ],
+        "rowCount": 4
+      },
+      "DESTINATIONS": {
+        "headers": [
+          "destination_key",
+          "destination_name",
+          "country",
+          "country_code",
+          "state_region",
+          "city_type",
+          "slug",
+          "short_description",
+          "long_description",
+          "currency",
+          "primary_language",
+          "time_zone",
+          "population",
+          "metro_population",
+          "elevation_m",
+          "latitude",
+          "longitude",
+          "official_tourism_url",
+          "google_maps_url",
+          "enabled",
+          "content_status",
+          "last_updated_at",
+          "beach_access",
+          "mountain_or_ski_access"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 1,
+          "sofia-bg": 1,
+          "puerto-vallarta-mx": 1,
+          "hoi-an-vn": 1,
+          "queenstown-nz": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 24.0,
+          "sofia-bg": 24.0,
+          "puerto-vallarta-mx": 24.0,
+          "hoi-an-vn": 24.0,
+          "queenstown-nz": 24.0
+        },
+        "destinationKeys": [
+          "hoi-an-vn",
+          "puerto-vallarta-mx",
+          "queenstown-nz",
+          "sofia-bg",
+          "the-villages-fl-us"
+        ]
+      },
+      "DESTINATION_FACTS": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "fact_group",
+          "fact_key",
+          "display_label",
+          "value_text",
+          "value_number",
+          "unit",
+          "qualitative_rating",
+          "stay_mode_key",
+          "display_order",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at",
+          "confidence",
+          "notes"
+        ],
+        "rowCount": 50,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 10,
+          "sofia-bg": 10,
+          "puerto-vallarta-mx": 10,
+          "hoi-an-vn": 10,
+          "queenstown-nz": 10
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 15.6,
+          "sofia-bg": 15.6,
+          "puerto-vallarta-mx": 15.6,
+          "hoi-an-vn": 15.8,
+          "queenstown-nz": 15.8
+        }
+      },
+      "DESTINATION_SCORES": {
+        "headers": [
+          "destination_key",
+          "score_key",
+          "score_value",
+          "score_label",
+          "methodology_version",
+          "evidence_summary",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 80,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 16,
+          "sofia-bg": 16,
+          "puerto-vallarta-mx": 16,
+          "hoi-an-vn": 16,
+          "queenstown-nz": 16
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 9.0,
+          "sofia-bg": 9.0,
+          "puerto-vallarta-mx": 9.0,
+          "hoi-an-vn": 9.0,
+          "queenstown-nz": 9.0
+        }
+      },
+      "NEIGHBORHOODS": {
+        "headers": [
+          "neighborhood_key",
+          "destination_key",
+          "neighborhood_name",
+          "area_type",
+          "best_for",
+          "summary",
+          "housing_character",
+          "typical_rent_low",
+          "typical_rent_high",
+          "typical_home_price",
+          "walkability_rating",
+          "safety_rating",
+          "transit_rating",
+          "pros",
+          "cons",
+          "google_maps_url",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 40,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 8,
+          "sofia-bg": 8,
+          "puerto-vallarta-mx": 8,
+          "hoi-an-vn": 8,
+          "queenstown-nz": 8
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 16.0,
+          "sofia-bg": 16.0,
+          "puerto-vallarta-mx": 16.0,
+          "hoi-an-vn": 16.0,
+          "queenstown-nz": 16.0
+        }
+      },
+      "PLACES": {
+        "headers": [
+          "place_key",
+          "destination_key",
+          "neighborhood_key",
+          "category_key",
+          "place_name",
+          "subcategory",
+          "description",
+          "address",
+          "latitude",
+          "longitude",
+          "price_level",
+          "website_url",
+          "google_maps_url",
+          "phone",
+          "best_for",
+          "display_order",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at",
+          "confidence"
+        ],
+        "rowCount": 139,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 28,
+          "sofia-bg": 26,
+          "puerto-vallarta-mx": 27,
+          "hoi-an-vn": 27,
+          "queenstown-nz": 31
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 15.8,
+          "sofia-bg": 15.8,
+          "puerto-vallarta-mx": 15.8,
+          "hoi-an-vn": 15.7,
+          "queenstown-nz": 15.8
+        }
+      },
+      "RESOURCES": {
+        "headers": [
+          "resource_key",
+          "destination_key",
+          "resource_category",
+          "resource_name",
+          "description",
+          "url",
+          "official",
+          "stay_mode_key",
+          "display_order",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 50,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 10,
+          "sofia-bg": 10,
+          "puerto-vallarta-mx": 10,
+          "hoi-an-vn": 10,
+          "queenstown-nz": 10
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 13.0,
+          "sofia-bg": 13.0,
+          "puerto-vallarta-mx": 13.0,
+          "hoi-an-vn": 13.0,
+          "queenstown-nz": 13.0
+        }
+      },
+      "MEDIA": {
+        "headers": [
+          "media_key",
+          "destination_key",
+          "media_type",
+          "image_url",
+          "caption",
+          "subject",
+          "primary_image",
+          "gallery_order",
+          "license_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at",
+          "confidence"
+        ],
+        "rowCount": 20,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 4,
+          "sofia-bg": 3,
+          "puerto-vallarta-mx": 4,
+          "hoi-an-vn": 4,
+          "queenstown-nz": 5
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 14.0,
+          "sofia-bg": 14.0,
+          "puerto-vallarta-mx": 14.0,
+          "hoi-an-vn": 14.0,
+          "queenstown-nz": 14.0
+        }
+      },
+      "COST_OF_LIVING": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "household_type",
+          "lifestyle_tier",
+          "category",
+          "monthly_low",
+          "monthly_high",
+          "currency",
+          "included_notes",
+          "stay_mode_key",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 40,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 8,
+          "sofia-bg": 8,
+          "puerto-vallarta-mx": 8,
+          "hoi-an-vn": 8,
+          "queenstown-nz": 8
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 14.0,
+          "sofia-bg": 14.0,
+          "puerto-vallarta-mx": 14.0,
+          "hoi-an-vn": 14.0,
+          "queenstown-nz": 14.0
+        }
+      },
+      "CLIMATE_MONTHLY": {
+        "headers": [
+          "destination_key",
+          "month",
+          "avg_high_c",
+          "avg_low_c",
+          "rainfall_mm",
+          "humidity_pct",
+          "sunshine_hours",
+          "snowfall_cm",
+          "water_temp_c",
+          "extreme_weather_notes",
+          "source_name",
+          "source_url",
+          "verified"
+        ],
+        "rowCount": 60,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 12,
+          "sofia-bg": 12,
+          "puerto-vallarta-mx": 12,
+          "hoi-an-vn": 12,
+          "queenstown-nz": 12
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 9.3,
+          "sofia-bg": 10.0,
+          "puerto-vallarta-mx": 9.2,
+          "hoi-an-vn": 9.2,
+          "queenstown-nz": 10.2
+        }
+      },
+      "HOUSING_PROPERTY": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "housing_topic",
+          "stay_mode_key",
+          "can_foreigners_buy",
+          "residency_required_to_buy",
+          "restrictions_summary",
+          "typical_condo_price",
+          "typical_house_price",
+          "typical_villa_price",
+          "price_per_sqm",
+          "currency",
+          "property_tax_notes",
+          "transfer_tax_notes",
+          "closing_cost_notes",
+          "hoa_condo_fee_notes",
+          "foreigner_mortgage_notes",
+          "typical_down_payment_pct",
+          "rental_rules_notes",
+          "buying_process_summary",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at",
+          "property_purchase_grants_residency_path",
+          "property_tax_annual_rate_percent",
+          "purchase_transfer_tax_percent",
+          "property_purchase_conditional_path_available"
+        ],
+        "rowCount": 10,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 2,
+          "sofia-bg": 2,
+          "puerto-vallarta-mx": 2,
+          "hoi-an-vn": 2,
+          "queenstown-nz": 2
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 13.0,
+          "sofia-bg": 13.0,
+          "puerto-vallarta-mx": 13.0,
+          "hoi-an-vn": 13.5,
+          "queenstown-nz": 13.5
+        }
+      },
+      "PROPERTY_RESOURCES": {
+        "headers": [
+          "resource_key",
+          "destination_key",
+          "transaction_type",
+          "resource_name",
+          "resource_type",
+          "url",
+          "official",
+          "description",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 15,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 3,
+          "sofia-bg": 3,
+          "puerto-vallarta-mx": 3,
+          "hoi-an-vn": 3,
+          "queenstown-nz": 3
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 11.0,
+          "sofia-bg": 11.0,
+          "puerto-vallarta-mx": 11.0,
+          "hoi-an-vn": 11.0,
+          "queenstown-nz": 11.0
+        }
+      },
+      "HEALTHCARE_INSURANCE": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "topic",
+          "system_summary",
+          "public_access_foreigners",
+          "private_care_available",
+          "english_speaking_care",
+          "typical_gp_visit_cost",
+          "typical_specialist_cost",
+          "currency",
+          "medicare_applicability",
+          "international_insurance_notes",
+          "emergency_number",
+          "pharmacy_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 10,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 2,
+          "sofia-bg": 2,
+          "puerto-vallarta-mx": 2,
+          "hoi-an-vn": 2,
+          "queenstown-nz": 2
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 16.0,
+          "sofia-bg": 16.0,
+          "puerto-vallarta-mx": 16.0,
+          "hoi-an-vn": 16.0,
+          "queenstown-nz": 16.0
+        }
+      },
+      "VISA_RESIDENCY": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "traveler_nationality",
+          "stay_mode_key",
+          "visa_free_days",
+          "visa_type",
+          "residency_option",
+          "income_requirement",
+          "proof_of_funds",
+          "insurance_requirement",
+          "work_rights",
+          "renewal_notes",
+          "permanent_residency_path",
+          "citizenship_path",
+          "official_source_url",
+          "verified",
+          "verified_at",
+          "remote_work_legal_tourist_status",
+          "digital_nomad_visa_available",
+          "dependent_inclusion_supported",
+          "retirement_visa_program_available"
+        ],
+        "rowCount": 10,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 2,
+          "sofia-bg": 2,
+          "puerto-vallarta-mx": 2,
+          "hoi-an-vn": 2,
+          "queenstown-nz": 2
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 12.5,
+          "sofia-bg": 13.0,
+          "puerto-vallarta-mx": 13.0,
+          "hoi-an-vn": 13.0,
+          "queenstown-nz": 13.0
+        }
+      },
+      "TAXES_FINANCE": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "topic",
+          "summary",
+          "income_tax_notes",
+          "retirement_income_notes",
+          "capital_gains_notes",
+          "property_tax_notes",
+          "vat_sales_tax_notes",
+          "inheritance_wealth_notes",
+          "us_tax_treaty_notes",
+          "bank_account_foreigner_notes",
+          "currency_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at",
+          "tax_residency_threshold_days",
+          "pension_treatment",
+          "social_security_treatment",
+          "ira_treatment",
+          "401k_treatment",
+          "foreign_tax_credit_available",
+          "wealth_tax_applicable",
+          "us_tax_treaty_in_effect"
+        ],
+        "rowCount": 15,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 3,
+          "sofia-bg": 3,
+          "puerto-vallarta-mx": 3,
+          "hoi-an-vn": 3,
+          "queenstown-nz": 3
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 14.0,
+          "sofia-bg": 14.7,
+          "puerto-vallarta-mx": 15.0,
+          "hoi-an-vn": 14.3,
+          "queenstown-nz": 15.3
+        }
+      },
+      "LGBTQ_INCLUSIVITY": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "overall_rating",
+          "legal_protections",
+          "social_acceptance",
+          "community_scene",
+          "pride_events",
+          "nightlife_social",
+          "healthcare_access",
+          "areas_resources",
+          "safety_considerations",
+          "evidence_summary",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 1,
+          "sofia-bg": 1,
+          "puerto-vallarta-mx": 1,
+          "hoi-an-vn": 1,
+          "queenstown-nz": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 16.0,
+          "sofia-bg": 16.0,
+          "puerto-vallarta-mx": 16.0,
+          "hoi-an-vn": 16.0,
+          "queenstown-nz": 16.0
+        }
+      },
+      "SAFETY_RISKS": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "risk_type",
+          "severity",
+          "summary",
+          "seasonality",
+          "mitigation_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 15,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 3,
+          "sofia-bg": 3,
+          "puerto-vallarta-mx": 3,
+          "hoi-an-vn": 3,
+          "queenstown-nz": 3
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 11.0,
+          "sofia-bg": 11.0,
+          "puerto-vallarta-mx": 11.0,
+          "hoi-an-vn": 11.0,
+          "queenstown-nz": 11.0
+        }
+      },
+      "TRANSPORT_AIRPORTS": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "topic",
+          "name",
+          "summary",
+          "distance_km",
+          "typical_drive_minutes",
+          "public_transit_available",
+          "nonstop_us_service",
+          "car_needed_rating",
+          "parking_notes",
+          "rideshare_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 20,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 4,
+          "sofia-bg": 4,
+          "puerto-vallarta-mx": 4,
+          "hoi-an-vn": 4,
+          "queenstown-nz": 4
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 15.0,
+          "sofia-bg": 14.5,
+          "puerto-vallarta-mx": 14.5,
+          "hoi-an-vn": 14.5,
+          "queenstown-nz": 14.5
+        }
+      },
+      "CONNECTIVITY_REMOTE_WORK": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "avg_download_mbps",
+          "fiber_available",
+          "mobile_5g",
+          "utility_reliability",
+          "coworking_summary",
+          "us_time_zone_fit",
+          "remote_work_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 15,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 3,
+          "sofia-bg": 3,
+          "puerto-vallarta-mx": 3,
+          "hoi-an-vn": 3,
+          "queenstown-nz": 3
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 12.0,
+          "sofia-bg": 12.3,
+          "puerto-vallarta-mx": 12.0,
+          "hoi-an-vn": 12.0,
+          "queenstown-nz": 12.3
+        }
+      },
+      "LANGUAGE_INTEGRATION": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "primary_language",
+          "english_proficiency",
+          "can_function_in_english",
+          "government_english_access",
+          "medical_english_access",
+          "integration_notes",
+          "language_resources",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 1,
+          "sofia-bg": 1,
+          "puerto-vallarta-mx": 1,
+          "hoi-an-vn": 1,
+          "queenstown-nz": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 13.0,
+          "sofia-bg": 13.0,
+          "puerto-vallarta-mx": 13.0,
+          "hoi-an-vn": 13.0,
+          "queenstown-nz": 13.0
+        }
+      },
+      "PETS": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "import_requirements",
+          "quarantine_notes",
+          "vaccination_notes",
+          "pet_friendly_rentals",
+          "vet_access",
+          "emergency_vet_access",
+          "dog_parks_summary",
+          "airline_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 15,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 3,
+          "sofia-bg": 3,
+          "puerto-vallarta-mx": 3,
+          "hoi-an-vn": 3,
+          "queenstown-nz": 3
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 13.0,
+          "sofia-bg": 13.0,
+          "puerto-vallarta-mx": 13.0,
+          "hoi-an-vn": 13.3,
+          "queenstown-nz": 13.0
+        }
+      },
+      "FAMILY_EDUCATION": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "topic",
+          "summary",
+          "international_schools",
+          "childcare_notes",
+          "universities",
+          "pediatric_care",
+          "family_activities",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 15,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 3,
+          "sofia-bg": 3,
+          "puerto-vallarta-mx": 3,
+          "hoi-an-vn": 3,
+          "queenstown-nz": 3
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 12.7,
+          "sofia-bg": 12.7,
+          "puerto-vallarta-mx": 13.0,
+          "hoi-an-vn": 12.7,
+          "queenstown-nz": 12.7
+        }
+      },
+      "COMMUNITY_SOCIAL": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "topic",
+          "summary",
+          "expat_presence",
+          "clubs_groups",
+          "volunteering",
+          "ease_meeting_people",
+          "age_mix",
+          "transient_vs_rooted",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 15,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 3,
+          "sofia-bg": 3,
+          "puerto-vallarta-mx": 3,
+          "hoi-an-vn": 3,
+          "queenstown-nz": 3
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 14.0,
+          "sofia-bg": 14.0,
+          "puerto-vallarta-mx": 14.0,
+          "hoi-an-vn": 14.0,
+          "queenstown-nz": 14.0
+        }
+      },
+      "ACCESSIBILITY": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "wheelchair_access",
+          "sidewalk_quality",
+          "hills_terrain",
+          "accessible_transit",
+          "elevator_access",
+          "medical_equipment",
+          "mobility_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 1,
+          "sofia-bg": 1,
+          "puerto-vallarta-mx": 1,
+          "hoi-an-vn": 1,
+          "queenstown-nz": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 13.0,
+          "sofia-bg": 13.0,
+          "puerto-vallarta-mx": 13.0,
+          "hoi-an-vn": 13.0,
+          "queenstown-nz": 13.0
+        }
+      },
+      "BUREAUCRACY_SETUP": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "topic",
+          "difficulty_rating",
+          "summary",
+          "typical_documents",
+          "estimated_timeline",
+          "official_url",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 25,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 5,
+          "sofia-bg": 5,
+          "puerto-vallarta-mx": 5,
+          "hoi-an-vn": 5,
+          "queenstown-nz": 5
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 12.0,
+          "sofia-bg": 12.0,
+          "puerto-vallarta-mx": 12.0,
+          "hoi-an-vn": 12.0,
+          "queenstown-nz": 12.0
+        }
+      },
+      "WORK_BUSINESS": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "major_industries",
+          "employment_notes",
+          "work_authorization",
+          "entrepreneurship",
+          "business_formation",
+          "coworking",
+          "remote_work_suitability",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 1,
+          "sofia-bg": 1,
+          "puerto-vallarta-mx": 1,
+          "hoi-an-vn": 1,
+          "queenstown-nz": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 13.0,
+          "sofia-bg": 13.0,
+          "puerto-vallarta-mx": 13.0,
+          "hoi-an-vn": 13.0,
+          "queenstown-nz": 13.0
+        }
+      },
+      "RETIREMENT_AGING": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "medicare_notes",
+          "social_security_notes",
+          "senior_discounts",
+          "assisted_living",
+          "home_healthcare",
+          "aging_in_place",
+          "retirement_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 1,
+          "sofia-bg": 1,
+          "puerto-vallarta-mx": 1,
+          "hoi-an-vn": 1,
+          "queenstown-nz": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 13.0,
+          "sofia-bg": 13.0,
+          "puerto-vallarta-mx": 13.0,
+          "hoi-an-vn": 13.0,
+          "queenstown-nz": 13.0
+        }
+      },
+      "LIFESTYLE_LAWS": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "topic",
+          "legal_status",
+          "summary",
+          "important_rules",
+          "official_source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 10,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 2,
+          "sofia-bg": 2,
+          "puerto-vallarta-mx": 2,
+          "hoi-an-vn": 2,
+          "queenstown-nz": 2
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 9.0,
+          "sofia-bg": 9.0,
+          "puerto-vallarta-mx": 9.0,
+          "hoi-an-vn": 9.0,
+          "queenstown-nz": 9.0
+        }
+      },
+      "REALITY_CHECK": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "display_order",
+          "title",
+          "detail",
+          "severity",
+          "stay_mode_key",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 25,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 5,
+          "sofia-bg": 5,
+          "puerto-vallarta-mx": 5,
+          "hoi-an-vn": 5,
+          "queenstown-nz": 5
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 11.0,
+          "sofia-bg": 11.0,
+          "puerto-vallarta-mx": 11.0,
+          "hoi-an-vn": 11.0,
+          "queenstown-nz": 11.0
+        }
+      },
+      "MOVE_CHECKLIST": {
+        "headers": [
+          "checklist_key",
+          "destination_key",
+          "stay_mode_key",
+          "category",
+          "task",
+          "description",
+          "official_url",
+          "display_order",
+          "enabled"
+        ],
+        "rowCount": 50,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 10,
+          "sofia-bg": 10,
+          "puerto-vallarta-mx": 10,
+          "hoi-an-vn": 10,
+          "queenstown-nz": 10
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 9.0,
+          "sofia-bg": 9.0,
+          "puerto-vallarta-mx": 9.0,
+          "hoi-an-vn": 9.0,
+          "queenstown-nz": 9.0
+        }
+      },
+      "SOURCES": {
+        "headers": [
+          "source_key",
+          "destination_key",
+          "source_name",
+          "source_url",
+          "source_type",
+          "publisher",
+          "accessed_at",
+          "verified",
+          "confidence",
+          "notes"
+        ],
+        "rowCount": 97,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 17,
+          "sofia-bg": 18,
+          "puerto-vallarta-mx": 20,
+          "hoi-an-vn": 19,
+          "queenstown-nz": 23
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 10.0,
+          "sofia-bg": 10.0,
+          "puerto-vallarta-mx": 10.0,
+          "hoi-an-vn": 10.0,
+          "queenstown-nz": 10.0
+        }
+      },
+      "SCHEMA_INDEX": {
+        "headers": [
+          "Sheet",
+          "Purpose",
+          "Extensible",
+          "Key idea"
+        ],
+        "rowCount": 23
+      },
+      "PREMIUM_REQUIREMENTS": {
+        "headers": [
+          "requirement_key",
+          "section",
+          "subcategory",
+          "target_count",
+          "minimum_count",
+          "required_fields",
+          "quality_standard",
+          "links_required",
+          "maps_required",
+          "verification_required",
+          "notes"
+        ],
+        "rowCount": 52
+      },
+      "CHANGELOG": {
+        "headers": [
+          "Version",
+          "Change",
+          "Impact",
+          "Notes"
+        ],
+        "rowCount": 3
+      },
+      "PILOT_STATUS": {
+        "headers": [
+          "Destination",
+          "Core profile",
+          "Neighborhoods",
+          "Named places",
+          "Links/resources",
+          "Relocation modules",
+          "Status",
+          "contract_version",
+          "role"
+        ],
+        "rowCount": 5
+      },
+      "IMPORT_CONTRACT": {
+        "headers": [
+          "DestinationFinderAI v3.1 Scalable Import Contract",
+          "Rule"
+        ],
+        "rowCount": 24
+      },
+      "WORKBOOK_METADATA": {
+        "headers": [
+          "metadata_key",
+          "value",
+          "notes"
+        ],
+        "rowCount": 14
+      },
+      "IMPORT_MANIFEST": {
+        "headers": [
+          "destination_key",
+          "operation",
+          "update_mode",
+          "publish_mode",
+          "allow_explicit_clears",
+          "expected_destination_rows",
+          "expected_neighborhood_rows",
+          "expected_place_rows",
+          "expected_resource_rows",
+          "expected_media_rows",
+          "validation_status",
+          "notes"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 1,
+          "sofia-bg": 1,
+          "puerto-vallarta-mx": 1,
+          "hoi-an-vn": 1,
+          "queenstown-nz": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 12.0,
+          "sofia-bg": 12.0,
+          "puerto-vallarta-mx": 12.0,
+          "hoi-an-vn": 12.0,
+          "queenstown-nz": 12.0
+        }
+      },
+      "DESTINATION_ALIASES": {
+        "headers": [
+          "alias_key",
+          "destination_key",
+          "alias_type",
+          "alias_value",
+          "canonical",
+          "active",
+          "notes"
+        ],
+        "rowCount": 10,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 2,
+          "sofia-bg": 2,
+          "puerto-vallarta-mx": 2,
+          "hoi-an-vn": 2,
+          "queenstown-nz": 2
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 7.0,
+          "sofia-bg": 7.0,
+          "puerto-vallarta-mx": 7.0,
+          "hoi-an-vn": 7.0,
+          "queenstown-nz": 7.0
+        }
+      },
+      "VALIDATION_RULES": {
+        "headers": [
+          "rule_key",
+          "scope",
+          "severity",
+          "rule",
+          "failure_action"
+        ],
+        "rowCount": 16
+      },
+      "DATA_DICTIONARY": {
+        "headers": [
+          "sheet",
+          "primary_key",
+          "destination_scoped",
+          "repeatable",
+          "blank_behavior",
+          "update_behavior",
+          "purpose"
+        ],
+        "rowCount": 29
+      },
+      "ENVIRONMENT_QUALITY": {
+        "headers": [
+          "destination_key",
+          "air_quality_summary",
+          "air_quality_metric",
+          "water_quality_summary",
+          "water_reliability",
+          "heat_humidity_comfort",
+          "noise_summary",
+          "light_pollution_summary",
+          "mosquito_pest_pressure",
+          "wildfire_smoke_exposure",
+          "drought_water_stress",
+          "environmental_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at",
+          "confidence",
+          "last_updated_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 1,
+          "sofia-bg": 1,
+          "puerto-vallarta-mx": 1,
+          "hoi-an-vn": 1,
+          "queenstown-nz": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 17.0,
+          "sofia-bg": 17.0,
+          "puerto-vallarta-mx": 17.0,
+          "hoi-an-vn": 17.0,
+          "queenstown-nz": 17.0
+        }
+      },
+      "DAILY_LIFE_PRACTICALITY": {
+        "headers": [
+          "destination_key",
+          "car_need",
+          "driving_difficulty",
+          "parking_difficulty",
+          "grocery_access",
+          "pharmacy_access",
+          "fitness_wellness_access",
+          "banking_practicality",
+          "card_payment_acceptance",
+          "cash_usage",
+          "mobile_payment_usage",
+          "delivery_services",
+          "emergency_services_summary",
+          "senior_services_summary",
+          "childcare_access",
+          "newcomer_friction",
+          "things_residents_wish_they_knew",
+          "source_url",
+          "verified",
+          "last_updated_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 1,
+          "sofia-bg": 1,
+          "puerto-vallarta-mx": 1,
+          "hoi-an-vn": 1,
+          "queenstown-nz": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 20.0,
+          "sofia-bg": 20.0,
+          "puerto-vallarta-mx": 20.0,
+          "hoi-an-vn": 20.0,
+          "queenstown-nz": 20.0
+        }
+      },
+      "EVENTS_SEASONALITY": {
+        "headers": [
+          "event_season_key",
+          "destination_key",
+          "record_type",
+          "name",
+          "month_start",
+          "month_end",
+          "season",
+          "description",
+          "crowding_level",
+          "price_pressure",
+          "weather_context",
+          "best_for",
+          "avoid_if",
+          "official_url",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 10,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 2,
+          "sofia-bg": 2,
+          "puerto-vallarta-mx": 2,
+          "hoi-an-vn": 2,
+          "queenstown-nz": 2
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 17.0,
+          "sofia-bg": 17.0,
+          "puerto-vallarta-mx": 17.0,
+          "hoi-an-vn": 17.0,
+          "queenstown-nz": 17.0
+        }
+      },
+      "LIFESTYLE_FEATURES": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "feature_group",
+          "feature_key",
+          "feature_value",
+          "availability_level",
+          "proximity_band",
+          "display_label",
+          "evidence_summary",
+          "source_name",
+          "source_url",
+          "source_as_of_date",
+          "confidence",
+          "matching_enabled",
+          "display_enabled",
+          "notes"
+        ],
+        "rowCount": 207,
+        "rowCountByDestination": {
+          "the-villages-fl-us": 41,
+          "sofia-bg": 41,
+          "puerto-vallarta-mx": 42,
+          "hoi-an-vn": 41,
+          "queenstown-nz": 42
+        },
+        "avgNonblankFieldsByDestination": {
+          "the-villages-fl-us": 13.9,
+          "sofia-bg": 13.8,
+          "puerto-vallarta-mx": 13.9,
+          "hoi-an-vn": 13.8,
+          "queenstown-nz": 14.3
+        },
+        "controlledFeatureKeys": [
+          "arts_culture_strength",
+          "beach_access",
+          "boat_launch_access",
+          "coastal_setting",
+          "college_town_character",
+          "community_energy",
+          "countryside_access",
+          "desert_setting",
+          "dining_strength",
+          "farmers_market_access",
+          "fishing_access",
+          "forest_access",
+          "golf_access",
+          "hiking_access",
+          "hunting_access",
+          "kayaking_access",
+          "lake_access",
+          "marina_access",
+          "master_planned_or_gated_character",
+          "mountain_access",
+          "mountain_biking_access",
+          "nightlife_strength",
+          "paddleboarding_access",
+          "parks_open_space_access",
+          "pickleball_access",
+          "powerboating_access",
+          "resort_orientation",
+          "retirement_orientation",
+          "river_access",
+          "road_cycling_access",
+          "sailing_access",
+          "scuba_snorkeling_access",
+          "settlement_type",
+          "skiing_snowboarding_access",
+          "slip_or_mooring_access",
+          "snow_access",
+          "suburban_character",
+          "surfing_access",
+          "swimming_access",
+          "tennis_access",
+          "tourism_seasonality",
+          "trail_access"
+        ]
+      }
+    }
+  },
+  "batch02_v3.3": {
+    "sheetOrder": [
+      "README",
+      "CATEGORIES",
+      "SCORING_DIMENSIONS",
+      "STAY_MODES",
+      "DESTINATIONS",
+      "DESTINATION_FACTS",
+      "DESTINATION_SCORES",
+      "NEIGHBORHOODS",
+      "PLACES",
+      "RESOURCES",
+      "MEDIA",
+      "COST_OF_LIVING",
+      "CLIMATE_MONTHLY",
+      "HOUSING_PROPERTY",
+      "PROPERTY_RESOURCES",
+      "HEALTHCARE_INSURANCE",
+      "VISA_RESIDENCY",
+      "TAXES_FINANCE",
+      "LGBTQ_INCLUSIVITY",
+      "SAFETY_RISKS",
+      "TRANSPORT_AIRPORTS",
+      "CONNECTIVITY_REMOTE_WORK",
+      "LANGUAGE_INTEGRATION",
+      "PETS",
+      "FAMILY_EDUCATION",
+      "COMMUNITY_SOCIAL",
+      "ACCESSIBILITY",
+      "BUREAUCRACY_SETUP",
+      "WORK_BUSINESS",
+      "RETIREMENT_AGING",
+      "LIFESTYLE_LAWS",
+      "REALITY_CHECK",
+      "MOVE_CHECKLIST",
+      "SOURCES",
+      "SCHEMA_INDEX",
+      "PREMIUM_REQUIREMENTS",
+      "CHANGELOG",
+      "PILOT_STATUS",
+      "IMPORT_CONTRACT",
+      "WORKBOOK_METADATA",
+      "IMPORT_MANIFEST",
+      "DESTINATION_ALIASES",
+      "VALIDATION_RULES",
+      "DATA_DICTIONARY",
+      "ENVIRONMENT_QUALITY",
+      "DAILY_LIFE_PRACTICALITY",
+      "EVENTS_SEASONALITY",
+      "LIFESTYLE_FEATURES"
+    ],
+    "sheets": {
+      "README": {
+        "headers": [
+          "DestinationFinderAI Master Workbook v3.1"
+        ],
+        "rowCount": 10
+      },
+      "CATEGORIES": {
+        "headers": [
+          "category_key",
+          "parent_category",
+          "display_name",
+          "enabled",
+          "display_order",
+          "scoreable",
+          "description"
+        ],
+        "rowCount": 38
+      },
+      "SCORING_DIMENSIONS": {
+        "headers": [
+          "score_key",
+          "display_name",
+          "enabled",
+          "default_weight",
+          "min_score",
+          "max_score",
+          "higher_is_better",
+          "description"
+        ],
+        "rowCount": 23
+      },
+      "STAY_MODES": {
+        "headers": [
+          "stay_mode_key",
+          "display_name",
+          "enabled",
+          "display_order",
+          "emphasis_notes"
+        ],
+        "rowCount": 4
+      },
+      "DESTINATIONS": {
+        "headers": [
+          "destination_key",
+          "destination_name",
+          "country",
+          "country_code",
+          "state_region",
+          "city_type",
+          "slug",
+          "short_description",
+          "long_description",
+          "currency",
+          "primary_language",
+          "time_zone",
+          "population",
+          "metro_population",
+          "elevation_m",
+          "latitude",
+          "longitude",
+          "official_tourism_url",
+          "google_maps_url",
+          "enabled",
+          "content_status",
+          "last_updated_at",
+          "beach_access",
+          "mountain_or_ski_access"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 23.0,
+          "sarande-al": 23.0,
+          "dumaguete-ph": 23.0,
+          "las-terrenas-do": 23.0,
+          "fairhope-al-us": 23.0
+        },
+        "destinationKeys": [
+          "ascoli-piceno-it",
+          "dumaguete-ph",
+          "fairhope-al-us",
+          "las-terrenas-do",
+          "sarande-al"
+        ]
+      },
+      "DESTINATION_FACTS": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "fact_group",
+          "fact_key",
+          "display_label",
+          "value_text",
+          "value_number",
+          "unit",
+          "qualitative_rating",
+          "stay_mode_key",
+          "display_order",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at",
+          "confidence",
+          "notes"
+        ],
+        "rowCount": 30,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 6,
+          "sarande-al": 6,
+          "dumaguete-ph": 6,
+          "las-terrenas-do": 6,
+          "fairhope-al-us": 6
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 13.8,
+          "sarande-al": 13.8,
+          "dumaguete-ph": 13.8,
+          "las-terrenas-do": 13.8,
+          "fairhope-al-us": 13.8
+        }
+      },
+      "DESTINATION_SCORES": {
+        "headers": [
+          "destination_key",
+          "score_key",
+          "score_value",
+          "score_label",
+          "methodology_version",
+          "evidence_summary",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 0,
+        "rowCountByDestination": {},
+        "avgNonblankFieldsByDestination": {}
+      },
+      "NEIGHBORHOODS": {
+        "headers": [
+          "neighborhood_key",
+          "destination_key",
+          "neighborhood_name",
+          "area_type",
+          "best_for",
+          "summary",
+          "housing_character",
+          "typical_rent_low",
+          "typical_rent_high",
+          "typical_home_price",
+          "walkability_rating",
+          "safety_rating",
+          "transit_rating",
+          "pros",
+          "cons",
+          "google_maps_url",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 34,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 7,
+          "sarande-al": 6,
+          "dumaguete-ph": 7,
+          "las-terrenas-do": 7,
+          "fairhope-al-us": 7
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 15.0,
+          "sarande-al": 15.0,
+          "dumaguete-ph": 15.0,
+          "las-terrenas-do": 15.0,
+          "fairhope-al-us": 15.0
+        }
+      },
+      "PLACES": {
+        "headers": [
+          "place_key",
+          "destination_key",
+          "neighborhood_key",
+          "category_key",
+          "place_name",
+          "subcategory",
+          "description",
+          "address",
+          "latitude",
+          "longitude",
+          "price_level",
+          "website_url",
+          "google_maps_url",
+          "phone",
+          "best_for",
+          "display_order",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at",
+          "confidence"
+        ],
+        "rowCount": 105,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 21,
+          "sarande-al": 20,
+          "dumaguete-ph": 20,
+          "las-terrenas-do": 20,
+          "fairhope-al-us": 24
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 15.0,
+          "sarande-al": 14.9,
+          "dumaguete-ph": 15.1,
+          "las-terrenas-do": 14.6,
+          "fairhope-al-us": 15.8
+        }
+      },
+      "RESOURCES": {
+        "headers": [
+          "resource_key",
+          "destination_key",
+          "resource_category",
+          "resource_name",
+          "description",
+          "url",
+          "official",
+          "stay_mode_key",
+          "display_order",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 0,
+        "rowCountByDestination": {},
+        "avgNonblankFieldsByDestination": {}
+      },
+      "MEDIA": {
+        "headers": [
+          "media_key",
+          "destination_key",
+          "media_type",
+          "image_url",
+          "caption",
+          "subject",
+          "primary_image",
+          "gallery_order",
+          "license_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at",
+          "confidence"
+        ],
+        "rowCount": 25,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 5,
+          "sarande-al": 5,
+          "dumaguete-ph": 5,
+          "las-terrenas-do": 5,
+          "fairhope-al-us": 5
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 14.0,
+          "sarande-al": 14.0,
+          "dumaguete-ph": 14.0,
+          "las-terrenas-do": 14.0,
+          "fairhope-al-us": 14.0
+        }
+      },
+      "COST_OF_LIVING": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "household_type",
+          "lifestyle_tier",
+          "category",
+          "monthly_low",
+          "monthly_high",
+          "currency",
+          "included_notes",
+          "stay_mode_key",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 13.0,
+          "sarande-al": 13.0,
+          "dumaguete-ph": 13.0,
+          "las-terrenas-do": 13.0,
+          "fairhope-al-us": 13.0
+        }
+      },
+      "CLIMATE_MONTHLY": {
+        "headers": [
+          "destination_key",
+          "month",
+          "avg_high_c",
+          "avg_low_c",
+          "rainfall_mm",
+          "humidity_pct",
+          "sunshine_hours",
+          "snowfall_cm",
+          "water_temp_c",
+          "extreme_weather_notes",
+          "source_name",
+          "source_url",
+          "verified"
+        ],
+        "rowCount": 0,
+        "rowCountByDestination": {},
+        "avgNonblankFieldsByDestination": {}
+      },
+      "HOUSING_PROPERTY": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "housing_topic",
+          "stay_mode_key",
+          "can_foreigners_buy",
+          "residency_required_to_buy",
+          "restrictions_summary",
+          "typical_condo_price",
+          "typical_house_price",
+          "typical_villa_price",
+          "price_per_sqm",
+          "currency",
+          "property_tax_notes",
+          "transfer_tax_notes",
+          "closing_cost_notes",
+          "hoa_condo_fee_notes",
+          "foreigner_mortgage_notes",
+          "typical_down_payment_pct",
+          "rental_rules_notes",
+          "buying_process_summary",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at",
+          "property_purchase_grants_residency_path",
+          "property_tax_annual_rate_percent",
+          "purchase_transfer_tax_percent",
+          "property_purchase_conditional_path_available"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 24.0,
+          "sarande-al": 25.0,
+          "dumaguete-ph": 24.0,
+          "las-terrenas-do": 26.0,
+          "fairhope-al-us": 22.0
+        }
+      },
+      "PROPERTY_RESOURCES": {
+        "headers": [
+          "resource_key",
+          "destination_key",
+          "transaction_type",
+          "resource_name",
+          "resource_type",
+          "url",
+          "official",
+          "description",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 0,
+        "rowCountByDestination": {},
+        "avgNonblankFieldsByDestination": {}
+      },
+      "HEALTHCARE_INSURANCE": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "topic",
+          "system_summary",
+          "public_access_foreigners",
+          "private_care_available",
+          "english_speaking_care",
+          "typical_gp_visit_cost",
+          "typical_specialist_cost",
+          "currency",
+          "medicare_applicability",
+          "international_insurance_notes",
+          "emergency_number",
+          "pharmacy_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 17.0,
+          "sarande-al": 17.0,
+          "dumaguete-ph": 17.0,
+          "las-terrenas-do": 17.0,
+          "fairhope-al-us": 17.0
+        }
+      },
+      "VISA_RESIDENCY": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "traveler_nationality",
+          "stay_mode_key",
+          "visa_free_days",
+          "visa_type",
+          "residency_option",
+          "income_requirement",
+          "proof_of_funds",
+          "insurance_requirement",
+          "work_rights",
+          "renewal_notes",
+          "permanent_residency_path",
+          "citizenship_path",
+          "official_source_url",
+          "verified",
+          "verified_at",
+          "remote_work_legal_tourist_status",
+          "digital_nomad_visa_available",
+          "dependent_inclusion_supported",
+          "retirement_visa_program_available"
+        ],
+        "rowCount": 10,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 2,
+          "sarande-al": 2,
+          "dumaguete-ph": 2,
+          "las-terrenas-do": 2,
+          "fairhope-al-us": 2
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 17.5,
+          "sarande-al": 17.5,
+          "dumaguete-ph": 17.5,
+          "las-terrenas-do": 17.5,
+          "fairhope-al-us": 17.0
+        }
+      },
+      "TAXES_FINANCE": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "topic",
+          "summary",
+          "income_tax_notes",
+          "retirement_income_notes",
+          "capital_gains_notes",
+          "property_tax_notes",
+          "vat_sales_tax_notes",
+          "inheritance_wealth_notes",
+          "us_tax_treaty_notes",
+          "bank_account_foreigner_notes",
+          "currency_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at",
+          "tax_residency_threshold_days",
+          "pension_treatment",
+          "social_security_treatment",
+          "ira_treatment",
+          "401k_treatment",
+          "foreign_tax_credit_available",
+          "wealth_tax_applicable",
+          "us_tax_treaty_in_effect"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 24.0,
+          "sarande-al": 24.0,
+          "dumaguete-ph": 24.0,
+          "las-terrenas-do": 24.0,
+          "fairhope-al-us": 23.0
+        }
+      },
+      "LGBTQ_INCLUSIVITY": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "overall_rating",
+          "legal_protections",
+          "social_acceptance",
+          "community_scene",
+          "pride_events",
+          "nightlife_social",
+          "healthcare_access",
+          "areas_resources",
+          "safety_considerations",
+          "evidence_summary",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 0,
+        "rowCountByDestination": {},
+        "avgNonblankFieldsByDestination": {}
+      },
+      "SAFETY_RISKS": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "risk_type",
+          "severity",
+          "summary",
+          "seasonality",
+          "mitigation_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 10.0,
+          "sarande-al": 10.0,
+          "dumaguete-ph": 10.0,
+          "las-terrenas-do": 10.0,
+          "fairhope-al-us": 10.0
+        }
+      },
+      "TRANSPORT_AIRPORTS": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "topic",
+          "name",
+          "summary",
+          "distance_km",
+          "typical_drive_minutes",
+          "public_transit_available",
+          "nonstop_us_service",
+          "car_needed_rating",
+          "parking_notes",
+          "rideshare_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 15.0,
+          "sarande-al": 15.0,
+          "dumaguete-ph": 15.0,
+          "las-terrenas-do": 15.0,
+          "fairhope-al-us": 15.0
+        }
+      },
+      "CONNECTIVITY_REMOTE_WORK": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "avg_download_mbps",
+          "fiber_available",
+          "mobile_5g",
+          "utility_reliability",
+          "coworking_summary",
+          "us_time_zone_fit",
+          "remote_work_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 11.0,
+          "sarande-al": 11.0,
+          "dumaguete-ph": 11.0,
+          "las-terrenas-do": 11.0,
+          "fairhope-al-us": 11.0
+        }
+      },
+      "LANGUAGE_INTEGRATION": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "primary_language",
+          "english_proficiency",
+          "can_function_in_english",
+          "government_english_access",
+          "medical_english_access",
+          "integration_notes",
+          "language_resources",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 12.0,
+          "sarande-al": 12.0,
+          "dumaguete-ph": 12.0,
+          "las-terrenas-do": 12.0,
+          "fairhope-al-us": 12.0
+        }
+      },
+      "PETS": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "import_requirements",
+          "quarantine_notes",
+          "vaccination_notes",
+          "pet_friendly_rentals",
+          "vet_access",
+          "emergency_vet_access",
+          "dog_parks_summary",
+          "airline_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 0,
+        "rowCountByDestination": {},
+        "avgNonblankFieldsByDestination": {}
+      },
+      "FAMILY_EDUCATION": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "topic",
+          "summary",
+          "international_schools",
+          "childcare_notes",
+          "universities",
+          "pediatric_care",
+          "family_activities",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 0,
+        "rowCountByDestination": {},
+        "avgNonblankFieldsByDestination": {}
+      },
+      "COMMUNITY_SOCIAL": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "topic",
+          "summary",
+          "expat_presence",
+          "clubs_groups",
+          "volunteering",
+          "ease_meeting_people",
+          "age_mix",
+          "transient_vs_rooted",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 13.0,
+          "sarande-al": 13.0,
+          "dumaguete-ph": 13.0,
+          "las-terrenas-do": 13.0,
+          "fairhope-al-us": 13.0
+        }
+      },
+      "ACCESSIBILITY": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "wheelchair_access",
+          "sidewalk_quality",
+          "hills_terrain",
+          "accessible_transit",
+          "elevator_access",
+          "medical_equipment",
+          "mobility_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 11.0,
+          "sarande-al": 11.0,
+          "dumaguete-ph": 11.0,
+          "las-terrenas-do": 11.0,
+          "fairhope-al-us": 11.0
+        }
+      },
+      "BUREAUCRACY_SETUP": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "topic",
+          "difficulty_rating",
+          "summary",
+          "typical_documents",
+          "estimated_timeline",
+          "official_url",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 12.0,
+          "sarande-al": 12.0,
+          "dumaguete-ph": 12.0,
+          "las-terrenas-do": 12.0,
+          "fairhope-al-us": 12.0
+        }
+      },
+      "WORK_BUSINESS": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "major_industries",
+          "employment_notes",
+          "work_authorization",
+          "entrepreneurship",
+          "business_formation",
+          "coworking",
+          "remote_work_suitability",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 13.0,
+          "sarande-al": 13.0,
+          "dumaguete-ph": 13.0,
+          "las-terrenas-do": 13.0,
+          "fairhope-al-us": 13.0
+        }
+      },
+      "RETIREMENT_AGING": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "medicare_notes",
+          "social_security_notes",
+          "senior_discounts",
+          "assisted_living",
+          "home_healthcare",
+          "aging_in_place",
+          "retirement_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 12.0,
+          "sarande-al": 12.0,
+          "dumaguete-ph": 12.0,
+          "las-terrenas-do": 12.0,
+          "fairhope-al-us": 12.0
+        }
+      },
+      "LIFESTYLE_LAWS": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "topic",
+          "legal_status",
+          "summary",
+          "important_rules",
+          "official_source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 10,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 2,
+          "sarande-al": 2,
+          "dumaguete-ph": 2,
+          "las-terrenas-do": 2,
+          "fairhope-al-us": 2
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 8.5,
+          "sarande-al": 8.5,
+          "dumaguete-ph": 8.5,
+          "las-terrenas-do": 8.5,
+          "fairhope-al-us": 8.5
+        }
+      },
+      "REALITY_CHECK": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "display_order",
+          "title",
+          "detail",
+          "severity",
+          "stay_mode_key",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 10,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 2,
+          "sarande-al": 2,
+          "dumaguete-ph": 2,
+          "las-terrenas-do": 2,
+          "fairhope-al-us": 2
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 10.0,
+          "sarande-al": 10.0,
+          "dumaguete-ph": 10.0,
+          "las-terrenas-do": 10.0,
+          "fairhope-al-us": 10.0
+        }
+      },
+      "MOVE_CHECKLIST": {
+        "headers": [
+          "checklist_key",
+          "destination_key",
+          "stay_mode_key",
+          "category",
+          "task",
+          "description",
+          "official_url",
+          "display_order",
+          "enabled"
+        ],
+        "rowCount": 20,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 4,
+          "sarande-al": 4,
+          "dumaguete-ph": 4,
+          "las-terrenas-do": 4,
+          "fairhope-al-us": 4
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 8.2,
+          "sarande-al": 8.2,
+          "dumaguete-ph": 8.2,
+          "las-terrenas-do": 8.2,
+          "fairhope-al-us": 8.2
+        }
+      },
+      "SOURCES": {
+        "headers": [
+          "source_key",
+          "destination_key",
+          "source_name",
+          "source_url",
+          "source_type",
+          "publisher",
+          "accessed_at",
+          "verified",
+          "confidence",
+          "notes"
+        ],
+        "rowCount": 80,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 9,
+          "sarande-al": 21,
+          "dumaguete-ph": 16,
+          "las-terrenas-do": 17,
+          "fairhope-al-us": 17
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 10.0,
+          "sarande-al": 10.0,
+          "dumaguete-ph": 10.0,
+          "las-terrenas-do": 10.0,
+          "fairhope-al-us": 10.0
+        }
+      },
+      "SCHEMA_INDEX": {
+        "headers": [
+          "Sheet",
+          "Purpose",
+          "Extensible",
+          "Key idea"
+        ],
+        "rowCount": 23
+      },
+      "PREMIUM_REQUIREMENTS": {
+        "headers": [
+          "requirement_key",
+          "section",
+          "subcategory",
+          "target_count",
+          "minimum_count",
+          "required_fields",
+          "quality_standard",
+          "links_required",
+          "maps_required",
+          "verification_required",
+          "notes"
+        ],
+        "rowCount": 52
+      },
+      "CHANGELOG": {
+        "headers": [
+          "Version",
+          "Change",
+          "Impact",
+          "Notes"
+        ],
+        "rowCount": 1
+      },
+      "PILOT_STATUS": {
+        "headers": [
+          "Destination",
+          "Core profile",
+          "Neighborhoods",
+          "Named places",
+          "Links/resources",
+          "Relocation modules",
+          "Status",
+          "contract_version",
+          "role"
+        ],
+        "rowCount": 5
+      },
+      "IMPORT_CONTRACT": {
+        "headers": [
+          "DestinationFinderAI v3.1 Scalable Import Contract",
+          "Rule"
+        ],
+        "rowCount": 24
+      },
+      "WORKBOOK_METADATA": {
+        "headers": [
+          "metadata_key",
+          "value",
+          "notes"
+        ],
+        "rowCount": 12
+      },
+      "IMPORT_MANIFEST": {
+        "headers": [
+          "destination_key",
+          "operation",
+          "update_mode",
+          "publish_mode",
+          "allow_explicit_clears",
+          "expected_destination_rows",
+          "expected_neighborhood_rows",
+          "expected_place_rows",
+          "expected_resource_rows",
+          "expected_media_rows",
+          "validation_status",
+          "notes"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 12.0,
+          "sarande-al": 12.0,
+          "dumaguete-ph": 12.0,
+          "las-terrenas-do": 12.0,
+          "fairhope-al-us": 12.0
+        }
+      },
+      "DESTINATION_ALIASES": {
+        "headers": [
+          "alias_key",
+          "destination_key",
+          "alias_type",
+          "alias_value",
+          "canonical",
+          "active",
+          "notes"
+        ],
+        "rowCount": 8,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 4,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 7.0,
+          "sarande-al": 7.0,
+          "dumaguete-ph": 7.0,
+          "las-terrenas-do": 7.0,
+          "fairhope-al-us": 7.0
+        }
+      },
+      "VALIDATION_RULES": {
+        "headers": [
+          "rule_key",
+          "scope",
+          "severity",
+          "rule",
+          "failure_action"
+        ],
+        "rowCount": 16
+      },
+      "DATA_DICTIONARY": {
+        "headers": [
+          "sheet",
+          "primary_key",
+          "destination_scoped",
+          "repeatable",
+          "blank_behavior",
+          "update_behavior",
+          "purpose"
+        ],
+        "rowCount": 29
+      },
+      "ENVIRONMENT_QUALITY": {
+        "headers": [
+          "destination_key",
+          "air_quality_summary",
+          "air_quality_metric",
+          "water_quality_summary",
+          "water_reliability",
+          "heat_humidity_comfort",
+          "noise_summary",
+          "light_pollution_summary",
+          "mosquito_pest_pressure",
+          "wildfire_smoke_exposure",
+          "drought_water_stress",
+          "environmental_notes",
+          "source_name",
+          "source_url",
+          "verified",
+          "verified_at",
+          "confidence",
+          "last_updated_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 16.0,
+          "sarande-al": 16.0,
+          "dumaguete-ph": 16.0,
+          "las-terrenas-do": 16.0,
+          "fairhope-al-us": 16.0
+        }
+      },
+      "DAILY_LIFE_PRACTICALITY": {
+        "headers": [
+          "destination_key",
+          "car_need",
+          "driving_difficulty",
+          "parking_difficulty",
+          "grocery_access",
+          "pharmacy_access",
+          "fitness_wellness_access",
+          "banking_practicality",
+          "card_payment_acceptance",
+          "cash_usage",
+          "mobile_payment_usage",
+          "delivery_services",
+          "emergency_services_summary",
+          "senior_services_summary",
+          "childcare_access",
+          "newcomer_friction",
+          "things_residents_wish_they_knew",
+          "source_url",
+          "verified",
+          "last_updated_at"
+        ],
+        "rowCount": 5,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 1,
+          "sarande-al": 1,
+          "dumaguete-ph": 1,
+          "las-terrenas-do": 1,
+          "fairhope-al-us": 1
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 20.0,
+          "sarande-al": 20.0,
+          "dumaguete-ph": 20.0,
+          "las-terrenas-do": 20.0,
+          "fairhope-al-us": 20.0
+        }
+      },
+      "EVENTS_SEASONALITY": {
+        "headers": [
+          "event_season_key",
+          "destination_key",
+          "record_type",
+          "name",
+          "month_start",
+          "month_end",
+          "season",
+          "description",
+          "crowding_level",
+          "price_pressure",
+          "weather_context",
+          "best_for",
+          "avoid_if",
+          "official_url",
+          "source_url",
+          "verified",
+          "verified_at"
+        ],
+        "rowCount": 0,
+        "rowCountByDestination": {},
+        "avgNonblankFieldsByDestination": {}
+      },
+      "LIFESTYLE_FEATURES": {
+        "headers": [
+          "record_key",
+          "destination_key",
+          "feature_group",
+          "feature_key",
+          "feature_value",
+          "availability_level",
+          "proximity_band",
+          "display_label",
+          "evidence_summary",
+          "source_name",
+          "source_url",
+          "source_as_of_date",
+          "confidence",
+          "matching_enabled",
+          "display_enabled",
+          "notes"
+        ],
+        "rowCount": 208,
+        "rowCountByDestination": {
+          "ascoli-piceno-it": 41,
+          "sarande-al": 42,
+          "dumaguete-ph": 41,
+          "las-terrenas-do": 42,
+          "fairhope-al-us": 42
+        },
+        "avgNonblankFieldsByDestination": {
+          "ascoli-piceno-it": 13.5,
+          "sarande-al": 13.1,
+          "dumaguete-ph": 13.6,
+          "las-terrenas-do": 13.1,
+          "fairhope-al-us": 13.7
+        },
+        "controlledFeatureKeys": [
+          "arts_culture_strength",
+          "beach_access",
+          "boat_launch_access",
+          "coastal_setting",
+          "college_town_character",
+          "community_energy",
+          "countryside_access",
+          "desert_setting",
+          "dining_strength",
+          "farmers_market_access",
+          "fishing_access",
+          "forest_access",
+          "golf_access",
+          "hiking_access",
+          "hunting_access",
+          "kayaking_access",
+          "lake_access",
+          "marina_access",
+          "master_planned_or_gated_character",
+          "mountain_access",
+          "mountain_biking_access",
+          "paddleboarding_access",
+          "parks_open_space_access",
+          "pickleball_access",
+          "powerboating_access",
+          "resort_orientation",
+          "retirement_orientation",
+          "river_access",
+          "road_cycling_access",
+          "sailing_access",
+          "scuba_snorkeling_access",
+          "settlement_type",
+          "skiing_snowboarding_access",
+          "slip_or_mooring_access",
+          "snow_access",
+          "suburban_character",
+          "surfing_access",
+          "swimming_access",
+          "tennis_access",
+          "tourism_seasonality",
+          "trail_access"
+        ]
+      }
+    }
+  }
+}

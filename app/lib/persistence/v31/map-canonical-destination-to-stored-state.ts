@@ -80,6 +80,14 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       name: asStoredNullableString(neighborhood.neighborhood_name),
       summary: asStoredNullableString(neighborhood.summary),
       areaType: asStoredNullableString(neighborhood.area_type),
+      bestFor: asStoredNullableString(neighborhood.best_for),
+      walkabilityRating: asStoredNullableString(neighborhood.walkability_rating),
+      safetyRating: asStoredNullableString(neighborhood.safety_rating),
+      transitRating: asStoredNullableString(neighborhood.transit_rating),
+      housingCharacter: asStoredNullableString(neighborhood.housing_character),
+      pros: asStoredNullableString(neighborhood.pros),
+      cons: asStoredNullableString(neighborhood.cons),
+      googleMapsUrl: asStoredNullableString(neighborhood.google_maps_url),
     })),
     places: places.map((place) => ({
       placeKey: asStoredKey<StoredDestinationState["places"][number]["placeKey"]>(asStoredChild(place, "place_key")),
@@ -113,6 +121,9 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       url: asStoredNullableString(media.image_url),
       caption: asStoredNullableString(media.caption),
       altText: asStoredNullableString(media.subject),
+      sourceName: asStoredNullableString(media.source_name),
+      sourceUrl: asStoredNullableString(media.source_url),
+      licenseNotes: asStoredNullableString(media.license_notes),
     })),
     costOfLiving: costOfLiving.map((item) => ({
       itemKey: asStoredKey<StoredDestinationState["costOfLiving"][number]["itemKey"]>(asStoredChild(item, "record_key")),
@@ -120,6 +131,8 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       monthlyLow: asStoredNullableString(item.monthly_low),
       monthlyHigh: asStoredNullableString(item.monthly_high),
       currency: asStoredNullableString(item.currency),
+      householdType: asStoredNullableString(item.household_type),
+      lifestyleTier: asStoredNullableString(item.lifestyle_tier),
       stayModeKey: asStoredNullableString(item.stay_mode_key),
       verified: asStoredNullableString(item.verified),
       verifiedAt: asStoredNullableString(item.verified_at),
@@ -164,7 +177,10 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       verifiedAt: asStoredNullableString(state.verified_at),
     })),
     visaResidency: canonicalDestination.visaResidency.map((state) => ({
-      summary: asStoredNullableString(state.visa_type),
+      // "summary" must be real prose shown to customers - visa_type is a controlled categorical
+      // token (e.g. "STATUS_DEPENDENT") and must never be used here; residency_option is the real
+      // human-written explanation sentence for the same row.
+      summary: asStoredNullableString(state.residency_option),
       residencyPath: asStoredNullableString(state.permanent_residency_path),
       citizenshipPath: asStoredNullableString(state.citizenship_path),
       stayModeKey: asStoredNullableString(state.stay_mode_key),
@@ -312,7 +328,8 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       featureValue: asStoredNullableString(feature.feature_value),
       availabilityLevel: asStoredNullableString(feature.availability_level),
       proximityBand: asStoredNullableString(feature.proximity_band),
-      displayLabel: asStoredNullableString(feature.display_label),
+      // Simpler LIFESTYLE_FEATURES schema variant uses "display_name" instead of "display_label".
+      displayLabel: asStoredNullableString(feature.display_label) ?? asStoredNullableString(feature.display_name ?? null),
       evidenceSummary: asStoredNullableString(feature.evidence_summary),
       sourceName: asStoredNullableString(feature.source_name),
       sourceUrl: asStoredNullableString(feature.source_url),

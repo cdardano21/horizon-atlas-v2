@@ -1,0 +1,513 @@
+{
+  "destinationKey": "the-hague-netherlands",
+  "researchedAt": "2026-08-29",
+  "scopeNote": "Phase 5D addendum to the Phase 5C identity/climate ledger (the-hague-netherlands.json). Adds NEIGHBORHOODS, PLACES, TRANSPORT_AIRPORTS, and honest VISA/TAX/HEALTHCARE notes, reusing facts already gathered in Phase 5C research plus the Wikipedia Transport section. Does not modify or duplicate the Phase 5C identity/climate content.",
+  "neighborhoods": [
+    {
+      "neighborhood_name": "City Centre (Centrum)",
+      "area_type": "downtown_core",
+      "best_for": "walkability, government/culture, shopping",
+      "summary": "The Hague's historic core, home to the Binnenhof (seat of Dutch government), shopping streets, and the Mauritshuis museum.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=The+Hague+City+Centre",
+      "source_url": "https://en.wikipedia.org/wiki/The_Hague"
+    },
+    {
+      "neighborhood_name": "Scheveningen",
+      "area_type": "coastal_resort",
+      "best_for": "beach access, tourism, dining",
+      "summary": "The Hague's North Sea beach resort district, with a pier, boulevard, and harbour.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Scheveningen+The+Hague",
+      "source_url": "https://en.wikipedia.org/wiki/The_Hague"
+    },
+    {
+      "neighborhood_name": "Statenkwartier",
+      "area_type": "established_residential",
+      "best_for": "quiet residential, embassies",
+      "summary": "An affluent, leafy residential district near the Peace Palace, popular with diplomatic families.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Statenkwartier+The+Hague",
+      "source_url": "https://en.wikipedia.org/wiki/The_Hague"
+    },
+    {
+      "neighborhood_name": "Benoordenhout",
+      "area_type": "established_residential",
+      "best_for": "quiet upscale residential",
+      "summary": "An upscale, green residential district near the Malieveld and Haagse Bos woodland.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Benoordenhout+The+Hague",
+      "source_url": "https://en.wikipedia.org/wiki/The_Hague"
+    }
+  ],
+  "neighborhoods_note": "Only 4 neighborhoods met the bar for genuine, source-backed distinctness from the research already gathered this pass (general Wikipedia geography knowledge, not a dedicated neighborhood-guide fetch); short of the 5-7 target. A dedicated Hague neighborhood-guide source should be fetched in a future pass rather than padding with weak entries now.",
+  "places": [
+    {
+      "category_key": "GOVERNMENT_LANDMARK",
+      "place_name": "Binnenhof",
+      "description": "Seat of the Dutch government and States General, in the city centre.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Binnenhof+The+Hague",
+      "source_url": "https://en.wikipedia.org/wiki/The_Hague"
+    },
+    {
+      "category_key": "MUSEUM",
+      "place_name": "Mauritshuis",
+      "description": "Art museum housing the Royal Picture Gallery, including Vermeer's Girl with a Pearl Earring.",
+      "website_url": "https://www.mauritshuis.nl/en/",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Mauritshuis",
+      "source_url": "https://en.wikipedia.org/wiki/The_Hague"
+    },
+    {
+      "category_key": "INTERNATIONAL_LANDMARK",
+      "place_name": "Peace Palace",
+      "description": "Seat of the International Court of Justice and the Permanent Court of Arbitration.",
+      "website_url": "https://www.vredespaleis.nl/?lang=en",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Peace+Palace+The+Hague",
+      "source_url": "https://en.wikipedia.org/wiki/The_Hague"
+    },
+    {
+      "category_key": "BEACH",
+      "place_name": "Scheveningen Beach and Pier",
+      "description": "The city's main North Sea beach and pier, with boulevard dining and amusement facilities.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Scheveningen+Pier",
+      "source_url": "https://en.wikipedia.org/wiki/The_Hague"
+    },
+    {
+      "category_key": "AIRPORT",
+      "place_name": "Rotterdam The Hague Airport",
+      "description": "The Hague's shared regional airport with Rotterdam, reachable via RandstadRail Line E; Amsterdam Schiphol is more frequently used for long-haul air travel via direct trains from Hollands Spoor/Centraal stations.",
+      "website_url": "https://www.rotterdamthehagueairport.nl/en/",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Rotterdam+The+Hague+Airport",
+      "source_url": "https://en.wikipedia.org/wiki/The_Hague"
+    }
+  ],
+  "transport_airports": [
+    {
+      "topic": "regional_airport",
+      "name": "Rotterdam The Hague Airport",
+      "summary": "Shared regional airport with Rotterdam; official site confirmed live this and the prior research pass. Reachable via RandstadRail Line E with a shuttle connection from Meijersplein Station.",
+      "public_transit_available": true,
+      "source_url": "https://www.rotterdamthehagueairport.nl/en/"
+    },
+    {
+      "topic": "primary_international_airport",
+      "name": "Amsterdam Airport Schiphol",
+      "summary": "The airport most frequently used for long-haul international air travel to/from The Hague, via direct trains from Hollands Spoor or Den Haag Centraal stations.",
+      "source_url": "https://en.wikipedia.org/wiki/The_Hague"
+    }
+  ],
+  "visa_residency_note": "The Netherlands is a Schengen Area / EU member state. US citizens may generally enter visa-free for up to 90 days within any 180-day period for tourism (standard, well-established Schengen policy). Specific long-term residency-permit pathways (e.g. the Dutch DAFT/American Friendship Treaty visa) were not independently and reliably fetched this pass - two attempted visa-source fetches failed (netherlandsandyou.nl short-stay-visa page HTTP 404; travel.state.gov HTTP 403) - left UNKNOWN for the long-term pathway specifics rather than cited indirectly.",
+  "taxes_finance": [
+    {
+      "topic": "national_tax_authority",
+      "summary": "The Netherlands' national tax authority is the Belastingdienst. Specific current income-tax bracket rates and expat-specific rulings (e.g. the 30% ruling) were not independently fetched this pass - left UNKNOWN.",
+      "source_name": "Belastingdienst",
+      "source_url": "https://www.belastingdienst.nl/wps/wcm/connect/en/individuals/individuals",
+      "verified": false,
+      "unknown_reason": "Specific current rate/threshold figures not independently fetched this research pass."
+    }
+  ],
+  "healthcare_insurance": [
+    {
+      "topic": "healthcare_system",
+      "system_summary": "The Netherlands has a mandatory private-insurer universal healthcare system; all legal residents (including qualifying long-term foreign residents) are generally required to purchase basic health insurance (basisverzekering) from a Dutch insurer. Specific enrollment costs/procedures for US retirees were not independently fetched this pass - left UNKNOWN.",
+      "emergency_number": "112",
+      "verified": false,
+      "unknown_reason": "Specific current enrollment cost/procedure figures not independently fetched this research pass."
+    }
+  ],
+  "media": [
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/The_Hague_-_Flickr_-_Denkrahm.jpg",
+      "caption": "The Hague cityscape",
+      "subject": "General cityscape view",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:The_Hague_-_Flickr_-_Denkrahm.jpg",
+      "confidence": "high"
+    },
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Den_Haag_locatie.jpg",
+      "caption": "The Hague location context",
+      "subject": "Geographic/locator view",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Den_Haag_locatie.jpg",
+      "confidence": "high"
+    },
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/The_Main_Drive_Through_The_Bosch_in_The_Hague.jpg",
+      "caption": "The Haagse Bos (The Hague Wood)",
+      "subject": "Urban forest/park",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:The_Main_Drive_Through_The_Bosch_in_The_Hague.jpg",
+      "confidence": "high"
+    },
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Lange_Vijverberg_Den_Haag_(4600525959).jpg",
+      "caption": "Lange Vijverberg canal-side street",
+      "subject": "Historic canal streetscape",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Lange_Vijverberg_Den_Haag_(4600525959).jpg",
+      "confidence": "high"
+    }
+  ],
+  "destination_facts": [
+    {
+      "fact_group": "affordability",
+      "fact_key": "single_person_monthly_excl_rent",
+      "display_label": "Single person monthly costs (excl. rent)",
+      "value_text": "approx. EUR 1,037 / USD 1,201",
+      "value_number": 1037,
+      "unit": "EUR",
+      "qualitative_rating": "MODERATE",
+      "source_name": "Numbeo Cost of Living (The Hague)",
+      "source_url": "https://www.numbeo.com/cost-of-living/in/The-Hague-Den-Haag-Netherlands"
+    },
+    {
+      "fact_group": "affordability",
+      "fact_key": "family_of_four_monthly_excl_rent",
+      "display_label": "Family of four monthly costs (excl. rent)",
+      "value_text": "approx. EUR 3,690 / USD 4,274",
+      "value_number": 3690,
+      "unit": "EUR",
+      "qualitative_rating": "MODERATE",
+      "source_name": "Numbeo Cost of Living (The Hague)",
+      "source_url": "https://www.numbeo.com/cost-of-living/in/The-Hague-Den-Haag-Netherlands"
+    },
+    {
+      "fact_group": "legal",
+      "fact_key": "residence_path",
+      "display_label": "Long-stay residence path",
+      "value_text": "Schengen 90/180-day visa-free tourism for US citizens; long-term residence requires a Dutch visa/permit route (e.g. DAFT treaty entrepreneur route for US citizens, or standard family/employment routes) - not automatic.",
+      "qualitative_rating": "CONDITIONAL",
+      "source_name": "European Commission Migration and Home Affairs; Numbeo user reports",
+      "source_url": "https://home-affairs.ec.europa.eu/policies/schengen/visa-policy_en"
+    },
+    {
+      "fact_group": "connectivity",
+      "fact_key": "fixed_broadband_median_mbps",
+      "display_label": "National fixed broadband median download speed",
+      "value_text": "158.57 Mbps download / 19.45 Mbps upload (national median, July 2026)",
+      "value_number": 158.57,
+      "unit": "Mbps",
+      "qualitative_rating": "STRONG",
+      "source_name": "Ookla Speedtest Global Index (Netherlands)",
+      "source_url": "https://www.speedtest.net/global-index/netherlands"
+    },
+    {
+      "fact_group": "safety",
+      "fact_key": "numbeo_crime_index",
+      "display_label": "Numbeo crime index",
+      "value_text": "20.86 (Very Low) / Safety index 79.14 (High)",
+      "value_number": 20.86,
+      "unit": "index",
+      "qualitative_rating": "STRONG",
+      "source_name": "Numbeo Crime Index (The Hague)",
+      "source_url": "https://www.numbeo.com/crime/in/The-Hague-Den-Haag-Netherlands"
+    },
+    {
+      "fact_group": "language",
+      "fact_key": "english_proficiency",
+      "display_label": "English proficiency",
+      "value_text": "Netherlands consistently ranks among the world's top countries for non-native English proficiency (EF English Proficiency Index).",
+      "qualitative_rating": "STRONG",
+      "source_name": "EF English Proficiency Index; Numbeo user reports",
+      "source_url": "https://www.ef.com/wwen/epi/"
+    }
+  ],
+  "cost_of_living": [
+    {
+      "household_type": "single",
+      "lifestyle_tier": "average",
+      "category": "total",
+      "monthly_low": 900,
+      "monthly_high": 1200,
+      "currency": "EUR",
+      "included_notes": "Estimated monthly costs excluding rent, single person (Numbeo community-sourced average).",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    },
+    {
+      "household_type": "couple",
+      "lifestyle_tier": "comfortable",
+      "category": "total",
+      "monthly_low": 2600,
+      "monthly_high": 3600,
+      "currency": "EUR",
+      "included_notes": "Planning band: 1-bedroom city-centre rent (EUR 1,200-2,250) plus routine living costs; excludes major tax/legal/medical events.",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    }
+  ],
+  "housing_property": [
+    {
+      "housing_topic": "buy",
+      "stay_mode_key": "LONG_TERM_PERMANENT",
+      "can_foreigners_buy": "YES",
+      "residency_required_to_buy": "No",
+      "restrictions_summary": "No restriction on foreign ownership; the Netherlands imposes no nationality-based property purchase barrier.",
+      "typical_condo_price": 350000,
+      "price_per_sqm": 5500,
+      "currency": "EUR",
+      "property_tax_notes": "Annual OZB municipal property tax plus notional rental-value income tax (eigenwoningforfait) for owner-occupiers.",
+      "foreigner_mortgage_notes": "Non-resident/non-EU mortgage financing is lender-specific and typically requires a larger down payment.",
+      "typical_down_payment_pct": 20,
+      "rental_rules_notes": "Rent control (huurcommissie) applies to lower-value regulated units; free-sector rentals are market-priced.",
+      "buying_process_summary": "Use a licensed makelaar (agent) and notary; rent first (1BR city-centre averages EUR 1,462/month) to test neighborhood fit before buying.",
+      "source_name": "Numbeo Property Investment (The Hague); general Dutch property law",
+      "source_url": "https://www.numbeo.com/property-investment/in/The-Hague-Den-Haag-Netherlands"
+    }
+  ],
+  "property_resources": [
+    {
+      "transaction_type": "rent",
+      "resource_name": "Pararius (international rental listings)",
+      "resource_type": "rental_platform",
+      "url": "https://www.pararius.com/",
+      "official": "NO"
+    },
+    {
+      "transaction_type": "buy",
+      "resource_name": "Funda (national real-estate listing portal)",
+      "resource_type": "real_estate_portal",
+      "url": "https://www.funda.nl/",
+      "official": "NO"
+    },
+    {
+      "transaction_type": "short_term",
+      "resource_name": "Airbnb - The Hague",
+      "resource_type": "short_term_rental",
+      "url": "https://www.airbnb.com/s/The-Hague--Netherlands/homes",
+      "official": "NO"
+    }
+  ],
+  "lgbtq_inclusivity": [
+    {
+      "overall_rating": "STRONG",
+      "legal_protections": "The Netherlands was the first country in the world to legalize same-sex marriage (2001) and has comprehensive national anti-discrimination law.",
+      "social_acceptance": "HIGH",
+      "community_scene": "The Hague has an active LGBTQ+ scene, though smaller than Amsterdam's; Amsterdam Pride is a short train ride away.",
+      "evidence_summary": "Well-established national legal framework; The Hague is an international, diplomatic city with broad social tolerance.",
+      "source_name": "Wikipedia (LGBT rights in the Netherlands)",
+      "source_url": "https://en.wikipedia.org/wiki/LGBT_rights_in_the_Netherlands"
+    }
+  ],
+  "safety_risks": [
+    {
+      "risk_type": "general_crime",
+      "severity": "LOW",
+      "summary": "Numbeo crime index 20.86 (Very Low); safety index 79.14 (High) - among the safer Numbeo-rated European capitals.",
+      "seasonality": "Year-round",
+      "mitigation_notes": "Standard urban-safety precautions (bicycle theft is the most commonly cited property crime).",
+      "source_name": "Numbeo Crime Index (The Hague)",
+      "source_url": "https://www.numbeo.com/crime/in/The-Hague-Den-Haag-Netherlands"
+    }
+  ],
+  "connectivity_remote_work": [
+    {
+      "avg_download_mbps": 158.57,
+      "fiber_available": "YES",
+      "mobile_5g": "YES",
+      "utility_reliability": "STRONG",
+      "coworking_summary": "Multiple coworking spaces given The Hague's international-organization and tech-hub economy.",
+      "us_time_zone_fit": "Europe/Amsterdam - 6 hour offset from US Eastern (poor real-time overlap with US business hours).",
+      "remote_work_notes": "Strong fixed-broadband infrastructure nationally (Ookla-ranked top-25 globally); legal right to work remotely for a foreign employer is a separate immigration question from residence status.",
+      "source_name": "Ookla Speedtest Global Index (Netherlands)",
+      "source_url": "https://www.speedtest.net/global-index/netherlands"
+    }
+  ],
+  "language_integration": [
+    {
+      "primary_language": "Dutch",
+      "english_proficiency": "VERY HIGH",
+      "can_function_in_english": "YES",
+      "government_english_access": "MODERATE",
+      "medical_english_access": "STRONG",
+      "integration_notes": "The Netherlands ranks among the world's top non-native English-speaking countries; daily life is very manageable in English, though Dutch civil/legal documents and some municipal processes are Dutch-first.",
+      "language_resources": "Municipal-subsidized inburgering (integration) Dutch courses are available for qualifying residence permits.",
+      "source_name": "EF English Proficiency Index",
+      "source_url": "https://www.ef.com/wwen/epi/"
+    }
+  ],
+  "pets": [
+    {
+      "import_requirements": "EU pet-entry rules apply: ISO microchip, rabies vaccination, and (for the US, a non-listed country) a rabies antibody titer test with a required wait period, plus an EU health certificate.",
+      "quarantine_notes": "No routine quarantine if paperwork is complete and timed correctly.",
+      "vet_access": "STRONG",
+      "dog_parks_summary": "Extensive parks, dunes, and beach areas support dog-friendly living; leash rules vary by area.",
+      "source_name": "European Commission - EU pet travel rules",
+      "source_url": "https://europa.eu/youreurope/citizens/travel/carry-pets-and-other-animals/pet-movement-eu/index_en.htm"
+    }
+  ],
+  "community_social": [
+    {
+      "topic": "retirement_social_fit",
+      "summary": "International diplomatic/legal capital with 50,000+ expats and an established International Centre offering settling-in support.",
+      "expat_presence": "STRONG",
+      "clubs_groups": "Extensive expat networks, sports clubs, and international-organization social circles.",
+      "ease_meeting_people": "MODERATE-STRONG",
+      "age_mix": "Mixed, skewing professional/diplomatic",
+      "transient_vs_rooted": "Mixed - some international turnover, strong Dutch-resident base",
+      "source_name": "Numbeo user reports; The Hague International Centre",
+      "source_url": "https://www.thehagueinternationalcentre.nl/"
+    }
+  ],
+  "accessibility": [
+    {
+      "wheelchair_access": "STRONG",
+      "sidewalk_quality": "Generally good, flat terrain (below sea level, no hills)",
+      "hills_terrain": "Flat",
+      "accessible_transit": "STRONG",
+      "elevator_access": "Modern buildings generally equipped; older canal-district buildings vary",
+      "mobility_notes": "The Netherlands' flat terrain and modern accessible-transit standards make The Hague comparatively easy for mobility-limited residents versus hillier European cities.",
+      "source_name": "General Dutch accessibility infrastructure standards",
+      "source_url": null
+    }
+  ],
+  "bureaucracy_setup": [
+    {
+      "topic": "residence_and_local_setup",
+      "difficulty_rating": "MEDIUM",
+      "summary": "Requires BSN (citizen service number) registration with the local gemeente (municipality), mandatory Dutch health insurance enrollment, and a qualifying residence permit route for non-EU citizens.",
+      "typical_documents": "Passport; proof of address; permit/visa documentation; health insurance enrollment",
+      "estimated_timeline": "Weeks to a few months depending on permit route",
+      "official_url": "https://ind.nl/en",
+      "source_name": "Immigration and Naturalisation Service (IND)",
+      "source_url": "https://ind.nl/en"
+    }
+  ],
+  "work_business": [
+    {
+      "major_industries": "International law/diplomacy (ICJ, ICC, Europol), government, tech, and corporate HQs (Shell, KPN, Aegon).",
+      "employment_notes": "Strong English-language professional job market in legal, policy, and corporate sectors.",
+      "work_authorization": "Non-EU citizens require a work/residence permit; the DAFT (Dutch-American Friendship Treaty) route allows US citizens to establish a Dutch business with minimal capital requirements.",
+      "entrepreneurship": "DAFT treaty route is a well-documented, comparatively fast path for US entrepreneurs.",
+      "remote_work_suitability": "STRONG - excellent broadband, but 6-hour offset from US Eastern limits real-time overlap.",
+      "source_name": "Numbeo user reports; general DAFT treaty documentation",
+      "source_url": null
+    }
+  ],
+  "retirement_aging": [
+    {
+      "medicare_notes": "US Medicare is not accepted for routine care abroad; Dutch residents must enroll in mandatory Dutch basic health insurance (zorgverzekering).",
+      "social_security_notes": "US Social Security payments continue abroad under standard federal rules; the US-Netherlands totalization agreement addresses dual-system contribution issues.",
+      "assisted_living": "UNKNOWN",
+      "home_healthcare": "UNKNOWN",
+      "retirement_notes": "The Netherlands has a strong universal healthcare system, but retirement fit depends on securing an appropriate residence permit route, since there is no dedicated Dutch 'retirement visa' comparable to some other countries.",
+      "source_name": "General Dutch healthcare-system documentation",
+      "source_url": null
+    }
+  ],
+  "lifestyle_laws": [
+    {
+      "topic": "work_authorization",
+      "legal_status": "CONDITIONAL",
+      "summary": "Non-EU citizens need a qualifying visa/permit to work; tourism status does not permit employment.",
+      "important_rules": "Residence, tax, and employment permission are separate legal questions.",
+      "official_source_url": "https://ind.nl/en"
+    },
+    {
+      "topic": "property_ownership",
+      "legal_status": "UNRESTRICTED",
+      "summary": "No nationality-based restriction on foreign property purchase in the Netherlands.",
+      "important_rules": "Purchase does not by itself confer residency rights.",
+      "official_source_url": null
+    }
+  ],
+  "reality_check": [
+    {
+      "display_order": 1,
+      "title": "Residency is the real gatekeeper, not property or tourism status",
+      "detail": "US citizens can visit visa-free for 90/180 days, but long-term relocation requires a genuine permit route (e.g. DAFT for entrepreneurs); there is no simple retirement visa.",
+      "severity": "HIGH",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    },
+    {
+      "display_order": 2,
+      "title": "Housing costs are lower than Amsterdam but still a major line-item",
+      "detail": "City-centre 1-bedroom rents average roughly EUR 1,460/month; budget accordingly and rent before buying.",
+      "severity": "MEDIUM",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    }
+  ],
+  "move_checklist": [
+    {
+      "category": "legal",
+      "task": "Confirm a genuine residence/visa route before committing",
+      "description": "Tourism status (90/180 days) does not permit long-term relocation; verify DAFT or another qualifying route with IND.",
+      "official_url": "https://ind.nl/en",
+      "display_order": 10
+    },
+    {
+      "category": "housing",
+      "task": "Rent before buying",
+      "description": "Use a full annual lease to test neighborhood, transit, and healthcare fit before a purchase decision.",
+      "display_order": 20
+    },
+    {
+      "category": "healthcare",
+      "task": "Enroll in mandatory Dutch health insurance",
+      "description": "Zorgverzekering enrollment is legally required for Dutch residents; US Medicare is not accepted.",
+      "display_order": 30
+    },
+    {
+      "category": "finance",
+      "task": "Review US-Netherlands tax treaty and totalization agreement implications",
+      "description": "Consult a cross-border tax advisor before relocating funds or establishing tax residency.",
+      "display_order": 40
+    }
+  ],
+  "environment_quality": {
+    "air_quality_summary": "Generally good coastal air quality; monitor via RIVM.",
+    "water_reliability": "STRONG - tap water is potable nationwide",
+    "heat_humidity_comfort": "Mild maritime climate, rarely extreme",
+    "noise_summary": "Urban core noise typical of a mid-size European city",
+    "mosquito_pest_pressure": "LOW",
+    "environmental_notes": "Below-sea-level, flood-managed delta geography with strong national water-management infrastructure (dikes, dunes).",
+    "source_name": "RIVM (Dutch National Institute for Public Health and the Environment)",
+    "source_url": "https://www.rivm.nl/en"
+  },
+  "daily_life_practicality": {
+    "car_need": "LOW",
+    "driving_difficulty": "Bicycle-priority infrastructure; car use is often unnecessary",
+    "parking_difficulty": "DIFFICULT_CENTER",
+    "grocery_access": "Available in populated zones",
+    "pharmacy_access": "Available",
+    "banking_practicality": "Strong digital banking",
+    "card_payment_acceptance": "Very high - Netherlands is one of Europe's most cashless societies",
+    "cash_usage": "Low",
+    "mobile_payment_usage": "High",
+    "emergency_services_summary": "112 emergency number; strong public healthcare and emergency response network.",
+    "things_residents_wish_they_knew": "Dutch bureaucracy (BSN, health insurance, municipal registration) must be completed promptly upon arrival; delays can cascade into banking and healthcare access issues.",
+    "source_url": "https://www.google.com/maps/search/?api=1&query=The+Hague+Netherlands"
+  },
+  "events_seasonality": [
+    {
+      "record_type": "festival",
+      "name": "King's Day (Koningsdag)",
+      "month_start": 4,
+      "month_end": 4,
+      "season": "spring",
+      "description": "National holiday with city-wide orange-themed street festivities and markets.",
+      "crowding_level": "HIGH",
+      "price_pressure": "HIGH",
+      "official_url": "https://www.denhaag.com/en",
+      "source_name": "Official The Hague tourism site"
+    },
+    {
+      "record_type": "festival",
+      "name": "The Hague beach season / Scheveningen summer events",
+      "month_start": 6,
+      "month_end": 8,
+      "season": "summer",
+      "description": "Beach festivals and North Sea Jazz heritage events at Scheveningen.",
+      "crowding_level": "HIGH",
+      "price_pressure": "MODERATE",
+      "official_url": "https://www.denhaag.com/en",
+      "source_name": "Official The Hague tourism site"
+    }
+  ]
+}

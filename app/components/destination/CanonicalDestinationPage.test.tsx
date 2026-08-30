@@ -89,24 +89,20 @@ describe("CanonicalDestinationPage", () => {
 
     expect(screen.getByText(/A magazine-style introduction to/i)).toBeInTheDocument();
     expect(screen.getByText(/Scores and fit/i)).toBeInTheDocument();
-    expect(screen.getByText(/Morning rhythm/i)).toBeInTheDocument();
+    expect(screen.getByText(/Getting around/i)).toBeInTheDocument();
   });
 
-  it("keeps all 'Continue reading' body content present in the DOM on initial render, inside a native <details> with no React click state gating it", () => {
+  it("shows the full editorial overview openly, directly after the hero/key-facts area, with no 'Continue reading' gate", () => {
     const destination = buildDestination();
     destination.premiumEditorialContent = {
       heroIntroduction: "A short hero line for this destination.",
       whyPeopleLoveIt: ["It has real character."],
-      overviewArticle: "Paragraph one about the destination.\n\nParagraph two continues the story.\n\nParagraph three reveals hidden depth that only used to show after clicking Continue reading.",
+      overviewArticle: "Paragraph one about the destination.\n\nParagraph two continues the story.\n\nParagraph three is now shown openly, without needing to click anything.",
     };
 
     render(<CanonicalDestinationPage destination={destination} />);
 
-    const hiddenParagraphs = screen.getAllByText(/Paragraph three reveals hidden depth/i);
-    const detailsEl = hiddenParagraphs.map((el) => el.closest("details")).find((el) => el !== null);
-    expect(detailsEl).not.toBeUndefined();
-    expect(detailsEl?.querySelector("summary")).not.toBeNull();
-    expect(within(detailsEl as HTMLElement).getByText("Continue reading")).toBeInTheDocument();
+    expect(screen.getByText(/Paragraph three is now shown openly/i)).toBeInTheDocument();
   });
 
   it("keeps all score explanation content present in the DOM on initial render, inside native <details> elements with no React click state gating it", () => {

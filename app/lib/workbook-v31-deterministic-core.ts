@@ -606,6 +606,10 @@ export interface DeterministicV31CanonicalLifestyleFeature {
   availability_level: DeterministicV31CanonicalStringValue;
   proximity_band: DeterministicV31CanonicalStringValue;
   display_label: DeterministicV31CanonicalStringValue;
+  // Simpler LIFESTYLE_FEATURES schema variant (authoritative pilot-06 workbook, 2026-08-30) uses
+  // "display_name" instead of "display_label" and omits feature_group/availability_level/
+  // proximity_band/display_enabled entirely - both column names are supported for compatibility.
+  display_name?: DeterministicV31CanonicalStringValue;
   evidence_summary: DeterministicV31CanonicalStringValue;
   source_name: DeterministicV31CanonicalStringValue;
   source_url: DeterministicV31CanonicalStringValue;

@@ -51,7 +51,10 @@ export function buildGeneratedTravelResources(context: DestinationTravelResource
     // Official tourism - explicitly NOT labeled "Official" here; the real "Official tourism website"
     // scalar slot is reserved for a genuine workbook-authored URL only (see canonical-destination-loader.ts).
     { category: "tourism", provider: "Web search", label: "Search official tourism info", url: `https://www.google.com/search?q=${joinQuery([publicName, country, "official tourism"])}` },
-    { category: "tourism", provider: "Web search", label: "Find tours and activities", url: `https://www.google.com/search?q=${joinQuery([publicName, country, "tours and activities"])}` },
+    // "tours" is deliberately its own category, distinct from "tourism" - an authored tourism-board
+    // resource (e.g. an official visitor site) must never suppress this specific tour-search utility,
+    // since it is not a duplicate of a general tourism-board link (see mergeAuthoredAndGeneratedResources).
+    { category: "tours", provider: "Web search", label: "Find tours and activities", url: `https://www.google.com/search?q=${joinQuery([publicName, country, "tours and activities"])}` },
     // Hotels (its own category/group - Booking.com has a long-stable, well-documented location-search
     // URL pattern).
     { category: "hotels", provider: "Booking.com", label: "Search hotels", url: `https://www.booking.com/searchresults.html?ss=${placeQuery}` },

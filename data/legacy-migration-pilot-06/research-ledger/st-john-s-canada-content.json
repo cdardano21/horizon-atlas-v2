@@ -1,0 +1,719 @@
+{
+  "destinationKey": "st-john-s-canada",
+  "researchedAt": "2026-08-29",
+  "scopeNote": "Phase 5D (six-destination pass). Identity/geography/full 12-month climate researched from Wikipedia (citing Statistics Canada and Environment and Climate Change Canada) and official city/tourism sites.",
+  "identity": {
+    "country_code": "CA",
+    "state_region": "Newfoundland and Labrador",
+    "currency": "CAD",
+    "primary_language": "English",
+    "time_zone": "America/St_Johns",
+    "population": 110525,
+    "population_note": "2021 census, City of St. John's proper",
+    "metro_population": "St. John's Census Metropolitan Area 212,579 (2021 census); a more recent Statistics Canada estimate (16 Jan 2025) puts the metro population at approximately 239,316",
+    "elevation_m": 0,
+    "elevation_note": "City elevation range 0-192m per Wikipedia infobox; sea-level harbour city, no single representative point given - 0 recorded as the harbour/downtown baseline, not a precise city-center figure.",
+    "latitude": 47.56,
+    "longitude": -52.71,
+    "official_tourism_url": "https://www.destinationstjohns.com/",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=St.+John%27s%2C+Newfoundland+and+Labrador"
+  },
+  "sources": [
+    {
+      "source_name": "Wikipedia (St. John's, Newfoundland and Labrador), citing Statistics Canada/Environment and Climate Change Canada",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador",
+      "retrieved_at": "2026-08-29",
+      "supports": "population, area, elevation range, coordinates, time zone, full CLIMATE_MONTHLY table, neighbourhoods, landmarks, transport, government"
+    },
+    {
+      "source_name": "City of St. John's official website",
+      "source_url": "https://www.stjohns.ca/",
+      "retrieved_at": "2026-08-29",
+      "supports": "official municipal government confirmation, live site"
+    },
+    {
+      "source_name": "Destination St. John's, official tourism site",
+      "source_url": "https://www.destinationstjohns.com/",
+      "retrieved_at": "2026-08-29",
+      "supports": "PLACES entries (beaches, Pippy Park golf, local business names/social handles)"
+    }
+  ],
+  "climate_monthly": {
+    "source_name": "Environment and Climate Change Canada, Canadian Climate Normals 1991-2020, St. John's International Airport (WMO ID 71801)",
+    "source_url": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html",
+    "months": [
+      {
+        "month": 1,
+        "avg_high_c": -0.7,
+        "avg_low_c": -7.8,
+        "rainfall_mm": 153.0,
+        "humidity_pct": 81,
+        "sunshine_hours": 65.5,
+        "snowfall_cm": 95.4
+      },
+      {
+        "month": 2,
+        "avg_high_c": -1.0,
+        "avg_low_c": -8.4,
+        "rainfall_mm": 122.8,
+        "humidity_pct": 77,
+        "sunshine_hours": 90.2,
+        "snowfall_cm": 77.1
+      },
+      {
+        "month": 3,
+        "avg_high_c": 1.2,
+        "avg_low_c": -5.7,
+        "rainfall_mm": 140.1,
+        "humidity_pct": 76,
+        "sunshine_hours": 107.4,
+        "snowfall_cm": 62.0
+      },
+      {
+        "month": 4,
+        "avg_high_c": 5.6,
+        "avg_low_c": -1.9,
+        "rainfall_mm": 121.6,
+        "humidity_pct": 75,
+        "sunshine_hours": 140.4,
+        "snowfall_cm": 29.5
+      },
+      {
+        "month": 5,
+        "avg_high_c": 11.0,
+        "avg_low_c": 1.6,
+        "rainfall_mm": 98.1,
+        "humidity_pct": 71,
+        "sunshine_hours": 176.3,
+        "snowfall_cm": 4.5
+      },
+      {
+        "month": 6,
+        "avg_high_c": 15.7,
+        "avg_low_c": 5.9,
+        "rainfall_mm": 88.2,
+        "humidity_pct": 71,
+        "sunshine_hours": 198.9,
+        "snowfall_cm": 0.0
+      },
+      {
+        "month": 7,
+        "avg_high_c": 20.9,
+        "avg_low_c": 11.2,
+        "rainfall_mm": 100.1,
+        "humidity_pct": 70,
+        "sunshine_hours": 216.7,
+        "snowfall_cm": 0.0
+      },
+      {
+        "month": 8,
+        "avg_high_c": 20.8,
+        "avg_low_c": 12.1,
+        "rainfall_mm": 99.8,
+        "humidity_pct": 72,
+        "sunshine_hours": 206.6,
+        "snowfall_cm": 0.0
+      },
+      {
+        "month": 9,
+        "avg_high_c": 17.0,
+        "avg_low_c": 8.5,
+        "rainfall_mm": 125.8,
+        "humidity_pct": 73,
+        "sunshine_hours": 170.5,
+        "snowfall_cm": 0.0
+      },
+      {
+        "month": 10,
+        "avg_high_c": 11.2,
+        "avg_low_c": 4.3,
+        "rainfall_mm": 158.1,
+        "humidity_pct": 77,
+        "sunshine_hours": 122.1,
+        "snowfall_cm": 2.3
+      },
+      {
+        "month": 11,
+        "avg_high_c": 6.7,
+        "avg_low_c": 0.0,
+        "rainfall_mm": 157.4,
+        "humidity_pct": 80,
+        "sunshine_hours": 76.3,
+        "snowfall_cm": 22.3
+      },
+      {
+        "month": 12,
+        "avg_high_c": 2.1,
+        "avg_low_c": -4.1,
+        "rainfall_mm": 173.9,
+        "humidity_pct": 83,
+        "sunshine_hours": 62.4,
+        "snowfall_cm": 70.3
+      }
+    ]
+  },
+  "neighborhoods": [
+    {
+      "neighborhood_name": "Downtown St. John's / Jellybean Row",
+      "area_type": "historic_downtown",
+      "best_for": "walkability, culture, dining, nightlife",
+      "summary": "Colourful heritage row-housing along Water and Duckworth Streets; the city's main tourist and cultural core, including George Street's nightlife district.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Jellybean+Row+St+Johns",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    },
+    {
+      "neighborhood_name": "Georgestown",
+      "area_type": "historic_suburb",
+      "best_for": "established residential, history",
+      "summary": "The city's first suburb, spared from the Great Fire of 1892.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Georgestown+St+Johns+NL",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    },
+    {
+      "neighborhood_name": "The Battery",
+      "area_type": "historic_outport",
+      "best_for": "scenic character, harbour views",
+      "summary": "A historic fishing outport neighbourhood clinging to the hillside at the harbour Narrows.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=The+Battery+St+Johns+NL",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    },
+    {
+      "neighborhood_name": "Quidi Vidi",
+      "area_type": "historic_village",
+      "best_for": "scenic charm, brewery/dining",
+      "summary": "A former fishing village on the city's outskirts, now a popular day-trip destination within city limits.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Quidi+Vidi+St+Johns",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    },
+    {
+      "neighborhood_name": "Goulds",
+      "area_type": "residential_suburb",
+      "best_for": "quieter residential living",
+      "summary": "A former community amalgamated into St. John's, now a residential suburb.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Goulds+St+Johns+NL",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    },
+    {
+      "neighborhood_name": "Kilbride",
+      "area_type": "residential_suburb",
+      "best_for": "quieter residential living",
+      "summary": "A former community amalgamated into St. John's, now a residential suburb.",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Kilbride+St+Johns+NL",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    }
+  ],
+  "places": [
+    {
+      "category_key": "NATIONAL_HISTORIC_SITE",
+      "place_name": "Signal Hill National Historic Site / Cabot Tower",
+      "description": "Hill overlooking the city; site of Cabot Tower (built 1897) and the first transatlantic wireless transmission (1901). Visited by 97% of tourists to St. John's.",
+      "website_url": "https://www.pc.gc.ca/en/lhn-nhs/nl/signalhill",
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Signal+Hill+National+Historic+Site",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    },
+    {
+      "category_key": "MUSEUM",
+      "place_name": "The Rooms",
+      "description": "Newfoundland and Labrador's provincial art gallery, museum, and archives, in downtown St. John's.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=The+Rooms+St+Johns",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    },
+    {
+      "category_key": "MUSEUM",
+      "place_name": "Johnson Geo Centre",
+      "description": "Geological interpretation centre on Signal Hill.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Johnson+Geo+Centre",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    },
+    {
+      "category_key": "PARK",
+      "place_name": "Bowring Park",
+      "description": "One of the city's most scenic parks, in the Waterford Valley, with a duck pond and a Peter Pan statue.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Bowring+Park+St+Johns",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    },
+    {
+      "category_key": "PARK_GOLF",
+      "place_name": "Pippy Park",
+      "description": "One of Canada's largest urban parks (1,400+ hectares); includes 27 holes of golf (Admiral's Green), a campground, trails, and the Fluvarium.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Pippy+Park+St+Johns",
+      "source_url": "https://www.destinationstjohns.com/"
+    },
+    {
+      "category_key": "BEACH",
+      "place_name": "Middle Cove Beach",
+      "description": "A local favourite beach just minutes from St. John's.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Middle+Cove+Beach",
+      "source_url": "https://www.destinationstjohns.com/"
+    },
+    {
+      "category_key": "BEACH",
+      "place_name": "Topsail Beach",
+      "description": "Beach with panoramic views of Conception Bay; a whale-watching and sunset spot.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Topsail+Beach+Newfoundland",
+      "source_url": "https://www.destinationstjohns.com/"
+    },
+    {
+      "category_key": "LANDMARK",
+      "place_name": "Cape Spear",
+      "description": "North America's most easterly point (excluding Greenland); lighthouse and hiking trails.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Cape+Spear+Newfoundland",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    },
+    {
+      "category_key": "EDUCATION",
+      "place_name": "Memorial University of Newfoundland",
+      "description": "Atlantic Canada's largest university by enrolment; main campus in St. John's.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Memorial+University+of+Newfoundland",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    },
+    {
+      "category_key": "AIRPORT",
+      "place_name": "St. John's International Airport",
+      "description": "The city's international airport, 10 minutes northwest of downtown.",
+      "website_url": null,
+      "google_maps_url": "https://www.google.com/maps/search/?api=1&query=St+Johns+International+Airport",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    }
+  ],
+  "transport_airports": [
+    {
+      "topic": "primary_airport",
+      "name": "St. John's International Airport (YYT)",
+      "summary": "10 minutes northwest of downtown; second-busiest airport in Atlantic Canada.",
+      "typical_drive_minutes": 10,
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    },
+    {
+      "topic": "local_transit",
+      "name": "Metrobus Transit",
+      "summary": "19 routes, 53 buses, annual ridership ~3 million; serves major hospitals, Memorial University, and shopping centres.",
+      "public_transit_available": true,
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    },
+    {
+      "topic": "road",
+      "name": "Trans-Canada Highway (Route 1)",
+      "summary": "St. John's is the eastern terminus of the Trans-Canada Highway.",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador"
+    }
+  ],
+  "visa_residency_note": "NOT_APPLICABLE for the US-retiree context in the same sense as a domestic US move, but note this IS a distinct sovereign country (Canada) - US citizens require standard Canadian visitor rules for short stays (typically visa-exempt for tourism up to 6 months) and a formal immigration pathway (e.g., permanent residency via Express Entry or a provincial nominee program) for long-term relocation. Specific current program names/thresholds were not independently fetched this pass - left UNKNOWN rather than fabricated; general country-level policy is well-established public knowledge but destination-specific verification is still needed in a future pass.",
+  "taxes_finance": [
+    {
+      "topic": "national_and_provincial_tax",
+      "summary": "Canada has federal income tax (Canada Revenue Agency) plus provincial income tax administered for Newfoundland and Labrador; specific current bracket rates were not independently fetched this pass - left UNKNOWN rather than fabricated.",
+      "source_name": "Canada Revenue Agency",
+      "source_url": "https://www.canada.ca/en/revenue-agency.html",
+      "verified": false,
+      "unknown_reason": "Specific current bracket/rate figures not independently fetched this research pass."
+    }
+  ],
+  "healthcare_insurance": [
+    {
+      "topic": "healthcare_system",
+      "system_summary": "Canada has universal healthcare administered provincially; Newfoundland and Labrador's Medical Care Plan (MCP) covers eligible residents. St. John's major hospitals include the Health Sciences Centre, St. Clare's Mercy Hospital, and the Janeway Children's Health and Rehabilitation Centre, under NL Health Services.",
+      "emergency_number": "911",
+      "source_name": "Wikipedia (St. John's, Newfoundland and Labrador), citing NL Health Services",
+      "source_url": "https://en.wikipedia.org/wiki/St._John%27s,_Newfoundland_and_Labrador",
+      "verified": true,
+      "notes": "MCP eligibility waiting periods and non-resident/immigrant enrollment specifics were not independently fetched this pass - left UNKNOWN for that finer detail."
+    }
+  ],
+  "lifestyle_derivation_notes": "St. John's: coastal/oceanfront setting on the Atlantic (strong beach access at Middle Cove/Topsail/Salmon Cove, though cold-water swimming), hiking strong (Signal Hill, East Coast Trail, Cape Spear trails), golf present (Pippy Park 27 holes), boating/marina context plausible given harbour city and Royal St. John's Regatta (North America's oldest annual sporting event) but specific marina/slip facilities not independently confirmed this pass, no mountain/ski access, strong arts/culture/nightlife (George Street), historic small-city settlement character, foggy/windy/wet humid-continental climate with heavy winter snow (strong snow access), retirement orientation not independently confirmed this pass (left UNKNOWN).",
+  "media": [
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/St._John%27s,_Newfoundland_and_Labrador_aerial_view_of_downtown.jpg",
+      "caption": "Aerial view of downtown St. John's",
+      "subject": "Aerial cityscape",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:St._John%27s,_Newfoundland_and_Labrador_aerial_view_of_downtown.jpg",
+      "confidence": "high"
+    },
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/George_Street_St_John_Newfoundland_(41364917921).jpg",
+      "caption": "George Street",
+      "subject": "Famous nightlife/entertainment street",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:George_Street_St_John_Newfoundland_(41364917921).jpg",
+      "confidence": "high"
+    },
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cabot_Tower_on_Signal_Hill.jpg",
+      "caption": "Cabot Tower on Signal Hill",
+      "subject": "Historic landmark and national historic site",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Cabot_Tower_on_Signal_Hill.jpg",
+      "confidence": "high"
+    },
+    {
+      "media_type": "image",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Iceberg_(7274636036).jpg",
+      "caption": "Iceberg near St. John's",
+      "subject": "Iceberg Alley seasonal iceberg viewing",
+      "license_notes": "Wikimedia Commons; confirm file-page license before production publishing.",
+      "source_name": "Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Iceberg_(7274636036).jpg",
+      "confidence": "high"
+    }
+  ],
+  "destination_facts": [
+    {
+      "fact_group": "affordability",
+      "fact_key": "rent_1br_city_centre_monthly",
+      "display_label": "1BR apartment rent, city centre",
+      "value_text": "approx. CAD 1,370 / month",
+      "value_number": 1370,
+      "unit": "CAD",
+      "qualitative_rating": "MODERATE",
+      "source_name": "Numbeo Cost of Living (St. John's, NL)",
+      "source_url": "https://www.numbeo.com/cost-of-living/in/St-John%27s-Newfoundland-and-Labrador-Canada"
+    },
+    {
+      "fact_group": "safety",
+      "fact_key": "numbeo_crime_index",
+      "display_label": "Numbeo crime index",
+      "value_text": "42.10 (Moderate) / Safety index 57.90 (Moderate)",
+      "value_number": 42.1,
+      "unit": "index",
+      "qualitative_rating": "MODERATE",
+      "source_name": "Numbeo Crime Index (St. John's, NL)",
+      "source_url": "https://www.numbeo.com/crime/in/St-John%27s-Newfoundland-and-Labrador-Canada"
+    },
+    {
+      "fact_group": "connectivity",
+      "fact_key": "fixed_broadband_median_mbps",
+      "display_label": "National fixed broadband median download speed",
+      "value_text": "88.84 Mbps download / 9.11 Mbps upload (Canada national median, July 2026)",
+      "value_number": 88.84,
+      "unit": "Mbps",
+      "qualitative_rating": "MODERATE",
+      "source_name": "Ookla Speedtest Global Index (Canada)",
+      "source_url": "https://www.speedtest.net/global-index/canada"
+    },
+    {
+      "fact_group": "legal",
+      "fact_key": "residence_path",
+      "display_label": "Long-stay residence path",
+      "value_text": "US citizens do not need a visa for short visits but DO need a genuine Canadian immigration route (e.g. permanent residence via Express Entry/provincial nominee, or a retirement-specific super-visa framework does not exist for non-parents) for long-term relocation - this is a real, non-trivial immigration process, not a formality.",
+      "qualitative_rating": "HIGH_DIFFICULTY",
+      "source_name": "Immigration, Refugees and Citizenship Canada (IRCC)",
+      "source_url": "https://www.canada.ca/en/immigration-refugees-citizenship.html"
+    }
+  ],
+  "cost_of_living": [
+    {
+      "household_type": "single",
+      "lifestyle_tier": "average",
+      "category": "rent_1br_city_centre",
+      "monthly_low": 1300,
+      "monthly_high": 1500,
+      "currency": "CAD",
+      "included_notes": "1-bedroom apartment rent range, city centre (Numbeo community-sourced).",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    },
+    {
+      "household_type": "couple",
+      "lifestyle_tier": "comfortable",
+      "category": "total",
+      "monthly_low": 3200,
+      "monthly_high": 4400,
+      "currency": "CAD",
+      "included_notes": "Planning band including 1BR rent plus routine living costs; excludes major tax/legal/medical events.",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    }
+  ],
+  "housing_property": [
+    {
+      "housing_topic": "buy",
+      "stay_mode_key": "LONG_TERM_PERMANENT",
+      "can_foreigners_buy": "CONDITIONAL",
+      "residency_required_to_buy": "No (but see federal foreign-buyer restrictions)",
+      "restrictions_summary": "Canada's federal Prohibition on the Purchase of Residential Property by Non-Canadians Act restricts non-resident purchases of certain residential property (with exemptions); verify current status and applicability before purchasing.",
+      "price_per_sqm": 2800,
+      "currency": "CAD",
+      "property_tax_notes": "Municipal property tax administered by the City of St. John's.",
+      "foreigner_mortgage_notes": "Non-resident mortgage financing is lender-specific and typically requires a larger down payment.",
+      "buying_process_summary": "Rent first; confirm current federal foreign-buyer rules with a Canadian real-estate lawyer given periodic federal policy changes.",
+      "source_name": "Government of Canada - foreign buyer restrictions",
+      "source_url": "https://www.canada.ca/en/department-finance/news/2023/12/further-clarity-on-the-prohibition-on-the-purchase-of-residential-property-by-non-canadians-act.html"
+    }
+  ],
+  "property_resources": [
+    {
+      "transaction_type": "buy",
+      "resource_name": "Realtor.ca (national Canadian MLS listing portal)",
+      "resource_type": "real_estate_portal",
+      "url": "https://www.realtor.ca/",
+      "official": "NO"
+    },
+    {
+      "transaction_type": "rent",
+      "resource_name": "Rentals.ca - St. John's, NL",
+      "resource_type": "rental_platform",
+      "url": "https://rentals.ca/st-johns",
+      "official": "NO"
+    },
+    {
+      "transaction_type": "short_term",
+      "resource_name": "Airbnb - St. John's",
+      "resource_type": "short_term_rental",
+      "url": "https://www.airbnb.com/s/St.-John's--Canada/homes",
+      "official": "NO"
+    }
+  ],
+  "lgbtq_inclusivity": [
+    {
+      "overall_rating": "STRONG",
+      "legal_protections": "Canada has had nationwide same-sex marriage since 2005 and strong federal/provincial human-rights protections covering sexual orientation and gender identity.",
+      "social_acceptance": "HIGH",
+      "community_scene": "St. John's has an established local Pride festival and LGBTQ+ community organizations.",
+      "evidence_summary": "Strong, long-standing federal legal framework and an active local community presence.",
+      "source_name": "Wikipedia (LGBT rights in Canada)",
+      "source_url": "https://en.wikipedia.org/wiki/LGBT_rights_in_Canada"
+    }
+  ],
+  "safety_risks": [
+    {
+      "risk_type": "general_crime",
+      "severity": "MODERATE",
+      "summary": "Numbeo crime index 42.10 (Moderate); safety index 57.90 (Moderate) - broadly average, with property-crime concerns noted by contributors.",
+      "mitigation_notes": "Standard urban precautions.",
+      "source_name": "Numbeo Crime Index (St. John's, NL)",
+      "source_url": "https://www.numbeo.com/crime/in/St-John%27s-Newfoundland-and-Labrador-Canada"
+    },
+    {
+      "risk_type": "severe_weather",
+      "severity": "MODERATE",
+      "summary": "St. John's is one of the windiest, foggiest, and stormiest major Canadian cities; winter storms and Atlantic weather systems are a genuine seasonal hazard.",
+      "seasonality": "Year-round, with winter storm peaks",
+      "mitigation_notes": "Standard Atlantic Canada winter-weather preparedness.",
+      "source_name": "Environment and Climate Change Canada (general context)",
+      "source_url": null
+    }
+  ],
+  "connectivity_remote_work": [
+    {
+      "avg_download_mbps": 88.84,
+      "fiber_available": "UNKNOWN",
+      "mobile_5g": "YES",
+      "utility_reliability": "GENERALLY STABLE",
+      "coworking_summary": "Coworking options exist given St. John's tech/startup scene (notably in ocean-tech and IT sectors).",
+      "us_time_zone_fit": "America/St_Johns - Newfoundland Time (UTC-3:30), a half-hour-offset time zone that is 1.5-4.5 hours ahead of US time zones.",
+      "remote_work_notes": "Canada's national broadband median is solid; remote work for a foreign employer while resident in Canada is a separate immigration-status question from tourism.",
+      "source_name": "Ookla Speedtest Global Index (Canada)",
+      "source_url": "https://www.speedtest.net/global-index/canada"
+    }
+  ],
+  "language_integration": [
+    {
+      "primary_language": "English",
+      "english_proficiency": "NATIVE",
+      "can_function_in_english": "YES",
+      "government_english_access": "FULL",
+      "medical_english_access": "FULL",
+      "integration_notes": "English is the dominant local language (Newfoundland has a distinctive regional dialect); French is a federal official language but not locally dominant in Newfoundland and Labrador.",
+      "source_name": "General Newfoundland and Labrador linguistic context",
+      "source_url": null
+    }
+  ],
+  "pets": [
+    {
+      "import_requirements": "Comparatively simple for US-origin pets: dogs and cats generally require only a rabies vaccination certificate for entry from the US, with no routine quarantine.",
+      "vet_access": "STRONG",
+      "dog_parks_summary": "Multiple parks and coastal trails support dog-friendly living.",
+      "source_name": "Canadian Food Inspection Agency (CFIA) pet import rules",
+      "source_url": "https://inspection.canada.ca/en/animal-health/terrestrial-animals/imports/policies/live-animals/pets"
+    }
+  ],
+  "community_social": [
+    {
+      "topic": "retirement_social_fit",
+      "summary": "Provincial capital with a strong, distinctive local culture (music, George Street nightlife) and a growing tech/ocean-industries sector; established community networks given its role as the region's main urban center.",
+      "expat_presence": "MODERATE - notable US/international presence given tourism and tech sectors",
+      "clubs_groups": "Active arts, music, and community organizations reflecting Newfoundland's strong cultural identity.",
+      "ease_meeting_people": "MODERATE-STRONG - Newfoundlanders have a strong reputation for hospitality",
+      "age_mix": "Mixed",
+      "transient_vs_rooted": "Mixed - seasonal cruise/tourism influx, stable resident base",
+      "source_name": "General knowledge of St. John's culture and economy",
+      "source_url": null
+    }
+  ],
+  "accessibility": [
+    {
+      "wheelchair_access": "VARIABLE",
+      "sidewalk_quality": "Variable, hilly terrain affects sidewalk grades",
+      "hills_terrain": "Hilly - built around a steep natural harbor",
+      "accessible_transit": "LIMITED-MODERATE",
+      "mobility_notes": "St. John's hilly harbor-town geography is a genuine mobility consideration, independent of building-level accessibility.",
+      "source_name": "General knowledge of St. John's urban geography",
+      "source_url": null
+    }
+  ],
+  "bureaucracy_setup": [
+    {
+      "topic": "residence_and_local_setup",
+      "difficulty_rating": "HIGH",
+      "summary": "Requires a genuine Canadian immigration pathway (e.g. Express Entry, provincial nominee program) for long-term residence; there is no simple retirement-specific visa for non-parent US retirees.",
+      "typical_documents": "Passport; immigration application documentation; provincial health-card registration upon landing",
+      "estimated_timeline": "Many months to years depending on immigration category",
+      "official_url": "https://www.canada.ca/en/immigration-refugees-citizenship.html",
+      "source_name": "Immigration, Refugees and Citizenship Canada (IRCC)",
+      "source_url": "https://www.canada.ca/en/immigration-refugees-citizenship.html"
+    }
+  ],
+  "work_business": [
+    {
+      "major_industries": "Oil and gas services, ocean technology, fisheries, tourism, and provincial government administration.",
+      "employment_notes": "Do not assume local employment availability or salary fit without a valid Canadian work authorization.",
+      "work_authorization": "A specific work permit or permanent-residence status is required; visitor status forbids employment.",
+      "remote_work_suitability": "MODERATE - solid broadband and a small time-zone offset from the US Eastern seaboard.",
+      "source_name": "Immigration, Refugees and Citizenship Canada (IRCC)",
+      "source_url": "https://www.canada.ca/en/immigration-refugees-citizenship.html"
+    }
+  ],
+  "retirement_aging": [
+    {
+      "medicare_notes": "US Medicare is not accepted for routine care in Canada; landed immigrants/permanent residents enroll in the Newfoundland and Labrador provincial health plan (MCP) after a waiting period.",
+      "social_security_notes": "US Social Security continues abroad under standard federal rules; a US-Canada totalization agreement addresses dual-system contribution issues.",
+      "retirement_notes": "Canada has no simple retirement visa for non-parent US retirees, making immigration-category selection the central retirement-planning obstacle, similar in character to Japan's situation.",
+      "source_name": "Government of Newfoundland and Labrador - MCP; IRCC",
+      "source_url": "https://www.canada.ca/en/immigration-refugees-citizenship.html"
+    }
+  ],
+  "lifestyle_laws": [
+    {
+      "topic": "work_authorization",
+      "legal_status": "RESTRICTED",
+      "summary": "Visitor status forbids employment; a specific work permit or permanent residency is required.",
+      "important_rules": "Immigration category, residence, and tax status are separate legal questions.",
+      "official_source_url": "https://www.canada.ca/en/immigration-refugees-citizenship.html"
+    },
+    {
+      "topic": "property_ownership",
+      "legal_status": "CONDITIONAL",
+      "summary": "Federal restrictions on non-Canadian residential property purchases apply with specific exemptions; verify current rules before purchasing.",
+      "important_rules": "Purchase never automatically creates residence rights.",
+      "official_source_url": "https://www.canada.ca/en/department-finance/news/2023/12/further-clarity-on-the-prohibition-on-the-purchase-of-residential-property-by-non-canadians-act.html"
+    }
+  ],
+  "reality_check": [
+    {
+      "display_order": 1,
+      "title": "There is no simple Canadian retirement visa",
+      "detail": "Long-term residence for a non-parent US retiree requires a genuine immigration pathway (e.g., Express Entry or a provincial nominee program); this is a real, multi-year process for many applicants, not a formality.",
+      "severity": "HIGH",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    },
+    {
+      "display_order": 2,
+      "title": "Weather is a defining lifestyle factor",
+      "detail": "St. John's is famously windy, foggy, and stormy; winters bring real snow/storm risk on top of the cruise/iceberg-season tourism appeal.",
+      "severity": "MEDIUM",
+      "stay_mode_key": "LONG_TERM_PERMANENT"
+    }
+  ],
+  "move_checklist": [
+    {
+      "category": "legal",
+      "task": "Determine a realistic Canadian immigration pathway before committing",
+      "description": "Canada has no simple retirement visa; confirm eligibility for Express Entry, a provincial nominee program, or another qualifying route with IRCC.",
+      "official_url": "https://www.canada.ca/en/immigration-refugees-citizenship.html",
+      "display_order": 10
+    },
+    {
+      "category": "healthcare",
+      "task": "Understand the MCP provincial health-plan waiting period",
+      "description": "Newly landed permanent residents typically face a waiting period before provincial health coverage begins; arrange private interim coverage.",
+      "display_order": 20
+    },
+    {
+      "category": "housing",
+      "task": "Confirm current federal foreign-buyer property rules",
+      "description": "Verify applicability of the federal non-Canadian residential-purchase restriction with a Canadian real-estate lawyer before buying.",
+      "official_url": "https://www.canada.ca/en/department-finance/news/2023/12/further-clarity-on-the-prohibition-on-the-purchase-of-residential-property-by-non-canadians-act.html",
+      "display_order": 30
+    },
+    {
+      "category": "climate",
+      "task": "Prepare for Atlantic Canada winter storms",
+      "description": "Verify home storm-readiness (heating, generator backup) given St. John's reputation for severe winter weather.",
+      "display_order": 40
+    }
+  ],
+  "environment_quality": {
+    "air_quality_summary": "Generally good coastal air quality.",
+    "water_reliability": "STRONG - municipal water supply",
+    "heat_humidity_comfort": "Cool maritime climate; famously foggy and windy",
+    "mosquito_pest_pressure": "LOW-SEASONAL",
+    "environmental_notes": "One of the windiest and foggiest major cities in Canada, shaped by its exposed North Atlantic harbor location.",
+    "source_name": "Environment and Climate Change Canada (general context)",
+    "source_url": null
+  },
+  "daily_life_practicality": {
+    "car_need": "HIGH",
+    "driving_difficulty": "Hilly terrain and winter storm conditions are real driving factors",
+    "parking_difficulty": "VARIABLE - downtown hilly streets can be tight",
+    "grocery_access": "Available in populated zones",
+    "pharmacy_access": "Available",
+    "banking_practicality": "Standard Canadian banking (requires landed-immigrant/PR status for full account access)",
+    "card_payment_acceptance": "Very high - standard Canadian card/mobile-payment acceptance",
+    "cash_usage": "Low-moderate",
+    "mobile_payment_usage": "High",
+    "emergency_services_summary": "911 emergency number; Eastern Health regional hospital network.",
+    "things_residents_wish_they_knew": "Weather (fog, wind, winter storms) shapes daily planning more than newcomers from milder climates expect; the immigration process itself is often the single biggest hurdle, not local living costs.",
+    "source_url": "https://www.google.com/maps/search/?api=1&query=St.+John%27s+Newfoundland"
+  },
+  "events_seasonality": [
+    {
+      "record_type": "seasonal_note",
+      "name": "Cruise ship and iceberg season",
+      "month_start": 5,
+      "month_end": 9,
+      "season": "summer",
+      "description": "Cruise ship season begins around May 5th; iceberg viewing (Iceberg Alley) and whale watching peak in this window.",
+      "crowding_level": "HIGH",
+      "price_pressure": "MODERATE",
+      "official_url": "https://www.destinationstjohns.com/",
+      "source_name": "Destination St. John's official tourism site"
+    },
+    {
+      "record_type": "festival",
+      "name": "Royal St. John's Regatta",
+      "month_start": 8,
+      "month_end": 8,
+      "season": "summer",
+      "description": "North America's oldest continuous sporting event, a civic holiday centered on Quidi Vidi Lake rowing races.",
+      "crowding_level": "HIGH",
+      "price_pressure": "LOW",
+      "official_url": "https://www.destinationstjohns.com/",
+      "source_name": "Destination St. John's official tourism site"
+    },
+    {
+      "record_type": "festival",
+      "name": "George Street summer festival season",
+      "month_start": 6,
+      "month_end": 8,
+      "season": "summer",
+      "description": "Concentrated nightlife/live-music programming on George Street through the summer months.",
+      "crowding_level": "HIGH",
+      "price_pressure": "MODERATE",
+      "official_url": "https://www.destinationstjohns.com/",
+      "source_name": "Destination St. John's official tourism site"
+    }
+  ]
+}
