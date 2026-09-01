@@ -48,8 +48,11 @@ const EXPECTED_BATCH01 = {
 
 const EXPECTED = {
   "ascoli-piceno-it": { title: "Ascoli Piceno", country: "Italy", neighborhoods: 7, places: 21, media: 5, sources: 9 },
-  "sarande-al": { title: "Sarandë", country: "Albania", neighborhoods: 6, places: 20, media: 5, sources: 21 },
-  "dumaguete-ph": { title: "Dumaguete City", country: "Philippines", neighborhoods: 7, places: 20, media: 5, sources: 16 },
+  // places bumped 20 -> 25 on 2026-08-31 after adding 5 real, verified food places each (both
+  // destinations previously had zero food-category places - see expansion-workbook-registry.ts
+  // hash-update comment).
+  "sarande-al": { title: "Sarandë", country: "Albania", neighborhoods: 6, places: 25, media: 5, sources: 21 },
+  "dumaguete-ph": { title: "Dumaguete City", country: "Philippines", neighborhoods: 7, places: 25, media: 5, sources: 16 },
   "las-terrenas-do": { title: "Las Terrenas", country: "Dominican Republic", neighborhoods: 7, places: 20, media: 5, sources: 17 },
   "fairhope-al-us": { title: "Fairhope", country: "United States", neighborhoods: 7, places: 24, media: 5, sources: 17 },
 } as const;

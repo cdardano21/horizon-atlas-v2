@@ -58,7 +58,16 @@ const BATCHES = [
     v32Path: path.resolve(process.cwd(), "data/DestinationFinderAI_Expansion_Batch_01_5_Destinations_v3.2.xlsx"),
     v33Path: path.resolve(process.cwd(), "data/DestinationFinderAI_Expansion_Batch_01_5_Destinations_v3.3.xlsx"),
     v32ExpectedSha256: "bbf101ee758733349109943510369d07c666fca1decee30250a9d2fa73016a4a",
-    v33ExpectedSha256: "2a0a7087123f9b4ff6eb57c3a20087e3ad966877bdef5bcd6a651787182499b8",
+    // Updated 2026-08-31: two food-place link corrections (Tintoque, Morning Glory Original) - see
+    // the dedicated allowance in the cell-level preservation test below. Updated again 2026-09-01
+    // after correcting links for 10 of 11 Hoi An Maps-only food places (Miss Ly Cafeteria left
+    // unresolved but its source_name/verified_at were still updated to record the investigation).
+    // Updated again 2026-09-01 after correcting links for 16 of 17 entries across The Villages (9)
+    // and Sofia (8) (Scooter's Coffee - The Villages left unresolved but its source_name/verified_at
+    // were still updated; Made in Home confirmed renamed to Dark Sister by Made in Home).
+    // Updated again 2026-09-01 after correcting links for all 14 entries across Puerto Vallarta (7)
+    // and Queenstown (7) - all 14 resolved, no closures/replacements/renames needed.
+    v33ExpectedSha256: "41a2bd189f3470b7cdafacb0b6a3f86fb047a442058587a16f6d3d393dfcf51c",
     expectedLifestyleRowCount: 207,
   },
   {
@@ -67,7 +76,17 @@ const BATCHES = [
     v32Path: path.resolve(process.cwd(), "data/DestinationFinderAI_Expansion_Batch_02_5_Destinations_v3.2.xlsx"),
     v33Path: path.resolve(process.cwd(), "data/DestinationFinderAI_Expansion_Batch_02_5_Destinations_v3.3.xlsx"),
     v32ExpectedSha256: "347afe628d5ceb3bbf0bc1b0b44a358b24bf575214946b40f4297fd3b6a80fe1",
-    v33ExpectedSha256: "8abcd297014c88a884784e4f1bd2169141f3fda5750ebab36d6943c2c6925a03",
+    // Updated 2026-08-31: 5 new food places added each for Sarande and Dumaguete (additive PLACES
+    // rows only, no pre-existing row changed).
+    // Updated again 2026-09-01: corrected website_url/source_name/source_url/verified_at for all 3
+    // Las Terrenas dining-area entries (las-terrenas-do-place-3, -7, -13) - see the dedicated
+    // allowance in the cell-level preservation test below.
+    // Updated again 2026-09-01 after accepting the exact business matches for Taverna Garden,
+    // Casablanca Restaurant Dumaguete, Buglas Isla Cafe, La Mensa Italian Chophouse,
+    // Sans Rival Cakes and Pastries, Hayahay Treehouse Bar and Viewdeck Restobar, and Aromas Café
+    // (official Facebook/Instagram profile matches only; all remaining target entries remain
+    // Maps-only unless exact identity evidence is independently confirmed).
+    v33ExpectedSha256: "3e3898283c38efb0f9fd2242c4bbf683f02426596e3c61210b18f41600b04c9a",
     expectedLifestyleRowCount: 208,
   },
 ];
@@ -122,10 +141,50 @@ describe.skipIf(!allFilesExist)("Lifestyle v3.3 candidate workbooks - final sema
         expect(registryEntry?.workbookPath).toContain("v3.3");
       });
 
-      it("every pre-existing sheet/header/row/cell/hyperlink is unchanged, tolerating only the approved schema_version bump and additive PLACES rows", () => {
+      it("every pre-existing sheet/header/row/cell/hyperlink is unchanged, tolerating only the approved schema_version bump, additive PLACES rows, and reviewed food-place link corrections (Batch #1 and Batch #2)", () => {
         const report = runComparator(batch.v32Path, batch.v33Path);
-        expect(report.issues).toEqual([]);
-        expect(report.ok).toBe(true);
+        // Batch #1: these rows' stored website_url/source_name/source_url/verified_at were
+        // corrected on 2026-08-31 (Tintoque, Morning Glory Original) and 2026-09-01 (the remaining
+        // Hoi An food places, one of which - Miss Ly Cafeteria - only had source_name/verified_at
+        // updated to record that no confident link was found) - see expansion-workbook-registry.ts
+        // hash-update comments. Batch #2: the 3 Las Terrenas dining-area rows were corrected
+        // 2026-09-01 (see above). Every other field on these rows, and every other row in every other
+        // sheet, is still byte-identical.
+        const APPROVED_LINK_CORRECTION_PLACE_KEYS_BY_BATCH: Record<string, Set<string>> = {
+          "batch-01": new Set([
+            "puerto-vallarta-mx-tintoque", "hoi-an-vn-morning-glory-original",
+            "hoi-an-vn-mango-mango", "hoi-an-vn-nu-eatery", "hoi-an-vn-bale-well",
+            "hoi-an-vn-streets-restaurant-cafe", "hoi-an-vn-miss-ly-cafeteria",
+            "hoi-an-vn-pause-and-enjoy-restaurant", "hoi-an-vn-reaching-out-tea-house",
+            "hoi-an-vn-xliii-specialty-coffee", "hoi-an-vn-hoi-an-roastery",
+            "hoi-an-vn-phin-coffee", "hoi-an-vn-rosie-s-cafe",
+            // The Villages (9) and Sofia (8) food-link corrections, 2026-09-01.
+            "the-villages-fl-us-city-fire-american-oven-bar", "the-villages-fl-us-prima-italian-steakhouse",
+            "the-villages-fl-us-legacy-restaurant-at-nancy-lopez-country-club",
+            "the-villages-fl-us-palmer-legends-country-club-restaurant", "the-villages-fl-us-the-standard-clcl",
+            "the-villages-fl-us-foxtail-coffee-co-the-villages", "the-villages-fl-us-scooter-s-coffee-the-villages",
+            "the-villages-fl-us-starbucks-lake-sumter-landing", "the-villages-fl-us-panera-bread-the-villages",
+            "sofia-bg-made-in-home", "sofia-bg-niko-las-0-360", "sofia-bg-tenebris",
+            "sofia-bg-martines-specialty-coffee-shop-roastery", "sofia-bg-dabov-specialty-coffee",
+            "sofia-bg-chucky-s-coffee-house", "sofia-bg-coffee-syndicate", "sofia-bg-furna",
+            // Puerto Vallarta (7) and Queenstown (7) food-link corrections, 2026-09-01.
+            "puerto-vallarta-mx-el-dorado", "puerto-vallarta-mx-pancho-s-takos", "puerto-vallarta-mx-puerto-cafe",
+            "puerto-vallarta-mx-calmate-cafe", "puerto-vallarta-mx-miscelanea-vallarta",
+            "puerto-vallarta-mx-a-page-in-the-sun", "puerto-vallarta-mx-dee-s-coffee-company",
+            "queenstown-nz-finz-seafood-grill", "queenstown-nz-madam-woo", "queenstown-nz-margo-s-queenstown",
+            "queenstown-nz-vudu-cafe-larder", "queenstown-nz-bespoke-kitchen", "queenstown-nz-mackenzie-coffee-co",
+            "queenstown-nz-yonder",
+          ]),
+          // Las Terrenas dining-area entries corrected 2026-09-01 (see the hash-update comment above).
+          "batch-02": new Set([
+            "las-terrenas-do-place-3", "las-terrenas-do-place-7", "las-terrenas-do-place-13",
+          ]),
+        };
+        const approvedKeys = APPROVED_LINK_CORRECTION_PLACE_KEYS_BY_BATCH[batch.registryId];
+        const unexpectedIssues = approvedKeys
+          ? report.issues.filter((issue) => !Array.from(approvedKeys).some((key) => issue.includes(`'place_key': '${key}'`)))
+          : report.issues;
+        expect(unexpectedIssues).toEqual([]);
       });
 
       it("LIFESTYLE_FEATURES is the only new sheet, appended last, with the approved 16 columns and the final validated evidence row count", () => {

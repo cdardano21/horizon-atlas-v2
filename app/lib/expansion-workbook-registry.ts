@@ -39,14 +39,31 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     workbookPath: "data/DestinationFinderAI_Expansion_Batch_01_5_Destinations_v3.3.xlsx",
     environment: "preview",
     expectedDestinationKeys: ["the-villages-fl-us", "sofia-bg", "puerto-vallarta-mx", "hoi-an-vn", "queenstown-nz"],
-    expectedSha256: "2a0a7087123f9b4ff6eb57c3a20087e3ad966877bdef5bcd6a651787182499b8",
+    // Updated 2026-08-31 after correcting two broken food-place links (Tintoque, Morning Glory
+    // Original). Updated again 2026-09-01 after correcting links for 10 of 11 Hoi An Maps-only
+    // food places (Miss Ly Cafeteria left unresolved - no confidently official link found).
+    // Updated again 2026-09-01 after correcting links for 16 of 17 entries across The Villages (9)
+    // and Sofia (8) (Scooter's Coffee - The Villages left unresolved - no confidently official/
+    // location-specific link found; Made in Home confirmed renamed to Dark Sister by Made in Home).
+    // Updated again 2026-09-01 after correcting links for all 14 entries across Puerto Vallarta (7)
+    // and Queenstown (7) - all 14 resolved, no closures/replacements/renames needed.
+    expectedSha256: "41a2bd189f3470b7cdafacb0b6a3f86fb047a442058587a16f6d3d393dfcf51c",
   },
   {
     registryId: "batch-02",
     workbookPath: "data/DestinationFinderAI_Expansion_Batch_02_5_Destinations_v3.3.xlsx",
     environment: "preview",
     expectedDestinationKeys: ["ascoli-piceno-it", "sarande-al", "dumaguete-ph", "las-terrenas-do", "fairhope-al-us"],
-    expectedSha256: "8abcd297014c88a884784e4f1bd2169141f3fda5750ebab36d6943c2c6925a03",
+    // Updated 2026-08-31 after adding 5 verified food places each for Sarande and Dumaguete (previously zero).
+    // Updated again 2026-09-01 after correcting links for all 3 Las Terrenas dining-area entries
+    // (Pueblo de los Pescadores, Punta Popy beach-road dining cluster, Playa Bonita boardwalk/dining
+    // cluster) to the official Dominican Republic tourism board page for Las Terrenas.
+    // Updated again 2026-09-01 after accepting the exact business matches for Casablanca Restaurant
+    // Dumaguete, Buglas Isla Cafe, La Mensa Italian Chophouse, Sans Rival Cakes and Pastries,
+    // Hayahay Treehouse Bar and Viewdeck Restobar, and Taverna Garden (exact official Facebook or
+    // Instagram profiles only; all remaining Sarandë/Dumaguete targets stay Maps-only unless identity
+    // is independently confirmed).
+    expectedSha256: "3e3898283c38efb0f9fd2242c4bbf683f02426596e3c61210b18f41600b04c9a",
   },
   {
     registryId: "legacy-pilot06-populated",
@@ -58,9 +75,15 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
       "the-hague-netherlands", "kyoto-japan", "santa-fe-new-mexico-united-states",
       "st-cloud-minnesota-united-states", "san-ramon-costa-rica", "st-john-s-canada",
     ],
-    // Updated after adding 30 verified, openly-licensed Wikimedia Commons MEDIA rows (5 per
-    // destination: 1 hero + 4 gallery) - the workbook's own real content changed, so its hash did too.
-    expectedSha256: "4f4017e5ff81d57722d8ce508e8824b8d5f47bb3537a95bb03141785f414c95b",
+    // Updated 2026-08-31 after correcting 6 broken/renamed food-place links (Foodhallen Den Haag
+    // replaced with De Grote Markt, Capriole Cafe renamed to Puurr aan de Binck, Gion Kappa renamed
+    // to its current name, plus Betterday Coffee/Krewe Restaurant/Chinched domain corrections).
+    // Updated again 2026-09-01 after confirming Raymonds (St. John's) permanently closed and
+    // replacing it with Rabble (verified official Instagram profile).
+    // Updated again 2026-09-01 after accepting the exact official Instagram profile for Aromas Café
+    // in San Ramón (all other San Ramón targets remain Maps-only unless exact identity evidence is
+    // independently confirmed).
+    expectedSha256: "91bcc28a9df767d20831c698c841fa8ab42e499914f0fc524e87479a07db6373",
   },
   {
     registryId: "legacy-batch-20",
@@ -73,7 +96,20 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
       "palm-springs-california-united-states", "paphos-cyprus", "santander-spain",
       "savannah-georgia-united-states", "sibenik-croatia",
     ],
-    expectedSha256: "f9841500141e91d5c810b4e87c42ddb997993d95362d0a5b9923bd84aa164275",
+    // Updated 2026-08-31 after correcting 3 food-place links (La Nueva Posada, Tamarind Market,
+    // Savor Nafplio Experiences) and reverting 2 unresolved broken links to Google Maps fallback.
+    // Updated again 2026-09-01 after correcting links for all 5 Savannah Maps-only food places.
+    // Updated again 2026-09-01 after correcting links for 8 of 9 entries across Funchal, Nafplio,
+    // Sibenik, Boquete (x3), and Da Nang (x2) (Pescaria Monopoli and Madame Lan Restaurant left
+    // unresolved - no confidently official/reachable link found for either).
+    // Updated again 2026-09-01 after correcting links for 13 of 15 entries across Ajijic (5),
+    // Chiang Mai (5), and Cuenca (5) (The Coffee Hour and Chiang Mai Food Adventures left
+    // unresolved - no confidently official Ajijic-specific/identity-confirmed match found).
+    // Updated again 2026-09-01: Yves' Restaurant Bar's website_url was incorrectly a third-party
+    // aggregator (hey-restaurants.com) - replaced with its confirmed official Facebook page.
+    // Updated again 2026-09-01 for the bounded Batch 20 food-link enrichment pass covering the 15
+    // named recommendations in Mérida, Montevideo, and Palm Springs.
+    expectedSha256: "43f4d65a68303f579aa03b685f3123963ac63ebc71c1ee2310ca912892aeefc4",
   },
 ];
 
