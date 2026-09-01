@@ -138,13 +138,13 @@ describe("CanonicalDestinationPage", () => {
     }
   });
 
-  it("renders a native 'On this page' anchor menu with the three correct hrefs", () => {
+  it("renders a prominent 'Explore this destination' anchor menu with the three correct hrefs", () => {
     render(<CanonicalDestinationPage destination={buildDestination()} />);
 
-    const nav = screen.getByRole("navigation", { name: /On this page/i });
-    expect(within(nav).getByRole("link", { name: "Destination Guide" })).toHaveAttribute("href", "#destination-guide");
-    expect(within(nav).getByRole("link", { name: "Practical Details" })).toHaveAttribute("href", "#practical-details");
-    expect(within(nav).getByRole("link", { name: "Deep Dive" })).toHaveAttribute("href", "#deep-dive");
+    const nav = screen.getByRole("navigation", { name: /Explore this destination/i });
+    expect(within(nav).getByRole("link", { name: /Destination Guide/ })).toHaveAttribute("href", "#destination-guide");
+    expect(within(nav).getByRole("link", { name: /Practical Details/ })).toHaveAttribute("href", "#practical-details");
+    expect(within(nav).getByRole("link", { name: /Deep Dive/ })).toHaveAttribute("href", "#deep-dive");
   });
 
   it("never reads or writes a tab-preference key to localStorage now that there is no tab state to persist", () => {
@@ -382,7 +382,10 @@ describe("CanonicalDestinationPage", () => {
 
     expect(screen.getAllByRole("link", { name: /Google Maps/i }).length).toBeGreaterThan(0);
     expect(screen.getByText(/Neighborhood intelligence/i)).toBeInTheDocument();
-    expect(screen.getByText(/Overall neighborhood score/i)).toBeInTheDocument();
+    // "Overall neighborhood score" was a synthetic composite counted from generic fallback keyword
+    // matches, never a real persisted evidence signal - it was removed as unfinished filler rather
+    // than asserted here.
+    expect(screen.queryByText(/Overall neighborhood score/i)).not.toBeInTheDocument();
   });
 
   it("never leaks generated Airbnb/airport-transfer travel-search utilities into the neighborhood-scoped 'Live neighborhood resources' widget (regression for a bare /air/ substring match)", () => {
@@ -907,7 +910,7 @@ describe("CanonicalDestinationPage", () => {
     });
   });
 
-  it("shows curated Chicago imagery in the executive summary and gallery", () => {
+  it("shows curated Chicago imagery in the hero and gallery", () => {
     const chicagoDestination = buildDestination();
     chicagoDestination.slug = "chicago-illinois-united-states";
     chicagoDestination.city = "Chicago";
@@ -921,7 +924,6 @@ describe("CanonicalDestinationPage", () => {
     const chicagoImages = images.filter((image) => image.getAttribute("src")?.includes("upload.wikimedia.org") || image.getAttribute("src")?.includes("data:image"));
 
     expect(chicagoImages.length).toBeGreaterThanOrEqual(2);
-    expect(screen.getByText(/Featured image/i)).toBeInTheDocument();
   });
 });
 
@@ -1087,20 +1089,19 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     expect(airportCard?.textContent).not.toContain("Find airport transfers");
   });
 
-  it("hides an optional At-a-glance category cleanly instead of repeating the placeholder sentence across the page", () => {
+  it("hides an optional category cleanly instead of repeating the placeholder sentence anywhere on the page", () => {
     const destination = buildV31Destination();
     // No bikeability data anywhere on this destination.
     destination.knowledgeProfile = { ...destination.knowledgeProfile, bikeFriendliness: undefined };
 
     render(<CanonicalDestinationPage destination={destination} />);
 
-    // Scoped to the At-a-glance summary specifically (its own intended subject) - the page also
-    // now always renders Practical Details' neighborhood cards, which independently derive their
-    // own optional facts and are out of scope for this assertion.
-    const atAGlanceHeading = screen.getByText("Essential destination facts, kept compact for quick comparison.");
-    const atAGlanceSection = atAGlanceHeading.closest("section") as HTMLElement;
-    expect(within(atAGlanceSection).queryByText("Bikeability")).not.toBeInTheDocument();
-    expect(within(atAGlanceSection).queryByText(/Detailed category information is not available yet/i)).not.toBeInTheDocument();
+    // The redundant Executive Summary / "at a glance" grid (which used to render every remaining
+    // fact, including a placeholder sentence for missing ones) was removed entirely - an optional
+    // category with genuinely no supported value must not leak its placeholder sentence into any
+    // surviving section (hero facts, "What to know first", or per-neighborhood insight cards).
+    expect(screen.queryByText("Bikeability")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Detailed category information is not available yet/i)).not.toBeInTheDocument();
   });
 
   function buildV31PlaceLinkedDestination(): CanonicalDestination {
@@ -1215,8 +1216,10 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     return destination;
   }
 
-  it("renders all 8 persisted flagship neighborhood cards directly, with no click required to reveal any of them", () => {
+  it("renders all 8 persisted flagship neighborhood cards after expanding the collapsed list (first 4 shown by default)", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /show .* more neighborhoods/i }));
 
     for (const name of ["Neighborhood A", "Neighborhood B", "Neighborhood C", "Neighborhood D", "Neighborhood E", "Neighborhood F", "Neighborhood G", "Neighborhood H"]) {
       expect(screen.getAllByText(name).length).toBeGreaterThan(0);
@@ -1233,7 +1236,10 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     expect(screen.getAllByRole("heading", { name: "Neighborhood B", level: 4 })).toHaveLength(1);
     expect(screen.getAllByRole("heading", { name: "Neighborhood C", level: 4 })).toHaveLength(1);
     expect(screen.getAllByRole("heading", { name: "Neighborhood D", level: 4 })).toHaveLength(1);
-    expect(screen.getAllByText("Neighborhood A Bistro")).toHaveLength(1);
+    // Destination Highlights now standardizes on showing every real place regardless of whether it
+    // also has a neighborhoodKey, so a neighborhood-linked place legitimately renders twice (once
+    // inside its own neighborhood card, once inside Destination Highlights) - never more than that.
+    expect(screen.getAllByText("Neighborhood A Bistro")).toHaveLength(2);
   });
 
 
@@ -1258,6 +1264,8 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
   it("renders exactly the real persisted neighborhood count for a destination with 5-8 neighborhoods, never padding to 8 (no fabrication)", () => {
     render(<CanonicalDestinationPage destination={buildV31DestinationWithNeighborhoodCount(6)} />);
 
+    fireEvent.click(screen.getByRole("button", { name: /show .* more neighborhoods/i }));
+
     expect(screen.getAllByText("Neighborhood E").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Neighborhood F").length).toBeGreaterThan(0);
     // Only 6 real neighborhoods exist - Neighborhood G/H must never appear (no fabrication).
@@ -1268,27 +1276,39 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
   it("filters real places by exact neighborhoodKey - a Neighborhood A restaurant never appears under Neighborhood B", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
 
-    expect(screen.getByText("Neighborhood A Bistro")).toBeInTheDocument();
-    expect(screen.getByText("Neighborhood B Grill")).toBeInTheDocument();
-    // Both real restaurants render exactly once each - proves no cross-neighborhood duplication.
-    expect(screen.getAllByText("Neighborhood A Bistro")).toHaveLength(1);
-    expect(screen.getAllByText("Neighborhood B Grill")).toHaveLength(1);
+    // Each real restaurant renders exactly twice (its own neighborhood card + Destination
+    // Highlights, which now surfaces every real place) - proves no cross-neighborhood duplication
+    // (neither ever renders a 3rd time under the wrong neighborhood).
+    expect(screen.getAllByText("Neighborhood A Bistro")).toHaveLength(2);
+    expect(screen.getAllByText("Neighborhood B Grill")).toHaveLength(2);
   });
 
-  it("renders a place tied to a neighborhood beyond the first 4 without requiring any click, now that all neighborhoods render directly", () => {
+  it("renders a place tied to a neighborhood beyond the first 4 once the collapsed list is expanded", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
 
-    expect(screen.getByText("Neighborhood E Cafe")).toBeInTheDocument();
-    expect(screen.getByText("Neighborhood G Golf Club")).toBeInTheDocument();
+    // Destination Highlights (unaffected by the neighborhoods collapse state) already surfaces
+    // every real place, so the place is visible exactly once before expanding - the collapsed
+    // neighborhood card itself is the only thing gated by the "Show more" control.
+    expect(screen.getAllByText("Neighborhood E Cafe")).toHaveLength(1);
+    fireEvent.click(screen.getByRole("button", { name: /show .* more neighborhoods/i }));
+
+    // After expanding, the place renders twice: once in Destination Highlights (unchanged), once
+    // in its now-visible Neighborhood E card.
+    expect(screen.getAllByText("Neighborhood E Cafe")).toHaveLength(2);
+    // Also renders twice now (Destination Highlights + its now-visible Neighborhood G card).
+    expect(screen.getAllByText("Neighborhood G Golf Club")).toHaveLength(2);
   });
 
-  it("surfaces a real place tied to a neighborhood outside the flagship 4 (e.g. golf) exactly once, with exact neighborhoodKey linkage preserved", () => {
+  it("surfaces a real place tied to a neighborhood outside the flagship 4 (e.g. golf), with exact neighborhoodKey linkage preserved", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
 
-    expect(screen.getByText("Neighborhood G Golf Club")).toBeInTheDocument();
-    expect(screen.getAllByText("Neighborhood G Golf Club")).toHaveLength(1);
+    fireEvent.click(screen.getByRole("button", { name: /show .* more neighborhoods/i }));
+
+    // Renders twice (Destination Highlights' golf bucket + its own now-visible Neighborhood G
+    // card) - never a 3rd time under an unrelated neighborhood.
+    expect(screen.getAllByText("Neighborhood G Golf Club")).toHaveLength(2);
     // Still never leaks into an unrelated neighborhood's card.
-    expect(screen.queryByText("Neighborhood A Bistro")).toBeInTheDocument();
+    expect(screen.getAllByText("Neighborhood A Bistro").length).toBeGreaterThan(0);
   });
 
   it("renders a real clickable website link in the DOM for a place with websiteUrl, with no click required to reveal it", () => {
@@ -1315,9 +1335,14 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
   it("does not invent a fake URL when a real place has no website, maps, or source link at all", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
 
-    const noLinkPlace = screen.getByText("Neighborhood A No Link Diner").closest("details") as HTMLElement;
-    expect(within(noLinkPlace).queryByText("Visit website")).not.toBeInTheDocument();
-    expect(within(noLinkPlace).queryByText("Open on Google Maps")).not.toBeInTheDocument();
+    // Renders in both its neighborhood card and Destination Highlights - neither occurrence may
+    // ever invent a URL for a place that genuinely has none.
+    const noLinkPlaceCards = screen.getAllByText("Neighborhood A No Link Diner").map((el) => el.closest("details") as HTMLElement);
+    expect(noLinkPlaceCards.length).toBeGreaterThan(0);
+    for (const card of noLinkPlaceCards) {
+      expect(within(card).queryByText("Visit website")).not.toBeInTheDocument();
+      expect(within(card).queryByText("Open on Google Maps")).not.toBeInTheDocument();
+    }
   });
 
   it("removes an editorial 'retain as UNKNOWN' instruction from a place's public description while preserving the rest of the real description text", () => {
@@ -1345,9 +1370,10 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
   it("does not replace real persisted places with generic 'More local detail coming soon' filler for categories that have real data", () => {
     render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
 
-    // Real restaurant/coffee content must be present, not replaced by filler text for those categories.
-    expect(screen.getByText("Neighborhood A Bistro")).toBeInTheDocument();
-    expect(screen.getByText("Neighborhood A Coffee Co")).toBeInTheDocument();
+    // Real restaurant/coffee content must be present, not replaced by filler text for those
+    // categories (present in both the neighborhood card and Destination Highlights).
+    expect(screen.getAllByText("Neighborhood A Bistro").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Neighborhood A Coffee Co").length).toBeGreaterThan(0);
   });
 
   function buildV31DestinationWithManyRestaurantsInOneNeighborhood(): CanonicalDestination {
@@ -1375,9 +1401,11 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
   it("renders every real place in a category directly, with no click required and no artificial cap", () => {
     render(<CanonicalDestinationPage destination={buildV31DestinationWithManyRestaurantsInOneNeighborhood()} />);
 
-    expect(screen.getByText("Many Restaurant 1")).toBeInTheDocument();
-    expect(screen.getByText("Many Restaurant 4")).toBeInTheDocument();
-    expect(screen.getByText("Many Restaurant 5")).toBeInTheDocument();
+    // Each also appears in Destination Highlights (neighborhood-linked places are no longer
+    // exclusive to their neighborhood card), so at least one occurrence of each is asserted here.
+    expect(screen.getAllByText("Many Restaurant 1").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Many Restaurant 4").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Many Restaurant 5").length).toBeGreaterThan(0);
   });
 
   function buildV31DestinationWithUnassignedPlaces(): CanonicalDestination {
@@ -1469,30 +1497,31 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
       render(<CanonicalDestinationPage destination={buildV31DestinationWithUnassignedPlaces()} />);
 
       expect(screen.getByText("Test Sports Complex")).toBeInTheDocument();
-      expect(screen.getByText(/Sports & recreation around/)).toBeInTheDocument();
+      expect(screen.getByText(/Sports & recreation across/)).toBeInTheDocument();
     });
 
     it("renders the coworking bucket for a real unassigned coworking place", () => {
       render(<CanonicalDestinationPage destination={buildV31DestinationWithUnassignedPlaces()} />);
 
       expect(screen.getByText("Test Coworking Hub")).toBeInTheDocument();
-      expect(screen.getByText(/Coworking around/)).toBeInTheDocument();
+      expect(screen.getByText(/Coworking across/)).toBeInTheDocument();
     });
 
     it("uses a generic heading built from the destination's own city name, never a hardcoded destination string", () => {
       const destination = buildV31DestinationWithUnassignedPlaces();
       render(<CanonicalDestinationPage destination={destination} />);
 
-      expect(screen.getByText(`Golf around ${destination.city}`)).toBeInTheDocument();
-      expect(screen.queryByText(/Golf around Summerlin/)).not.toBeInTheDocument();
+      expect(screen.getByText(`Golf across ${destination.city}`)).toBeInTheDocument();
+      expect(screen.queryByText(/Golf across Summerlin/)).not.toBeInTheDocument();
     });
 
-    it("never renders the linked place inside the destination-level unassigned section", () => {
+    it("also renders a neighborhood-linked place inside Destination Highlights, in addition to its own neighborhood card", () => {
       render(<CanonicalDestinationPage destination={buildV31DestinationWithUnassignedPlaces()} />);
 
-      // The linked place appears exactly once (inside its neighborhood card) - never duplicated
-      // into the destination-level section as well.
-      expect(screen.getAllByText("Linked Neighborhood Bistro")).toHaveLength(1);
+      // Destination Highlights standardizes on every real place, including ones that also have a
+      // neighborhoodKey - so the linked place now legitimately renders twice (its neighborhood card
+      // + Destination Highlights), never more than that.
+      expect(screen.getAllByText("Linked Neighborhood Bistro")).toHaveLength(2);
     });
 
     it("never renders an unassigned place inside any neighborhood card", () => {
@@ -1510,8 +1539,11 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
       expect(screen.getAllByText("Test Sports Complex")).toHaveLength(1);
     });
 
-    it("is completely absent when a destination has no unassigned real places", () => {
-      render(<CanonicalDestinationPage destination={buildV31PlaceLinkedDestination()} />);
+    it("is completely absent when a destination has no real places at all", () => {
+      const destination = buildV31Destination();
+      destination.v31Modules = { ...destination.v31Modules!, neighborhoods: [], places: [] };
+
+      render(<CanonicalDestinationPage destination={destination} />);
 
       expect(screen.queryByText("Destination highlights")).not.toBeInTheDocument();
     });

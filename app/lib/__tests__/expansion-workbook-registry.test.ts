@@ -182,6 +182,11 @@ describe("Expansion-workbook preview resolver (registry-driven, generic getCanon
       "ascoli-piceno-it", "sarande-al", "dumaguete-ph", "las-terrenas-do", "fairhope-al-us",
       "the-hague-netherlands", "kyoto-japan", "santa-fe-new-mexico-united-states",
       "st-cloud-minnesota-united-states", "san-ramon-costa-rica", "st-john-s-canada",
+      "ajijic-mexico", "boquete-panama", "chiang-mai-thailand", "cuenca-ecuador", "da-nang-vietnam",
+      "florianopolis-brazil", "funchal-portugal", "george-town-malaysia", "hua-hin-thailand", "lucca-italy",
+      "merida-mexico", "monopoli-italy", "montevideo-uruguay", "nafplio-greece", "nice-france",
+      "palm-springs-california-united-states", "paphos-cyprus", "santander-spain",
+      "savannah-georgia-united-states", "sibenik-croatia",
     ];
     expect(allRegisteredKeys.slice().sort()).toEqual(expectedKeys.sort());
   });

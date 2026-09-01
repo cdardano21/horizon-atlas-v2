@@ -32,6 +32,7 @@
 !data/DestinationFinderAI_Expansion_Batch_01_5_Destinations_v3.2.xlsx
 !data/DestinationFinderAI_Expansion_Batch_02_5_Destinations_v3.2.xlsx
 !data/legacy-migration-pilot-06/DestinationFinderAI_Legacy_Pilot_06_Authoritative_v3.3.xlsx
+!data/legacy-migration-batch-20/DestinationFinderAI_Legacy_Production_Batch_20_Reader_Ready_Authoritative_v3.3.xlsx
 *.xls
 *.xlsm
 /archive/

@@ -62,6 +62,19 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     // destination: 1 hero + 4 gallery) - the workbook's own real content changed, so its hash did too.
     expectedSha256: "4f4017e5ff81d57722d8ce508e8824b8d5f47bb3537a95bb03141785f414c95b",
   },
+  {
+    registryId: "legacy-batch-20",
+    workbookPath: "data/legacy-migration-batch-20/DestinationFinderAI_Legacy_Production_Batch_20_Reader_Ready_Authoritative_v3.3.xlsx",
+    environment: "preview",
+    expectedDestinationKeys: [
+      "ajijic-mexico", "boquete-panama", "chiang-mai-thailand", "cuenca-ecuador", "da-nang-vietnam",
+      "florianopolis-brazil", "funchal-portugal", "george-town-malaysia", "hua-hin-thailand", "lucca-italy",
+      "merida-mexico", "monopoli-italy", "montevideo-uruguay", "nafplio-greece", "nice-france",
+      "palm-springs-california-united-states", "paphos-cyprus", "santander-spain",
+      "savannah-georgia-united-states", "sibenik-croatia",
+    ],
+    expectedSha256: "f9841500141e91d5c810b4e87c42ddb997993d95362d0a5b9923bd84aa164275",
+  },
 ];
 
 const previewEntries = (registry: readonly ExpansionWorkbookRegistryEntry[]) => registry.filter((entry) => entry.environment === "preview");

@@ -370,15 +370,21 @@ const mapNeighborhoods = (bundle: NormalizedPersistedDestinationBundle): Canonic
   bundle.neighborhoods.map((item) => ({
     neighborhoodKey: item.neighborhoodKey,
     name: item.name,
-    summary: item.summary,
+    // Human-authored prose fields sometimes carry unfinished internal research-status language
+    // ("Not yet verified from an authoritative source.", "Specific items to confirm: ...") -
+    // route every one of them through the shared sanitizer so that never reaches a reader.
+    summary: sanitizePublicText(item.summary),
     areaType: item.areaType,
-    bestFor: item.bestFor,
-    walkabilityRating: item.walkabilityRating,
-    safetyRating: item.safetyRating,
-    transitRating: item.transitRating,
-    housingCharacter: item.housingCharacter,
-    pros: item.pros,
-    cons: item.cons,
+    bestFor: sanitizePublicText(item.bestFor),
+    // Rating fields are usually short categorical values ("Good"/"High"), but this batch sometimes
+    // authored full research-status prose here instead - the shared sanitizer is a no-op on a real
+    // short rating and only strips genuinely unpublishable placeholder language.
+    walkabilityRating: sanitizePublicText(item.walkabilityRating),
+    safetyRating: sanitizePublicText(item.safetyRating),
+    transitRating: sanitizePublicText(item.transitRating),
+    housingCharacter: sanitizePublicText(item.housingCharacter),
+    pros: sanitizePublicText(item.pros),
+    cons: sanitizePublicText(item.cons),
     googleMapsUrl: item.googleMapsUrl,
   }));
 
@@ -652,9 +658,30 @@ export const buildCanonicalDestinationFromPersistedBundle = (
   // prose - never fabricated, just the real value or nothing.
   const findFactValue = (factGroup: string) => normalizeTextValue(v31Modules.facts.find((fact) => fact.factGroup === factGroup)?.valueText);
   const findFactByKey = (factKey: string) => normalizeTextValue(v31Modules.facts.find((fact) => fact.factKey === factKey)?.valueText);
+  // A population/metro-population fact row is sometimes authored as research prose describing
+  // WHERE to find the figure ("INEGI's 2020 Census rapid-results interface provides...") rather
+  // than the figure itself - never publish that methodology text as if it were the value. A
+  // short existing value (the normal case) passes through unchanged; long prose is only used if a
+  // genuine comma-grouped population figure (never a bare 4-digit year) can be found within it,
+  // and is hidden entirely otherwise.
+  const extractPlausiblePopulationValue = (text: string | undefined): string | undefined => {
+    if (!text) return undefined;
+    if (text.length <= 40) return text;
+    const match = text.match(/\d{1,3}(?:,\d{3})+/);
+    return match ? match[0] : undefined;
+  };
   const firstSummary = (rows: ReadonlyArray<{ readonly summary: string | null }>) => normalizeTextValue(rows.find((row) => normalizeTextValue(row.summary))?.summary);
+  // TRANSPORT_AIRPORTS can carry more than one row per destination, and a non-transportation row
+  // (e.g. a population-methodology note that was miscategorized into this sheet) can sit ahead of
+  // the real transportation row - prefer the first row that actually has real airport/transit
+  // evidence (airportSummary/transitSummary), and only fall back to the generic first-row .summary
+  // when no row has that dedicated evidence at all.
+  const firstTransportationSummary = (rows: CanonicalDestinationV31Modules["transportation"]) => {
+    const rowWithRealEvidence = rows.find((row) => normalizeTextValue(row.airportSummary) || normalizeTextValue(row.transitSummary));
+    return normalizeTextValue(rowWithRealEvidence?.summary) || firstSummary(rows);
+  };
   const v31Climate = findFactValue("climate");
-  const v31Transportation = firstSummary(v31Modules.transportation) || findFactValue("mobility");
+  const v31Transportation = firstTransportationSummary(v31Modules.transportation) || findFactValue("mobility");
   const v31Healthcare = firstSummary(v31Modules.healthcare) || findFactValue("healthcare");
   const v31Retirement = firstSummary(v31Modules.retirementAging);
   const v31Family = firstSummary(v31Modules.familyEducation);
@@ -676,9 +703,21 @@ export const buildCanonicalDestinationFromPersistedBundle = (
     couple: "Couple",
     family4: "Family of 4",
   };
+  // Budget-card labels are distinct from the generic household-token humanizer above: "single"
+  // reads as "One adult" (never "Family", since no children are included) and "couple" gets its
+  // own clarifying note, both reused as-is rather than inventing a second competing labeling system.
+  const KNOWN_BUDGET_LABELS: Record<string, string> = {
+    single: "One adult",
+    couple: "Couple \u2014 two adults sharing housing",
+    family4: "Family of 4",
+  };
+  const KNOWN_BUDGET_NOTES: Record<string, string> = {
+    couple: "Estimated for two adults sharing one home. Actual costs vary by housing, lifestyle and healthcare needs.",
+  };
   const humanizeToken = (token: string) => token.trim().replace(/[_-]+/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
   const humanizeCostCategory = (token: string) => KNOWN_COST_CATEGORY_LABELS[token.toLowerCase()] || humanizeToken(token);
   const humanizeHousehold = (token: string) => KNOWN_HOUSEHOLD_LABELS[token.toLowerCase()] || humanizeToken(token);
+  const humanizeBudgetLabel = (token: string) => KNOWN_BUDGET_LABELS[token.toLowerCase()] || `${humanizeHousehold(token)} total`;
   const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "cost";
   // Real COST_OF_LIVING rows only: never copy an overall/total figure into invented granular
   // categories (rent/utilities/food) that have no corresponding real row, and never default to a
@@ -700,9 +739,25 @@ export const buildCanonicalDestinationFromPersistedBundle = (
     return "";
   };
 
-  const firstCostOfLivingItem = v31Modules.costOfLiving.find((item) => normalizeTextValue(item.category).toLowerCase().includes("total")) || v31Modules.costOfLiving[0];
-  const v31CostOfLiving = firstCostOfLivingItem
-    ? `${humanizeCostCategory(normalizeTextValue(firstCostOfLivingItem.category) || "Housing")}: ${formatMoneyRange(firstCostOfLivingItem.monthlyLow, firstCostOfLivingItem.monthlyHigh, firstCostOfLivingItem.currency)}`
+  // The headline scalar/summary figure always reflects the one-adult budget (never couple/family)
+  // - a destination with only a couple row still falls back to it, but single is always preferred
+  // when both exist, so the summary and the "One adult" budget card never disagree.
+  const isTotalCostRowByCategory = (item: (typeof v31Modules.costOfLiving)[number]) => normalizeTextValue(item.category).toLowerCase().includes("total");
+  const totalCostRows = v31Modules.costOfLiving.filter(isTotalCostRowByCategory);
+  const firstCostOfLivingItem = totalCostRows.find((item) => normalizeTextValue(item.householdType).toLowerCase() === "single")
+    || totalCostRows[0]
+    || v31Modules.costOfLiving[0];
+  // Only ever built when a real numeric range exists - a row that exists purely as an "evidence
+  // pending" placeholder (category present, monthlyLow/High both null) must never produce a
+  // truthy summary sentence with nothing after it.
+  const firstCostOfLivingRange = firstCostOfLivingItem ? formatMoneyRange(firstCostOfLivingItem.monthlyLow, firstCostOfLivingItem.monthlyHigh, firstCostOfLivingItem.currency) : "";
+  // Never surfaces the raw workbook category token (e.g. "Total Monthly Budget") as the summary
+  // prefix for a total/budget row - only genuine, non-total category rows (e.g. "Housing") still
+  // use the humanized category label.
+  const v31CostOfLiving = firstCostOfLivingItem && firstCostOfLivingRange
+    ? (isTotalCostRowByCategory(firstCostOfLivingItem)
+        ? `Estimated one-adult monthly cost of living: ${firstCostOfLivingRange}.`
+        : `${humanizeCostCategory(normalizeTextValue(firstCostOfLivingItem.category) || "Housing")}: ${firstCostOfLivingRange}`)
     : "";
   // Scalar identity/finance facts (population, metro population, elevation, currency, time zone)
   // are legitimate 1:1 overrides of the existing scalar knowledgeProfile fields - not "cramming"
@@ -737,8 +792,8 @@ export const buildCanonicalDestinationFromPersistedBundle = (
   };
   const v31AverageTemperatures = formatAverageTemperatures();
   const v31KnowledgeProfileOverrides = {
-    population: normalizeTextValue(rawIdentity?.population) || findFactByKey("population") || undefined,
-    metroPopulation: normalizeTextValue(rawIdentity?.metroPopulation) || findFactByKey("metro_population") || undefined,
+    population: normalizeTextValue(rawIdentity?.population) || extractPlausiblePopulationValue(findFactByKey("population")) || undefined,
+    metroPopulation: normalizeTextValue(rawIdentity?.metroPopulation) || extractPlausiblePopulationValue(findFactByKey("metro_population")) || undefined,
     // A bare numeric elevation value (e.g. "1") needs its unit for the figure to be meaningful -
     // never re-labeled or converted, only given the "m" the workbook's own elevation_m column implies.
     elevation: rawElevation ? (/^-?\d+(\.\d+)?$/.test(rawElevation) ? `${rawElevation} m` : rawElevation) : undefined,
@@ -753,20 +808,25 @@ export const buildCanonicalDestinationFromPersistedBundle = (
   const realCostRows = v31Modules.costOfLiving.filter((item) => item.monthlyLow != null || item.monthlyHigh != null);
   const realCostCurrency = normalizeTextValue(realCostRows[0]?.currency) || normalizeTextValue(bundle.editorial.currency) || undefined;
   const isTotalCostRow = (item: (typeof realCostRows)[number]) => normalizeTextValue(item.category).toLowerCase().includes("total");
+  const HOUSEHOLD_SORT_ORDER: Record<string, number> = { single: 0, couple: 1, family4: 2 };
   // Each "total" row is a distinct household-type budget summary (single/couple/family4) - never
   // collapsed into one label/key, and never showing the raw category token as the visible label.
+  // One-adult always sorts first so the reader sees it before the couple estimate.
   const v31MonthlyBudgets = realCostRows
     .filter(isTotalCostRow)
     .map((item) => {
       const household = normalizeTextValue(item.householdType);
-      const label = household ? `${humanizeHousehold(household)} total` : humanizeCostCategory(normalizeTextValue(item.category) || "");
+      const label = household ? humanizeBudgetLabel(household) : humanizeCostCategory(normalizeTextValue(item.category) || "");
       return {
         label,
         amount: formatMoneyRange(item.monthlyLow, item.monthlyHigh, item.currency),
-        note: "",
+        note: household ? KNOWN_BUDGET_NOTES[household.toLowerCase()] || "" : "",
+        sortOrder: household ? HOUSEHOLD_SORT_ORDER[household.toLowerCase()] ?? 99 : 99,
       };
     })
-    .filter((budget) => budget.amount);
+    .filter((budget) => budget.amount)
+    .sort((left, right) => left.sortOrder - right.sortOrder)
+    .map(({ sortOrder: _sortOrder, ...budget }) => budget);
   // Only genuinely distinct, non-total category rows become their own granular category cards -
   // a "total" row is a budget summary, never split into fabricated rent/utilities/food lines.
   const v31CostCategories = realCostRows

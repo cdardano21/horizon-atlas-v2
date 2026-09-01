@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { CanonicalDestination, NeighborhoodIntelligenceGroup, NeighborhoodIntelligenceMetric, NeighborhoodIntelligencePlace, NeighborhoodProfile, NeighborhoodResourceItem } from "../../lib/canonical-destination-model";
 import { buildDestinationIntelligenceProfile } from "../../lib/destination-intelligence-engine";
 import { getDestinationImageSet, getDestinationImageUrl } from "../../lib/imageFallback";
 import { buildNeighborhoodIntelligenceSeedData } from "../../lib/neighborhood-intelligence-seed-data";
 import { buildPremiumDestinationEditorialPackage } from "../../lib/premium-destination-engine";
 import { isPlaceWebsiteVisible } from "../../lib/website-verification";
-import { sanitizePublicText } from "../../lib/sanitize-public-text";
+import { containsUnpublishablePlaceholderLanguage, sanitizePublicText } from "../../lib/sanitize-public-text";
 import Footer from "../Footer";
 import LifestyleRecreationSection from "./LifestyleRecreationSection";
 import Navbar from "../Navbar";
@@ -18,6 +18,14 @@ interface CanonicalDestinationPageProps {
   destination: CanonicalDestination;
   developerMode?: boolean;
 }
+
+// Shared, single source of truth for the sticky tab bar - anchor targets/labels are unchanged
+// from the existing section ids; only presentation (prominence, descriptor, active state) changed.
+const SECTION_TABS: ReadonlyArray<{ id: string; label: string; descriptor: string }> = [
+  { id: "destination-guide", label: "Destination Guide", descriptor: "Overview and neighborhoods" },
+  { id: "practical-details", label: "Practical Details", descriptor: "Costs, transportation, and setup" },
+  { id: "deep-dive", label: "Deep Dive", descriptor: "Detailed local intelligence" },
+];
 
 function buildGalleryItems(destination: CanonicalDestination) {
   const sources = [
@@ -507,6 +515,7 @@ function sanitizePublicPlaceText(value: string | undefined | null): string | und
   text = text.replace(/\s*Source:\s*https?:\/\/\S+\s*$/i, "").trim();
   text = text.replace(/,?\s*retain as `?unknown`?[^.]*\.?/gi, "").trim();
   text = text.replace(/\bsearch_zone\b/gi, "this area").trim();
+  if (!text || containsUnpublishablePlaceholderLanguage(text)) return undefined;
   return text.length > 0 ? text : undefined;
 }
 
@@ -641,12 +650,13 @@ const REAL_PLACE_CATEGORY_BUCKETS: ReadonlyArray<{ key: string; label: string; m
   { key: "parks", label: "Parks & recreation", matches: (category) => category === "park" || category === "trail" },
   { key: "shopping", label: "Shopping", matches: (category) => category === "shopping" || category === "grocery" || category === "farmers_market" },
   { key: "golf", label: "Golf", matches: (category) => category === "golf" },
-  { key: "healthcare", label: "Healthcare", matches: (category) => category === "hospital" || category === "urgent_care" },
-  { key: "entertainment", label: "Entertainment & nightlife", matches: (category) => category === "live_music" || category === "nightlife" || category === "theater" },
+  { key: "healthcare", label: "Healthcare", matches: (category) => category === "hospital" || category === "urgent_care" || category === "pharmacy" },
+  { key: "entertainment", label: "Entertainment & nightlife", matches: (category) => category === "live_music" || category === "nightlife" || category === "theater" || category === "brewery_winery" },
   { key: "attractions", label: "Attractions & things to do", matches: (category) => category === "attraction" || category === "museum" || category === "zoo_aquarium" },
   { key: "outdoor", label: "Outdoor recreation", matches: (category) => category === "beach" || category === "water_recreation" || category === "skiing_winter" },
-  { key: "sports", label: "Sports & recreation", matches: (category) => category === "sports" },
+  { key: "sports", label: "Sports & recreation", matches: (category) => category === "sports" || category === "gym" || category === "pickleball_tennis" },
   { key: "coworking", label: "Coworking", matches: (category) => category === "coworking" },
+  { key: "services", label: "Services & government resources", matches: (category) => /government|transit_hub|social_club|senior_living|school|religious/i.test(category) },
 ];
 
 /**
@@ -711,32 +721,37 @@ function buildRealNeighborhoodPlaceCards(destination: CanonicalDestination, neig
 }
 
 /**
- * Destination-level counterpart to buildRealNeighborhoodPlaceCards: groups real persisted places
- * that have NO neighborhoodKey (never a false/forced neighborhood association) into the same
- * category buckets, with a generic "${category} around ${city}" heading derived purely from the
- * bucket label and the current destination's own name - never a hardcoded destination string.
- * Mutually exclusive with every neighborhood card by construction: a place with a neighborhoodKey
- * can never appear here, and a place appearing here can never appear in a neighborhood card,
- * because both read the same boolean condition on the same field.
+ * Destination Highlights: a centralized, destination-wide view of every real persisted place,
+ * grouped into useful categories - regardless of whether a place also has a neighborhoodKey (a
+ * place tied to a neighborhood still belongs to its neighborhood card too; this section is an
+ * additional, not exclusive, way to discover it). Deduplicated by placeKey first, then by
+ * normalized name + URL, so a place is never listed twice within the same category. A category
+ * only ever appears when at least one real place exists for it - never forced, never fabricated.
  */
-function buildDestinationLevelUnassignedPlaceGroups(destination: CanonicalDestination): NeighborhoodInsightCard[] {
+function buildDestinationLevelPlaceHighlightGroups(destination: CanonicalDestination): NeighborhoodInsightCard[] {
   const allPlaces = destination.v31Modules?.places ?? [];
-  const unassignedPlaces = allPlaces.filter((place) => !place.neighborhoodKey);
-
-  return REAL_PLACE_CATEGORY_BUCKETS.flatMap((bucket) => {
-    const matchingPlaces = unassignedPlaces
-      .filter((place) => place.category && bucket.matches(place.category) && place.name && place.name.trim().length > 0)
-      .sort((left, right) => {
-        const orderLeft = left.displayOrder ? Number(left.displayOrder) : Number.MAX_SAFE_INTEGER;
-        const orderRight = right.displayOrder ? Number(right.displayOrder) : Number.MAX_SAFE_INTEGER;
-        return orderLeft - orderRight;
-      });
-
-    if (matchingPlaces.length === 0) {
-      return [];
+  const seenPlaceKeys = new Set<string>();
+  const seenNameUrlPairs = new Set<string>();
+  const dedupedPlaces = allPlaces.filter((place) => {
+    if (!place.name || place.name.trim().length === 0) return false;
+    if (place.placeKey) {
+      if (seenPlaceKeys.has(place.placeKey)) return false;
+      seenPlaceKeys.add(place.placeKey);
     }
+    const dedupeKey = `${normalizeText(place.name)}|${(place.websiteUrl || place.googleMapsUrl || place.sourceUrl || "").trim().toLowerCase()}`;
+    if (seenNameUrlPairs.has(dedupeKey)) return false;
+    seenNameUrlPairs.add(dedupeKey);
+    return true;
+  });
 
-    const places: NeighborhoodInsightPlace[] = matchingPlaces.map((place) => {
+  const buildCardForPlaces = (bucketKey: string, bucketLabel: string, matchingPlaces: typeof dedupedPlaces) => {
+    const sorted = [...matchingPlaces].sort((left, right) => {
+      const orderLeft = left.displayOrder ? Number(left.displayOrder) : Number.MAX_SAFE_INTEGER;
+      const orderRight = right.displayOrder ? Number(right.displayOrder) : Number.MAX_SAFE_INTEGER;
+      return orderLeft - orderRight;
+    });
+
+    const places: NeighborhoodInsightPlace[] = sorted.map((place) => {
       const website = place.websiteUrl && place.websiteUrl.trim().length > 0 ? place.websiteUrl : undefined;
       const mapUrl = place.googleMapsUrl && place.googleMapsUrl.trim().length > 0
         ? place.googleMapsUrl
@@ -749,7 +764,7 @@ function buildDestinationLevelUnassignedPlaceGroups(destination: CanonicalDestin
         title: place.name as string,
         description: sanitizePublicPlaceText(place.description) ?? `${place.name} is a real place associated with ${destination.city} as a whole.`,
         neighborhood: destination.city,
-        category: bucket.label,
+        category: bucketLabel,
         mapUrl,
         website,
         address: place.address ?? undefined,
@@ -757,15 +772,31 @@ function buildDestinationLevelUnassignedPlaceGroups(destination: CanonicalDestin
       } satisfies NeighborhoodInsightPlace;
     });
 
-    return [{
-      key: bucket.key,
-      label: `${bucket.label} around ${destination.city}`,
-      value: bucket.label,
-      description: `Real persisted ${destination.city} places that are not tied to one specific neighborhood.`,
+    return {
+      key: bucketKey,
+      label: `${bucketLabel} across ${destination.city}`,
+      value: bucketLabel,
+      description: `Real, verified ${destination.city} places in this category.`,
       places,
       emptyMessage: "",
-    } satisfies NeighborhoodInsightCard];
+    } satisfies NeighborhoodInsightCard;
+  };
+
+  const matchedPlaceKeys = new Set<string>();
+  const namedBucketCards = REAL_PLACE_CATEGORY_BUCKETS.flatMap((bucket) => {
+    const matchingPlaces = dedupedPlaces.filter((place) => place.category && bucket.matches(place.category));
+    if (matchingPlaces.length === 0) return [];
+    matchingPlaces.forEach((place) => place.placeKey && matchedPlaceKeys.add(place.placeKey));
+    return [buildCardForPlaces(bucket.key, bucket.label, matchingPlaces)];
   });
+
+  // Catch-all: any real, named place whose category_key didn't match a known bucket (a different
+  // workbook's own category vocabulary, or genuinely uncategorized) is still surfaced here rather
+  // than silently disappearing from every recommendation surface.
+  const leftoverPlaces = dedupedPlaces.filter((place) => !(place.placeKey && matchedPlaceKeys.has(place.placeKey)));
+  const catchAllCard = leftoverPlaces.length > 0 ? [buildCardForPlaces("other-resources", "Other useful destination resources", leftoverPlaces)] : [];
+
+  return [...namedBucketCards, ...catchAllCard];
 }
 
 /**
@@ -866,8 +897,8 @@ function CategoryPlaceList({ places }: { places: NeighborhoodInsightPlace[] }) {
  * destination: headings are built purely from the category bucket label and the destination's own
  * name, never a hardcoded destination string.
  */
-function DestinationLevelUnassignedSection({ destination }: { destination: CanonicalDestination }) {
-  const groups = useMemo(() => buildDestinationLevelUnassignedPlaceGroups(destination), [destination]);
+function DestinationHighlightsSection({ destination }: { destination: CanonicalDestination }) {
+  const groups = useMemo(() => buildDestinationLevelPlaceHighlightGroups(destination), [destination]);
 
   if (groups.length === 0) {
     return null;
@@ -1031,56 +1062,74 @@ function buildNeighborhoodInsightCards(destination: CanonicalDestination, neighb
       value: cardConfig.value,
       description: cardConfig.description,
       places,
-      emptyMessage: "More local detail coming soon.",
+      emptyMessage: "",
     } satisfies NeighborhoodInsightCard];
   });
 
+  // Narrow, exact-match detection of the known unfinished/generic fallback strings used above when
+  // no real per-neighborhood evidence exists (never a fuzzy/substring match against real content) -
+  // a card built entirely from one of these is unfinished filler, not destination-specific value,
+  // and is dropped rather than rendered.
+  const GENERIC_NEIGHBORHOOD_FALLBACK_TEXT = new Set([
+    "Well-suited for everyday life",
+    "Strong cycling potential when paired with a good neighborhood layout",
+    "Useful transit access for daily movement",
+    "A practical and grounded everyday feel",
+    "Good fit for households seeking everyday ease",
+    "A useful neighborhood for pet-friendly routines",
+    "A practical base for focused work and slow routines",
+    "A few local corridors shape the neighborhood’s everyday rhythm",
+  ]);
+  const isGenericNeighborhoodFallback = (text: string) =>
+    GENERIC_NEIGHBORHOOD_FALLBACK_TEXT.has(text) || /is often defined by a few streets that anchor daily errands/i.test(text);
+
   const cards: NeighborhoodInsightCard[] = [
-    {
+    ...(isGenericNeighborhoodFallback(signatureStreets) ? [] : [{
       key: "signature-streets",
       label: "Signature streets",
       value: "Local corridors that shape the place",
       description: signatureStreets,
       places: [],
-      emptyMessage: "Signature street context is being refined for this neighborhood.",
-    },
+      emptyMessage: "",
+    }]),
     ...categoryCards,
-    {
+    ...(isGenericNeighborhoodFallback(bikeability) ? [] : [{
       key: "bikeability",
       label: "Bikeability",
       value: "Bike-friendly routes",
       description: bikeability,
       places: [],
-      emptyMessage: "More local detail coming soon.",
-    },
-    {
+      emptyMessage: "",
+    }]),
+    ...(isGenericNeighborhoodFallback(familyFriendly) ? [] : [{
       key: "family-empty",
       label: "Family friendly",
       value: "Family-friendly places",
       description: familyFriendly,
       places: [],
-      emptyMessage: "More local detail coming soon.",
-    },
-    {
+      emptyMessage: "",
+    }]),
+    ...(isGenericNeighborhoodFallback(petFriendly) ? [] : [{
       key: "pet",
       label: "Pet friendly",
       value: "Pet-friendly places",
       description: petFriendly,
       places: [],
-      emptyMessage: "More local detail coming soon.",
-    },
-    {
+      emptyMessage: "",
+    }]),
+    ...(isGenericNeighborhoodFallback(remoteWork) ? [] : [{
       key: "remote-work-empty",
       label: "Remote work",
       value: "Remote-work-friendly spots",
       description: remoteWork,
       places: [],
-      emptyMessage: "More local detail coming soon.",
-    },
-    { key: "walkability", label: "Walkability", value: String(walkability), description: "How easily daily errands and neighborhood life can be handled on foot.", places: [], emptyMessage: "More local detail coming soon." },
-    { key: "transit-signal", label: "Transit", value: String(transit), description: "How well the area supports car-light routines and local travel.", places: [], emptyMessage: "More local detail coming soon." },
-    { key: "safety", label: "Safety", value: String(safety), description: "How the area is perceived for daily calm and residential comfort.", places: [], emptyMessage: "More local detail coming soon." },
-    { key: "overall", label: "Overall neighborhood score", value: `${overallScore.toFixed(1)}/10`, description: "A dynamic composite built from the strongest available neighborhood signals.", places: [], emptyMessage: "More local detail coming soon." },
+      emptyMessage: "",
+    }]),
+    ...(isGenericNeighborhoodFallback(walkability) ? [] : [{ key: "walkability", label: "Walkability", value: String(walkability), description: "How easily daily errands and neighborhood life can be handled on foot.", places: [], emptyMessage: "" }]),
+    ...(isGenericNeighborhoodFallback(transit) ? [] : [{ key: "transit-signal", label: "Transit", value: String(transit), description: "How well the area supports car-light routines and local travel.", places: [], emptyMessage: "" }]),
+    ...(isGenericNeighborhoodFallback(safety) ? [] : [{ key: "safety", label: "Safety", value: String(safety), description: "How the area is perceived for daily calm and residential comfort.", places: [], emptyMessage: "" }]),
+    // The "overall" score was a synthetic composite counted from generic fallback keyword matches,
+    // never a real persisted evidence signal - always generic filler, so it is never included.
   ];
 
   return cards;
@@ -1386,9 +1435,9 @@ function ExpandableNeighborhoodCard({
                   <p className="mt-1.5 text-sm leading-6 text-[#9eb2c6]">{card.description}</p>
                   {card.places.length > 0 ? (
                     <CategoryPlaceList places={card.places} />
-                  ) : (
+                  ) : card.emptyMessage ? (
                     <p className="mt-3 text-[15px] leading-7 text-slate-300">{card.emptyMessage}</p>
-                  )}
+                  ) : null}
                 </div>
               ))}
             </div>
@@ -1434,6 +1483,28 @@ function ExpandableNeighborhoodCard({
 export default function CanonicalDestinationPage({ destination, developerMode = false }: CanonicalDestinationPageProps) {
   const [selectedMedia, setSelectedMedia] = useState<GalleryItem | null>(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
+  const [activeSectionId, setActiveSectionId] = useState<string>(SECTION_TABS[0].id);
+  const [neighborhoodsExpanded, setNeighborhoodsExpanded] = useState(false);
+
+  // Lightweight scroll-position indicator for the sticky tab bar - purely a visual "current
+  // section" cue (aria-current), never gates rendering of any section (all three remain
+  // permanently in the DOM as one continuous page, so behavior/semantics are unchanged).
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return;
+    const sectionElements = SECTION_TABS.map((tab) => document.getElementById(tab.id)).filter((el): el is HTMLElement => el !== null);
+    if (sectionElements.length === 0) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort((left, right) => right.intersectionRatio - left.intersectionRatio);
+        if (visible.length > 0) {
+          setActiveSectionId(visible[0].target.id);
+        }
+      },
+      { rootMargin: "-140px 0px -60% 0px", threshold: [0, 0.1, 0.25, 0.5] },
+    );
+    sectionElements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   const sectionEntries = Object.values(destination.sections ?? {}).sort((left, right) => left.title.localeCompare(right.title));
   const galleryItems = buildGalleryItems(destination).slice(0, 10);
@@ -1692,9 +1763,9 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     { label: "Climate", value: categoryValue(formatClimateValue()), note: "Climate influences daily life, outdoor behavior, and long-stay comfort." },
     { label: "Elevation", value: categoryValue(destination.knowledgeProfile?.elevation), note: "Elevation influences weather, views, and how the city feels on the ground." },
     { label: "Average temperatures", value: categoryValue(destination.knowledgeProfile?.averageTemperatures), note: "Temperature patterns are one of the clearest differences between visiting and living somewhere." },
-    { label: "Walkability", value: categoryValue(destination.knowledgeProfile?.walkability || destination.walkability), note: "Walkability determines whether daily errands can happen on foot or by transit." },
+    { label: "Walkability", value: categoryValue(destination.knowledgeProfile?.walkability || sanitizePublicText(destination.walkability) || undefined), note: "Walkability determines whether daily errands can happen on foot or by transit." },
     { label: "Bikeability", value: categoryValue(destination.knowledgeProfile?.bikeFriendliness), note: "Cycling often changes the feel of a city more than most visitors expect." },
-    { label: "Transit", value: categoryValue(destination.knowledgeProfile?.publicTransportation || destination.transportation), note: "Transit turns a city into a daily-life system rather than a postcard image." },
+    { label: "Transit", value: categoryValue(destination.knowledgeProfile?.publicTransportation || sanitizePublicText(destination.transportation) || undefined), note: "Transit turns a city into a daily-life system rather than a postcard image." },
     // A v3.1/v3.2 bundle's healthcareResources array is always the generic, unconditional
     // "${city} hospitals"/"${city} clinics" fallback (buildCanonicalDestinationFromPersistedBundle
     // never populates it from real data) - never let that masquerade as a specific named resource
@@ -1729,10 +1800,15 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   }, [destination]);
   const availableFacts = essentialFacts.filter((fact) => fact.value !== categoryPlaceholder);
   const heroFacts = availableFacts.slice(0, 4);
-  const heroFactLabels = new Set(heroFacts.map((fact) => fact.label));
-  // Optional categories with genuinely no supported value are hidden entirely here rather than
-  // repeating the placeholder sentence down the page - only facts with a real value are shown.
-  const detailFacts = availableFacts.filter((fact) => !heroFactLabels.has(fact.label));
+  // Currency/Language/Time zone/Visa friendly/Airport access/Healthcare are essentialFacts
+  // subjects with no other polished, exact-label home elsewhere on the page (walkability, safety,
+  // family, pets, retirement, cost, and lifestyle-interest facts are all covered by the Cost of
+  // living, Practical Living Snapshot, Community and Personal Comfort, or Lifestyle & Recreation
+  // sections under their own headings) - guaranteed into the existing "What to know first" panel
+  // regardless of how many other facts rank ahead of them, instead of being silently crowded out
+  // when the redundant Executive Summary / "at a glance" grid was removed (that grid used to show
+  // every remaining fact, not just the first six).
+  const UNIQUE_SCALAR_FACT_LABELS = ["Currency", "Language", "Time zone", "Visa friendly", "Airport access", "Healthcare"];
 
   // STEP 8: representative UI for the rich v3.1 modules that have no existing dedicated section -
   // built entirely from real persisted rows. A module with zero rows is simply omitted from this
@@ -1902,7 +1978,15 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   // destination genuinely has none. The hardcoded 76/74/72/78 defaults are never used for a
   // resolved v3.1 destination. This is a display mapping only - no personalized quiz/match/
   // recommendation scoring logic is introduced here.
-  const v31ScoreLabel = (scoreKey: string) => scoreKey.split("_").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
+  // A handful of score_key tokens don't read well under plain Title Case splitting (e.g.
+  // "walkability_transport" -> "Walkability Transport") - these get a specific, clearer label;
+  // any other token still falls back to the generic Title Case conversion.
+  const KNOWN_SCORE_KEY_LABELS: Record<string, string> = {
+    walkability_transport: "Walkability & Transportation",
+    tax_visa: "Tax & Visa",
+    lgbtq: "LGBTQ+",
+  };
+  const v31ScoreLabel = (scoreKey: string) => KNOWN_SCORE_KEY_LABELS[scoreKey.toLowerCase()] || scoreKey.split("_").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
   // The workbook's real DESTINATION_SCORES values are on a 0-10 scale (e.g. 7, 9) - the UI always
   // displays "/100", so a sub-11 raw value is scaled up ×10 for display only; the stored workbook
   // value itself is never altered. A value already above 10 (a future 0-100-scale workbook) is
@@ -2020,11 +2104,23 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     ? `/destinations/${destination.slug}`
     : `/destinations/${destination.slug}?developer=1`;
   const destinationLocation = [destination.knowledgeProfile?.adminRegion, destination.country].filter(Boolean).join(" / ");
+  const firstSixFacts = availableFacts.slice(0, 6);
+  const firstSixFactLabels = new Set(firstSixFacts.map((fact) => fact.label));
+  const whatToKnowFirstFacts = [
+    ...firstSixFacts,
+    ...availableFacts.filter((fact) => UNIQUE_SCALAR_FACT_LABELS.includes(fact.label) && !firstSixFactLabels.has(fact.label)),
+  ];
+  // Genuinely empty after real-data-then-fallback resolution - the whole section is hidden rather
+  // than rendering an empty "Pros and cons" heading with two blank columns.
+  const resolvedPros = destination.pros.length > 0 ? destination.pros : premiumContent.prosAndCons.advantages;
+  const resolvedCons = destination.cons.length > 0 ? destination.cons : premiumContent.prosAndCons.disadvantages;
+  const hasProsOrCons = resolvedPros.length > 0 || resolvedCons.length > 0;
+  const visibleNeighborhoods = neighborhoodsExpanded ? neighborhoods : neighborhoods.slice(0, 4);
 
   return (
     <>
       <Navbar />
-      <main className="space-y-7 bg-[linear-gradient(180deg,#03142a_0%,#061d37_45%,#03142a_100%)] pb-10 pt-[72px] text-[#edf2fb] sm:space-y-8 sm:pb-12">
+      <main className="space-y-7 bg-[linear-gradient(180deg,#03142a_0%,#061d37_45%,#03142a_100%)] pb-28 pt-[72px] text-[#edf2fb] sm:space-y-8 sm:pb-32">
         <section className="relative isolate min-h-[600px] overflow-hidden border-b border-[#d8ad554f] bg-[#03142a]">
           <Image src={executiveSummaryImage.resolvedUrl} alt={executiveSummaryImage.altText || destination.title} fill sizes="100vw" preload unoptimized className="z-0 object-cover object-center" />
           <div className="absolute inset-0 z-10 bg-[linear-gradient(90deg,rgba(2,13,29,0.88)_0%,rgba(3,20,42,0.7)_42%,rgba(3,20,42,0.16)_76%,rgba(2,13,29,0.3)_100%)]" />
@@ -2053,61 +2149,45 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
           </div>
         </section>
 
-        {/* Plain native anchors, no JS state/scroll-spy - mirrors the proven DestinationStickyNav
-            pattern used on the legacy destination page, kept as a sibling of (not nested inside)
-            the hero so sticky positioning is not fighting the hero's flex-col justify-end layout. */}
-        <nav aria-label="On this page" className="sticky top-[72px] z-30 border-y border-[#d8ad5548] bg-[#03172ee6] backdrop-blur-2xl">
-          <div className="mx-auto max-w-[1440px] overflow-x-auto px-5 py-3 sm:px-8 lg:px-10">
-            <ul className="flex min-w-max items-center gap-2 text-sm">
-              <li>
-                <a href="#destination-guide" className="inline-flex rounded-full border border-[#d8ad554f] bg-white/5 px-3 py-1.5 font-medium text-[#d9e4ee] transition hover:border-cyan-400/40 hover:text-[#f3c666]">
-                  Destination Guide
-                </a>
-              </li>
-              <li>
-                <a href="#practical-details" className="inline-flex rounded-full border border-[#d8ad554f] bg-white/5 px-3 py-1.5 font-medium text-[#d9e4ee] transition hover:border-cyan-400/40 hover:text-[#f3c666]">
-                  Practical Details
-                </a>
-              </li>
-              <li>
-                <a href="#deep-dive" className="inline-flex rounded-full border border-[#d8ad554f] bg-white/5 px-3 py-1.5 font-medium text-[#d9e4ee] transition hover:border-cyan-400/40 hover:text-[#f3c666]">
-                  Deep Dive
-                </a>
-              </li>
+        {/* Still plain native anchors (no panel show/hide, no role="tab" misuse - there is only
+            ever one continuous scrolling page) so keyboard/link semantics and existing behavior
+            are fully preserved; only visual prominence and a lightweight scroll-position indicator
+            (aria-current, the correct attribute for "current item in a set of page sections") were
+            added. Mirrors the proven DestinationStickyNav pattern, kept as a sibling of (not nested
+            inside) the hero so sticky positioning is not fighting the hero's flex-col justify-end layout. */}
+        <nav aria-label="Explore this destination" className="sticky top-[72px] z-30 border-y border-[#d8ad5548] bg-[#03172ee6] backdrop-blur-2xl shadow-[0_12px_30px_rgba(0,0,0,0.25)]">
+          <div className="mx-auto max-w-[1440px] px-5 pt-3 sm:px-8 lg:px-10">
+            <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#69d5d4]">Explore this destination</p>
+          </div>
+          <div className="mx-auto max-w-[1440px] overflow-x-auto px-5 pb-3 pt-2 sm:px-8 lg:px-10">
+            <ul className="flex min-w-max items-stretch gap-2.5 text-sm sm:gap-3">
+              {SECTION_TABS.map((tab) => {
+                const isActive = activeSectionId === tab.id;
+                return (
+                  <li key={tab.id} className="flex-1">
+                    <a
+                      href={`#${tab.id}`}
+                      aria-current={isActive ? "true" : undefined}
+                      className={`flex min-h-[3.25rem] w-full flex-col justify-center rounded-2xl border-2 px-4 py-2 text-center font-semibold transition sm:min-w-[200px] sm:text-left ${
+                        isActive
+                          ? "border-[#f3c666] bg-[#f3c666] text-[#03172e] shadow-[0_10px_24px_rgba(243,198,102,0.35)]"
+                          : "border-[#d8ad5548] bg-white/5 text-[#d9e4ee] hover:border-cyan-400/60 hover:bg-white/10 hover:text-[#f3c666]"
+                      }`}
+                    >
+                      <span className="text-[15px] leading-tight">{tab.label}</span>
+                      <span className={`mt-0.5 hidden text-[11px] font-normal leading-tight sm:block ${isActive ? "text-[#03172e]/70" : "text-[#9eb2c6]"}`}>{tab.descriptor}</span>
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </nav>
 
-        <section className="mx-5 border-y border-[#d8ad5548] bg-[#061a32] sm:mx-8 lg:mx-10">
-          <span className="sr-only">Featured image</span>
-          <div className="mx-auto max-w-[1360px] px-4 py-5 sm:px-6 sm:py-6">
-            <div className="flex flex-wrap items-end justify-between gap-3 border-b border-white/10 pb-4">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#55c7c9]">Executive summary</p>
-                <h2 className="mt-1 font-serif text-2xl text-[#fff8e9]">{destination.title} at a glance</h2>
-              </div>
-              <p className="max-w-xl text-xs leading-5 text-[#9eb2c6]">Essential destination facts, kept compact for quick comparison.</p>
-            </div>
-            <div className="grid md:grid-cols-2 xl:grid-cols-3">
-              {detailFacts.map((fact) => (
-                <details key={fact.label} className="group border-b border-white/10 px-1 py-3 md:px-4 md:[&:nth-child(odd)]:border-r xl:[&:nth-child(odd)]:border-r-0 xl:[&:not(:nth-child(3n))]:border-r">
-                  <summary className="flex cursor-pointer list-none items-start justify-between gap-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#55c7c9]">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#eabc5b]">{fact.label}</p>
-                    <span className="flex max-w-[70%] items-start gap-2 text-right text-sm font-semibold leading-5 text-[#e5edf6]">
-                      {fact.value}
-                      <span className="text-[#55c7c9] transition group-open:rotate-45" aria-hidden="true">+</span>
-                    </span>
-                  </summary>
-                  <p className="mt-2 border-l border-[#55c7c966] pl-3 text-xs leading-5 text-[#8fa6ba]">{fact.note}</p>
-                </details>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* The full editorial overview - shown once, in full, immediately after the hero/key-facts
-            area. This is the single canonical rendering; every other place that used to repeat
-            this same text has been removed rather than duplicated. */}
+        {/* The full editorial overview - shown once, in full, immediately after the hero/nav,
+            directly above the Executive Summary facts grid. This is the single canonical
+            rendering; every other place that used to repeat this same text has been removed
+            rather than duplicated. */}
         {(premiumContent.overviewArticle || destination.overview) ? (
           <section className="mx-5 border border-[#d8ad5548] bg-[#061a32] p-5 shadow-[0_20px_55px_rgba(0,0,0,0.18)] sm:mx-8 sm:p-6 lg:mx-10">
             <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Overview</p>
@@ -2116,35 +2196,43 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
           </section>
         ) : null}
 
+        {/* Hidden entirely (never an empty "0 budget bands" shell) when the destination genuinely
+            has no real cost-of-living summary or budget rows - an honest absence, never a
+            fabricated placeholder. */}
+        {(costProfile.summary || costProfile.budgets.length > 0) ? (
         <section className="mx-5 border border-[#d8ad5548] bg-[#061a32] p-5 shadow-[0_20px_55px_rgba(0,0,0,0.18)] sm:mx-8 sm:p-6 lg:mx-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Cost of living snapshot</p>
             <h2 className="mt-2 text-2xl font-semibold text-white">A practical executive summary for residents and relocators</h2>
           </div>
-          <p className="text-sm text-slate-400">{costProfile.budgets.length} budget bands</p>
+          {costProfile.budgets.length > 0 ? <p className="text-sm text-slate-400">{costProfile.budgets.length} budget bands</p> : null}
         </div>
         <div className="mt-6 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="rounded-[1.5rem] border border-cyan-400/20 bg-cyan-500/10 p-5">
             <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">Executive summary</p>
-            <p className="mt-3 text-sm leading-8 text-slate-200">{costProfile.summary}</p>
+            {costProfile.summary ? <p className="mt-3 text-sm leading-8 text-slate-200">{costProfile.summary}</p> : null}
             <div className="mt-4 flex flex-wrap gap-2 text-xs uppercase tracking-[0.2em] text-slate-300">
               <span className="rounded-full border border-white/10 bg-slate-950/40 px-3 py-2">{costProfile.currency}</span>
               <span className="rounded-full border border-white/10 bg-slate-950/40 px-3 py-2">{costProfile.confidence} confidence</span>
             </div>
           </div>
+          {costProfile.budgets.length > 0 ? (
           <div className="space-y-3 rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
-            {costProfile.budgets.length > 0 ? costProfile.budgets.map((budget, index) => (
+            {costProfile.budgets.map((budget, index) => (
               <div key={`${budget.label}-${index}`} className="rounded-2xl border border-white/10 bg-slate-950/40 p-4">
                 <p className="text-sm font-semibold text-white">{budget.label}</p>
                 <p className="mt-2 text-lg font-semibold text-cyan-300">{budget.amount}</p>
                 {budget.note ? <p className="mt-2 text-sm leading-7 text-slate-300">{budget.note}</p> : null}
               </div>
-            )) : null}
+            ))}
           </div>
+          ) : null}
         </div>
       </section>
+      ) : null}
 
+      {costProfile.categories.length > 0 ? (
       <section className="rounded-[2rem] border border-white/20 bg-slate-900/70 p-8 shadow-[0_20px_70px_rgba(2,8,23,0.22)] sm:p-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -2154,13 +2242,13 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
           <p className="text-sm text-slate-400">{costProfile.categories.length} live categories</p>
         </div>
         <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {costProfile.categories.length > 0 ? costProfile.categories.map((category) => (
+          {costProfile.categories.map((category) => (
             <div key={category.key} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
               <p className="text-sm font-semibold text-white">{category.label}</p>
               {category.amount ? <p className="mt-2 text-lg font-semibold text-cyan-300">{category.amount}</p> : null}
               {category.note ? <p className="mt-2 text-sm leading-7 text-slate-300">{category.note}</p> : null}
             </div>
-          )) : null}
+          ))}
         </div>
         <div className="mt-6 rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">How the estimate is framed</p>
@@ -2172,6 +2260,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
           ) : null}
         </div>
       </section>
+      ) : null}
 
       <section className="rounded-[2rem] border border-white/20 bg-slate-900/70 p-8 shadow-[0_20px_70px_rgba(2,8,23,0.22)] sm:p-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
@@ -2253,7 +2342,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">What to know first</p>
                 <div className="mt-3 space-y-2">
-                  {availableFacts.slice(0, 6).map((fact) => (
+                  {whatToKnowFirstFacts.map((fact) => (
                     <div key={fact.label} className="flex items-start justify-between gap-4 rounded-2xl border border-white/10 bg-slate-950/40 px-3 py-3">
                       <span className="text-sm text-slate-400">{fact.label}</span>
                       <span className="text-right text-sm font-semibold text-white">{fact.value}</span>
@@ -2345,41 +2434,25 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             <article className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
               <h2 className="text-2xl font-semibold text-white">Cost of living</h2>
               <p className="mt-4 text-sm leading-8 text-slate-400">{intelligenceProfile.heroSummary}</p>
-              <div className="mt-6 rounded-[1.5rem] border border-cyan-400/20 bg-cyan-500/10 p-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">Structured profile</p>
-                <p className="mt-3 text-sm leading-7 text-slate-200">{costProfile.summary}</p>
-                <div className="mt-4 flex flex-wrap gap-2 text-xs uppercase tracking-[0.2em] text-slate-300">
-                  <span className="rounded-full border border-white/10 bg-slate-950/40 px-3 py-2">{costProfile.currency}</span>
-                  <span className="rounded-full border border-white/10 bg-slate-950/40 px-3 py-2">{costProfile.confidence} confidence</span>
+              {/* One-adult/couple totals and the category breakdown are already presented in full
+                  in the "Cost of living snapshot" and "Monthly cost breakdown" sections above -
+                  repeating every budget and category card here again duplicated the same total
+                  multiple times on the page, so this teaser only links back to that detail. */}
+              {costProfile.budgets.length > 0 ? (
+                <div className="mt-6 flex flex-wrap gap-3">
+                  {costProfile.budgets.map((budget, index) => (
+                    <span key={`${budget.label}-${index}`} className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-sm text-cyan-100">
+                      {budget.label}: <span className="font-semibold text-cyan-300">{budget.amount}</span>
+                    </span>
+                  ))}
                 </div>
-                <p className="mt-4 text-sm leading-7 text-slate-300">{costProfile.methodology}</p>
-                {costProfile.assumptions.length > 0 ? (
-                  <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-slate-300">
-                    {costProfile.assumptions.map((item) => <li key={item}>{item}</li>)}
-                  </ul>
-                ) : null}
-              </div>
-              <div className="mt-6 grid gap-4 md:grid-cols-2">
-                {costProfile.categories.length > 0 ? costProfile.categories.map((category) => (
-                  <div key={category.key} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
-                    <p className="text-sm font-semibold text-white">{category.label}</p>
-                    {category.amount ? <p className="mt-2 text-lg font-semibold text-cyan-300">{category.amount}</p> : null}
-                    {category.note ? <p className="mt-2 text-sm leading-7 text-slate-300">{category.note}</p> : null}
-                  </div>
-                )) : null}
-              </div>
-              <div className="mt-6 space-y-4">
-                {costProfile.budgets.length > 0 ? costProfile.budgets.map((budget, index) => (
-                  <div key={`${budget.label}-${index}`} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
-                    <p className="text-sm font-semibold text-white">{budget.label}</p>
-                    <p className="mt-2 text-lg font-semibold text-cyan-300">{budget.amount}</p>
-                    {budget.note ? <p className="mt-2 text-sm leading-7 text-slate-300">{budget.note}</p> : null}
-                  </div>
-                )) : <p className="text-sm leading-8 text-slate-400">{premiumContent.costOfLivingArticle}</p>}
-              </div>
+              ) : (
+                <p className="mt-6 text-sm leading-8 text-slate-400">{premiumContent.costOfLivingArticle}</p>
+              )}
             </article>
           </section>
 
+          {hasProsOrCons ? (
           <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
@@ -2391,17 +2464,18 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               <div>
                 <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-300">Pros</h3>
                 <ul className="mt-3 space-y-2">
-                  {destination.pros.length > 0 ? destination.pros.map((item) => <li key={item} className="text-sm leading-7 text-slate-300">• {item}</li>) : premiumContent.prosAndCons.advantages.map((item) => <li key={item} className="text-sm leading-7 text-slate-300">• {item}</li>)}
+                  {resolvedPros.map((item) => <li key={item} className="text-sm leading-7 text-slate-300">• {item}</li>)}
                 </ul>
               </div>
               <div>
                 <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-rose-300">Cons</h3>
                 <ul className="mt-3 space-y-2">
-                  {destination.cons.length > 0 ? destination.cons.map((item) => <li key={item} className="text-sm leading-7 text-slate-300">• {item}</li>) : premiumContent.prosAndCons.disadvantages.map((item) => <li key={item} className="text-sm leading-7 text-slate-300">• {item}</li>)}
+                  {resolvedCons.map((item) => <li key={item} className="text-sm leading-7 text-slate-300">• {item}</li>)}
                 </ul>
               </div>
             </div>
           </section>
+          ) : null}
 
           <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
             <div className="flex flex-wrap items-start justify-between gap-4">
@@ -2412,13 +2486,25 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               <div className="rounded-3xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-200">{neighborhoods.length} districts</div>
             </div>
             <div className="mt-6 space-y-4">
-              {neighborhoods.map((neighborhood, index) => (
+              {visibleNeighborhoods.map((neighborhood, index) => (
                 <ExpandableNeighborhoodCard key={neighborhood.name} neighborhood={neighborhood} index={index} destination={destination} />
               ))}
             </div>
+            {neighborhoods.length > 4 ? (
+              <div className="mt-5 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setNeighborhoodsExpanded((current) => !current)}
+                  aria-expanded={neighborhoodsExpanded}
+                  className="rounded-full border border-cyan-400/40 bg-cyan-500/10 px-5 py-2.5 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/70 hover:bg-cyan-500/20"
+                >
+                  {neighborhoodsExpanded ? "Show fewer neighborhoods" : `Show ${neighborhoods.length - 4} more neighborhoods (view all ${neighborhoods.length})`}
+                </button>
+              </div>
+            ) : null}
           </section>
 
-          <DestinationLevelUnassignedSection destination={destination} />
+          <DestinationHighlightsSection destination={destination} />
 
           <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
             <div className="flex flex-wrap items-start justify-between gap-4">
@@ -2480,7 +2566,11 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
 
           <section className="grid gap-6 xl:grid-cols-2">
             {premiumContent.transportationArticle ? <PremiumSectionBlock title="Transportation" summary={premiumContent.transportationArticle} body={buildDedupedSectionBody([["Airport access", destination.airportInfo || destination.knowledgeProfile?.majorAirports?.join(", ") || "Regional and international access"], ["Transit", destination.transportation], ["Car dependency", destination.transportation], ["Walking and cycling", destination.walkability], ["Typical commute", destination.transportation]])} eyebrow="Movement" /> : null}
-            {premiumContent.costOfLivingArticle ? <PremiumSectionBlock title="Cost of living" summary={premiumContent.costOfLivingArticle} body={buildDedupedSectionBody([["Monthly budgets", destination.monthlyBudgets.map((budget) => `${budget.label}: ${budget.amount}`).join(" \u2022 ")], ["Rent", destination.costOfLiving], ["Utilities", destination.costOfLiving], ["Food", destination.dailyLife], ["Healthcare", destination.healthcare], ["Transportation", destination.transportation], ["Entertainment", destination.editorial], ["Taxes", destination.costOfLiving]])} eyebrow="Economics" /> : null}
+            {/* The prior "Cost of living" card here duplicated the already-rendered budgets/
+                categories above AND mislabeled the same destination.costOfLiving scalar as three
+                different, unrelated fields (Rent/Utilities/Taxes) - removed rather than repeated
+                or left semantically wrong; the authoritative cost section above is the single
+                source for these figures. */}
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">

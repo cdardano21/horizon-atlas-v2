@@ -18,6 +18,27 @@ const PLACEHOLDER_TOKENS = new Set([
   "categorydependent", "donotassume", "nodedicatedprogram",
 ]);
 
+// Whole-value internal research/production-status language that must never reach a reader,
+// regardless of surrounding sentence structure - matched as a substring (case-insensitive) against
+// the full value, since these phrases appear embedded inside otherwise-plausible-looking prose
+// rather than as a standalone token. A value containing any of these is hidden entirely (returns
+// null) rather than partially edited, since the remaining text is typically also just unfinished
+// research scaffolding.
+const PLACEHOLDER_PHRASES = [
+  "not yet verified from an authoritative source",
+  "verified imagery pending",
+  "address-specific review recommended",
+  "more local detail coming soon",
+  "specific items to confirm",
+];
+
+// Shared with sanitizePublicPlaceText (a separate, narrower place/description sanitizer) so both
+// recognize the exact same set of unpublishable research-status phrases.
+export const containsUnpublishablePlaceholderLanguage = (value: string): boolean => {
+  const lowerText = value.toLowerCase();
+  return PLACEHOLDER_PHRASES.some((phrase) => lowerText.includes(phrase));
+};
+
 export const sanitizePublicText = (value?: string | null): string | null => {
   if (typeof value !== "string") return null;
   let text = value.trim();
@@ -53,6 +74,7 @@ export const sanitizePublicText = (value?: string | null): string | null => {
   if (!text) return null;
   const normalized = text.toLowerCase().replace(/[_\s]+/g, "");
   if (PLACEHOLDER_TOKENS.has(normalized)) return null;
+  if (containsUnpublishablePlaceholderLanguage(text)) return null;
   // A bare number (e.g. a raw "0"/"1" flag value with no unit or sentence context) is never a
   // meaningful standalone public fact when mixed into a prose list.
   if (/^-?\d+(\.\d+)?$/.test(text)) return null;

@@ -1938,10 +1938,10 @@ describe("STEP 11: renderer-integration authority contract", () => {
 
   describe("real neighborhoods mapping (STEP 6)", () => {
     it("maps persisted neighborhoods and never fabricates a generic city-center entry", async () => {
-      mockExactCatalogRow("da-nang-vn", "da-nang-vietnam");
-      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "da-nang-vn", identity: { slug: "da-nang-vietnam", name: "Da Nang", city: "Da Nang", country: "Vietnam" } }) } as never);
+      mockExactCatalogRow("nha-trang-vn", "nha-trang-vietnam");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "nha-trang-vn", identity: { slug: "nha-trang-vietnam", name: "Nha Trang", city: "Nha Trang", country: "Vietnam" } }) } as never);
 
-      const destination = await getCanonicalDestination("da-nang-vietnam");
+      const destination = await getCanonicalDestination("nha-trang-vietnam");
 
       expect(destination?.v31Modules?.neighborhoods.map((n) => n.name)).toEqual(["Real Neighborhood One", "Real Neighborhood Two"]);
       expect(destination?.neighborhoods).toEqual(["Real Neighborhood One", "Real Neighborhood Two"]);
