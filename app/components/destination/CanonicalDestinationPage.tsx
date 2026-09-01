@@ -1554,7 +1554,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   }, [galleryItems, destination.title, mediaDestination]);
   const previewGalleryItems = resolvedGalleryItems.slice(0, 5);
   const galleryModalItems = resolvedGalleryItems.slice(0, 10);
-  const hasMoreGalleryItems = resolvedGalleryItems.length > 5;
+  const googleImagesHref = `https://www.google.com/search?q=${encodeURIComponent(`${destination.title} ${destination.country} travel photos`)}&tbm=isch`;
   const executiveSummaryImage = resolvedGalleryItems[0];
   const openGalleryItem = (item: GalleryItem, index: number) => {
     setSelectedMedia(item);
@@ -2279,14 +2279,17 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             </button>
           ))}
         </div>
-        {hasMoreGalleryItems ? (
-          <div className="mt-6 flex justify-start">
-            <button type="button" onClick={() => openGalleryItem(previewGalleryItems[0], 0)} className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/50 hover:bg-cyan-500/20">
-              View More Images
-            </button>
-          </div>
-        ) : null}
-        </section>
+        <div className="mt-6 flex justify-start">
+          <a
+            href={googleImagesHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-400/50 hover:bg-cyan-500/20"
+          >
+            View more photos of {destination.title}
+          </a>
+        </div>
+      </section>
 
       {selectedMedia ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-4 backdrop-blur-sm" onClick={() => setSelectedMedia(null)}>
