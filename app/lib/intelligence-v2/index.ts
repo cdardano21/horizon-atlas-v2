@@ -88,6 +88,13 @@ export {
   isValidBudgetAmount,
 } from "./affordability-policy";
 
+export type { LifeMatchPurposeAnswer, LifeMatchStayDurationAnswer } from "./purpose-duration-intake";
+export {
+  LIFE_MATCH_PURPOSE_OPTIONS,
+  LIFE_MATCH_STAY_DURATION_OPTIONS,
+  derivePurposeAndDurationProfileFields,
+} from "./purpose-duration-intake";
+
 export { evaluateLifestyleFit } from "./lifestyle-scorer";
 export type { LifestyleDimensionKey } from "./lifestyle-scoring-policy";
 export {

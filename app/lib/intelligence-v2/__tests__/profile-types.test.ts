@@ -39,6 +39,7 @@ describe("UserProfileV2 — stay duration and activity mode independence", () =>
       "LOCAL_EMPLOYMENT",
       "SECOND_HOME",
       "SPLIT_YEAR_SNOWBIRD",
+      "LEISURE_TRAVELER",
       "TESTING",
       "NOT_SURE",
     ];

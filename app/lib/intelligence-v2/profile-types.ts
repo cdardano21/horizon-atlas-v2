@@ -69,6 +69,8 @@ export type ActivityMode =
   | "LOCAL_EMPLOYMENT"
   | "SECOND_HOME"
   | "SPLIT_YEAR_SNOWBIRD"
+  /** Ordinary leisure/extended-stay tourism with no relocation, work, or retirement intent — distinct from TESTING (evaluating a future move), SECOND_HOME (ownership), and RETIRED. */
+  | "LEISURE_TRAVELER"
   | "TESTING"
   | "NOT_SURE";
 

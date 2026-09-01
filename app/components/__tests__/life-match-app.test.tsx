@@ -26,6 +26,9 @@ describe("LifeMatchApp", () => {
     expect(screen.getByRole("heading", { name: "Find the places that fit your life." })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /Start your Life Match/ }));
 
+    fireEvent.click(screen.getByRole("radio", { name: "Not sure yet" }));
+    fireEvent.click(screen.getByRole("radio", { name: "Not sure yet" }));
+
     expect(screen.getByRole("heading", { name: RETIREMENT_DNA_QUESTIONS[0].prompt })).toBeInTheDocument();
     const essential = screen.getByRole("radio", { name: /Essential/ });
     fireEvent.click(essential);
@@ -53,6 +56,9 @@ describe("LifeMatchApp", () => {
     render(<LifeMatchApp />);
     fireEvent.click(screen.getByRole("button", { name: /Continue your Life Match/ }));
 
+    fireEvent.click(screen.getByRole("radio", { name: "Not sure yet" }));
+    fireEvent.click(screen.getByRole("radio", { name: "Not sure yet" }));
+
     expect(screen.getByRole("heading", { name: RETIREMENT_DNA_QUESTIONS[2].prompt })).toBeInTheDocument();
     expect(screen.getByText("5% complete")).toBeInTheDocument();
   });
@@ -63,6 +69,10 @@ describe("LifeMatchApp", () => {
 
     render(<LifeMatchApp />);
     fireEvent.click(screen.getByRole("button", { name: /Continue your Life Match/ }));
+
+    fireEvent.click(screen.getByRole("radio", { name: "Not sure yet" }));
+    fireEvent.click(screen.getByRole("radio", { name: "Not sure yet" }));
+
     fireEvent.click(screen.getByRole("button", { name: /Identity, Hobbies & Retirement Goals/ }));
     fireEvent.click(screen.getByRole("button", { name: /Continue/ }));
     fireEvent.click(screen.getByRole("button", { name: /Continue/ }));
@@ -71,5 +81,28 @@ describe("LifeMatchApp", () => {
 
     expect(pushMock).toHaveBeenCalledWith(`/results?dna=${encodeURIComponent(serializeRetirementDnaAnswers(completeAnswers))}`);
     expect(window.localStorage.getItem("destinationfinderai:retirement-dna-draft")).toBeNull();
+  });
+
+  it("asks purpose then duration first, and maps a leisure traveler's one-month answer onto the canonical profile fields without any retirement assumption", () => {
+    render(<LifeMatchApp />);
+    fireEvent.click(screen.getByRole("button", { name: /Start your Life Match/ }));
+
+    expect(screen.getByRole("heading", { name: /best describes why you.re exploring/ })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("radio", { name: "Leisure traveler / extended stay" }));
+
+    expect(screen.getByRole("heading", { name: /How long are you picturing this stay/ })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("radio", { name: "Around one month" }));
+
+    expect(screen.getByRole("heading", { name: RETIREMENT_DNA_QUESTIONS[0].prompt })).toBeInTheDocument();
+
+    const storedIntake = JSON.parse(window.localStorage.getItem("destinationfinderai:life-match-purpose-intake") ?? "{}");
+    expect(storedIntake.purpose).toBe("LEISURE_TRAVELER");
+    expect(storedIntake.duration).toBe("ABOUT_ONE_MONTH");
+    expect(storedIntake.profileFields).toEqual({
+      activityMode: "LEISURE_TRAVELER",
+      stayDuration: { band: "SHORT_1_3_MONTHS", intendedStayDurationDays: 30 },
+      tenureIntent: "UNSURE",
+      intendsToWorkDuringStay: false,
+    });
   });
 });

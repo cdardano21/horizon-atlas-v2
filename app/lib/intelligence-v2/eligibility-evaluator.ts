@@ -70,6 +70,9 @@ function constraintFromTriState(
  * evaluateRequiredLegalPath so the two can never contradict each other from the same gap.
  */
 function resolveProfileCompatibleLongStayPath(profile: UserProfileV2, facts: SyntheticDestinationFixture["entryAndStay"]): TriStateFact {
+  // Every other activity mode (including LEISURE_TRAVELER, SECOND_HOME, SPLIT_YEAR_SNOWBIRD,
+  // TESTING) intentionally falls through to only the generic permanentResidencyPathAvailable
+  // candidate below — no retirement or employment-specific path is ever added for them.
   const candidates: TriStateFact[] = [facts.permanentResidencyPathAvailable];
   if (profile.activityMode === "RETIRED") candidates.push(facts.retirementVisaProgramAvailable);
   if (profile.activityMode === "REMOTE_EMPLOYEE" || profile.activityMode === "DIGITAL_NOMAD" || profile.intendsToWorkDuringStay) {

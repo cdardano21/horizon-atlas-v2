@@ -13,8 +13,16 @@ import {
   serializeRetirementDnaAnswers,
   type RetirementDnaAnswers,
 } from "../lib/retirement-dna";
+import {
+  derivePurposeAndDurationProfileFields,
+  LIFE_MATCH_PURPOSE_OPTIONS,
+  LIFE_MATCH_STAY_DURATION_OPTIONS,
+  type LifeMatchPurposeAnswer,
+  type LifeMatchStayDurationAnswer,
+} from "../lib/intelligence-v2/purpose-duration-intake";
 
 const DRAFT_STORAGE_KEY = "destinationfinderai:retirement-dna-draft";
+const PURPOSE_INTAKE_STORAGE_KEY = "destinationfinderai:life-match-purpose-intake";
 
 const parseDraftAnswers = (rawDraft: string): RetirementDnaAnswers => {
   try {
@@ -28,6 +36,20 @@ const subscribeToDraft = () => () => {};
 const readDraftSnapshot = () => window.localStorage.getItem(DRAFT_STORAGE_KEY) ?? "";
 const readServerDraftSnapshot = () => "";
 
+type PurposeIntakeDraft = { purpose: LifeMatchPurposeAnswer | null; duration: LifeMatchStayDurationAnswer | null };
+
+const parsePurposeIntakeDraft = (rawDraft: string): PurposeIntakeDraft => {
+  try {
+    if (!rawDraft) return { purpose: null, duration: null };
+    const parsed = JSON.parse(rawDraft) as Partial<PurposeIntakeDraft>;
+    return { purpose: parsed.purpose ?? null, duration: parsed.duration ?? null };
+  } catch {
+    return { purpose: null, duration: null };
+  }
+};
+
+const readPurposeIntakeSnapshot = () => window.localStorage.getItem(PURPOSE_INTAKE_STORAGE_KEY) ?? "";
+
 export default function LifeMatchApp() {
   const draftSnapshot = useSyncExternalStore(subscribeToDraft, readDraftSnapshot, readServerDraftSnapshot);
   const [editedAnswers, setEditedAnswers] = useState<RetirementDnaAnswers | null>(null);
@@ -36,6 +58,17 @@ export default function LifeMatchApp() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const questionHeadingRef = useRef<HTMLHeadingElement | null>(null);
   const router = useRouter();
+
+  const purposeIntakeSnapshot = useSyncExternalStore(subscribeToDraft, readPurposeIntakeSnapshot, readServerDraftSnapshot);
+  const [editedPurposeIntake, setEditedPurposeIntake] = useState<PurposeIntakeDraft | null>(null);
+  const purposeIntake = editedPurposeIntake ?? parsePurposeIntakeDraft(purposeIntakeSnapshot);
+
+  // Foundation mapping only — not yet wired into results; see purpose-duration-intake.ts.
+  const derivedPurposeProfileFields = useMemo(() => {
+    if (!purposeIntake.purpose || !purposeIntake.duration) return null;
+    return derivePurposeAndDurationProfileFields(purposeIntake.purpose, purposeIntake.duration);
+  }, [purposeIntake.purpose, purposeIntake.duration]);
+
   const profilePreview = useMemo(() => computeRetirementDnaProfile(answers), [answers]);
   const currentQuestion = RETIREMENT_DNA_QUESTIONS[currentQuestionIndex];
   const currentSectionIndex = RETIREMENT_DNA_SECTIONS.findIndex((section) =>
@@ -46,7 +79,7 @@ export default function LifeMatchApp() {
   const assessmentIsComplete = profilePreview.answeredCount === RETIREMENT_DNA_TOTAL_QUESTIONS;
   const isFinalQuestion = currentQuestionIndex === RETIREMENT_DNA_TOTAL_QUESTIONS - 1;
   const progressPercent = Math.round((profilePreview.answeredCount / RETIREMENT_DNA_TOTAL_QUESTIONS) * 100);
-  const hasDraft = profilePreview.answeredCount > 0;
+  const hasDraft = profilePreview.answeredCount > 0 || purposeIntake.purpose !== null || purposeIntake.duration !== null;
 
   useEffect(() => {
     if (editedAnswers === null) return;
@@ -59,6 +92,21 @@ export default function LifeMatchApp() {
 
     window.localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(answers));
   }, [answers, editedAnswers]);
+
+  useEffect(() => {
+    if (editedPurposeIntake === null) return;
+    if (typeof window === "undefined") return;
+
+    if (purposeIntake.purpose === null && purposeIntake.duration === null) {
+      window.localStorage.removeItem(PURPOSE_INTAKE_STORAGE_KEY);
+      return;
+    }
+
+    window.localStorage.setItem(
+      PURPOSE_INTAKE_STORAGE_KEY,
+      JSON.stringify({ ...purposeIntake, profileFields: derivedPurposeProfileFields }),
+    );
+  }, [purposeIntake, editedPurposeIntake, derivedPurposeProfileFields]);
 
   const focusQuestion = () => {
     window.requestAnimationFrame(() => {
@@ -83,11 +131,27 @@ export default function LifeMatchApp() {
     setEditedAnswers((current) => ({ ...(current ?? answers), [questionId]: value }));
   };
 
+  const setPurposeAnswer = (value: LifeMatchPurposeAnswer) => {
+    setEditedPurposeIntake({ purpose: value, duration: purposeIntake.duration });
+  };
+
+  const setDurationAnswer = (value: LifeMatchStayDurationAnswer) => {
+    setEditedPurposeIntake({ purpose: purposeIntake.purpose, duration: value });
+  };
+
+  const goBackToPurposeStep = () => {
+    setEditedPurposeIntake({ purpose: null, duration: purposeIntake.duration });
+  };
+
   const resetAssessment = () => {
     setEditedAnswers({});
+    setEditedPurposeIntake({ purpose: null, duration: null });
     setCurrentQuestionIndex(0);
     setHasStarted(false);
-    if (typeof window !== "undefined") window.localStorage.removeItem(DRAFT_STORAGE_KEY);
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem(DRAFT_STORAGE_KEY);
+      window.localStorage.removeItem(PURPOSE_INTAKE_STORAGE_KEY);
+    }
   };
 
   const goToResults = () => {
@@ -130,8 +194,8 @@ export default function LifeMatchApp() {
                 <p className="mt-2 text-[10px] uppercase leading-4 tracking-[0.14em] text-[#dfeaf4]">Lifestyle, cost, climate &amp; what matters to you</p>
               </div>
               <div className="border-l border-white/15 pl-4 sm:pl-5">
-                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#f1c66d]">10 matches</p>
-                <p className="mt-2 text-[10px] uppercase leading-4 tracking-[0.14em] text-[#dfeaf4]">Your strongest destinations</p>
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#f1c66d]">UP TO 10 MATCHES</p>
+                <p className="mt-2 text-[10px] uppercase leading-4 tracking-[0.14em] text-[#dfeaf4]">YOUR STRONGEST VERIFIED DESTINATIONS</p>
               </div>
             </div>
 
@@ -152,7 +216,7 @@ export default function LifeMatchApp() {
             </div>
 
             <p className="mt-5 max-w-xl text-xs leading-5 text-[#9eb2c5]">
-              Completing the assessment generates 10 ranked matches from thousands of destinations around the world.
+              Completing the assessment generates up to 10 ranked matches from thousands of destinations around the world.
             </p>
           </div>
 
@@ -169,9 +233,87 @@ export default function LifeMatchApp() {
               </div>
               <div className="flex items-start gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-2.5">
                 <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#f0c66e]/30 bg-[#f0c66e]/12 text-[11px] font-bold text-[#f7d68a]">03</span>
-                <p className="text-sm leading-6 text-[#edf3f8]">Honest tradeoffs to investigate before moving.</p>
+                <p className="text-sm leading-6 text-[#edf3f8]">Honest tradeoffs to consider before you choose.</p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!purposeIntake.purpose) {
+    return (
+      <section className="min-h-screen bg-[#04162b] px-5 py-16 text-white sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-3xl">
+          <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#56c6c3]">Step 1 of 2</p>
+          <h1 className="mt-4 text-3xl leading-tight text-white sm:text-4xl">What best describes why you&rsquo;re exploring a destination?</h1>
+          <p className="mt-5 max-w-2xl text-base leading-7 text-[#bdcad5]">
+            This routes your match to the right legal, work, and lifestyle pathway. Retirement-specific questions only appear if you select Retirement below.
+          </p>
+
+          <div role="radiogroup" aria-label="Purpose" className="mt-9 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {LIFE_MATCH_PURPOSE_OPTIONS.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                role="radio"
+                aria-checked={purposeIntake.purpose === option.value}
+                onClick={() => setPurposeAnswer(option.value)}
+                className="min-h-16 border border-white/15 bg-white/[0.045] px-5 py-4 text-left text-sm font-semibold text-white transition hover:border-[#58c7c4]/70 hover:bg-white/[0.075] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#58c7c4] focus-visible:ring-offset-2 focus-visible:ring-offset-[#04162b]"
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-10 border-t border-white/10 pt-6">
+            <button
+              type="button"
+              onClick={() => setHasStarted(false)}
+              className="min-h-12 border border-white/15 px-5 text-sm font-semibold text-[#c3d0da] transition hover:border-white/35 hover:text-white"
+            >
+              <span aria-hidden="true" className="mr-2">&#8592;</span> Back
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!purposeIntake.duration) {
+    return (
+      <section className="min-h-screen bg-[#04162b] px-5 py-16 text-white sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-3xl">
+          <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#56c6c3]">Step 2 of 2</p>
+          <h1 className="mt-4 text-3xl leading-tight text-white sm:text-4xl">How long are you picturing this stay?</h1>
+          <p className="mt-5 max-w-2xl text-base leading-7 text-[#bdcad5]">
+            An estimate is fine &mdash; this helps us check realistic entry, stay, and legal pathways for each destination.
+          </p>
+
+          <div role="radiogroup" aria-label="Intended stay duration" className="mt-9 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {LIFE_MATCH_STAY_DURATION_OPTIONS.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                role="radio"
+                aria-checked={purposeIntake.duration === option.value}
+                onClick={() => setDurationAnswer(option.value)}
+                className="min-h-16 border border-white/15 bg-white/[0.045] px-5 py-4 text-left text-sm font-semibold text-white transition hover:border-[#58c7c4]/70 hover:bg-white/[0.075] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#58c7c4] focus-visible:ring-offset-2 focus-visible:ring-offset-[#04162b]"
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-10 border-t border-white/10 pt-6">
+            <button
+              type="button"
+              onClick={goBackToPurposeStep}
+              className="min-h-12 border border-white/15 px-5 text-sm font-semibold text-[#c3d0da] transition hover:border-white/35 hover:text-white"
+            >
+              <span aria-hidden="true" className="mr-2">&#8592;</span> Back
+            </button>
           </div>
         </div>
       </section>
