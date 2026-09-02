@@ -81,7 +81,7 @@ export const RETIREMENT_DNA_SECTIONS: RetirementSection[] = [
     title: "Financial Fit",
     description: "Define how much affordability and cost discipline should shape your shortlist.",
     questions: [
-      question("budget-2", "budget", "I want a destination where my retirement income stretches meaningfully further.", "Think purchasing power rather than just headline prices."),
+      question("budget-2", "budget", "I want a destination where my budget stretches meaningfully further.", "Think purchasing power rather than just headline prices."),
       question("budget-1", "budget", "Keeping monthly living costs under control is a top decision driver for me.", "This includes housing, groceries, dining, and routine services."),
       question("budget-4", "budget", "Owning or renting comfortable housing at a sensible cost matters a lot to me.", "Housing cost is one of the biggest long-term levers."),
     ],
@@ -92,8 +92,8 @@ export const RETIREMENT_DNA_SECTIONS: RetirementSection[] = [
     description: "Measure how heavily healthcare confidence should influence your matches.",
     questions: [
       question("healthcare-6", "healthcare", "Healthcare confidence is one of the first filters I would use to eliminate a city.", "A strong score here should sharply influence the ranking."),
-      question("healthcare-1", "healthcare", "Reliable access to doctors and specialists is essential for my move.", "This is about baseline access, not only elite hospitals."),
-      question("healthcare-2", "healthcare", "I want to feel confident that healthcare quality will hold up over the next decade.", "Long-horizon resilience matters as much as current availability."),
+      question("healthcare-1", "healthcare", "Reliable access to doctors and specialists is important for this destination choice.", "This is about baseline access, not only elite hospitals."),
+      question("healthcare-2", "healthcare", "I want to feel confident that healthcare quality will hold up throughout my planned stay.", "Long-horizon resilience matters as much as current availability."),
     ],
   },
   {
@@ -121,8 +121,8 @@ export const RETIREMENT_DNA_SECTIONS: RetirementSection[] = [
     title: "Climate & Coast",
     description: "Weight how strongly warm weather and seaside access should influence your shortlist.",
     questions: [
-      question("climate-1", "climate", "Warm weather for most of the year is a major reason I am considering a move.", "This helps favor consistently mild destinations."),
-      question("coast-1", "coast", "Living near the water feels central to my ideal retirement lifestyle.", "This supports coastal and marina-oriented destinations."),
+      question("climate-1", "climate", "Warm weather for most of the year is a major reason I am considering a destination.", "This helps favor consistently mild destinations."),
+      question("coast-1", "coast", "Living near the water feels central to my ideal day-to-day lifestyle.", "This supports coastal and marina-oriented destinations."),
       question("climate-3", "climate", "Avoiding long cold seasons matters strongly to me.", "Useful for prioritizing Mediterranean and warm-weather regions."),
     ],
   },
@@ -168,30 +168,30 @@ export const RETIREMENT_DNA_SECTIONS: RetirementSection[] = [
   },
   {
     id: "long-horizon",
-    title: "Long-Horizon Fit",
-    description: "Bring together stability, resilience, and confidence in a multi-year move.",
+    title: "Longer-Term Fit",
+    description: "Bring together stability, resilience, and confidence in a longer-term destination choice.",
     questions: [
       question("stability-6", "stability", "Long-term fit matters more to me than immediate excitement.", "This separates durable matches from tempting but fragile options."),
-      question("stability-1", "stability", "I want a destination that feels dependable for a long multi-year stay.", "This is about staying power, not novelty."),
+      question("stability-1", "stability", "I want a destination that feels dependable for the full length of my planned stay.", "This is about staying power, not novelty."),
       question("stability-3", "stability", "I prefer destinations that feel established and trustworthy over those that feel speculative.", "This sharpens long-term risk tolerance."),
     ],
   },
   {
     id: "family-relationships",
     title: "Family & Relationships",
-    description: "Capture how family structure and access should shape relocation decisions.",
+    description: "Capture how family structure and access should shape destination decisions.",
     questions: [
       question("family-5", "family", "Being too remote from the people I care about would be a serious downside.", "Distance tolerance matters as much as destination appeal."),
-      question("family-3", "family", "My move needs to work not just for me, but for a partner or close family member too.", "This broadens the match beyond solo preference."),
+      question("family-3", "family", "This destination choice needs to work not just for me, but for a partner or close family member too.", "This broadens the match beyond solo preference."),
       question("family-1", "family", "Easy access for family visits is important to my ideal destination.", "This can strongly raise the value of airport access and practical logistics."),
     ],
   },
   {
     id: "identity-goals",
-    title: "Identity, Hobbies & Retirement Goals",
+    title: "Identity, Hobbies & Life Goals",
     description: "Define the kind of life you want to build, not only the city features you want around you.",
     questions: [
-      question("goals-2", "goals", "I want my destination to feel aligned with the future I imagine for myself in retirement.", "This helps the engine distinguish practical fits from genuinely aspirational fits."),
+      question("goals-2", "goals", "I want my destination to feel aligned with the life I want to build.", "This helps the engine distinguish practical fits from genuinely aspirational fits."),
       question("personality-3", "personality", "I would rather live in a place that fits my energy and values than in a place that is simply popular.", "This helps avoid trend-driven mismatches."),
       question("personality-1", "personality", "My ideal place should match my temperament, not just my spreadsheet criteria.", "Some people thrive in energetic urban environments; others need calm and simplicity."),
       question("hobbies-1", "hobbies", "My regular hobbies and recreation should be easy to sustain where I live.", "This may include golf, walking, fitness, arts, boating, or outdoor activities."),

@@ -73,7 +73,7 @@ describe("LifeMatchApp", () => {
     fireEvent.click(screen.getByRole("radio", { name: "Not sure yet" }));
     fireEvent.click(screen.getByRole("radio", { name: "Not sure yet" }));
 
-    fireEvent.click(screen.getByRole("button", { name: /Identity, Hobbies & Retirement Goals/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Identity, Hobbies & Life Goals/ }));
     fireEvent.click(screen.getByRole("button", { name: /Continue/ }));
     fireEvent.click(screen.getByRole("button", { name: /Continue/ }));
     fireEvent.click(screen.getByRole("button", { name: /Continue/ }));
