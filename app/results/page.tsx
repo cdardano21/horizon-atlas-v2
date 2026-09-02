@@ -2,6 +2,7 @@ import Link from "next/link";
 import LifeMatchResultImage from "../components/LifeMatchResultImage";
 import ResultsHistorySaver from "../components/ResultsHistorySaver";
 import type { Destination } from "../lib/destinations";
+import { getLifeMatchCandidateDestinations } from "../lib/life-match-candidates";
 import { getPublicDestinations } from "../lib/public-destinations";
 import { rankDestinationsForRetirementDna } from "../lib/recommendation-engine";
 import {
@@ -40,11 +41,32 @@ const scoreDestination = (destination: Destination, selectedTags: string[]) => {
 export default async function ResultsPage({ searchParams }: ResultsPageProps) {
   const params = searchParams ? await searchParams : undefined;
   const publicDestinations = await getPublicDestinations();
+  const lifeMatchCandidateDestinations = getLifeMatchCandidateDestinations(publicDestinations);
   const selectedTags = parseTags(params?.tags);
   const dnaPayload = parseDna(params?.dna);
   const dnaAnswers = dnaPayload ? deserializeRetirementDnaAnswers(dnaPayload) : {};
   const hasDnaAssessment = Object.keys(dnaAnswers).length > 0;
-  const dnaRanking = hasDnaAssessment ? rankDestinationsForRetirementDna(publicDestinations, dnaAnswers) : null;
+
+  if (hasDnaAssessment && lifeMatchCandidateDestinations.length === 0) {
+    return (
+      <main className="min-h-screen bg-[#04162b] text-white">
+        <section className="border-b border-white/10 bg-[#061b34] px-5 py-16 sm:px-8 lg:px-10">
+          <div className="mx-auto max-w-5xl">
+            <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#58c7c4]">Destination recommendations</p>
+            <h1 className="mt-4 max-w-3xl text-4xl leading-tight sm:text-5xl">No verified workbook-backed destinations are available for this Life Match yet.</h1>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-[#b9c8d4]">
+              The current Life Match pool is restricted to registered workbook-backed destinations only. Please try again once a verified destination set is available.
+            </p>
+            <Link href="/life-match" className="mt-8 inline-flex min-h-12 items-center bg-[#e5b654] px-6 text-sm font-bold text-[#06172c] hover:bg-[#f0c66e]">
+              Start Life Match <span aria-hidden="true" className="ml-3">&#8594;</span>
+            </Link>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  const dnaRanking = hasDnaAssessment ? rankDestinationsForRetirementDna(lifeMatchCandidateDestinations, dnaAnswers) : null;
   const fallbackRanking = [...publicDestinations]
     .map((destination) => scoreDestination(destination, selectedTags))
     .sort((left, right) => right.score - left.score)
@@ -104,7 +126,7 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
             <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#58c7c4]">Your Life Match</p>
             <h1 className="mt-4 max-w-3xl text-5xl leading-[0.98] text-white sm:text-6xl">Your priorities point somewhere meaningful.</h1>
             <p className="mt-6 max-w-2xl text-base leading-7 text-[#c4d1dc] sm:text-lg">
-              We weighed all {profile.answeredCount} answers against {publicDestinations.length} destinations. These are your strongest evidence-backed matches and the tradeoffs worth understanding next.
+              We weighed all {profile.answeredCount} answers against {lifeMatchCandidateDestinations.length} registered workbook-backed destinations. These are your strongest evidence-backed matches and the tradeoffs worth understanding next.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href={compareHref} className="inline-flex min-h-12 items-center bg-[#e5b654] px-6 text-sm font-bold text-[#06172c] hover:bg-[#f0c66e]">Compare top 3</Link>
