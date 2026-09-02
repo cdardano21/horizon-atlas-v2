@@ -164,6 +164,10 @@ export interface DeterministicV31CanonicalCostOfLivingItem {
   source_url: DeterministicV31CanonicalStringValue;
   verified: DeterministicV31CanonicalStringValue;
   verified_at: DeterministicV31CanonicalStringValue;
+  /** Optional camelCase aliases for future evidence metadata; absent columns remain fully backward compatible. */
+  sourceName?: DeterministicV31CanonicalStringValue;
+  sourceUrl?: DeterministicV31CanonicalStringValue;
+  sourceAsOfDate?: DeterministicV31CanonicalStringValue;
 }
 
 export interface DeterministicV31CanonicalClimateMonth {

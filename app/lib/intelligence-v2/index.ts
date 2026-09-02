@@ -78,6 +78,34 @@ export type {
   SyntheticDestinationFixture,
 } from "./destination-fact-types";
 
+export type {
+  ActivityModeGroup,
+  Confidence,
+  CountryJurisdictionFact,
+  EvidenceStatus,
+  LifeMatchEvidence,
+  LifestyleCapability,
+  LifestyleFeatureKey,
+  SourceAuthority,
+  StayModeKey,
+  TriState,
+} from "./life-match-fact-contract";
+export {
+  ACTIVITY_MODE_GROUPS,
+  COUNTRY_JURISDICTION_FACT_HEADERS,
+  LIFESTYLE_FEATURE_DEFINITIONS,
+  normalizeCountryCode,
+  normalizeEvidenceForLegalStatus,
+  validateCountryJurisdictionFact,
+  validateCountryJurisdictionRows,
+} from "./life-match-fact-contract";
+export {
+  COUNTRY_JURISDICTION_WORKBOOK_PATH,
+  loadSharedCountryJurisdictionWorkbook,
+  lookupCountryJurisdictionFact,
+  readWorkbookRowsFromPython,
+} from "./country-jurisdiction-loader";
+
 export { evaluateEligibility } from "./eligibility-evaluator";
 export { evaluateAffordability } from "./affordability-evaluator";
 export {
