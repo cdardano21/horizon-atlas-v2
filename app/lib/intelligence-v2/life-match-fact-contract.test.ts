@@ -3,6 +3,7 @@ import {
   LIFESTYLE_FEATURE_DEFINITIONS,
   normalizeCountryCode,
   normalizeEvidenceForLegalStatus,
+  validateLifestyleFeatureValue,
   type ActivityModeGroup,
   type CountryJurisdictionFact,
   type LifeMatchEvidence,
@@ -140,5 +141,48 @@ describe("Life Match Fact Contract v1 scaffolding", () => {
     expect(LIFESTYLE_FEATURE_DEFINITIONS[feature].expectedType).toBe("enum");
     expect(LIFESTYLE_FEATURE_DEFINITIONS[feature].capability).toBe("WEIGHTED_PREFERENCE");
     expect(LIFESTYLE_FEATURE_DEFINITIONS[feature].unknownRepresentation).toBe("UNKNOWN");
+  });
+
+  it("12. all intentionally supported existing settlement_type workbook values validate", () => {
+    for (const value of ["MAJOR_URBAN_CORE", "MID_SIZE_CITY", "SMALL_CITY", "SMALL_TOWN", "SUBURBAN_COMMUNITY", "RESORT_COMMUNITY", "CITY", "TOWN", "RURAL", "UNKNOWN"]) {
+      expect(validateLifestyleFeatureValue("settlement_type", value)).toBe(true);
+    }
+  });
+
+  it("13. settlement_type=MIXED is deliberately unsupported (ambiguous, not silently accepted)", () => {
+    expect(validateLifestyleFeatureValue("settlement_type", "MIXED")).toBe(false);
+    expect(LIFESTYLE_FEATURE_DEFINITIONS.settlement_type.allowedValues).not.toContain("MIXED");
+  });
+
+  it("14. mountain_access reconciles with the established MountainOrSkiAccessFact canonical type: SKI_RESORT_ACCESS is distinct from MOUNTAIN_SCENIC_ONLY", () => {
+    expect(validateLifestyleFeatureValue("mountain_access", "SKI_RESORT_ACCESS")).toBe(true);
+    expect(validateLifestyleFeatureValue("mountain_access", "MOUNTAIN_SCENIC_ONLY")).toBe(true);
+    expect("SKI_RESORT_ACCESS").not.toBe("MOUNTAIN_SCENIC_ONLY");
+    expect(LIFESTYLE_FEATURE_DEFINITIONS.mountain_access.capability).toBe("HARD_GATE");
+  });
+
+  it("15. mountain_access NONE and UNKNOWN retain their intended behavior; no NEARBY/DIRECT_ACCESS competing vocabulary remains", () => {
+    expect(validateLifestyleFeatureValue("mountain_access", "NONE")).toBe(true);
+    expect(validateLifestyleFeatureValue("mountain_access", "UNKNOWN")).toBe(true);
+    expect(validateLifestyleFeatureValue("mountain_access", "NEARBY")).toBe(false);
+    expect(validateLifestyleFeatureValue("mountain_access", "DIRECT_ACCESS")).toBe(false);
+  });
+
+  it("16. beach_access NONE, NEARBY, DIRECT_ACCESS, and UNKNOWN retain their intended behavior (unchanged, canonical BeachAccessFact match)", () => {
+    for (const value of ["NONE", "NEARBY", "DIRECT_ACCESS", "UNKNOWN"]) {
+      expect(validateLifestyleFeatureValue("beach_access", value)).toBe(true);
+    }
+  });
+
+  it("17. NOT_APPLICABLE is a valid non-matching status for any feature and can never become matching-enabled data", () => {
+    expect(validateLifestyleFeatureValue("mountain_access", "NOT_APPLICABLE")).toBe(true);
+    expect(validateLifestyleFeatureValue("settlement_type", "NOT_APPLICABLE")).toBe(true);
+    expect("NOT_APPLICABLE").not.toBe("UNKNOWN");
+    expect("NOT_APPLICABLE" as string).not.toBe("PASS");
+  });
+
+  it("18. an arbitrary unsupported value is rejected for both settlement_type and mountain_access (no silent coercion)", () => {
+    expect(validateLifestyleFeatureValue("settlement_type", "MEGA_METROPOLIS")).toBe(false);
+    expect(validateLifestyleFeatureValue("mountain_access", "ALPINE_VILLAGE")).toBe(false);
   });
 });

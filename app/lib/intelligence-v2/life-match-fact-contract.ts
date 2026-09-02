@@ -78,9 +78,17 @@ export const ACTIVITY_MODE_GROUPS: readonly ActivityModeGroup[] = [
 
 export const UNKNOWN_REPRESENTATION = "UNKNOWN" as const;
 export const LIFESTYLE_FEATURE_DEFINITIONS = {
+  // MID_SIZE_CITY/MAJOR_URBAN_CORE/SMALL_TOWN/SUBURBAN_COMMUNITY/RESORT_COMMUNITY are distinct,
+  // established authoritative-workbook settlement distinctions and are intentionally NOT flattened
+  // into CITY/TOWN. MIXED is deliberately excluded (not UNKNOWN): it is semantically ambiguous
+  // (could mean mixed urban/rural, mixed density, or a blend of settlement types) and admitting it
+  // without a precise definition would erase the very distinctions this enum exists to preserve.
   settlement_type: {
     expectedType: "enum",
-    allowedValues: ["CITY", "SMALL_CITY", "TOWN", "RURAL", "UNKNOWN"],
+    allowedValues: [
+      "CITY", "MAJOR_URBAN_CORE", "MID_SIZE_CITY", "SMALL_CITY",
+      "TOWN", "SMALL_TOWN", "SUBURBAN_COMMUNITY", "RESORT_COMMUNITY", "RURAL", "UNKNOWN",
+    ],
     unknownRepresentation: UNKNOWN_REPRESENTATION,
     capability: "WEIGHTED_PREFERENCE" as LifestyleCapability,
     evidenceRequirement: "required_when_non_unknown",
@@ -148,11 +156,15 @@ export const LIFESTYLE_FEATURE_DEFINITIONS = {
     capability: "HARD_GATE" as LifestyleCapability,
     evidenceRequirement: "required_when_non_unknown",
   },
+  // Reconciled with the established, already-live MountainOrSkiAccessFact canonical type
+  // (destination-fact-types.ts, used by eligibility-evaluator.ts's hard gate and
+  // lifestyle-scoring-policy.ts's MOUNTAIN_ACCESS_DIMENSION_SCORE) rather than inventing a
+  // second, competing NEARBY/DIRECT_ACCESS vocabulary for mountain/ski access.
   mountain_access: {
     expectedType: "enum",
-    allowedValues: ["NONE", "NEARBY", "DIRECT_ACCESS", "UNKNOWN"],
+    allowedValues: ["SKI_RESORT_ACCESS", "MOUNTAIN_SCENIC_ONLY", "NONE", "UNKNOWN"],
     unknownRepresentation: UNKNOWN_REPRESENTATION,
-    capability: "WEIGHTED_PREFERENCE" as LifestyleCapability,
+    capability: "HARD_GATE" as LifestyleCapability,
     evidenceRequirement: "required_when_non_unknown",
   },
   hiking_access: {
@@ -256,6 +268,21 @@ export const LIFESTYLE_FEATURE_DEFINITIONS = {
 } as const;
 
 export type LifestyleFeatureKey = keyof typeof LIFESTYLE_FEATURE_DEFINITIONS;
+
+/** Strict, no-coercion membership check against the committed enum/numeric-range contract for one feature. */
+export function validateLifestyleFeatureValue(featureKey: LifestyleFeatureKey, value: unknown): boolean {
+  const definition: { expectedType: string; allowedValues: readonly string[] } = LIFESTYLE_FEATURE_DEFINITIONS[featureKey];
+  if (value === "NOT_APPLICABLE") return true;
+  if (definition.expectedType === "enum") {
+    return typeof value === "string" && definition.allowedValues.includes(value);
+  }
+  if (definition.expectedType === "numeric") {
+    if (value === UNKNOWN_REPRESENTATION) return true;
+    const numeric = typeof value === "number" ? value : Number(value);
+    return Number.isFinite(numeric) && numeric >= 0 && numeric <= 100;
+  }
+  return false;
+}
 
 export const COUNTRY_JURISDICTION_FACT_HEADERS = [
   "destinationCountryCode",
