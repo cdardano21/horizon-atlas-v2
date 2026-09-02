@@ -33,6 +33,47 @@ export type LifeMatchStayDurationAnswer =
   | "INDEFINITE_OR_PERMANENT"
   | "NOT_SURE";
 
+export type LifeMatchPassportAnswer = string | "NOT_SURE";
+export type LifeMatchPermitWillingnessAnswer = "YES" | "MAYBE" | "NO" | "NOT_SURE";
+export type LifeMatchBudgetAnswer =
+  | "UNDER_3000"
+  | "FROM_3000_TO_4499"
+  | "FROM_4500_TO_6499"
+  | "FROM_6500_TO_8499"
+  | "FROM_8500_TO_10499"
+  | "FROM_10500_PLUS"
+  | "NOT_SURE";
+
+const ALL_REPO_COUNTRIES = [
+  "AD", "AE", "AF", "AG", "AI", "AL", "AM", "AO", "AR", "AT", "AU", "AW", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BL", "BM", "BN", "BO", "BR", "BS", "BT", "BW", "BY", "BZ", "CA", "CD", "CF", "CG", "CH", "CI", "CL", "CM", "CN", "CO", "CR", "CU", "CV", "CW", "CY", "CZ", "DE", "DJ", "DK", "DM", "DO", "DZ", "EC", "EE", "EG", "ES", "ET", "FI", "FJ", "FR", "GA", "GB", "GD", "GE", "GH", "GM", "GN", "GQ", "GR", "GT", "GW", "GY", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IN", "IQ", "IR", "IS", "IT", "JM", "JO", "JP", "KE", "KG", "KH", "KM", "KN", "KP", "KR", "KW", "KY", "KZ", "LA", "LB", "LC", "LI", "LK", "LR", "LS", "LT", "LU", "LV", "LY", "MA", "MC", "MD", "ME", "MF", "MG", "MK", "ML", "MM", "MN", "MR", "MT", "MU", "MV", "MW", "MX", "MY", "MZ", "NA", "NE", "NG", "NI", "NL", "NO", "NP", "NZ", "OM", "PA", "PE", "PG", "PH", "PK", "PL", "PR", "PT", "PY", "QA", "RO", "RS", "RU", "RW", "SA", "SB", "SC", "SD", "SE", "SG", "SI", "SK", "SL", "SM", "SN", "SO", "SR", "SS", "ST", "SV", "SX", "SY", "SZ", "TC", "TD", "TG", "TH", "TJ", "TL", "TM", "TN", "TO", "TR", "TT", "TW", "TZ", "UA", "UG", "US", "UY", "UZ", "VC", "VE", "VN", "WS", "XK", "YE", "ZA", "ZM", "ZW",
+] as const;
+
+const COUNTRY_LABELS = new Intl.DisplayNames(["en"], { type: "region" });
+
+export const LIFE_MATCH_PASSPORT_OPTIONS: ReadonlyArray<{ value: LifeMatchPassportAnswer; label: string }> = [
+  { value: "NOT_SURE", label: "Not sure yet" },
+  ...ALL_REPO_COUNTRIES
+    .filter((code) => code !== "XK")
+    .map((code) => ({ value: code as LifeMatchPassportAnswer, label: COUNTRY_LABELS.of(code) ?? code })),
+];
+
+export const LIFE_MATCH_PERMIT_WILLINGNESS_OPTIONS: ReadonlyArray<{ value: LifeMatchPermitWillingnessAnswer; label: string }> = [
+  { value: "YES", label: "Yes" },
+  { value: "MAYBE", label: "Maybe" },
+  { value: "NO", label: "No" },
+  { value: "NOT_SURE", label: "Not sure yet" },
+];
+
+export const LIFE_MATCH_BUDGET_OPTIONS: ReadonlyArray<{ value: LifeMatchBudgetAnswer; label: string }> = [
+  { value: "UNDER_3000", label: "Under $3,000" },
+  { value: "FROM_3000_TO_4499", label: "$3,000–$4,499" },
+  { value: "FROM_4500_TO_6499", label: "$4,500–$6,499" },
+  { value: "FROM_6500_TO_8499", label: "$6,500–$8,499" },
+  { value: "FROM_8500_TO_10499", label: "$8,500–$10,499" },
+  { value: "FROM_10500_PLUS", label: "$10,500 or more" },
+  { value: "NOT_SURE", label: "Not sure yet" },
+];
+
 export const LIFE_MATCH_PURPOSE_OPTIONS: ReadonlyArray<{ value: LifeMatchPurposeAnswer; label: string }> = [
   { value: "LEISURE_TRAVELER", label: "Leisure traveler / extended stay" },
   { value: "REMOTE_EMPLOYEE", label: "Remote employee" },
@@ -124,6 +165,23 @@ function mapPurposeToIntendsToWorkDuringStay(purpose: LifeMatchPurposeAnswer): b
       return false;
   }
 }
+
+export const isValidLifeMatchPurposeAnswer = (value: unknown): value is LifeMatchPurposeAnswer =>
+  typeof value === "string" && LIFE_MATCH_PURPOSE_OPTIONS.some((option) => option.value === value);
+
+export const isValidLifeMatchStayDurationAnswer = (value: unknown): value is LifeMatchStayDurationAnswer =>
+  typeof value === "string" && LIFE_MATCH_STAY_DURATION_OPTIONS.some((option) => option.value === value);
+
+export const isValidLifeMatchPassportAnswer = (value: unknown): value is LifeMatchPassportAnswer => {
+  if (value === "NOT_SURE") return true;
+  return typeof value === "string" && /^[A-Z]{2}$/.test(value) && ALL_REPO_COUNTRIES.includes(value as (typeof ALL_REPO_COUNTRIES)[number]);
+};
+
+export const isValidLifeMatchPermitWillingnessAnswer = (value: unknown): value is LifeMatchPermitWillingnessAnswer =>
+  typeof value === "string" && LIFE_MATCH_PERMIT_WILLINGNESS_OPTIONS.some((option) => option.value === value);
+
+export const isValidLifeMatchBudgetAnswer = (value: unknown): value is LifeMatchBudgetAnswer =>
+  typeof value === "string" && LIFE_MATCH_BUDGET_OPTIONS.some((option) => option.value === value);
 
 export function derivePurposeAndDurationProfileFields(
   purpose: LifeMatchPurposeAnswer,

@@ -10,6 +10,19 @@ import {
   deserializeRetirementDnaAnswers,
   RETIREMENT_DNA_TOTAL_QUESTIONS,
 } from "../lib/retirement-dna";
+import {
+  derivePurposeAndDurationProfileFields,
+  isValidLifeMatchPassportAnswer,
+  isValidLifeMatchPermitWillingnessAnswer,
+  isValidLifeMatchPurposeAnswer,
+  isValidLifeMatchStayDurationAnswer,
+  isValidLifeMatchBudgetAnswer,
+  type LifeMatchBudgetAnswer,
+  type LifeMatchPassportAnswer,
+  type LifeMatchPermitWillingnessAnswer,
+  type LifeMatchPurposeAnswer,
+  type LifeMatchStayDurationAnswer,
+} from "../lib/intelligence-v2/purpose-duration-intake";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 type ResultsPageProps = {
@@ -25,6 +38,37 @@ const parseTags = (value: string | string[] | undefined) => {
 const parseDna = (value: string | string[] | undefined) => {
   if (!value) return "";
   return Array.isArray(value) ? value[0] ?? "" : value;
+};
+
+const parseValidatedPurpose = (value: string | string[] | undefined): LifeMatchPurposeAnswer | null => {
+  const raw = parseDna(value);
+  if (!raw) return null;
+  return isValidLifeMatchPurposeAnswer(raw) ? raw : null;
+};
+
+const parseValidatedDuration = (value: string | string[] | undefined): LifeMatchStayDurationAnswer | null => {
+  const raw = parseDna(value);
+  if (!raw) return null;
+  return isValidLifeMatchStayDurationAnswer(raw) ? raw : null;
+};
+
+const parseValidatedPassport = (value: string | string[] | undefined): LifeMatchPassportAnswer | null => {
+  const raw = parseDna(value);
+  if (!raw) return null;
+  if (raw === "NOT_SURE") return raw;
+  return isValidLifeMatchPassportAnswer(raw) ? raw : null;
+};
+
+const parseValidatedPermitWillingness = (value: string | string[] | undefined): LifeMatchPermitWillingnessAnswer | null => {
+  const raw = parseDna(value);
+  if (!raw) return null;
+  return isValidLifeMatchPermitWillingnessAnswer(raw) ? raw : null;
+};
+
+const parseValidatedBudget = (value: string | string[] | undefined): LifeMatchBudgetAnswer | null => {
+  const raw = parseDna(value);
+  if (!raw) return null;
+  return isValidLifeMatchBudgetAnswer(raw) ? raw : null;
 };
 
 const scoreDestination = (destination: Destination, selectedTags: string[]) => {
@@ -46,6 +90,21 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
   const dnaPayload = parseDna(params?.dna);
   const dnaAnswers = dnaPayload ? deserializeRetirementDnaAnswers(dnaPayload) : {};
   const hasDnaAssessment = Object.keys(dnaAnswers).length > 0;
+  const validatedPurpose = parseValidatedPurpose(params?.purpose);
+  const validatedDuration = parseValidatedDuration(params?.duration);
+  const validatedPassport = parseValidatedPassport(params?.passport);
+  const validatedPermitWillingness = parseValidatedPermitWillingness(params?.permitWillingness);
+  const validatedBudget = parseValidatedBudget(params?.budget);
+  const validatedPurposeIntake = {
+    purpose: validatedPurpose,
+    duration: validatedDuration,
+    passport: validatedPassport,
+    permitWillingness: validatedPermitWillingness,
+    budget: validatedBudget,
+  };
+  const purposeAndDurationProfileFields = validatedPurpose && validatedDuration
+    ? derivePurposeAndDurationProfileFields(validatedPurpose, validatedDuration)
+    : null;
 
   if (hasDnaAssessment && lifeMatchCandidateDestinations.length === 0) {
     return (

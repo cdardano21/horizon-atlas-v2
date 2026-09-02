@@ -15,8 +15,14 @@ import {
 } from "../lib/retirement-dna";
 import {
   derivePurposeAndDurationProfileFields,
+  LIFE_MATCH_BUDGET_OPTIONS,
+  LIFE_MATCH_PASSPORT_OPTIONS,
+  LIFE_MATCH_PERMIT_WILLINGNESS_OPTIONS,
   LIFE_MATCH_PURPOSE_OPTIONS,
   LIFE_MATCH_STAY_DURATION_OPTIONS,
+  type LifeMatchBudgetAnswer,
+  type LifeMatchPassportAnswer,
+  type LifeMatchPermitWillingnessAnswer,
   type LifeMatchPurposeAnswer,
   type LifeMatchStayDurationAnswer,
 } from "../lib/intelligence-v2/purpose-duration-intake";
@@ -36,15 +42,27 @@ const subscribeToDraft = () => () => {};
 const readDraftSnapshot = () => window.localStorage.getItem(DRAFT_STORAGE_KEY) ?? "";
 const readServerDraftSnapshot = () => "";
 
-type PurposeIntakeDraft = { purpose: LifeMatchPurposeAnswer | null; duration: LifeMatchStayDurationAnswer | null };
+type PurposeIntakeDraft = {
+  purpose: LifeMatchPurposeAnswer | null;
+  duration: LifeMatchStayDurationAnswer | null;
+  passport: LifeMatchPassportAnswer | null;
+  permitWillingness: LifeMatchPermitWillingnessAnswer | null;
+  budget: LifeMatchBudgetAnswer | null;
+};
 
 const parsePurposeIntakeDraft = (rawDraft: string): PurposeIntakeDraft => {
   try {
-    if (!rawDraft) return { purpose: null, duration: null };
+    if (!rawDraft) return { purpose: null, duration: null, passport: null, permitWillingness: null, budget: null };
     const parsed = JSON.parse(rawDraft) as Partial<PurposeIntakeDraft>;
-    return { purpose: parsed.purpose ?? null, duration: parsed.duration ?? null };
+    return {
+      purpose: parsed.purpose ?? null,
+      duration: parsed.duration ?? null,
+      passport: parsed.passport ?? null,
+      permitWillingness: parsed.permitWillingness ?? null,
+      budget: parsed.budget ?? null,
+    };
   } catch {
-    return { purpose: null, duration: null };
+    return { purpose: null, duration: null, passport: null, permitWillingness: null, budget: null };
   }
 };
 
@@ -62,12 +80,26 @@ export default function LifeMatchApp() {
   const purposeIntakeSnapshot = useSyncExternalStore(subscribeToDraft, readPurposeIntakeSnapshot, readServerDraftSnapshot);
   const [editedPurposeIntake, setEditedPurposeIntake] = useState<PurposeIntakeDraft | null>(null);
   const purposeIntake = editedPurposeIntake ?? parsePurposeIntakeDraft(purposeIntakeSnapshot);
+  const [passportQuery, setPassportQuery] = useState("");
+  const [isPassportOpen, setIsPassportOpen] = useState(false);
+  const [highlightedPassportIndex, setHighlightedPassportIndex] = useState(0);
 
-  // Foundation mapping only — not yet wired into results; see purpose-duration-intake.ts.
   const derivedPurposeProfileFields = useMemo(() => {
     if (!purposeIntake.purpose || !purposeIntake.duration) return null;
     return derivePurposeAndDurationProfileFields(purposeIntake.purpose, purposeIntake.duration);
   }, [purposeIntake.purpose, purposeIntake.duration]);
+
+  const passportOptions = useMemo(() => {
+    const query = passportQuery.trim().toLowerCase();
+    if (!query) return LIFE_MATCH_PASSPORT_OPTIONS;
+    return LIFE_MATCH_PASSPORT_OPTIONS.filter((option) => {
+      const label = option.label.toLowerCase();
+      return label.includes(query) || option.value.toLowerCase().includes(query);
+    });
+  }, [passportQuery]);
+
+  const selectedPassportLabel = purposeIntake.passport ? LIFE_MATCH_PASSPORT_OPTIONS.find((option) => option.value === purposeIntake.passport)?.label ?? "" : "";
+  const selectedPassportOption = purposeIntake.passport ? LIFE_MATCH_PASSPORT_OPTIONS.find((option) => option.value === purposeIntake.passport) : null;
 
   const profilePreview = useMemo(() => computeRetirementDnaProfile(answers), [answers]);
   const currentQuestion = RETIREMENT_DNA_QUESTIONS[currentQuestionIndex];
@@ -79,7 +111,7 @@ export default function LifeMatchApp() {
   const assessmentIsComplete = profilePreview.answeredCount === RETIREMENT_DNA_TOTAL_QUESTIONS;
   const isFinalQuestion = currentQuestionIndex === RETIREMENT_DNA_TOTAL_QUESTIONS - 1;
   const progressPercent = Math.round((profilePreview.answeredCount / RETIREMENT_DNA_TOTAL_QUESTIONS) * 100);
-  const hasDraft = profilePreview.answeredCount > 0 || purposeIntake.purpose !== null || purposeIntake.duration !== null;
+  const hasDraft = profilePreview.answeredCount > 0 || purposeIntake.purpose !== null || purposeIntake.duration !== null || purposeIntake.budget !== null;
 
   useEffect(() => {
     if (editedAnswers === null) return;
@@ -97,7 +129,13 @@ export default function LifeMatchApp() {
     if (editedPurposeIntake === null) return;
     if (typeof window === "undefined") return;
 
-    if (purposeIntake.purpose === null && purposeIntake.duration === null) {
+    if (
+      purposeIntake.purpose === null &&
+      purposeIntake.duration === null &&
+      purposeIntake.passport === null &&
+      purposeIntake.permitWillingness === null &&
+      purposeIntake.budget === null
+    ) {
       window.localStorage.removeItem(PURPOSE_INTAKE_STORAGE_KEY);
       return;
     }
@@ -132,20 +170,74 @@ export default function LifeMatchApp() {
   };
 
   const setPurposeAnswer = (value: LifeMatchPurposeAnswer) => {
-    setEditedPurposeIntake({ purpose: value, duration: purposeIntake.duration });
+    setEditedPurposeIntake({
+      purpose: value,
+      duration: purposeIntake.duration,
+      passport: purposeIntake.passport,
+      permitWillingness: purposeIntake.permitWillingness,
+      budget: purposeIntake.budget,
+    });
   };
 
   const setDurationAnswer = (value: LifeMatchStayDurationAnswer) => {
-    setEditedPurposeIntake({ purpose: purposeIntake.purpose, duration: value });
+    setEditedPurposeIntake({
+      purpose: purposeIntake.purpose,
+      duration: value,
+      passport: purposeIntake.passport,
+      permitWillingness: purposeIntake.permitWillingness,
+      budget: purposeIntake.budget,
+    });
+  };
+
+  const setPassportAnswer = (value: LifeMatchPassportAnswer) => {
+    setEditedPurposeIntake((current) => ({
+      purpose: purposeIntake.purpose ?? current?.purpose ?? null,
+      duration: purposeIntake.duration ?? current?.duration ?? null,
+      passport: value,
+      permitWillingness: purposeIntake.permitWillingness ?? current?.permitWillingness ?? null,
+      budget: purposeIntake.budget ?? current?.budget ?? null,
+    }));
+  };
+
+  const setPermitWillingnessAnswer = (value: LifeMatchPermitWillingnessAnswer) => {
+    setEditedPurposeIntake({
+      purpose: purposeIntake.purpose,
+      duration: purposeIntake.duration,
+      passport: purposeIntake.passport,
+      permitWillingness: value,
+      budget: purposeIntake.budget,
+    });
+  };
+
+  const setBudgetAnswer = (value: LifeMatchBudgetAnswer) => {
+    setEditedPurposeIntake({
+      purpose: purposeIntake.purpose,
+      duration: purposeIntake.duration,
+      passport: purposeIntake.passport,
+      permitWillingness: purposeIntake.permitWillingness,
+      budget: value,
+    });
   };
 
   const goBackToPurposeStep = () => {
-    setEditedPurposeIntake({ purpose: null, duration: purposeIntake.duration });
+    setEditedPurposeIntake({ purpose: null, duration: purposeIntake.duration, passport: purposeIntake.passport, permitWillingness: purposeIntake.permitWillingness, budget: purposeIntake.budget });
+  };
+
+  const goBackToDurationStep = () => {
+    setEditedPurposeIntake({ purpose: purposeIntake.purpose, duration: null, passport: purposeIntake.passport, permitWillingness: purposeIntake.permitWillingness, budget: purposeIntake.budget });
+  };
+
+  const goBackToPassportStep = () => {
+    setEditedPurposeIntake({ purpose: purposeIntake.purpose, duration: purposeIntake.duration, passport: null, permitWillingness: purposeIntake.permitWillingness, budget: purposeIntake.budget });
+  };
+
+  const goBackToPermitStep = () => {
+    setEditedPurposeIntake({ purpose: purposeIntake.purpose, duration: purposeIntake.duration, passport: purposeIntake.passport, permitWillingness: null, budget: purposeIntake.budget });
   };
 
   const resetAssessment = () => {
     setEditedAnswers({});
-    setEditedPurposeIntake({ purpose: null, duration: null });
+    setEditedPurposeIntake({ purpose: null, duration: null, passport: null, permitWillingness: null, budget: null });
     setCurrentQuestionIndex(0);
     setHasStarted(false);
     if (typeof window !== "undefined") {
@@ -157,7 +249,18 @@ export default function LifeMatchApp() {
   const goToResults = () => {
     if (!assessmentIsComplete) return;
     if (typeof window !== "undefined") window.localStorage.removeItem(DRAFT_STORAGE_KEY);
-    router.push(`/results?dna=${encodeURIComponent(serializeRetirementDnaAnswers(answers))}`);
+
+    const params = new URLSearchParams({
+      dna: serializeRetirementDnaAnswers(answers),
+    });
+
+    if (purposeIntake.purpose) params.set("purpose", purposeIntake.purpose);
+    if (purposeIntake.duration) params.set("duration", purposeIntake.duration);
+    if (purposeIntake.passport) params.set("passport", purposeIntake.passport);
+    if (purposeIntake.permitWillingness) params.set("permitWillingness", purposeIntake.permitWillingness);
+    if (purposeIntake.budget) params.set("budget", purposeIntake.budget);
+
+    router.push(`/results?${params.toString()}`);
   };
 
   if (!hasStarted) {
@@ -246,7 +349,7 @@ export default function LifeMatchApp() {
     return (
       <section className="min-h-screen bg-[#04162b] px-5 py-16 text-white sm:px-8 lg:px-10">
         <div className="mx-auto max-w-3xl">
-          <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#56c6c3]">Step 1 of 2</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#56c6c3]">Step 1 of 4</p>
           <h1 className="mt-4 text-3xl leading-tight text-white sm:text-4xl">What best describes why you&rsquo;re exploring a destination?</h1>
           <p className="mt-5 max-w-2xl text-base leading-7 text-[#bdcad5]">
             This routes your match to the right legal, work, and lifestyle pathway. Retirement-specific questions only appear if you select Retirement below.
@@ -285,7 +388,7 @@ export default function LifeMatchApp() {
     return (
       <section className="min-h-screen bg-[#04162b] px-5 py-16 text-white sm:px-8 lg:px-10">
         <div className="mx-auto max-w-3xl">
-          <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#56c6c3]">Step 2 of 2</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#56c6c3]">Step 2 of 4</p>
           <h1 className="mt-4 text-3xl leading-tight text-white sm:text-4xl">How long are you picturing this stay?</h1>
           <p className="mt-5 max-w-2xl text-base leading-7 text-[#bdcad5]">
             An estimate is fine &mdash; this helps us check realistic entry, stay, and legal pathways for each destination.
@@ -310,6 +413,205 @@ export default function LifeMatchApp() {
             <button
               type="button"
               onClick={goBackToPurposeStep}
+              className="min-h-12 border border-white/15 px-5 text-sm font-semibold text-[#c3d0da] transition hover:border-white/35 hover:text-white"
+            >
+              <span aria-hidden="true" className="mr-2">&#8592;</span> Back
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const handlePassportKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setIsPassportOpen(true);
+      setHighlightedPassportIndex((current) => Math.min(current + 1, Math.max(passportOptions.length - 1, 0)));
+    }
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setIsPassportOpen(true);
+      setHighlightedPassportIndex((current) => Math.max(current - 1, 0));
+    }
+    if (event.key === "Enter") {
+      event.preventDefault();
+      const option = passportOptions[highlightedPassportIndex];
+      if (!option) return;
+      setPassportAnswer(option.value as LifeMatchPassportAnswer);
+      setPassportQuery("");
+      setIsPassportOpen(false);
+      setHighlightedPassportIndex(0);
+    }
+    if (event.key === "Escape") {
+      event.preventDefault();
+      setIsPassportOpen(false);
+      setPassportQuery("");
+      setHighlightedPassportIndex(0);
+    }
+  };
+
+  if (!purposeIntake.passport) {
+    return (
+      <section className="min-h-screen bg-[#04162b] px-5 py-16 text-white sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-3xl">
+          <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#56c6c3]">Step 3 of 5</p>
+          <h1 className="mt-4 text-3xl leading-tight text-white sm:text-4xl">Which passport would you use for this stay?</h1>
+          <p className="mt-5 max-w-2xl text-base leading-7 text-[#bdcad5]">Entry, stay, and work rules depend on the passport you use.</p>
+
+          <div className="mt-9 max-w-xl">
+            <label htmlFor="life-match-passport" className="block text-sm font-semibold text-[#dbe8f2]">Passport country</label>
+            <div className="relative mt-3">
+              <input
+                id="life-match-passport"
+                type="text"
+                role="combobox"
+                aria-expanded={isPassportOpen}
+                aria-controls="life-match-passport-listbox"
+                aria-autocomplete="list"
+                placeholder="Search country"
+                value={isPassportOpen ? passportQuery : selectedPassportLabel}
+                onFocus={() => setIsPassportOpen(true)}
+                onClick={() => setIsPassportOpen(true)}
+                onChange={(event) => {
+                  const nextQuery = event.target.value;
+                  const normalizedQuery = nextQuery.trim();
+                  const exactMatch = LIFE_MATCH_PASSPORT_OPTIONS.find(
+                    (option) =>
+                      option.value.toLowerCase() === normalizedQuery.toLowerCase() ||
+                      option.label.toLowerCase() === normalizedQuery.toLowerCase(),
+                  );
+
+                  if (exactMatch) {
+                    setPassportAnswer(exactMatch.value as LifeMatchPassportAnswer);
+                    setPassportQuery("");
+                    setIsPassportOpen(false);
+                    setHighlightedPassportIndex(0);
+                    return;
+                  }
+
+                  setPassportQuery(nextQuery);
+                  setIsPassportOpen(true);
+                  setHighlightedPassportIndex(0);
+                }}
+                onKeyDown={handlePassportKeyDown}
+                className="min-h-12 w-full rounded-md border border-white/15 bg-[#061b34] px-4 py-3 text-base text-white shadow-none outline-none transition focus:border-[#58c7c4] focus:ring-2 focus:ring-[#58c7c4]/40"
+              />
+              {isPassportOpen ? (
+                <ul id="life-match-passport-listbox" role="listbox" className="absolute z-10 mt-2 max-h-72 w-full overflow-auto rounded-md border border-white/10 bg-[#061b34] p-1 shadow-xl">
+                  {passportOptions.map((option, index) => (
+                    <li key={option.value}>
+                      <button
+                        type="button"
+                        role="option"
+                        aria-selected={purposeIntake.passport === option.value}
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() => {
+                          setPassportAnswer(option.value as LifeMatchPassportAnswer);
+                          setPassportQuery("");
+                          setIsPassportOpen(false);
+                          setHighlightedPassportIndex(0);
+                        }}
+                        className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm transition ${highlightedPassportIndex === index ? "bg-white/10 text-white" : "text-[#dfeaf4] hover:bg-white/5"}`}
+                      >
+                        <span>{option.label}</span>
+                        {purposeIntake.passport === option.value ? <span className="text-[10px] uppercase tracking-[0.15em] text-[#58c7c4]">Selected</span> : null}
+                      </button>
+                    </li>
+                  ))}
+                  {passportOptions.length === 0 ? (
+                    <li className="px-3 py-2 text-sm text-[#91a6b8]">No matching countries</li>
+                  ) : null}
+                </ul>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="mt-10 flex items-center justify-between gap-4 border-t border-white/10 pt-6">
+            <button
+              type="button"
+              onClick={goBackToDurationStep}
+              className="min-h-12 border border-white/15 px-5 text-sm font-semibold text-[#c3d0da] transition hover:border-white/35 hover:text-white"
+            >
+              <span aria-hidden="true" className="mr-2">&#8592;</span> Back
+            </button>
+            <button
+              type="button"
+              onClick={() => setPassportAnswer("NOT_SURE")}
+              className="min-h-12 border border-white/15 px-5 text-sm font-semibold text-[#dbe8f2] transition hover:border-white/35 hover:text-white"
+            >
+              Not sure yet
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (purposeIntake.permitWillingness === null) {
+    return (
+      <section className="min-h-screen bg-[#04162b] px-5 py-16 text-white sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-3xl">
+          <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#56c6c3]">Step 4 of 5</p>
+          <h1 className="mt-4 text-3xl leading-tight text-white sm:text-4xl">If a longer stay requires a visa or residence permit, would you consider applying?</h1>
+          <p className="mt-5 max-w-2xl text-base leading-7 text-[#bdcad5]">This helps distinguish an ordinary visitor stay from destinations that may require a longer-stay pathway.</p>
+
+          <div role="radiogroup" aria-label="Permit willingness" className="mt-9 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {LIFE_MATCH_PERMIT_WILLINGNESS_OPTIONS.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                role="radio"
+                aria-checked={purposeIntake.permitWillingness === option.value}
+                onClick={() => setPermitWillingnessAnswer(option.value)}
+                className="min-h-16 border border-white/15 bg-white/[0.045] px-5 py-4 text-left text-sm font-semibold text-white transition hover:border-[#58c7c4]/70 hover:bg-white/[0.075] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#58c7c4] focus-visible:ring-offset-2 focus-visible:ring-offset-[#04162b]"
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-10 border-t border-white/10 pt-6">
+            <button
+              type="button"
+              onClick={goBackToPassportStep}
+              className="min-h-12 border border-white/15 px-5 text-sm font-semibold text-[#c3d0da] transition hover:border-white/35 hover:text-white"
+            >
+              <span aria-hidden="true" className="mr-2">&#8592;</span> Back
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (purposeIntake.budget === null) {
+    return (
+      <section className="min-h-screen bg-[#04162b] px-5 py-16 text-white sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-3xl">
+          <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#56c6c3]">Step 5 of 5</p>
+          <h1 className="mt-4 text-3xl leading-tight text-white sm:text-4xl">What is your estimated total monthly household budget while living in the destination?</h1>
+          <p className="mt-5 max-w-2xl text-base leading-7 text-[#bdcad5]">Include housing, utilities, food, local transportation, routine healthcare, and everyday spending. Use your total household budget, not a per-person amount.</p>
+
+          <div role="radiogroup" aria-label="Household budget" className="mt-9 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {LIFE_MATCH_BUDGET_OPTIONS.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                role="radio"
+                aria-checked={purposeIntake.budget === option.value}
+                onClick={() => setBudgetAnswer(option.value)}
+                className="min-h-16 border border-white/15 bg-white/[0.045] px-5 py-4 text-left text-sm font-semibold text-white transition hover:border-[#58c7c4]/70 hover:bg-white/[0.075] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#58c7c4] focus-visible:ring-offset-2 focus-visible:ring-offset-[#04162b]"
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-10 border-t border-white/10 pt-6">
+            <button
+              type="button"
+              onClick={goBackToPermitStep}
               className="min-h-12 border border-white/15 px-5 text-sm font-semibold text-[#c3d0da] transition hover:border-white/35 hover:text-white"
             >
               <span aria-hidden="true" className="mr-2">&#8592;</span> Back
