@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { smartShortlistCandidates, type PrototypeCandidate } from "../../lib/smart-shortlist/cohort";
 import { convertRangeForDisplay, U3_R3_FIXTURE_SNAPSHOT } from "../../lib/smart-shortlist/exchange-rates";
-import type { EvaluatedDestination, ShortlistProfile } from "../../lib/smart-shortlist/evaluator";
+import type { EssentialRequirementMode, EvaluatedDestination, HardOnlyRequirementMode, ShortlistProfile } from "../../lib/smart-shortlist/evaluator";
+import type { HealthcareMinimumStandard, SafetyMinimumStandard } from "../../lib/intelligence-v2/profile-types";
 import { evaluateShortlistWithOwnedAffordability, type OwnedEvaluatedDestination } from "../../lib/smart-shortlist/owned-affordability-evaluator";
 import { ownedAffordabilityByDestination } from "../../lib/smart-shortlist/owned-affordability-records";
 import { AFFORDABILITY_ESTIMATE_DEFINITION } from "../../lib/smart-shortlist/owned-affordability";
@@ -13,7 +14,7 @@ import type { SmartShortlistIntelligence } from "../../lib/smart-shortlist/serve
 import DualCurrencyCostEvidence from "./DualCurrencyCostEvidence";
 import OwnedAffordabilityEvidence from "./OwnedAffordabilityEvidence";
 
-const steps = ["Where", "Affordability", "Setting", "Details", "Review"] as const;
+const steps = ["Where", "Essentials", "Affordability", "Setting", "Details", "Review"] as const;
 const detailTopics = ["Setting", "Affordability", "Cost evidence"] as const;
 const countryPresets = {
   anywhere: {},
@@ -67,6 +68,20 @@ function ChoiceButton({ active, children, onClick }: { active: boolean; children
   );
 }
 
+function RequirementModeButtons({ value, onChange, allowPreference = true }: {
+  value: EssentialRequirementMode;
+  onChange: (value: EssentialRequirementMode | HardOnlyRequirementMode) => void;
+  allowPreference?: boolean;
+}) {
+  return (
+    <div className={`grid gap-2 ${allowPreference ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
+      <ChoiceButton active={value === "NOT_A_FACTOR"} onClick={() => onChange("NOT_A_FACTOR")}>Not a factor</ChoiceButton>
+      {allowPreference && <ChoiceButton active={value === "IMPORTANT_PREFERENCE"} onClick={() => onChange("IMPORTANT_PREFERENCE")}>Important preference</ChoiceButton>}
+      <ChoiceButton active={value === "MUST_HAVE"} onClick={() => onChange("MUST_HAVE")}>Must have</ChoiceButton>
+    </div>
+  );
+}
+
 export default function SmartShortlistPrototype({ intelligence }: { intelligence: readonly SmartShortlistIntelligence[] }) {
   const [step, setStep] = useState(0);
   const [countryPreset, setCountryPreset] = useState<CountryPreset>("anywhere");
@@ -74,6 +89,12 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
   const [budget, setBudget] = useState("");
   const [requireBudget, setRequireBudget] = useState(true);
   const [displayCurrency, setDisplayCurrency] = useState("USD");
+  const [healthcareMode, setHealthcareMode] = useState<EssentialRequirementMode>("NOT_A_FACTOR");
+  const [healthcareMinimum, setHealthcareMinimum] = useState<HealthcareMinimumStandard>("GOOD_PRIVATE_AVAILABLE");
+  const [safetyMode, setSafetyMode] = useState<EssentialRequirementMode>("NOT_A_FACTOR");
+  const [safetyMinimum, setSafetyMinimum] = useState<SafetyMinimumStandard>("MODERATE_OR_BETTER");
+  const [lgbtqMode, setLgbtqMode] = useState<HardOnlyRequirementMode>("NOT_A_FACTOR");
+  const [legalPathMode, setLegalPathMode] = useState<HardOnlyRequirementMode>("NOT_A_FACTOR");
   const [beach, setBeach] = useState<ShortlistProfile["beach"]>();
   const [mountain, setMountain] = useState<ShortlistProfile["mountain"]>();
   const [detailTopic, setDetailTopic] = useState<DetailTopic>("Setting");
@@ -97,6 +118,10 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
     requireBeach,
     mountain,
     requireMountain,
+    healthcare: { mode: healthcareMode, minimum: healthcareMinimum },
+    safety: { mode: safetyMode, minimum: safetyMinimum },
+    lgbtqLegalSafety: { mode: lgbtqMode },
+    documentedLongStayPath: { mode: legalPathMode },
   };
 
   const submit = () => {
@@ -121,7 +146,9 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
 
   const displayedResults = results?.filter((item) => item.group !== "EXCLUDED").slice(0, 12) ?? [];
   const excludedResults = results?.filter((item) => item.group === "EXCLUDED") ?? [];
-  const noFilters = !profile.includedCountries && !profile.excludedCountries && !beach && !mountain && !budget;
+  const noFilters = !profile.includedCountries && !profile.excludedCountries && !beach && !mountain && !budget
+    && healthcareMode === "NOT_A_FACTOR" && safetyMode === "NOT_A_FACTOR"
+    && lgbtqMode === "NOT_A_FACTOR" && legalPathMode === "NOT_A_FACTOR";
   const comparisonRows = comparison
     .map((key) => smartShortlistCandidates.find((candidate) => candidate.key === key))
     .filter((candidate): candidate is PrototypeCandidate => Boolean(candidate));
@@ -151,7 +178,7 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
 
         {!results ? (
           <section className="border border-[var(--atlas-border)] bg-[rgba(255,253,247,0.88)] shadow-[var(--atlas-shadow)]">
-            <div className="grid border-b border-[var(--atlas-border)] sm:grid-cols-5">
+            <div className="grid border-b border-[var(--atlas-border)] sm:grid-cols-6">
               {steps.map((label, index) => (
                 <button key={label} type="button" onClick={() => index <= step && setStep(index)} disabled={index > step} className={`min-h-14 border-b border-[var(--atlas-border)] px-3 text-left text-xs font-bold uppercase sm:border-b-0 sm:border-r ${index === step ? "bg-[var(--atlas-accent)] text-white" : "bg-white/60 text-[var(--atlas-muted)]"}`}>
                   <span className="mr-2 opacity-60">{index + 1}</span>{label}
@@ -162,7 +189,7 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
             <div className="min-h-[440px] p-6 sm:p-10">
               {step === 0 && (
                 <div className="max-w-3xl">
-                  <p className="text-sm font-bold text-[var(--atlas-accent)]">1 of 5</p>
+                  <p className="text-sm font-bold text-[var(--atlas-accent)]">{step + 1} of {steps.length}</p>
                   <h2 className="mt-2 text-3xl font-semibold">Where would you like to look?</h2>
                   <p className="mt-3 text-sm leading-6 text-[var(--atlas-muted)]">This is geographic scope only. It does not establish citizenship, residency, tax, or work eligibility.</p>
                   <div className="mt-8 grid gap-3 sm:grid-cols-2">
@@ -178,7 +205,37 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
 
               {step === 1 && (
                 <div className="max-w-4xl">
-                  <p className="text-sm font-bold text-[var(--atlas-accent)]">2 of 5</p>
+                  <p className="text-sm font-bold text-[var(--atlas-accent)]">{step + 1} of {steps.length}</p>
+                  <h2 className="mt-2 text-3xl font-semibold">Which essentials should shape the shortlist?</h2>
+                  <p className="mt-3 text-sm leading-6 text-[var(--atlas-muted)]">Must-haves exclude explicit failures and send unknown evidence to Needs verification. Healthcare and safety can also use the existing V2 preference scores. Legal-path and LGBTQ evidence remain hard-only because no approved soft score exists.</p>
+                  <div className="mt-8 grid gap-4 lg:grid-cols-2">
+                    <fieldset className="border border-[var(--atlas-border)] bg-white p-4">
+                      <legend className="px-1 text-lg font-semibold">Healthcare</legend>
+                      <RequirementModeButtons value={healthcareMode} onChange={(value) => setHealthcareMode(value as EssentialRequirementMode)} />
+                      <label className="mt-4 block text-sm font-semibold">Minimum standard (must-have only)<select aria-label="Minimum healthcare standard" value={healthcareMinimum} onChange={(event) => setHealthcareMinimum(event.target.value as HealthcareMinimumStandard)} disabled={healthcareMode !== "MUST_HAVE"} className={selectClass}><option value="BASIC_ACCESS">Basic access</option><option value="GOOD_PRIVATE_AVAILABLE">Good private care available</option><option value="INTERNATIONAL_STANDARD">International standard</option></select></label>
+                    </fieldset>
+                    <fieldset className="border border-[var(--atlas-border)] bg-white p-4">
+                      <legend className="px-1 text-lg font-semibold">Safety</legend>
+                      <RequirementModeButtons value={safetyMode} onChange={(value) => setSafetyMode(value as EssentialRequirementMode)} />
+                      <label className="mt-4 block text-sm font-semibold">Minimum standard (must-have only)<select aria-label="Minimum safety standard" value={safetyMinimum} onChange={(event) => setSafetyMinimum(event.target.value as SafetyMinimumStandard)} disabled={safetyMode !== "MUST_HAVE"} className={selectClass}><option value="MODERATE_OR_BETTER">Moderate or better</option><option value="HIGH_SAFETY_ONLY">High safety only</option></select></label>
+                    </fieldset>
+                    <fieldset className="border border-[var(--atlas-border)] bg-white p-4">
+                      <legend className="px-1 text-lg font-semibold">Residency or long-stay route</legend>
+                      <p className="mb-3 text-xs leading-5 text-[var(--atlas-muted)]">Checks whether a structured route is documented. It does not promise personal eligibility.</p>
+                      <RequirementModeButtons value={legalPathMode} allowPreference={false} onChange={(value) => setLegalPathMode(value as HardOnlyRequirementMode)} />
+                    </fieldset>
+                    <fieldset className="border border-[var(--atlas-border)] bg-white p-4">
+                      <legend className="px-1 text-lg font-semibold">LGBTQ legal protections</legend>
+                      <p className="mb-3 text-xs leading-5 text-[var(--atlas-muted)]">Uses legal-protection status only, not a claim about every right or lived experience.</p>
+                      <RequirementModeButtons value={lgbtqMode} allowPreference={false} onChange={(value) => setLgbtqMode(value as HardOnlyRequirementMode)} />
+                    </fieldset>
+                  </div>
+                </div>
+              )}
+
+              {step === 2 && (
+                <div className="max-w-4xl">
+                  <p className="text-sm font-bold text-[var(--atlas-accent)]">{step + 1} of {steps.length}</p>
                   <h2 className="mt-2 text-3xl font-semibold">What should affordability mean here?</h2>
                   <p className="mt-3 text-sm leading-6 text-[var(--atlas-muted)]">Enter one total monthly spending budget in USD. This is the only budget-related shortlist signal. Local-currency costs remain visible as supporting evidence.</p>
                   <div className="mt-8 grid gap-4 sm:grid-cols-3">
@@ -189,9 +246,9 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
                 </div>
               )}
 
-              {step === 2 && (
+              {step === 3 && (
                 <div className="max-w-3xl">
-                  <p className="text-sm font-bold text-[var(--atlas-accent)]">3 of 5</p>
+                  <p className="text-sm font-bold text-[var(--atlas-accent)]">{step + 1} of {steps.length}</p>
                   <h2 className="mt-2 text-3xl font-semibold">Which setting would you enjoy?</h2>
                   <div className="mt-8 grid gap-8 sm:grid-cols-2">
                     <div><h3 className="text-lg font-semibold">Beach access</h3><p className="mb-3 mt-1 text-xs text-[var(--atlas-muted)]">General beach access may include lakes. Ocean access requires explicit coastal evidence.</p><div className="grid gap-2"><ChoiceButton active={!beach} onClick={() => setBeach(undefined)}>No preference</ChoiceButton><ChoiceButton active={beach === "DIRECT_ACCESS"} onClick={() => setBeach("DIRECT_ACCESS")}>Direct beach access</ChoiceButton><ChoiceButton active={beach === "NEARBY_OR_DIRECT"} onClick={() => setBeach("NEARBY_OR_DIRECT")}>Nearby beach is enough</ChoiceButton><ChoiceButton active={beach === "OCEAN_COASTAL"} onClick={() => { setBeach("OCEAN_COASTAL"); setRequireBeach(true); }}>Ocean or coastal beach access</ChoiceButton></div></div>
@@ -200,9 +257,9 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
                 </div>
               )}
 
-              {step === 3 && (
+              {step === 4 && (
                 <div className="max-w-3xl">
-                  <p className="text-sm font-bold text-[var(--atlas-accent)]">4 of 5</p>
+                  <p className="text-sm font-bold text-[var(--atlas-accent)]">{step + 1} of {steps.length}</p>
                   <h2 className="mt-2 text-3xl font-semibold">Which details should open first?</h2>
                   <p className="mt-3 text-sm text-[var(--atlas-muted)]">Choose one verified comparison section. This changes presentation only, never eligibility or rank.</p>
                   <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -211,9 +268,9 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
                 </div>
               )}
 
-              {step === 4 && (
+              {step === 5 && (
                 <div className="max-w-3xl">
-                  <p className="text-sm font-bold text-[var(--atlas-accent)]">5 of 5</p>
+                  <p className="text-sm font-bold text-[var(--atlas-accent)]">{step + 1} of {steps.length}</p>
                   <h2 className="mt-2 text-3xl font-semibold">What must be met?</h2>
                   <p className="mt-3 text-sm leading-6 text-[var(--atlas-muted)]">Only supported choices can become requirements. Unknown evidence moves a place to Needs verification, never to confirmed results.</p>
                   <div className="mt-8 grid gap-3">
@@ -221,7 +278,7 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
                     {beach === "OCEAN_COASTAL" && <p className="border border-[var(--atlas-border)] bg-white p-4 text-sm font-semibold">Ocean or coastal beach access is a hard requirement. Missing evidence cannot produce a confirmed recommendation.</p>}
                     {mountain && <label className="flex items-center gap-3 border border-[var(--atlas-border)] bg-white p-4 text-sm font-semibold"><input type="checkbox" checked={requireMountain} onChange={(event) => setRequireMountain(event.target.checked)} /> Require the selected mountain category</label>}
                     {budget && <label className="flex items-center gap-3 border border-[var(--atlas-border)] bg-white p-4 text-sm font-semibold"><input type="checkbox" checked={requireBudget} onChange={(event) => setRequireBudget(event.target.checked)} /> Treat the monthly budget as a hard ceiling</label>}
-                    {!beach && !mountain && !budget && <p className="border border-[var(--atlas-border)] bg-white p-5 text-sm">No requirements selected. Results will be a neutral, canonical list rather than a personal-fit ranking.</p>}
+                    {!beach && !mountain && !budget && healthcareMode === "NOT_A_FACTOR" && safetyMode === "NOT_A_FACTOR" && lgbtqMode === "NOT_A_FACTOR" && legalPathMode === "NOT_A_FACTOR" && <p className="border border-[var(--atlas-border)] bg-white p-5 text-sm">No requirements selected. Results will be a neutral, canonical list rather than a personal-fit ranking.</p>}
                   </div>
                   <dl className="mt-6 grid gap-3 text-sm sm:grid-cols-2"><div><dt className="font-bold">Geography</dt><dd className="text-[var(--atlas-muted)]">{countryPreset}</dd></div><div><dt className="font-bold">Compare first</dt><dd className="text-[var(--atlas-muted)]">{detailTopic}</dd></div></dl>
                 </div>
@@ -230,7 +287,7 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
 
             <div className="flex items-center justify-between border-t border-[var(--atlas-border)] bg-white/60 p-5 sm:px-10">
               <button type="button" onClick={() => setStep((current) => Math.max(0, current - 1))} disabled={step === 0} className="px-4 py-3 text-sm font-bold text-[var(--atlas-muted)] disabled:opacity-30">Back</button>
-              {step < 4
+              {step < steps.length - 1
                 ? <button type="button" onClick={() => setStep((current) => current + 1)} className="bg-[var(--atlas-accent)] px-6 py-3 text-sm font-bold text-white">Continue</button>
                 : <button type="button" onClick={submit} className="bg-[var(--atlas-accent)] px-6 py-3 text-sm font-bold text-white">Build shortlist</button>}
             </div>

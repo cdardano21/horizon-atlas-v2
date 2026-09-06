@@ -1,14 +1,22 @@
-import { resolveHardConstraintOutcome } from "../intelligence-v2/eligibility-evaluator";
+import {
+  evaluateDocumentedLongStayPathRequirement,
+  evaluateHealthcareMinimumStandard,
+  evaluateLgbtqLegalSafetyRequirement,
+  evaluateSafetyMinimumStandard,
+  resolveHardConstraintOutcome,
+} from "../intelligence-v2/eligibility-evaluator";
 import { evaluateLifestylePreferences } from "../intelligence-v2/lifestyle-scorer";
 import { compareForRanking } from "../intelligence-v2/ranking-policy";
-import type { SyntheticDestinationFixture } from "../intelligence-v2/destination-fact-types";
-import type { LifestylePreferenceInput } from "../intelligence-v2/profile-types";
+import type { DestinationEntryAndStayFacts, LgbtqLegalProtectionFact, SafetyStandardFact, SyntheticDestinationFixture } from "../intelligence-v2/destination-fact-types";
+import type { HealthcareMinimumStandard, LifestylePreferenceInput, SafetyMinimumStandard } from "../intelligence-v2/profile-types";
 import type { HardConstraintResult, LifestyleScore } from "../intelligence-v2/result-types";
 
 export type EvidenceState = "KNOWN" | "UNKNOWN" | "CONDITIONAL" | "NOT_APPLICABLE";
 export type ResultGroup = "MEETS_FILTERS" | "NEEDS_VERIFICATION" | "EXCLUDED";
 export type Household = "single" | "couple";
 export type CoastalSetting = "COASTAL" | "INLAND" | "HYBRID" | "UNKNOWN";
+export type EssentialRequirementMode = "NOT_A_FACTOR" | "IMPORTANT_PREFERENCE" | "MUST_HAVE";
+export type HardOnlyRequirementMode = Exclude<EssentialRequirementMode, "IMPORTANT_PREFERENCE">;
 
 export type AffordabilityEvidence = {
   providerId?: string;
@@ -29,6 +37,11 @@ export type ShortlistFacts = {
   beachAccess: "DIRECT_ACCESS" | "NEARBY" | "NONE" | "UNKNOWN";
   mountainAccess: "SKI_RESORT_ACCESS" | "MOUNTAIN_ACCESS" | "NONE" | "UNKNOWN";
   oceanAccess?: CoastalSetting;
+  healthcareStandard: HealthcareMinimumStandard | "UNKNOWN";
+  safetyStandard: SafetyStandardFact | "UNKNOWN";
+  lgbtqLegalProtectionStatus: LgbtqLegalProtectionFact;
+  entryAndStay: Pick<DestinationEntryAndStayFacts,
+    "extendedStayOrLongStayVisaAvailable" | "permanentResidencyPathAvailable" | "retirementVisaProgramAvailable" | "remoteWorkOrDigitalNomadVisaAvailable">;
   lifestyleDimensions?: Readonly<Record<string, number>>;
   affordability: AffordabilityEvidence;
 };
@@ -40,12 +53,16 @@ export type ShortlistProfile = {
   requireBeach?: boolean;
   mountain?: "SKI_RESORT_ACCESS" | "MOUNTAIN_OR_SKI";
   requireMountain?: boolean;
+  healthcare?: { mode: EssentialRequirementMode; minimum: HealthcareMinimumStandard };
+  safety?: { mode: EssentialRequirementMode; minimum: SafetyMinimumStandard };
+  lgbtqLegalSafety?: { mode: HardOnlyRequirementMode };
+  documentedLongStayPath?: { mode: HardOnlyRequirementMode };
   affordability?: { maxBand: "LOW" | "MODERATE" | "HIGH"; require?: boolean };
   budget?: { amount: number; currency: string; household: Household; require?: boolean };
 };
 
 export type RequirementReason = {
-  capability: "country" | "beach" | "ocean" | "mountain" | "affordability";
+  capability: "country" | "beach" | "ocean" | "mountain" | "affordability" | "healthcare" | "safety" | "lgbtq" | "legalPath";
   state: "PASS" | "FAIL" | "UNKNOWN";
   explanation: string;
 };
@@ -175,6 +192,12 @@ function buildLifestylePreferences(profile: ShortlistProfile): LifestylePreferen
   if (profile.mountain) {
     preferences.push({ dimensionKey: "mountainOutdoorLifestyle", direction: "MORE_IS_BETTER", importance: 1, isHardRequirement: false, targetValue: null });
   }
+  if (profile.healthcare?.mode === "IMPORTANT_PREFERENCE") {
+    preferences.push({ dimensionKey: "healthcareQuality", direction: "MORE_IS_BETTER", importance: 4, isHardRequirement: false, targetValue: null });
+  }
+  if (profile.safety?.mode === "IMPORTANT_PREFERENCE") {
+    preferences.push({ dimensionKey: "safetyQuality", direction: "MORE_IS_BETTER", importance: 4, isHardRequirement: false, targetValue: null });
+  }
   return preferences;
 }
 
@@ -182,13 +205,63 @@ function scoreLifestyle(destination: ShortlistFacts, profile: ShortlistProfile):
   const hardGates: SyntheticDestinationFixture["hardGates"] = {
     beachAccess: destination.beachAccess,
     mountainOrSkiAccess: destination.mountainAccess === "MOUNTAIN_ACCESS" ? "MOUNTAIN_SCENIC_ONLY" : destination.mountainAccess,
-    healthcareStandard: "UNKNOWN",
-    safetyStandard: "UNKNOWN",
-    lgbtqLegalProtectionStatus: "UNKNOWN",
+    healthcareStandard: destination.healthcareStandard,
+    safetyStandard: destination.safetyStandard,
+    lgbtqLegalProtectionStatus: destination.lgbtqLegalProtectionStatus,
   };
   return evaluateLifestylePreferences(buildLifestylePreferences(profile), {
     hardGates,
     lifestyleDimensions: { dimensionValues: destination.lifestyleDimensions ?? {} },
+  });
+}
+
+function hardConstraintReason(
+  capability: RequirementReason["capability"],
+  result: HardConstraintResult | null,
+  explanations: Readonly<Record<string, string>>,
+): RequirementReason | null {
+  if (!result) return null;
+  return {
+    capability,
+    state: result.status,
+    explanation: explanations[result.reasonCode] ?? "The available structured evidence does not resolve this requirement.",
+  };
+}
+
+function evaluateHealthcare(destination: ShortlistFacts, profile: ShortlistProfile): RequirementReason | null {
+  if (!profile.healthcare || profile.healthcare.mode === "NOT_A_FACTOR") return null;
+  return hardConstraintReason("healthcare", evaluateHealthcareMinimumStandard(profile.healthcare.minimum, destination.healthcareStandard), {
+    HEALTHCARE_STANDARD_MEETS_MINIMUM: "Healthcare evidence meets the selected minimum.",
+    HEALTHCARE_STANDARD_BELOW_MINIMUM: "Healthcare evidence is below the selected minimum.",
+    HEALTHCARE_STANDARD_UNKNOWN: "The healthcare standard is not yet verified.",
+  });
+}
+
+function evaluateSafety(destination: ShortlistFacts, profile: ShortlistProfile): RequirementReason | null {
+  if (!profile.safety || profile.safety.mode === "NOT_A_FACTOR") return null;
+  return hardConstraintReason("safety", evaluateSafetyMinimumStandard(profile.safety.minimum, destination.safetyStandard), {
+    SAFETY_STANDARD_MEETS_MINIMUM: "Safety evidence meets the selected minimum.",
+    SAFETY_STANDARD_BELOW_MINIMUM: "Safety evidence is below the selected minimum.",
+    SAFETY_STANDARD_ELEVATED_RISK: "The structured evidence identifies elevated safety risk.",
+    SAFETY_STANDARD_UNKNOWN: "The safety standard is not yet verified.",
+  });
+}
+
+function evaluateLgbtq(destination: ShortlistFacts, profile: ShortlistProfile): RequirementReason | null {
+  if (profile.lgbtqLegalSafety?.mode !== "MUST_HAVE") return null;
+  return hardConstraintReason("lgbtq", evaluateLgbtqLegalSafetyRequirement(true, destination.lgbtqLegalProtectionStatus), {
+    LGBTQ_LEGAL_PROTECTIONS_IN_PLACE: "Structured evidence confirms legal protections are in place.",
+    LGBTQ_LEGAL_PROTECTIONS_ABSENT: "Structured evidence does not confirm the required legal protections.",
+    LGBTQ_LEGAL_STATUS_UNKNOWN: "LGBTQ legal-protection evidence is not yet verified.",
+  });
+}
+
+function evaluateLegalPath(destination: ShortlistFacts, profile: ShortlistProfile): RequirementReason | null {
+  if (profile.documentedLongStayPath?.mode !== "MUST_HAVE") return null;
+  return hardConstraintReason("legalPath", evaluateDocumentedLongStayPathRequirement(true, destination.entryAndStay), {
+    DOCUMENTED_LONG_STAY_PATH_AVAILABLE: "Structured evidence identifies a long-stay or residency route; personal eligibility still requires verification.",
+    NO_DOCUMENTED_LONG_STAY_PATH_AVAILABLE: "Structured evidence confirms no supported long-stay or residency route.",
+    DOCUMENTED_LONG_STAY_PATH_UNKNOWN: "A suitable long-stay or residency route is not yet verified.",
   });
 }
 
@@ -206,12 +279,20 @@ export function evaluateDestination(destination: ShortlistFacts, profile: Shortl
     evaluateCountry(destination, profile),
     evaluateBeach(destination, profile),
     evaluateMountain(destination, profile),
+    evaluateHealthcare(destination, profile),
+    evaluateSafety(destination, profile),
+    evaluateLgbtq(destination, profile),
+    evaluateLegalPath(destination, profile),
     profile.affordability ? normalizedAffordabilityState(destination.affordability, profile.affordability) : null,
   ].filter((reason): reason is RequirementReason => reason !== null);
 
   const required = reasons.filter((reason) => reason.capability === "country"
     || ((reason.capability === "beach" || reason.capability === "ocean") && (profile.requireBeach || profile.beach === "OCEAN_COASTAL"))
     || (reason.capability === "mountain" && profile.requireMountain)
+    || (reason.capability === "healthcare" && profile.healthcare?.mode === "MUST_HAVE")
+    || (reason.capability === "safety" && profile.safety?.mode === "MUST_HAVE")
+    || reason.capability === "lgbtq"
+    || reason.capability === "legalPath"
     || (reason.capability === "affordability" && profile.affordability?.require));
   const outcome = resolveHardConstraintOutcome(required.map((reason): HardConstraintResult => ({
     status: reason.state,

@@ -14,6 +14,15 @@ const destination = (key: string, overrides: Partial<ShortlistFacts> = {}): Shor
   countryCode: "US",
   beachAccess: "NONE",
   mountainAccess: "NONE",
+  healthcareStandard: "UNKNOWN",
+  safetyStandard: "UNKNOWN",
+  lgbtqLegalProtectionStatus: "UNKNOWN",
+  entryAndStay: {
+    extendedStayOrLongStayVisaAvailable: "UNKNOWN",
+    permanentResidencyPathAvailable: "UNKNOWN",
+    retirementVisaProgramAvailable: "UNKNOWN",
+    remoteWorkOrDigitalNomadVisaAvailable: "UNKNOWN",
+  },
   affordability: {},
   ...overrides,
 });
@@ -135,5 +144,58 @@ describe("Smart Shortlist evaluator", () => {
     expect(results.map((result) => result.destination.key)).toEqual(["b-high", "z-high", "a-low"]);
     expect(results[0].lifestyleFit.totalScore).toBe(results[1].lifestyleFit.totalScore);
     expect(results[1].lifestyleFit.totalScore).toBeGreaterThan(results[2].lifestyleFit.totalScore);
+  });
+
+  it("applies healthcare, safety, LGBTQ, and legal-path must-haves with FAIL before UNKNOWN", () => {
+    const results = evaluateShortlist([
+      destination("pass", {
+        healthcareStandard: "INTERNATIONAL_STANDARD",
+        safetyStandard: "HIGH_SAFETY_ONLY",
+        lgbtqLegalProtectionStatus: "LEGAL_PROTECTIONS_IN_PLACE",
+        entryAndStay: {
+          extendedStayOrLongStayVisaAvailable: "UNKNOWN",
+          permanentResidencyPathAvailable: "YES",
+          retirementVisaProgramAvailable: "UNKNOWN",
+          remoteWorkOrDigitalNomadVisaAvailable: "UNKNOWN",
+        },
+      }),
+      destination("unknown"),
+      destination("fail", {
+        healthcareStandard: "BASIC_ACCESS",
+        safetyStandard: "ELEVATED_RISK",
+        lgbtqLegalProtectionStatus: "NO_LEGAL_PROTECTIONS",
+        entryAndStay: {
+          extendedStayOrLongStayVisaAvailable: "NO",
+          permanentResidencyPathAvailable: "NO",
+          retirementVisaProgramAvailable: "NO",
+          remoteWorkOrDigitalNomadVisaAvailable: "NO",
+        },
+      }),
+    ], {
+      healthcare: { mode: "MUST_HAVE", minimum: "GOOD_PRIVATE_AVAILABLE" },
+      safety: { mode: "MUST_HAVE", minimum: "MODERATE_OR_BETTER" },
+      lgbtqLegalSafety: { mode: "MUST_HAVE" },
+      documentedLongStayPath: { mode: "MUST_HAVE" },
+    });
+
+    expect(results.map((result) => [result.destination.key, result.group])).toEqual([
+      ["pass", "MEETS_FILTERS"],
+      ["unknown", "NEEDS_VERIFICATION"],
+      ["fail", "EXCLUDED"],
+    ]);
+  });
+
+  it("uses only the existing V2 healthcare and safety dimensions for important preferences", () => {
+    const results = evaluateShortlist([
+      destination("lower", { healthcareStandard: "BASIC_ACCESS", safetyStandard: "MODERATE_OR_BETTER" }),
+      destination("higher", { healthcareStandard: "INTERNATIONAL_STANDARD", safetyStandard: "HIGH_SAFETY_ONLY" }),
+    ], {
+      healthcare: { mode: "IMPORTANT_PREFERENCE", minimum: "GOOD_PRIVATE_AVAILABLE" },
+      safety: { mode: "IMPORTANT_PREFERENCE", minimum: "MODERATE_OR_BETTER" },
+    });
+
+    expect(results.map((result) => result.destination.key)).toEqual(["higher", "lower"]);
+    expect(results.every((result) => result.group === "MEETS_FILTERS")).toBe(true);
+    expect(results[0].lifestyleFit.relevantDimensionCount).toBe(2);
   });
 });

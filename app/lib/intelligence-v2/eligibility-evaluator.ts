@@ -347,11 +347,12 @@ function evaluateForeignPropertyPurchaseRights(profile: UserProfileV2, destinati
   return buildResult("UNKNOWN", "PROPERTY_PURCHASE_ELIGIBILITY_UNKNOWN", null, sourceFactKeys);
 }
 
-function evaluateHealthcareGate(profile: UserProfileV2, destination: SyntheticDestinationFixture): HardConstraintResult | null {
-  const minimum = profile.hardRequirements.minimumHealthcareStandard;
+export function evaluateHealthcareMinimumStandard(
+  minimum: HealthcareMinimumStandard | null,
+  actual: SyntheticDestinationFixture["hardGates"]["healthcareStandard"],
+): HardConstraintResult | null {
   if (minimum === null) return null;
 
-  const actual = destination.hardGates.healthcareStandard;
   if (actual === "UNKNOWN") return buildResult("UNKNOWN", "HEALTHCARE_STANDARD_UNKNOWN", null, ["hardGates.healthcareStandard"]);
 
   const meets = HEALTHCARE_STANDARD_RANK[actual] >= HEALTHCARE_STANDARD_RANK[minimum];
@@ -360,11 +361,16 @@ function evaluateHealthcareGate(profile: UserProfileV2, destination: SyntheticDe
     : buildResult("FAIL", "HEALTHCARE_STANDARD_BELOW_MINIMUM", null, ["hardGates.healthcareStandard"]);
 }
 
-function evaluateSafetyGate(profile: UserProfileV2, destination: SyntheticDestinationFixture): HardConstraintResult | null {
-  const minimum = profile.hardRequirements.minimumSafetyStandard;
+function evaluateHealthcareGate(profile: UserProfileV2, destination: SyntheticDestinationFixture): HardConstraintResult | null {
+  return evaluateHealthcareMinimumStandard(profile.hardRequirements.minimumHealthcareStandard, destination.hardGates.healthcareStandard);
+}
+
+export function evaluateSafetyMinimumStandard(
+  minimum: SafetyMinimumStandard | null,
+  actual: SyntheticDestinationFixture["hardGates"]["safetyStandard"],
+): HardConstraintResult | null {
   if (minimum === null) return null;
 
-  const actual = destination.hardGates.safetyStandard;
   if (actual === "UNKNOWN") return buildResult("UNKNOWN", "SAFETY_STANDARD_UNKNOWN", null, ["hardGates.safetyStandard"]);
   if (actual === "ELEVATED_RISK") return buildResult("FAIL", "SAFETY_STANDARD_ELEVATED_RISK", null, ["hardGates.safetyStandard"]);
 
@@ -374,13 +380,49 @@ function evaluateSafetyGate(profile: UserProfileV2, destination: SyntheticDestin
     : buildResult("FAIL", "SAFETY_STANDARD_BELOW_MINIMUM", null, ["hardGates.safetyStandard"]);
 }
 
-function evaluateLgbtqLegalSafetyGate(profile: UserProfileV2, destination: SyntheticDestinationFixture): HardConstraintResult | null {
-  if (!profile.hardRequirements.lgbtqLegalSafetyEssential) return null;
+function evaluateSafetyGate(profile: UserProfileV2, destination: SyntheticDestinationFixture): HardConstraintResult | null {
+  return evaluateSafetyMinimumStandard(profile.hardRequirements.minimumSafetyStandard, destination.hardGates.safetyStandard);
+}
 
-  const status = destination.hardGates.lgbtqLegalProtectionStatus;
+export function evaluateLgbtqLegalSafetyRequirement(
+  essential: boolean,
+  status: SyntheticDestinationFixture["hardGates"]["lgbtqLegalProtectionStatus"],
+): HardConstraintResult | null {
+  if (!essential) return null;
+
   if (status === "UNKNOWN") return buildResult("UNKNOWN", "LGBTQ_LEGAL_STATUS_UNKNOWN", null, ["hardGates.lgbtqLegalProtectionStatus"]);
   if (status === "LEGAL_PROTECTIONS_IN_PLACE") return buildResult("PASS", "LGBTQ_LEGAL_PROTECTIONS_IN_PLACE", null, ["hardGates.lgbtqLegalProtectionStatus"]);
   return buildResult("FAIL", "LGBTQ_LEGAL_PROTECTIONS_ABSENT", null, ["hardGates.lgbtqLegalProtectionStatus"]);
+}
+
+function evaluateLgbtqLegalSafetyGate(profile: UserProfileV2, destination: SyntheticDestinationFixture): HardConstraintResult | null {
+  return evaluateLgbtqLegalSafetyRequirement(profile.hardRequirements.lgbtqLegalSafetyEssential, destination.hardGates.lgbtqLegalProtectionStatus);
+}
+
+export function evaluateDocumentedLongStayPathRequirement(
+  essential: boolean,
+  facts: Pick<SyntheticDestinationFixture["entryAndStay"],
+    "extendedStayOrLongStayVisaAvailable" | "permanentResidencyPathAvailable" | "retirementVisaProgramAvailable" | "remoteWorkOrDigitalNomadVisaAvailable">,
+): HardConstraintResult | null {
+  if (!essential) return null;
+
+  return constraintFromTriState(
+    combineTriStateAnyYes([
+      facts.extendedStayOrLongStayVisaAvailable,
+      facts.permanentResidencyPathAvailable,
+      facts.retirementVisaProgramAvailable,
+      facts.remoteWorkOrDigitalNomadVisaAvailable,
+    ]),
+    "DOCUMENTED_LONG_STAY_PATH_AVAILABLE",
+    "NO_DOCUMENTED_LONG_STAY_PATH_AVAILABLE",
+    "DOCUMENTED_LONG_STAY_PATH_UNKNOWN",
+    [
+      "entryAndStay.extendedStayOrLongStayVisaAvailable",
+      "entryAndStay.permanentResidencyPathAvailable",
+      "entryAndStay.retirementVisaProgramAvailable",
+      "entryAndStay.remoteWorkOrDigitalNomadVisaAvailable",
+    ],
+  );
 }
 
 function evaluateBeachAccessGate(profile: UserProfileV2, destination: SyntheticDestinationFixture): HardConstraintResult | null {

@@ -13,7 +13,7 @@ import type { CoastalSetting, ShortlistFacts } from "./evaluator";
 
 export type SmartShortlistIntelligence = Pick<
   ShortlistFacts,
-  "key" | "beachAccess" | "mountainAccess" | "oceanAccess" | "lifestyleDimensions"
+  "key" | "beachAccess" | "mountainAccess" | "oceanAccess" | "healthcareStandard" | "safetyStandard" | "lgbtqLegalProtectionStatus" | "entryAndStay" | "lifestyleDimensions"
 >;
 
 function normalizedToken(value: string | null | undefined): string {
@@ -75,6 +75,15 @@ export async function loadSmartShortlistIntelligence(): Promise<readonly SmartSh
           ? "MOUNTAIN_ACCESS"
           : persistedAdapted.facts.hardGates.mountainOrSkiAccess,
         oceanAccess: coastalSettingFromLifestyleFeatures(canonical.lifestyleFeatures),
+        healthcareStandard: persistedAdapted.facts.hardGates.healthcareStandard,
+        safetyStandard: persistedAdapted.facts.hardGates.safetyStandard,
+        lgbtqLegalProtectionStatus: persistedAdapted.facts.hardGates.lgbtqLegalProtectionStatus,
+        entryAndStay: {
+          extendedStayOrLongStayVisaAvailable: persistedAdapted.facts.entryAndStay.extendedStayOrLongStayVisaAvailable,
+          permanentResidencyPathAvailable: persistedAdapted.facts.entryAndStay.permanentResidencyPathAvailable,
+          retirementVisaProgramAvailable: persistedAdapted.facts.entryAndStay.retirementVisaProgramAvailable,
+          remoteWorkOrDigitalNomadVisaAvailable: persistedAdapted.facts.entryAndStay.remoteWorkOrDigitalNomadVisaAvailable,
+        },
         lifestyleDimensions: adapted.facts.lifestyleDimensions.dimensionValues,
       });
     }
