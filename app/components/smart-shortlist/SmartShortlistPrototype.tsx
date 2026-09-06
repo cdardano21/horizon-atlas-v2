@@ -60,6 +60,44 @@ function groupCopy(group: EvaluatedDestination["group"], noFilters: boolean) {
   return "Excluded by a hard requirement";
 }
 
+const reasonLabels: Record<EvaluatedDestination["reasons"][number]["capability"], string> = {
+  affordability: "Affordability",
+  beach: "Beach access",
+  country: "Geography",
+  healthcare: "Healthcare",
+  legalPath: "Residency or long-stay route",
+  lgbtq: "LGBTQ legal protections",
+  mountain: "Mountain access",
+  ocean: "Ocean or coastal access",
+  safety: "Safety",
+};
+
+function RequirementReasons({ reasons }: { reasons: EvaluatedDestination["reasons"] }) {
+  const decisiveReasons = reasons.filter((reason) => reason.state !== "PASS");
+  const passingReasons = reasons.filter((reason) => reason.state === "PASS");
+  const visiblePassingReasons = passingReasons.slice(0, Math.max(0, 4 - decisiveReasons.length));
+  const additionalPassingReasons = passingReasons.slice(visiblePassingReasons.length);
+  const renderReason = (reason: EvaluatedDestination["reasons"][number]) => (
+    <li key={reason.capability} data-reason-state={reason.state}>
+      <span className="font-bold text-[var(--atlas-ink)]">{reasonLabels[reason.capability]} · {reason.state}:</span> {reason.explanation}
+    </li>
+  );
+
+  return (
+    <div className="mt-4 text-xs text-[var(--atlas-muted)]">
+      <ul aria-label="Requirement explanations" className="space-y-1">
+        {[...decisiveReasons, ...visiblePassingReasons].map(renderReason)}
+      </ul>
+      {additionalPassingReasons.length > 0 && (
+        <details className="mt-2">
+          <summary className="cursor-pointer font-bold text-[var(--atlas-accent)]">More details ({additionalPassingReasons.length} passing)</summary>
+          <ul className="mt-2 space-y-1 pl-3">{additionalPassingReasons.map(renderReason)}</ul>
+        </details>
+      )}
+    </div>
+  );
+}
+
 function ChoiceButton({ active, children, onClick }: { active: boolean; children: React.ReactNode; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} aria-pressed={active} className={`${controlClass} ${active ? "border-[var(--atlas-accent)] bg-[#e8f0eb] text-[var(--atlas-accent)]" : ""}`}>
@@ -237,9 +275,9 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
                 <div className="max-w-4xl">
                   <p className="text-sm font-bold text-[var(--atlas-accent)]">{step + 1} of {steps.length}</p>
                   <h2 className="mt-2 text-3xl font-semibold">What should affordability mean here?</h2>
-                  <p className="mt-3 text-sm leading-6 text-[var(--atlas-muted)]">Enter one total monthly spending budget in USD. This is the only budget-related shortlist signal. Local-currency costs remain visible as supporting evidence.</p>
+                  <p className="mt-3 text-sm leading-6 text-[var(--atlas-muted)]">Enter one target monthly budget in USD. Estimates at or below the target are eligible. Estimates above the target but no more than 10% over need verification; estimates more than 10% over are excluded when budget is required. Local-currency costs remain supporting evidence.</p>
                   <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                    <label className="text-sm font-semibold">Total monthly budget (USD)<input aria-label="Total monthly budget in USD" inputMode="numeric" value={budget} onChange={(event) => setBudget(event.target.value.replace(/[^0-9]/g, ""))} placeholder="Optional" className={selectClass} /></label>
+                    <label className="text-sm font-semibold">Target monthly budget (USD)<input aria-label="Target monthly budget in USD" inputMode="numeric" value={budget} onChange={(event) => setBudget(event.target.value.replace(/[^0-9]/g, ""))} placeholder="Optional" className={selectClass} /></label>
                     <label className="text-sm font-semibold">Supporting display currency<select aria-label="Supporting display currency" value={displayCurrency} onChange={(event) => setDisplayCurrency(event.target.value)} className={selectClass}><option>USD</option><option>EUR</option><option>GBP</option><option>JPY</option><option>MXN</option><option>THB</option><option>VND</option></select></label>
                     <label className="text-sm font-semibold">Household<select aria-label="Household" value={household} onChange={(event) => setHousehold(event.target.value as "single" | "couple")} className={selectClass}><option value="single">One adult</option><option value="couple">Two adults</option></select></label>
                   </div>
@@ -277,7 +315,7 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
                     {beach && beach !== "OCEAN_COASTAL" && <label className="flex items-center gap-3 border border-[var(--atlas-border)] bg-white p-4 text-sm font-semibold"><input type="checkbox" checked={requireBeach} onChange={(event) => setRequireBeach(event.target.checked)} /> Require the selected beach category</label>}
                     {beach === "OCEAN_COASTAL" && <p className="border border-[var(--atlas-border)] bg-white p-4 text-sm font-semibold">Ocean or coastal beach access is a hard requirement. Missing evidence cannot produce a confirmed recommendation.</p>}
                     {mountain && <label className="flex items-center gap-3 border border-[var(--atlas-border)] bg-white p-4 text-sm font-semibold"><input type="checkbox" checked={requireMountain} onChange={(event) => setRequireMountain(event.target.checked)} /> Require the selected mountain category</label>}
-                    {budget && <label className="flex items-center gap-3 border border-[var(--atlas-border)] bg-white p-4 text-sm font-semibold"><input type="checkbox" checked={requireBudget} onChange={(event) => setRequireBudget(event.target.checked)} /> Treat the monthly budget as a hard ceiling</label>}
+                    {budget && <label className="flex items-center gap-3 border border-[var(--atlas-border)] bg-white p-4 text-sm font-semibold"><input type="checkbox" checked={requireBudget} onChange={(event) => setRequireBudget(event.target.checked)} /> Use the target monthly budget as a requirement (up to 10% above needs verification; more than 10% above is excluded)</label>}
                     {!beach && !mountain && !budget && healthcareMode === "NOT_A_FACTOR" && safetyMode === "NOT_A_FACTOR" && lgbtqMode === "NOT_A_FACTOR" && legalPathMode === "NOT_A_FACTOR" && <p className="border border-[var(--atlas-border)] bg-white p-5 text-sm">No requirements selected. Results will be a neutral, canonical list rather than a personal-fit ranking.</p>}
                   </div>
                   <dl className="mt-6 grid gap-3 text-sm sm:grid-cols-2"><div><dt className="font-bold">Geography</dt><dd className="text-[var(--atlas-muted)]">{countryPreset}</dd></div><div><dt className="font-bold">Compare first</dt><dd className="text-[var(--atlas-muted)]">{detailTopic}</dd></div></dl>
@@ -300,7 +338,7 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
                 <h2 className="mt-2 text-3xl font-semibold">{displayedResults.length} places shown from 36</h2>
                 <p className="mt-2 text-sm text-[var(--atlas-muted)]">Up to 12 viable or verification-needed places are shown. Excluded places never enter this list.</p>
                 <p className="mt-1 text-xs text-[var(--atlas-muted)]">Lifestyle scores use only supported selected preferences. Equal scores remain equal; destination key is only the final deterministic tie-breaker.</p>
-                <p className="mt-2 text-sm font-semibold">Your decision budget: {budget ? `${formatMoney(Number(budget), "USD")} USD` : "Not entered"}</p>
+                <p className="mt-2 text-sm font-semibold">Your target monthly budget: {budget ? `${formatMoney(Number(budget), "USD")} USD` : "Not entered"}</p>
                 <p className="mt-1 text-xs text-[var(--atlas-muted)]">{household === "single" ? "One adult" : "Two adults"}</p>
               </div>
               <button type="button" onClick={() => { setResults(null); setStep(0); setComparison([]); setShowExcluded(false); }} className="border border-[var(--atlas-accent)] px-5 py-3 text-sm font-bold text-[var(--atlas-accent)]">Edit choices</button>
@@ -332,7 +370,7 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
                           <OwnedAffordabilityEvidence record={ownedAffordabilityByDestination.get(candidate.key)} household={household} decision={item.affordabilityDecision} />
                           <DualCurrencyCostEvidence candidate={candidate} localRange={localTotal(candidate, household)} displayCurrency={displayCurrency} snapshot={snapshot} asOfDate={snapshotAsOfDate} household={household} />
                           <p className="mt-3 text-xs font-semibold text-[var(--atlas-ink)]">{item.lifestyleFit.scoreStatus === "SCORED" ? `Lifestyle fit ${item.lifestyleFit.totalScore}/100 · ${item.lifestyleFit.scoredDimensionCount}/${item.lifestyleFit.relevantDimensionCount} selected dimensions supported` : "No supported preference score; shown without a fabricated ranking"}</p>
-                          <ul className="mt-4 space-y-1 text-xs text-[var(--atlas-muted)]">{item.reasons.slice(0, 4).map((reason) => <li key={reason.capability}><span className="font-bold text-[var(--atlas-ink)]">{reason.state}:</span> {reason.explanation}</li>)}</ul>
+                          <RequirementReasons reasons={item.reasons} />
                           <Link href={`/destinations/${candidate.slug}`} className="mt-5 inline-block text-sm font-bold text-[var(--atlas-accent)] underline underline-offset-4">Open destination guide</Link>
                         </article>
                       );
@@ -355,7 +393,7 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
                       {excludedResults.map((item) => (
                         <article key={item.destination.key} className="border border-[#caa98d] bg-[#fff8f1] p-4">
                           <h3 className="font-semibold">{item.destination.name}</h3>
-                          <ul className="mt-2 space-y-1 text-xs text-[var(--atlas-muted)]">{item.reasons.filter((reason) => reason.state === "FAIL").map((reason) => <li key={reason.capability}>{reason.explanation}</li>)}</ul>
+                          <RequirementReasons reasons={item.reasons} />
                         </article>
                       ))}
                     </div>
