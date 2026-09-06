@@ -1,4 +1,4 @@
-import type { PreferenceDirection, UserProfileV2 } from "./profile-types";
+import type { LifestylePreferenceInput, PreferenceDirection, UserProfileV2 } from "./profile-types";
 import type { LifestyleDimensionContribution, LifestyleScore, LifestyleTradeoff } from "./result-types";
 import type { SyntheticDestinationFixture } from "./destination-fact-types";
 import { CURRENT_SCORING_MODEL_VERSION } from "./versions";
@@ -53,7 +53,10 @@ function fitLevelFromPercent(normalizedFitPercent: number): "LOW" | "MEDIUM" | "
   return "HIGH";
 }
 
-export function evaluateLifestyleFit(profile: UserProfileV2, destination: SyntheticDestinationFixture): LifestyleScore {
+export function evaluateLifestylePreferences(
+  preferences: readonly LifestylePreferenceInput[],
+  destination: Pick<SyntheticDestinationFixture, "hardGates" | "lifestyleDimensions">,
+): LifestyleScore {
   const contributions: LifestyleDimensionContribution[] = [];
   const tradeoffs: LifestyleTradeoff[] = [];
 
@@ -61,7 +64,7 @@ export function evaluateLifestyleFit(profile: UserProfileV2, destination: Synthe
   let possibleWeight = 0;
   let scoredDimensionCount = 0;
 
-  for (const preference of profile.lifestylePreferences) {
+  for (const preference of preferences) {
     const rawDimensionValue = resolveDimensionRawValue(preference.dimensionKey, destination);
 
     if (rawDimensionValue === null) {
@@ -106,7 +109,7 @@ export function evaluateLifestyleFit(profile: UserProfileV2, destination: Synthe
     }
   }
 
-  const relevantDimensionCount = profile.lifestylePreferences.length;
+  const relevantDimensionCount = preferences.length;
   const coverageRatio = relevantDimensionCount > 0 ? scoredDimensionCount / relevantDimensionCount : 0;
   const totalScore = scoredDimensionCount > 0 ? Math.round((achievedWeightedFit / possibleWeight) * 100) : 0;
 
@@ -126,4 +129,8 @@ export function evaluateLifestyleFit(profile: UserProfileV2, destination: Synthe
     relevantDimensionCount,
     coverageRatio,
   };
+}
+
+export function evaluateLifestyleFit(profile: UserProfileV2, destination: SyntheticDestinationFixture): LifestyleScore {
+  return evaluateLifestylePreferences(profile.lifestylePreferences, destination);
 }

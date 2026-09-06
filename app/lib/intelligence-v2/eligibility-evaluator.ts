@@ -7,7 +7,7 @@ import type {
   UserProfileV2,
 } from "./profile-types";
 import type { EligibilityCriteria, EligibilityResult, HardConstraintResult, HardConstraintStatus } from "./result-types";
-import type { SyntheticDestinationFixture, TriStateFact } from "./destination-fact-types";
+import type { SafetyStandardFact, SyntheticDestinationFixture, TriStateFact } from "./destination-fact-types";
 import { deriveRelocationApplicability, type RelocationApplicability } from "./relocation-applicability";
 import { CURRENT_ELIGIBILITY_MODEL_VERSION } from "./versions";
 
@@ -102,9 +102,10 @@ const HEALTHCARE_STANDARD_RANK: Record<HealthcareMinimumStandard, number> = {
   INTERNATIONAL_STANDARD: 3,
 };
 
-const SAFETY_STANDARD_RANK: Record<SafetyMinimumStandard, number> = {
+const SAFETY_STANDARD_RANK: Record<SafetyMinimumStandard | SafetyStandardFact, number> = {
   MODERATE_OR_BETTER: 1,
   HIGH_SAFETY_ONLY: 2,
+  ELEVATED_RISK: 0,
 };
 
 // ---------------------------------------------------------------------------
@@ -365,6 +366,7 @@ function evaluateSafetyGate(profile: UserProfileV2, destination: SyntheticDestin
 
   const actual = destination.hardGates.safetyStandard;
   if (actual === "UNKNOWN") return buildResult("UNKNOWN", "SAFETY_STANDARD_UNKNOWN", null, ["hardGates.safetyStandard"]);
+  if (actual === "ELEVATED_RISK") return buildResult("FAIL", "SAFETY_STANDARD_ELEVATED_RISK", null, ["hardGates.safetyStandard"]);
 
   const meets = SAFETY_STANDARD_RANK[actual] >= SAFETY_STANDARD_RANK[minimum];
   return meets
@@ -404,9 +406,9 @@ function evaluateMountainOrSkiAccessGate(profile: UserProfileV2, destination: Sy
 // Overall status precedence (no averaging)
 // ---------------------------------------------------------------------------
 
-function computeOverallStatus(criteria: EligibilityCriteria): Pick<EligibilityResult, "overallStatus" | "exclusionReasonCodes" | "unknownReasonCodes"> {
-  const activated = Object.values(criteria).filter((value): value is HardConstraintResult => value !== null);
-
+export function resolveHardConstraintOutcome(
+  activated: readonly HardConstraintResult[],
+): Pick<EligibilityResult, "overallStatus" | "exclusionReasonCodes" | "unknownReasonCodes"> {
   const fails = activated.filter((criterion) => criterion.status === "FAIL");
   if (fails.length > 0) {
     return { overallStatus: "EXCLUDED", exclusionReasonCodes: fails.map((f) => f.reasonCode), unknownReasonCodes: [] };
@@ -418,6 +420,10 @@ function computeOverallStatus(criteria: EligibilityCriteria): Pick<EligibilityRe
   }
 
   return { overallStatus: "ELIGIBLE", exclusionReasonCodes: [], unknownReasonCodes: [] };
+}
+
+function computeOverallStatus(criteria: EligibilityCriteria): Pick<EligibilityResult, "overallStatus" | "exclusionReasonCodes" | "unknownReasonCodes"> {
+  return resolveHardConstraintOutcome(Object.values(criteria).filter((value): value is HardConstraintResult => value !== null));
 }
 
 // ---------------------------------------------------------------------------

@@ -41,7 +41,7 @@ const cases: Array<[string, () => void]> = [
   ["17 overlapping cash ranges remain unresolved", () => expect(affordabilityState({ ...range, monthlyHigh: 1800 }, budget).state).toBe("UNKNOWN")],
   ["18 local ranges cannot satisfy a normalized band", () => expect(normalizedAffordabilityState(range, { maxBand: "MODERATE" }).state).toBe("UNKNOWN")],
   ["19 unknown hard facts enter needs-verification", () => expect(evaluateShortlist([candidate("a", { beachAccess: "UNKNOWN" })], { beach: "DIRECT_ACCESS", requireBeach: true })[0].group).toBe("NEEDS_VERIFICATION")],
-  ["20 one known failure enters relax-one", () => expect(evaluateShortlist([candidate("a")], { beach: "DIRECT_ACCESS", requireBeach: true })[0].group).toBe("RELAX_ONE")],
+  ["20 one known failure is excluded", () => expect(evaluateShortlist([candidate("a")], { beach: "DIRECT_ACCESS", requireBeach: true })[0].group).toBe("EXCLUDED")],
   ["21 multiple known failures are excluded", () => expect(evaluateShortlist([candidate("a")], { includedCountries: ["CA"], beach: "DIRECT_ACCESS", requireBeach: true })[0].group).toBe("EXCLUDED")],
   ["22 unknown optional facts add no support", () => { const result = evaluateShortlist([candidate("a")], { affordability: { maxBand: "LOW" } })[0]; expect([result.group, result.preferenceSupport]).toEqual(["MEETS_FILTERS", 0]); }],
   ["23 canonical key breaks a complete tie", () => expect(evaluateShortlist([candidate("z"), candidate("a")], {}).map((item) => item.destination.key)).toEqual(["a", "z"])],

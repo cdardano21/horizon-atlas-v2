@@ -78,7 +78,7 @@ describe("Smart Shortlist evaluator", () => {
     ], { affordability: { maxBand: "MODERATE", require: true } });
     expect(results.map((result) => [result.destination.key, result.group])).toEqual([
       ["unknown-cost", "NEEDS_VERIFICATION"],
-      ["known-expensive", "RELAX_ONE"],
+      ["known-expensive", "EXCLUDED"],
     ]);
     expect(results[0].preferenceSupport).toBe(0);
   });
@@ -91,14 +91,14 @@ describe("Smart Shortlist evaluator", () => {
       destination("failed"),
     ], { beach: "DIRECT_ACCESS", requireBeach: true });
     expect(results.map((result) => result.destination.key)).toEqual(["a-known", "z-known", "unknown", "failed"]);
-    expect(results.map((result) => result.group)).toEqual(["MEETS_FILTERS", "MEETS_FILTERS", "NEEDS_VERIFICATION", "RELAX_ONE"]);
+    expect(results.map((result) => result.group)).toEqual(["MEETS_FILTERS", "MEETS_FILTERS", "NEEDS_VERIFICATION", "EXCLUDED"]);
     expect(new Set(results.map((result) => result.destination.key)).size).toBe(4);
     expect(results).toHaveLength(4);
   });
 
   it("treats geography as scope rather than citizenship eligibility", () => {
     const [result] = evaluateShortlist([destination("ca", { countryCode: "CA" })], { includedCountries: ["US"] });
-    expect(result.group).toBe("RELAX_ONE");
+    expect(result.group).toBe("EXCLUDED");
     expect(result.reasons[0].explanation).toContain("selected countries");
   });
 
@@ -107,7 +107,33 @@ describe("Smart Shortlist evaluator", () => {
       destination("direct", { beachAccess: "DIRECT_ACCESS" }),
       destination("nearby", { beachAccess: "NEARBY" }),
     ], { beach: "DIRECT_ACCESS", requireBeach: true });
-    expect(results.map((result) => result.group)).toEqual(["MEETS_FILTERS", "RELAX_ONE"]);
+    expect(results.map((result) => result.group)).toEqual(["MEETS_FILTERS", "EXCLUDED"]);
     expect(results.flatMap((result) => result.reasons).some((reason) => /ocean/i.test(reason.explanation))).toBe(false);
+  });
+
+  it("requires explicit coastal evidence for ocean access", () => {
+    const results = evaluateShortlist([
+      destination("coastal", { beachAccess: "DIRECT_ACCESS", oceanAccess: "COASTAL" }),
+      destination("lake", { beachAccess: "DIRECT_ACCESS", oceanAccess: "INLAND" }),
+      destination("generic", { beachAccess: "DIRECT_ACCESS", oceanAccess: "UNKNOWN" }),
+    ], { beach: "OCEAN_COASTAL", requireBeach: true });
+
+    expect(results.map((result) => [result.destination.key, result.group])).toEqual([
+      ["coastal", "MEETS_FILTERS"],
+      ["generic", "NEEDS_VERIFICATION"],
+      ["lake", "EXCLUDED"],
+    ]);
+  });
+
+  it("uses lifestyle score before canonical key and key only for equal scores", () => {
+    const results = evaluateShortlist([
+      destination("a-low", { beachAccess: "NEARBY" }),
+      destination("z-high", { beachAccess: "DIRECT_ACCESS" }),
+      destination("b-high", { beachAccess: "DIRECT_ACCESS" }),
+    ], { beach: "NEARBY_OR_DIRECT" });
+
+    expect(results.map((result) => result.destination.key)).toEqual(["b-high", "z-high", "a-low"]);
+    expect(results[0].lifestyleFit.totalScore).toBe(results[1].lifestyleFit.totalScore);
+    expect(results[1].lifestyleFit.totalScore).toBeGreaterThan(results[2].lifestyleFit.totalScore);
   });
 });

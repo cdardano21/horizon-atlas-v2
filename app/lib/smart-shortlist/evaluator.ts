@@ -1,6 +1,14 @@
+import { resolveHardConstraintOutcome } from "../intelligence-v2/eligibility-evaluator";
+import { evaluateLifestylePreferences } from "../intelligence-v2/lifestyle-scorer";
+import { compareForRanking } from "../intelligence-v2/ranking-policy";
+import type { SyntheticDestinationFixture } from "../intelligence-v2/destination-fact-types";
+import type { LifestylePreferenceInput } from "../intelligence-v2/profile-types";
+import type { HardConstraintResult, LifestyleScore } from "../intelligence-v2/result-types";
+
 export type EvidenceState = "KNOWN" | "UNKNOWN" | "CONDITIONAL" | "NOT_APPLICABLE";
-export type ResultGroup = "MEETS_FILTERS" | "NEEDS_VERIFICATION" | "RELAX_ONE" | "EXCLUDED";
+export type ResultGroup = "MEETS_FILTERS" | "NEEDS_VERIFICATION" | "EXCLUDED";
 export type Household = "single" | "couple";
+export type CoastalSetting = "COASTAL" | "INLAND" | "HYBRID" | "UNKNOWN";
 
 export type AffordabilityEvidence = {
   providerId?: string;
@@ -20,13 +28,15 @@ export type ShortlistFacts = {
   countryCode: string;
   beachAccess: "DIRECT_ACCESS" | "NEARBY" | "NONE" | "UNKNOWN";
   mountainAccess: "SKI_RESORT_ACCESS" | "MOUNTAIN_ACCESS" | "NONE" | "UNKNOWN";
+  oceanAccess?: CoastalSetting;
+  lifestyleDimensions?: Readonly<Record<string, number>>;
   affordability: AffordabilityEvidence;
 };
 
 export type ShortlistProfile = {
   includedCountries?: string[];
   excludedCountries?: string[];
-  beach?: "DIRECT_ACCESS" | "NEARBY_OR_DIRECT";
+  beach?: "DIRECT_ACCESS" | "NEARBY_OR_DIRECT" | "OCEAN_COASTAL";
   requireBeach?: boolean;
   mountain?: "SKI_RESORT_ACCESS" | "MOUNTAIN_OR_SKI";
   requireMountain?: boolean;
@@ -35,7 +45,7 @@ export type ShortlistProfile = {
 };
 
 export type RequirementReason = {
-  capability: "country" | "beach" | "mountain" | "affordability";
+  capability: "country" | "beach" | "ocean" | "mountain" | "affordability";
   state: "PASS" | "FAIL" | "UNKNOWN";
   explanation: string;
 };
@@ -45,6 +55,7 @@ export type EvaluatedDestination = {
   group: ResultGroup;
   reasons: RequirementReason[];
   preferenceSupport: number;
+  lifestyleFit: LifestyleScore;
 };
 
 const AFFORDABILITY_BAND_ORDER = { LOW: 1, MODERATE: 2, HIGH: 3, VERY_HIGH: 4 } as const;
@@ -137,11 +148,48 @@ function evaluateCountry(destination: ShortlistFacts, profile: ShortlistProfile)
 
 function evaluateBeach(destination: ShortlistFacts, profile: ShortlistProfile): RequirementReason | null {
   if (!profile.beach) return null;
+  if (profile.beach === "OCEAN_COASTAL") {
+    if (!destination.oceanAccess || destination.oceanAccess === "UNKNOWN") {
+      return { capability: "ocean", state: "UNKNOWN", explanation: "Ocean or coastal access is not explicitly established by the available structured evidence." };
+    }
+    const hasGeneralBeachAccess = destination.beachAccess === "DIRECT_ACCESS" || destination.beachAccess === "NEARBY";
+    const passes = hasGeneralBeachAccess && (destination.oceanAccess === "COASTAL" || destination.oceanAccess === "HYBRID");
+    return {
+      capability: "ocean",
+      state: passes ? "PASS" : "FAIL",
+      explanation: passes ? "Structured coastal evidence establishes ocean access." : "The available structured evidence establishes inland or non-ocean access.",
+    };
+  }
   if (destination.beachAccess === "UNKNOWN") return { capability: "beach", state: "UNKNOWN", explanation: "Beach access is unresolved." };
   const passes = profile.beach === "DIRECT_ACCESS"
     ? destination.beachAccess === "DIRECT_ACCESS"
     : destination.beachAccess === "DIRECT_ACCESS" || destination.beachAccess === "NEARBY";
   return { capability: "beach", state: passes ? "PASS" : "FAIL", explanation: passes ? "Matches the selected broad beach category." : "Does not match the selected broad beach category." };
+}
+
+function buildLifestylePreferences(profile: ShortlistProfile): LifestylePreferenceInput[] {
+  const preferences: LifestylePreferenceInput[] = [];
+  if (profile.beach && profile.beach !== "OCEAN_COASTAL") {
+    preferences.push({ dimensionKey: "beachLifestyle", direction: "MORE_IS_BETTER", importance: 1, isHardRequirement: false, targetValue: null });
+  }
+  if (profile.mountain) {
+    preferences.push({ dimensionKey: "mountainOutdoorLifestyle", direction: "MORE_IS_BETTER", importance: 1, isHardRequirement: false, targetValue: null });
+  }
+  return preferences;
+}
+
+function scoreLifestyle(destination: ShortlistFacts, profile: ShortlistProfile): LifestyleScore {
+  const hardGates: SyntheticDestinationFixture["hardGates"] = {
+    beachAccess: destination.beachAccess,
+    mountainOrSkiAccess: destination.mountainAccess === "MOUNTAIN_ACCESS" ? "MOUNTAIN_SCENIC_ONLY" : destination.mountainAccess,
+    healthcareStandard: "UNKNOWN",
+    safetyStandard: "UNKNOWN",
+    lgbtqLegalProtectionStatus: "UNKNOWN",
+  };
+  return evaluateLifestylePreferences(buildLifestylePreferences(profile), {
+    hardGates,
+    lifestyleDimensions: { dimensionValues: destination.lifestyleDimensions ?? {} },
+  });
 }
 
 function evaluateMountain(destination: ShortlistFacts, profile: ShortlistProfile): RequirementReason | null {
@@ -162,31 +210,43 @@ export function evaluateDestination(destination: ShortlistFacts, profile: Shortl
   ].filter((reason): reason is RequirementReason => reason !== null);
 
   const required = reasons.filter((reason) => reason.capability === "country"
-    || (reason.capability === "beach" && profile.requireBeach)
+    || ((reason.capability === "beach" || reason.capability === "ocean") && (profile.requireBeach || profile.beach === "OCEAN_COASTAL"))
     || (reason.capability === "mountain" && profile.requireMountain)
     || (reason.capability === "affordability" && profile.affordability?.require));
-  const failures = required.filter((reason) => reason.state === "FAIL").length;
-  const unknowns = required.filter((reason) => reason.state === "UNKNOWN").length;
-  const group: ResultGroup = failures === 0 && unknowns === 0 ? "MEETS_FILTERS"
-    : failures === 0 ? "NEEDS_VERIFICATION"
-      : failures === 1 && unknowns === 0 ? "RELAX_ONE"
-        : "EXCLUDED";
+  const outcome = resolveHardConstraintOutcome(required.map((reason): HardConstraintResult => ({
+    status: reason.state,
+    reasonCode: `${reason.capability.toUpperCase()}_${reason.state}`,
+    evidenceSummary: reason.explanation,
+    sourceFactKeys: [],
+  })));
+  const group: ResultGroup = outcome.overallStatus === "EXCLUDED"
+    ? "EXCLUDED"
+    : outcome.overallStatus === "UNKNOWN_INCOMPLETE" ? "NEEDS_VERIFICATION" : "MEETS_FILTERS";
+  const lifestyleFit = scoreLifestyle(destination, profile);
 
   return {
     destination,
     group,
     reasons,
-    preferenceSupport: reasons.filter((reason) => reason.state === "PASS" && reason.capability !== "country").length,
+    preferenceSupport: lifestyleFit.scoredDimensionCount,
+    lifestyleFit,
   };
 }
 
-export function evaluateShortlist(destinations: ShortlistFacts[], profile: ShortlistProfile): EvaluatedDestination[] {
-  return destinations.map((destination) => evaluateDestination(destination, profile)).sort((left, right) => {
-    const groupOrder: Record<ResultGroup, number> = { MEETS_FILTERS: 0, NEEDS_VERIFICATION: 1, RELAX_ONE: 2, EXCLUDED: 3 };
-    return groupOrder[left.group] - groupOrder[right.group]
-      || right.preferenceSupport - left.preferenceSupport
-      || left.destination.key.localeCompare(right.destination.key);
+export function compareEvaluatedDestinations(left: EvaluatedDestination, right: EvaluatedDestination): number {
+  const toRankingInput = (result: EvaluatedDestination) => ({
+    destinationId: result.destination.key,
+    recommendationStatus: result.group === "MEETS_FILTERS" ? "VIABLE" as const
+      : result.group === "NEEDS_VERIFICATION" ? "NEEDS_VERIFICATION" as const : "EXCLUDED" as const,
+    sortRankingValue: result.group === "MEETS_FILTERS" && result.lifestyleFit.scoreStatus === "SCORED"
+      ? { basis: "LIFESTYLE_SCORE_AMONG_ELIGIBLE_ONLY" as const, value: result.lifestyleFit.totalScore }
+      : null,
   });
+  return compareForRanking(toRankingInput(left), toRankingInput(right));
+}
+
+export function evaluateShortlist(destinations: ShortlistFacts[], profile: ShortlistProfile): EvaluatedDestination[] {
+  return destinations.map((destination) => evaluateDestination(destination, profile)).sort(compareEvaluatedDestinations);
 }
 
 export function compareAffordability(left: AffordabilityEvidence, right: AffordabilityEvidence): number | null {

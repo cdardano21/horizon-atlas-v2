@@ -13,7 +13,13 @@ export const MATCHED_REASON_FIT_THRESHOLD_PERCENT = 70;
  */
 export type RecommendationRankGroup = 0 | 1 | 2 | 3;
 
-export function computeRankGroup(result: FinalDestinationRecommendationResult): RecommendationRankGroup {
+export interface RankingPolicyInput {
+  readonly destinationId: string;
+  readonly recommendationStatus: FinalDestinationRecommendationResult["recommendationStatus"];
+  readonly sortRankingValue: FinalDestinationRecommendationResult["sortRankingValue"];
+}
+
+export function computeRankGroup(result: RankingPolicyInput): RecommendationRankGroup {
   if (result.recommendationStatus === "EXCLUDED") return 3;
   if (result.recommendationStatus === "NEEDS_VERIFICATION") return 2;
   return result.sortRankingValue !== null ? 0 : 1;
@@ -23,7 +29,7 @@ export function computeRankGroup(result: FinalDestinationRecommendationResult): 
  * Sort comparator: rank group ascending, then sortRankingValue descending (group 0
  * only), then destinationId ascending as the deterministic, non-random tie-breaker.
  */
-export function compareForRanking(a: FinalDestinationRecommendationResult, b: FinalDestinationRecommendationResult): number {
+export function compareForRanking(a: RankingPolicyInput, b: RankingPolicyInput): number {
   const groupA = computeRankGroup(a);
   const groupB = computeRankGroup(b);
   if (groupA !== groupB) return groupA - groupB;
