@@ -146,6 +146,24 @@ describe("Smart Shortlist evaluator", () => {
     expect(results[1].lifestyleFit.totalScore).toBeGreaterThan(results[2].lifestyleFit.totalScore);
   });
 
+  it("uses meaningful lifestyle scores before canonical keys within Needs verification", () => {
+    const results = evaluateShortlist([
+      destination("a-low", { beachAccess: "UNKNOWN", safetyStandard: "ELEVATED_RISK" }),
+      destination("b-unscored", { beachAccess: "UNKNOWN", safetyStandard: "UNKNOWN" }),
+      destination("z-high", { beachAccess: "UNKNOWN", safetyStandard: "MODERATE_OR_BETTER" }),
+    ], {
+      beach: "DIRECT_ACCESS",
+      requireBeach: true,
+      safety: { mode: "IMPORTANT_PREFERENCE", minimum: "MODERATE_OR_BETTER" },
+    });
+
+    expect(results.map((result) => [result.destination.key, result.group, result.lifestyleFit.scoreStatus, result.lifestyleFit.totalScore])).toEqual([
+      ["z-high", "NEEDS_VERIFICATION", "SCORED", 50],
+      ["a-low", "NEEDS_VERIFICATION", "SCORED", 0],
+      ["b-unscored", "NEEDS_VERIFICATION", "INSUFFICIENT_DATA", 0],
+    ]);
+  });
+
   it("applies healthcare, safety, LGBTQ, and legal-path must-haves with FAIL before UNKNOWN", () => {
     const results = evaluateShortlist([
       destination("pass", {

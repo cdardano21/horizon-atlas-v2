@@ -6,7 +6,6 @@ import {
   resolveHardConstraintOutcome,
 } from "../intelligence-v2/eligibility-evaluator";
 import { evaluateLifestylePreferences } from "../intelligence-v2/lifestyle-scorer";
-import { compareForRanking } from "../intelligence-v2/ranking-policy";
 import type { DestinationEntryAndStayFacts, LgbtqLegalProtectionFact, SafetyStandardFact, SyntheticDestinationFixture } from "../intelligence-v2/destination-fact-types";
 import type { HealthcareMinimumStandard, LifestylePreferenceInput, SafetyMinimumStandard } from "../intelligence-v2/profile-types";
 import type { HardConstraintResult, LifestyleScore } from "../intelligence-v2/result-types";
@@ -315,15 +314,22 @@ export function evaluateDestination(destination: ShortlistFacts, profile: Shortl
 }
 
 export function compareEvaluatedDestinations(left: EvaluatedDestination, right: EvaluatedDestination): number {
-  const toRankingInput = (result: EvaluatedDestination) => ({
-    destinationId: result.destination.key,
-    recommendationStatus: result.group === "MEETS_FILTERS" ? "VIABLE" as const
-      : result.group === "NEEDS_VERIFICATION" ? "NEEDS_VERIFICATION" as const : "EXCLUDED" as const,
-    sortRankingValue: result.group === "MEETS_FILTERS" && result.lifestyleFit.scoreStatus === "SCORED"
-      ? { basis: "LIFESTYLE_SCORE_AMONG_ELIGIBLE_ONLY" as const, value: result.lifestyleFit.totalScore }
-      : null,
-  });
-  return compareForRanking(toRankingInput(left), toRankingInput(right));
+  const rankGroup = (result: EvaluatedDestination) => result.group === "MEETS_FILTERS"
+    ? result.lifestyleFit.scoreStatus === "SCORED" ? 0 : 1
+    : result.group === "NEEDS_VERIFICATION" ? 2 : 3;
+  const groupDifference = rankGroup(left) - rankGroup(right);
+  if (groupDifference !== 0) return groupDifference;
+
+  if (left.group !== "EXCLUDED") {
+    const leftScored = left.lifestyleFit.scoreStatus === "SCORED";
+    const rightScored = right.lifestyleFit.scoreStatus === "SCORED";
+    if (leftScored !== rightScored) return leftScored ? -1 : 1;
+    if (leftScored && rightScored && left.lifestyleFit.totalScore !== right.lifestyleFit.totalScore) {
+      return right.lifestyleFit.totalScore - left.lifestyleFit.totalScore;
+    }
+  }
+
+  return left.destination.key.localeCompare(right.destination.key);
 }
 
 export function evaluateShortlist(destinations: ShortlistFacts[], profile: ShortlistProfile): EvaluatedDestination[] {

@@ -15,9 +15,9 @@ export type OwnedEvaluatedDestination = EvaluatedDestination & {
 
 function gatedGroup(group: ResultGroup, decision: AffordabilityClassification, required: boolean): ResultGroup {
   if (!required) return group;
-  if (group === "EXCLUDED" || decision.state === "WITHIN_BUDGET") return group;
-  if (group === "MEETS_FILTERS") return decision.state === "CLOSE_TO_BUDGET" ? "NEEDS_VERIFICATION" : "EXCLUDED";
-  return "EXCLUDED";
+  if (group === "EXCLUDED" || decision.state === "OVER_BUDGET") return "EXCLUDED";
+  if (group === "NEEDS_VERIFICATION" || decision.state === "CLOSE_TO_BUDGET") return "NEEDS_VERIFICATION";
+  return "MEETS_FILTERS";
 }
 
 export function evaluateShortlistWithOwnedAffordability(

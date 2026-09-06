@@ -94,5 +94,22 @@ describe("Smart Shortlist server facts", () => {
 
     const budget = evaluateShortlistWithOwnedAffordability(destinations, {}, { amountUsd: 2_000, household: "single", require: true });
     expect(budget.filter((result) => result.affordabilityDecision?.state === "OVER_BUDGET").every((result) => result.group === "EXCLUDED")).toBe(true);
+
+    const affordableInternationalCouple = evaluateShortlistWithOwnedAffordability(destinations, {
+      excludedCountries: ["US"],
+      healthcare: { mode: "IMPORTANT_PREFERENCE", minimum: "GOOD_PRIVATE_AVAILABLE" },
+      safety: { mode: "IMPORTANT_PREFERENCE", minimum: "MODERATE_OR_BETTER" },
+      documentedLongStayPath: { mode: "MUST_HAVE" },
+    }, { amountUsd: 2_500, household: "couple", require: true });
+    expect(affordableInternationalCouple.find((result) => result.destination.key === "cuenca-ecuador")).toMatchObject({
+      group: "NEEDS_VERIFICATION",
+      affordabilityDecision: { state: "CLOSE_TO_BUDGET", estimatedMonthlyUsd: 2_550 },
+    });
+    expect(affordableInternationalCouple.find((result) => result.destination.key === "hua-hin-thailand")).toMatchObject({
+      group: "NEEDS_VERIFICATION",
+      affordabilityDecision: { state: "CLOSE_TO_BUDGET", estimatedMonthlyUsd: 2_700 },
+    });
+    expect(affordableInternationalCouple.filter((result) => result.group === "EXCLUDED")
+      .every((result) => result.reasons.some((reason) => reason.state === "FAIL"))).toBe(true);
   }, 15_000);
 });

@@ -62,7 +62,7 @@ describe("Smart Shortlist prototype", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Build shortlist" }));
     expect(screen.getByRole("heading", { name: "12 places shown from 36" })).toBeInTheDocument();
-    expect(screen.getByText(/Excluded places never enter this list/)).toBeInTheDocument();
+    expect(screen.getByText(/excluded places remain separate/i)).toBeInTheDocument();
     expect(screen.queryByText(/match percentage/i)).toBeInTheDocument();
     expect(screen.getByText("Your target monthly budget: $4,500 USD")).toBeInTheDocument();
     expect(screen.getByText(/Supporting local-cost conversion uses one deterministic fixture/)).toBeInTheDocument();
@@ -164,5 +164,61 @@ describe("Smart Shortlist prototype", () => {
     expect(card).toHaveTextContent("LGBTQ legal protections · UNKNOWN:");
     expect(card).toHaveTextContent("Residency or long-stay route · UNKNOWN:");
     expect(card.querySelectorAll('details [data-reason-state="FAIL"], details [data-reason-state="UNKNOWN"]')).toHaveLength(0);
+
+    const excludedSection = screen.getByRole("heading", { name: "Excluded by a hard requirement" }).closest("section");
+    expect(excludedSection).not.toBeNull();
+    for (const excludedCard of excludedSection!.querySelectorAll("article")) {
+      expect(excludedCard.querySelector('[data-reason-state="FAIL"]')).not.toBeNull();
+    }
+  });
+
+  it("makes every verification candidate accessible and restores the concise view", () => {
+    render(<SmartShortlistPrototype intelligence={intelligence} />);
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    fireEvent.click(within(screen.getByRole("group", { name: "Healthcare" })).getByRole("button", { name: "Must have" }));
+    buildShortlist();
+
+    expect(screen.getByText("12 of 36")).toBeInTheDocument();
+    expect(screen.getAllByRole("article")).toHaveLength(12);
+    const showAll = screen.getByRole("button", { name: "Show all places needing verification (24 more)" });
+    expect(showAll).toHaveAttribute("aria-expanded", "false");
+
+    fireEvent.click(showAll);
+    expect(screen.getByText("36 of 36")).toBeInTheDocument();
+    expect(screen.getAllByRole("article")).toHaveLength(36);
+    const showFewer = screen.getByRole("button", { name: "Show fewer" });
+    expect(showFewer).toHaveAttribute("aria-expanded", "true");
+
+    fireEvent.click(showFewer);
+    expect(screen.getByText("12 of 36")).toBeInTheDocument();
+    expect(screen.getAllByRole("article")).toHaveLength(12);
+  });
+
+  it("does not silently hide recommendations beyond the concise view", () => {
+    render(<SmartShortlistPrototype intelligence={intelligence} />);
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    buildShortlist();
+
+    expect(screen.getAllByRole("article")).toHaveLength(12);
+    fireEvent.click(screen.getByRole("button", { name: "Show all places meeting required filters (24 more)" }));
+    expect(screen.getAllByRole("article")).toHaveLength(36);
+    fireEvent.click(screen.getByRole("button", { name: "Show fewer places meeting required filters" }));
+    expect(screen.getAllByRole("article")).toHaveLength(12);
+  });
+
+  it("keeps important-preference failures eligible and labels them as tradeoffs", () => {
+    const preferenceIntelligence = intelligence.map((item) => item.key === "san-ramon-costa-rica"
+      ? { ...item, safetyStandard: "ELEVATED_RISK" as const }
+      : item);
+    render(<SmartShortlistPrototype intelligence={preferenceIntelligence} />);
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    fireEvent.click(within(screen.getByRole("group", { name: "Safety" })).getByRole("button", { name: "Important preference" }));
+    buildShortlist();
+
+    expect(screen.getByRole("heading", { name: "Meets your required filters" })).toBeInTheDocument();
+    expect(screen.getByText(/Important preferences affect ordering but do not exclude/)).toBeInTheDocument();
+    const card = cardFor("San Ramón");
+    expect(card).toHaveTextContent("Important-preference tradeoff — Safety · FAIL:");
+    expect(card.closest("section")).toHaveTextContent("Meets your required filters");
   });
 });

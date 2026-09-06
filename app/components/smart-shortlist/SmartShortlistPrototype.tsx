@@ -55,7 +55,7 @@ function convertedTotal(candidate: PrototypeCandidate, household: "single" | "co
 }
 
 function groupCopy(group: EvaluatedDestination["group"], noFilters: boolean) {
-  if (group === "MEETS_FILTERS") return noFilters ? "Places to explore" : "Meets your selected filters";
+  if (group === "MEETS_FILTERS") return noFilters ? "Places to explore" : "Meets your required filters";
   if (group === "NEEDS_VERIFICATION") return "Needs verification";
   return "Excluded by a hard requirement";
 }
@@ -72,16 +72,22 @@ const reasonLabels: Record<EvaluatedDestination["reasons"][number]["capability"]
   safety: "Safety",
 };
 
-function RequirementReasons({ reasons }: { reasons: EvaluatedDestination["reasons"] }) {
+function RequirementReasons({ reasons, preferenceCapabilities }: {
+  reasons: EvaluatedDestination["reasons"];
+  preferenceCapabilities: ReadonlySet<EvaluatedDestination["reasons"][number]["capability"]>;
+}) {
   const decisiveReasons = reasons.filter((reason) => reason.state !== "PASS");
   const passingReasons = reasons.filter((reason) => reason.state === "PASS");
   const visiblePassingReasons = passingReasons.slice(0, Math.max(0, 4 - decisiveReasons.length));
   const additionalPassingReasons = passingReasons.slice(visiblePassingReasons.length);
-  const renderReason = (reason: EvaluatedDestination["reasons"][number]) => (
-    <li key={reason.capability} data-reason-state={reason.state}>
-      <span className="font-bold text-[var(--atlas-ink)]">{reasonLabels[reason.capability]} · {reason.state}:</span> {reason.explanation}
-    </li>
-  );
+  const renderReason = (reason: EvaluatedDestination["reasons"][number]) => {
+    const preferenceTradeoff = reason.state === "FAIL" && preferenceCapabilities.has(reason.capability);
+    return (
+      <li key={reason.capability} data-reason-state={reason.state} data-preference-tradeoff={preferenceTradeoff || undefined}>
+        <span className="font-bold text-[var(--atlas-ink)]">{preferenceTradeoff ? "Important-preference tradeoff — " : ""}{reasonLabels[reason.capability]} · {reason.state}:</span> {reason.explanation}
+      </li>
+    );
+  };
 
   return (
     <div className="mt-4 text-xs text-[var(--atlas-muted)]">
@@ -141,6 +147,8 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
   const [results, setResults] = useState<OwnedEvaluatedDestination[] | null>(null);
   const [comparison, setComparison] = useState<string[]>([]);
   const [showExcluded, setShowExcluded] = useState(false);
+  const [showAllRecommended, setShowAllRecommended] = useState(false);
+  const [showAllVerification, setShowAllVerification] = useState(false);
 
   const intelligenceByKey = new Map(intelligence.map((item) => [item.key, item]));
   const candidates = smartShortlistCandidates.map((candidate) => ({
@@ -182,8 +190,22 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
       : current.length < 4 ? [...current, key] : current);
   };
 
-  const displayedResults = results?.filter((item) => item.group !== "EXCLUDED").slice(0, 12) ?? [];
+  const allRecommendedResults = results?.filter((item) => item.group === "MEETS_FILTERS") ?? [];
+  const initialRecommendedCount = Math.min(12, allRecommendedResults.length);
+  const recommendedResults = showAllRecommended ? allRecommendedResults : allRecommendedResults.slice(0, initialRecommendedCount);
+  const additionalRecommendedCount = allRecommendedResults.length - recommendedResults.length;
+  const verificationResults = results?.filter((item) => item.group === "NEEDS_VERIFICATION") ?? [];
+  const initialVerificationCount = Math.max(0, 12 - initialRecommendedCount);
+  const visibleVerificationResults = showAllVerification
+    ? verificationResults
+    : verificationResults.slice(0, initialVerificationCount);
+  const additionalVerificationCount = verificationResults.length - visibleVerificationResults.length;
+  const displayedResults = [...recommendedResults, ...visibleVerificationResults];
   const excludedResults = results?.filter((item) => item.group === "EXCLUDED") ?? [];
+  const preferenceCapabilities = new Set<EvaluatedDestination["reasons"][number]["capability"]>([
+    ...(healthcareMode === "IMPORTANT_PREFERENCE" ? ["healthcare" as const] : []),
+    ...(safetyMode === "IMPORTANT_PREFERENCE" ? ["safety" as const] : []),
+  ]);
   const noFilters = !profile.includedCountries && !profile.excludedCountries && !beach && !mountain && !budget
     && healthcareMode === "NOT_A_FACTOR" && safetyMode === "NOT_A_FACTOR"
     && lgbtqMode === "NOT_A_FACTOR" && legalPathMode === "NOT_A_FACTOR";
@@ -336,12 +358,13 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
               <div>
                 <p className="text-xs font-bold uppercase text-[var(--atlas-accent)]">Evidence-first results</p>
                 <h2 className="mt-2 text-3xl font-semibold">{displayedResults.length} places shown from 36</h2>
-                <p className="mt-2 text-sm text-[var(--atlas-muted)]">Up to 12 viable or verification-needed places are shown. Excluded places never enter this list.</p>
+                <p className="mt-2 text-sm text-[var(--atlas-muted)]">An initial set of places meeting required filters is shown, followed by places needing verification. Counted controls reveal every additional result; excluded places remain separate.</p>
                 <p className="mt-1 text-xs text-[var(--atlas-muted)]">Lifestyle scores use only supported selected preferences. Equal scores remain equal; destination key is only the final deterministic tie-breaker.</p>
+                <p className="mt-1 text-xs text-[var(--atlas-muted)]">Important preferences affect ordering but do not exclude a destination. Confirmed mismatches are labeled as tradeoffs.</p>
                 <p className="mt-2 text-sm font-semibold">Your target monthly budget: {budget ? `${formatMoney(Number(budget), "USD")} USD` : "Not entered"}</p>
                 <p className="mt-1 text-xs text-[var(--atlas-muted)]">{household === "single" ? "One adult" : "Two adults"}</p>
               </div>
-              <button type="button" onClick={() => { setResults(null); setStep(0); setComparison([]); setShowExcluded(false); }} className="border border-[var(--atlas-accent)] px-5 py-3 text-sm font-bold text-[var(--atlas-accent)]">Edit choices</button>
+              <button type="button" onClick={() => { setResults(null); setStep(0); setComparison([]); setShowExcluded(false); setShowAllRecommended(false); setShowAllVerification(false); }} className="border border-[var(--atlas-accent)] px-5 py-3 text-sm font-bold text-[var(--atlas-accent)]">Edit choices</button>
             </section>
 
             <section className="border border-[#bd7b36] bg-[#fff8ea] p-5 text-sm">
@@ -352,11 +375,11 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
             </section>
 
             {(["MEETS_FILTERS", "NEEDS_VERIFICATION"] as const).map((group) => {
-              const items = displayedResults.filter((item) => item.group === group);
-              if (!items.length) return null;
+              const items = group === "MEETS_FILTERS" ? recommendedResults : visibleVerificationResults;
+              if (group === "MEETS_FILTERS" ? !items.length : !verificationResults.length) return null;
               return (
                 <section key={group}>
-                  <div className="mb-4 flex items-baseline justify-between"><h2 className="text-2xl font-semibold">{groupCopy(group, noFilters)}</h2><span className="text-sm text-[var(--atlas-muted)]">{items.length}</span></div>
+                  <div className="mb-4 flex items-baseline justify-between gap-4"><div><h2 className="text-2xl font-semibold">{groupCopy(group, noFilters)}</h2>{group === "MEETS_FILTERS" && !noFilters && <p className="mt-1 text-xs text-[var(--atlas-muted)]">These places passed every selected requirement. Important preferences affect their order and may still show tradeoffs.</p>}</div><span className="shrink-0 text-sm text-[var(--atlas-muted)]">{group === "NEEDS_VERIFICATION" ? `${items.length} of ${verificationResults.length}` : items.length}</span></div>
                   <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                     {items.map((item) => {
                       const candidate = item.destination as PrototypeCandidate;
@@ -370,12 +393,22 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
                           <OwnedAffordabilityEvidence record={ownedAffordabilityByDestination.get(candidate.key)} household={household} decision={item.affordabilityDecision} />
                           <DualCurrencyCostEvidence candidate={candidate} localRange={localTotal(candidate, household)} displayCurrency={displayCurrency} snapshot={snapshot} asOfDate={snapshotAsOfDate} household={household} />
                           <p className="mt-3 text-xs font-semibold text-[var(--atlas-ink)]">{item.lifestyleFit.scoreStatus === "SCORED" ? `Lifestyle fit ${item.lifestyleFit.totalScore}/100 · ${item.lifestyleFit.scoredDimensionCount}/${item.lifestyleFit.relevantDimensionCount} selected dimensions supported` : "No supported preference score; shown without a fabricated ranking"}</p>
-                          <RequirementReasons reasons={item.reasons} />
+                          <RequirementReasons reasons={item.reasons} preferenceCapabilities={preferenceCapabilities} />
                           <Link href={`/destinations/${candidate.slug}`} className="mt-5 inline-block text-sm font-bold text-[var(--atlas-accent)] underline underline-offset-4">Open destination guide</Link>
                         </article>
                       );
                     })}
                   </div>
+                  {group === "MEETS_FILTERS" && allRecommendedResults.length > 12 && (
+                    <button type="button" aria-expanded={showAllRecommended} onClick={() => setShowAllRecommended((current) => !current)} className="mt-5 border border-[var(--atlas-accent)] px-5 py-3 text-sm font-bold text-[var(--atlas-accent)]">
+                      {showAllRecommended ? "Show fewer places meeting required filters" : `Show all places meeting required filters (${additionalRecommendedCount} more)`}
+                    </button>
+                  )}
+                  {group === "NEEDS_VERIFICATION" && verificationResults.length > initialVerificationCount && (
+                    <button type="button" aria-expanded={showAllVerification} onClick={() => setShowAllVerification((current) => !current)} className="mt-5 border border-[var(--atlas-accent)] px-5 py-3 text-sm font-bold text-[var(--atlas-accent)]">
+                      {showAllVerification ? "Show fewer" : `Show all places needing verification (${additionalVerificationCount} more)`}
+                    </button>
+                  )}
                 </section>
               );
             })}
@@ -393,7 +426,7 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
                       {excludedResults.map((item) => (
                         <article key={item.destination.key} className="border border-[#caa98d] bg-[#fff8f1] p-4">
                           <h3 className="font-semibold">{item.destination.name}</h3>
-                          <RequirementReasons reasons={item.reasons} />
+                          <RequirementReasons reasons={item.reasons} preferenceCapabilities={preferenceCapabilities} />
                         </article>
                       ))}
                     </div>
