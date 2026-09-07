@@ -24,13 +24,24 @@ export function evaluateShortlistWithOwnedAffordability(
   destinations: PrototypeCandidate[],
   profile: ShortlistProfile,
   budget?: OwnedBudgetContext,
+  affordabilityByDestination = ownedAffordabilityByDestination,
 ): OwnedEvaluatedDestination[] {
   const baseResults = evaluateShortlist(destinations, { ...profile, affordability: undefined, budget: undefined });
   if (!budget) return baseResults;
 
   return baseResults.map((result) => {
-    const record = ownedAffordabilityByDestination.get(result.destination.key);
-    if (!record) throw new Error(`Missing owned affordability estimate for ${result.destination.key}`);
+    const record = affordabilityByDestination.get(result.destination.key);
+    if (!record) {
+      return {
+        ...result,
+        group: budget.require !== false && result.group !== "EXCLUDED" ? "NEEDS_VERIFICATION" : result.group,
+        reasons: [...result.reasons, {
+          capability: "affordability" as const,
+          state: "UNKNOWN" as const,
+          explanation: `No validated ${budget.household} household affordability estimate is available.`,
+        }],
+      };
+    }
     const estimatedMonthlyUsd = budget.household === "single" ? record.singleMonthlyUsd : record.coupleMonthlyUsd;
     const decision = classifyAffordability({ budgetUsd: budget.amountUsd, estimatedMonthlyUsd });
     const reasonState = decision.state === "WITHIN_BUDGET"

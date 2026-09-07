@@ -190,6 +190,10 @@ describe("Expansion-workbook preview resolver (registry-driven, generic getCanon
       "merida-mexico", "monopoli-italy", "montevideo-uruguay", "nafplio-greece", "nice-france",
       "palm-springs-california-united-states", "paphos-cyprus", "santander-spain",
       "savannah-georgia-united-states", "sibenik-croatia",
+      "tivat-montenegro", "matera-italy", "trieste-italy", "braga-portugal", "valencia-spain",
+      "rijeka-croatia", "zadar-croatia", "piran-slovenia", "rovinj-croatia", "kanazawa-japan",
+      "polignano-a-mare-italy", "cefalu-italy", "kalamata-greece", "taormina-italy", "podgorica-montenegro",
+      "kotor-montenegro", "bergamo-italy", "pietrasanta-italy", "alicante-spain", "verona-italy",
     ];
     expect(allRegisteredKeys.slice().sort()).toEqual(expectedKeys.sort());
   });

@@ -5,7 +5,7 @@ import { normalizePersistedDestinationRows } from "./normalize-persisted-destina
 import type { PersistedRootRow, PersistedProfileRow, PersistedPresenceRow, PersistedKeyedChildrenRows, PersistedReplaceModulesRows, PersistedSingletonsRows } from "./normalize-persisted-destination-rows";
 import { CURRENT_V31_PROFILE_STORAGE_VERSION } from "./write-port";
 
-const REQUIRED_PRESENCE_MODULES: readonly PersistedPresenceModuleKey[] = [
+export const REQUIRED_PRESENCE_MODULES: readonly PersistedPresenceModuleKey[] = [
   "facts",
   "scores",
   "neighborhoods",

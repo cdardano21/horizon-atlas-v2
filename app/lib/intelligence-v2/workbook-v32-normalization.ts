@@ -9,9 +9,10 @@ import type {
   LgbtqLegalProtectionFact,
   MountainOrSkiAccessFact,
   RetirementIncomeTreatmentFact,
+  SafetyStandardFact,
   TriStateFact,
 } from "../destination-fact-types";
-import type { HealthcareMinimumStandard, SafetyMinimumStandard } from "../profile-types";
+import type { HealthcareMinimumStandard } from "../profile-types";
 import type { MoneyRange } from "../result-types";
 
 export interface WorkbookAdapterMappingError {
@@ -146,28 +147,32 @@ export function normalizeLgbtqLegalProtectionStatus(legalProtections: string | n
 // Safety standard (structured SAFETY_RISKS.severity aggregation only)
 // ---------------------------------------------------------------------------
 
-const SAFETY_SEVERITY_RANK: Readonly<Record<string, number>> = { low: 1, medium: 2, high: 3 };
+const SAFETY_SEVERITY_RANK: Readonly<Record<string, number>> = { low: 1, medium: 2 };
+const SAFETY_EXPLICIT_ADVERSE_TOKENS = new Set(["elevated_risk"]);
 
 /**
  * Worst-material-risk aggregation over structured `severity` tokens only (never
  * risk `summary` prose). No ranked risk at all -> UNKNOWN. Worst risk is "low"
  * -> HIGH_SAFETY_ONLY (only minor material risks). Worst risk is "medium" ->
- * MODERATE_OR_BETTER (ordinary/baseline). Worst risk is "high" OR an
- * unrecognized/invalid severity token -> UNKNOWN (conservative: the current
- * fact type has no explicit "fails safety" tier, so a genuinely material or
- * unclassifiable risk must not be dressed up as either positive tier).
+ * MODERATE_OR_BETTER (ordinary/baseline). The explicit canonical token
+ * "elevated_risk" -> ELEVATED_RISK. Any other token, including bare "high" or
+ * hazard prose, remains UNKNOWN (conservative: malformed or merely severe
+ * advisory text does not become adverse evidence by default).
  */
-export function normalizeSafetyStandard(severities: ReadonlyArray<string | null | undefined>): SafetyMinimumStandard | "UNKNOWN" {
+export function normalizeSafetyStandard(severities: ReadonlyArray<string | null | undefined>): SafetyStandardFact | "UNKNOWN" {
   if (severities.length === 0) return "UNKNOWN";
   let worstRank = 0;
   for (const raw of severities) {
     const key = normalizeCell(raw).toLowerCase();
-    const rank = SAFETY_SEVERITY_RANK[key] ?? 3; // unrecognized token treated as worst-case, conservatively
+    if (key === "") continue;
+    if (SAFETY_EXPLICIT_ADVERSE_TOKENS.has(key)) return "ELEVATED_RISK";
+    if (!(key in SAFETY_SEVERITY_RANK)) continue;
+    const rank = SAFETY_SEVERITY_RANK[key];
     if (rank > worstRank) worstRank = rank;
   }
-  if (worstRank >= 3) return "UNKNOWN";
   if (worstRank === 2) return "MODERATE_OR_BETTER";
-  return "HIGH_SAFETY_ONLY";
+  if (worstRank === 1) return "HIGH_SAFETY_ONLY";
+  return "UNKNOWN";
 }
 
 // ---------------------------------------------------------------------------

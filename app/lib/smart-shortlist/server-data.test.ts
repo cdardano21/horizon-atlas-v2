@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
+import { EXPANSION_WORKBOOK_REGISTRY } from "../expansion-workbook-registry";
 import type { DeterministicV31CanonicalLifestyleFeature } from "../workbook-v31-deterministic-core";
 import { smartShortlistCandidates } from "./cohort";
 import { evaluateShortlist } from "./evaluator";
 import { evaluateShortlistWithOwnedAffordability } from "./owned-affordability-evaluator";
-import { coastalSettingFromLifestyleFeatures, loadSmartShortlistIntelligence } from "./server-data";
+import { coastalSettingFromLifestyleFeatures, loadSmartShortlistData, loadSmartShortlistIntelligence } from "./server-data";
 
 function coastalRow(overrides: Partial<DeterministicV31CanonicalLifestyleFeature> = {}): DeterministicV31CanonicalLifestyleFeature {
   return {
@@ -37,10 +38,11 @@ describe("Smart Shortlist server facts", () => {
     expect(coastalSettingFromLifestyleFeatures([])).toBe("UNKNOWN");
   });
 
-  it("loads exactly the canonical 36 keys through the workbook and V2 adapters", async () => {
-    const intelligence = await loadSmartShortlistIntelligence();
-    expect(intelligence).toHaveLength(36);
-    expect(intelligence.map((item) => item.key).sort()).toEqual(smartShortlistCandidates.map((item) => item.key).sort());
+  it("loads exactly the canonical 56 keys through the workbook and V2 adapters", async () => {
+    const { candidates, intelligence } = await loadSmartShortlistData();
+    expect(intelligence).toHaveLength(56);
+    expect(candidates).toHaveLength(56);
+    expect(intelligence.map((item) => item.key).sort()).toEqual(candidates.map((item) => item.key).sort());
     expect(intelligence.find((item) => item.key === "queenstown-nz")).toMatchObject({
       beachAccess: "DIRECT_ACCESS",
       mountainAccess: "SKI_RESORT_ACCESS",
@@ -60,7 +62,16 @@ describe("Smart Shortlist server facts", () => {
       && item.lgbtqLegalProtectionStatus && item.entryAndStay)).toBe(true);
   }, 15_000);
 
-  it("enforces the supported hard-requirement scenarios across all 36", async () => {
+  it("does not activate destinations from an unregistered workbook", async () => {
+    const registryWithoutNext20 = EXPANSION_WORKBOOK_REGISTRY.filter((entry) => entry.registryId !== "next-batch-20-private-import-authorized");
+    const { candidates, affordabilityRecords } = await loadSmartShortlistData(registryWithoutNext20);
+
+    expect(candidates).toHaveLength(36);
+    expect(candidates.some((candidate) => candidate.key === "tivat-montenegro")).toBe(false);
+    expect(affordabilityRecords.some((record) => record.destinationKey === "tivat-montenegro")).toBe(false);
+  }, 15_000);
+
+  it("enforces the supported hard-requirement scenarios across all 56", async () => {
     const intelligence = await loadSmartShortlistIntelligence();
     const byKey = new Map(intelligence.map((item) => [item.key, item]));
     const destinations = smartShortlistCandidates.map((candidate) => ({ ...candidate, ...byKey.get(candidate.key) }));

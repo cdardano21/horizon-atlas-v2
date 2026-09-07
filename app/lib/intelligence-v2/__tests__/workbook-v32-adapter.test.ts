@@ -199,6 +199,24 @@ describe("workbook v3.2 -> Intelligence v2 adapter — multi-row VISA_RESIDENCY 
 });
 
 describe("workbook v3.2 -> Intelligence v2 adapter — blank/UNKNOWN handling", () => {
+  it("projects mixed single/couple costs as single without mutating the canonical household rows", () => {
+    const costOfLiving = [
+      { destination_key: "synthetic-households", record_key: "single", household_type: "single", lifestyle_tier: "comfortable", category: "u3_r5_total_monthly_estimate", monthly_low: "2000", monthly_high: "2400", currency: "USD" },
+      { destination_key: "synthetic-households", record_key: "couple", household_type: "couple", lifestyle_tier: "comfortable", category: "u3_r5_total_monthly_estimate", monthly_low: "2900", monthly_high: "3500", currency: "USD" },
+    ] as never;
+    const canonical = makeCanonicalFixture({ destinationKey: "synthetic-households", costOfLiving });
+
+    const { facts, mappingErrors } = adaptWorkbookDestinationToIntelligenceV2Facts(canonical);
+
+    expect(facts.cost).toEqual({
+      estimatedMonthlyCostRange: { low: 2000, high: 2400, currencyCode: "USD" },
+      householdSizeAssumedForEstimate: 1,
+    });
+    expect(mappingErrors).not.toContainEqual(expect.objectContaining({ factPath: "cost.householdSizeAssumedForEstimate" }));
+    expect(canonical.costOfLiving).toBe(costOfLiving);
+    expect(canonical.costOfLiving.map((row) => row.household_type)).toEqual(["single", "couple"]);
+  });
+
   it("never coerces blank numeric fields to zero, blank TriState fields to NO, or blank scores to a fabricated value", () => {
     const canonical = makeCanonicalFixture({
       destinationKey: "synthetic-blank",

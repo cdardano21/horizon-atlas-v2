@@ -125,6 +125,10 @@ export function adaptWorkbookDestinationToIntelligenceV2Facts(canonical: Determi
   const lgbtqRow = scopeRowsToDestination(canonical.lgbtqInclusivity, destinationKey)[0] ?? null;
   const safetyRows = scopeRowsToDestination(canonical.safetyRisks, destinationKey);
   const costRows = scopeRowsToDestination(canonical.costOfLiving, destinationKey);
+  const intelligenceV2CostRows = costRows.some((row) => row.household_type?.trim().toLowerCase() === "single")
+    && costRows.some((row) => row.household_type?.trim().toLowerCase() === "couple")
+    ? costRows.filter((row) => row.household_type?.trim().toLowerCase() === "single")
+    : costRows;
   const scoreRows = scopeRowsToDestination(canonical.scores, destinationKey);
 
   const touristRow = selectTouristRow(visaRows);
@@ -164,7 +168,7 @@ export function adaptWorkbookDestinationToIntelligenceV2Facts(canonical: Determi
 
     cost: {
       estimatedMonthlyCostRange: normalizeMonthlyCostRange(
-        costRows.map((row) => ({
+        intelligenceV2CostRows.map((row) => ({
           householdType: row.household_type,
           lifestyleTier: row.lifestyle_tier,
           category: row.category,
@@ -176,7 +180,7 @@ export function adaptWorkbookDestinationToIntelligenceV2Facts(canonical: Determi
         errors,
       ),
       householdSizeAssumedForEstimate: normalizeHouseholdSize(
-        costRows.map((row) => row.household_type),
+        intelligenceV2CostRows.map((row) => row.household_type),
         "COST_OF_LIVING",
         errors,
       ),

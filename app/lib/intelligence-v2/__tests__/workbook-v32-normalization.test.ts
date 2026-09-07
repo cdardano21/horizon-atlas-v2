@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { DeterministicV31CanonicalDestination } from "../../workbook-v31-deterministic-core";
 import { adaptWorkbookDestinationToIntelligenceV2Facts } from "../workbook-v32-adapter";
-import { normalizeHealthcareStandard, normalizeMonthlyCostRange, selectBuyTopicHousingRow, toTriState, type WorkbookAdapterMappingError } from "../workbook-v32-normalization";
+import { normalizeHealthcareStandard, normalizeMonthlyCostRange, normalizeSafetyStandard, selectBuyTopicHousingRow, toTriState, type WorkbookAdapterMappingError } from "../workbook-v32-normalization";
 
 /**
  * Phase 12.2 — focused hardening tests for the three Batch #1 data-convention
@@ -276,5 +276,38 @@ describe("Issue C — HOUSING_PROPERTY buy-topic row selection", () => {
     // No TriState/boolean-related mapping errors - only the unrelated, expected
     // "no household_type" note from this fixture's deliberately-empty costOfLiving array.
     expect(mappingErrors.filter((e) => e.factPath !== "cost.householdSizeAssumedForEstimate")).toEqual([]);
+  });
+});
+
+describe("Issue B2 — safety normalization keeps advisory severity separate from explicit adverse evidence", () => {
+  it("preserves HIGH_SAFETY_ONLY as a positive safety value", () => {
+    expect(normalizeSafetyStandard(["low"])).toBe("HIGH_SAFETY_ONLY");
+  });
+
+  it("preserves MODERATE_OR_BETTER as a positive safety value", () => {
+    expect(normalizeSafetyStandard(["medium"])).toBe("MODERATE_OR_BETTER");
+  });
+
+  it("ignores unranked companion rows when a recognized safety baseline exists", () => {
+    expect(normalizeSafetyStandard([null, "", "medium"])).toBe("MODERATE_OR_BETTER");
+    expect(normalizeSafetyStandard(["medium", "medium-high", "medium"])).toBe("MODERATE_OR_BETTER");
+  });
+
+  it("maps the exact canonical adverse token to ELEVATED_RISK", () => {
+    expect(normalizeSafetyStandard(["elevated_risk"])).toBe("ELEVATED_RISK");
+  });
+
+  it("keeps bare high and hazard prose as UNKNOWN rather than adverse evidence", () => {
+    expect(normalizeSafetyStandard(["high"])).toBe("UNKNOWN");
+    expect(normalizeSafetyStandard(["high earthquake risk"])).toBe("UNKNOWN");
+    expect(normalizeSafetyStandard(["high flood risk"])).toBe("UNKNOWN");
+    expect(normalizeSafetyStandard(["wildfire danger high"])).toBe("UNKNOWN");
+    expect(normalizeSafetyStandard(["hurricane exposure high"])).toBe("UNKNOWN");
+  });
+
+  it("treats missing or unrecognized text as UNKNOWN", () => {
+    expect(normalizeSafetyStandard([])).toBe("UNKNOWN");
+    expect(normalizeSafetyStandard([null, undefined, ""])).toBe("UNKNOWN");
+    expect(normalizeSafetyStandard(["not a recognized token"])).toBe("UNKNOWN");
   });
 });

@@ -40,4 +40,13 @@ describe("owned affordability shortlist gate", () => {
     expect(flexible.group).toBe("MEETS_FILTERS");
     expect(hard.affordabilityDecision).toEqual(flexible.affordabilityDecision);
   });
+
+  it("keeps missing registered household evidence explicit instead of guessing", () => {
+    const [candidate] = smartShortlistCandidates;
+    const [result] = evaluateShortlistWithOwnedAffordability([candidate], {}, budget, new Map());
+
+    expect(result.affordabilityDecision).toBeUndefined();
+    expect(result.group).toBe("NEEDS_VERIFICATION");
+    expect(result.reasons).toContainEqual(expect.objectContaining({ capability: "affordability", state: "UNKNOWN" }));
+  });
 });

@@ -10,6 +10,7 @@ import type { HealthcareMinimumStandard, SafetyMinimumStandard } from "../../lib
 import { evaluateShortlistWithOwnedAffordability, type OwnedEvaluatedDestination } from "../../lib/smart-shortlist/owned-affordability-evaluator";
 import { ownedAffordabilityByDestination } from "../../lib/smart-shortlist/owned-affordability-records";
 import { AFFORDABILITY_ESTIMATE_DEFINITION } from "../../lib/smart-shortlist/owned-affordability";
+import type { OwnedAffordabilityRecord } from "../../lib/smart-shortlist/owned-affordability";
 import type { SmartShortlistIntelligence } from "../../lib/smart-shortlist/server-data";
 import DualCurrencyCostEvidence from "./DualCurrencyCostEvidence";
 import OwnedAffordabilityEvidence from "./OwnedAffordabilityEvidence";
@@ -126,7 +127,11 @@ function RequirementModeButtons({ value, onChange, allowPreference = true }: {
   );
 }
 
-export default function SmartShortlistPrototype({ intelligence }: { intelligence: readonly SmartShortlistIntelligence[] }) {
+export default function SmartShortlistPrototype({ candidates: suppliedCandidates = smartShortlistCandidates, intelligence, affordabilityRecords = [] }: {
+  candidates?: readonly PrototypeCandidate[];
+  intelligence: readonly SmartShortlistIntelligence[];
+  affordabilityRecords?: readonly OwnedAffordabilityRecord[];
+}) {
   const [step, setStep] = useState(0);
   const [countryPreset, setCountryPreset] = useState<CountryPreset>("anywhere");
   const [household, setHousehold] = useState<"single" | "couple">("single");
@@ -151,7 +156,11 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
   const [showAllVerification, setShowAllVerification] = useState(false);
 
   const intelligenceByKey = new Map(intelligence.map((item) => [item.key, item]));
-  const candidates = smartShortlistCandidates.map((candidate) => ({
+  const affordabilityByDestination = new Map([
+    ...ownedAffordabilityByDestination,
+    ...affordabilityRecords.map((record) => [record.destinationKey, record] as const),
+  ]);
+  const candidates = suppliedCandidates.map((candidate) => ({
     ...candidate,
     ...intelligenceByKey.get(candidate.key),
   }));
@@ -179,6 +188,7 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
         household,
         require: requireBudget,
       } : undefined,
+      affordabilityByDestination,
     );
     setResults(evaluated);
     setComparison(evaluated.filter((item) => item.group === "MEETS_FILTERS").slice(0, 3).map((item) => item.destination.key));
@@ -390,7 +400,7 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
                             <label className="text-xs font-bold"><input className="mr-2" type="checkbox" checked={comparison.includes(candidate.key)} disabled={!comparison.includes(candidate.key) && comparison.length >= 4} onChange={() => toggleComparison(candidate.key)} />Compare</label>
                           </div>
                           <p className="mt-4 line-clamp-3 text-sm leading-6 text-[var(--atlas-muted)]">{candidate.summary}</p>
-                          <OwnedAffordabilityEvidence record={ownedAffordabilityByDestination.get(candidate.key)} household={household} decision={item.affordabilityDecision} />
+                          <OwnedAffordabilityEvidence record={affordabilityByDestination.get(candidate.key)} household={household} decision={item.affordabilityDecision} />
                           <DualCurrencyCostEvidence candidate={candidate} localRange={localTotal(candidate, household)} displayCurrency={displayCurrency} snapshot={snapshot} asOfDate={snapshotAsOfDate} household={household} />
                           <p className="mt-3 text-xs font-semibold text-[var(--atlas-ink)]">{item.lifestyleFit.scoreStatus === "SCORED" ? `Lifestyle fit ${item.lifestyleFit.totalScore}/100 · ${item.lifestyleFit.scoredDimensionCount}/${item.lifestyleFit.relevantDimensionCount} selected dimensions supported` : "No supported preference score; shown without a fabricated ranking"}</p>
                           <RequirementReasons reasons={item.reasons} preferenceCapabilities={preferenceCapabilities} />
@@ -444,7 +454,7 @@ export default function SmartShortlistPrototype({ intelligence }: { intelligence
                     <tbody>{comparisonTopicOrder.map((topic) => topic === "Setting" ? (
                       <tr key={topic} data-comparison-section={topic}><th className="border-b border-[var(--atlas-border)] p-3">Setting</th>{comparisonRows.map((candidate) => <td key={candidate.key} className="border-b border-[var(--atlas-border)] p-3">{candidate.beachAccess.replaceAll("_", " ")}<br />{candidate.mountainAccess.replaceAll("_", " ")}</td>)}</tr>
                     ) : topic === "Affordability" ? (
-                      <tr key={topic} data-comparison-section={topic}><th className="border-b border-[var(--atlas-border)] p-3">Estimated total monthly cost</th>{comparisonRows.map((candidate) => { const owned = ownedAffordabilityByDestination.get(candidate.key); const estimate = owned && (household === "single" ? owned.singleMonthlyUsd : owned.coupleMonthlyUsd); return <td key={candidate.key} className="border-b border-[var(--atlas-border)] p-3">{estimate ? `${formatMoney(estimate, "USD")} USD` : "Estimate unavailable"}<br /><span className="text-xs text-[var(--atlas-muted)]">2026 estimate · {household === "single" ? "one adult" : "two adults"}</span></td>; })}</tr>
+                      <tr key={topic} data-comparison-section={topic}><th className="border-b border-[var(--atlas-border)] p-3">Estimated total monthly cost</th>{comparisonRows.map((candidate) => { const owned = affordabilityByDestination.get(candidate.key); const estimate = owned && (household === "single" ? owned.singleMonthlyUsd : owned.coupleMonthlyUsd); return <td key={candidate.key} className="border-b border-[var(--atlas-border)] p-3">{estimate ? `${formatMoney(estimate, "USD")} USD` : "Estimate unavailable"}<br /><span className="text-xs text-[var(--atlas-muted)]">2026 estimate · {household === "single" ? "one adult" : "two adults"}</span></td>; })}</tr>
                     ) : (
                       <tr key={topic} data-comparison-section={topic}><th className="p-3">Cost evidence</th>{comparisonRows.map((candidate) => { const total = localTotal(candidate, household); const converted = convertedTotal(candidate, household, displayCurrency); const available = Boolean(converted && converted.low.convertedAmount !== null && converted.high.convertedAmount !== null); return <td key={candidate.key} className="p-3">{total ? `${formatMoney(total.monthlyLow, total.currency)}-${formatMoney(total.monthlyHigh, total.currency)}` : "Original range unavailable"}<br />{available ? `${formatMoney(converted!.low.convertedAmount!, displayCurrency)}-${formatMoney(converted!.high.convertedAmount!, displayCurrency)}` : `${displayCurrency} conversion unavailable`}<br /><span className="text-xs text-[var(--atlas-muted)]">{candidate.costRows.length} detailed rows · {candidate.costSources.length} sources</span></td>; })}</tr>
                     ))}</tbody>
