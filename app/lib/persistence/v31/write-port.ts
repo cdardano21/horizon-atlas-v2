@@ -15,10 +15,12 @@ import type {
   DestinationPlan,
   KeyedChildModuleKey,
   ModuleExecutionOperation,
+  ModulePresenceOperation,
   ReplaceModuleExecutionModuleKey,
   ScalarModuleKey,
   ScalarOperation,
 } from "./types";
+import { deriveHealthcareCostQualifiers, healthcareNumericStorageValue } from "./healthcare-cost-storage";
 
 export interface SqlStatement {
   readonly text: string;
@@ -135,10 +137,10 @@ interface KeyedChildTableConfig {
 export const KEYED_CHILD_TABLE_CONFIG: Readonly<Record<KeyedChildModuleKey, KeyedChildTableConfig>> = {
   facts: { table: "premium_destination_facts", stableKeyColumn: "fact_key", columns: { factGroup: "fact_type", valueText: "body", displayLabel: "title", sourceName: "source_ref" }, conflictColumns: ["destination_id", "destination_key", "fact_key"] },
   scores: { table: "premium_destination_scores", stableKeyColumn: "score_key", columns: { scoreValue: "score_value", scoreLabel: "score_name", verified: "verified", verifiedAt: "verified_at" }, conflictColumns: ["destination_id", "destination_key", "score_key"] },
-  neighborhoods: { table: "premium_neighborhoods", stableKeyColumn: "neighborhood_key", columns: { name: "neighborhood_name", summary: "summary", areaType: "area_type" }, requiredTextColumn: "neighborhood_name", conflictColumns: ["destination_id", "destination_key", "neighborhood_key"] },
+  neighborhoods: { table: "premium_neighborhoods", stableKeyColumn: "neighborhood_key", columns: { name: "neighborhood_name", summary: "summary", areaType: "area_type", bestFor: "best_for", walkabilityRating: "walkability_rating", safetyRating: "safety_rating", transitRating: "transit_rating", housingCharacter: "housing_character", pros: "pros", cons: "cons", googleMapsUrl: "google_maps_url" }, requiredTextColumn: "neighborhood_name", conflictColumns: ["destination_id", "destination_key", "neighborhood_key"] },
   places: { table: "premium_places", stableKeyColumn: "place_key", columns: { category: "category_key", name: "place_name", description: "description", neighborhoodKey: "neighborhood_key", websiteUrl: "website_url", googleMapsUrl: "google_maps_url", sourceUrl: "source_url", address: "address", phone: "phone", displayOrder: "display_order" }, requiredTextColumn: "place_name", conflictColumns: ["destination_id", "destination_key", "place_key"] },
   resources: { table: "premium_resources", stableKeyColumn: "resource_key", columns: { category: "resource_category", name: "resource_name", url: "url" }, requiredTextColumn: "resource_name", conflictColumns: ["destination_id", "destination_key", "resource_key"] },
-  media: { table: "premium_media", stableKeyColumn: "media_key", columns: { kind: "media_type", url: "url", caption: "caption", altText: "alt_text" }, conflictColumns: ["destination_id", "destination_key", "media_key"] },
+  media: { table: "premium_media", stableKeyColumn: "media_key", columns: { kind: "media_type", url: "url", caption: "caption", altText: "alt_text", sourceName: "source_name", sourceUrl: "source_url" }, conflictColumns: ["destination_id", "destination_key", "media_key"] },
   propertyResources: { table: "premium_property_resources", stableKeyColumn: "record_key", columns: { category: "resource_type", name: "resource_name", url: "url" }, conflictColumns: ["destination_id", "destination_key", "record_key"] },
   moveChecklist: { table: "premium_move_checklist", stableKeyColumn: "checklist_key", columns: { summary: "summary", checklistNotes: "checklist_notes" }, conflictColumns: ["destination_id", "checklist_key"] },
   eventsSeasonality: { table: "premium_events_seasonality", stableKeyColumn: "event_seasonality_key", columns: { summary: "summary", seasonalityNotes: "seasonality_notes" }, conflictColumns: ["destination_id", "event_seasonality_key"] },
@@ -155,10 +157,10 @@ export const KEYED_CHILD_TABLE_CONFIG: Readonly<Record<KeyedChildModuleKey, Keye
 const KEYED_CHILD_CANONICAL_FALLBACK_FIELD: Readonly<Record<KeyedChildModuleKey, Readonly<Record<string, string>>>> = {
   facts: {},
   scores: { verifiedAt: "verified_at" },
-  neighborhoods: { name: "neighborhood_name", areaType: "area_type" },
+  neighborhoods: { name: "neighborhood_name", areaType: "area_type", bestFor: "best_for", walkabilityRating: "walkability_rating", safetyRating: "safety_rating", transitRating: "transit_rating", housingCharacter: "housing_character", pros: "pros", cons: "cons", googleMapsUrl: "google_maps_url" },
   places: { category: "category_key", name: "place_name", neighborhoodKey: "neighborhood_key", websiteUrl: "website_url", googleMapsUrl: "google_maps_url", sourceUrl: "source_url", displayOrder: "display_order" },
   resources: { category: "resource_category", name: "resource_name" },
-  media: { kind: "media_type", url: "image_url", altText: "subject" },
+  media: { kind: "media_type", url: "image_url", altText: "subject", sourceName: "source_name", sourceUrl: "source_url", licenseNotes: "license_notes" },
   propertyResources: { category: "resource_type", name: "resource_name" },
   moveChecklist: { summary: "task", checklistNotes: "description" },
   eventsSeasonality: { summary: "description", seasonalityNotes: "weather_context" },
@@ -204,10 +206,10 @@ interface ReplaceModuleTableConfig {
 // - "record_key" tables: unique(destination_id, destination_key, record_key)
 // - "position" tables: unique(destination_id, position), position >= 1
 export const REPLACE_MODULE_TABLE_CONFIG: Readonly<Record<ReplaceModuleExecutionModuleKey, ReplaceModuleTableConfig>> = {
-  costOfLiving: { table: "premium_cost_of_living", keyStrategy: "record_key", columns: { category: "category", monthlyLow: "monthly_low", monthlyHigh: "monthly_high", currency: "currency", stayModeKey: "stay_mode_key", verified: "verified", verifiedAt: "verified_at" } },
+  costOfLiving: { table: "premium_cost_of_living", keyStrategy: "record_key", columns: { category: "category", monthlyLow: "monthly_low", monthlyHigh: "monthly_high", currency: "currency", householdType: "household_type", lifestyleTier: "lifestyle_tier", stayModeKey: "stay_mode_key", verified: "verified", verifiedAt: "verified_at" } },
   climateMonthly: { table: "premium_climate_monthly", keyStrategy: "record_key", columns: { monthKey: "month_key", avgHighTemp: "avg_high_temp", avgLowTemp: "avg_low_temp", precipitationMm: "precipitation_mm", humidityPct: "humidity_pct" } },
   housing: { table: "premium_housing_property", keyStrategy: "record_key", columns: { summary: "restrictions_summary", buyingSummary: "buying_process_summary", rentalSummary: "rental_rules_notes", stayModeKey: "stay_mode_key", canForeignersBuy: "can_foreigners_buy", residencyRequiredToBuy: "residency_required_to_buy", verified: "verified", verifiedAt: "verified_at" } },
-  healthcare: { table: "premium_healthcare_insurance", keyStrategy: "record_key", columns: { summary: "system_summary", publicAccessSummary: "public_access_foreigners", insuranceSummary: "international_insurance_notes", topic: "topic", englishSpeakingCare: "english_speaking_care", typicalGpVisitCost: "typical_gp_visit_cost", typicalSpecialistCost: "typical_specialist_cost", verified: "verified", verifiedAt: "verified_at" } },
+  healthcare: { table: "premium_healthcare_insurance", keyStrategy: "record_key", columns: { summary: "system_summary", publicAccessSummary: "public_access_foreigners", insuranceSummary: "international_insurance_notes", privateCareAvailable: "private_care_available", topic: "topic", englishSpeakingCare: "english_speaking_care", typicalGpVisitCost: "typical_gp_visit_cost", typicalSpecialistCost: "typical_specialist_cost", verified: "verified", verifiedAt: "verified_at" } },
   visaResidency: { table: "premium_visa_residency", keyStrategy: "record_key", columns: { summary: "visa_type", residencyPath: "permanent_residency_path", citizenshipPath: "citizenship_path", stayModeKey: "stay_mode_key", travelerNationality: "traveler_nationality", verified: "verified", verifiedAt: "verified_at" } },
   taxesFinance: { table: "premium_taxes_finance", keyStrategy: "record_key", columns: { summary: "summary", notes: "notes", verified: "verified", verifiedAt: "verified_at" } },
   safetyRisks: { table: "premium_safety_risks", keyStrategy: "record_key", columns: { topic: "topic", severity: "severity", summary: "summary", verified: "verified", verifiedAt: "verified_at" } },
@@ -224,6 +226,7 @@ export const REPLACE_MODULE_TABLE_CONFIG: Readonly<Record<ReplaceModuleExecution
   workBusiness: { table: "premium_work_business", keyStrategy: "position", columns: { summary: "summary", remoteWorkNotes: "remote_work_notes" } },
   retirementAging: { table: "premium_retirement_aging", keyStrategy: "position", columns: { summary: "summary", agingNotes: "aging_notes" } },
   lifestyleLaws: { table: "premium_lifestyle_laws", keyStrategy: "position", columns: { summary: "summary", legalNotes: "legal_notes" } },
+  lifestyleFeatures: { table: "premium_lifestyle_features", keyStrategy: "record_key", columns: { featureGroup: "feature_group", featureKey: "feature_key", featureValue: "feature_value", availabilityLevel: "availability_level", proximityBand: "proximity_band", displayLabel: "display_label", evidenceSummary: "evidence_summary", sourceName: "source_name", sourceUrl: "source_url", sourceAsOfDate: "source_as_of_date", confidence: "confidence", matchingEnabled: "matching_enabled", displayEnabled: "display_enabled", notes: "notes" } },
 };
 
 // Columns in REPLACE_MODULE_TABLE_CONFIG that are genuinely `boolean` in the database (per the
@@ -234,7 +237,7 @@ export const REPLACE_MODULE_TABLE_CONFIG: Readonly<Record<ReplaceModuleExecution
 // transportation's public_transit_available) is preserved as null rather than guessing a
 // true/false meaning that was never part of the established contract - never invented, never
 // silently coerced to false.
-const REPLACE_MODULE_BOOLEAN_COLUMNS = new Set<string>(["public_transit_available", "nonstop_us_service", "verified"]);
+const REPLACE_MODULE_BOOLEAN_COLUMNS = new Set<string>(["private_care_available", "public_transit_available", "nonstop_us_service", "verified"]);
 
 // The workbook's actual XLSX boolean cells serialize as literal "1"/"0" text for several columns,
 // not just `verified` (confirmed directly against the frozen golden workbook - Lisbon's own
@@ -242,10 +245,9 @@ const REPLACE_MODULE_BOOLEAN_COLUMNS = new Set<string>(["public_transit_availabl
 // row, and free narrative text like "Yes"/"Limited" on other rows for the same conceptual field).
 // Recognizing only "true"/"false" here would silently coerce those real "1"/"0" cells to null -
 // exactly the kind of silent-drop this hardening pass exists to close. "1"/"0" recognition is
-// therefore extended to every REPLACE_MODULE boolean column, while narrative text ("Yes", "Limited")
-// deliberately remains unrecognized and null - "do not invent values" still applies to anything
-// that isn't an unambiguous boolean literal.
-const NUMERIC_BOOLEAN_COLUMNS = new Set<string>(["public_transit_available", "nonstop_us_service", "verified"]);
+// therefore extended to every REPLACE_MODULE boolean column. Yes/no are also unambiguous boolean
+// literals; narrative text such as "Limited" remains unrecognized rather than inventing a value.
+const NUMERIC_BOOLEAN_COLUMNS = new Set<string>(["private_care_available", "public_transit_available", "nonstop_us_service", "verified"]);
 
 function coerceReplaceModuleColumnValue(dbColumn: string, value: unknown): unknown {
   if (!REPLACE_MODULE_BOOLEAN_COLUMNS.has(dbColumn)) {
@@ -258,8 +260,8 @@ function coerceReplaceModuleColumnValue(dbColumn: string, value: unknown): unkno
     return null;
   }
   const normalized = value.trim().toLowerCase();
-  if (normalized === "true") return true;
-  if (normalized === "false") return false;
+  if (normalized === "true" || (dbColumn !== "verified" && normalized === "yes")) return true;
+  if (normalized === "false" || (dbColumn !== "verified" && normalized === "no")) return false;
   if (NUMERIC_BOOLEAN_COLUMNS.has(dbColumn)) {
     if (normalized === "1") return true;
     if (normalized === "0") return false;
@@ -291,11 +293,40 @@ function buildReplaceModuleStatements(
     const rows = operation.expectedAfter as readonly unknown[];
     rows.forEach((row, index) => {
       const record = row as Record<string, unknown>;
-      const columnEntries = Object.entries(config.columns);
+      const transportationQualifiers = operation.module === "transportation"
+        ? Object.fromEntries([
+          ["transit_summary_qualifier", record.transitSummary],
+          ["nonstop_us_service_qualifier", record.nonstopUsService],
+        ].filter(([, value]) => typeof value === "string" && value.trim() !== "" && coerceReplaceModuleColumnValue("public_transit_available", value) === null))
+        : {};
+      const columnEntries = [
+        ...Object.entries(config.columns),
+        ...(operation.module === "healthcare" ? [["__costQualifiers", "metadata"]] : []),
+        ...(Object.keys(transportationQualifiers).length > 0 ? [["__booleanQualifiers", "metadata"]] : []),
+      ];
       const columnNames = columnEntries.map(([, dbColumn]) => dbColumn);
-      const columnValues = columnEntries.map(([storedField, dbColumn]) => coerceReplaceModuleColumnValue(dbColumn, record[storedField] ?? null));
+      const costQualifiers = operation.module === "healthcare"
+        ? deriveHealthcareCostQualifiers(
+          typeof record.typicalGpVisitCost === "string" ? record.typicalGpVisitCost : null,
+          typeof record.typicalSpecialistCost === "string" ? record.typicalSpecialistCost : null,
+        )
+        : {};
+      const columnValues = columnEntries.map(([storedField, dbColumn]) => {
+        if (dbColumn === "metadata") return operation.module === "healthcare" ? costQualifiers : transportationQualifiers;
+        if (dbColumn === "typical_gp_visit_cost") {
+          return healthcareNumericStorageValue(record[storedField], costQualifiers.typical_gp_visit_cost_qualifier);
+        }
+        if (dbColumn === "typical_specialist_cost") {
+          return healthcareNumericStorageValue(record[storedField], costQualifiers.typical_specialist_cost_qualifier);
+        }
+        return coerceReplaceModuleColumnValue(dbColumn, record[storedField] ?? null);
+      });
       const keyColumnName = config.keyStrategy === "record_key" ? "record_key" : "position";
-      const keyColumnValue: unknown = config.keyStrategy === "record_key" ? `record-${index + 1}` : index + 1;
+      const keyColumnValue: unknown = config.keyStrategy === "record_key"
+        ? typeof record.recordKey === "string" && record.recordKey.trim() !== ""
+          ? record.recordKey
+          : typeof record.itemKey === "string" && record.itemKey.trim() !== "" ? record.itemKey : `record-${index + 1}`
+        : index + 1;
 
       const allColumns = ["destination_id", "destination_key", keyColumnName, ...columnNames];
       const allValues: unknown[] = [destinationId, destinationKey, keyColumnValue, ...columnValues];
@@ -307,15 +338,24 @@ function buildReplaceModuleStatements(
       });
     });
 
-    if (rows.length > 0) {
-      statements.push({
-        text: "insert into public.premium_destination_module_presence (destination_id, destination_key, module_key) values ($1, $2, $3) on conflict (destination_id, module_key) do nothing",
-        values: [destinationId, destinationKey, operation.module],
-      });
-    }
+    statements.push({
+      text: "insert into public.premium_destination_module_presence (destination_id, destination_key, module_key) values ($1, $2, $3) on conflict (destination_id, module_key) do nothing",
+      values: [destinationId, destinationKey, operation.module],
+    });
   }
 
   return statements;
+}
+
+function buildModulePresenceStatements(
+  destinationId: DestinationId,
+  destinationKey: string,
+  operations: readonly ModulePresenceOperation[],
+): readonly SqlStatement[] {
+  return [...new Set(operations.map((operation) => operation.module))].map((moduleKey) => ({
+    text: "insert into public.premium_destination_module_presence (destination_id, destination_key, module_key) values ($1, $2, $3) on conflict (destination_id, module_key) do nothing",
+    values: [destinationId, destinationKey, moduleKey],
+  }));
 }
 
 /**
@@ -360,6 +400,10 @@ function buildKeyedChildStatements(
       const columnEntries = Object.entries(config.columns);
       const columnNames = columnEntries.map(([, dbColumn]) => dbColumn);
       const columnValues = columnEntries.map(([storedField, dbColumn]) => coerceReplaceModuleColumnValue(dbColumn, readChildField(child, storedField, operation.module)));
+      if (operation.module === "media") {
+        columnNames.push("metadata");
+        columnValues.push({ licenseNotes: readChildField(child, "licenseNotes", operation.module) });
+      }
 
       const conflictTarget = buildKeyedChildConflictTarget(operation.module, config.conflictColumns);
       const allColumns = ["destination_id", "destination_key", config.stableKeyColumn, ...columnNames];
@@ -386,10 +430,10 @@ function buildKeyedChildStatements(
     // PRESERVE_CHILD / UNCHANGED_CHILD: no SQL - omission never causes a destructive write.
   }
 
-  for (const module of modulesTouchedByCreate) {
+  for (const moduleKey of modulesTouchedByCreate) {
     statements.push({
       text: "insert into public.premium_destination_module_presence (destination_id, destination_key, module_key) values ($1, $2, $3) on conflict (destination_id, module_key) do nothing",
-      values: [destinationId, destinationKey, module],
+      values: [destinationId, destinationKey, moduleKey],
     });
   }
 
@@ -409,6 +453,23 @@ function buildScalarStatementsForModule(
   module: ScalarModuleKey,
   operations: readonly ScalarOperation[],
 ): readonly SqlStatement[] {
+  if (module === "identity") {
+    const columns: Readonly<Record<string, string>> = { population: "population", metroPopulation: "metro_population", elevation: "elevation" };
+    const writableOps = operations.filter((op) => op.kind === "CREATE" || op.kind === "UPDATE" || op.kind === "CLEAR");
+    const assignments: string[] = [];
+    const values: unknown[] = [destinationId, destinationKey];
+    for (const operation of writableOps) {
+      const column = columns[operation.fieldPath];
+      if (!column) continue;
+      values.push(operation.kind === "CLEAR" ? null : operation.incomingValue);
+      assignments.push(`${column} = $${values.length}`);
+    }
+    if (assignments.length === 0) return [];
+    return [{
+      text: `update public.destinations_catalog set ${assignments.join(", ")}, updated_at = now() where id = $1 and destination_key = $2`,
+      values,
+    }];
+  }
   const config: SingletonTableConfig = module === "editorial" ? EDITORIAL_TABLE_CONFIG : SINGLETON_TABLE_CONFIG[module];
   const writableOps = operations.filter((op) => op.kind === "CREATE" || op.kind === "UPDATE" || op.kind === "CLEAR");
   if (writableOps.length === 0) {
@@ -510,6 +571,7 @@ export function buildDestinationPlanWriteStatements(plan: DestinationPlan): read
 
   statements.push(...buildKeyedChildStatements(destinationId, destinationKey, plan.childOperations));
   statements.push(...buildReplaceModuleStatements(destinationId, destinationKey, plan.moduleExecutionOperations));
+  statements.push(...buildModulePresenceStatements(destinationId, destinationKey, plan.modulePresenceOperations ?? []));
 
   return statements;
 }

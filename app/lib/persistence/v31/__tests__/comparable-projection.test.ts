@@ -567,15 +567,15 @@ describe("Phase 3A.1 comparable projection", () => {
 
   it("preserves ordering for non-keyed arrays", () => {
     const first = createState({
-      costOfLiving: [
-        { itemKey: "food", category: "Food", monthlyLow: "1000", monthlyHigh: "1500", currency: "USD" },
-        { itemKey: "rent", category: "Rent", monthlyLow: "2000", monthlyHigh: "3000", currency: "USD" },
+      housing: [
+        { summary: "First", buyingSummary: null, rentalSummary: null, stayModeKey: null, canForeignersBuy: null, residencyRequiredToBuy: null, verified: null, verifiedAt: null },
+        { summary: "Second", buyingSummary: null, rentalSummary: null, stayModeKey: null, canForeignersBuy: null, residencyRequiredToBuy: null, verified: null, verifiedAt: null },
       ],
     });
     const second = createState({
-      costOfLiving: [
-        { itemKey: "rent", category: "Rent", monthlyLow: "2000", monthlyHigh: "3000", currency: "USD" },
-        { itemKey: "food", category: "Food", monthlyLow: "1000", monthlyHigh: "1500", currency: "USD" },
+      housing: [
+        { summary: "Second", buyingSummary: null, rentalSummary: null, stayModeKey: null, canForeignersBuy: null, residencyRequiredToBuy: null, verified: null, verifiedAt: null },
+        { summary: "First", buyingSummary: null, rentalSummary: null, stayModeKey: null, canForeignersBuy: null, residencyRequiredToBuy: null, verified: null, verifiedAt: null },
       ],
     });
 
@@ -638,6 +638,9 @@ describe("Phase 3A.1 comparable projection", () => {
         name: "New Braunfels",
         city: "New Braunfels",
         country: "United States",
+        beachAccess: null,
+        mountainOrSkiAccess: null,
+        countryCode: null,
       },
       editorial: {
         shortDescription: "  Cafe\u0301\r\nCity  ",
@@ -711,7 +714,7 @@ describe("Phase 3A.1 comparable projection", () => {
       climateMonthly: [],
       housing: [{ summary: "Strong market", buyingSummary: null, rentalSummary: null, stayModeKey: null, canForeignersBuy: null, residencyRequiredToBuy: null, verified: null, verifiedAt: null }],
       propertyResources: [{ itemKey: "property-1" as StoredDestinationState["propertyResources"][number]["itemKey"], category: "real-estate", name: "Property", url: "https://example.com/Property" }],
-      healthcare: [{ summary: "Accessible", publicAccessSummary: null, insuranceSummary: null, topic: null, englishSpeakingCare: null, typicalGpVisitCost: null, typicalSpecialistCost: null, verified: null, verifiedAt: null }],
+      healthcare: [{ summary: "Accessible", publicAccessSummary: null, insuranceSummary: null, privateCareAvailable: null, topic: null, englishSpeakingCare: null, typicalGpVisitCost: null, typicalSpecialistCost: null, verified: null, verifiedAt: null }],
       visaResidency: [],
       taxesFinance: [{ summary: "Simple", notes: null, verified: null, verifiedAt: null }],
       lgbtqInclusivity: [],

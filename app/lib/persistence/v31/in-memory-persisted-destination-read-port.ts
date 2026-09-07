@@ -63,6 +63,9 @@ export function createInMemoryPersistedDestinationReadPort(identity: ResolvedDes
     name: storedState.identity.name,
     city: storedState.identity.city,
     country: storedState.identity.country,
+    beachAccess: storedState.identity.beachAccess ?? null,
+    mountainOrSkiAccess: storedState.identity.mountainOrSkiAccess ?? null,
+    countryCode: storedState.identity.countryCode ?? null,
   };
   const profile = {
     destinationId,

@@ -7,11 +7,19 @@ export interface NormalizedPersistedDestinationBundle {
     readonly name: string | null;
     readonly city: string | null;
     readonly country: string | null;
+    readonly beachAccess?: string | null;
+    readonly mountainOrSkiAccess?: string | null;
+    readonly countryCode?: string | null;
+    readonly population?: string | null;
+    readonly metroPopulation?: string | null;
+    readonly elevation?: string | null;
   };
   readonly editorial: {
     readonly shortDescription: string | null;
     readonly longDescription: string | null;
     readonly currency: string | null;
+    readonly householdType?: string | null;
+    readonly lifestyleTier?: string | null;
     readonly primaryLanguage: string | null;
     readonly timeZone: string | null;
   };
@@ -35,6 +43,14 @@ export interface NormalizedPersistedDestinationBundle {
     readonly name: string | null;
     readonly summary: string | null;
     readonly areaType: string | null;
+    readonly bestFor: string | null;
+    readonly walkabilityRating: string | null;
+    readonly safetyRating: string | null;
+    readonly transitRating: string | null;
+    readonly housingCharacter: string | null;
+    readonly pros: string | null;
+    readonly cons: string | null;
+    readonly googleMapsUrl: string | null;
   }>;
   readonly places: ReadonlyArray<{
     readonly placeKey: string;
@@ -68,6 +84,9 @@ export interface NormalizedPersistedDestinationBundle {
     readonly url: string | null;
     readonly caption: string | null;
     readonly altText: string | null;
+    readonly sourceName: string | null;
+    readonly sourceUrl: string | null;
+    readonly licenseNotes: string | null;
   }>;
   readonly costOfLiving: ReadonlyArray<{
     readonly itemKey: string;
@@ -111,6 +130,7 @@ export interface NormalizedPersistedDestinationBundle {
     readonly summary: string | null;
     readonly publicAccessSummary: string | null;
     readonly insuranceSummary: string | null;
+    readonly privateCareAvailable?: boolean | null;
     readonly topic: string | null;
     readonly englishSpeakingCare: string | null;
     readonly typicalGpVisitCost: string | null;
@@ -280,8 +300,8 @@ export interface NormalizedPersistedDestinationBundle {
   }>;
 }
 
-function asNullableString(value: string | null): string | null {
-  return value;
+function asNullableString(value: string | null | undefined): string | null {
+  return value ?? null;
 }
 
 export function materializeStoredDestinationStateFromNormalizedPersistedBundle(bundle: NormalizedPersistedDestinationBundle): StoredDestinationState {
@@ -292,6 +312,12 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
       name: asNullableString(bundle.identity.name),
       city: asNullableString(bundle.identity.city),
       country: asNullableString(bundle.identity.country),
+      beachAccess: asNullableString(bundle.identity.beachAccess),
+      mountainOrSkiAccess: asNullableString(bundle.identity.mountainOrSkiAccess),
+      countryCode: asNullableString(bundle.identity.countryCode),
+      population: asNullableString(bundle.identity.population),
+      metroPopulation: asNullableString(bundle.identity.metroPopulation),
+      elevation: asNullableString(bundle.identity.elevation),
     },
     editorial: {
       shortDescription: asNullableString(bundle.editorial.shortDescription),
@@ -320,6 +346,14 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
       name: asNullableString(neighborhood.name),
       summary: asNullableString(neighborhood.summary),
       areaType: asNullableString(neighborhood.areaType),
+      bestFor: asNullableString(neighborhood.bestFor),
+      walkabilityRating: asNullableString(neighborhood.walkabilityRating),
+      safetyRating: asNullableString(neighborhood.safetyRating),
+      transitRating: asNullableString(neighborhood.transitRating),
+      housingCharacter: asNullableString(neighborhood.housingCharacter),
+      pros: asNullableString(neighborhood.pros),
+      cons: asNullableString(neighborhood.cons),
+      googleMapsUrl: asNullableString(neighborhood.googleMapsUrl),
     })),
     places: bundle.places.map((place) => ({
       placeKey: place.placeKey as StoredDestinationState["places"][number]["placeKey"],
@@ -353,6 +387,9 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
       url: asNullableString(media.url),
       caption: asNullableString(media.caption),
       altText: asNullableString(media.altText),
+      sourceName: asNullableString(media.sourceName),
+      sourceUrl: asNullableString(media.sourceUrl),
+      licenseNotes: asNullableString(media.licenseNotes),
     })),
     costOfLiving: bundle.costOfLiving.map((item) => ({
       itemKey: item.itemKey as StoredDestinationState["costOfLiving"][number]["itemKey"],
@@ -360,6 +397,8 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
       monthlyLow: asNullableString(item.monthlyLow),
       monthlyHigh: asNullableString(item.monthlyHigh),
       currency: asNullableString(item.currency),
+      householdType: asNullableString(item.householdType),
+      lifestyleTier: asNullableString(item.lifestyleTier),
       stayModeKey: asNullableString(item.stayModeKey),
       verified: asNullableString(item.verified),
       verifiedAt: asNullableString(item.verifiedAt),
@@ -396,6 +435,7 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
       summary: asNullableString(state.summary),
       publicAccessSummary: asNullableString(state.publicAccessSummary),
       insuranceSummary: asNullableString(state.insuranceSummary),
+      privateCareAvailable: state.privateCareAvailable ?? null,
       topic: asNullableString(state.topic),
       englishSpeakingCare: asNullableString(state.englishSpeakingCare),
       typicalGpVisitCost: asNullableString(state.typicalGpVisitCost),

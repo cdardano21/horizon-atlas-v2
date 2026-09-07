@@ -347,7 +347,7 @@ describe("CanonicalDestinationPage", () => {
     expect(screen.getAllByText(/Editorial destination placeholder/i).length).toBeGreaterThan(0);
   });
 
-  it("shows a view-more gallery control when a destination has more than five verified images", () => {
+  it("retains more than five verified images while previewing the first five", () => {
     const destination = buildDestination();
     destination.slug = "chicago-illinois-united-states";
     destination.city = "Chicago";
@@ -360,7 +360,40 @@ describe("CanonicalDestinationPage", () => {
 
     render(<CanonicalDestinationPage destination={destination} />);
 
-    expect(screen.getByRole("button", { name: /view more images/i })).toBeInTheDocument();
+    const gallery = screen.getByRole("heading", { name: "Photos, streets, and daily life" }).closest("section") as HTMLElement;
+    const previews = within(gallery).getAllByRole("button");
+    expect(within(gallery).getByText("6 curated assets")).toBeInTheDocument();
+    expect(previews).toHaveLength(5);
+  });
+
+  it("deduplicates Wikimedia original and thumbnail URLs while preserving distinct gallery images", () => {
+    const destination = buildDestination();
+    destination.slug = "gallery-dedupe-test";
+    destination.city = "Gallery Test";
+    destination.country = "Test Country";
+    destination.title = "Gallery Test";
+    destination.heroImages = [
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/a/ab/Shared_Image.jpg",
+        altText: "Original shared image",
+      },
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Shared_Image.jpg/1280px-Shared_Image.jpg",
+        altText: "Duplicate thumbnail image",
+      },
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Distinct_Image.jpg",
+        altText: "Distinct gallery image",
+      },
+    ];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    const gallery = screen.getByRole("heading", { name: "Media gallery" }).closest("section") as HTMLElement;
+    expect(within(gallery).getAllByRole("button")).toHaveLength(2);
+    expect(within(gallery).getByRole("img", { name: "Original shared image" })).toBeInTheDocument();
+    expect(within(gallery).getByRole("img", { name: "Distinct gallery image" })).toBeInTheDocument();
+    expect(within(gallery).queryByRole("img", { name: "Duplicate thumbnail image" })).not.toBeInTheDocument();
   });
 
   it("shows neighborhood resource groups and intelligence for any destination", () => {

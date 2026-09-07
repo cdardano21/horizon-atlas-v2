@@ -47,7 +47,7 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     // location-specific link found; Made in Home confirmed renamed to Dark Sister by Made in Home).
     // Updated again 2026-09-01 after correcting links for all 14 entries across Puerto Vallarta (7)
     // and Queenstown (7) - all 14 resolved, no closures/replacements/renames needed.
-    expectedSha256: "41a2bd189f3470b7cdafacb0b6a3f86fb047a442058587a16f6d3d393dfcf51c",
+    expectedSha256: "3153462443d85b82e621711856242cdd3cdeb86ee6776acad309a58dcc200671",
   },
   {
     registryId: "batch-02",
@@ -63,11 +63,11 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     // Hayahay Treehouse Bar and Viewdeck Restobar, and Taverna Garden (exact official Facebook or
     // Instagram profiles only; all remaining Sarandë/Dumaguete targets stay Maps-only unless identity
     // is independently confirmed).
-    expectedSha256: "3e3898283c38efb0f9fd2242c4bbf683f02426596e3c61210b18f41600b04c9a",
+    expectedSha256: "a2fc1e0cd99f4662b31e6846d2cc39715e0195c1098874ac9f2b637b31a7084d",
   },
   {
     registryId: "next-batch-20-private-import-authorized",
-    workbookPath: "data/next-batch-20/DestinationFinderAI-Next-Batch-20-Private-Import-Authorized-v3.3.xlsx",
+    workbookPath: "data/next-batch-20/DestinationFinderAI-Next-Batch-20-Visual-Parity-Enriched-v3.3.xlsx",
     environment: "preview",
     expectedDestinationKeys: [
       "tivat-montenegro", "matera-italy", "trieste-italy", "braga-portugal", "valencia-spain",
@@ -75,14 +75,14 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
       "polignano-a-mare-italy", "cefalu-italy", "kalamata-greece", "taormina-italy", "podgorica-montenegro",
       "kotor-montenegro", "bergamo-italy", "pietrasanta-italy", "alicante-spain", "verona-italy",
     ],
-    expectedSha256: "9a76e2b4427dd78c17cb9e844b1f8eaae37f778e0a278589320b3d5c86991cac",
+    expectedSha256: "88f365b1dabfef7a3bbeb2958f53e9c3537d1f8f8b74e6cf6083482ddb802683",
   },
   {
     registryId: "legacy-pilot06-populated",
     // Superseded 2026-08-30 by the authoritative curated workbook - the prior POPULATED.xlsx file is
     // intentionally left on disk, unregistered, as a recoverable historical artifact (never deleted).
     workbookPath: "data/legacy-migration-pilot-06/DestinationFinderAI_Legacy_Pilot_06_Authoritative_v3.3.xlsx",
-    environment: "preview",
+    environment: "production",
     expectedDestinationKeys: [
       "the-hague-netherlands", "kyoto-japan", "santa-fe-new-mexico-united-states",
       "st-cloud-minnesota-united-states", "san-ramon-costa-rica", "st-john-s-canada",
@@ -95,12 +95,12 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     // Updated again 2026-09-01 after accepting the exact official Instagram profile for Aromas Café
     // in San Ramón (all other San Ramón targets remain Maps-only unless exact identity evidence is
     // independently confirmed).
-    expectedSha256: "91bcc28a9df767d20831c698c841fa8ab42e499914f0fc524e87479a07db6373",
+    expectedSha256: "9bc59b700e7eebff35578fbdea1f628b27c8a53cf8a5c9da5d648946039e77ff",
   },
   {
     registryId: "legacy-batch-20",
     workbookPath: "data/legacy-migration-batch-20/DestinationFinderAI_Legacy_Production_Batch_20_Reader_Ready_Authoritative_v3.3.xlsx",
-    environment: "preview",
+    environment: "production",
     expectedDestinationKeys: [
       "ajijic-mexico", "boquete-panama", "chiang-mai-thailand", "cuenca-ecuador", "da-nang-vietnam",
       "florianopolis-brazil", "funchal-portugal", "george-town-malaysia", "hua-hin-thailand", "lucca-italy",
@@ -121,7 +121,14 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     // aggregator (hey-restaurants.com) - replaced with its confirmed official Facebook page.
     // Updated again 2026-09-01 for the bounded Batch 20 food-link enrichment pass covering the 15
     // named recommendations in Mérida, Montevideo, and Palm Springs.
-    expectedSha256: "43f4d65a68303f579aa03b685f3123963ac63ebc71c1ee2310ca912892aeefc4",
+    // Updated 2026-09-05 to merge the duplicate Mercado Público de Florianópolis place record;
+    // the richer official-source row remains and preserves the correct Portuguese diacritics.
+    // Updated again 2026-09-05 to remove duplicate Teatro Solís and Mercado Agrícola de
+    // Montevideo records, preserving each direct official-source row and correct diacritics.
+    // Updated again 2026-09-05 to reconcile five production-planner semantic fact collisions:
+    // six distinct facts received precise fact keys and two redundant fact rows were removed
+    // only where their evidence and official sources remain in supported canonical modules.
+    expectedSha256: "2d02e7932574caee95f955d9d900d3de65bf8a96ac258ddaf717f64f005dff10",
   },
 ];
 

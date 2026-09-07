@@ -266,7 +266,15 @@ describe("loadNormalizedPersistedDestinationBundle", () => {
       throw new Error("Expected success");
     }
     expect(result.bundle.destinationKey).toBe(identity.destinationKey);
-    expect(result.bundle.identity).toEqual({ slug: "braunfels", name: "Braunfels", city: "Braunfels", country: "United States" });
+    expect(result.bundle.identity).toEqual({
+      slug: "braunfels",
+      name: "Braunfels",
+      city: "Braunfels",
+      country: "United States",
+      beachAccess: null,
+      mountainOrSkiAccess: null,
+      countryCode: null,
+    });
     expect(result.bundle.facts).toEqual([]);
     expect(result.bundle.environmentQuality).toEqual({ summary: "air quality", qualityNotes: "water quality" });
     expect(result.bundle.dailyLifePracticality).toEqual({ summary: "life is fine", practicalityNotes: "go for it" });

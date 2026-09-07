@@ -11,7 +11,7 @@ export type ComparableValue = ComparablePrimitive | ComparableObject | Comparabl
 
 export type ComparableProjection = ComparableObject;
 
-export type ComparableScalarPolicy = "ordinary" | "url" | "boolean" | "date";
+export type ComparableScalarPolicy = "ordinary" | "url" | "boolean" | "yesNoBoolean" | "date" | "decimal" | "healthcareNumericUnknown";
 
 type ComparableScalarValue = ComparablePrimitive;
 type ComparableObjectInput = object;
@@ -78,6 +78,8 @@ const URL_FIELDS = new Set(["url", "source_url", "image_url", "websiteUrl", "goo
 // representations (workbook "0"/"1" vs DB-stringified "false"/"true"; bare date vs full
 // timestamptz) compare equal without changing what is actually stored.
 const BOOLEAN_FIELDS = new Set(["verified"]);
+const YES_NO_BOOLEAN_FIELDS = new Set(["privateCareAvailable", "transitSummary", "nonstopUsService"]);
+const DECIMAL_FIELDS = new Set(["monthlyLow", "monthlyHigh", "avgHighTemp", "avgLowTemp", "precipitationMm", "humidityPct"]);
 const DATE_FIELDS = new Set(["verifiedAt", "verified_at"]);
 
 function normalizeStringValue(value: string): string | null {
@@ -126,15 +128,23 @@ function normalizeUrlValue(value: string): string | null {
 // Mirrors write-port.ts's coerceReplaceModuleColumnValue exactly, so the comparison layer's idea
 // of "equal" never diverges from what the write layer would actually persist. Narrative text
 // (e.g. "Yes") is never invented into a boolean - it falls through to ordinary string comparison.
-function normalizeBooleanValue(value: string): ComparablePrimitive | null {
+function normalizeBooleanValue(value: string, allowYesNo = false): ComparablePrimitive | null {
   const normalized = value.trim().toLowerCase();
-  if (normalized === "true" || normalized === "1") {
+  if (normalized === "true" || normalized === "1" || (allowYesNo && normalized === "yes")) {
     return true;
   }
-  if (normalized === "false" || normalized === "0") {
+  if (normalized === "false" || normalized === "0" || (allowYesNo && normalized === "no")) {
     return false;
   }
   return normalizeStringValue(value);
+}
+
+function normalizeDecimalValue(value: string): ComparablePrimitive | null {
+  const normalized = normalizeStringValue(value);
+  if (normalized === null || !/^-?\d+(?:\.\d+)?$/.test(normalized)) {
+    return normalized;
+  }
+  return Number(normalized).toFixed(6).replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1");
 }
 
 // The workbook only ever supplies a bare calendar date; the DB returns a full timestamptz over
@@ -159,11 +169,20 @@ function normalizeScalarValue(value: ComparableInput, policy: ComparableScalarPo
   }
 
   if (typeof value === "string") {
+    if (policy === "healthcareNumericUnknown" && value.trim().toUpperCase() === "UNKNOWN") {
+      return null;
+    }
     if (policy === "url") {
       return normalizeUrlValue(value);
     }
     if (policy === "boolean") {
       return normalizeBooleanValue(value);
+    }
+    if (policy === "yesNoBoolean") {
+      return normalizeBooleanValue(value, true);
+    }
+    if (policy === "decimal") {
+      return normalizeDecimalValue(value);
     }
     if (policy === "date") {
       return normalizeDateValue(value);
@@ -200,11 +219,20 @@ export function projectComparableObject(value: ComparableObjectInput): Comparabl
 }
 
 function getFieldPolicy(fieldName: string): ComparableScalarPolicy {
+  if (fieldName === "typicalGpVisitCost" || fieldName === "typicalSpecialistCost") {
+    return "healthcareNumericUnknown";
+  }
   if (URL_FIELDS.has(fieldName)) {
     return "url";
   }
   if (BOOLEAN_FIELDS.has(fieldName)) {
     return "boolean";
+  }
+  if (YES_NO_BOOLEAN_FIELDS.has(fieldName)) {
+    return "yesNoBoolean";
+  }
+  if (DECIMAL_FIELDS.has(fieldName)) {
+    return "decimal";
   }
   if (DATE_FIELDS.has(fieldName)) {
     return "date";
@@ -250,6 +278,14 @@ export function projectKeyedChildArray<T extends ComparableObjectInput>(value: r
 
 export function projectOrderedArray<T>(value: readonly T[]): ComparableArray {
   return value.map((entry) => projectComparableValue(entry));
+}
+
+function projectRecordKeyArray<T>(value: readonly T[]): ComparableArray {
+  return [...projectOrderedArray(value)].sort((left: ComparableValue, right: ComparableValue) => {
+    const leftKey = typeof left === "object" && left !== null && "itemKey" in left ? String(left.itemKey ?? "") : "";
+    const rightKey = typeof right === "object" && right !== null && "itemKey" in right ? String(right.itemKey ?? "") : "";
+    return leftKey.localeCompare(rightKey, undefined, { numeric: true });
+  });
 }
 
 function toNullableString(value: unknown): string | null {
@@ -305,6 +341,14 @@ export function projectKeyedChildComparableRow(module: KeyedChildModuleKey, valu
         name: pickNullableString(record, ["name", "neighborhood_name"]),
         summary: pickNullableString(record, ["summary"]),
         areaType: pickNullableString(record, ["areaType", "area_type"]),
+        bestFor: pickNullableString(record, ["bestFor", "best_for"]),
+        walkabilityRating: pickNullableString(record, ["walkabilityRating", "walkability_rating"]),
+        safetyRating: pickNullableString(record, ["safetyRating", "safety_rating"]),
+        transitRating: pickNullableString(record, ["transitRating", "transit_rating"]),
+        housingCharacter: pickNullableString(record, ["housingCharacter", "housing_character"]),
+        pros: pickNullableString(record, ["pros"]),
+        cons: pickNullableString(record, ["cons"]),
+        googleMapsUrl: pickNullableString(record, ["googleMapsUrl", "google_maps_url"]),
       });
     case "places":
       return projectComparableObject({
@@ -382,7 +426,6 @@ function toCanonicalScore(value: DeterministicV31CanonicalDestination["scores"][
     scoreKey: value.scoreKey,
     scoreValue: value.scoreValue,
     scoreLabel: value.scoreLabel,
-    methodologyVersion: value.methodologyVersion,
     verified: value.verified,
     verifiedAt: value.verified_at,
   };
@@ -495,6 +538,7 @@ function toCanonicalHealthcareState(value: DeterministicV31CanonicalDestination[
     summary: value.system_summary,
     publicAccessSummary: value.public_access_foreigners,
     insuranceSummary: value.international_insurance_notes,
+    privateCareAvailable: value.private_care_available,
     topic: value.topic,
     englishSpeakingCare: value.english_speaking_care,
     typicalGpVisitCost: value.typical_gp_visit_cost,
@@ -661,6 +705,26 @@ function toCanonicalLifestyleLawState(value: DeterministicV31CanonicalDestinatio
   };
 }
 
+function toCanonicalLifestyleFeature(value: DeterministicV31CanonicalDestination["lifestyleFeatures"][number]): ComparableObjectInput {
+  return {
+    recordKey: value.record_key,
+    featureGroup: value.feature_group,
+    featureKey: value.feature_key,
+    featureValue: value.feature_value,
+    availabilityLevel: value.availability_level,
+    proximityBand: value.proximity_band,
+    displayLabel: value.display_label ?? value.display_name ?? null,
+    evidenceSummary: value.evidence_summary,
+    sourceName: value.source_name,
+    sourceUrl: value.source_url,
+    sourceAsOfDate: value.source_as_of_date,
+    confidence: value.confidence,
+    matchingEnabled: value.matching_enabled,
+    displayEnabled: value.display_enabled,
+    notes: value.notes,
+  };
+}
+
 function toCanonicalRealityCheckEntry(value: DeterministicV31CanonicalDestination["realityCheck"][number]): ComparableObjectInput {
   return {
     itemKey: value.record_key,
@@ -735,23 +799,31 @@ function isCanonicalDestinationState(value: StoredDestinationState | Determinist
 
 export function projectStoredComparable(state: StoredDestinationState): ComparableProjection {
   const projection: ComparableObject = {
-    identity: projectComparableObject(state.identity),
+    identity: projectComparableObject({
+      ...state.identity,
+      beachAccess: state.identity.beachAccess ?? null,
+      mountainOrSkiAccess: state.identity.mountainOrSkiAccess ?? null,
+      countryCode: state.identity.countryCode ?? null,
+      population: state.identity.population ?? null,
+      metroPopulation: state.identity.metroPopulation ?? null,
+      elevation: state.identity.elevation ?? null,
+    }),
     editorial: projectComparableObject(state.editorial),
     facts: projectKeyedChildArray(state.facts, KEYED_CHILD_MODULES.facts),
-    scores: projectKeyedChildArray(state.scores, KEYED_CHILD_MODULES.scores),
+    scores: projectKeyedChildArray(state.scores.map((entry) => projectKeyedChildComparableRow("scores", entry)), KEYED_CHILD_MODULES.scores),
     neighborhoods: projectKeyedChildArray(state.neighborhoods, KEYED_CHILD_MODULES.neighborhoods),
     places: projectKeyedChildArray(state.places, KEYED_CHILD_MODULES.places),
-    resources: projectKeyedChildArray(state.resources, KEYED_CHILD_MODULES.resources),
+    resources: projectKeyedChildArray(state.resources.map((entry) => projectKeyedChildComparableRow("resources", entry)), KEYED_CHILD_MODULES.resources),
     media: projectKeyedChildArray(state.media, KEYED_CHILD_MODULES.media),
-    costOfLiving: projectOrderedArray(state.costOfLiving),
+    costOfLiving: projectRecordKeyArray(state.costOfLiving),
     climateMonthly: projectOrderedArray(state.climateMonthly),
     housing: projectOrderedArray(state.housing),
-    propertyResources: projectKeyedChildArray(state.propertyResources, KEYED_CHILD_MODULES.propertyResources),
+    propertyResources: projectKeyedChildArray(state.propertyResources.map((entry) => projectKeyedChildComparableRow("propertyResources", entry)), KEYED_CHILD_MODULES.propertyResources),
     healthcare: projectOrderedArray(state.healthcare),
     visaResidency: projectOrderedArray(state.visaResidency),
     taxesFinance: projectOrderedArray(state.taxesFinance),
     lgbtqInclusivity: projectOrderedArray(state.lgbtqInclusivity),
-    safetyRisks: projectOrderedArray(state.safetyRisks),
+    safetyRisks: projectRecordKeyArray(state.safetyRisks),
     transportation: projectOrderedArray(state.transportation),
     remoteWork: projectOrderedArray(state.remoteWork),
     languageIntegration: projectOrderedArray(state.languageIntegration),
@@ -763,12 +835,13 @@ export function projectStoredComparable(state: StoredDestinationState): Comparab
     workBusiness: projectOrderedArray(state.workBusiness),
     retirementAging: projectOrderedArray(state.retirementAging),
     lifestyleLaws: projectOrderedArray(state.lifestyleLaws),
-    realityCheck: projectOrderedArray(state.realityCheck),
+    realityCheck: projectRecordKeyArray(state.realityCheck),
     moveChecklist: projectKeyedChildArray(state.moveChecklist, KEYED_CHILD_MODULES.moveChecklist),
-    environmentQuality: state.environmentQuality === null ? null : projectComparableValue(state.environmentQuality),
-    dailyLifePracticality: state.dailyLifePracticality === null ? null : projectComparableValue(state.dailyLifePracticality),
+    environmentQuality: state.environmentQuality === null ? null : projectComparableObject({ summary: state.environmentQuality.summary, qualityNotes: state.environmentQuality.qualityNotes }),
+    dailyLifePracticality: state.dailyLifePracticality === null ? null : projectComparableObject({ summary: state.dailyLifePracticality.summary, practicalityNotes: state.dailyLifePracticality.practicalityNotes }),
     eventsSeasonality: projectKeyedChildArray(state.eventsSeasonality, KEYED_CHILD_MODULES.eventsSeasonality),
     sources: projectKeyedChildArray(state.sources, KEYED_CHILD_MODULES.sources),
+    lifestyleFeatures: projectKeyedChildArray(state.lifestyleFeatures ?? [], "recordKey"),
   };
 
   return projection;
@@ -776,7 +849,15 @@ export function projectStoredComparable(state: StoredDestinationState): Comparab
 
 export function projectCanonicalComparable(state: DeterministicV31CanonicalDestination): ComparableProjection {
   const projection: ComparableObject = {
-    identity: projectComparableObject(state.identity),
+    identity: projectComparableObject({
+      ...state.identity,
+      beachAccess: state.destinationRow?.beach_access ?? null,
+      mountainOrSkiAccess: state.destinationRow?.mountain_or_ski_access ?? null,
+      countryCode: state.destinationRow?.country_code ?? null,
+      population: state.identity.population ?? null,
+      metroPopulation: state.identity.metroPopulation ?? null,
+      elevation: state.identity.elevation ?? null,
+    }),
     editorial: projectComparableObject(state.editorial),
     facts: projectKeyedChildArray(state.facts.map(toCanonicalFact), KEYED_CHILD_MODULES.facts),
     scores: projectKeyedChildArray(state.scores.map(toCanonicalScore), KEYED_CHILD_MODULES.scores),
@@ -784,7 +865,7 @@ export function projectCanonicalComparable(state: DeterministicV31CanonicalDesti
     places: projectKeyedChildArray(state.places.map(toCanonicalPlace), KEYED_CHILD_MODULES.places),
     resources: projectKeyedChildArray(state.resources.map(toCanonicalResource), KEYED_CHILD_MODULES.resources),
     media: projectKeyedChildArray(state.media.map(toCanonicalMedia), KEYED_CHILD_MODULES.media),
-    costOfLiving: projectOrderedArray(state.costOfLiving.map(toCanonicalCostOfLivingItem)),
+    costOfLiving: projectRecordKeyArray(state.costOfLiving.map(toCanonicalCostOfLivingItem)),
     climateMonthly: projectOrderedArray(state.climateMonthly.map(toCanonicalClimateMonth)),
     housing: projectOrderedArray(state.housing.map(toCanonicalHousingState)),
     propertyResources: projectKeyedChildArray(state.propertyResources.map(toCanonicalPropertyResource), KEYED_CHILD_MODULES.propertyResources),
@@ -792,7 +873,7 @@ export function projectCanonicalComparable(state: DeterministicV31CanonicalDesti
     visaResidency: projectOrderedArray(state.visaResidency.map(toCanonicalVisaResidencyState)),
     taxesFinance: projectOrderedArray(state.taxesFinance.map(toCanonicalTaxFinanceState)),
     lgbtqInclusivity: projectOrderedArray(state.lgbtqInclusivity.map(toCanonicalLgbtqInclusivityState)),
-    safetyRisks: projectOrderedArray(state.safetyRisks.map(toCanonicalSafetyRisk)),
+    safetyRisks: projectRecordKeyArray(state.safetyRisks.map(toCanonicalSafetyRisk)),
     transportation: projectOrderedArray(state.transportation.map(toCanonicalTransportationState)),
     remoteWork: projectOrderedArray(state.remoteWork.map(toCanonicalRemoteWorkState)),
     languageIntegration: projectOrderedArray(state.languageIntegration.map(toCanonicalLanguageIntegrationState)),
@@ -804,12 +885,13 @@ export function projectCanonicalComparable(state: DeterministicV31CanonicalDesti
     workBusiness: projectOrderedArray(state.workBusiness.map(toCanonicalWorkBusinessState)),
     retirementAging: projectOrderedArray(state.retirementAging.map(toCanonicalRetirementAgingState)),
     lifestyleLaws: projectOrderedArray(state.lifestyleLaws.map(toCanonicalLifestyleLawState)),
-    realityCheck: projectOrderedArray(state.realityCheck.map(toCanonicalRealityCheckEntry)),
+    realityCheck: projectRecordKeyArray(state.realityCheck.map(toCanonicalRealityCheckEntry)),
     moveChecklist: projectKeyedChildArray(state.moveChecklist.map(toCanonicalMoveChecklistState), KEYED_CHILD_MODULES.moveChecklist),
     environmentQuality: state.environmentQuality === null ? null : projectComparableValue(toCanonicalEnvironmentQualityState(state.environmentQuality)),
     dailyLifePracticality: state.dailyLifePracticality === null ? null : projectComparableValue(toCanonicalDailyLifePracticalityState(state.dailyLifePracticality)),
     eventsSeasonality: projectKeyedChildArray(state.eventsSeasonality.map(toCanonicalEventsSeasonalityState), KEYED_CHILD_MODULES.eventsSeasonality),
     sources: projectKeyedChildArray(state.sources.map(toCanonicalSource), KEYED_CHILD_MODULES.sources),
+    lifestyleFeatures: projectKeyedChildArray((state.lifestyleFeatures ?? []).map(toCanonicalLifestyleFeature), "recordKey"),
   };
 
   return projection;

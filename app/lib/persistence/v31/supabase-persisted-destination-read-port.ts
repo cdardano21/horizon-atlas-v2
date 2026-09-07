@@ -8,6 +8,7 @@ import type {
   PersistedReplaceModulesRows,
   PersistedSingletonsRows,
 } from "./normalize-persisted-destination-rows";
+import { readHealthcareCostQualifiers, restoreHealthcareCostValue } from "./healthcare-cost-storage";
 
 export interface PersistedDestinationSupabaseReadClient {
   readonly selectRows: (args: {
@@ -28,6 +29,21 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 function pickString(row: Record<string, unknown>, key: string): string | null {
   const value = row[key];
   return typeof value === "string" ? value : value == null ? null : null;
+}
+
+function pickMetadataString(row: Record<string, unknown>, key: string): string | null {
+  const metadata = row.metadata;
+  return isRecord(metadata) && typeof metadata[key] === "string" ? metadata[key] : null;
+}
+
+function pickBoolean(row: Record<string, unknown>, key: string): boolean | null {
+  const value = row[key];
+  if (typeof value === "boolean") return value;
+  if (typeof value !== "string") return null;
+  const normalized = value.trim().toLowerCase();
+  if (normalized === "true" || normalized === "1" || normalized === "yes") return true;
+  if (normalized === "false" || normalized === "0" || normalized === "no") return false;
+  return null;
 }
 
 function pickNumber(row: Record<string, unknown>, key: string): number | null {
@@ -102,6 +118,7 @@ async function readRows<T>(
   identity: ResolvedDestinationIdentity,
   transform: (row: Record<string, unknown>) => T,
   identityColumn = "destination_id",
+  compareRows?: (left: Record<string, unknown>, right: Record<string, unknown>) => number,
 ): Promise<QueryResult<readonly T[]>> {
   try {
     const rows = await client.selectRows({
@@ -111,7 +128,8 @@ async function readRows<T>(
     });
 
     const mapped: T[] = [];
-    for (const row of rows) {
+    const orderedRows = compareRows ? [...rows].sort(compareRows) : rows;
+    for (const row of orderedRows) {
       if (!isRecord(row)) {
         return { ok: false, error: createFailure() };
       }
@@ -128,13 +146,19 @@ export function createSupabasePersistedDestinationReadPort(
 ): PersistedDestinationReadPort {
   return {
     async readRoot(identity) {
-      return readSingleRow(client, "destinations_catalog", "id,destination_key,slug,city,country", identity, (row) => ({
+      return readSingleRow(client, "destinations_catalog", "id,destination_key,slug,city,country,beach_access,mountain_or_ski_access,country_code,population,metro_population,elevation", identity, (row) => ({
         destinationId: String(row.id ?? row.destination_id ?? ""),
         destinationKey: String(row.destination_key ?? ""),
         slug: pickString(row, "slug"),
         name: null,
         city: pickString(row, "city"),
         country: pickString(row, "country"),
+        beachAccess: pickString(row, "beach_access"),
+        mountainOrSkiAccess: pickString(row, "mountain_or_ski_access"),
+        countryCode: pickString(row, "country_code"),
+        population: row.population == null ? null : String(row.population),
+        metroPopulation: row.metro_population == null ? null : String(row.metro_population),
+        elevation: row.elevation == null ? null : String(row.elevation),
       } as PersistedRootRow), "id");
     },
 
@@ -164,10 +188,10 @@ export function createSupabasePersistedDestinationReadPort(
       const queries = [
         ["facts", "premium_destination_facts", "destination_id,destination_key,fact_key,fact_type,title,body,source_ref", "facts"],
         ["scores", "premium_destination_scores", "destination_id,destination_key,score_key,score_name,score_value,weight,higher_is_better,verified,verified_at", "scores"],
-        ["neighborhoods", "premium_neighborhoods", "destination_id,destination_key,neighborhood_key,neighborhood_name,area_type,summary", "neighborhoods"],
+        ["neighborhoods", "premium_neighborhoods", "destination_id,destination_key,neighborhood_key,neighborhood_name,area_type,best_for,summary,housing_character,walkability_rating,safety_rating,transit_rating,pros,cons,google_maps_url", "neighborhoods"],
         ["places", "premium_places", "destination_id,destination_key,place_key,category_key,place_name,description,neighborhood_key,website_url,google_maps_url,source_url,address,phone,display_order", "places"],
         ["resources", "premium_resources", "destination_id,destination_key,resource_key,resource_category,resource_name,url", "resources"],
-        ["media", "premium_media", "destination_id,destination_key,media_key,media_type,url,caption,alt_text", "media"],
+        ["media", "premium_media", "destination_id,destination_key,media_key,media_type,url,caption,alt_text,source_name,source_url,metadata", "media"],
         ["propertyResources", "premium_property_resources", "destination_id,destination_key,record_key,resource_type,resource_name,url", "propertyResources"],
         ["moveChecklist", "premium_move_checklist", "destination_id,destination_key,checklist_key,summary,checklist_notes", "moveChecklist"],
         ["eventsSeasonality", "premium_events_seasonality", "destination_id,destination_key,event_seasonality_key,summary,seasonality_notes", "eventsSeasonality"],
@@ -207,6 +231,14 @@ export function createSupabasePersistedDestinationReadPort(
                   name: pickString(row, "neighborhood_name"),
                   summary: pickString(row, "summary"),
                   areaType: pickString(row, "area_type"),
+                  bestFor: pickString(row, "best_for"),
+                  walkabilityRating: pickString(row, "walkability_rating"),
+                  safetyRating: pickString(row, "safety_rating"),
+                  transitRating: pickString(row, "transit_rating"),
+                  housingCharacter: pickString(row, "housing_character"),
+                  pros: pickString(row, "pros"),
+                  cons: pickString(row, "cons"),
+                  googleMapsUrl: pickString(row, "google_maps_url"),
                 };
               case "places":
                 return {
@@ -234,6 +266,7 @@ export function createSupabasePersistedDestinationReadPort(
                   url: pickString(row, "url"),
                 };
               case "media":
+                const mediaMetadata = isRecord(row.metadata) ? row.metadata : {};
                 return {
                   destinationId: String(row.destination_id ?? ""),
                   destinationKey: String(row.destination_key ?? ""),
@@ -242,6 +275,9 @@ export function createSupabasePersistedDestinationReadPort(
                   url: pickString(row, "url"),
                   caption: pickString(row, "caption"),
                   altText: pickString(row, "alt_text"),
+                  sourceName: pickString(row, "source_name"),
+                  sourceUrl: pickString(row, "source_url"),
+                  licenseNotes: pickString(mediaMetadata, "licenseNotes"),
                 };
               case "propertyResources":
                 return {
@@ -315,7 +351,7 @@ export function createSupabasePersistedDestinationReadPort(
           continue;
         }
         if (moduleKey === "neighborhoods") {
-          neighborhoods = match.queryResult.value as PersistedKeyedChildrenRows["neighborhoods"];
+          neighborhoods = match.queryResult.value as unknown as PersistedKeyedChildrenRows["neighborhoods"];
           continue;
         }
         if (moduleKey === "places") {
@@ -363,15 +399,15 @@ export function createSupabasePersistedDestinationReadPort(
 
     async readReplaceModules(identity) {
       const queries = [
-        ["costOfLiving", "premium_cost_of_living", "destination_id,destination_key,record_key,category,monthly_low,monthly_high,currency,stay_mode_key,verified,verified_at", "costOfLiving"],
+        ["costOfLiving", "premium_cost_of_living", "destination_id,destination_key,record_key,category,monthly_low,monthly_high,currency,household_type,lifestyle_tier,stay_mode_key,verified,verified_at", "costOfLiving"],
         ["climateMonthly", "premium_climate_monthly", "destination_id,destination_key,record_key,month_key,avg_high_temp,avg_low_temp,precipitation_mm,humidity_pct", "climateMonthly"],
         ["housing", "premium_housing_property", "destination_id,destination_key,record_key,restrictions_summary,buying_process_summary,rental_rules_notes,stay_mode_key,can_foreigners_buy,residency_required_to_buy,verified,verified_at", "housing"],
-        ["healthcare", "premium_healthcare_insurance", "destination_id,destination_key,record_key,system_summary,public_access_foreigners,international_insurance_notes,topic,english_speaking_care,typical_gp_visit_cost,typical_specialist_cost,verified,verified_at", "healthcare"],
+        ["healthcare", "premium_healthcare_insurance", "destination_id,destination_key,record_key,system_summary,public_access_foreigners,international_insurance_notes,private_care_available,topic,english_speaking_care,typical_gp_visit_cost,typical_specialist_cost,metadata,verified,verified_at", "healthcare"],
         ["visaResidency", "premium_visa_residency", "destination_id,destination_key,record_key,visa_type,permanent_residency_path,citizenship_path,stay_mode_key,traveler_nationality,verified,verified_at", "visaResidency"],
         ["taxesFinance", "premium_taxes_finance", "destination_id,destination_key,record_key,summary,notes,verified,verified_at", "taxesFinance"],
         ["lgbtqInclusivity", "premium_lgbtq_inclusivity", "destination_id,destination_key,position,summary,cultural_notes,overall_rating,legal_protections,social_acceptance,pride_events,nightlife_social,healthcare_access,areas_resources,safety_considerations,verified,verified_at", "lgbtqInclusivity"],
         ["safetyRisks", "premium_safety_risks", "destination_id,destination_key,record_key,topic,severity,summary,verified,verified_at", "safetyRisks"],
-        ["transportation", "premium_transport_airports", "destination_id,destination_key,record_key,summary,name,public_transit_available,topic,distance_km,typical_drive_minutes,nonstop_us_service,car_needed_rating,parking_notes,rideshare_notes,verified,verified_at", "transportation"],
+        ["transportation", "premium_transport_airports", "destination_id,destination_key,record_key,summary,name,public_transit_available,topic,distance_km,typical_drive_minutes,nonstop_us_service,car_needed_rating,parking_notes,rideshare_notes,verified,verified_at,metadata", "transportation"],
         ["remoteWork", "premium_connectivity_remote_work", "destination_id,destination_key,record_key,remote_work_notes,avg_download_mbps,us_time_zone_fit,fiber_available,mobile_5g,utility_reliability,coworking_summary,verified,verified_at", "remoteWork"],
         ["languageIntegration", "premium_language_integration", "destination_id,destination_key,position,summary,english_support,primary_language,english_proficiency,government_english_access,medical_english_access,language_resources,verified,verified_at", "languageIntegration"],
         ["pets", "premium_pets", "destination_id,destination_key,position,summary,pet_friendly_notes", "pets"],
@@ -383,6 +419,7 @@ export function createSupabasePersistedDestinationReadPort(
         ["retirementAging", "premium_retirement_aging", "destination_id,destination_key,position,summary,aging_notes", "retirementAging"],
         ["lifestyleLaws", "premium_lifestyle_laws", "destination_id,destination_key,position,summary,legal_notes", "lifestyleLaws"],
         ["realityCheck", "premium_reality_check", "destination_id,destination_key,record_key,title,detail,severity", "realityCheck"],
+        ["lifestyleFeatures", "premium_lifestyle_features", "destination_id,destination_key,record_key,feature_group,feature_key,feature_value,availability_level,proximity_band,display_label,evidence_summary,source_name,source_url,source_as_of_date,confidence,matching_enabled,display_enabled,notes", "lifestyleFeatures"],
       ] as const;
 
       const results = await Promise.all(
@@ -398,6 +435,8 @@ export function createSupabasePersistedDestinationReadPort(
                   monthlyLow: row.monthly_low == null ? null : String(row.monthly_low),
                   monthlyHigh: row.monthly_high == null ? null : String(row.monthly_high),
                   currency: pickString(row, "currency"),
+                  householdType: pickString(row, "household_type"),
+                  lifestyleTier: pickString(row, "lifestyle_tier"),
                   stayModeKey: pickString(row, "stay_mode_key"),
                   verified: row.verified == null ? null : String(row.verified),
                   verifiedAt: pickString(row, "verified_at"),
@@ -406,7 +445,7 @@ export function createSupabasePersistedDestinationReadPort(
                 return {
                   destinationId: String(row.destination_id ?? ""),
                   destinationKey: String(row.destination_key ?? ""),
-                  monthKey: String(row.record_key ?? ""),
+                  monthKey: String(row.month_key ?? ""),
                   avgHighTemp: row.avg_high_temp == null ? null : String(row.avg_high_temp),
                   avgLowTemp: row.avg_low_temp == null ? null : String(row.avg_low_temp),
                   precipitationMm: row.precipitation_mm == null ? null : String(row.precipitation_mm),
@@ -426,16 +465,18 @@ export function createSupabasePersistedDestinationReadPort(
                   verifiedAt: pickString(row, "verified_at"),
                 };
               case "healthcare":
+                const costQualifiers = readHealthcareCostQualifiers(row.metadata);
                 return {
                   destinationId: String(row.destination_id ?? ""),
                   destinationKey: String(row.destination_key ?? ""),
                   summary: pickString(row, "system_summary"),
                   publicAccessSummary: pickString(row, "public_access_foreigners"),
                   insuranceSummary: pickString(row, "international_insurance_notes"),
+                  privateCareAvailable: pickBoolean(row, "private_care_available"),
                   topic: pickString(row, "topic"),
                   englishSpeakingCare: pickString(row, "english_speaking_care"),
-                  typicalGpVisitCost: row.typical_gp_visit_cost == null ? null : String(row.typical_gp_visit_cost),
-                  typicalSpecialistCost: row.typical_specialist_cost == null ? null : String(row.typical_specialist_cost),
+                  typicalGpVisitCost: restoreHealthcareCostValue(row.typical_gp_visit_cost, costQualifiers.typical_gp_visit_cost_qualifier),
+                  typicalSpecialistCost: restoreHealthcareCostValue(row.typical_specialist_cost, costQualifiers.typical_specialist_cost_qualifier),
                   verified: row.verified == null ? null : String(row.verified),
                   verifiedAt: pickString(row, "verified_at"),
                 };
@@ -495,11 +536,11 @@ export function createSupabasePersistedDestinationReadPort(
                   destinationKey: String(row.destination_key ?? ""),
                   summary: pickString(row, "summary"),
                   airportSummary: pickString(row, "name"),
-                  transitSummary: row.public_transit_available == null ? null : String(row.public_transit_available),
+                  transitSummary: pickMetadataString(row, "transit_summary_qualifier") ?? (row.public_transit_available == null ? null : String(row.public_transit_available)),
                   topic: pickString(row, "topic"),
                   distanceKm: row.distance_km == null ? null : String(row.distance_km),
                   typicalDriveMinutes: row.typical_drive_minutes == null ? null : String(row.typical_drive_minutes),
-                  nonstopUsService: row.nonstop_us_service == null ? null : String(row.nonstop_us_service),
+                  nonstopUsService: pickMetadataString(row, "nonstop_us_service_qualifier") ?? (row.nonstop_us_service == null ? null : String(row.nonstop_us_service)),
                   carNeededRating: pickString(row, "car_needed_rating"),
                   parkingNotes: pickString(row, "parking_notes"),
                   rideshareNotes: pickString(row, "rideshare_notes"),
@@ -615,10 +656,30 @@ export function createSupabasePersistedDestinationReadPort(
                   detail: pickString(row, "detail"),
                   severity: pickString(row, "severity"),
                 };
+              case "lifestyleFeatures":
+                return {
+                  destinationId: String(row.destination_id ?? ""),
+                  destinationKey: String(row.destination_key ?? ""),
+                  recordKey: String(row.record_key ?? ""),
+                  featureGroup: pickString(row, "feature_group"),
+                  featureKey: pickString(row, "feature_key"),
+                  featureValue: pickString(row, "feature_value"),
+                  availabilityLevel: pickString(row, "availability_level"),
+                  proximityBand: pickString(row, "proximity_band"),
+                  displayLabel: pickString(row, "display_label"),
+                  evidenceSummary: pickString(row, "evidence_summary"),
+                  sourceName: pickString(row, "source_name"),
+                  sourceUrl: pickString(row, "source_url"),
+                  sourceAsOfDate: pickString(row, "source_as_of_date"),
+                  confidence: pickString(row, "confidence"),
+                  matchingEnabled: row.matching_enabled == null ? null : String(row.matching_enabled),
+                  displayEnabled: row.display_enabled == null ? null : String(row.display_enabled),
+                  notes: pickString(row, "notes"),
+                };
               default:
                 throw new Error(`Unhandled replace module: ${String(moduleName)}`);
             }
-          });
+          }, "destination_id", (left, right) => String(left.record_key ?? "").localeCompare(String(right.record_key ?? ""), undefined, { numeric: true }));
 
           return { moduleName, queryResult };
         }),
@@ -644,6 +705,7 @@ export function createSupabasePersistedDestinationReadPort(
       let retirementAging: PersistedReplaceModulesRows["retirementAging"] = [];
       let lifestyleLaws: PersistedReplaceModulesRows["lifestyleLaws"] = [];
       let realityCheck: PersistedReplaceModulesRows["realityCheck"] = [];
+      let lifestyleFeatures: PersistedReplaceModulesRows["lifestyleFeatures"] = [];
       const moduleOrder = [
         "costOfLiving",
         "climateMonthly",
@@ -665,6 +727,7 @@ export function createSupabasePersistedDestinationReadPort(
         "retirementAging",
         "lifestyleLaws",
         "realityCheck",
+        "lifestyleFeatures",
       ] as const;
 
       for (const moduleKey of moduleOrder) {
@@ -751,6 +814,10 @@ export function createSupabasePersistedDestinationReadPort(
           lifestyleLaws = match.queryResult.value as PersistedReplaceModulesRows["lifestyleLaws"];
           continue;
         }
+        if (moduleKey === "lifestyleFeatures") {
+          lifestyleFeatures = match.queryResult.value as PersistedReplaceModulesRows["lifestyleFeatures"];
+          continue;
+        }
         realityCheck = match.queryResult.value as PersistedReplaceModulesRows["realityCheck"];
       }
 
@@ -775,6 +842,7 @@ export function createSupabasePersistedDestinationReadPort(
         retirementAging,
         lifestyleLaws,
         realityCheck,
+        lifestyleFeatures,
       };
 
       return { ok: true, value };

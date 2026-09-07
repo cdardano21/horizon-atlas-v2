@@ -97,6 +97,14 @@ export type StoredNeighborhoodShape<T extends DeterministicV31CanonicalNeighborh
   readonly name: CanonicalNullableString<T["neighborhood_name"]>;
   readonly summary: CanonicalNullableString<T["summary"]>;
   readonly areaType: CanonicalNullableString<T["area_type"]>;
+  readonly bestFor: CanonicalNullableString<T["best_for"]>;
+  readonly walkabilityRating: CanonicalNullableString<T["walkability_rating"]>;
+  readonly safetyRating: CanonicalNullableString<T["safety_rating"]>;
+  readonly transitRating: CanonicalNullableString<T["transit_rating"]>;
+  readonly housingCharacter: CanonicalNullableString<T["housing_character"]>;
+  readonly pros: CanonicalNullableString<T["pros"]>;
+  readonly cons: CanonicalNullableString<T["cons"]>;
+  readonly googleMapsUrl: CanonicalNullableString<T["google_maps_url"]>;
 };
 
 export type StoredPlaceShape<T extends DeterministicV31CanonicalPlace> = {
@@ -144,6 +152,8 @@ export type StoredCostOfLivingItemShape<T extends DeterministicV31CanonicalCostO
   readonly monthlyLow: CanonicalNullableString<T["monthly_low"]>;
   readonly monthlyHigh: CanonicalNullableString<T["monthly_high"]>;
   readonly currency: CanonicalNullableString<T["currency"]>;
+  readonly householdType?: CanonicalNullableString<T["household_type"]>;
+  readonly lifestyleTier?: CanonicalNullableString<T["lifestyle_tier"]>;
   readonly stayModeKey: CanonicalNullableString<T["stay_mode_key"]>;
   readonly verified: CanonicalNullableString<T["verified"]>;
   readonly verifiedAt: CanonicalNullableString<T["verified_at"]>;
@@ -184,6 +194,7 @@ export type StoredHealthcareStateShape<T extends DeterministicV31CanonicalHealth
   readonly summary: CanonicalNullableString<T["system_summary"]>;
   readonly publicAccessSummary: CanonicalNullableString<T["public_access_foreigners"]>;
   readonly insuranceSummary: CanonicalNullableString<T["international_insurance_notes"]>;
+  readonly privateCareAvailable?: CanonicalNullableString<T["private_care_available"]> | boolean;
   readonly topic: CanonicalNullableString<T["topic"]>;
   readonly englishSpeakingCare: CanonicalNullableString<T["english_speaking_care"]>;
   readonly typicalGpVisitCost: CanonicalNullableString<T["typical_gp_visit_cost"]>;
@@ -381,6 +392,12 @@ type StoredDestinationStateShape<T extends DeterministicV31CanonicalDestination>
     readonly name: CanonicalNullableString<T["identity"]["name"]>;
     readonly city: CanonicalNullableString<T["identity"]["city"]>;
     readonly country: CanonicalNullableString<T["identity"]["country"]>;
+    readonly beachAccess?: string | null;
+    readonly mountainOrSkiAccess?: string | null;
+    readonly countryCode?: string | null;
+    readonly population?: string | null;
+    readonly metroPopulation?: string | null;
+    readonly elevation?: string | null;
   };
   readonly editorial: StoredEditorialStateShape<T["editorial"]>;
   readonly facts: readonly StoredFactShape<T["facts"][number]>[];
@@ -431,11 +448,11 @@ type ModuleFieldMapping = {
   places: { place_key: "placeKey"; category_key: "category"; place_name: "name"; description: "description" };
   resources: { resource_key: "resourceKey"; resource_category: "category"; resource_name: "name"; url: "url"; description: "description"; official: "official"; stay_mode_key: "stayModeKey"; source_name: "sourceName"; source_url: "sourceUrl"; verified: "verified"; verified_at: "verifiedAt" };
   media: { media_key: "mediaKey"; media_type: "kind"; image_url: "url"; caption: "caption"; subject: "altText" };
-  costOfLiving: { record_key: "itemKey"; category: "category"; monthly_low: "monthlyLow"; monthly_high: "monthlyHigh"; currency: "currency" };
+  costOfLiving: { record_key: "itemKey"; category: "category"; monthly_low: "monthlyLow"; monthly_high: "monthlyHigh"; currency: "currency"; household_type: "householdType"; lifestyle_tier: "lifestyleTier" };
   climateMonthly: { month: "monthKey"; avg_high_c: "avgHighTemp"; avg_low_c: "avgLowTemp"; rainfall_mm: "precipitationMm"; humidity_pct: "humidityPct" };
   housing: { restrictions_summary: "summary"; buying_process_summary: "buyingSummary"; rental_rules_notes: "rentalSummary" };
   propertyResources: { resource_key: "itemKey"; resource_type: "category"; resource_name: "name"; url: "url"; description: "description"; official: "official"; source_url: "sourceUrl"; verified: "verified"; verified_at: "verifiedAt" };
-  healthcare: { system_summary: "summary"; public_access_foreigners: "publicAccessSummary"; international_insurance_notes: "insuranceSummary" };
+  healthcare: { system_summary: "summary"; public_access_foreigners: "publicAccessSummary"; international_insurance_notes: "insuranceSummary"; private_care_available: "privateCareAvailable" };
   visaResidency: { visa_type: "summary"; permanent_residency_path: "residencyPath"; citizenship_path: "citizenshipPath" };
   taxesFinance: { summary: "summary"; income_tax_notes: "notes" };
   lgbtqInclusivity: { evidence_summary: "summary"; community_scene: "culturalNotes" };
@@ -596,7 +613,7 @@ export interface DiffPolicy {
 
 export type ScalarOperationKind = "CREATE" | "UPDATE" | "UNCHANGED" | "PRESERVE" | "CLEAR";
 
-export type ScalarModuleKey = "editorial" | SingletonModuleKey;
+export type ScalarModuleKey = "identity" | "editorial" | SingletonModuleKey;
 
 export interface ScalarCreateOperation {
   readonly kind: "CREATE";
@@ -770,6 +787,11 @@ export interface ReplaceModuleExecutionOperation<M extends ReplaceModuleExecutio
   readonly module: M;
   readonly expectedBefore: readonly ReplaceModuleExecutionPayload<M>[];
   readonly expectedAfter: readonly ReplaceModuleExecutionPayload<M>[];
+}
+
+export interface ModulePresenceOperation {
+  readonly kind: "INITIALIZE_MODULE";
+  readonly module: PersistedPresenceModuleKey;
 }
 
 export type ModuleExecutionOperation = ReplaceModuleExecutionOperation<ReplaceModuleExecutionModuleKey>;
@@ -953,6 +975,7 @@ export interface DestinationPlan {
   readonly action: DestinationPlanAction;
   readonly scalarOperations: readonly ScalarOperation[];
   readonly childOperations: readonly ChildOperation[];
+  readonly modulePresenceOperations?: readonly ModulePresenceOperation[];
   readonly warnings: readonly string[];
   readonly errors: readonly import("./errors").PersistenceError[];
   readonly preStateHash?: string | null;

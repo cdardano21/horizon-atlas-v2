@@ -17,6 +17,7 @@ import type {
   DestinationPlan,
   EventsSeasonalityKey,
   FactKey,
+  LifestyleFeatureKey,
   ModuleExecutionOperation,
   MoveChecklistKey,
   NeighborhoodKey,
@@ -169,6 +170,19 @@ describe("write-port statement translation", () => {
     expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, "A disposable synthetic test destination.", CURRENT_V31_PROFILE_STORAGE_VERSION]);
   });
 
+  it("translates demographic identity fields into a destination-key-guarded root update", () => {
+    const scalarOperations: ScalarOperation[] = [
+      { kind: "CREATE", module: "identity", fieldPath: "population", currentValue: null, incomingValue: "98,857" },
+      { kind: "UPDATE", module: "identity", fieldPath: "metroPopulation", currentValue: "2.5m", incomingValue: "2,655,342" },
+      { kind: "CREATE", module: "identity", fieldPath: "elevation", currentValue: null, incomingValue: "192 m" },
+    ];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ scalarOperations }));
+    expect(statements).toEqual([{
+      text: "update public.destinations_catalog set population = $3, metro_population = $4, elevation = $5, updated_at = now() where id = $1 and destination_key = $2",
+      values: [DEST_ID, DEST_KEY, "98,857", "2,655,342", "192 m"],
+    }]);
+  });
+
   it("translates a scalar CLEAR into setting the column to null explicitly", () => {
     const scalarOperations: ScalarOperation[] = [
       { kind: "CLEAR", module: "editorial", fieldPath: "shortDescription", currentValue: "old", incomingValue: null },
@@ -250,7 +264,7 @@ describe("write-port statement translation", () => {
         module: "neighborhoods",
         stableChildKey: "hood-1" as NeighborhoodKey,
         currentChild: null,
-        incomingChild: { neighborhoodKey: "hood-1" as NeighborhoodKey, name: "Testland Heights", summary: "A synthetic neighborhood.", areaType: "urban" },
+        incomingChild: { neighborhoodKey: "hood-1" as NeighborhoodKey, name: "Testland Heights", summary: "A synthetic neighborhood.", areaType: "urban", bestFor: null, walkabilityRating: null, safetyRating: null, transitRating: null, housingCharacter: null, pros: null, cons: null, googleMapsUrl: null },
       },
     ];
     const statements = buildDestinationPlanWriteStatements(basePlan({ childOperations }));
@@ -271,11 +285,11 @@ describe("write-port statement translation", () => {
         module: "neighborhoods",
         stableChildKey: "hood-1" as NeighborhoodKey,
         currentChild: null,
-        incomingChild: { neighborhood_key: "hood-1", neighborhood_name: "Snake Case Heights", summary: "ok", area_type: "urban" } as any,
+        incomingChild: { neighborhood_key: "hood-1", neighborhood_name: "Snake Case Heights", summary: "ok", area_type: "urban", best_for: "walkers", walkability_rating: "high", safety_rating: "high", transit_rating: "medium", housing_character: "mixed", pros: "parks", cons: "traffic", google_maps_url: "https://maps.example.com/hood-1" } as any,
       },
     ];
     const statements = buildDestinationPlanWriteStatements(basePlan({ childOperations }));
-    expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, "hood-1", "Snake Case Heights", "ok", "urban"]);
+    expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, "hood-1", "Snake Case Heights", "ok", "urban", "walkers", "high", "high", "medium", "mixed", "parks", "traffic", "https://maps.example.com/hood-1"]);
   });
 
   it("translates CREATE_CHILD for places into an upsert that includes neighborhood_key, website_url, google_maps_url, source_url, address, phone, and display_order alongside category/name/description", () => {
@@ -424,10 +438,41 @@ describe("write-port statement translation", () => {
     expect(statements[0].values).toEqual([DEST_ID, DEST_KEY]);
     expect(statements[1].text).toContain("insert into public.premium_cost_of_living");
     expect(statements[1].text).toContain("record_key");
-    expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "housing", "1200", "1800", "USD", null, null, null]);
-    expect(statements[2].values).toEqual([DEST_ID, DEST_KEY, "record-2", "groceries", "300", "500", "USD", null, null, null]);
+    expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "old-1", "housing", "1200", "1800", "USD", null, null, null, null, null]);
+    expect(statements[2].values).toEqual([DEST_ID, DEST_KEY, "old-2", "groceries", "300", "500", "USD", null, null, null, null, null]);
     expect(statements[3].text).toContain("premium_destination_module_presence");
     expect(statements[3].values).toEqual([DEST_ID, DEST_KEY, "costOfLiving"]);
+  });
+
+  it("persists every lifestyle-feature field with stable record-key identity", () => {
+    const moduleExecutionOperations: ModuleExecutionOperation[] = [{
+      kind: "REPLACE_MODULE",
+      module: "lifestyleFeatures",
+      expectedBefore: [],
+      expectedAfter: [{
+        recordKey: "life-1" as LifestyleFeatureKey,
+        featureGroup: "outdoors",
+        featureKey: "coastal_walks",
+        featureValue: "Strong",
+        availabilityLevel: "HIGH",
+        proximityBand: "LOCAL",
+        displayLabel: "Coastal walks",
+        evidenceSummary: "Several signed waterfront routes.",
+        sourceName: "Tourism office",
+        sourceUrl: "https://example.com/walks",
+        sourceAsOfDate: "2026-08-01",
+        confidence: "HIGH",
+        matchingEnabled: "0",
+        displayEnabled: "1",
+        notes: "Seasonal shade varies.",
+      }],
+    }];
+    const statements = buildDestinationPlanWriteStatements(basePlan({ moduleExecutionOperations }));
+    expect(statements).toHaveLength(3);
+    expect(statements[0].text).toBe("delete from public.premium_lifestyle_features where destination_id = $1 and destination_key = $2");
+    expect(statements[1].text).toContain("insert into public.premium_lifestyle_features");
+    expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "life-1", "outdoors", "coastal_walks", "Strong", "HIGH", "LOCAL", "Coastal walks", "Several signed waterfront routes.", "Tourism office", "https://example.com/walks", "2026-08-01", "HIGH", "0", "1", "Seasonal shade varies."]);
+    expect(statements[2].values).toEqual([DEST_ID, DEST_KEY, "lifestyleFeatures"]);
   });
 
   describe("REPLACE_MODULE boolean-column coercion (transportation.public_transit_available)", () => {
@@ -442,7 +487,7 @@ describe("write-port statement translation", () => {
       ];
       const statements = buildDestinationPlanWriteStatements(basePlan({ moduleExecutionOperations }));
       expect(statements[1].text).not.toContain("Limited");
-      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "Airport 30 min away", "Harry Reid International", null, null, null, null, null, null, null, null, null, null]);
+      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "Airport 30 min away", "Harry Reid International", null, null, null, null, null, null, null, null, null, null, { transit_summary_qualifier: "Limited" }]);
     });
 
     it("coerces the read port's own round-trip strings 'true'/'false' into real booleans", () => {
@@ -503,12 +548,12 @@ describe("write-port statement translation", () => {
       expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "true", "false", null, null, null, null, null, null, null, null, null, null]);
     });
 
-    it("leaves every other REPLACE_MODULE module's columns completely unaffected (no unrelated behavior change)", () => {
+    it("leaves healthcare narrative columns unaffected while defaulting absent private care to null", () => {
       const moduleExecutionOperations: ModuleExecutionOperation[] = [
         { kind: "REPLACE_MODULE", module: "healthcare", expectedBefore: [], expectedAfter: [{ summary: "true", publicAccessSummary: "false", insuranceSummary: "Limited" }] },
       ];
       const statements = buildDestinationPlanWriteStatements(basePlan({ moduleExecutionOperations }));
-      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "true", "false", "Limited", null, null, null, null, null, null]);
+      expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "record-1", "true", "false", "Limited", null, null, null, null, null, null, null, {}]);
     });
   });
 
@@ -531,13 +576,15 @@ describe("write-port statement translation", () => {
     expect(statements[2].values).toEqual([DEST_ID, DEST_KEY, "pets"]);
   });
 
-  it("still deletes existing rows but skips presence insert when a REPLACE_MODULE has an empty expectedAfter", () => {
+  it("deletes existing rows and writes presence when a REPLACE_MODULE has an empty expectedAfter", () => {
     const moduleExecutionOperations: ModuleExecutionOperation[] = [
       { kind: "REPLACE_MODULE", module: "healthcare", expectedBefore: [{ summary: "old" } as any], expectedAfter: [] },
     ];
     const statements = buildDestinationPlanWriteStatements(basePlan({ moduleExecutionOperations }));
-    expect(statements).toHaveLength(1);
+    expect(statements).toHaveLength(2);
     expect(statements[0].text).toBe("delete from public.premium_healthcare_insurance where destination_id = $1 and destination_key = $2");
+    expect(statements[1].text).toContain("premium_destination_module_presence");
+    expect(statements[1].values).toEqual([DEST_ID, DEST_KEY, "healthcare"]);
   });
 
   it("real-schema regression: moveChecklist CREATE_CHILD conflict target is (destination_id, checklist_key) - NOT 3-column", () => {
@@ -750,7 +797,7 @@ describe("write-port transactional execution", () => {
         module: "neighborhoods",
         stableChildKey: "hood-1" as NeighborhoodKey,
         currentChild: null,
-        incomingChild: { neighborhoodKey: "hood-1" as NeighborhoodKey, name: "Testland Heights", summary: null, areaType: null },
+        incomingChild: { neighborhoodKey: "hood-1" as NeighborhoodKey, name: "Testland Heights", summary: null, areaType: null, bestFor: null, walkabilityRating: null, safetyRating: null, transitRating: null, housingCharacter: null, pros: null, cons: null, googleMapsUrl: null },
       },
     ];
     const result = await executeApprovedDestinationPlanWrite(client, baseGateInput({ plan: basePlan({ scalarOperations, childOperations }) }));

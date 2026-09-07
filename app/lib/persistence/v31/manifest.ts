@@ -74,6 +74,7 @@ const NON_KEYED_REPEATABLE_MODULES: readonly CanonicalRepeatableModuleKey[] = [
   "retirementAging",
   "lifestyleLaws",
   "realityCheck",
+  "lifestyleFeatures",
   "moveChecklist",
   "eventsSeasonality",
   "sources",

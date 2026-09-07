@@ -1,5 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+beforeEach(async () => {
+  await new Promise<void>((resolve) => setImmediate(resolve));
+});
+
 vi.mock("../supabase", () => ({
   isSupabaseConfigured: () => true,
   supabaseFetch: vi.fn(),

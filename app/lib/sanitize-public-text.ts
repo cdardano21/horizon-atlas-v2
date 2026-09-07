@@ -43,6 +43,7 @@ export const sanitizePublicText = (value?: string | null): string | null => {
   if (typeof value !== "string") return null;
   let text = value.trim();
   if (!text) return null;
+  if (/^Existing workbook long_description explicitly frames the destination as /i.test(text)) return null;
   // Move embedded "Source: <url>" citations out of public prose - the URL belongs in a structured
   // source field, not appended to visible text.
   text = text.replace(/\s*Source:\s*https?:\/\/\S+\s*$/i, "").trim();
@@ -53,6 +54,8 @@ export const sanitizePublicText = (value?: string | null): string | null => {
   // "documented in REALITY_CHECK") - replace with a plain-language equivalent rather than leaving
   // an internal system name in customer-facing copy.
   text = text
+    .replace(/^Existing PLACES\/attraction entry\s+/i, "")
+    .replace(/;\s*not independently verified beyond the existing workbook naming\.?$/i, ".")
     .replace(/\bREALITY_CHECK\b/g, "the reality-check notes")
     .replace(/\bCLIMATE_MONTHLY\b/g, "the monthly climate data")
     .replace(/\bCOST_OF_LIVING\b/g, "the cost-of-living breakdown")

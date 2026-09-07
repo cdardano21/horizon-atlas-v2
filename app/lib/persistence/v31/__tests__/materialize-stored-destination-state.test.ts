@@ -160,6 +160,9 @@ describe("v31 normalized persisted-bundle materializer", () => {
       name: null,
       city: null,
       country: null,
+      beachAccess: null,
+      mountainOrSkiAccess: null,
+      countryCode: null,
     });
   });
 

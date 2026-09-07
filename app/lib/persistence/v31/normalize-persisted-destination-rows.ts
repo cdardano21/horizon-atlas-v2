@@ -8,6 +8,12 @@ export interface PersistedRootRow {
   readonly name: string | null;
   readonly city: string | null;
   readonly country: string | null;
+  readonly beachAccess?: string | null;
+  readonly mountainOrSkiAccess?: string | null;
+  readonly countryCode?: string | null;
+  readonly population?: string | null;
+  readonly metroPopulation?: string | null;
+  readonly elevation?: string | null;
 }
 
 export interface PersistedProfileRow {
@@ -225,6 +231,7 @@ export interface PersistedHealthcareRow {
   readonly summary: string | null;
   readonly publicAccessSummary: string | null;
   readonly insuranceSummary: string | null;
+  readonly privateCareAvailable?: boolean | null;
   readonly topic: string | null;
   readonly englishSpeakingCare: string | null;
   readonly typicalGpVisitCost: string | null;
@@ -387,6 +394,12 @@ export function normalizePersistedDestinationRows(input: {
       name: input.root.name ?? input.profile.identityName ?? null,
       city: input.root.city,
       country: input.root.country,
+      beachAccess: input.root.beachAccess ?? null,
+      mountainOrSkiAccess: input.root.mountainOrSkiAccess ?? null,
+      countryCode: input.root.countryCode ?? null,
+      population: input.root.population ?? null,
+      metroPopulation: input.root.metroPopulation ?? null,
+      elevation: input.root.elevation ?? null,
     },
     editorial: {
       shortDescription: input.profile.shortDescription,

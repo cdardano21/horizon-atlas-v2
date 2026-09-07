@@ -90,7 +90,7 @@ function plan(canonical: DeterministicV31CanonicalDestination, stored: StoredDes
   });
 }
 
-const BOOLEAN_DB_COLUMNS = new Set(["public_transit_available", "nonstop_us_service", "verified"]);
+const BOOLEAN_DB_COLUMNS = new Set(["public_transit_available", "nonstop_us_service", "private_care_available", "verified"]);
 
 interface ReplaceModuleCase {
   readonly module: ReplaceModuleExecutionModuleKey;
@@ -110,6 +110,8 @@ const REPLACE_MODULE_CASES: readonly ReplaceModuleCase[] = [
       monthly_low: "costOfLiving:monthly_low",
       monthly_high: "costOfLiving:monthly_high",
       currency: "costOfLiving:currency",
+      household_type: "costOfLiving:household_type",
+      lifestyle_tier: "costOfLiving:lifestyle_tier",
       stay_mode_key: "costOfLiving:stay_mode_key",
       verified: "1",
       verified_at: "costOfLiving:verified_at",
@@ -134,6 +136,7 @@ const REPLACE_MODULE_CASES: readonly ReplaceModuleCase[] = [
       system_summary: "healthcare:system_summary",
       public_access_foreigners: "healthcare:public_access_foreigners",
       international_insurance_notes: "healthcare:international_insurance_notes",
+      private_care_available: "1",
       topic: "healthcare:topic",
       english_speaking_care: "healthcare:english_speaking_care",
       typical_gp_visit_cost: "healthcare:typical_gp_visit_cost",
@@ -285,8 +288,18 @@ describe("REQUIRED TEST 1 - full REPLACE_MODULE field pass-through (planner trun
       const insertStatement = statements.find((statement) => statement.text.startsWith(`insert into public.${config.table}`));
       expect(insertStatement).toBeDefined();
       const expectedValues = Object.entries(config.columns).map(([, dbColumn]) =>
-        BOOLEAN_DB_COLUMNS.has(dbColumn) ? true : `${testCase.module}:${dbColumn}`,
+        BOOLEAN_DB_COLUMNS.has(dbColumn)
+          ? true
+          : testCase.module === "healthcare" && (dbColumn === "typical_gp_visit_cost" || dbColumn === "typical_specialist_cost")
+            ? null
+            : `${testCase.module}:${dbColumn}`,
       );
+      if (testCase.module === "healthcare") {
+        expectedValues.push({
+          typical_gp_visit_cost_qualifier: "healthcare:typical_gp_visit_cost",
+          typical_specialist_cost_qualifier: "healthcare:typical_specialist_cost",
+        } as never);
+      }
       expect(insertStatement!.values.slice(3)).toEqual(expectedValues);
     });
   }

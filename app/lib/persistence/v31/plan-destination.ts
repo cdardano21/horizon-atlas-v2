@@ -72,6 +72,16 @@ function buildScalarOperationsForEditorial(fields: readonly { fieldPath: string;
   }));
 }
 
+function buildScalarOperationsForIdentity(fields: readonly { fieldPath: string; currentValue: ScalarValue; incomingValue: ScalarValue }[], policy: DiffPolicy): ScalarOperation[] {
+  return fields.map((field) => diffScalar({
+    module: "identity",
+    fieldPath: field.fieldPath,
+    currentValue: field.currentValue,
+    incomingValue: field.incomingValue,
+    policy,
+  }));
+}
+
 function isClearFieldOperation(entry: ManifestEntry): entry is ClearFieldManifestEntry {
   return entry.operation === "CLEAR_FIELD";
 }
@@ -212,6 +222,8 @@ function normalizeReplaceModuleExecutionPayload<M extends ReplaceModuleExecution
         monthlyLow: (record.monthlyLow as string | null | undefined) ?? (record.monthly_low as string | null | undefined) ?? null,
         monthlyHigh: (record.monthlyHigh as string | null | undefined) ?? (record.monthly_high as string | null | undefined) ?? null,
         currency: (record.currency as string | null | undefined) ?? null,
+        householdType: (record.householdType as string | null | undefined) ?? (record.household_type as string | null | undefined) ?? null,
+        lifestyleTier: (record.lifestyleTier as string | null | undefined) ?? (record.lifestyle_tier as string | null | undefined) ?? null,
         stayModeKey: (record.stayModeKey as string | null | undefined) ?? (record.stay_mode_key as string | null | undefined) ?? null,
         verified: (record.verified as string | null | undefined) ?? null,
         verifiedAt: (record.verifiedAt as string | null | undefined) ?? (record.verified_at as string | null | undefined) ?? null,
@@ -240,6 +252,7 @@ function normalizeReplaceModuleExecutionPayload<M extends ReplaceModuleExecution
         summary: (record.summary as string | null | undefined) ?? (record.system_summary as string | null | undefined) ?? null,
         publicAccessSummary: (record.publicAccessSummary as string | null | undefined) ?? (record.public_access_foreigners as string | null | undefined) ?? null,
         insuranceSummary: (record.insuranceSummary as string | null | undefined) ?? (record.international_insurance_notes as string | null | undefined) ?? null,
+        privateCareAvailable: (record.privateCareAvailable as string | boolean | null | undefined) ?? (record.private_care_available as string | boolean | null | undefined) ?? null,
         topic: (record.topic as string | null | undefined) ?? null,
         englishSpeakingCare: (record.englishSpeakingCare as string | null | undefined) ?? (record.english_speaking_care as string | null | undefined) ?? null,
         typicalGpVisitCost: (record.typicalGpVisitCost as string | null | undefined) ?? (record.typical_gp_visit_cost as string | null | undefined) ?? null,
@@ -374,6 +387,24 @@ function normalizeReplaceModuleExecutionPayload<M extends ReplaceModuleExecution
         summary: (record.summary as string | null | undefined) ?? null,
         legalNotes: (record.legalNotes as string | null | undefined) ?? (record.important_rules as string | null | undefined) ?? null,
       } as ReplaceModuleExecutionPayload<M>;
+    case "lifestyleFeatures":
+      return {
+        recordKey: (record.recordKey as string | null | undefined) ?? (record.record_key as string | null | undefined) ?? null,
+        featureGroup: (record.featureGroup as string | null | undefined) ?? (record.feature_group as string | null | undefined) ?? null,
+        featureKey: (record.featureKey as string | null | undefined) ?? (record.feature_key as string | null | undefined) ?? null,
+        featureValue: (record.featureValue as string | null | undefined) ?? (record.feature_value as string | null | undefined) ?? null,
+        availabilityLevel: (record.availabilityLevel as string | null | undefined) ?? (record.availability_level as string | null | undefined) ?? null,
+        proximityBand: (record.proximityBand as string | null | undefined) ?? (record.proximity_band as string | null | undefined) ?? null,
+        displayLabel: (record.displayLabel as string | null | undefined) ?? (record.display_label as string | null | undefined) ?? (record.display_name as string | null | undefined) ?? null,
+        evidenceSummary: (record.evidenceSummary as string | null | undefined) ?? (record.evidence_summary as string | null | undefined) ?? null,
+        sourceName: (record.sourceName as string | null | undefined) ?? (record.source_name as string | null | undefined) ?? null,
+        sourceUrl: (record.sourceUrl as string | null | undefined) ?? (record.source_url as string | null | undefined) ?? null,
+        sourceAsOfDate: (record.sourceAsOfDate as string | null | undefined) ?? (record.source_as_of_date as string | null | undefined) ?? null,
+        confidence: (record.confidence as string | null | undefined) ?? null,
+        matchingEnabled: (record.matchingEnabled as string | null | undefined) ?? (record.matching_enabled as string | null | undefined) ?? null,
+        displayEnabled: (record.displayEnabled as string | null | undefined) ?? (record.display_enabled as string | null | undefined) ?? null,
+        notes: (record.notes as string | null | undefined) ?? null,
+      } as ReplaceModuleExecutionPayload<M>;
     case "realityCheck":
       return {
         itemKey: (record.itemKey as string | null | undefined) ?? (record.record_key as string | null | undefined) ?? null,
@@ -443,6 +474,12 @@ function applyScalarExpectation(projection: ComparableProjection, operation: Sca
   })();
 
   switch (operation.module) {
+    case "identity": {
+      const currentIdentity = asComparableObject(projection.identity);
+      const nextIdentity = currentIdentity === null ? {} : { ...currentIdentity };
+      nextIdentity[operation.fieldPath] = nextValue;
+      return { ...projection, identity: nextIdentity };
+    }
     case "editorial": {
       const currentEditorial = asComparableObject(projection.editorial);
       const nextEditorial = currentEditorial === null ? {} : { ...currentEditorial };
@@ -470,7 +507,7 @@ function applyScalarExpectation(projection: ComparableProjection, operation: Sca
     }
     case "environmentQuality": {
       const currentEnvironmentQuality = asComparableObject(projection.environmentQuality);
-      const nextEnvironmentQuality = currentEnvironmentQuality === null ? {} : { ...currentEnvironmentQuality };
+      const nextEnvironmentQuality: ComparableObject = currentEnvironmentQuality === null ? { summary: null, qualityNotes: null } : { ...currentEnvironmentQuality };
       switch (operation.fieldPath) {
         case "summary":
           nextEnvironmentQuality.summary = nextValue;
@@ -486,7 +523,7 @@ function applyScalarExpectation(projection: ComparableProjection, operation: Sca
     }
     case "dailyLifePracticality": {
       const currentDailyLifePracticality = asComparableObject(projection.dailyLifePracticality);
-      const nextDailyLifePracticality = currentDailyLifePracticality === null ? {} : { ...currentDailyLifePracticality };
+      const nextDailyLifePracticality: ComparableObject = currentDailyLifePracticality === null ? { summary: null, practicalityNotes: null } : { ...currentDailyLifePracticality };
       switch (operation.fieldPath) {
         case "summary":
           nextDailyLifePracticality.summary = nextValue;
@@ -528,7 +565,7 @@ function applyChildExpectation(projection: ComparableProjection, operation: Chil
 
   switch (operation.kind) {
     case "CREATE_CHILD": {
-      const incomingChild = projectComparableValue(operation.incomingChild);
+      const incomingChild = projectKeyedChildComparableRow(operation.module, operation.incomingChild);
       const nextChildren = [...currentChildren, incomingChild].sort((left, right) => {
         const leftRecord = asComparableObject(left);
         const rightRecord = asComparableObject(right);
@@ -539,7 +576,7 @@ function applyChildExpectation(projection: ComparableProjection, operation: Chil
       return { ...projection, [operation.module]: nextChildren };
     }
     case "UPDATE_CHILD": {
-      const incomingChild = projectComparableValue(operation.incomingChild);
+      const incomingChild = projectKeyedChildComparableRow(operation.module, operation.incomingChild);
       const nextChildren = currentChildren
         .filter((entry) => {
           const comparableChild = asComparableObject(entry);
@@ -592,7 +629,11 @@ function buildExpectedComparablePostState(
           .map((entryValue) => normalizeReplaceModuleExecutionPayload(module, entryValue))
           .filter((entryValue): entryValue is ReplaceModuleExecutionPayload<ReplaceModuleExecutionModuleKey> => entryValue !== null);
 
-        return [module, normalizedValue];
+        const storedOrderValue = module === "costOfLiving" || module === "safetyRisks" || module === "realityCheck"
+          ? [...normalizedValue].sort((left, right) => String((left as { itemKey?: unknown }).itemKey ?? "").localeCompare(String((right as { itemKey?: unknown }).itemKey ?? ""), undefined, { numeric: true }))
+          : normalizedValue;
+
+        return [module, storedOrderValue];
       }),
     ),
   } as StoredDestinationState;
@@ -707,6 +748,13 @@ export function buildDestinationPlan(input: BuildDestinationPlanInput): Destinat
   const incomingDailyLifePracticality = normalizeSingletonModuleValue("dailyLifePracticality", input.canonicalDestination.dailyLifePracticality);
   scalarOperations.push(...buildScalarOperationsForSingletonModule("dailyLifePracticality", currentDailyLifePracticality, incomingDailyLifePracticality, input.diffPolicy));
 
+  const identityFields = [
+    { fieldPath: "population", currentValue: input.storedDestinationState.identity.population ?? null, incomingValue: input.canonicalDestination.identity.population ?? null },
+    { fieldPath: "metroPopulation", currentValue: input.storedDestinationState.identity.metroPopulation ?? null, incomingValue: input.canonicalDestination.identity.metroPopulation ?? null },
+    { fieldPath: "elevation", currentValue: input.storedDestinationState.identity.elevation ?? null, incomingValue: input.canonicalDestination.identity.elevation ?? null },
+  ];
+  scalarOperations.push(...buildScalarOperationsForIdentity(identityFields, input.diffPolicy));
+
   const editorialFields = [
     { fieldPath: "shortDescription", currentValue: input.storedDestinationState.editorial.shortDescription, incomingValue: input.canonicalDestination.editorial.shortDescription },
     { fieldPath: "longDescription", currentValue: input.storedDestinationState.editorial.longDescription, incomingValue: input.canonicalDestination.editorial.longDescription },
@@ -729,7 +777,7 @@ export function buildDestinationPlan(input: BuildDestinationPlanInput): Destinat
   let action: DestinationPlanAction = "UNCHANGED";
   if (orderedErrors.length > 0) {
     action = "ERROR";
-  } else if (orderedScalarOperations.length > 0 || orderedChildOperations.length > 0) {
+  } else if (orderedScalarOperations.length > 0 || orderedChildOperations.some((operation) => operation.kind !== "UNCHANGED_CHILD") || moduleExecutionOperations.length > 0) {
     action = "UPDATE";
   }
 

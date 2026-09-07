@@ -255,7 +255,7 @@ function linkifyStructuredPlaceNames(text: string, places: readonly StructuredPl
 // byte-for-byte identical to the overview, or is entirely contained within a prior card's
 // normalized text. It never removes a card's title, badge, or a description that has any content
 // beyond what's already visible.
-function resolveSuppressedEvidenceKeys(rows: readonly LifestyleFeatureRow[], overviewText: string): Set<string> {
+function resolveVisibleEvidence(rows: readonly LifestyleFeatureRow[], overviewText: string): Map<string, string | null> {
   const normalize = (value: string) =>
     value
       .trim()
@@ -264,29 +264,45 @@ function resolveSuppressedEvidenceKeys(rows: readonly LifestyleFeatureRow[], ove
       .replace(/^["'“”]+|["'“”.,;: ]+$/g, "");
 
   const normalizedOverview = normalize(overviewText || "");
-  const suppressed = new Set<string>();
-  const seenNormalizedText: string[] = [];
+  const visibleEvidence = new Map<string, string | null>();
+  const seenEvidence: Array<{ raw: string; normalized: string }> = [];
 
   for (const row of rows) {
     const sanitized = sanitizePublicText(row.evidenceSummary);
-    if (!sanitized) continue;
-    const normalized = normalize(sanitized);
-    // Short phrases (e.g. "No evidence found.") are excluded from both sides of the comparison -
-    // they're too generic for containment to mean genuine duplication, and would otherwise cause
-    // unrelated cards to be suppressed against each other.
-    if (normalized.length < 40) {
-      seenNormalizedText.push(normalized);
+    if (!sanitized) {
+      visibleEvidence.set(row.recordKey, null);
       continue;
     }
+    const normalized = normalize(sanitized);
     const duplicatesOverview = normalizedOverview.length >= 40 && normalized === normalizedOverview;
-    const duplicatesEarlierCard = seenNormalizedText.some((priorText) => priorText.length >= 40 && priorText.includes(normalized));
-    if (duplicatesOverview || duplicatesEarlierCard) {
-      suppressed.add(row.recordKey);
-    } else {
-      seenNormalizedText.push(normalized);
+    if (duplicatesOverview) {
+      visibleEvidence.set(row.recordKey, null);
+      continue;
+    }
+
+    let evidence = sanitized;
+    for (const prior of seenEvidence) {
+      if (prior.normalized.length < 40 || normalized.length < 40) continue;
+      if (normalized === prior.normalized || prior.normalized.includes(normalized)) {
+        evidence = "";
+        break;
+      }
+      if (
+        (normalized.startsWith(`${prior.normalized}.`) || normalized.startsWith(`${prior.normalized} `))
+        && sanitized.toLowerCase().startsWith(prior.raw.toLowerCase())
+      ) {
+        evidence = sanitized.slice(prior.raw.length).replace(/^[\s.!?,;:—–-]+/, "").trim();
+        break;
+      }
+    }
+
+    const resolvedEvidence = evidence || null;
+    visibleEvidence.set(row.recordKey, resolvedEvidence);
+    if (resolvedEvidence) {
+      seenEvidence.push({ raw: resolvedEvidence, normalized: normalize(resolvedEvidence) });
     }
   }
-  return suppressed;
+  return visibleEvidence;
 }
 
 function FeatureCard({
@@ -294,25 +310,26 @@ function FeatureCard({
   places,
   destinationCity,
   destinationCountry,
-  hideEvidence = false,
+  evidenceOverride,
 }: {
   row: LifestyleFeatureRow;
   places: readonly StructuredPlace[];
   destinationCity: string;
   destinationCountry: string;
-  hideEvidence?: boolean;
+  evidenceOverride?: string | null;
 }) {
   const title = row.displayLabel?.trim() || humanizeFeatureKey(row.featureKey);
   const availability = describeAvailability(row);
-  const evidence = hideEvidence ? null : sanitizePublicText(row.evidenceSummary);
+  const evidence = evidenceOverride === undefined ? sanitizePublicText(row.evidenceSummary) : evidenceOverride;
   const categoryPlaces = resolveCategoryPlacesForRow(row, places, evidence);
+  if (!evidence && !availability && categoryPlaces.length === 0) return null;
 
   return (
     <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
       <div className="flex flex-wrap items-start justify-between gap-2">
-        <p className="text-sm font-semibold text-white">{title}</p>
+        <p className="min-w-0 text-sm font-semibold text-white">{title}</p>
         {availability ? (
-          <span className="shrink-0 rounded-full border border-cyan-400/30 bg-cyan-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-cyan-200">
+          <span className="max-w-full whitespace-normal break-words rounded-full border border-cyan-400/30 bg-cyan-500/10 px-3 py-1 text-right text-[10px] font-semibold uppercase leading-4 tracking-[0.16em] text-cyan-200 sm:max-w-none sm:shrink-0 sm:whitespace-nowrap">
             {availability}
           </span>
         ) : null}
@@ -391,7 +408,7 @@ export default function LifestyleRecreationSection({
     // destinations) applies duplicate-description suppression - the grouped rich-schema path
     // (Batch 1/2) is left untouched since its cards are independent, evidence-backed rows rather
     // than narrative text that repeats a broader description.
-    const suppressedEvidenceKeys = resolveSuppressedEvidenceKeys(ungroupedRows, overviewText);
+    const visibleEvidence = resolveVisibleEvidence(ungroupedRows, overviewText);
     return (
       <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
         <div className="flex flex-wrap items-start justify-between gap-4">
@@ -412,7 +429,7 @@ export default function LifestyleRecreationSection({
               places={places}
               destinationCity={destinationCity}
               destinationCountry={destinationCountry}
-              hideEvidence={suppressedEvidenceKeys.has(row.recordKey)}
+              evidenceOverride={visibleEvidence.get(row.recordKey) ?? null}
             />
           ))}
         </div>

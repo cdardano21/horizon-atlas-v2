@@ -461,6 +461,7 @@ describe("destination plan assembly", () => {
     });
 
     expect(plan.childOperations).toEqual(expect.arrayContaining([expect.objectContaining({ kind: "UNCHANGED_CHILD", module: "facts", stableChildKey: FACT_ONE_KEY })]));
+    expect(plan.action).toBe("UNCHANGED");
   });
 
   it("does not infer keyed-child delete from omission", () => {
@@ -581,9 +582,54 @@ describe("destination plan assembly", () => {
     }));
 
     const expectedState = createStoredState({
-      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD", stayModeKey: null, verified: null, verifiedAt: null }] as Array<StoredDestinationState["costOfLiving"][number]>,
+      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD", householdType: null, lifestyleTier: null, stayModeKey: null, verified: null, verifiedAt: null }] as Array<StoredDestinationState["costOfLiving"][number]>,
     });
     expect(plan.expectedComparablePostState).toEqual(projectComparable(expectedState));
+  });
+
+  it("preserves lifestyle feature rows in replace-module execution payloads", () => {
+    const canonical = createCanonicalDestination({
+      lifestyleFeatures: [{
+        record_key: "dest-a-feature-airport_access",
+        feature_group: "mobility",
+        feature_key: "airport_access",
+        feature_value: "Direct bus",
+        availability_level: "AVAILABLE",
+        proximity_band: "LOCAL",
+        display_label: "Airport access",
+        evidence_summary: "The airport bus serves the city center.",
+        source_name: "Airport authority",
+        source_url: "https://example.com/airport",
+        source_as_of_date: "2026-09-01",
+        confidence: "HIGH",
+        matching_enabled: "FALSE",
+        display_enabled: "TRUE",
+        notes: null,
+      }],
+    });
+    const plan = buildDestinationPlan({
+      resolvedDestinationIdentity: createResolvedIdentity(),
+      canonicalDestination: canonical,
+      storedDestinationState: createStoredState({ lifestyleFeatures: [] }),
+      manifestInterpretation: createManifestInterpretation([{ destinationKey: DESTINATION_A_KEY, operation: "REPLACE_MODULE", targetModule: "lifestyleFeatures" }]),
+      diffPolicy: createDiffPolicy(),
+      approvedScope: createApprovedScope(),
+    });
+
+    expect(plan.moduleExecutionOperations).toEqual([
+      expect.objectContaining({
+        kind: "REPLACE_MODULE",
+        module: "lifestyleFeatures",
+        expectedAfter: [expect.objectContaining({
+          recordKey: "dest-a-feature-airport_access",
+          featureKey: "airport_access",
+          evidenceSummary: "The airport bus serves the city center.",
+          sourceUrl: "https://example.com/airport",
+          matchingEnabled: "FALSE",
+          displayEnabled: "TRUE",
+        })],
+      }),
+    ]);
   });
 
   it("projects mixed scalar child and replace-module expectations in the expected comparable post state", () => {
@@ -632,14 +678,14 @@ describe("destination plan assembly", () => {
     const expectedState = createStoredState({
       editorial: { shortDescription: "Updated short", longDescription: "Long", currency: "USD", primaryLanguage: "English", timeZone: "UTC" },
       facts: [{ factKey: FACT_ONE_KEY, factGroup: "quality", valueText: "Updated fact", displayLabel: "Updated fact", sourceName: "Source" }],
-      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD", stayModeKey: null, verified: null, verifiedAt: null }] as Array<StoredDestinationState["costOfLiving"][number]>,
+      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD", householdType: null, lifestyleTier: null, stayModeKey: null, verified: null, verifiedAt: null }] as Array<StoredDestinationState["costOfLiving"][number]>,
     });
     expect(firstPlan.expectedComparablePostState).toEqual(projectComparable(expectedState));
 
     const staleState = createStoredState({
       editorial: { shortDescription: "Original short", longDescription: "Long", currency: "USD", primaryLanguage: "English", timeZone: "UTC" },
       facts: [{ factKey: FACT_ONE_KEY, factGroup: "quality", valueText: "Stored fact", displayLabel: "Stored fact", sourceName: "Source" }],
-      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD", stayModeKey: null, verified: null, verifiedAt: null }] as Array<StoredDestinationState["costOfLiving"][number]>,
+      costOfLiving: [{ itemKey: "row-1", category: "food", monthlyLow: "110", monthlyHigh: "220", currency: "USD", householdType: null, lifestyleTier: null, stayModeKey: null, verified: null, verifiedAt: null }] as Array<StoredDestinationState["costOfLiving"][number]>,
     });
     expect(firstPlan.expectedComparablePostState).not.toEqual(projectComparable(staleState));
 

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CanonicalDestinationKey, DestinationId, PersistedPresenceModuleKey, ResolvedDestinationIdentity } from "../types";
+import type { PersistedReplaceModulesRows } from "../normalize-persisted-destination-rows";
 import { createSupabasePersistedDestinationReadPort, type PersistedDestinationSupabaseReadClient } from "../supabase-persisted-destination-read-port";
 
 class FakeSupabaseReadClient implements PersistedDestinationSupabaseReadClient {
@@ -54,6 +55,9 @@ describe("createSupabasePersistedDestinationReadPort", () => {
         name: "Braunfels",
         city: "Braunfels",
         country: "United States",
+        population: "98,857",
+        metro_population: "2,655,342",
+        elevation: "192 m",
       }],
     });
 
@@ -69,6 +73,12 @@ describe("createSupabasePersistedDestinationReadPort", () => {
         name: null,
         city: "Braunfels",
         country: "United States",
+        beachAccess: null,
+        mountainOrSkiAccess: null,
+        countryCode: null,
+        population: "98,857",
+        metroPopulation: "2,655,342",
+        elevation: "192 m",
       },
     });
   });
@@ -82,7 +92,7 @@ describe("createSupabasePersistedDestinationReadPort", () => {
 
     expect(client.selectCalls[0]).toEqual({
       table: "destinations_catalog",
-      select: "id,destination_key,slug,city,country",
+      select: "id,destination_key,slug,city,country,beach_access,mountain_or_ski_access,country_code,population,metro_population,elevation",
       filters: [{ column: "id", operator: "eq", value: identity.destinationId }],
     });
   });
@@ -183,10 +193,10 @@ describe("createSupabasePersistedDestinationReadPort", () => {
     const client = new FakeSupabaseReadClient({
       premium_destination_facts: [{ destination_id: "dest-id-a", destination_key: "dest-a", fact_key: "fact-1", fact_type: null, title: null, body: null, source_ref: null, metadata: {} }],
       premium_destination_scores: [{ destination_id: "dest-id-a", destination_key: "dest-a", score_key: "score-1", score_value: 5, score_name: null, weight: null, higher_is_better: true, metadata: {} }],
-      premium_neighborhoods: [{ destination_id: "dest-id-a", destination_key: "dest-a", neighborhood_key: "hood-1", neighborhood_name: "Old Town", area_type: "urban", summary: null, housing_character: null, walkability_rating: null, safety_rating: null, transit_rating: null, pros: null, cons: null, google_maps_url: null, source_url: null, verified: false, metadata: {}, sort_order: 1 }],
+      premium_neighborhoods: [{ destination_id: "dest-id-a", destination_key: "dest-a", neighborhood_key: "hood-1", neighborhood_name: "Old Town", area_type: "urban", best_for: "walkers", summary: null, housing_character: "historic", walkability_rating: "high", safety_rating: "high", transit_rating: "medium", pros: "parks", cons: "traffic", google_maps_url: "https://maps.example.com/old-town", source_url: null, verified: false, metadata: {}, sort_order: 1 }],
       premium_places: [{ destination_id: "dest-id-a", destination_key: "dest-a", place_key: "place-1", category_key: "food", place_name: "Market", subcategory: null, description: "Nice market", neighborhood_key: "hood-1", address: "123 Main St", latitude: null, longitude: null, price_level: null, website_url: "https://example.com/market", google_maps_url: "https://maps.example.com/market", phone: "+1 555-1234", best_for: null, display_order: 1, source_name: null, source_url: "https://example.com/source-market", verified: false, confidence: null, metadata: {} }],
       premium_resources: [{ destination_id: "dest-id-a", destination_key: "dest-a", resource_key: "resource-1", resource_category: "gov", resource_name: "Visa office", description: null, url: "https://example.com", official: true, stay_mode_key: null, display_order: 1, source_name: null, source_url: null, verified: false, metadata: {} }],
-      premium_media: [{ destination_id: "dest-id-a", destination_key: "dest-a", media_key: "media-1", media_type: "image", url: "https://cdn.example.com/a.jpg", caption: "View", alt_text: "A", sort_order: 1, is_primary: true, verified: false, source_name: null, source_url: null, metadata: {} }],
+      premium_media: [{ destination_id: "dest-id-a", destination_key: "dest-a", media_key: "media-1", media_type: "image", url: "https://cdn.example.com/a.jpg", caption: "View", alt_text: "A", sort_order: 1, is_primary: true, verified: false, source_name: "Commons", source_url: "https://example.com/source-image", metadata: { licenseNotes: "CC BY 4.0" } }],
       premium_property_resources: [{ destination_id: "dest-id-a", destination_key: "dest-a", record_key: "property-1", transaction_type: null, resource_name: "Broker", resource_type: "real-estate", url: "https://example.com/broker", official: false, description: null, source_url: null, verified: false, metadata: {} }],
       premium_move_checklist: [{ destination_id: "dest-id-a", destination_key: "dest-a", checklist_key: "check-1", summary: "Ship everything", checklist_notes: "Pack carefully" }],
       premium_events_seasonality: [{ destination_id: "dest-id-a", destination_key: "dest-a", event_seasonality_key: "event-1", summary: "Festival", seasonality_notes: "Spring" }],
@@ -204,10 +214,10 @@ describe("createSupabasePersistedDestinationReadPort", () => {
     expect(result.value).toEqual({
       facts: [{ destinationId: "dest-id-a", destinationKey: "dest-a", factKey: "fact-1", factGroup: null, valueText: null, displayLabel: null, sourceName: null }],
       scores: [{ destinationId: "dest-id-a", destinationKey: "dest-a", scoreKey: "score-1", scoreValue: "5", scoreLabel: null, methodologyVersion: null, verified: null, verifiedAt: null }],
-      neighborhoods: [{ destinationId: "dest-id-a", destinationKey: "dest-a", neighborhoodKey: "hood-1", name: "Old Town", summary: null, areaType: "urban" }],
+      neighborhoods: [{ destinationId: "dest-id-a", destinationKey: "dest-a", neighborhoodKey: "hood-1", name: "Old Town", summary: null, areaType: "urban", bestFor: "walkers", walkabilityRating: "high", safetyRating: "high", transitRating: "medium", housingCharacter: "historic", pros: "parks", cons: "traffic", googleMapsUrl: "https://maps.example.com/old-town" }],
       places: [{ destinationId: "dest-id-a", destinationKey: "dest-a", placeKey: "place-1", category: "food", name: "Market", description: "Nice market", neighborhoodKey: "hood-1", websiteUrl: "https://example.com/market", googleMapsUrl: "https://maps.example.com/market", sourceUrl: "https://example.com/source-market", address: "123 Main St", phone: "+1 555-1234", displayOrder: "1" }],
       resources: [{ destinationId: "dest-id-a", destinationKey: "dest-a", resourceKey: "resource-1", category: "gov", name: "Visa office", url: "https://example.com" }],
-      media: [{ destinationId: "dest-id-a", destinationKey: "dest-a", mediaKey: "media-1", kind: "image", url: "https://cdn.example.com/a.jpg", caption: "View", altText: "A" }],
+      media: [{ destinationId: "dest-id-a", destinationKey: "dest-a", mediaKey: "media-1", kind: "image", url: "https://cdn.example.com/a.jpg", caption: "View", altText: "A", sourceName: "Commons", sourceUrl: "https://example.com/source-image", licenseNotes: "CC BY 4.0" }],
       propertyResources: [{ destinationId: "dest-id-a", destinationKey: "dest-a", itemKey: "property-1", category: "real-estate", name: "Broker", url: "https://example.com/broker" }],
       moveChecklist: [{ destinationId: "dest-id-a", destinationKey: "dest-a", checklistKey: "check-1", summary: "Ship everything", checklistNotes: "Pack carefully" }],
       eventsSeasonality: [{ destinationId: "dest-id-a", destinationKey: "dest-a", eventSeasonalityKey: "event-1", summary: "Festival", seasonalityNotes: "Spring" }],
@@ -238,6 +248,7 @@ describe("createSupabasePersistedDestinationReadPort", () => {
       premium_retirement_aging: [{ destination_id: "dest-id-a", destination_key: "dest-a", position: 9, summary: "Aging", aging_notes: "Good" }],
       premium_lifestyle_laws: [{ destination_id: "dest-id-a", destination_key: "dest-a", position: 10, summary: "Laws", legal_notes: "Some restrictions" }],
       premium_reality_check: [{ destination_id: "dest-id-a", destination_key: "dest-a", record_key: "reality-1", title: "Watch out", detail: "Detail", severity: "medium" }],
+      premium_lifestyle_features: [{ destination_id: "dest-id-a", destination_key: "dest-a", record_key: "life-1", feature_group: "outdoors", feature_key: "coastal_walks", feature_value: "Strong", availability_level: "HIGH", proximity_band: "LOCAL", display_label: "Coastal walks", evidence_summary: "Several signed waterfront routes.", source_name: "Tourism office", source_url: "https://example.com/walks", source_as_of_date: "2026-08-01", confidence: "HIGH", matching_enabled: "0", display_enabled: "1", notes: "Seasonal shade varies." }],
     });
 
     const port = createSupabasePersistedDestinationReadPort(client);
@@ -249,10 +260,10 @@ describe("createSupabasePersistedDestinationReadPort", () => {
     }
 
     expect(result.value).toEqual({
-      costOfLiving: [{ destinationId: "dest-id-a", destinationKey: "dest-a", itemKey: "col-1", category: "rent", monthlyLow: "2000", monthlyHigh: "3000", currency: "USD", stayModeKey: null, verified: null, verifiedAt: null }],
-      climateMonthly: [{ destinationId: "dest-id-a", destinationKey: "dest-a", monthKey: "month-1", avgHighTemp: "20", avgLowTemp: "10", precipitationMm: "100", humidityPct: "75" }],
+      costOfLiving: [{ destinationId: "dest-id-a", destinationKey: "dest-a", itemKey: "col-1", category: "rent", monthlyLow: "2000", monthlyHigh: "3000", currency: "USD", householdType: null, lifestyleTier: null, stayModeKey: null, verified: null, verifiedAt: null }],
+      climateMonthly: [{ destinationId: "dest-id-a", destinationKey: "dest-a", monthKey: "january", avgHighTemp: "20", avgLowTemp: "10", precipitationMm: "100", humidityPct: "75" }],
       housing: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "Limited", buyingSummary: "Easy", rentalSummary: "Strict", stayModeKey: null, canForeignersBuy: null, residencyRequiredToBuy: null, verified: null, verifiedAt: null }],
-      healthcare: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "Good", publicAccessSummary: "Easy", insuranceSummary: "Required", topic: null, englishSpeakingCare: null, typicalGpVisitCost: null, typicalSpecialistCost: null, verified: null, verifiedAt: null }],
+      healthcare: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "Good", publicAccessSummary: "Easy", insuranceSummary: "Required", privateCareAvailable: null, topic: null, englishSpeakingCare: null, typicalGpVisitCost: null, typicalSpecialistCost: null, verified: null, verifiedAt: null }],
       visaResidency: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "D", residencyPath: "Long", citizenshipPath: "Long", stayModeKey: null, travelerNationality: "US", verified: null, verifiedAt: null }],
       taxesFinance: [{ destinationId: "dest-id-a", destinationKey: "dest-a", summary: "Simple", notes: "No issues", verified: null, verifiedAt: null }],
       lgbtqInclusivity: [{ destinationId: "dest-id-a", destinationKey: "dest-a", position: 2, summary: "Friendly", culturalNotes: "Welcoming", overallRating: null, legalProtections: null, socialAcceptance: null, prideEvents: null, nightlifeSocial: null, healthcareAccess: null, areasResources: null, safetyConsiderations: null, verified: null, verifiedAt: null }],
@@ -269,7 +280,49 @@ describe("createSupabasePersistedDestinationReadPort", () => {
       retirementAging: [{ destinationId: "dest-id-a", destinationKey: "dest-a", position: 9, summary: "Aging", agingNotes: "Good" }],
       lifestyleLaws: [{ destinationId: "dest-id-a", destinationKey: "dest-a", position: 10, summary: "Laws", legalNotes: "Some restrictions" }],
       realityCheck: [{ destinationId: "dest-id-a", destinationKey: "dest-a", itemKey: "reality-1", title: "Watch out", detail: "Detail", severity: "medium" }],
+      lifestyleFeatures: [{ destinationId: "dest-id-a", destinationKey: "dest-a", recordKey: "life-1", featureGroup: "outdoors", featureKey: "coastal_walks", featureValue: "Strong", availabilityLevel: "HIGH", proximityBand: "LOCAL", displayLabel: "Coastal walks", evidenceSummary: "Several signed waterfront routes.", sourceName: "Tourism office", sourceUrl: "https://example.com/walks", sourceAsOfDate: "2026-08-01", confidence: "HIGH", matchingEnabled: "0", displayEnabled: "1", notes: "Seasonal shade varies." }],
     });
+  });
+
+  it("preserves PostgreSQL text-backed healthcare booleans as exact tri-state values", async () => {
+    const identity = createIdentity();
+    const client = new FakeSupabaseReadClient({
+      premium_healthcare_insurance: [
+        { destination_id: "dest-id-a", destination_key: "dest-a", record_key: "health-true", private_care_available: "true" },
+        { destination_id: "dest-id-a", destination_key: "dest-a", record_key: "health-false", private_care_available: "false" },
+        { destination_id: "dest-id-a", destination_key: "dest-a", record_key: "health-unknown", private_care_available: null },
+      ],
+    });
+
+    const result = await createSupabasePersistedDestinationReadPort(client).readReplaceModules(identity);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error("Expected replace-module success");
+    const value = result.value as PersistedReplaceModulesRows;
+    expect(value.healthcare.map((row) => row.privateCareAvailable)).toEqual([false, true, null]);
+  });
+
+  it("orders replacement rows by natural record key and preserves climate month identity", async () => {
+    const identity = createIdentity();
+    const client = new FakeSupabaseReadClient({
+      premium_climate_monthly: [
+        { destination_id: "dest-id-a", destination_key: "dest-a", record_key: "record-10", month_key: "10", avg_high_temp: 30 },
+        { destination_id: "dest-id-a", destination_key: "dest-a", record_key: "record-2", month_key: "2", avg_high_temp: 20 },
+        { destination_id: "dest-id-a", destination_key: "dest-a", record_key: "record-1", month_key: "1", avg_high_temp: 10 },
+      ],
+      premium_healthcare_insurance: [
+        { destination_id: "dest-id-a", destination_key: "dest-a", record_key: "record-2", system_summary: "Second", metadata: {} },
+        { destination_id: "dest-id-a", destination_key: "dest-a", record_key: "record-1", system_summary: "First", metadata: {} },
+      ],
+    });
+
+    const result = await createSupabasePersistedDestinationReadPort(client).readReplaceModules(identity);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error("Expected replace-module success");
+    const value = result.value as PersistedReplaceModulesRows;
+    expect(value.climateMonthly.map((row) => row.monthKey)).toEqual(["1", "2", "10"]);
+    expect(value.healthcare.map((row) => row.summary)).toEqual(["First", "Second"]);
   });
 
   it("preserves positioned row order and raw position values", async () => {

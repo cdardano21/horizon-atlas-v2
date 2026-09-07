@@ -19,6 +19,37 @@ interface CanonicalDestinationPageProps {
   developerMode?: boolean;
 }
 
+function getMediaIdentity(rawUrl: string): string {
+  try {
+    const parsed = new URL(rawUrl);
+    const pathname = decodeURIComponent(parsed.pathname);
+    if (parsed.hostname === "upload.wikimedia.org") {
+      const thumbnailPrefix = "/wikipedia/commons/thumb/";
+      if (pathname.startsWith(thumbnailPrefix)) {
+        const parts = pathname.slice(thumbnailPrefix.length).split("/");
+        if (parts.length >= 4) return `wikimedia:${parts.slice(0, -1).join("/")}`;
+      }
+      const originalPrefix = "/wikipedia/commons/";
+      if (pathname.startsWith(originalPrefix)) {
+        return `wikimedia:${pathname.slice(originalPrefix.length)}`;
+      }
+    }
+    return `${parsed.origin}${pathname}`;
+  } catch {
+    return rawUrl.trim();
+  }
+}
+
+function dedupeMediaUrls(urls: readonly string[]): string[] {
+  const seen = new Set<string>();
+  return urls.filter((url) => {
+    const identity = getMediaIdentity(url);
+    if (!identity || seen.has(identity)) return false;
+    seen.add(identity);
+    return true;
+  });
+}
+
 // Shared, single source of truth for the sticky tab bar - anchor targets/labels are unchanged
 // from the existing section ids; only presentation (prominence, descriptor, active state) changed.
 const SECTION_TABS: ReadonlyArray<{ id: string; label: string; descriptor: string }> = [
@@ -36,8 +67,10 @@ function buildGalleryItems(destination: CanonicalDestination) {
 
   const seen = new Set<string>();
   return sources.filter((item) => {
-    if (!item?.url || seen.has(item.url)) return false;
-    seen.add(item.url);
+    if (!item?.url) return false;
+    const identity = getMediaIdentity(item.url);
+    if (seen.has(identity)) return false;
+    seen.add(identity);
     return true;
   });
 }
@@ -1526,14 +1559,17 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     const realItemByUrl = new Map(galleryItems.map((item) => [item.url, item]));
     const imageSet = getDestinationImageSet(mediaDestination, 5);
     if (imageSet.length > 0) {
-      return imageSet.slice(0, 10).map((imageUrl, index) => {
+      return dedupeMediaUrls(imageSet).slice(0, 10).map((imageUrl, index) => {
         const real = realItemByUrl.get(imageUrl);
-        const altText = real?.altText || destination.title;
+        const fallbackCaption = index === 0
+          ? `${destination.title} skyline and civic identity`
+          : `${destination.title} destination view ${index + 1}`;
+        const altText = real?.altText || fallbackCaption;
         return {
           kind: real?.kind || (index === 0 ? "featured" : "gallery"),
           url: imageUrl,
           altText,
-          caption: real?.caption || (index === 0 ? `${destination.title} skyline and civic identity` : `${destination.title} streetscape and daily-life texture`),
+          caption: real?.caption || fallbackCaption,
           isPrimary: real?.isPrimary ?? index === 0,
           resolvedUrl: getDestinationImageUrl({ src: imageUrl, alt: altText }, mediaDestination),
           attribution: real?.attribution,
