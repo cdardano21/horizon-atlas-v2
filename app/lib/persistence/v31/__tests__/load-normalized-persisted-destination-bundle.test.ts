@@ -274,6 +274,9 @@ describe("loadNormalizedPersistedDestinationBundle", () => {
       beachAccess: null,
       mountainOrSkiAccess: null,
       countryCode: null,
+      population: null,
+      metroPopulation: null,
+      elevation: null,
     });
     expect(result.bundle.facts).toEqual([]);
     expect(result.bundle.environmentQuality).toEqual({ summary: "air quality", qualityNotes: "water quality" });

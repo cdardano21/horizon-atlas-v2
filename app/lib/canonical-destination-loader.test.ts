@@ -1883,15 +1883,29 @@ describe("STEP 11: renderer-integration authority contract", () => {
   });
 
   describe("real facts mapping", () => {
-    it("maps persisted population, healthcare, and climate facts into the view model", async () => {
+    it("prefers persisted identity demographics while mapping healthcare and climate facts", async () => {
       mockExactCatalogRow("the-meadowlands-fl-us", "the-meadowlands-florida-united-states");
-      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "the-meadowlands-fl-us" }) } as never);
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
+        outcome: "SUCCESS",
+        bundle: buildFullNormalizedBundle({
+          destinationKey: "the-meadowlands-fl-us",
+          identity: {
+            slug: "the-meadowlands-florida-united-states",
+            name: "The Meadowlands",
+            city: "The Meadowlands",
+            country: "United States",
+            population: "987,654",
+            metroPopulation: "Persisted metro: 300,000",
+            elevation: "55",
+          },
+        }),
+      } as never);
 
       const destination = await getCanonicalDestination("the-meadowlands-florida-united-states");
 
-      expect(destination?.knowledgeProfile?.population).toBe("123,456");
-      expect(destination?.knowledgeProfile?.metroPopulation).toBe("Metro area: 200,000");
-      expect(destination?.knowledgeProfile?.elevation).toBe("42 m");
+      expect(destination?.knowledgeProfile?.population).toBe("987,654");
+      expect(destination?.knowledgeProfile?.metroPopulation).toBe("Persisted metro: 300,000");
+      expect(destination?.knowledgeProfile?.elevation).toBe("55 m");
       expect(destination?.knowledgeProfile?.currency).toBe("USD");
       expect(destination?.healthcare).toContain("Real healthcare module summary");
       expect(destination?.climate).toContain("Real climate narrative");

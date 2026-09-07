@@ -762,10 +762,10 @@ export const buildCanonicalDestinationFromPersistedBundle = (
   // Scalar identity/finance facts (population, metro population, elevation, currency, time zone)
   // are legitimate 1:1 overrides of the existing scalar knowledgeProfile fields - not "cramming"
   // rich modules into it, since these were always meant to be single scalar strings. Population/
-  // metro population/elevation live on the DESTINATIONS row itself (rawIdentity), not as
-  // DESTINATION_FACTS rows - prefer the real DESTINATIONS-sheet value, then fall back to a
-  // DESTINATION_FACTS-keyed fact for destinations that encode it that way instead.
-  const rawElevation = normalizeTextValue(rawIdentity?.elevationMeters) || findFactByKey("elevation") || undefined;
+  // metro population/elevation live on the persisted destination identity (or rawIdentity for
+  // workbook previews), not as DESTINATION_FACTS rows. Prefer persisted values, then the preview
+  // identity, then a DESTINATION_FACTS-keyed fallback for older destinations.
+  const rawElevation = normalizeTextValue(bundle.identity.elevation) || normalizeTextValue(rawIdentity?.elevationMeters) || findFactByKey("elevation") || undefined;
   // LIFESTYLE_FEATURES has a distinct, real feature_key row for "walkability" and "transit" - a
   // generic legacy knowledgeProfile fallback must never take priority over this real per-feature
   // evidence, and the two must never show the same combined text (the prior bug: both chips showed
@@ -792,8 +792,8 @@ export const buildCanonicalDestinationFromPersistedBundle = (
   };
   const v31AverageTemperatures = formatAverageTemperatures();
   const v31KnowledgeProfileOverrides = {
-    population: normalizeTextValue(rawIdentity?.population) || extractPlausiblePopulationValue(findFactByKey("population")) || undefined,
-    metroPopulation: normalizeTextValue(rawIdentity?.metroPopulation) || extractPlausiblePopulationValue(findFactByKey("metro_population")) || undefined,
+    population: normalizeTextValue(bundle.identity.population) || normalizeTextValue(rawIdentity?.population) || extractPlausiblePopulationValue(findFactByKey("population")) || undefined,
+    metroPopulation: normalizeTextValue(bundle.identity.metroPopulation) || normalizeTextValue(rawIdentity?.metroPopulation) || extractPlausiblePopulationValue(findFactByKey("metro_population")) || undefined,
     // A bare numeric elevation value (e.g. "1") needs its unit for the figure to be meaningful -
     // never re-labeled or converted, only given the "m" the workbook's own elevation_m column implies.
     elevation: rawElevation ? (/^-?\d+(\.\d+)?$/.test(rawElevation) ? `${rawElevation} m` : rawElevation) : undefined,
