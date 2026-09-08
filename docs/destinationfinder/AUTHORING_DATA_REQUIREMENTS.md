@@ -151,7 +151,7 @@ Do not invent extra category keys such as `hotel`, `marina`, `lake`, or `ski_res
 | `RESOURCES.stay_mode_key` | Duration relevance | **OPTIONAL** | Blank means all modes | Shared stay-mode vocabulary | Same evidence as row | Destination-page filtering | `SHORT_1_3_MONTHS` for vacation stays | Arbitrary mode used to hide weak resource. |
 | `PROPERTY_RESOURCES.resource_key`, `destination_key`, `transaction_type`, `resource_name`, `resource_type`, `url`, `official`, `description`, `source_url`, `verified`, `verified_at` | Property search/professional resources | **REQUIRED** min 3 for-sale and 3 rental; target 5 each | No for authored row | Consistent transaction values such as `buy`/`rent`; descriptive resource type | URL/source/verification required | Destination page and persistence | Reputable national listing portal, `rent` | Agency represented as regulator or unsupported service area. |
 
-Every destination should also cover applicable tourism, maps, transportation, visa, healthcare, housing, weather, photos, and social-discovery needs. `hotels`, `vacation-stays`, `schools`, `golf`, `lgbtq`, and `webcams` are conditional on page scope/local availability.
+Every destination should also cover applicable tourism, maps, transportation, visa, healthcare, housing, weather, photos, and social-discovery needs. `hotels`, `vacation-stays`, `schools`, `golf`, `lgbtq`, and `webcams` are conditional on page scope/local availability. Preserve all useful authored rows in the workbook and persisted module; an initial UI item cap or disclosure control never justifies deleting or omitting source records.
 
 ## Media
 
@@ -160,7 +160,7 @@ Every destination should also cover applicable tourism, maps, transportation, vi
 | `media_key`, `destination_key`, `media_type`, `image_url`, `caption`, `subject`, `primary_image`, `gallery_order` | Image identity, asset, accessible subject, hero/order | **REQUIRED** for min 3/target 5 rows | No | Current supported type `photo`; absolute image URL; boolean primary; integer order | Asset and depicted destination manually checked | Smart Shortlist hero; destination page; persistence | Clear city-specific waterfront photo with one primary row | Generic regional stock, broken hotlink, wrong city, or multiple primaries. |
 | `license_notes`, `source_name`, `source_url`, `verified`, `verified_at`, `confidence` | Credit, usage basis, provenance, check date | **REQUIRED** | No | State license/permission and required attribution; ISO date; confidence vocabulary | Source must identify image and usage basis. Recheck links/rights; dates do not guarantee perpetual license. | Publication compliance and QA | `CC BY 4.0; credit Jane Doe`, source page, verified date | Blank rights, search-engine URL, author omitted, or “public domain” without evidence. |
 
-Media URLs and usage rights are time-sensitive. Before publication, confirm the asset still resolves, the pictured subject is correct, the license still permits the intended use, and attribution remains accurate.
+Media URLs and usage rights are time-sensitive. Before publication, confirm the asset still resolves, the pictured subject is correct, the license still permits the intended use, and attribution remains accurate. Preserve the full verified media set in the data layer even when a consumer initially displays a smaller gallery.
 
 ## Cost of living and U3-R5
 

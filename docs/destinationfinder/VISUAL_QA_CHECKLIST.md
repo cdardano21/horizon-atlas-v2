@@ -9,7 +9,7 @@ Record:
 - Batch ID, registry ID, workbook SHA-256, repository commit, environment, tester, and UTC time
 - Exact destination keys tested
 - Browser/version and viewport dimensions
-- Premium Guide URL and Smart Shortlist URL/result state
+- Premium Guide URL, Smart Shortlist URL/result state, and Explore URL/search/filter state
 - Screenshot filenames and console/network logs
 - Every failure with destination key, route, viewport, reproduction steps, and severity
 
@@ -21,6 +21,26 @@ Record:
 - [ ] Narrow mobile: 320 x 700
 
 Use deterministic screenshots after fonts/images settle. Disable browser extensions and record any blocked third-party media separately from application defects.
+
+## Automated precheck
+
+Before browser QA, update the batch acceptance assertions to the newly expected registry-backed cohort and run:
+
+```bash
+./node_modules/.bin/vitest run \
+	app/lib/expansion-workbook-registry.test.ts \
+	app/lib/smart-shortlist/server-data.test.ts \
+	app/lib/smart-shortlist/evaluator.test.ts \
+	app/lib/smart-shortlist/owned-affordability.test.ts \
+	app/lib/smart-shortlist/owned-affordability-evaluator.test.ts \
+	app/lib/smart-shortlist/scenarios.test.ts \
+	app/lib/smart-shortlist/adversarial-matrix.test.ts \
+	app/lib/explore-destinations.test.ts \
+	app/components/__tests__/destination-search.test.tsx \
+	app/components/destinationCardFacts.test.ts
+```
+
+The automated suite is necessary but not sufficient. Enumerate every expected canonical slug from the post-batch candidate set, request `/destinations/<slug>`, require HTTP 200 with matching identity, and then exercise the search/filter/Back interactions in a real browser.
 
 ## Premium Guide route and identity
 
@@ -81,6 +101,19 @@ For every destination:
 - [ ] Preference ranking does not reintroduce a hard-gate-excluded destination.
 - [ ] Explanations identify actual available evidence and do not claim unsupported precision.
 
+## Explore/Browse discovery and navigation
+
+- [ ] The rendered cohort equals the expected registry-backed cohort: every activated destination appears exactly once, with no missing destinations, extras, duplicate keys, or duplicate slugs.
+- [ ] Every new destination has a valid card name, country, useful summary, destination-specific image, and accurate alt text; unsupported scores or facts are omitted rather than fabricated.
+- [ ] Exact city/name searches find the intended destination and no unrelated empty-field matches.
+- [ ] Country and region searches behave as expected, including diacritics, punctuation, and apostrophes.
+- [ ] Canonical lifestyle filters use customer-facing aliases only; internal tags/tokens do not leak into the interface.
+- [ ] Combined search and filters produce deterministic results, and clear/reset restores the full cohort.
+- [ ] Every card opens the canonical Premium Guide route successfully with matching identity and media.
+- [ ] Browse -> Destination -> Back restores the previous query and active filters.
+- [ ] Primary navigation tabs/links between Explore, Smart Shortlist, and destination content work at desktop and mobile widths.
+- [ ] Empty, loading, image-failure, and no-results states remain useful and do not change the cohort or fabricate fallback facts.
+
 ## Interaction and responsive quality
 
 - [ ] Keyboard navigation reaches links, tabs, accordions, galleries, filters, and primary actions in logical order.
@@ -94,8 +127,8 @@ For every destination:
 
 ## Cross-consumer reconciliation
 
-- [ ] Premium Guide and Smart Shortlist show the same canonical name, country, hero identity, and decision-critical facts.
-- [ ] Both consumers use canonical media/shared resolution rather than separate manual image mappings.
+- [ ] Premium Guide, Smart Shortlist, and Explore show the same canonical name, country, slug, hero identity, and decision-critical facts.
+- [ ] All three consumers use canonical media/shared resolution rather than separate manual image mappings.
 - [ ] Any deliberate presentation difference is documented and does not alter factual meaning.
 - [ ] Normalized read-back counts reconcile with rendered/accessible item counts; UI truncation is reported as UI behavior, not repaired by deleting workbook rows.
 
@@ -103,6 +136,7 @@ For every destination:
 
 - [ ] At least one preexisting destination outside the batch is unchanged in Premium Guide.
 - [ ] At least one preexisting destination outside the batch is unchanged in Smart Shortlist.
+- [ ] At least one preexisting destination outside the batch is unchanged in Explore/Browse.
 - [ ] Unknown and exclusion behavior for existing controls is unchanged.
 - [ ] No route, image, or resource from the new batch leaks into a control destination.
 
@@ -115,7 +149,7 @@ Record separate verdicts:
 | Identity safe | Every route/alias resolves exactly and no cross-destination content exists. |
 | Data preserved | Normalized read-back and rendered content retain all expected modules/rows. |
 | Matching ready | Hard gates, U3-R5 households, UNKNOWN behavior, and preference fit are correct. |
-| Display ready | Both consumer paths pass required desktop/mobile checks with correct media. |
+| Display ready | All three consumer paths pass required desktop/mobile checks with correct media. |
 | Publication ready | All above pass and every material source/media-rights issue is resolved. |
 
 Any NO blocks the corresponding next phase. Attach screenshots and defects; do not “fix” a visual/data mismatch by editing production data outside the approved batch workflow.

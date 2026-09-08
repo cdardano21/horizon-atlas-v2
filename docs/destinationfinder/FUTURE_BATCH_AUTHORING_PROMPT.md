@@ -26,9 +26,11 @@ NON-NEGOTIABLE CONTRACT
 - Preserve UNKNOWN honestly. Do not turn missing evidence into No, NONE, zero, low risk, legal, available, or a passing gate.
 - Use official/primary sources for legal, visa, tax, property, healthcare, and other decision-critical claims whenever available.
 - Preserve source URL/name, verification, date, confidence, media credit/license, and research-ledger evidence.
+- Preserve every useful authored resource/media row in the workbook even when the current UI uses an initial display cap or disclosure control; never truncate source data to match presentation.
 - Create exactly one valid single and one valid couple U3-R5 2026 USD row per destination using the current `comfortable` / `u3_r5_total_monthly_estimate` / `RELOCATE` tokens.
 - Do not invent DESTINATION_SCORES without an approved 0-100 methodology.
 - SCHEMA-VALID IS NOT AUTHORING-COMPLETE. Every destination requires a positive numeric population with destination-scoped credible provenance and targets at least 14 useful, evidence-backed, sourced `LIFESTYLE_FEATURES` rows across multiple locally meaningful themes.
+- `metro_population` and `elevation_m` are optional: author them only when meaningful and supported, never as guesses or copied regional values.
 - Do not force irrelevant lifestyle topics to reach 14. Explicitly document and request human review for a legitimate exception; duplicated/generic filler is a failure.
 - Customer-visible copy must describe the destination, never the parser, adapter, workbook, schema, engine, runtime, hard gates, preference fit, normalization, database, import, or internal table/field names.
 - Preserve/rebind climate formulas and recalculate cached values.
@@ -51,6 +53,7 @@ FINAL REPORT
 - Parser and batch-integrity result
 - Authoring parity/readiness result, population/provenance coverage, lifestyle count by destination, and technical-copy diagnostics
 - Per-destination module/minimum coverage
+- Full resource/media counts and any deliberate UI disclosure expectations
 - Every unresolved UNKNOWN, warning, conflict, stale source, formula issue, or media-rights issue
 - Explicit confirmation: database writes 0; imports 0; deployments 0; pushes 0; commits 0
 - Final AUTHORING READY: YES or NO

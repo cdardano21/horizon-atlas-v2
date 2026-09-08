@@ -1,92 +1,110 @@
 # DestinationFinder Permanent Batch System Readiness Report
 
-**Assessment date:** 2026-09-07<br>
-**Mode:** documentation and read-only validation only<br>
-**Reference workbook:** `data/next-batch-20/DestinationFinderAI-Next-Batch-20-Visual-Parity-Enriched-v3.3.xlsx`<br>
-**Reference SHA-256:** `88f365b1dabfef7a3bbeb2958f53e9c3537d1f8f8b74e6cf6083482ddb802683`
+**Checkpoint date:** 2026-09-07<br>
+**Checkpoint mode:** documentation and source-of-truth audit; no workbook or database mutation<br>
+**Current proven private cohort:** 56 unique destinations (preexisting 36 plus Next-20)<br>
+**Contract/readiness proof workbook:** `data/next-batch-20/DestinationFinderAI-Next-Batch-20-Visual-Parity-Enriched-v3.3.xlsx`<br>
+**Contract/readiness proof SHA-256:** `88f365b1dabfef7a3bbeb2958f53e9c3537d1f8f8b74e6cf6083482ddb802683`<br>
+**Copy-and-sanitize template workbook:** `data/next-batch-20/DestinationFinderAI-Next-Batch-20-Private-Import-Authorized-v3.3.xlsx`<br>
+**Template SHA-256:** `9a76e2b4427dd78c17cb9e844b1f8eaae37f778e0a278589320b3d5c86991cac`
 
-## 39 versus 48: authoritative resolution
+## Checkpoint conclusion
 
-1. **Why did 39 versus 48 appear?** The authorized workbook's canonical order places `IMPORT_CONTRACT` at worksheet 39. An earlier inspection/report stopped there and incorrectly described 39 as the total. The nine omitted physical sheets are `WORKBOOK_METADATA`, `IMPORT_MANIFEST`, `DESTINATION_ALIASES`, `VALIDATION_RULES`, `DATA_DICTIONARY`, `ENVIRONMENT_QUALITY`, `DAILY_LIFE_PRACTICALITY`, `EVENTS_SEASONALITY`, and `LIFESTYLE_FEATURES`. No repository contract or acceptance test defines a 39-sheet v3.3 workbook.
-2. **Is 39 the current workbook count?** No. Direct XLSX inspection returns 48 worksheet names.
-3. **What does 48 mean?** It is the complete current v3.3 physical authoring template, not an older or merely logical-module count. The workbook's own `WORKBOOK_METADATA.validation_sheet_count` is `48`, and the Next-20 acceptance test pins `sheetCount: 48`.
-4. **What must future workbooks contain?** All 48 sheets in the canonical order with the exact headers in `batch-contract-v3.3.json`. The deterministic parser checks a narrower ten-sheet structural subset for backward compatibility; that minimum does not define authoring completeness. `SCHEMA_INDEX` and `DATA_DICTIONARY` contain 24 and 30 entries respectively and are partial documentation registries, not exhaustive sheet manifests.
-5. **What number must be enforced?** The permanent authoring playbook and validator enforce **48**. The parser continues to enforce its existing **10-sheet** compatibility minimum. **39 must not be used.**
+The permanent workflow now describes the proven system from source research through all three product consumers. A fresh agent can prepare and import the next 20 without relying on chat history: it can identify the exact workbook contract, authoring-readiness gates, generic registry/persistence paths, authorization boundaries, normalized read-back checks, idempotency proof, Smart Shortlist behavior, Explore/Browse behavior, and desktop/mobile visual QA.
 
-## Delivered system
+The two workbook hashes above are not contradictory. They identify two distinct immutable artifacts with different documented roles. Every operation must verify the path/hash pair for the artifact actually used.
 
-- `AUTHORING_DATA_REQUIREMENTS.md`: exact field-level research contract
-- `BATCH_AUTHORING_AND_IMPORT_PLAYBOOK.md`: phases A-G and authorization gates
-- `BATCH_OPERATOR_CHECKLIST.md`: operator sign-offs and stop conditions
-- `batch-contract-v3.3.json`: exact 48-sheet order, headers, enums, U3-R5 and climate rules
-- `WORKBOOK_TEMPLATE_INSTRUCTIONS.md`: safe copy-and-sanitize template method
-- `FUTURE_BATCH_AUTHORING_PROMPT.md`: self-contained authoring prompt
-- `FUTURE_BATCH_IMPORT_PROMPT.md`: phase-bounded import prompt
-- `VISUAL_QA_CHECKLIST.md`: Premium Guide and Smart Shortlist QA
-- `scripts/validate_destination_batch.ts`: read-only validator
-- `scripts/validate_destination_batch.test.ts`: focused validator tests
-- `package.json`: `validate:destination-batch` command
+## Contract resolution
 
-## Current Next-20 validation
+- **48** is the complete v3.3 physical authoring contract and canonical sheet order.
+- **10** is only the deterministic parser's backward-compatible structural minimum; it is not authoring-complete.
+- **39** was a historical inspection/reporting error caused by stopping at worksheet 39, `IMPORT_CONTRACT`.
+- **24 / 30** are partial row counts in `SCHEMA_INDEX` / `DATA_DICTIONARY`, not worksheet counts.
+- `batch-contract-v3.3.json` remains the machine-readable authority. No schema or validator change was required by this checkpoint.
 
-Command:
+## Proven Next-20 authoring state
 
-```bash
-npm run --silent validate:destination-batch -- \
-  --workbook data/next-batch-20/DestinationFinderAI-Next-Batch-20-Visual-Parity-Enriched-v3.3.xlsx \
-  --registry-id next-batch-20-private-import-authorized \
-  --json
-```
-
-Result:
-
-| Check | Result |
+| Check | Proven result |
 |---|---|
-| Physical sheets | 48/48 |
-| Exact sheet order and headers | PASS |
-| Schema metadata | PASS |
-| Climate formulas | 960/960 with numeric cached values |
-| Deterministic parser | PASS |
-| Registry SHA-256 | PASS |
-| Registry/manifest/parsed keys | PASS, 20/20 |
-| U3-R5 row structure and numeric ranges | PASS, 40/40 rows |
-| Blocking errors | 0 |
-| Population/provenance | PASS, 20/20 and 20/20 |
-| Lifestyle parity | PASS, 312 rows; 14-18 per destination |
+| Physical sheets/order/headers | PASS, 48/48 |
+| Deterministic parser and registry hash/key ownership | PASS, exact 20/20 keys |
+| Climate formulas | PASS, 960/960 with numeric cached values |
+| U3-R5 structure | PASS, one single and one couple row per destination, 40/40 total |
+| Population/provenance | PASS, 20/20 |
+| Lifestyle parity | PASS, 312 rows, 14-18 per destination |
 | Customer-copy blocking terms | PASS, 0 |
-| Authoring parity | PASS |
-| Authoring readiness | AUTHORING_COMPLETE |
+| Authoring parity/readiness | PASS / `AUTHORING_COMPLETE` |
+| Blocking errors | 0 |
 
-The readiness result is intentionally separate from integrity. UNKNOWN and evidence-quality warnings remain reviewable rather than being coerced into known values. Exact duplicate evidence summaries in Valencia and Kanazawa are flagged for non-blocking filler review.
+UNKNOWN and evidence-quality warnings remain reviewable and are never coerced to PASS. The prior report recorded unverified U3-R5 evidence and unresolved decision facts for explicit disposition; future authoring must satisfy the current stricter requirements before it is called authoring-ready.
 
-- 20 destinations have U3-R5 planning-estimate rows intentionally marked unverified.
-- Each destination has one or more unresolved decision facts. Aggregate counts are: `foreignPropertyPurchaseAllowed` 20, `remoteWorkLegalUnderTouristStatus` 20, `retirementVisaProgramAvailable` 20, `mountainOrSkiAccess` 18, `remoteWorkOrDigitalNomadVisaAvailable` 16, `spouseOrDependentInclusionSupported` 16, `healthcareStandard` 12, `beachAccess` 7, and `lgbtqLegalProtectionStatus` 1.
+## Proven persistence parity
 
-These warnings are preserved rather than converted to passing values. They do not negate the previously authorized controlled import, but the stricter permanent authoring standard requires explicit warning disposition before a future batch is called authoring-ready.
+The old-36 parity repair and Next-20 path now share the same generic architecture:
 
-## Fresh-agent simulation
+- Population, metro population, and elevation map to persisted destination identity in `destinations_catalog` and return through the normalized read path.
+- `LIFESTYLE_FEATURES` maps through the generic `lifestyleFeatures` module and `premium_lifestyle_features` table with stable destination/record identity.
+- The canonical destination loader prefers persisted identity values and uses only approved existing fallbacks for absent optional values.
+- No old/new destination-specific production branch is required.
+- Normalized persisted parity and rendered parity are separate from workbook completeness. Future batches must prove all three; a complete workbook alone is insufficient.
+- Scoped backup, outside-scope fingerprint, transactional execution/rollback, normalized read-back, and zero-diff replay remain mandatory write controls.
 
-A new read-only Explore agent was given only the permanent artifacts and relevant code references, with no conversation history. It independently:
+## Proven product state
 
-- identified 48 as the full authoring contract and 10 as the parser compatibility minimum;
-- rejected 39 as a contract number;
-- recovered the copy-and-sanitize template method;
-- produced the correct registered and unregistered validator commands;
-- distinguished structural validity, authoring readiness, dry run, write approval, read-back, and visual QA;
-- found no missing external context required for authoring or read-only preflight;
-- returned **PASS** and performed no edits, imports, database operations, deployments, pushes, or commits.
+| Consumer | Current proof |
+|---|---|
+| Premium Guide | Canonical identity/content/media, population and supported metro values, full lifestyle access, route integrity, and responsive rendering were checked during parity and product QA. |
+| Smart Shortlist | Exactly 56 candidates load through the registry-backed shared path. Hard requirements use PASS/FAIL/UNKNOWN; failures exclude before preference ranking. Single/couple U3-R5 midpoint and 10% close-to-budget behavior are covered. |
+| Explore/Browse | Exactly the same 56-candidate cohort is derived from Smart Shortlist data, with no missing candidates or extras. Identity/image completeness, search normalization, canonical filters, routes, and Back-state restoration are covered. |
 
-## Validation evidence
+All 56 Explore destination routes returned HTTP 200 in the completed product QA. Desktop `1440x900` and mobile `390x844` checks covered the required product surfaces, with compact and narrow responsive checks retained in the permanent checklist. Smart Shortlist hardening is recorded in local commit `3271f4148b3bee5cbbec35f458095db12b37f688`; Explore hardening is recorded in local commit `9a38dce`.
 
-- Contract-to-workbook comparison: 48-sheet order matched; 46 tabular header sets matched; `README` and title-based `IMPORT_CONTRACT` were handled as nonstandard/reference sheets.
-- Focused validator tests: 2/2 passed.
-- Validator plus Next-20 acceptance suite: 12/12 passed.
-- Markdown/JSON/TypeScript editor diagnostics: no errors at the point of focused validation.
+## Decision contract
+
+The permanent rule is **FILTER FIRST -> RANK SURVIVORS BY PREFERENCE FIT**. Hard requirements resolve to `PASS`, `FAIL`, or `UNKNOWN`; `FAIL` excludes, `UNKNOWN` stays in needs-verification state, and preference fit cannot rescue failure. Unsupported scores remain absent.
+
+U3-R5 uses the selected household's 2026 USD comfortable monthly estimate midpoint. At or below budget is within budget; up to 10% above is close to budget/needs verification; more than 10% above is over budget. The documented estimate includes ordinary comfortable living assumptions and excludes healthcare, taxes, international travel, major medical expenses, and luxury spending.
+
+## Permanent controls delivered
+
+- `BATCH_AUTHORING_AND_IMPORT_PLAYBOOK.md`: authoritative 24-step end-to-end workflow.
+- `BATCH_OPERATOR_CHECKLIST.md`: phase gates, stop conditions, persisted parity, product proof, and repository handoff.
+- `AUTHORING_DATA_REQUIREMENTS.md`: exact field/evidence/UNKNOWN and full-data-preservation requirements.
+- `batch-contract-v3.3.json`: exact 48-sheet machine-readable contract.
+- `WORKBOOK_TEMPLATE_INSTRUCTIONS.md`: artifact-specific path/hash roles and safe copy/sanitize process.
+- `FUTURE_BATCH_AUTHORING_PROMPT.md`: self-contained authoring handoff.
+- `FUTURE_BATCH_IMPORT_PROMPT.md`: authorization-bounded import/read-back/product-QA handoff.
+- `VISUAL_QA_CHECKLIST.md`: Premium Guide, Smart Shortlist, and Explore/Browse QA.
+- `scripts/validate_destination_batch.ts` and its focused test: read-only structural and authoring-completeness enforcement.
+
+## Fresh-agent acceptance test
+
+Using only repository documentation, a fresh agent asked to “Prepare and import the next 20 legacy destinations using the current DestinationFinderAI production process” must now:
+
+1. Stop before writes until an exact phase and explicit authorization are supplied.
+2. Select the correct artifact/path/hash role and preserve exactly 48 sheets.
+3. Enforce exact keys, provenance, population, 14-row lifestyle depth, customer-copy restrictions, hard-gate evidence, and both U3-R5 household rows.
+4. Distinguish parser compatibility, structural validity, authoring readiness, dry run, execution approval, normalized read-back, idempotency, product QA, and publication readiness.
+5. Use the generic registry, persistence/read-back, Smart Shortlist, and Explore paths without destination-specific branches.
+6. Capture scoped backup/outside-scope proof and verify identity plus `premium_lifestyle_features` parity after an authorized write.
+7. Prove every new candidate in Smart Shortlist and Explore, all routes, decision behavior, search/filter/Back behavior, and desktop/mobile rendering.
+8. Run focused checks serially, preserve unrelated dirty-worktree work, stage only task-owned changes, and never infer push authorization from a local commit request.
+
+Failure to recover any item above is a documentation/contract blocker.
+
+## Checkpoint validation evidence
+
+- Fresh-agent simulation before correction found that phases D-G lacked registry, controller, preflight, fingerprint, execution, read-back, and product-proof mechanics.
+- Fresh-agent simulation after correction reconstructed all 24 steps from permanent documentation and returned strict **PASS**. Human authorization and secret credentials were correctly treated as explicit external stop conditions, not inferred inputs.
+- Focused validator/Smart Shortlist/Explore regression run: **10 test files, 89 tests passed**.
+- The suite proved validator readiness behavior, exact 56-candidate loading, hard-gate and U3-R5 behavior, Explore cohort mapping, normalized search/filter state, and unsupported-score suppression.
+- `batch-contract-v3.3.json` parsed successfully and all 13 referenced control paths checked during this audit existed.
+- Both documented workbook path/hash pairs were recomputed and matched their named artifacts.
+- Touched-document diagnostics and `git diff --check` passed.
+- The test run emitted pre-existing duplicate object-key warnings from `app/lib/destinations.ts`; they are outside this documentation checkpoint and did not fail the focused suite.
 
 ## Final verdict
 
-**YES: the permanent batch system prevents a schema-valid workbook from reaching AUTHORING COMPLETE when population/provenance is missing, lifestyle content is materially thin, or clearly internal pipeline language appears in customer-visible copy.**
+**BATCH SYSTEM CHECKPOINT COMPLETE — READY FOR NEXT 20**
 
-This YES does not authorize import or publication. A particular future workbook must independently pass the 48-sheet contract, deterministic parser, key/hash/manifest/affordability checks, authoring parity, warning review, dry-run planning, explicit write approval, normalized read-back, and visual QA.
-
-No workbook was imported. No database was read or written. No deployment, push, or commit was performed.
+This verdict confirms workflow readiness only. It does not authorize a new workbook, protected-state read, database write, deployment, or push. This checkpoint modified documentation only; it did not modify workbooks or perform an import.

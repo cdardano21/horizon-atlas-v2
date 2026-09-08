@@ -50,20 +50,26 @@ This checklist is a sign-off record, not authorization. Record evidence beside e
 
 ## Registry and dry run
 
-- [ ] One generic registry entry added with exact path, environment, complete key set, and SHA-256.
+- [ ] One generic entry added to `app/lib/expansion-workbook-registry.ts` with unique ID, exact path, `preview` or `production` environment, complete key set, and SHA-256.
 - [ ] No batch-specific loader, route, UI branch, candidate list, affordability list, or media map added.
-- [ ] Registry ownership validation passes with no duplicate key/alias.
+- [ ] `./node_modules/.bin/vitest run app/lib/expansion-workbook-registry.test.ts scripts/validate_destination_batch.test.ts <batch-acceptance-test>` passes with no duplicate key/alias.
+- [ ] A new task-owned thin controller uses `executeGuardedDeterministicV31Batch()` and the normalized read APIs; historical `tmp/` runners were not reused unchanged.
+- [ ] Controller review confirms separate fail-closed `--preflight`/`--execute` modes, exact workbook/key/environment constants, no embedded credentials, and no publication mutation.
+- [ ] Scoped pre-write backup contains approved catalog/module rows, stable serialization, row counts, and SHA-256; file path/hash are recorded.
+- [ ] Outside-scope fingerprint covers `destinations_catalog` plus discovered public `premium_*` destination tables, with deterministically ordered stable-JSON row count/SHA-256 per table.
 - [ ] Separately authorized dry run resolves every key to exactly one approved destination ID.
 - [ ] Dry-run plan lists creates/updates/unchanged/warnings/errors and all explicit destructive operations.
 - [ ] Workbook, manifest, plan, policy, scope, and destination-ID hashes/versions bound in the plan envelope.
-- [ ] Unresolved count is zero; changed input caused a new hash and new plan.
+- [ ] Immutable preflight report records scope/statuses, hashes, table set, backup, fingerprints, plan operations, counts, and errors/warnings; its SHA-256 is recorded.
+- [ ] Unresolved count is zero; every destination plans; failed/skipped and dry-run SQL statements are zero; changed input caused a new hash and new plan.
 
 ## Write authorization
 
 - [ ] Human approval identifies exact plan ID/hash, workbook hash, environment, scope, approver, and expiry.
 - [ ] Mode is exactly `EXECUTE`; explicit execution approval is true.
 - [ ] Credentials are bounded to the authorized environment/window.
-- [ ] Transaction and rollback mechanisms confirmed immediately before execution.
+- [ ] Workbook, preflight, and backup hashes plus key/ID/status scope and outside-scope fingerprint are revalidated immediately before execution.
+- [ ] Controller owns one outer transaction for batch-level atomicity; the guarded API's nested per-destination transaction boundaries cannot commit independently.
 - [ ] No unrelated worktree/deployment/push activity is bundled with the operation.
 
 ## Post-write verification
@@ -71,12 +77,26 @@ This checklist is a sign-off record, not authorization. Record evidence beside e
 - [ ] Transaction committed once for exact scope, or fully rolled back on failure.
 - [ ] Database write count and affected identities match the approved plan.
 - [ ] Normalized read-back equals expected canonical state per destination/module.
-- [ ] Unrelated destination controls are unchanged.
+- [ ] Population, supported metro population/elevation, and canonical identity read back through the generic `destinations_catalog` path.
+- [ ] Every expected lifestyle row reads back through `premium_lifestyle_features`; full row counts and stable record keys reconcile even when the UI initially discloses fewer items.
+- [ ] Outside-scope fingerprint and unrelated destination controls are unchanged.
 - [ ] Repeat dry run proposes zero changes.
-- [ ] Premium Guide and Smart Shortlist consume the same canonical facts/media.
+- [ ] Smart Shortlist contains every new candidate exactly once, with no missing/extra keys or destination-specific candidate branch.
+- [ ] Smart Shortlist proves FILTER FIRST -> RANK SURVIVORS: FAIL excludes, UNKNOWN needs verification, preference fit cannot rescue failure, and selected-household U3-R5 midpoint/tolerance behavior matches policy.
+- [ ] Explore/Browse contains every new candidate exactly once with no missing/extra keys; exact/country/region search and canonical filters work.
+- [ ] Every new Smart Shortlist and Explore card routes to its canonical destination; Browse -> Destination -> Back restores search/filter state.
+- [ ] Premium Guide, Smart Shortlist, and Explore consume the same canonical identity, facts, and media.
 - [ ] `VISUAL_QA_CHECKLIST.md` passed on desktop and mobile; screenshots archived.
+- [ ] Catalog publication status is unchanged; any draft-to-published transition remains a separately authorized operation.
 - [ ] Final report distinguishes structural, authoring, matching, display, and publication readiness.
 - [ ] Final **YES/NO** readiness verdict and remaining blockers recorded.
+
+## Repository handoff
+
+- [ ] Full-project `tsc --noEmit` was not used as a default batch check; focused tests and touched-file diagnostics were run serially.
+- [ ] Temporary scripts, reports, screenshots, and workbook artifacts are retained only in their intended audit location or removed.
+- [ ] Dirty-worktree changes were reviewed; only task-owned files/hunks are staged.
+- [ ] Local commit message matches the requested checkpoint/batch operation; no push occurs without separate authorization.
 
 ## Immediate stop conditions
 
@@ -87,6 +107,7 @@ This checklist is a sign-off record, not authorization. Record evidence beside e
 - [ ] Missing/unsupported population or population provenance; materially thin lifestyle content without an approved exception; clearly internal technical language in customer copy.
 - [ ] Implicit delete/clear/replace or unapproved scope change.
 - [ ] Unresolved conflict, stale approval, transaction uncertainty, or read-back mismatch.
+- [ ] Preflight/backup/fingerprint mismatch, nonzero dry-run statements, or partial per-destination commit risk without the approved outer transaction.
 - [ ] Broken/wrong/unlicensed primary media or destination identity uncertainty.
 
 If any stop condition is checked, do not import. Preserve evidence, create a corrected workbook/plan as a new artifact, and restart at read-only validation.
