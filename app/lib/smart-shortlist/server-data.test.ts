@@ -1,10 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { EXPANSION_WORKBOOK_REGISTRY } from "../expansion-workbook-registry";
 import type { DeterministicV31CanonicalLifestyleFeature } from "../workbook-v31-deterministic-core";
-import { smartShortlistCandidates } from "./cohort";
 import { evaluateShortlist } from "./evaluator";
 import { evaluateShortlistWithOwnedAffordability } from "./owned-affordability-evaluator";
-import { coastalSettingFromLifestyleFeatures, loadSmartShortlistData, loadSmartShortlistIntelligence } from "./server-data";
+import { coastalSettingFromLifestyleFeatures, loadSmartShortlistData } from "./server-data";
 
 function coastalRow(overrides: Partial<DeterministicV31CanonicalLifestyleFeature> = {}): DeterministicV31CanonicalLifestyleFeature {
   return {
@@ -72,9 +71,12 @@ describe("Smart Shortlist server facts", () => {
   }, 15_000);
 
   it("enforces the supported hard-requirement scenarios across all 56", async () => {
-    const intelligence = await loadSmartShortlistIntelligence();
+    const { candidates, intelligence } = await loadSmartShortlistData();
     const byKey = new Map(intelligence.map((item) => [item.key, item]));
-    const destinations = smartShortlistCandidates.map((candidate) => ({ ...candidate, ...byKey.get(candidate.key) }));
+    const destinations = candidates.map((candidate) => ({ ...candidate, ...byKey.get(candidate.key) }));
+
+    expect(destinations).toHaveLength(56);
+    expect(destinations.filter((candidate) => EXPANSION_WORKBOOK_REGISTRY.find((entry) => entry.registryId === "next-batch-20-private-import-authorized")?.expectedDestinationKeys.includes(candidate.key))).toHaveLength(20);
 
     const usOnly = evaluateShortlist(destinations, { includedCountries: ["US"] });
     expect(usOnly.filter((result) => result.group !== "EXCLUDED").every((result) => result.destination.countryCode === "US")).toBe(true);

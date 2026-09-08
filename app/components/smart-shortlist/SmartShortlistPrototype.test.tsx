@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { smartShortlistCandidates } from "../../lib/smart-shortlist/cohort";
 import SmartShortlistPrototype from "./SmartShortlistPrototype";
@@ -204,6 +204,55 @@ describe("Smart Shortlist prototype", () => {
     expect(screen.getAllByRole("article")).toHaveLength(36);
     fireEvent.click(screen.getByRole("button", { name: "Show fewer places meeting required filters" }));
     expect(screen.getAllByRole("article")).toHaveLength(12);
+  });
+
+  it("keeps a supplied Next-20 candidate in the one-result comparison", () => {
+    const tivat = {
+      ...smartShortlistCandidates[0],
+      key: "tivat-montenegro",
+      slug: "tivat-montenegro",
+      name: "Tivat",
+      country: "Montenegro",
+      countryCode: "ME",
+    };
+    const tivatIntelligence = [{ ...intelligence[0], key: tivat.key }];
+
+    render(<SmartShortlistPrototype candidates={[tivat]} intelligence={tivatIntelligence} />);
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    buildShortlist();
+
+    expect(cardFor("Tivat")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "1 place side by side" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: /Tivat/ })).toBeInTheDocument();
+  });
+
+  it("restores a completed shortlist after opening a destination guide", async () => {
+    const { unmount } = render(<SmartShortlistPrototype intelligence={intelligence} />);
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    buildShortlist();
+    const guideLink = screen.getAllByRole("link", { name: /Open destination guide/ })[0];
+    guideLink.addEventListener("click", (event) => event.preventDefault(), { once: true });
+    fireEvent.click(guideLink);
+    unmount();
+
+    render(<SmartShortlistPrototype intelligence={intelligence} />);
+
+    await waitFor(() => expect(screen.getByRole("button", { name: "Edit choices" })).toBeInTheDocument());
+    expect(screen.queryByRole("heading", { name: "Where would you like to look?" })).not.toBeInTheDocument();
+    expect(sessionStorage.getItem("destinationfinder-smart-shortlist-return-v1")).toBeNull();
+  });
+
+  it("explains a zero-survivor result and identifies requirements to review", () => {
+    const onlyCandidate = smartShortlistCandidates[0];
+    render(<SmartShortlistPrototype candidates={[onlyCandidate]} intelligence={[intelligence[0]]} />);
+    fireEvent.click(screen.getByRole("button", { name: "Outside the United States" }));
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    buildShortlist();
+
+    expect(screen.getByRole("heading", { name: "No destinations satisfy every selected requirement." })).toBeInTheDocument();
+    expect(screen.getByText("Requirements to review first")).toBeInTheDocument();
+    expect(screen.getByText("Geography")).toBeInTheDocument();
+    expect(screen.getByText("Rules out 1 destination")).toBeInTheDocument();
   });
 
   it("keeps important-preference failures eligible and labels them as tradeoffs", () => {

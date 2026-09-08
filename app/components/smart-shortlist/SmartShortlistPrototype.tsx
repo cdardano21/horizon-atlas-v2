@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { smartShortlistCandidates, type PrototypeCandidate } from "../../lib/smart-shortlist/cohort";
 import { convertRangeForDisplay, U3_R3_FIXTURE_SNAPSHOT } from "../../lib/smart-shortlist/exchange-rates";
 import type { EssentialRequirementMode, EvaluatedDestination, HardOnlyRequirementMode, ShortlistProfile } from "../../lib/smart-shortlist/evaluator";
@@ -28,6 +28,33 @@ const countryPresets = {
 
 type CountryPreset = keyof typeof countryPresets;
 type DetailTopic = typeof detailTopics[number];
+
+interface SavedShortlistSession {
+  version: 1;
+  countryPreset: CountryPreset;
+  household: "single" | "couple";
+  budget: string;
+  requireBudget: boolean;
+  displayCurrency: string;
+  healthcareMode: EssentialRequirementMode;
+  healthcareMinimum: HealthcareMinimumStandard;
+  safetyMode: EssentialRequirementMode;
+  safetyMinimum: SafetyMinimumStandard;
+  lgbtqMode: HardOnlyRequirementMode;
+  legalPathMode: HardOnlyRequirementMode;
+  beach: ShortlistProfile["beach"];
+  mountain: ShortlistProfile["mountain"];
+  detailTopic: DetailTopic;
+  requireBeach: boolean;
+  requireMountain: boolean;
+  results: OwnedEvaluatedDestination[];
+  comparison: string[];
+  showExcluded: boolean;
+  showAllRecommended: boolean;
+  showAllVerification: boolean;
+}
+
+const savedSessionKey = "destinationfinder-smart-shortlist-return-v1";
 
 const controlClass = "w-full border border-[var(--atlas-border)] bg-white px-4 py-3 text-left text-sm font-semibold text-[var(--atlas-ink)] transition hover:border-[var(--atlas-accent)] disabled:cursor-not-allowed disabled:opacity-45";
 const selectClass = "mt-2 w-full border border-[var(--atlas-border)] bg-white px-3 py-3";
@@ -155,6 +182,44 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
   const [showAllRecommended, setShowAllRecommended] = useState(false);
   const [showAllVerification, setShowAllVerification] = useState(false);
 
+  useEffect(() => {
+    const serialized = sessionStorage.getItem(savedSessionKey);
+    if (!serialized) return;
+    sessionStorage.removeItem(savedSessionKey);
+    let saved: SavedShortlistSession;
+    try {
+      saved = JSON.parse(serialized) as SavedShortlistSession;
+      if (saved.version !== 1 || !Array.isArray(saved.results) || !Array.isArray(saved.comparison)) return;
+    } catch {
+      return;
+    }
+    const restore = window.setTimeout(() => {
+      setStep(steps.length - 1);
+      setCountryPreset(saved.countryPreset);
+      setHousehold(saved.household);
+      setBudget(saved.budget);
+      setRequireBudget(saved.requireBudget);
+      setDisplayCurrency(saved.displayCurrency);
+      setHealthcareMode(saved.healthcareMode);
+      setHealthcareMinimum(saved.healthcareMinimum);
+      setSafetyMode(saved.safetyMode);
+      setSafetyMinimum(saved.safetyMinimum);
+      setLgbtqMode(saved.lgbtqMode);
+      setLegalPathMode(saved.legalPathMode);
+      setBeach(saved.beach);
+      setMountain(saved.mountain);
+      setDetailTopic(saved.detailTopic);
+      setRequireBeach(saved.requireBeach);
+      setRequireMountain(saved.requireMountain);
+      setResults(saved.results);
+      setComparison(saved.comparison);
+      setShowExcluded(saved.showExcluded);
+      setShowAllRecommended(saved.showAllRecommended);
+      setShowAllVerification(saved.showAllVerification);
+    }, 0);
+    return () => window.clearTimeout(restore);
+  }, []);
+
   const intelligenceByKey = new Map(intelligence.map((item) => [item.key, item]));
   const affordabilityByDestination = new Map([
     ...ownedAffordabilityByDestination,
@@ -200,6 +265,39 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
       : current.length < 4 ? [...current, key] : current);
   };
 
+  const preserveShortlistForReturn = () => {
+    if (!results) return;
+    const saved: SavedShortlistSession = {
+      version: 1,
+      countryPreset,
+      household,
+      budget,
+      requireBudget,
+      displayCurrency,
+      healthcareMode,
+      healthcareMinimum,
+      safetyMode,
+      safetyMinimum,
+      lgbtqMode,
+      legalPathMode,
+      beach,
+      mountain,
+      detailTopic,
+      requireBeach,
+      requireMountain,
+      results,
+      comparison,
+      showExcluded,
+      showAllRecommended,
+      showAllVerification,
+    };
+    try {
+      sessionStorage.setItem(savedSessionKey, JSON.stringify(saved));
+    } catch {
+      // Navigation still works when browser storage is unavailable.
+    }
+  };
+
   const allRecommendedResults = results?.filter((item) => item.group === "MEETS_FILTERS") ?? [];
   const initialRecommendedCount = Math.min(12, allRecommendedResults.length);
   const recommendedResults = showAllRecommended ? allRecommendedResults : allRecommendedResults.slice(0, initialRecommendedCount);
@@ -212,6 +310,28 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
   const additionalVerificationCount = verificationResults.length - visibleVerificationResults.length;
   const displayedResults = [...recommendedResults, ...visibleVerificationResults];
   const excludedResults = results?.filter((item) => item.group === "EXCLUDED") ?? [];
+  const hasZeroSurvivors = results !== null && allRecommendedResults.length === 0 && verificationResults.length === 0;
+  const hardRequirementCapabilities = new Set<EvaluatedDestination["reasons"][number]["capability"]>([
+    ...(profile.includedCountries || profile.excludedCountries ? ["country" as const] : []),
+    ...(requireBeach ? ["beach" as const, "ocean" as const] : []),
+    ...(requireMountain ? ["mountain" as const] : []),
+    ...(healthcareMode === "MUST_HAVE" ? ["healthcare" as const] : []),
+    ...(safetyMode === "MUST_HAVE" ? ["safety" as const] : []),
+    ...(lgbtqMode === "MUST_HAVE" ? ["lgbtq" as const] : []),
+    ...(legalPathMode === "MUST_HAVE" ? ["legalPath" as const] : []),
+    ...(requireBudget && Boolean(budget) && Number(budget) > 0 ? ["affordability" as const] : []),
+  ]);
+  const failedRequirementCounts = excludedResults.reduce((counts, result) => {
+    for (const reason of result.reasons) {
+      if (reason.state === "FAIL" && hardRequirementCapabilities.has(reason.capability)) {
+        counts.set(reason.capability, (counts.get(reason.capability) ?? 0) + 1);
+      }
+    }
+    return counts;
+  }, new Map<EvaluatedDestination["reasons"][number]["capability"], number>());
+  const relaxationSuggestions = [...failedRequirementCounts]
+    .sort(([leftCapability, leftCount], [rightCapability, rightCount]) => rightCount - leftCount || leftCapability.localeCompare(rightCapability))
+    .slice(0, 3);
   const preferenceCapabilities = new Set<EvaluatedDestination["reasons"][number]["capability"]>([
     ...(healthcareMode === "IMPORTANT_PREFERENCE" ? ["healthcare" as const] : []),
     ...(safetyMode === "IMPORTANT_PREFERENCE" ? ["safety" as const] : []),
@@ -220,7 +340,7 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
     && healthcareMode === "NOT_A_FACTOR" && safetyMode === "NOT_A_FACTOR"
     && lgbtqMode === "NOT_A_FACTOR" && legalPathMode === "NOT_A_FACTOR";
   const comparisonRows = comparison
-    .map((key) => smartShortlistCandidates.find((candidate) => candidate.key === key))
+    .map((key) => candidates.find((candidate) => candidate.key === key))
     .filter((candidate): candidate is PrototypeCandidate => Boolean(candidate));
   const comparisonTopicOrder = [detailTopic, ...detailTopics.filter((topic) => topic !== detailTopic)];
 
@@ -384,6 +504,27 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
               <p className="mt-2 text-xs text-[var(--atlas-muted)]">Missing pairs show conversion unavailable. Stale rates retain their effective date and a visible warning. Weekends and declared market holidays do not consume freshness days.</p>
             </section>
 
+            {hasZeroSurvivors && (
+              <section className="rounded-lg border border-[#f0bd5680] bg-[#332a1b] p-6 text-[#fff8e9] sm:p-8">
+                <p className="text-xs font-bold uppercase text-[#f0bd56]">No confirmed or unconfirmed matches</p>
+                <h2 className="mt-2 text-2xl font-semibold">No destinations satisfy every selected requirement.</h2>
+                <p className="mt-3 max-w-3xl text-sm leading-6 text-[#e3d7bf]">Every destination misses at least one must-have based on the current information. Edit your choices and relax one requirement at a time; the underlying destination facts will not change.</p>
+                {relaxationSuggestions.length > 0 && (
+                  <div className="mt-5">
+                    <p className="text-sm font-bold">Requirements to review first</p>
+                    <ul className="mt-2 grid gap-2 sm:grid-cols-3">
+                      {relaxationSuggestions.map(([capability, count]) => (
+                        <li key={capability} className="rounded-md border border-[#f0bd564d] bg-[#211d28] px-4 py-3 text-sm">
+                          <span className="font-bold">{reasonLabels[capability]}</span>
+                          <span className="mt-1 block text-xs text-[#d8c8ad]">Rules out {count} {count === 1 ? "destination" : "destinations"}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </section>
+            )}
+
             {(["MEETS_FILTERS", "NEEDS_VERIFICATION"] as const).map((group) => {
               const items = group === "MEETS_FILTERS" ? recommendedResults : visibleVerificationResults;
               if (group === "MEETS_FILTERS" ? !items.length : !verificationResults.length) return null;
@@ -404,7 +545,7 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
                           <DualCurrencyCostEvidence candidate={candidate} localRange={localTotal(candidate, household)} displayCurrency={displayCurrency} snapshot={snapshot} asOfDate={snapshotAsOfDate} household={household} />
                           <p className="mt-3 text-xs font-semibold text-[var(--atlas-ink)]">{item.lifestyleFit.scoreStatus === "SCORED" ? `Lifestyle fit ${item.lifestyleFit.totalScore}/100 · ${item.lifestyleFit.scoredDimensionCount}/${item.lifestyleFit.relevantDimensionCount} selected dimensions supported` : "No supported preference score; shown without a fabricated ranking"}</p>
                           <RequirementReasons reasons={item.reasons} preferenceCapabilities={preferenceCapabilities} />
-                          <Link href={`/destinations/${candidate.slug}`} className="mt-5 inline-block text-sm font-bold text-[var(--atlas-accent)] underline underline-offset-4">Open destination guide</Link>
+                          <Link href={`/destinations/${candidate.slug}`} onClick={preserveShortlistForReturn} className="mt-5 inline-block text-sm font-bold text-[var(--atlas-accent)] underline underline-offset-4">Open destination guide</Link>
                         </article>
                       );
                     })}
@@ -446,7 +587,7 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
             )}
 
             <section className="border-t-4 border-[var(--atlas-accent)] bg-[#fffdf7] p-5 sm:p-8">
-              <div className="flex flex-wrap items-end justify-between gap-3"><div><p className="text-xs font-bold uppercase text-[var(--atlas-accent)]">Comparison</p><h2 className="mt-2 text-3xl font-semibold">{comparisonRows.length ? `${comparisonRows.length} places side by side` : "Select places to compare"}</h2></div><span className="text-sm text-[var(--atlas-muted)]">Start with three, add one more</span></div>
+              <div className="flex flex-wrap items-end justify-between gap-3"><div><p className="text-xs font-bold uppercase text-[var(--atlas-accent)]">Comparison</p><h2 className="mt-2 text-3xl font-semibold">{comparisonRows.length ? `${comparisonRows.length} ${comparisonRows.length === 1 ? "place" : "places"} side by side` : "Select places to compare"}</h2></div><span className="text-sm text-[var(--atlas-muted)]">Start with three, add one more</span></div>
               {comparisonRows.length > 0 && (
                 <div className="mt-7 overflow-x-auto">
                   <table className="w-full min-w-[760px] border-collapse text-left text-sm">
