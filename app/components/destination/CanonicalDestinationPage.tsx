@@ -2136,9 +2136,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     return true;
   });
 
-  const developerToggleHref = developerMode
-    ? `/destinations/${destination.slug}`
-    : `/destinations/${destination.slug}?developer=1`;
+  const developerExitHref = `/destinations/${destination.slug}`;
   const destinationLocation = [destination.knowledgeProfile?.adminRegion, destination.country].filter(Boolean).join(" / ");
   const firstSixFacts = availableFacts.slice(0, 6);
   const firstSixFactLabels = new Set(firstSixFacts.map((fact) => fact.label));
@@ -2416,11 +2414,15 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               <h2 className="mt-3 text-2xl font-semibold text-white">Scores and fit</h2>
             </div>
             <div className="flex flex-wrap items-center gap-3">
-            <div className="rounded-3xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-200">{scoreCards.length} decision lenses</div>
-            <Link href={developerToggleHref} className="rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/40 hover:text-cyan-200">
-              {developerMode ? "Exit developer view" : "Open developer view"}
-            </Link>
-          </div>
+              {scoreCards.length > 0 ? (
+                <div className="rounded-3xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-200">{scoreCards.length} decision lenses</div>
+              ) : null}
+              {developerMode ? (
+                <Link href={developerExitHref} className="rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/40 hover:text-cyan-200">
+                  Exit developer view
+                </Link>
+              ) : null}
+            </div>
             </div>
             <div className="mt-6 divide-y divide-white/10 border-y border-white/10">
               {scoreCards.map((category) => (

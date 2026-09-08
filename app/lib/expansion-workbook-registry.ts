@@ -78,6 +78,20 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     expectedSha256: "88f365b1dabfef7a3bbeb2958f53e9c3537d1f8f8b74e6cf6083482ddb802683",
   },
   {
+    registryId: "legacy-carryover-batch-20-02",
+    // Superseded 2026-09-08 by the premium-enriched authoritative workbook. Prior workbook
+    // bytes and replacement evidence remain preserved for recovery and audit purposes.
+    workbookPath: "data/legacy-carryover-batch-20-02/DestinationFinderAI-Legacy-Carryover-Batch-20-Premium-Enriched-Final-v3.3.xlsx",
+    environment: "preview",
+    expectedDestinationKeys: [
+      "radovljica-slovenia", "osaka-japan", "sitges-spain", "estepona-spain", "lake-bled-slovenia",
+      "olbia-italy", "hiroshima-japan", "kobe-japan", "alghero-italy", "hakodate-japan",
+      "desenzano-del-garda-italy", "onomichi-japan", "cartagena-spain", "gijon-spain", "girona-spain",
+      "ptuj-slovenia", "koper-slovenia", "murcia-spain", "takayama-japan", "dubrovnik-croatia",
+    ],
+    expectedSha256: "015209686a8a68c20c32288498be40b88802268cc967a4ef71fbaa143b9d2a3a",
+  },
+  {
     registryId: "legacy-pilot06-populated",
     // Superseded 2026-08-30 by the authoritative curated workbook - the prior POPULATED.xlsx file is
     // intentionally left on disk, unregistered, as a recoverable historical artifact (never deleted).

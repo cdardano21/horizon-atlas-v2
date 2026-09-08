@@ -25,6 +25,32 @@ function feature(overrides: Partial<LifestyleFeature>): LifestyleFeature {
 }
 
 describe("LifestyleRecreationSection", () => {
+  it("shows separate website and Maps actions for a named place with both stored links", () => {
+    render(
+      <LifestyleRecreationSection
+        destinationCity="Alghero"
+        destinationCountry="Italy"
+        lifestyleFeatures={[feature({ featureKey: "dining", displayLabel: "Dining" })]}
+        places={[{
+          placeKey: "alghero-restaurant",
+          category: "restaurant",
+          name: "Al Tuguri",
+          description: "A named dining recommendation.",
+          neighborhoodKey: "centro-storico",
+          websiteUrl: "https://altuguri.example-test.invalid/",
+          googleMapsUrl: "https://maps.example-test.invalid/al-tuguri",
+          sourceUrl: "https://altuguri.example-test.invalid/",
+          address: null,
+          phone: null,
+          displayOrder: "1",
+        }]}
+      />,
+    );
+
+    expect(screen.getByRole("link", { name: "Visit website" })).toHaveAttribute("href", "https://altuguri.example-test.invalid/");
+    expect(screen.getByRole("link", { name: "Open on Google Maps" })).toHaveAttribute("href", "https://maps.example-test.invalid/al-tuguri");
+  });
+
   it("allows a long availability pill to wrap within a narrow card", () => {
     render(
       <LifestyleRecreationSection

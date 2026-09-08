@@ -174,17 +174,24 @@ function NamedPlacesRow({ places, destinationCity, destinationCountry }: { place
       <div className="mt-2 flex flex-wrap gap-2">
         {places.map((place) => {
           const name = (place.name ?? "").trim();
-          const href = place.websiteUrl || place.googleMapsUrl || buildPlaceMapsSearchUrl(name, destinationCity, destinationCountry);
+          const mapsUrl = place.googleMapsUrl || (!place.websiteUrl ? buildPlaceMapsSearchUrl(name, destinationCity, destinationCountry) : null);
           return (
-            <a
+            <div
               key={place.placeKey}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full border border-white/10 bg-slate-950/40 px-3 py-1 text-xs text-cyan-200 hover:bg-slate-950/60"
+              className="flex max-w-full flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-white/10 bg-slate-950/40 px-3 py-2 text-xs"
             >
-              {name}
-            </a>
+              <span className="font-semibold text-slate-200">{name}</span>
+              {place.websiteUrl ? (
+                <a href={place.websiteUrl} target="_blank" rel="noopener noreferrer" className="text-cyan-200 underline decoration-cyan-400/50 underline-offset-2 hover:text-cyan-100">
+                  Visit website
+                </a>
+              ) : null}
+              {mapsUrl ? (
+                <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="text-cyan-200 underline decoration-cyan-400/50 underline-offset-2 hover:text-cyan-100">
+                  Open on Google Maps
+                </a>
+              ) : null}
+            </div>
           );
         })}
       </div>

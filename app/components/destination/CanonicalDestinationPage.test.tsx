@@ -76,6 +76,16 @@ const buildDestination = (): CanonicalDestination => ({
 });
 
 describe("CanonicalDestinationPage", () => {
+  it("hides empty decision-lens status and developer controls on customer pages", () => {
+    const destination = buildDestination();
+    destination.scoring = [];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    expect(screen.queryByText("0 decision lenses")).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Open developer view" })).not.toBeInTheDocument();
+  });
+
   it("renders a destination guide section for Spearfish", () => {
     render(<CanonicalDestinationPage destination={buildDestination()} />);
 
