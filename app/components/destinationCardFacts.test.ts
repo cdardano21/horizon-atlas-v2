@@ -1,8 +1,30 @@
 import { describe, expect, it } from "vitest";
-
-import { destinations } from "../lib/destinations";
+import { destinations, type Destination } from "../lib/destinations";
 import { generatedDestinationCardFacts } from "../lib/generated-destination-card-facts";
 import { getDestinationCardFacts } from "./destinationCardFacts";
+
+describe("getDestinationCardFacts", () => {
+  it("does not manufacture scores for a destination without generated evidence", () => {
+    const destination: Destination = {
+      slug: "unsupported-destination",
+      city: "Unsupported",
+      country: "Example",
+      emoji: "",
+      match: 0,
+      description: "Verified description",
+      overview: "Verified overview",
+      climate: "",
+      lifestyle: "",
+      transportation: "",
+      images: [],
+    };
+
+    const facts = getDestinationCardFacts(destination);
+
+    expect(facts.overallScore).toBeNull();
+    expect(facts.scoreSignals).toEqual([]);
+  });
+});
 
 describe("destinationCardFacts", () => {
   it("always returns at least three card facts", () => {

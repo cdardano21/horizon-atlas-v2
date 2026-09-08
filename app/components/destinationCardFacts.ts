@@ -27,7 +27,7 @@ export function getFactSourcePublisherUrl(sourceUrl: string): string | null {
 
 export type DestinationCardFactsResult = {
   summary: string;
-  overallScore: number;
+  overallScore: number | null;
   scoreSignals: Array<{ category: string; score: number }>;
   facts: DestinationCardFact[];
   lowCoverage: boolean;
@@ -137,18 +137,10 @@ export function getDestinationCardFacts(destination: Destination): DestinationCa
       ? truncate(fallbackSummary, 170)
       : generatedSummary || truncate(fallbackSummary, 170);
 
-  const fallbackScoreSignals = [
-    { category: "Lifestyle Fit", score: 82 },
-    { category: "Climate Comfort", score: 79 },
-    { category: "Access & Mobility", score: 76 },
-  ];
-
   return {
     summary,
-    overallScore: generated?.overallScore ?? 80,
-    scoreSignals: generated?.scoreSignals?.length
-      ? generated.scoreSignals
-      : fallbackScoreSignals,
+    overallScore: generated?.scoreSignals?.length ? generated.overallScore : null,
+    scoreSignals: generated?.scoreSignals ?? [],
     facts,
     lowCoverage,
   };

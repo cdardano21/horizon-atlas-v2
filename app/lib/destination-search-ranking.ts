@@ -5,12 +5,37 @@ export type SearchRankedDestination = Destination & {
   searchScore: number;
 };
 
-const normalize = (value: string) => value.toLowerCase().trim();
+export const destinationFilterAliases: Readonly<Record<string, readonly string[]>> = {
+  beach: ["beach", "beaches", "beach city", "beach town", "coast", "coastal", "coastline"],
+  "airport access": ["airport access", "airport", "airports"],
+  affordable: ["affordable", "budget", "cheap", "low cost", "value"],
+  "family friendly": ["family", "family friendly", "families"],
+  golf: ["golf"],
+  healthcare: ["healthcare", "hospital", "hospitals", "medical"],
+  walkability: ["walkability", "walkable", "pedestrian"],
+  "expat-friendly": ["expat", "expat-friendly", "international"],
+  remote: ["remote", "digital nomad", "workability"],
+  safety: ["safe", "safety"],
+};
+
+export const normalizeDestinationSearchText = (value: string) => value
+  .normalize("NFKD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .toLowerCase()
+  .replace(/[’']/g, "")
+  .replace(/[^a-z0-9]+/g, " ")
+  .trim();
+
+export const getDestinationFilterAliases = (filter: string): readonly string[] => {
+  const normalizedFilter = normalizeDestinationSearchText(filter);
+  const entry = Object.entries(destinationFilterAliases)
+    .find(([canonical]) => normalizeDestinationSearchText(canonical) === normalizedFilter);
+  return entry?.[1] ?? [filter];
+};
 
 const tokenizeQuery = (value: string) =>
-  value
-    .toLowerCase()
-    .split(/[^a-z0-9]+/g)
+  normalizeDestinationSearchText(value)
+    .split(/\s+/g)
     .map((token) => token.trim())
     .filter((token) => token.length >= 2);
 
@@ -19,47 +44,53 @@ const matchesTag = (destinationTags: string[] | undefined, selectedTags: string[
     return true;
   }
 
-  const normalizedTags = (destinationTags ?? []).map((tag) => normalize(tag));
+  const normalizedTags = (destinationTags ?? []).map((tag) => normalizeDestinationSearchText(tag)).filter(Boolean);
   return selectedTags.every((selectedTag) => {
-    const normalizedSelectedTag = normalize(selectedTag);
-    return normalizedTags.some((tag) => tag === normalizedSelectedTag || tag.includes(normalizedSelectedTag) || normalizedSelectedTag.includes(tag));
+    const aliases = getDestinationFilterAliases(selectedTag);
+    return aliases.some((alias) => normalizedTags.includes(normalizeDestinationSearchText(alias)));
   });
 };
 
 export function rankDestinationsForSearch(destinations: Destination[], query: string, selectedTags: string[]) {
-  const normalizedQuery = normalize(query);
+  const normalizedQuery = normalizeDestinationSearchText(query);
   const tokens = tokenizeQuery(normalizedQuery);
 
   return destinations
     .map((destination) => {
-      const searchableFields = [
+      const identityFields = [
         destination.city,
         destination.country,
         destination.slug,
+      ].map((field) => normalizeDestinationSearchText(field)).filter(Boolean);
+      const searchableFields = [
+        ...identityFields,
         destination.description,
         destination.overview,
         destination.climate,
         destination.lifestyle,
         destination.transportation,
         ...(destination.tags ?? []),
-      ].map((field) => normalize(field));
+      ].map((field) => normalizeDestinationSearchText(field)).filter(Boolean);
 
       if (!matchesTag(destination.tags, selectedTags)) {
         return null;
       }
 
       const queryMatches = tokens.length > 0
-        ? tokens.every((token) => searchableFields.some((field) => field === token || field.includes(token) || token.includes(field)))
+        ? tokens.every((token) => (token.length <= 3 ? identityFields : searchableFields)
+          .some((field) => field === token || field.includes(token)))
         : true;
 
       if (!queryMatches) {
         return null;
       }
 
-      const exactCityMatch = normalizedQuery === normalize(destination.city);
-      const exactCountryMatch = normalizedQuery === normalize(destination.country);
-      const exactSlugMatch = normalizedQuery === normalize(destination.slug);
-      const exactTagMatch = (destination.tags ?? []).some((tag) => normalize(tag) === normalizedQuery);
+      const exactCityMatch = normalizedQuery === normalizeDestinationSearchText(destination.city);
+      const exactCountryMatch = normalizedQuery === normalizeDestinationSearchText(destination.country);
+      const exactSlugMatch = normalizedQuery === normalizeDestinationSearchText(destination.slug);
+      const exactTagMatch = (destination.tags ?? []).some((tag) => normalizeDestinationSearchText(tag) === normalizedQuery);
+      const cityPrefixMatch = normalizeDestinationSearchText(destination.city).startsWith(normalizedQuery);
+      const slugPrefixMatch = normalizeDestinationSearchText(destination.slug).startsWith(normalizedQuery);
 
       let matchKind: SearchRankedDestination["matchKind"] = "fallback";
       if (exactCityMatch) matchKind = "exact-city";
@@ -68,9 +99,21 @@ export function rankDestinationsForSearch(destinations: Destination[], query: st
       else if (exactTagMatch) matchKind = "exact-tag";
       else matchKind = "keyword";
 
-      const matchedTokenCount = tokens.filter((token) => searchableFields.some((field) => field === token || field.includes(token) || token.includes(field))).length;
+      const matchedTokenCount = tokens.filter((token) => searchableFields.some((field) => field === token || field.includes(token))).length;
       const baseScore = Math.max(0, destination.match);
-      const matchBoost = exactCityMatch ? 1600 : exactCountryMatch ? 1400 : exactSlugMatch ? 1200 : exactTagMatch ? 1000 : 0;
+      const matchBoost = exactCityMatch
+        ? 1600
+        : exactCountryMatch
+          ? 1400
+          : exactSlugMatch
+            ? 1200
+            : exactTagMatch
+              ? 1000
+              : cityPrefixMatch
+                ? 800
+                : slugPrefixMatch
+                  ? 700
+                  : 0;
       const tokenBoost = tokens.length > 0 ? matchedTokenCount * 120 : 0;
       const tagBoost = selectedTags.length * 8;
 
@@ -101,6 +144,7 @@ export function rankDestinationsForSearch(destinations: Destination[], query: st
         return rank(left.matchKind) - rank(right.matchKind);
       }
 
-      return (right.match?.valueOf() ?? 0) - (left.match?.valueOf() ?? 0);
+      const matchDifference = (right.match?.valueOf() ?? 0) - (left.match?.valueOf() ?? 0);
+      return matchDifference || left.slug.localeCompare(right.slug);
     });
 }

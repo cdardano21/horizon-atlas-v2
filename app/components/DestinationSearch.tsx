@@ -4,31 +4,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type MouseEvent } from "react";
 import type { Destination } from "../lib/destinations";
-import { rankDestinationsForSearch } from "../lib/destination-search-ranking";
+import {
+  destinationFilterAliases,
+  getDestinationFilterAliases,
+  normalizeDestinationSearchText,
+  rankDestinationsForSearch,
+} from "../lib/destination-search-ranking";
 import { getDestinationImageSet } from "../lib/imageFallback";
 import FavoriteButton from "./FavoriteButton";
 import { getDestinationCardFacts } from "./destinationCardFacts";
-
-const normalize = (value: string) => value.toLowerCase().trim();
-
-const filterTagAliasMap: Record<string, string[]> = {
-  beach: ["beach", "beaches", "beach city", "beach town", "coast", "coastal", "coastline"],
-  "airport access": ["airport access", "airport", "airports"],
-  affordable: ["affordable", "budget", "cheap", "low cost", "value"],
-  "family friendly": ["family", "family friendly", "families"],
-  golf: ["golf"],
-  healthcare: ["healthcare", "hospital", "hospitals", "medical"],
-  walkability: ["walkability", "walkable", "pedestrian"],
-  "expat-friendly": ["expat", "expat-friendly", "international"],
-  remote: ["remote", "digital nomad", "workability"],
-  safety: ["safe", "safety"],
-};
 
 const toTestIdToken = (value: string) =>
   value
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+
+const EXPLORE_STATE_KEY = "destinationfinder:explore-state";
 
 function DestinationCardImage({ destination }: { destination: Destination }) {
   const candidates = useMemo(
@@ -72,34 +64,46 @@ function DestinationCardImage({ destination }: { destination: Destination }) {
 export default function DestinationSearch({
   destinations,
   initialQuery = "",
+  initialTags = [],
 }: {
   destinations: Destination[];
   initialQuery?: string;
+  initialTags?: string[];
 }) {
   const [query, setQuery] = useState(initialQuery);
-  const [activeTags, setActiveTags] = useState<string[]>([]);
+  const [activeTags, setActiveTags] = useState<string[]>(initialTags);
 
-  const featuredTags = useMemo(() => {
-    const counts = new Map<string, number>();
-    destinations.forEach((destination) => {
-      destination.tags?.forEach((tag) => counts.set(tag, (counts.get(tag) ?? 0) + 1));
-    });
+  useEffect(() => {
+    if (initialQuery || initialTags.length > 0) return;
+    const storedState = window.sessionStorage.getItem(EXPLORE_STATE_KEY);
+    window.sessionStorage.removeItem(EXPLORE_STATE_KEY);
+    if (!storedState) return;
 
-    return Array.from(counts.entries())
-      .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
-      .slice(0, 8)
-      .map(([tag]) => tag);
-  }, [destinations]);
+    try {
+      const parsed = JSON.parse(storedState) as { query?: unknown; activeTags?: unknown };
+      const restoredQuery = typeof parsed.query === "string" ? parsed.query : "";
+      const restoredTags = Array.isArray(parsed.activeTags) && parsed.activeTags.every((tag) => typeof tag === "string")
+        ? parsed.activeTags
+        : [];
+      const restorationTimer = window.setTimeout(() => {
+        setQuery(restoredQuery);
+        setActiveTags(restoredTags);
+      }, 0);
+      return () => window.clearTimeout(restorationTimer);
+    } catch {
+      // Ignore malformed session state and keep the server-provided defaults.
+    }
+  }, [initialQuery, initialTags]);
 
   const derivedFilterTags = useMemo(() => {
     const tags = new Set<string>();
 
     destinations.forEach((destination) => {
       destination.tags?.forEach((tag) => {
-        const normalizedTag = normalize(tag);
-        Object.entries(filterTagAliasMap).forEach(([canonical, aliases]) => {
-          const variants = [canonical, ...aliases].map((entry) => normalize(entry));
-          if (variants.some((variant) => normalizedTag === variant || normalizedTag.includes(variant) || variant.includes(normalizedTag))) {
+        const normalizedTag = normalizeDestinationSearchText(tag);
+        Object.keys(destinationFilterAliases).forEach((canonical) => {
+          const aliases = getDestinationFilterAliases(canonical);
+          if (aliases.some((alias) => normalizedTag === normalizeDestinationSearchText(alias))) {
             tags.add(canonical);
           }
         });
@@ -110,12 +114,22 @@ export default function DestinationSearch({
   }, [destinations]);
 
   const visibleTags = useMemo(
-    () => Array.from(new Set([...featuredTags, ...derivedFilterTags, ...activeTags])),
-    [activeTags, derivedFilterTags, featuredTags],
+    () => Array.from(new Set([...derivedFilterTags, ...activeTags])),
+    [activeTags, derivedFilterTags],
   );
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (query.trim()) params.set("q", query.trim());
+    else params.delete("q");
+    params.delete("tag");
+    activeTags.forEach((tag) => params.append("tag", tag));
+    const search = params.toString();
+    window.history.replaceState(window.history.state, "", `${window.location.pathname}${search ? `?${search}` : ""}${window.location.hash}`);
+  }, [activeTags, query]);
+
   const filteredDestinations = useMemo(
-    () => rankDestinationsForSearch(destinations, query, activeTags).map((destination) => destination as Destination),
+    () => rankDestinationsForSearch(destinations, query, activeTags),
     [destinations, query, activeTags],
   );
 
@@ -136,6 +150,10 @@ export default function DestinationSearch({
   const clearFilters = () => {
     setQuery("");
     setActiveTags([]);
+  };
+
+  const preserveExploreState = () => {
+    window.sessionStorage.setItem(EXPLORE_STATE_KEY, JSON.stringify({ query, activeTags }));
   };
 
   if (process.env.NEXT_PUBLIC_DEBUG_PUBLIC_CATALOG === "1") {
@@ -233,16 +251,16 @@ export default function DestinationSearch({
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredDestinations.map((destination, index) => {
+            {filteredDestinations.map((destination) => {
               const cardFacts = getDestinationCardFacts(destination);
 
               return (
-                <article key={`${destination.slug}-${index}`} className="group overflow-hidden border border-[#d8ad5540] bg-[#071d36] shadow-[0_18px_40px_rgba(0,0,0,0.22)] [contain-intrinsic-size:auto_390px] [content-visibility:auto] transition duration-300 hover:-translate-y-1 hover:border-[#d8ad5580]">
-                  <Link href={`/destinations/${destination.slug}`} data-testid={`destination-card-${destination.slug}`} aria-label={`Open guide for ${destination.city}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#f0c05f]">
+                <article key={destination.slug} className="group overflow-hidden border border-[#d8ad5540] bg-[#071d36] shadow-[0_18px_40px_rgba(0,0,0,0.22)] [contain-intrinsic-size:auto_390px] [content-visibility:auto] transition duration-300 hover:-translate-y-1 hover:border-[#d8ad5580]">
+                  <Link href={`/destinations/${destination.slug}`} onClick={preserveExploreState} data-testid={`destination-card-${destination.slug}`} aria-label={`Open guide for ${destination.city}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#f0c05f]">
                     <div className="relative aspect-[4/3] overflow-hidden bg-[#0a2745]">
                       <DestinationCardImage destination={destination} />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#021326f5] via-[#031a3133] to-transparent" />
-                      <span className="absolute right-3 top-3 rounded-full bg-[#05243de8] px-2.5 py-1 text-[10px] font-bold text-[#67d3c5] backdrop-blur">{cardFacts.overallScore} overall</span>
+                      {cardFacts.overallScore !== null ? <span className="absolute right-3 top-3 rounded-full bg-[#05243de8] px-2.5 py-1 text-[10px] font-bold text-[#67d3c5] backdrop-blur">{cardFacts.overallScore} overall</span> : null}
                       <div className="absolute inset-x-0 bottom-0 p-4">
                         <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#f0c05f]">{destination.country}</p>
                         <h3 className="mt-1 font-serif text-2xl leading-tight text-white">{destination.city}</h3>
@@ -251,17 +269,19 @@ export default function DestinationSearch({
                   </Link>
 
                   <div className="p-4">
-                    <div className="grid grid-cols-3 gap-1.5">
-                      {cardFacts.scoreSignals.slice(0, 3).map((signal) => (
-                        <div key={signal.category} className="bg-[#0a2948] px-2 py-2 text-center">
-                          <strong className="block text-sm text-[#57d0c4]">{signal.score}</strong>
-                          <span className="mt-0.5 block truncate text-[9px] uppercase tracking-[0.08em] text-[#9fb4c9]">{signal.category}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="mt-4 flex items-center justify-between gap-3 border-t border-[#ffffff12] pt-3">
+                    {cardFacts.scoreSignals.length > 0 ? (
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {cardFacts.scoreSignals.slice(0, 3).map((signal) => (
+                          <div key={signal.category} className="bg-[#0a2948] px-2 py-2 text-center">
+                            <strong className="block text-sm text-[#57d0c4]">{signal.score}</strong>
+                            <span className="mt-0.5 block truncate text-[9px] uppercase tracking-[0.08em] text-[#9fb4c9]">{signal.category}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+                    <div className={`${cardFacts.scoreSignals.length > 0 ? "mt-4 border-t" : ""} flex items-center justify-between gap-3 border-[#ffffff12] pt-3`}>
                       <FavoriteButton slug={destination.slug} label="Save" className="h-9 px-3 text-xs" />
-                      <Link href={`/destinations/${destination.slug}`} data-testid={`destination-open-${destination.slug}`} className="text-xs font-bold text-[#eabc5b] transition hover:text-[#f4d08b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f4d08b66]">Explore guide →</Link>
+                      <Link href={`/destinations/${destination.slug}`} onClick={preserveExploreState} data-testid={`destination-open-${destination.slug}`} className="text-xs font-bold text-[#eabc5b] transition hover:text-[#f4d08b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f4d08b66]">Explore guide →</Link>
                     </div>
                   </div>
                 </article>

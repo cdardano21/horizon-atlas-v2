@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import type { Destination } from "../../lib/destinations";
 import DestinationSearch from "../DestinationSearch";
@@ -83,6 +83,59 @@ describe("DestinationSearch", () => {
     fireEvent.click(screen.getByTestId("destination-filters-clear"));
     expect(screen.getByTestId("destination-card-alba-coast-portugal")).toBeInTheDocument();
     expect(screen.getByTestId("destination-card-cedar-hills-france")).toBeInTheDocument();
+  });
+
+  it("stores query and filter state in the URL for navigation restoration", async () => {
+    window.history.replaceState({}, "", "/destinations");
+    render(<DestinationSearch destinations={destinations} />);
+
+    fireEvent.change(screen.getByTestId("destination-search-input"), { target: { value: "Alba" } });
+    fireEvent.click(screen.getByTestId("destination-filter-beach"));
+
+    await waitFor(() => expect(window.location.search).toBe("?q=Alba&tag=beach"));
+  });
+
+  it("restores initial query and filter state from page props", () => {
+    render(<DestinationSearch destinations={destinations} initialQuery="Alba" initialTags={["beach"]} />);
+
+    expect(screen.getByTestId("destination-search-input")).toHaveValue("Alba");
+    expect(screen.getByTestId("destination-filter-beach")).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByTestId("destination-card-alba-coast-portugal")).toBeInTheDocument();
+    expect(screen.queryByTestId("destination-card-cedar-hills-france")).not.toBeInTheDocument();
+  });
+
+  it("restores one-time session state after returning from a destination", async () => {
+    window.history.replaceState({}, "", "/destinations");
+    window.sessionStorage.setItem("destinationfinder:explore-state", JSON.stringify({ query: "Alba", activeTags: ["beach"] }));
+
+    render(<DestinationSearch destinations={destinations} />);
+
+    await waitFor(() => expect(screen.getByTestId("destination-search-input")).toHaveValue("Alba"));
+    expect(screen.getByTestId("destination-filter-beach")).toHaveAttribute("aria-pressed", "true");
+    expect(window.sessionStorage.getItem("destinationfinder:explore-state")).toBeNull();
+  });
+
+  it("stores current state when a destination opens", () => {
+    window.sessionStorage.clear();
+    render(<DestinationSearch destinations={destinations} initialQuery="Alba" initialTags={["beach"]} />);
+
+    const destinationLink = screen.getByTestId("destination-card-alba-coast-portugal");
+    destinationLink.addEventListener("click", (event) => event.preventDefault(), { once: true });
+    fireEvent.click(destinationLink);
+
+    expect(JSON.parse(window.sessionStorage.getItem("destinationfinder:explore-state") ?? "{}")).toEqual({
+      query: "Alba",
+      activeTags: ["beach"],
+    });
+  });
+
+  it("does not expose internal catalog metadata as lifestyle filters", () => {
+    const internal = { ...destinations[0], tags: ["official-sources", "verified-profile", "coastal"] };
+    render(<DestinationSearch destinations={[internal]} />);
+
+    expect(screen.queryByTestId("destination-filter-official-sources")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("destination-filter-verified-profile")).not.toBeInTheDocument();
+    expect(screen.getByTestId("destination-filter-beach")).toBeInTheDocument();
   });
 
   it("renders the first verified image candidate", () => {
