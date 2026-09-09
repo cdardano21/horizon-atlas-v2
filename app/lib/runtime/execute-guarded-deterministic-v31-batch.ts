@@ -179,7 +179,7 @@ function emptyStoredState(resolution: CatalogResolution): StoredDestinationState
     remoteWork: [], languageIntegration: [], pets: [], familyEducation: [], communitySocial: [],
     accessibility: [], bureaucracySetup: [], workBusiness: [], retirementAging: [], lifestyleLaws: [],
     realityCheck: [], moveChecklist: [], environmentQuality: null, dailyLifePracticality: null,
-    eventsSeasonality: [], sources: [],
+    eventsSeasonality: [], sources: [], lifestyleFeatures: [],
   } as unknown as StoredDestinationState;
 }
 

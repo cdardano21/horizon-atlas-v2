@@ -398,6 +398,8 @@ type StoredDestinationStateShape<T extends DeterministicV31CanonicalDestination>
     readonly population?: string | null;
     readonly metroPopulation?: string | null;
     readonly elevation?: string | null;
+    readonly latitude?: string | null;
+    readonly longitude?: string | null;
   };
   readonly editorial: StoredEditorialStateShape<T["editorial"]>;
   readonly facts: readonly StoredFactShape<T["facts"][number]>[];
@@ -958,7 +960,7 @@ export interface OperationManifest {
 export type DestinationPlanAction = "CREATE" | "UPDATE" | "UNCHANGED" | "ERROR";
 
 export type ExecutionTransactionGranularity = "PER_DESTINATION";
-export type ExecutionFailurePolicy = "CONTINUE_AFTER_FAILURE";
+export type ExecutionFailurePolicy = "CONTINUE_AFTER_FAILURE" | "STOP_ON_FIRST_FAILURE";
 export type ExecutionReplayPolicy = "IDEMPOTENT_REPLAY";
 export type ExecutionStalePlanPolicy = "STRICT_PRECONDITION_MATCH";
 

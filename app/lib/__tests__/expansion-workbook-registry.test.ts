@@ -198,6 +198,14 @@ describe("Expansion-workbook preview resolver (registry-driven, generic getCanon
       "rijeka-croatia", "zadar-croatia", "piran-slovenia", "rovinj-croatia", "kanazawa-japan",
       "polignano-a-mare-italy", "cefalu-italy", "kalamata-greece", "taormina-italy", "podgorica-montenegro",
       "kotor-montenegro", "bergamo-italy", "pietrasanta-italy", "alicante-spain", "verona-italy",
+      "radovljica-slovenia", "osaka-japan", "sitges-spain", "estepona-spain", "lake-bled-slovenia",
+      "olbia-italy", "hiroshima-japan", "kobe-japan", "alghero-italy", "hakodate-japan",
+      "desenzano-del-garda-italy", "onomichi-japan", "cartagena-spain", "gijon-spain", "girona-spain",
+      "ptuj-slovenia", "koper-slovenia", "murcia-spain", "takayama-japan", "dubrovnik-croatia",
+      "aomori-japan", "kamakura-japan", "porto-portugal", "kranj-slovenia", "coimbra-portugal",
+      "kumamoto-japan", "beppu-japan", "sapporo-japan", "lecce-italy", "athens-greece",
+      "matsumoto-japan", "morioka-japan", "sendai-japan", "cavtat-croatia", "sirmione-italy",
+      "celje-slovenia", "nagasaki-japan", "perugia-italy", "novigrad-croatia", "ioannina-greece",
     ];
     expect(allRegisteredKeys.slice().sort()).toEqual(expectedKeys.sort());
   });

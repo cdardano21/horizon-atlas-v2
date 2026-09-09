@@ -92,6 +92,18 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     expectedSha256: "015209686a8a68c20c32288498be40b88802268cc967a4ef71fbaa143b9d2a3a",
   },
   {
+    registryId: "legacy-carryover-batch-20-03",
+    workbookPath: "data/legacy-carryover-batch-20-03/DestinationFinderAI-Next-Legacy-Batch-20-Premium-Enriched-Corrected-v3.3.xlsx",
+    environment: "preview",
+    expectedDestinationKeys: [
+      "aomori-japan", "kamakura-japan", "porto-portugal", "kranj-slovenia", "coimbra-portugal",
+      "kumamoto-japan", "beppu-japan", "sapporo-japan", "lecce-italy", "athens-greece",
+      "matsumoto-japan", "morioka-japan", "sendai-japan", "cavtat-croatia", "sirmione-italy",
+      "celje-slovenia", "nagasaki-japan", "perugia-italy", "novigrad-croatia", "ioannina-greece",
+    ],
+    expectedSha256: "6bae082ce0d8d2f43975971004824d202d8dcfd73be336d75d6670dd1f6f8bc7",
+  },
+  {
     registryId: "legacy-pilot06-populated",
     // Superseded 2026-08-30 by the authoritative curated workbook - the prior POPULATED.xlsx file is
     // intentionally left on disk, unregistered, as a recoverable historical artifact (never deleted).

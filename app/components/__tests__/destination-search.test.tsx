@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { StrictMode } from "react";
 import { describe, expect, it, vi } from "vitest";
 import type { Destination } from "../../lib/destinations";
 import DestinationSearch from "../DestinationSearch";
@@ -104,15 +105,30 @@ describe("DestinationSearch", () => {
     expect(screen.queryByTestId("destination-card-cedar-hills-france")).not.toBeInTheDocument();
   });
 
-  it("restores one-time session state after returning from a destination", async () => {
+  it("restores and consumes one-time session state after returning from a destination in Strict Mode", async () => {
     window.history.replaceState({}, "", "/destinations");
     window.sessionStorage.setItem("destinationfinder:explore-state", JSON.stringify({ query: "Alba", activeTags: ["beach"] }));
 
-    render(<DestinationSearch destinations={destinations} />);
+    const { unmount } = render(
+      <StrictMode>
+        <DestinationSearch destinations={destinations} />
+      </StrictMode>,
+    );
 
     await waitFor(() => expect(screen.getByTestId("destination-search-input")).toHaveValue("Alba"));
     expect(screen.getByTestId("destination-filter-beach")).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByTestId("destination-card-alba-coast-portugal")).toBeInTheDocument();
+    expect(screen.queryByTestId("destination-card-cedar-hills-france")).not.toBeInTheDocument();
     expect(window.sessionStorage.getItem("destinationfinder:explore-state")).toBeNull();
+
+    unmount();
+    window.history.replaceState({}, "", "/destinations");
+    render(<DestinationSearch destinations={destinations} />);
+
+    expect(screen.getByTestId("destination-search-input")).toHaveValue("");
+    expect(screen.getByTestId("destination-filter-beach")).toHaveAttribute("aria-pressed", "false");
+    expect(screen.getByTestId("destination-card-alba-coast-portugal")).toBeInTheDocument();
+    expect(screen.getByTestId("destination-card-cedar-hills-france")).toBeInTheDocument();
   });
 
   it("stores current state when a destination opens", () => {

@@ -76,7 +76,6 @@ export default function DestinationSearch({
   useEffect(() => {
     if (initialQuery || initialTags.length > 0) return;
     const storedState = window.sessionStorage.getItem(EXPLORE_STATE_KEY);
-    window.sessionStorage.removeItem(EXPLORE_STATE_KEY);
     if (!storedState) return;
 
     try {
@@ -88,9 +87,11 @@ export default function DestinationSearch({
       const restorationTimer = window.setTimeout(() => {
         setQuery(restoredQuery);
         setActiveTags(restoredTags);
+        window.sessionStorage.removeItem(EXPLORE_STATE_KEY);
       }, 0);
       return () => window.clearTimeout(restorationTimer);
     } catch {
+      window.sessionStorage.removeItem(EXPLORE_STATE_KEY);
       // Ignore malformed session state and keep the server-provided defaults.
     }
   }, [initialQuery, initialTags]);
