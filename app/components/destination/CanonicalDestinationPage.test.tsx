@@ -376,6 +376,22 @@ describe("CanonicalDestinationPage", () => {
     expect(previews).toHaveLength(5);
   });
 
+  it("removes a failed gallery slot and promotes the next ordered image without leaving a broken thumbnail", () => {
+    const destination = buildDestination();
+    destination.heroImages = [
+      { url: "https://upload.wikimedia.org/broken-hero.jpg", altText: "Broken hero", isPrimary: true },
+      { url: "https://upload.wikimedia.org/working-gallery.jpg", altText: "Working gallery", isPrimary: false },
+    ];
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    const gallery = screen.getByRole("heading", { name: "Photos, streets, and daily life" }).closest("section") as HTMLElement;
+    fireEvent.error(within(gallery).getByRole("img", { name: "Broken hero" }));
+
+    expect(within(gallery).queryByRole("img", { name: "Broken hero" })).not.toBeInTheDocument();
+    expect(within(gallery).getByRole("img", { name: "Working gallery" })).toBeInTheDocument();
+  });
+
   it("deduplicates Wikimedia original and thumbnail URLs while preserving distinct gallery images", () => {
     const destination = buildDestination();
     destination.slug = "gallery-dedupe-test";

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CanonicalDestination, NeighborhoodIntelligenceGroup, NeighborhoodIntelligenceMetric, NeighborhoodIntelligencePlace, NeighborhoodProfile, NeighborhoodResourceItem } from "../../lib/canonical-destination-model";
 import { buildDestinationIntelligenceProfile } from "../../lib/destination-intelligence-engine";
-import { getDestinationImageSet, getDestinationImageUrl } from "../../lib/imageFallback";
+import { getDestinationHeroImage, getDestinationImageSet, getDestinationImageUrl } from "../../lib/imageFallback";
 import { buildNeighborhoodIntelligenceSeedData } from "../../lib/neighborhood-intelligence-seed-data";
 import { buildPremiumDestinationEditorialPackage } from "../../lib/premium-destination-engine";
 import { isPlaceWebsiteVisible } from "../../lib/website-verification";
@@ -1516,6 +1516,7 @@ function ExpandableNeighborhoodCard({
 export default function CanonicalDestinationPage({ destination, developerMode = false }: CanonicalDestinationPageProps) {
   const [selectedMedia, setSelectedMedia] = useState<GalleryItem | null>(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
+  const [failedMediaUrls, setFailedMediaUrls] = useState<Set<string>>(() => new Set());
   const [activeSectionId, setActiveSectionId] = useState<string>(SECTION_TABS[0].id);
   const [neighborhoodsExpanded, setNeighborhoodsExpanded] = useState(false);
 
@@ -1557,9 +1558,13 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     // identity" template below - the template is a last-resort label for a destination that
     // genuinely has no real per-image metadata yet.
     const realItemByUrl = new Map(galleryItems.map((item) => [item.url, item]));
+    const heroImage = getDestinationHeroImage(mediaDestination);
     const imageSet = getDestinationImageSet(mediaDestination, 5);
+    const heroFirstImageSet = heroImage
+      ? [heroImage, ...imageSet.filter((imageUrl) => imageUrl !== heroImage)]
+      : imageSet;
     if (imageSet.length > 0) {
-      return dedupeMediaUrls(imageSet).slice(0, 10).map((imageUrl, index) => {
+      return dedupeMediaUrls(heroFirstImageSet).slice(0, 10).map((imageUrl, index) => {
         const real = realItemByUrl.get(imageUrl);
         const fallbackCaption = index === 0
           ? `${destination.title} skyline and civic identity`
@@ -1588,10 +1593,19 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
       resolvedUrl: fallbackUrl,
     }];
   }, [galleryItems, destination.title, mediaDestination]);
-  const previewGalleryItems = resolvedGalleryItems.slice(0, 5);
-  const galleryModalItems = resolvedGalleryItems.slice(0, 10);
+  const availableGalleryItems = resolvedGalleryItems.filter((item) => !failedMediaUrls.has(item.resolvedUrl ?? item.url));
+  const galleryModalItems = availableGalleryItems.length > 0
+    ? availableGalleryItems.slice(0, 10)
+    : resolvedGalleryItems.filter((item) => item.kind === "placeholder").slice(0, 1);
+  const previewGalleryItems = galleryModalItems.slice(0, 5);
   const googleImagesHref = `https://www.google.com/search?q=${encodeURIComponent(`${destination.title} ${destination.country} travel photos`)}&tbm=isch`;
-  const executiveSummaryImage = resolvedGalleryItems[0];
+  const executiveSummaryImage = galleryModalItems[0] ?? resolvedGalleryItems[0];
+  const handleMediaError = (url: string) => {
+    setFailedMediaUrls((current) => {
+      if (current.has(url)) return current;
+      return new Set([...current, url]);
+    });
+  };
   const openGalleryItem = (item: GalleryItem, index: number) => {
     setSelectedMedia(item);
     setGalleryIndex(index);
@@ -2156,7 +2170,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
       <Navbar />
       <main className="space-y-7 bg-[linear-gradient(180deg,#03142a_0%,#061d37_45%,#03142a_100%)] pb-28 pt-[72px] text-[#edf2fb] sm:space-y-8 sm:pb-32">
         <section className="relative isolate min-h-[600px] overflow-hidden border-b border-[#d8ad554f] bg-[#03142a]">
-          <Image src={executiveSummaryImage.resolvedUrl} alt={executiveSummaryImage.altText || destination.title} fill sizes="100vw" preload unoptimized className="z-0 object-cover object-center" />
+          <Image src={executiveSummaryImage.resolvedUrl} alt={executiveSummaryImage.altText || destination.title} fill sizes="100vw" preload unoptimized className="z-0 object-cover object-center" onError={() => handleMediaError(executiveSummaryImage.resolvedUrl ?? executiveSummaryImage.url)} />
           <div className="absolute inset-0 z-10 bg-[linear-gradient(90deg,rgba(2,13,29,0.88)_0%,rgba(3,20,42,0.7)_42%,rgba(3,20,42,0.16)_76%,rgba(2,13,29,0.3)_100%)]" />
           <div className="absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(2,12,27,0.04)_25%,rgba(2,13,29,0.82)_100%)]" />
           <div className="relative z-20 mx-auto flex min-h-[600px] max-w-[1440px] flex-col justify-end px-5 pb-6 pt-8 sm:px-8 sm:pb-8 lg:px-10">
@@ -2307,7 +2321,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
         <div className={`mt-5 grid gap-3 ${previewGalleryItems.length > 2 ? "md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-2" : "md:grid-cols-2"}`}>
           {previewGalleryItems.map((item, index) => (
             <button key={`${item.url}-${index}`} type="button" onClick={() => openGalleryItem(item, index)} className={`group relative min-h-52 overflow-hidden border border-white/10 bg-[#08223c] text-left shadow-[0_16px_40px_rgba(0,0,0,0.22)] ${index === 0 && previewGalleryItems.length > 2 ? "md:col-span-2 lg:row-span-2 lg:min-h-[29rem]" : "lg:min-h-56"}`}>
-              <img src={item.resolvedUrl} alt={item.altText || item.caption || destination.title} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]" />
+              <img src={item.resolvedUrl} alt={item.altText || item.caption || destination.title} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]" onError={() => handleMediaError(item.resolvedUrl ?? item.url)} />
               <div className="absolute inset-0 bg-gradient-to-t from-[#021326f2] via-transparent to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-4 text-xs leading-5 text-[#d5e0ea]">{item.caption || item.altText || item.kind}</div>
             </button>
@@ -2340,7 +2354,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               </div>
             </div>
             <div className="mt-3 overflow-hidden rounded-[1.5rem]">
-              <img src={selectedMedia.resolvedUrl ?? selectedMedia.url} alt={selectedMedia.altText || selectedMedia.caption || destination.title} className="max-h-[72vh] w-full rounded-[1.5rem] object-contain transition duration-300" />
+              <img src={selectedMedia.resolvedUrl ?? selectedMedia.url} alt={selectedMedia.altText || selectedMedia.caption || destination.title} className="max-h-[72vh] w-full rounded-[1.5rem] object-contain transition duration-300" onError={() => { handleMediaError(selectedMedia.resolvedUrl ?? selectedMedia.url); setSelectedMedia(null); }} />
             </div>
             <p className="mt-3 px-2 text-sm leading-7 text-slate-300">{selectedMedia.caption || selectedMedia.altText || selectedMedia.kind}</p>
             {selectedMedia.attribution ? (

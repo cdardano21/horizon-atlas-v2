@@ -131,6 +131,17 @@ const looksLikeImageAssetUrl = (value: string | null | undefined) => {
   }
 };
 
+const isMediaDiscoveryUrl = (value: string | null | undefined) => {
+  if (typeof value !== "string" || !value.trim()) return false;
+  try {
+    const parsed = new URL(value.trim());
+    const pathname = decodeURIComponent(parsed.pathname).toLowerCase();
+    return pathname.includes("/special:mediasearch") || pathname.includes("/special:search");
+  } catch {
+    return false;
+  }
+};
+
 const IANA_RESERVED_EXAMPLE_HOSTNAMES = new Set(["example.com", "example.org", "example.net", "www.example.com", "www.example.org", "www.example.net"]);
 
 const isReservedExampleDomainUrl = (value: string | null | undefined) => {
@@ -407,7 +418,9 @@ const mapPlacesAndResources = (bundle: NormalizedPersistedDestinationBundle): { 
 });
 
 const mapMedia = (bundle: NormalizedPersistedDestinationBundle): CanonicalDestinationV31Modules["media"] =>
-  bundle.media.map((item) => ({ mediaKey: item.mediaKey, kind: item.kind, url: item.url, caption: item.caption, altText: item.altText }));
+  [...bundle.media]
+    .sort((left, right) => Number(right.isPrimary === "true" || right.isPrimary === "1") - Number(left.isPrimary === "true" || left.isPrimary === "1") || Number(left.sortOrder ?? Number.MAX_SAFE_INTEGER) - Number(right.sortOrder ?? Number.MAX_SAFE_INTEGER))
+    .map((item) => ({ mediaKey: item.mediaKey, kind: item.kind, url: item.url, caption: item.caption, altText: item.altText, isPrimary: item.isPrimary, sortOrder: item.sortOrder, verified: item.verified }));
 
 const mapCostAndClimate = (bundle: NormalizedPersistedDestinationBundle): { costOfLiving: CanonicalDestinationV31Modules["costOfLiving"]; climateMonthly: CanonicalDestinationV31Modules["climateMonthly"]; housing: CanonicalDestinationV31Modules["housing"] } => ({
   costOfLiving: bundle.costOfLiving.map((item) => ({ itemKey: item.itemKey, category: item.category, monthlyLow: item.monthlyLow, monthlyHigh: item.monthlyHigh, currency: item.currency, householdType: item.householdType, lifestyleTier: item.lifestyleTier })),
@@ -565,17 +578,20 @@ export const buildCanonicalDestinationFromPersistedBundle = (
     return parts.length > 0 ? parts.join(", ") : undefined;
   };
 
-  const persistedMedia = bundle.media
+  const persistedMedia = [...bundle.media]
+    .sort((left, right) => Number(right.isPrimary === "true" || right.isPrimary === "1") - Number(left.isPrimary === "true" || left.isPrimary === "1") || Number(left.sortOrder ?? Number.MAX_SAFE_INTEGER) - Number(right.sortOrder ?? Number.MAX_SAFE_INTEGER))
     .map((item) => ({
       kind: normalizeTextValue(item.kind) || "image",
       url: normalizeTextValue(item.url) || "",
       altText: normalizeTextValue(item.altText) || title || city || "Destination media",
       caption: normalizeTextValue(item.caption) || title || city || "Destination media",
-      isPrimary: false,
+      isPrimary: item.isPrimary === "true" || item.isPrimary === "1",
+      sortOrder: item.sortOrder == null ? undefined : Number(item.sortOrder),
+      verified: item.verified === "true" || item.verified === "1",
       sourceUrl: normalizeTextValue(item.sourceUrl) || undefined,
       attribution: buildMediaAttribution(item.sourceName, item.licenseNotes),
     }))
-    .filter((item) => item.url && !isReservedExampleDomainUrl(item.url));
+    .filter((item) => item.url && !isReservedExampleDomainUrl(item.url) && !isMediaDiscoveryUrl(item.url));
   const workbookMedia = (workbookData?.media ?? [])
     .map((item) => ({
       kind: normalizeTextValue(item.kind) || "image",
@@ -591,8 +607,9 @@ export const buildCanonicalDestinationFromPersistedBundle = (
   // unrelated imagery captioned with this destination's name.
   const media = persistedMedia.length > 0 ? persistedMedia : workbookMedia.length > 0 ? workbookMedia : [];
 
-  const primaryMedia = media[0] ? [{ ...media[0], isPrimary: true }] : [];
-  const normalizedMedia = [...primaryMedia, ...media.slice(1)];
+  const explicitPrimaryIndex = media.findIndex((item) => item.isPrimary);
+  const primaryIndex = explicitPrimaryIndex >= 0 ? explicitPrimaryIndex : 0;
+  const normalizedMedia = media.map((item, index) => ({ ...item, isPrimary: index === primaryIndex }));
   const persistedResources = bundle.resources
     .map((item) => ({
       category: normalizeTextValue(item.category) || "resource",
@@ -1548,9 +1565,9 @@ export const buildWorkbookDestinationFromData = (slug: string, workbookData: Pre
     wikipediaUrl: workbookData?.wikipediaUrl || fallback?.wikipediaUrl || "",
     monthlyBudgets: hasWorkbookContent ? buildWorkbookBudgets(workbookData, fallbackBudgets) : (fallback?.monthlyBudgets ?? fallbackBudgets),
     costOfLivingProfile: hasWorkbookContent ? buildWorkbookCostProfile(workbookData, fallbackCostProfile) : (fallback?.costOfLivingProfile ?? fallbackCostProfile),
-    media: hasWorkbookContent && filteredWorkbookMedia.length > 0 ? filteredWorkbookMedia.map((item) => ({ kind: item.kind, url: item.url, altText: item.altText, caption: item.caption, isPrimary: item.isPrimary, sourceUrl: item.sourceUrl, attribution: item.attribution, license: item.license })) : (fallback?.media ?? fallbackMedia),
-    heroImages: hasWorkbookContent && filteredWorkbookMedia.length > 0 ? filteredWorkbookMedia.map((item) => ({ kind: item.kind, url: item.url, altText: item.altText, caption: item.caption, isPrimary: item.isPrimary, sourceUrl: item.sourceUrl, attribution: item.attribution, license: item.license })) : (fallback?.heroImages ?? fallbackMedia),
-    mediaGallery: hasWorkbookContent && filteredWorkbookMedia.length > 0 ? filteredWorkbookMedia.map((item) => ({ kind: item.kind, url: item.url, altText: item.altText, caption: item.caption, isPrimary: item.isPrimary, sourceUrl: item.sourceUrl, attribution: item.attribution, license: item.license })) : (fallback?.mediaGallery ?? fallbackMedia),
+    media: hasWorkbookContent && filteredWorkbookMedia.length > 0 ? filteredWorkbookMedia.map((item) => ({ kind: item.kind, url: item.url, altText: item.altText, caption: item.caption, isPrimary: item.isPrimary, sortOrder: item.sortOrder, verified: item.verified, sourceUrl: item.sourceUrl, attribution: item.attribution, license: item.license })) : (fallback?.media ?? fallbackMedia),
+    heroImages: hasWorkbookContent && filteredWorkbookMedia.length > 0 ? filteredWorkbookMedia.map((item) => ({ kind: item.kind, url: item.url, altText: item.altText, caption: item.caption, isPrimary: item.isPrimary, sortOrder: item.sortOrder, verified: item.verified, sourceUrl: item.sourceUrl, attribution: item.attribution, license: item.license })) : (fallback?.heroImages ?? fallbackMedia),
+    mediaGallery: hasWorkbookContent && filteredWorkbookMedia.length > 0 ? filteredWorkbookMedia.map((item) => ({ kind: item.kind, url: item.url, altText: item.altText, caption: item.caption, isPrimary: item.isPrimary, sortOrder: item.sortOrder, verified: item.verified, sourceUrl: item.sourceUrl, attribution: item.attribution, license: item.license })) : (fallback?.mediaGallery ?? fallbackMedia),
     premiumEditorialContent: buildWorkbookPremiumEditorialContent(workbookData, workbookFallbackData?.premiumEditorialContent ?? fallback?.premiumEditorialContent),
     knowledgeProfile: workbookKnowledgeProfile,
     neighborhoodProfiles: preferredNeighborhoodProfiles,

@@ -155,6 +155,35 @@ describe("v31 canonical-to-stored-state adapter", () => {
     expect(result.editorial.shortDescription).toBe("A lively retirement hub");
   });
 
+  it("preserves primary identity, gallery order, and verification for media", () => {
+    const canonicalDestination = createCanonicalDestination({
+      media: [
+        {
+          media_key: "media-1",
+          media_type: "photo",
+          image_url: "https://upload.wikimedia.org/example.jpg",
+          caption: "Destination panorama",
+          subject: "City skyline",
+          primary_image: "1",
+          gallery_order: "2",
+          source_name: "Wikimedia Commons",
+          source_url: "https://commons.wikimedia.org/wiki/File:Example.jpg",
+          license_notes: "CC BY-SA 4.0",
+          verified: "1",
+        } as unknown as DeterministicV31CanonicalDestination["media"][number],
+      ],
+    });
+
+    const result = mapCanonicalDestinationToStoredState(canonicalDestination);
+
+    expect(result.media[0]).toMatchObject({
+      mediaKey: "media-1",
+      isPrimary: "1",
+      sortOrder: "2",
+      verified: "1",
+    });
+  });
+
   it("preserves neighborhoodKey, websiteUrl, googleMapsUrl, sourceUrl, address, phone, and displayOrder for a real place row", () => {
     const canonicalDestination = createCanonicalDestination({
       places: [

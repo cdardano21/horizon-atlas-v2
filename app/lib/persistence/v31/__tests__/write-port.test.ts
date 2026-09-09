@@ -157,6 +157,22 @@ describe("write-port statement translation", () => {
     expect(buildDestinationPlanWriteStatements(basePlan())).toEqual([]);
   });
 
+  it("maps media primary identity, gallery order, and verification to premium_media", () => {
+    const childOperations: ChildOperation[] = [{
+      kind: "CREATE_CHILD",
+      module: "media",
+      stableChildKey: "media-1" as any,
+      currentChild: null,
+      incomingChild: { mediaKey: "media-1", kind: "image", url: "https://upload.wikimedia.org/example.jpg", caption: "View", altText: "View", isPrimary: "1", sortOrder: "2", verified: "1", sourceName: "Commons", sourceUrl: "https://commons.wikimedia.org/wiki/File:Example.jpg", licenseNotes: "CC BY-SA" } as any,
+    }];
+
+    const statements = buildDestinationPlanWriteStatements(basePlan({ childOperations }));
+
+    expect(statements[0].text).toContain("premium_media");
+    for (const column of ["is_primary", "sort_order", "verified"]) expect(statements[0].text).toContain(column);
+    expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, "media-1", "image", "https://upload.wikimedia.org/example.jpg", "View", "View", "1", "2", true, "Commons", "https://commons.wikimedia.org/wiki/File:Example.jpg", { licenseNotes: "CC BY-SA" }]);
+  });
+
   it("translates a scalar CREATE on the editorial module into an upsert of premium_destination_profiles", () => {
     const scalarOperations: ScalarOperation[] = [
       { kind: "CREATE", module: "editorial", fieldPath: "shortDescription", currentValue: null, incomingValue: "A disposable synthetic test destination." },

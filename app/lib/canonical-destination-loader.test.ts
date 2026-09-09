@@ -1991,6 +1991,31 @@ describe("STEP 11: renderer-integration authority contract", () => {
       }
     });
 
+    it("selects the explicit primary and orders the remaining gallery by persisted sort order", async () => {
+      mockExactCatalogRow("ordered-media-key", "ordered-media-slug");
+      mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
+        outcome: "SUCCESS",
+        bundle: buildFullNormalizedBundle({
+          destinationKey: "ordered-media-key",
+          media: [
+            { mediaKey: "media-3", kind: "image", url: "https://upload.wikimedia.org/third.jpg", caption: "Third", altText: "Third", isPrimary: "false", sortOrder: "3", verified: "true", sourceName: "Commons", sourceUrl: "https://commons.wikimedia.org/wiki/File:Third.jpg", licenseNotes: "CC" },
+            { mediaKey: "media-1", kind: "image", url: "https://upload.wikimedia.org/hero.jpg", caption: "Hero", altText: "Hero", isPrimary: "true", sortOrder: "1", verified: "true", sourceName: "Commons", sourceUrl: "https://commons.wikimedia.org/wiki/File:Hero.jpg", licenseNotes: "CC" },
+            { mediaKey: "media-2", kind: "image", url: "https://upload.wikimedia.org/second.jpg", caption: "Second", altText: "Second", isPrimary: "false", sortOrder: "2", verified: "true", sourceName: "Commons", sourceUrl: "https://commons.wikimedia.org/wiki/File:Second.jpg", licenseNotes: "CC" },
+          ],
+        }),
+      } as never);
+
+      const destination = await getCanonicalDestination("ordered-media-slug");
+
+      expect(destination?.media.map((item) => item.url)).toEqual([
+        "https://upload.wikimedia.org/hero.jpg",
+        "https://upload.wikimedia.org/second.jpg",
+        "https://upload.wikimedia.org/third.jpg",
+      ]);
+      expect(destination?.media.map((item) => item.isPrimary)).toEqual([true, false, false]);
+      expect(destination?.v31Modules?.media.map((item) => item.sortOrder)).toEqual(["1", "2", "3"]);
+    });
+
     it("omits media (empty array) rather than using generic stock photos when a v3.1 destination genuinely has zero persisted/workbook media", async () => {
       mockExactCatalogRow("the-meadowlands-fl-us", "the-meadowlands-florida-united-states");
       mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "the-meadowlands-fl-us", media: [] }) } as never);

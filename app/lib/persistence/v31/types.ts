@@ -141,6 +141,9 @@ export type StoredMediaShape<T extends DeterministicV31CanonicalMedia> = {
   readonly url: CanonicalNullableString<T["image_url"]>;
   readonly caption: CanonicalNullableString<T["caption"]>;
   readonly altText: CanonicalNullableString<T["subject"]>;
+  readonly isPrimary: CanonicalNullableString<T["primary_image"]>;
+  readonly sortOrder: CanonicalNullableString<T["gallery_order"]>;
+  readonly verified: CanonicalNullableString<T["verified"]>;
   readonly sourceName: CanonicalNullableString<T["source_name"]>;
   readonly sourceUrl: CanonicalNullableString<T["source_url"]>;
   readonly licenseNotes: CanonicalNullableString<T["license_notes"]>;

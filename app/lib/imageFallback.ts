@@ -7,7 +7,6 @@ const featuredPhotoRegex = /images\.unsplash\.com\/featured\/\?/i;
 const sourceUnsplashRegex = /source\.unsplash\.com/i;
 const placeholderTokenRegex = /(placeholder|default-image)/i;
 const legacyGenericFallbackPath = "/images/costa-del-sol-hero.jpg";
-
 function escapeSvgText(value: string) {
   return value
     .replace(/&/g, "&amp;")
@@ -55,6 +54,12 @@ function isInvalidImageSource(src: string | null | undefined) {
   if (!src) return true;
   const trimmed = src.trim();
   if (!trimmed) return true;
+  try {
+    const pathname = decodeURIComponent(new URL(trimmed, "https://local.invalid").pathname).toLowerCase();
+    if (pathname.includes("/special:mediasearch") || pathname.includes("/special:search")) return true;
+  } catch {
+    return true;
+  }
   return featuredPhotoRegex.test(trimmed)
     || sourceUnsplashRegex.test(trimmed)
     || placeholderTokenRegex.test(trimmed)
@@ -149,7 +154,6 @@ function rotate<T>(items: T[], start: number) {
 
 function cityScopedImageUrls(destination: Destination) {
   const candidates: string[] = [];
-
   const curatedVariants = curatedCityImageGalleriesBySlug[destination.slug];
   if (curatedVariants?.length) {
     candidates.push(...curatedVariants);
@@ -208,6 +212,10 @@ export function getDestinationImageSet(destination: Destination, minCount = 3) {
   if (ordered.length >= minCount) return ordered;
 
   return ordered;
+}
+
+export function getDestinationHeroImage(destination: Destination) {
+  return getDestinationImageSet(destination, 1)[0] ?? null;
 }
 
 export function hasVerifiedDestinationImage(destination: Destination) {

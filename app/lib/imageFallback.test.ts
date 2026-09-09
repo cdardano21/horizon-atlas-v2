@@ -70,6 +70,29 @@ describe("imageFallback", () => {
     expect(getDestinationImageUrl({ src: "https://images.unsplash.com/photo-12345", alt: "Generic stock photo" }, destination)).toContain("data:image/svg+xml");
   });
 
+  it.each([
+    "https://commons.wikimedia.org/wiki/Special:MediaSearch?type=image&search=Coimbra",
+    "https://commons.wikimedia.org/wiki/Special:Search?search=Coimbra&ns6=1",
+  ])("rejects HTML discovery URLs instead of treating a trusted host as an image asset", (src) => {
+    const destination = {
+      slug: "coimbra-portugal",
+      city: "Coimbra",
+      country: "Portugal",
+      emoji: "",
+      match: 0,
+      description: "Coimbra",
+      overview: "Coimbra",
+      climate: "Mediterranean",
+      lifestyle: "Historic",
+      transportation: "Available",
+      images: [{ src, alt: "Coimbra discovery page" }],
+      tags: [],
+    } satisfies Destination;
+
+    expect(getDestinationImageSet(destination, 1)).not.toContain(src);
+    expect(getDestinationImageUrl({ src, alt: "Coimbra discovery page" }, destination)).not.toBe(src);
+  });
+
   it("accepts a generic-host image when the metadata clearly matches the destination", () => {
     const destination: Destination = {
       slug: "new-braunfels-texas-united-states",
@@ -91,4 +114,5 @@ describe("imageFallback", () => {
     expect(imageSet).toContain("https://images.unsplash.com/photo-12345?new-braunfels");
     expect(getDestinationImageUrl({ src: "https://images.unsplash.com/photo-12345?new-braunfels", alt: "New Braunfels river corridor and historic district" }, destination)).toBe("https://images.unsplash.com/photo-12345?new-braunfels");
   });
+
 });

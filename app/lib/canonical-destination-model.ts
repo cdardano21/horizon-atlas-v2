@@ -28,6 +28,8 @@ export type CanonicalDestinationMedia = {
   altText: string;
   caption: string;
   isPrimary: boolean;
+  sortOrder?: number;
+  verified?: boolean;
   sourceUrl?: string;
   attribution?: string;
   license?: string;
@@ -290,7 +292,7 @@ export type CanonicalDestinationV31Place = {
   readonly displayOrder: string | null;
 };
 export type CanonicalDestinationV31Resource = { readonly resourceKey: string; readonly category: string | null; readonly name: string | null; readonly url: string | null };
-export type CanonicalDestinationV31Media = { readonly mediaKey: string; readonly kind: string | null; readonly url: string | null; readonly caption: string | null; readonly altText: string | null };
+export type CanonicalDestinationV31Media = { readonly mediaKey: string; readonly kind: string | null; readonly url: string | null; readonly caption: string | null; readonly altText: string | null; readonly isPrimary: string | null; readonly sortOrder: string | null; readonly verified: string | null };
 export type CanonicalDestinationV31CostOfLivingItem = {
   readonly itemKey: string;
   readonly category: string | null;

@@ -148,6 +148,9 @@ export interface PersistedMediaRow {
   readonly url: string | null;
   readonly caption: string | null;
   readonly altText: string | null;
+  readonly isPrimary: string | null;
+  readonly sortOrder: string | null;
+  readonly verified: string | null;
   readonly sourceName: string | null;
   readonly sourceUrl: string | null;
   readonly licenseNotes: string | null;
