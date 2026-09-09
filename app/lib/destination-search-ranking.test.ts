@@ -75,4 +75,55 @@ describe("rankDestinationsForSearch", () => {
 
     expect(rankDestinationsForSearch(destinations, "ver", []).map((item) => item.slug)).toEqual(["verona-italy"]);
   });
+
+  const qualityMatrix = [
+    makeDestination({ slug: "aomori-japan", city: "Aomori", country: "Japan" }),
+    makeDestination({ slug: "morioka-japan", city: "Morioka", country: "Japan", transportation: "Rail connects Morioka with Tokyo, Sendai, Aomori and Akita." }),
+    makeDestination({ slug: "porto-portugal", city: "Porto", country: "Portugal" }),
+    makeDestination({ slug: "athens-greece", city: "Athens", country: "Greece" }),
+    makeDestination({ slug: "sapporo-japan", city: "Sapporo", country: "Japan" }),
+    makeDestination({ slug: "fairhope-alabama", city: "Fairhope", country: "United States" }),
+  ];
+
+  it.each([
+    ["Aomori", "aomori-japan"],
+    ["Morioka", "morioka-japan"],
+    ["Porto", "porto-portugal"],
+    ["Athens", "athens-greece"],
+    ["Sapporo", "sapporo-japan"],
+    ["Fairhope", "fairhope-alabama"],
+  ])("puts exact city query %s first", (query, expectedSlug) => {
+    const ranked = rankDestinationsForSearch(qualityMatrix, query, []);
+
+    expect(ranked[0]?.slug).toBe(expectedSlug);
+    expect(ranked[0]?.matchKind).toBe("exact-city");
+  });
+
+  it("suppresses broad content matches when an exact city exists", () => {
+    expect(rankDestinationsForSearch(qualityMatrix, "Aomori", []).map((item) => item.slug)).toEqual(["aomori-japan"]);
+    expect(rankDestinationsForSearch(qualityMatrix, "Morioka", [])[0]?.slug).toBe("morioka-japan");
+  });
+
+  it.each([
+    ["Sapp", "sapporo-japan"],
+    ["Port", "porto-portugal"],
+  ])("keeps prefix query %s useful", (query, expectedSlug) => {
+    expect(rankDestinationsForSearch(qualityMatrix, query, [])[0]?.slug).toBe(expectedSlug);
+  });
+
+  it.each([
+    ["Aomri", "aomori-japan"],
+    ["Saporo", "sapporo-japan"],
+    ["Athnes", "athens-greece"],
+    ["Fairhpo", "fairhope-alabama"],
+  ])("keeps typo query %s useful", (query, expectedSlug) => {
+    const ranked = rankDestinationsForSearch(qualityMatrix, query, []);
+
+    expect(ranked[0]?.slug).toBe(expectedSlug);
+    expect(ranked[0]?.matchKind).toBe("fuzzy");
+  });
+
+  it("preserves broader content search when no exact identity exists", () => {
+    expect(rankDestinationsForSearch(qualityMatrix, "rail connects", []).map((item) => item.slug)).toEqual(["morioka-japan"]);
+  });
 });
