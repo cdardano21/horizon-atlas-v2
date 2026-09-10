@@ -104,6 +104,18 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     expectedSha256: "6bae082ce0d8d2f43975971004824d202d8dcfd73be336d75d6670dd1f6f8bc7",
   },
   {
+    registryId: "legacy-carryover-batch-20-06",
+    workbookPath: "data/legacy-carryover-batch-20-06/DestinationFinderAI-Next-Legacy-Batch-20-06-FINAL-AUTHORITATIVE-POPULATION-REPAIRED-v3.3.xlsx",
+    environment: "preview",
+    expectedDestinationKeys: [
+      "asheville-north-carolina-united-states", "portland-maine-united-states", "bend-oregon-united-states", "san-luis-obispo-california-united-states", "sarasota-florida-united-states",
+      "reno-nevada-united-states", "viana-do-castelo-portugal", "salamanca-spain", "san-sebastian-spain", "evora-portugal",
+      "prague-other-europe", "treviso-italy", "annecy-france", "ho-chi-minh-city-vietnam", "tokyo-japan",
+      "bali-indonesia", "auckland-new-zealand", "cusco-peru", "valdivia-chile", "cordoba-argentina",
+    ],
+    expectedSha256: "9cb91d6f7ac8e6c7bb84a262960ce7dc7699099c2a40351408883af079f87558",
+  },
+  {
     registryId: "legacy-pilot06-populated",
     // Superseded 2026-08-30 by the authoritative curated workbook - the prior POPULATED.xlsx file is
     // intentionally left on disk, unregistered, as a recoverable historical artifact (never deleted).
