@@ -1,17 +1,10 @@
-import LifeMatchApp from "../components/LifeMatchApp";
-import { LAUNCH_CATALOG_SIZE } from "../lib/destinations";
-import { RETIREMENT_DNA_TOTAL_QUESTIONS } from "../lib/retirement-dna";
+import { redirect } from "next/navigation";
 
 export const metadata = {
   title: "Life Match | DestinationFinderAI",
-  description:
-    `Take the ${RETIREMENT_DNA_TOTAL_QUESTIONS}-question DestinationFinderAI Retirement DNA assessment to identify the top 10 retirement destinations from ${LAUNCH_CATALOG_SIZE} verified global locations.`,
+  description: "Build a focused destination shortlist with Smart Shortlist.",
 };
 
 export default function LifeMatchPage() {
-  return (
-    <main className="atlas-shell min-h-screen">
-      <LifeMatchApp />
-    </main>
-  );
+  redirect("/smart-shortlist");
 }
