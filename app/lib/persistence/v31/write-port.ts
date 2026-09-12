@@ -372,6 +372,12 @@ export function buildKeyedChildConflictTarget(module: string, conflictColumns: r
 }
 
 function readChildField(child: Record<string, unknown>, storedField: string, module: KeyedChildModuleKey): unknown {
+  if (module === "media" && storedField === "sortOrder") {
+    const order = child.sortOrder ?? child.gallery_order;
+    // Explicit NULL bypasses premium_media's NOT NULL DEFAULT 0. Preserve authored
+    // orders; use that same default for unranked media in either payload shape.
+    return order == null || (typeof order === "string" && order.trim() === "") ? 0 : order;
+  }
   const directValue = child[storedField];
   if (directValue !== undefined && directValue !== null) {
     return directValue;

@@ -121,14 +121,15 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       verified: asStoredNullableString(resource.verified),
       verifiedAt: asStoredNullableString(resource.verified_at),
     })),
-    media: media.map((media) => ({
+    media: media.map((media, index) => ({
       mediaKey: asStoredKey<StoredDestinationState["media"][number]["mediaKey"]>(asStoredChild(media, "media_key")),
       kind: asStoredNullableString(media.media_type),
       url: asStoredNullableString(media.image_url),
       caption: asStoredNullableString(media.caption),
       altText: asStoredNullableString(media.subject),
       isPrimary: asStoredNullableString(media.primary_image),
-      sortOrder: asStoredNullableString(media.gallery_order),
+      // Preserve authored order; canonical blanks use the stable input position.
+      sortOrder: media.gallery_order?.trim() ? media.gallery_order : String(index),
       verified: asStoredNullableString(media.verified),
       sourceName: asStoredNullableString(media.source_name),
       sourceUrl: asStoredNullableString(media.source_url),

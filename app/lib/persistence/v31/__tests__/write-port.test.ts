@@ -18,6 +18,7 @@ import type {
   EventsSeasonalityKey,
   FactKey,
   LifestyleFeatureKey,
+  MediaKey,
   ModuleExecutionOperation,
   MoveChecklistKey,
   NeighborhoodKey,
@@ -171,6 +172,39 @@ describe("write-port statement translation", () => {
     expect(statements[0].text).toContain("premium_media");
     for (const column of ["is_primary", "sort_order", "verified"]) expect(statements[0].text).toContain(column);
     expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, "media-1", "image", "https://upload.wikimedia.org/example.jpg", "View", "View", "1", "2", true, "Commons", "https://commons.wikimedia.org/wiki/File:Example.jpg", { licenseNotes: "CC BY-SA" }]);
+  });
+
+  describe.each(["canonical", "stored"] as const)("%s media sort-order SQL contract", (shape) => {
+    it.each([
+      [null, 0], [undefined, 0], ["", 0], [" ", 0],
+      [0, 0], ["0", "0"], ["1", "1"], ["2", "2"], ["3", "3"],
+    ])("preserves authored order or defaults missing order %s to %s", (order, expected) => {
+      for (const role of ["hero", "gallery"]) {
+        const incomingChild = shape === "canonical"
+          ? { media_key: "media-order", media_type: role, image_url: "https://upload.wikimedia.org/media.jpg", caption: "View", subject: "Skyline", primary_image: role === "hero" ? "1" : "0", gallery_order: order, source_name: "Commons", source_url: "https://commons.wikimedia.org/wiki/File:Media.jpg", verified: "1" }
+          : { mediaKey: "media-order", kind: role, url: "https://upload.wikimedia.org/media.jpg", caption: "View", altText: "Skyline", isPrimary: role === "hero" ? "1" : "0", sortOrder: order, sourceName: "Commons", sourceUrl: "https://commons.wikimedia.org/wiki/File:Media.jpg", verified: "1" };
+        const childOperations = [{
+          kind: "CREATE_CHILD", module: "media", stableChildKey: "media-order" as MediaKey,
+          currentChild: null, incomingChild,
+        }] as unknown as ChildOperation[];
+        // Statement generation only: no SQL executor or database connection.
+        const plan = basePlan({ childOperations });
+        const statements = buildDestinationPlanWriteStatements(plan);
+        const statement = statements[0];
+        expect(statement.text).toContain("insert into public.premium_media");
+        const columns = statement.text.match(/premium_media \(([^)]+)\)/)![1].split(", ");
+        const values = Object.fromEntries(columns.map((column, index) => [column, statement.values[index]]));
+        expect(values.sort_order, `${shape}/${role}`).toBe(expected);
+        expect(values.sort_order, `${shape}/${role}`).not.toBeNull();
+        expect(values).toMatchObject({
+          destination_id: DEST_ID, destination_key: DEST_KEY, media_key: "media-order",
+          media_type: role, url: "https://upload.wikimedia.org/media.jpg", caption: "View",
+          alt_text: "Skyline", is_primary: role === "hero" ? "1" : "0",
+          source_name: "Commons", source_url: "https://commons.wikimedia.org/wiki/File:Media.jpg", verified: true,
+        });
+        expect(buildDestinationPlanWriteStatements(plan)).toEqual(statements);
+      }
+    });
   });
 
   it("translates a scalar CREATE on the editorial module into an upsert of premium_destination_profiles", () => {

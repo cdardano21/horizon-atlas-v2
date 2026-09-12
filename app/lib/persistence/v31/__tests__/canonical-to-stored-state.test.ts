@@ -184,6 +184,37 @@ describe("v31 canonical-to-stored-state adapter", () => {
     });
   });
 
+  it.each([null, "", " "])("preserves authored media order and deterministically fills blank hero order: %s", (blankOrder) => {
+    const media = [
+      { key: "hero", order: blankOrder },
+      { key: "gallery-3", order: "3" },
+      { key: "gallery-1", order: "1" },
+      { key: "gallery-2", order: "2" },
+    ].map(({ key, order }) => ({
+      destination_key: "dest-a", media_key: key, media_type: key === "hero" ? "hero" : "gallery",
+      image_url: `https://upload.wikimedia.org/${key}.jpg`, caption: key, subject: key,
+      primary_image: key === "hero" ? "1" : "0", gallery_order: order,
+      source_name: "Commons", source_url: `https://commons.wikimedia.org/wiki/File:${key}.jpg`,
+      license_notes: "CC BY-SA", verified: "1", verified_at: null, confidence: "HIGH",
+    }));
+    const canonical = createCanonicalDestination({ media });
+    const stored = mapCanonicalDestinationToStoredState(canonical);
+    expect(stored.identity.destinationKey).toBe("dest-a");
+    expect(stored.media.map((row) => [row.mediaKey, row.sortOrder])).toEqual([
+      ["hero", "0"], ["gallery-3", "3"], ["gallery-1", "1"], ["gallery-2", "2"],
+    ]);
+    for (const [index, row] of stored.media.entries()) {
+      expect(row.sortOrder, row.mediaKey).not.toBeNull();
+      expect(row, row.mediaKey).toMatchObject({
+        mediaKey: media[index].media_key, kind: media[index].media_type,
+        url: media[index].image_url, isPrimary: media[index].primary_image,
+        sourceUrl: media[index].source_url,
+      });
+    }
+    expect(mapCanonicalDestinationToStoredState(canonical)).toEqual(stored);
+    expect(canonical.media[0].gallery_order).toBe(blankOrder);
+  });
+
   it("preserves neighborhoodKey, websiteUrl, googleMapsUrl, sourceUrl, address, phone, and displayOrder for a real place row", () => {
     const canonicalDestination = createCanonicalDestination({
       places: [
