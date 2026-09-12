@@ -104,6 +104,30 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     expectedSha256: "6bae082ce0d8d2f43975971004824d202d8dcfd73be336d75d6670dd1f6f8bc7",
   },
   {
+    registryId: "legacy-carryover-batch-20-04",
+    workbookPath: "data/legacy-carryover-batch-20-04/DestinationFinderAI-Next-Legacy-Batch-20-Authoritative-Final-v3.3.xlsx",
+    environment: "preview",
+    expectedDestinationKeys: [
+      "siracusa-italy", "toyama-japan", "kardamyli-greece", "trogir-croatia", "korcula-town-croatia",
+      "fukuoka-japan", "maribor-slovenia", "mali-losinj-croatia", "naha-japan", "niigata-japan",
+      "kagoshima-japan", "bari-italy", "miyazaki-japan", "hvar-town-croatia", "oviedo-spain",
+      "cagliari-italy", "naxos-town-greece", "corfu-town-greece", "thessaloniki-greece", "okayama-japan",
+    ],
+    expectedSha256: "f352b0fbf84e5e22bfc0d4b3942324cb82ebe6f1518517b24b3d2df4e12b2129",
+  },
+  {
+    registryId: "legacy-carryover-batch-20-05",
+    workbookPath: "data/legacy-carryover-batch-20-05/DestinationFinderAI-Next-Legacy-Batch-20-05-Authoritative-Final-v3.3.xlsx",
+    environment: "preview",
+    expectedDestinationKeys: [
+      "chattanooga-tennessee-united-states", "greenville-south-carolina-united-states", "tucson-arizona-united-states", "st-petersburg-florida-united-states", "fort-collins-colorado-united-states",
+      "boise-idaho-united-states", "leiria-portugal", "granada-spain", "bilbao-spain", "osijek-croatia",
+      "vienna-austria", "ljubljana-slovenia", "tallinn-estonia", "kuala-lumpur-malaysia", "taipei-taiwan",
+      "busan-south-korea", "adelaide-australia", "oaxaca-mexico", "pereira-colombia", "salinas-ecuador",
+    ],
+    expectedSha256: "28141ee6331438080ad0d1e82c1226759539c6cd4144401ab4c677142d212e6b",
+  },
+  {
     registryId: "legacy-carryover-batch-20-06",
     workbookPath: "data/legacy-carryover-batch-20-06/DestinationFinderAI-Next-Legacy-Batch-20-06-FINAL-AUTHORITATIVE-POPULATION-REPAIRED-v3.3.xlsx",
     environment: "preview",
