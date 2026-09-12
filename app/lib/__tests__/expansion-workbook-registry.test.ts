@@ -65,8 +65,13 @@ const FOREIGN_TOKENS = ["lisbon", "summerlin", "braunfels", "villages", "sofia",
 
 describe("Expansion-workbook registry validation (generic, registry-driven)", () => {
   it("the real, currently-registered preview registry is internally consistent (no duplicate keys/aliases, schema version supported, expected keys match parsed keys, SHA-256 pinned and correct)", async () => {
+    // The validator checks a hash only when supplied; require every preview entry
+    // to supply a pin so removing one cannot silently disable integrity coverage.
+    for (const entry of EXPANSION_WORKBOOK_REGISTRY.filter((entry) => entry.environment === "preview")) {
+      expect(entry.expectedSha256, `${entry.registryId}: required SHA-256 pin`).toMatch(/^[a-f0-9]{64}$/);
+    }
     const result = await validateExpansionWorkbookRegistry();
-    expect(result.issues).toEqual([]);
+    expect(result.issues, "registered workbook validation issues (registryId and message)").toEqual([]);
     expect(result.ok).toBe(true);
   });
 
@@ -90,13 +95,20 @@ describe("Expansion-workbook registry validation (generic, registry-driven)", ()
     expect(result.issues.some((issue) => issue.message.includes("sarande-al"))).toBe(true); // undeclared-in-registry: workbook has 4 more real keys not listed
   });
 
-  it("detects a SHA-256 mismatch against a pinned expectedSha256", async () => {
+  it("detects a SHA-256 mismatch for Batch 20-06 without changing the authoritative workbook", async () => {
+    // Immutable Batch 20-06 path/hash/scope expectations live in its workbook test.
+    // Here exercise generic validation against that real entry, changing only the pin.
+    const entries = EXPANSION_WORKBOOK_REGISTRY.filter((entry) => entry.registryId === "legacy-carryover-batch-20-06");
+    expect(entries, "Batch 20-06 must have exactly one registry entry").toHaveLength(1);
+    const entry = entries[0];
     const wrongHashRegistry: ExpansionWorkbookRegistryEntry[] = [
-      { registryId: "wrong-hash", workbookPath: BATCH_02_ENTRY.workbookPath, environment: "preview", expectedDestinationKeys: [...BATCH_02_ENTRY.expectedDestinationKeys], expectedSha256: "0".repeat(64) },
+      { ...entry, expectedSha256: "0".repeat(64) }, // Deliberately invalid SHA-256, not an artifact change.
     ];
     const result = await validateExpansionWorkbookRegistry(wrongHashRegistry);
     expect(result.ok).toBe(false);
-    expect(result.issues.some((issue) => issue.message.includes("SHA-256 mismatch"))).toBe(true);
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({ registryId: entry.registryId, message: expect.stringContaining("SHA-256 mismatch") }),
+    ]));
   });
 
   it("fails clearly (never throws an opaque error) when a registered workbook path is missing/unreadable", async () => {
@@ -105,7 +117,9 @@ describe("Expansion-workbook registry validation (generic, registry-driven)", ()
     ];
     const result = await validateExpansionWorkbookRegistry(missingFileRegistry);
     expect(result.ok).toBe(false);
-    expect(result.issues.some((issue) => issue.registryId === "missing-file" && issue.message.includes("could not be read"))).toBe(true);
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({ registryId: "missing-file", message: expect.stringContaining("Workbook could not be read (data/this-workbook-does-not-exist.xlsx):") }),
+    ]));
   });
 
   it("detects the same alias defined in two different registered workbooks", async () => {
@@ -206,6 +220,10 @@ describe("Expansion-workbook preview resolver (registry-driven, generic getCanon
       "kumamoto-japan", "beppu-japan", "sapporo-japan", "lecce-italy", "athens-greece",
       "matsumoto-japan", "morioka-japan", "sendai-japan", "cavtat-croatia", "sirmione-italy",
       "celje-slovenia", "nagasaki-japan", "perugia-italy", "novigrad-croatia", "ioannina-greece",
+      "asheville-north-carolina-united-states", "portland-maine-united-states", "bend-oregon-united-states", "san-luis-obispo-california-united-states", "sarasota-florida-united-states",
+      "reno-nevada-united-states", "viana-do-castelo-portugal", "salamanca-spain", "san-sebastian-spain", "evora-portugal",
+      "prague-other-europe", "treviso-italy", "annecy-france", "ho-chi-minh-city-vietnam", "tokyo-japan",
+      "bali-indonesia", "auckland-new-zealand", "cusco-peru", "valdivia-chile", "cordoba-argentina",
     ];
     expect(allRegisteredKeys.slice().sort()).toEqual(expectedKeys.sort());
   });

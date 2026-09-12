@@ -211,16 +211,11 @@ export async function resolveExpansionWorkbookDestinationKey(
   const normalized = rawSlug.trim().toLowerCase();
   if (!normalized) return null;
 
-  const entries = previewEntries(registry);
-
-  const directOwners = entries.filter((entry) => entry.expectedDestinationKeys.includes(normalized));
-  if (directOwners.length > 1) {
-    throw new Error(`Expansion workbook registry conflict: destination_key "${normalized}" is registered in multiple workbooks (${directOwners.map((entry) => entry.registryId).join(", ")}).`);
-  }
-  if (directOwners.length === 1) {
+  if (findOwningEntry(normalized, registry)) {
     return normalized;
   }
 
+  const entries = previewEntries(registry);
   const aliasMatches: Array<{ registryId: string; resolvedKey: string }> = [];
   for (const entry of entries) {
     const workbookImport = await loadRegistryEntryImport(entry);
@@ -361,7 +356,7 @@ export async function validateExpansionWorkbookRegistry(
     try {
       workbookImport = await loadRegistryEntryImport(entry);
     } catch (error) {
-      issues.push({ registryId: entry.registryId, message: `Workbook could not be read: ${error instanceof Error ? error.message : String(error)}` });
+      issues.push({ registryId: entry.registryId, message: `Workbook could not be read (${entry.workbookPath}): ${error instanceof Error ? error.message : String(error)}` });
       continue;
     }
 
