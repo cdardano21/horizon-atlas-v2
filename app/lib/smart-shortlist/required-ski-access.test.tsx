@@ -1,3 +1,4 @@
+import { hasRequiredSkiAccess, verifiedSkiAccessByDestination } from "../intelligence-v2/ski-access";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import SmartShortlistPrototype from "../../components/smart-shortlist/SmartShortlistPrototype";
@@ -7,16 +8,38 @@ import { evaluateShortlistWithOwnedAffordability } from "./owned-affordability-e
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn() }) }));
 const hoiAn = smartShortlistCandidates.find(d => d.key === "hoi-an-vn")!;
-const queenstown = smartShortlistCandidates.find(d => d.key === "queenstown-nz")!;
+const queenstown = { ...smartShortlistCandidates.find(d => d.key === "queenstown-nz")!, skiAccess: verifiedSkiAccessByDestination["queenstown-nz"]! };
 const required = { mountain: "SKI_RESORT_ACCESS" as const, requireMountain: true };
 afterEach(() => { cleanup(); sessionStorage.clear(); vi.useRealTimers(); });
 
 describe("Required ski access through Smart Shortlist", () => {
+  it.each(Object.entries(verifiedSkiAccessByDestination))("qualifies verified seed %s", (key, evidence) => {
+    expect(hasRequiredSkiAccess(evidence), key).toBe(true);
+    expect(evaluateShortlist([{ ...queenstown, key, skiAccess: evidence }], required)[0].group).toBe("MEETS_FILTERS");
+  });
+
   it.each(["NONE", "MOUNTAIN_ACCESS", "UNKNOWN", undefined, null, false, "YES"])("excludes non-affirmative access %s", access => {
     const candidate = { ...hoiAn, mountainAccess: access } as unknown as PrototypeCandidate;
     const [result] = evaluateShortlist([candidate], required);
     expect(result.group).toBe("EXCLUDED");
     expect(result.reasons).toContainEqual(expect.objectContaining({ capability: "mountain", state: "FAIL" }));
+  });
+
+  it.each([60, 61, null, undefined, -1, NaN, Infinity])("checks the drive-time boundary %s", minutes => {
+    const candidate = { ...queenstown, skiAccess: { ...queenstown.skiAccess, skiResortDriveMinutes: minutes } } as PrototypeCandidate;
+    expect(evaluateShortlist([candidate], required)[0].group).toBe(minutes === 60 ? "MEETS_FILTERS" : "EXCLUDED");
+  });
+
+  it.each([
+    { skiAccessVerified: false }, { resortType: "CROSS_COUNTRY_ONLY" }, { resortType: "INDOOR_ARTIFICIAL" },
+    { nearestSkiResortName: "" }, { sourceUrl: "" }, { sourceUrl: "javascript:alert(1)" }, { verifiedAt: "" },
+  ])("rejects incomplete or ineligible evidence %j", patch => {
+    const candidate = { ...queenstown, skiAccess: { ...queenstown.skiAccess, ...patch } } as PrototypeCandidate;
+    expect(evaluateShortlist([candidate], required)[0].group).toBe("EXCLUDED");
+  });
+
+  it("does not accept an old affirmative enum without proximity evidence", () => {
+    expect(evaluateShortlist([{ ...queenstown, skiAccess: undefined }], required)[0].group).toBe("EXCLUDED");
   });
 
   it("admits explicit resort access and excludes the real Hoi An catalog fixture", () => {
@@ -47,7 +70,7 @@ describe("Required ski access through Smart Shortlist", () => {
   it("submits the real question controls and never displays unknown ski access as a result", () => {
     render(<SmartShortlistPrototype intelligence={[]} candidates={[{ ...hoiAn, mountainAccess: "UNKNOWN" }, queenstown]} />);
     for (let i = 0; i < 3; i++) fireEvent.click(screen.getByRole("button", { name: "Continue" }));
-    fireEvent.click(screen.getByRole("button", { name: "Ski-resort access", exact: true }));
+    fireEvent.click(screen.getByRole("button", { name: "Downhill ski resort within about 60 minutes", exact: true }));
     fireEvent.click(screen.getByRole("button", { name: "Continue" }));
     fireEvent.click(screen.getByRole("button", { name: "Continue" }));
     fireEvent.click(screen.getByRole("checkbox", { name: "Require the selected mountain category" }));
@@ -65,7 +88,7 @@ describe("Required ski access through Smart Shortlist", () => {
       healthcareMode: "NOT_A_FACTOR", healthcareMinimum: "GOOD_PRIVATE_AVAILABLE",
       safetyMode: "NOT_A_FACTOR", safetyMinimum: "MODERATE_OR_BETTER", lgbtqMode: "NOT_A_FACTOR", legalPathMode: "NOT_A_FACTOR",
       detailTopic: "Setting", requireBeach: false, showExcluded: false, showAllRecommended: false, showAllVerification: false,
-      results: evaluateShortlist([{ ...hoiAn, mountainAccess: "UNKNOWN" }], { ...required, requireMountain: false })
+      results: evaluateShortlist([{ ...queenstown, skiAccess: undefined }], { ...required, requireMountain: false })
         .map(result => ({ ...result, group: "NEEDS_VERIFICATION" })),
     }));
     render(<SmartShortlistPrototype intelligence={[]} candidates={[hoiAn, queenstown]} />);

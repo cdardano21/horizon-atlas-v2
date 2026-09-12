@@ -1,3 +1,4 @@
+import type { SkiAccessEvidence } from "./ski-access";
 import type { HealthcareMinimumStandard, SafetyMinimumStandard } from "./profile-types";
 import type { MoneyRange } from "./result-types";
 
@@ -54,6 +55,7 @@ export type MountainOrSkiAccessFact = "SKI_RESORT_ACCESS" | "MOUNTAIN_SCENIC_ONL
 export type LgbtqLegalProtectionFact = "LEGAL_PROTECTIONS_IN_PLACE" | "NO_LEGAL_PROTECTIONS" | "CRIMINALIZED" | "UNKNOWN";
 
 export interface DestinationHardGateFacts {
+  readonly skiAccess?: SkiAccessEvidence;
   readonly beachAccess: BeachAccessFact;
   readonly mountainOrSkiAccess: MountainOrSkiAccessFact;
   readonly healthcareStandard: HealthcareMinimumStandard | "UNKNOWN";

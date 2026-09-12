@@ -1,8 +1,9 @@
+import { verifiedSkiAccessByDestination } from "../intelligence-v2/ski-access";
 import { describe, expect, it } from "vitest";
 import { smartShortlistCandidates } from "./cohort";
 import { evaluateShortlist, type ShortlistProfile } from "./evaluator";
 
-const group = (profile: ShortlistProfile, name: string) => evaluateShortlist(smartShortlistCandidates, profile)
+const group = (profile: ShortlistProfile, name: string) => evaluateShortlist(smartShortlistCandidates.map(candidate => ({ ...candidate, skiAccess: verifiedSkiAccessByDestination[candidate.key] })), profile)
   .filter((result) => result.group === name);
 
 describe("Smart Shortlist product scenarios", () => {
@@ -27,8 +28,8 @@ describe("Smart Shortlist product scenarios", () => {
     expect(results.every((result) => result.reasons.every((reason) => !/citizen|visa|eligible/i.test(reason.explanation)))).toBe(true);
   });
 
-  it("finds exactly the three broad ski-resort-access candidates", () => {
-    expect(group({ mountain: "SKI_RESORT_ACCESS", requireMountain: true }, "MEETS_FILTERS")).toHaveLength(3);
+  it("requires verified proximity rather than the three broad ski enums", () => {
+    expect(group({ mountain: "SKI_RESORT_ACCESS", requireMountain: true }, "MEETS_FILTERS").map(result => result.destination.key)).toEqual(["queenstown-nz"]);
   });
 
   it("returns Queenstown alone for direct beach plus ski access", () => {

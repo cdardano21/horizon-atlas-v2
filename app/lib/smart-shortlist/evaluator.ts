@@ -1,3 +1,4 @@
+import { hasRequiredSkiAccess, type SkiAccessEvidence } from "../intelligence-v2/ski-access";
 import {
   evaluateDocumentedLongStayPathRequirement,
   evaluateHealthcareMinimumStandard,
@@ -30,6 +31,7 @@ export type AffordabilityEvidence = {
 };
 
 export type ShortlistFacts = {
+  skiAccess?: SkiAccessEvidence;
   key: string;
   name: string;
   countryCode: string;
@@ -266,9 +268,11 @@ function evaluateLegalPath(destination: ShortlistFacts, profile: ShortlistProfil
 
 function evaluateMountain(destination: ShortlistFacts, profile: ShortlistProfile): RequirementReason | null {
   if (!profile.mountain) return null;
-  // Required ski access needs affirmative evidence; an unresolved category is not a reviewable match.
-  if (profile.requireMountain && profile.mountain === "SKI_RESORT_ACCESS" && destination.mountainAccess !== "SKI_RESORT_ACCESS") {
-    return { capability: "mountain", state: "FAIL", explanation: "Required ski-resort access is not affirmatively established." };
+  if (profile.requireMountain && profile.mountain === "SKI_RESORT_ACCESS") {
+    const passes = hasRequiredSkiAccess(destination.skiAccess);
+    return { capability: "mountain", state: passes ? "PASS" : "FAIL", explanation: passes
+      ? `Verified outdoor downhill resort: ${destination.skiAccess!.nearestSkiResortName}, approximately ${destination.skiAccess!.skiResortDriveMinutes} minutes by road from the destination centre.`
+      : "Verified outdoor downhill ski-resort access within 60 minutes by road is not established." };
   }
   if (destination.mountainAccess === "UNKNOWN") return { capability: "mountain", state: "UNKNOWN", explanation: "Mountain access is unresolved." };
   const passes = profile.mountain === "SKI_RESORT_ACCESS"

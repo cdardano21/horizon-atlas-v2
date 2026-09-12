@@ -190,9 +190,8 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
     try {
       saved = JSON.parse(serialized) as SavedShortlistSession;
       if (saved.version !== 1 || !Array.isArray(saved.results) || !Array.isArray(saved.comparison)) return;
-      // Do not restore results admitted by the previous, permissive required-ski policy.
-      if (saved.requireMountain && saved.mountain === "SKI_RESORT_ACCESS"
-        && saved.results.some(result => result.group !== "EXCLUDED" && result.destination.mountainAccess !== "SKI_RESORT_ACCESS")) return;
+      // Required-ski results must be rebuilt against current proximity evidence, never cached facts.
+      if (saved.requireMountain && saved.mountain === "SKI_RESORT_ACCESS") return;
     } catch {
       return;
     }
@@ -445,7 +444,7 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
                   <h2 className="mt-2 text-3xl font-semibold">Which setting would you enjoy?</h2>
                   <div className="mt-8 grid gap-8 sm:grid-cols-2">
                     <div><h3 className="text-lg font-semibold">Beach access</h3><p className="mb-3 mt-1 text-xs text-[var(--atlas-muted)]">General beach access may include lakes. Ocean access requires explicit coastal evidence.</p><div className="grid gap-2"><ChoiceButton active={!beach} onClick={() => setBeach(undefined)}>No preference</ChoiceButton><ChoiceButton active={beach === "DIRECT_ACCESS"} onClick={() => setBeach("DIRECT_ACCESS")}>Direct beach access</ChoiceButton><ChoiceButton active={beach === "NEARBY_OR_DIRECT"} onClick={() => setBeach("NEARBY_OR_DIRECT")}>Nearby beach is enough</ChoiceButton><ChoiceButton active={beach === "OCEAN_COASTAL"} onClick={() => { setBeach("OCEAN_COASTAL"); setRequireBeach(true); }}>Ocean or coastal beach access</ChoiceButton></div></div>
-                    <div><h3 className="text-lg font-semibold">Mountains</h3><p className="mb-3 mt-1 text-xs text-[var(--atlas-muted)]">Broad category, not a travel-time or snow promise.</p><div className="grid gap-2"><ChoiceButton active={!mountain} onClick={() => setMountain(undefined)}>No preference</ChoiceButton><ChoiceButton active={mountain === "MOUNTAIN_OR_SKI"} onClick={() => setMountain("MOUNTAIN_OR_SKI")}>Mountain scenery or ski access</ChoiceButton><ChoiceButton active={mountain === "SKI_RESORT_ACCESS"} onClick={() => setMountain("SKI_RESORT_ACCESS")}>Ski-resort access</ChoiceButton></div></div>
+                    <div><h3 className="text-lg font-semibold">Mountains</h3><p className="mb-3 mt-1 text-xs text-[var(--atlas-muted)]">Required ski access needs a verified outdoor downhill resort within 60 minutes by road from the destination centre.</p><div className="grid gap-2"><ChoiceButton active={!mountain} onClick={() => setMountain(undefined)}>No preference</ChoiceButton><ChoiceButton active={mountain === "MOUNTAIN_OR_SKI"} onClick={() => setMountain("MOUNTAIN_OR_SKI")}>Mountain scenery or ski access</ChoiceButton><ChoiceButton active={mountain === "SKI_RESORT_ACCESS"} onClick={() => setMountain("SKI_RESORT_ACCESS")}>Downhill ski resort within about 60 minutes</ChoiceButton></div></div>
                   </div>
                 </div>
               )}
