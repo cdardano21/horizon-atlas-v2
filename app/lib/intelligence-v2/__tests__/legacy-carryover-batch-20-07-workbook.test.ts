@@ -6,7 +6,7 @@ import { loadFrozenWorkbookV31DeterministicImport } from "../../workbook-v31-det
 import { mapCanonicalDestinationToStoredState } from "../../persistence/v31/map-canonical-destination-to-stored-state";
 
 const WORKBOOK_PATH = "data/legacy-carryover-batch-20-07/DestinationFinderAI-Next-Legacy-Batch-20-07-Contract-Repaired-v3.3.xlsx";
-const EXPECTED_SHA256 = "73c281d00f45d4741ef8e063c85e700bafef3db195428ec42754e23b2182c360";
+const EXPECTED_SHA256 = "20191e74867828cc15cd6f1ffd2b5e8ef89ef9ba8bb92900cdca60bf79ed2cd4";
 const EXPECTED_KEYS = ["buenos-aires-argentina", "brisbane-australia", "bruges-belgium", "curitiba-brazil", "santiago-chile", "bogota-colombia", "makarska-croatia", "aix-en-provence-france", "chania-greece", "aosta-italy", "kurashiki-japan", "todos-santos-mexico", "muscat-oman", "panama-city-panama", "cape-town-south-africa", "seoul-south-korea", "a-coruna-spain", "phuket-thailand", "belfast-united-kingdom", "albuquerque-new-mexico-united-states"];
 
 describe("legacy carryover batch 20-07 workbook", () => {

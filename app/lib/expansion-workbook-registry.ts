@@ -149,7 +149,7 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
       "kurashiki-japan", "todos-santos-mexico", "muscat-oman", "panama-city-panama", "cape-town-south-africa",
       "seoul-south-korea", "a-coruna-spain", "phuket-thailand", "belfast-united-kingdom", "albuquerque-new-mexico-united-states",
     ],
-    expectedSha256: "73c281d00f45d4741ef8e063c85e700bafef3db195428ec42754e23b2182c360",
+    expectedSha256: "20191e74867828cc15cd6f1ffd2b5e8ef89ef9ba8bb92900cdca60bf79ed2cd4",
   },
   {
     registryId: "legacy-pilot06-populated",
