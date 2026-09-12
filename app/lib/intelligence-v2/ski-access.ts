@@ -1,5 +1,10 @@
+export type SkiAccessType = "SKI_RESORT_TOWN" | "SKI_ACCESS_WITHIN_60_MIN" | "NO_QUALIFYING_SKI_ACCESS" | "UNKNOWN";
+
 /** Verified normal-road access from the destination centre, not a winter-condition guarantee. */
 export interface SkiAccessEvidence {
+  readonly accessType: SkiAccessType;
+  /** Separate official evidence for the community classification; required for resort towns. */
+  readonly resortTownSourceUrl?: string;
   readonly nearestSkiResortName: string;
   readonly skiResortDriveMinutes: number | null;
   readonly skiAccessVerified: boolean;
@@ -10,12 +15,17 @@ export interface SkiAccessEvidence {
 }
 
 export function hasRequiredSkiAccess(evidence?: SkiAccessEvidence | null): boolean {
-  if (!evidence || evidence.skiAccessVerified !== true || evidence.resortType !== "OUTDOOR_DOWNHILL"
+  if (!evidence || (evidence.accessType !== "SKI_RESORT_TOWN" && evidence.accessType !== "SKI_ACCESS_WITHIN_60_MIN")
+    || evidence.skiAccessVerified !== true || evidence.resortType !== "OUTDOOR_DOWNHILL"
     || !evidence.nearestSkiResortName?.trim() || !evidence.sourceName?.trim()
     || !evidence.verifiedAt || !Number.isFinite(Date.parse(evidence.verifiedAt))
     || typeof evidence.skiResortDriveMinutes !== "number" || !Number.isFinite(evidence.skiResortDriveMinutes)
     || evidence.skiResortDriveMinutes < 0 || evidence.skiResortDriveMinutes > 60) return false;
   try {
+    if (evidence.accessType === "SKI_RESORT_TOWN") {
+      const townSource = new URL(evidence.resortTownSourceUrl ?? "");
+      if (townSource.protocol !== "https:" && townSource.protocol !== "http:") return false;
+    }
     const url = new URL(evidence.sourceUrl);
     return url.protocol === "https:" || url.protocol === "http:";
   } catch { return false; }
@@ -24,6 +34,8 @@ export function hasRequiredSkiAccess(evidence?: SkiAccessEvidence | null): boole
 /** Bounded verified seed; absent destinations remain unknown, never inferred from mountain enums. */
 export const verifiedSkiAccessByDestination: Readonly<Partial<Record<string, SkiAccessEvidence>>> = {
   "queenstown-nz": {
+    accessType: "SKI_RESORT_TOWN",
+    resortTownSourceUrl: "https://www.queenstownnz.co.nz/stories/post/planning-a-couples-ski-trip-to-queenstown/",
     nearestSkiResortName: "Coronet Peak",
     skiResortDriveMinutes: 20,
     skiAccessVerified: true,
@@ -33,6 +45,7 @@ export const verifiedSkiAccessByDestination: Readonly<Partial<Record<string, Ski
     verifiedAt: "2026-09-12",
   },
   "reno-nevada-united-states": {
+    accessType: "SKI_ACCESS_WITHIN_60_MIN",
     nearestSkiResortName: "Mt. Rose Ski Tahoe",
     skiResortDriveMinutes: 25,
     skiAccessVerified: true,
@@ -42,6 +55,7 @@ export const verifiedSkiAccessByDestination: Readonly<Partial<Record<string, Ski
     verifiedAt: "2026-09-12",
   },
   "boise-idaho-united-states": {
+    accessType: "SKI_ACCESS_WITHIN_60_MIN",
     nearestSkiResortName: "Bogus Basin",
     skiResortDriveMinutes: 45,
     skiAccessVerified: true,
@@ -51,6 +65,7 @@ export const verifiedSkiAccessByDestination: Readonly<Partial<Record<string, Ski
     verifiedAt: "2026-09-12",
   },
   "sapporo-japan": {
+    accessType: "SKI_ACCESS_WITHIN_60_MIN",
     nearestSkiResortName: "Sapporo Teine",
     skiResortDriveMinutes: 40,
     skiAccessVerified: true,
@@ -60,6 +75,7 @@ export const verifiedSkiAccessByDestination: Readonly<Partial<Record<string, Ski
     verifiedAt: "2026-09-12",
   },
   "aosta-italy": {
+    accessType: "SKI_ACCESS_WITHIN_60_MIN",
     nearestSkiResortName: "Pila",
     skiResortDriveMinutes: 30,
     skiAccessVerified: true,
@@ -69,6 +85,7 @@ export const verifiedSkiAccessByDestination: Readonly<Partial<Record<string, Ski
     verifiedAt: "2026-09-12",
   },
   "annecy-france": {
+    accessType: "SKI_ACCESS_WITHIN_60_MIN",
     nearestSkiResortName: "Semnoz",
     skiResortDriveMinutes: 20,
     skiAccessVerified: true,
@@ -78,6 +95,7 @@ export const verifiedSkiAccessByDestination: Readonly<Partial<Record<string, Ski
     verifiedAt: "2026-09-12",
   },
   "sendai-japan": {
+    accessType: "SKI_ACCESS_WITHIN_60_MIN",
     nearestSkiResortName: "Spring Valley Sendai Izumi",
     skiResortDriveMinutes: 40,
     skiAccessVerified: true,
@@ -87,6 +105,7 @@ export const verifiedSkiAccessByDestination: Readonly<Partial<Record<string, Ski
     verifiedAt: "2026-09-12",
   },
   "ljubljana-slovenia": {
+    accessType: "SKI_ACCESS_WITHIN_60_MIN",
     nearestSkiResortName: "Krvavec",
     skiResortDriveMinutes: 30,
     skiAccessVerified: true,
@@ -96,6 +115,7 @@ export const verifiedSkiAccessByDestination: Readonly<Partial<Record<string, Ski
     verifiedAt: "2026-09-12",
   },
   "radovljica-slovenia": {
+    accessType: "SKI_ACCESS_WITHIN_60_MIN",
     nearestSkiResortName: "Kranjska Gora",
     skiResortDriveMinutes: 45,
     skiAccessVerified: true,
@@ -105,6 +125,7 @@ export const verifiedSkiAccessByDestination: Readonly<Partial<Record<string, Ski
     verifiedAt: "2026-09-12",
   },
   "kanazawa-japan": {
+    accessType: "SKI_ACCESS_WITHIN_60_MIN",
     nearestSkiResortName: "Hakusan Seymour",
     skiResortDriveMinutes: 50,
     skiAccessVerified: true,
@@ -114,6 +135,7 @@ export const verifiedSkiAccessByDestination: Readonly<Partial<Record<string, Ski
     verifiedAt: "2026-09-12",
   },
   "takayama-japan": {
+    accessType: "SKI_ACCESS_WITHIN_60_MIN",
     nearestSkiResortName: "Mont Deus Hida Kuraiyama Snow Park",
     skiResortDriveMinutes: 20,
     skiAccessVerified: true,
@@ -123,6 +145,7 @@ export const verifiedSkiAccessByDestination: Readonly<Partial<Record<string, Ski
     verifiedAt: "2026-09-12",
   },
   "ioannina-greece": {
+    accessType: "SKI_ACCESS_WITHIN_60_MIN",
     nearestSkiResortName: "Anilio Park",
     skiResortDriveMinutes: 50,
     skiAccessVerified: true,

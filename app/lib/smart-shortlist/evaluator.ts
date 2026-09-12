@@ -271,7 +271,7 @@ function evaluateMountain(destination: ShortlistFacts, profile: ShortlistProfile
   if (profile.requireMountain && profile.mountain === "SKI_RESORT_ACCESS") {
     const passes = hasRequiredSkiAccess(destination.skiAccess);
     return { capability: "mountain", state: passes ? "PASS" : "FAIL", explanation: passes
-      ? `Verified outdoor downhill resort: ${destination.skiAccess!.nearestSkiResortName}, approximately ${destination.skiAccess!.skiResortDriveMinutes} minutes by road from the destination centre.`
+      ? `${destination.skiAccess!.accessType === "SKI_RESORT_TOWN" ? "Ski resort town" : "Nearby ski access"} — verified outdoor downhill resort: ${destination.skiAccess!.nearestSkiResortName}, approximately ${destination.skiAccess!.skiResortDriveMinutes} minutes by road from the destination centre.`
       : "Verified outdoor downhill ski-resort access within 60 minutes by road is not established." };
   }
   if (destination.mountainAccess === "UNKNOWN") return { capability: "mountain", state: "UNKNOWN", explanation: "Mountain access is unresolved." };

@@ -13,6 +13,27 @@ const required = { mountain: "SKI_RESORT_ACCESS" as const, requireMountain: true
 afterEach(() => { cleanup(); sessionStorage.clear(); vi.useRealTimers(); });
 
 describe("Required ski access through Smart Shortlist", () => {
+  it.each([
+    ["SKI_RESORT_TOWN", "MEETS_FILTERS"], ["SKI_ACCESS_WITHIN_60_MIN", "MEETS_FILTERS"],
+    ["NO_QUALIFYING_SKI_ACCESS", "EXCLUDED"], ["UNKNOWN", "EXCLUDED"], [undefined, "EXCLUDED"],
+  ])("enforces ski classification %s", (accessType, group) => {
+    const candidate = { ...queenstown, skiAccess: { ...queenstown.skiAccess, accessType } } as PrototypeCandidate;
+    expect(evaluateShortlist([candidate], required)[0].group).toBe(group);
+  });
+
+  it("requires separate official evidence for a resort-town classification", () => {
+    expect(hasRequiredSkiAccess({ ...queenstown.skiAccess, resortTownSourceUrl: undefined })).toBe(false);
+  });
+
+  it("distinguishes a verified ski town from a metro with nearby skiing in result facts and reasons", () => {
+    const sapporo = { ...queenstown, key: "sapporo-japan", skiAccess: verifiedSkiAccessByDestination["sapporo-japan"]! };
+    const results = evaluateShortlist([queenstown, sapporo], required);
+    expect(results.find(r => r.destination.key === queenstown.key)?.destination.skiAccess?.accessType).toBe("SKI_RESORT_TOWN");
+    expect(results.find(r => r.destination.key === sapporo.key)?.destination.skiAccess?.accessType).toBe("SKI_ACCESS_WITHIN_60_MIN");
+    expect(results.find(r => r.destination.key === queenstown.key)?.reasons).toContainEqual(expect.objectContaining({ explanation: expect.stringContaining("Ski resort town") }));
+    expect(results.find(r => r.destination.key === sapporo.key)?.reasons).toContainEqual(expect.objectContaining({ explanation: expect.stringContaining("Nearby ski access") }));
+  });
+
   it.each(Object.entries(verifiedSkiAccessByDestination))("qualifies verified seed %s", (key, evidence) => {
     expect(hasRequiredSkiAccess(evidence), key).toBe(true);
     expect(evaluateShortlist([{ ...queenstown, key, skiAccess: evidence }], required)[0].group).toBe("MEETS_FILTERS");
