@@ -190,6 +190,9 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
     try {
       saved = JSON.parse(serialized) as SavedShortlistSession;
       if (saved.version !== 1 || !Array.isArray(saved.results) || !Array.isArray(saved.comparison)) return;
+      // Do not restore results admitted by the previous, permissive required-ski policy.
+      if (saved.requireMountain && saved.mountain === "SKI_RESORT_ACCESS"
+        && saved.results.some(result => result.group !== "EXCLUDED" && result.destination.mountainAccess !== "SKI_RESORT_ACCESS")) return;
     } catch {
       return;
     }

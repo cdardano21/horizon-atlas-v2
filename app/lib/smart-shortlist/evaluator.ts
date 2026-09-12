@@ -266,6 +266,10 @@ function evaluateLegalPath(destination: ShortlistFacts, profile: ShortlistProfil
 
 function evaluateMountain(destination: ShortlistFacts, profile: ShortlistProfile): RequirementReason | null {
   if (!profile.mountain) return null;
+  // Required ski access needs affirmative evidence; an unresolved category is not a reviewable match.
+  if (profile.requireMountain && profile.mountain === "SKI_RESORT_ACCESS" && destination.mountainAccess !== "SKI_RESORT_ACCESS") {
+    return { capability: "mountain", state: "FAIL", explanation: "Required ski-resort access is not affirmatively established." };
+  }
   if (destination.mountainAccess === "UNKNOWN") return { capability: "mountain", state: "UNKNOWN", explanation: "Mountain access is unresolved." };
   const passes = profile.mountain === "SKI_RESORT_ACCESS"
     ? destination.mountainAccess === "SKI_RESORT_ACCESS"
