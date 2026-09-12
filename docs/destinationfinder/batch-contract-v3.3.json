@@ -197,7 +197,9 @@
     "formulaColumns": ["avg_high_c", "avg_low_c", "rainfall_mm", "humidity_pct"],
     "monthsPerDestination": 12,
     "expectedFormulasPerDestination": 48,
-    "cachedValuesRequired": true
+    "cachedValuesRequired": true,
+    "directNumericValuesAllowed": true,
+    "validationPolicy": "Each destination requires months 1 through 12 exactly once; all four fields must contain finite numeric direct values or numeric cached formula results. Formula count is template information, not an acceptance requirement."
   },
   "writePolicy": {
     "validatorIsReadOnly": true,

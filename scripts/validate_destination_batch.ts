@@ -40,13 +40,46 @@ type BatchContract = {
   };
 };
 
+type ClimateValidationRow = {
+  destinationKey: string;
+  month: unknown;
+  // Direct values or cached formula results; formulas are never evaluated here.
+  values: unknown[];
+};
+
+export function validateClimateRows(rows: readonly ClimateValidationRow[], expectedKeys: readonly string[]): string[] {
+  const errors: string[] = [];
+  const months = new Map(expectedKeys.map((key) => [key, new Set<number>()]));
+  const fields = ["avg_high_c", "avg_low_c", "rainfall_mm", "humidity_pct"];
+  for (const row of rows) {
+    const label = `CLIMATE_MONTHLY ${row.destinationKey}/${String(row.month)}`;
+    const ownedMonths = months.get(row.destinationKey);
+    if (!ownedMonths) errors.push(`${label}: unexpected destination ownership.`);
+    if (typeof row.month !== "number" || !Number.isInteger(row.month) || row.month < 1 || row.month > 12) {
+      errors.push(`${label}: month must be an integer from 1 to 12.`);
+    } else if (ownedMonths) {
+      if (ownedMonths.has(row.month)) errors.push(`${label}: duplicate destination/month.`);
+      ownedMonths.add(row.month);
+    }
+    fields.forEach((field, index) => {
+      const value = row.values[index];
+      if (typeof value !== "number" || !Number.isFinite(value)) {
+        errors.push(`${label}: ${field} requires a finite numeric direct value or cached formula result.`);
+      }
+    });
+  }
+  for (const [key, values] of months) {
+    if (values.size !== 12) errors.push(`CLIMATE_MONTHLY ${key}: expected 12 distinct months; found ${values.size}.`);
+  }
+  return errors;
+}
+
 type WorkbookStructure = {
   sheetNames: string[];
   headers: Record<string, string[]>;
   metadata: Record<string, string>;
   manifestKeys: string[];
-  climateFormulaCount: number;
-  invalidCachedClimateCells: string[];
+  climateRows: ClimateValidationRow[];
   excelErrorCells: string[];
   destinationRows: Array<{ destinationKey: string; population: unknown }>;
   sourceRows: Array<{ destinationKey: string; sourceKey: string; sourceName: string; sourceUrl: string; sourceType: string; notes: string }>;
@@ -121,18 +154,16 @@ manifest_keys = [
     for row in records("IMPORT_MANIFEST")
     if row.get("destination_key") is not None
 ]
-climate_formula_count = sum(
-  1
-  for row in workbook["CLIMATE_MONTHLY"].iter_rows(min_col=3, max_col=6)
-  for cell in row
-  if isinstance(cell.value, str) and cell.value.startswith("=")
-)
 cached_workbook = load_workbook(sys.argv[1], read_only=True, data_only=True)
-invalid_cached_climate_cells = []
-for row in cached_workbook["CLIMATE_MONTHLY"].iter_rows(min_row=2, min_col=3, max_col=6):
-  for cell in row:
-    if not isinstance(cell.value, (int, float)):
-      invalid_cached_climate_cells.append(cell.coordinate)
+climate_rows = []
+for row in cached_workbook["CLIMATE_MONTHLY"].iter_rows(min_row=2):
+  if not any(cell.value is not None for cell in row):
+    continue
+  climate_rows.append({
+    "destinationKey": str(row[0].value or ""),
+    "month": row[1].value,
+    "values": [cell.value for cell in row[2:6]],
+  })
 
 excel_error_cells = []
 for sheet in workbook.worksheets:
@@ -209,8 +240,7 @@ print(json.dumps({
     "headers": headers,
     "metadata": metadata,
     "manifestKeys": manifest_keys,
-    "climateFormulaCount": climate_formula_count,
-    "invalidCachedClimateCells": invalid_cached_climate_cells,
+    "climateRows": climate_rows,
     "excelErrorCells": excel_error_cells,
     "destinationRows": destination_rows,
     "sourceRows": source_rows,
@@ -450,13 +480,7 @@ export async function validateDestinationBatch(options: ValidationOptions): Prom
   }
   const duplicateManifestKeys = duplicates(structure.manifestKeys);
   if (duplicateManifestKeys.length) errors.push(`Duplicate IMPORT_MANIFEST keys: ${duplicateManifestKeys.join(", ")}.`);
-  const expectedClimateFormulaCount = parsedDestinationKeys.length * contract.climateFormulas.expectedFormulasPerDestination;
-  if (structure.climateFormulaCount !== expectedClimateFormulaCount) {
-    errors.push(`CLIMATE_MONTHLY must contain ${expectedClimateFormulaCount} formulas for ${parsedDestinationKeys.length} destinations; found ${structure.climateFormulaCount}.`);
-  }
-  if (structure.invalidCachedClimateCells.length) {
-    errors.push(`CLIMATE_MONTHLY contains ${structure.invalidCachedClimateCells.length} formula cells without numeric cached values.`);
-  }
+  errors.push(...validateClimateRows(structure.climateRows, expectedDestinationKeys));
   if (structure.excelErrorCells.length) {
     errors.push(`Workbook contains ${structure.excelErrorCells.length} Excel error cells: ${structure.excelErrorCells.slice(0, 10).join(", ")}.`);
   }

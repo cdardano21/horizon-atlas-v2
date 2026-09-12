@@ -1,6 +1,11 @@
+import { EXPANSION_WORKBOOK_REGISTRY } from "../app/lib/expansion-workbook-registry";
+import { execFileSync } from "node:child_process";
+import { mkdtempSync, rmSync } from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import contract from "../docs/destinationfinder/batch-contract-v3.3.json";
-import { validateAuthoringParity, validateDestinationBatch } from "./validate_destination_batch";
+import { validateAuthoringParity, validateClimateRows, validateDestinationBatch } from "./validate_destination_batch";
 
 const WORKBOOK_PATH = "data/next-batch-20/DestinationFinderAI-Next-Batch-20-Visual-Parity-Enriched-v3.3.xlsx";
 const THIN_WORKBOOK_PATH = "data/next-batch-20/DestinationFinderAI-Next-Batch-20-Private-Import-Authorized-v3.3.xlsx";
@@ -105,5 +110,67 @@ describe("read-only destination batch validator", () => {
     expect(report.batchIntegrityStatus).toBe("PASS");
     expect(report.authoringParityStatus).toBe("FAIL");
     expect(report.authoringReadinessStatus).toBe("REVIEW_REQUIRED");
+  });
+});
+
+describe("climate direct values and cached formula results", () => {
+  const rows = () => Array.from({ length: 12 }, (_, i) => ({
+    destinationKey: "fixture-city", month: i + 1, values: [25, 12, 0, 65] as unknown[],
+  }));
+  it("accepts twelve complete numeric months, including zero rainfall", () => {
+    expect(validateClimateRows(rows(), ["fixture-city"])).toEqual([]);
+  });
+  it.each([null, "not numeric", "25", true, NaN, Infinity])("rejects missing or invalid direct/cache value %s", (value) => {
+    const fixture = rows(); fixture[0].values[0] = value;
+    expect(validateClimateRows(fixture, ["fixture-city"])).toContain(
+      "CLIMATE_MONTHLY fixture-city/1: avg_high_c requires a finite numeric direct value or cached formula result.",
+    );
+  });
+  it("rejects duplicate months even when the row count remains twelve", () => {
+    const fixture = rows(); fixture[11].month = 1;
+    const errors = validateClimateRows(fixture, ["fixture-city"]);
+    expect(errors).toContain("CLIMATE_MONTHLY fixture-city/1: duplicate destination/month.");
+    expect(errors).toContain("CLIMATE_MONTHLY fixture-city: expected 12 distinct months; found 11.");
+  });
+  it("rejects missing months and foreign destination ownership", () => {
+    const fixture = rows(); fixture[0].destinationKey = "another-city";
+    expect(validateClimateRows(fixture, ["fixture-city"])).toEqual([
+      "CLIMATE_MONTHLY another-city/1: unexpected destination ownership.",
+      "CLIMATE_MONTHLY fixture-city: expected 12 distinct months; found 11.",
+    ]);
+  });
+  it.each([0, 13, 1.5])("rejects invalid month %s", (month) => {
+    const fixture = rows(); fixture[0].month = month;
+    expect(validateClimateRows(fixture, ["fixture-city"])[0]).toContain("month must be an integer from 1 to 12");
+  });
+});
+
+
+describe("climate workbook cell integration", () => {
+  it.each(["direct", "missing", "invalid", "uncached-formula"])("validates %s climate cells from actual workbook bytes", async (mode) => {
+    const dir = mkdtempSync(path.join(os.tmpdir(), "climate-validator-test-"));
+    const workbookPath = path.join(dir, "fixture.xlsx");
+    try {
+      execFileSync(process.env.PYTHON || "python3", ["-c", `
+import openpyxl,sys
+w=openpyxl.load_workbook(sys.argv[1],data_only=True)
+s=w['CLIMATE_MONTHLY']
+if sys.argv[3]=='missing': s['C2']=None
+if sys.argv[3]=='invalid': s['C2']='invalid'
+if sys.argv[3]=='uncached-formula': s['C2']='=20+5'
+w.save(sys.argv[2])
+`, WORKBOOK_PATH, workbookPath, mode]);
+      const expectedDestinationKeys = [...EXPANSION_WORKBOOK_REGISTRY.find(entry => entry.registryId === "next-batch-20-private-import-authorized")!.expectedDestinationKeys];
+      const report = await validateDestinationBatch({ workbookPath, expectedDestinationKeys });
+      if (mode === "direct") {
+        expect(report.errors).toEqual([]);
+        expect(report.authoringReadinessStatus).toBe("AUTHORING_COMPLETE");
+      } else {
+        expect(report.errors.some(error => error.includes("avg_high_c requires a finite numeric direct value or cached formula result"))).toBe(true);
+        expect(report.authoringReadinessStatus).toBe("REVIEW_REQUIRED");
+      }
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });

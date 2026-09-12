@@ -232,6 +232,10 @@ describe("Expansion-workbook preview resolver (registry-driven, generic getCanon
       "reno-nevada-united-states", "viana-do-castelo-portugal", "salamanca-spain", "san-sebastian-spain", "evora-portugal",
       "prague-other-europe", "treviso-italy", "annecy-france", "ho-chi-minh-city-vietnam", "tokyo-japan",
       "bali-indonesia", "auckland-new-zealand", "cusco-peru", "valdivia-chile", "cordoba-argentina",
+      "buenos-aires-argentina", "brisbane-australia", "bruges-belgium", "curitiba-brazil", "santiago-chile",
+      "bogota-colombia", "makarska-croatia", "aix-en-provence-france", "chania-greece", "aosta-italy",
+      "kurashiki-japan", "todos-santos-mexico", "muscat-oman", "panama-city-panama", "cape-town-south-africa",
+      "seoul-south-korea", "a-coruna-spain", "phuket-thailand", "belfast-united-kingdom", "albuquerque-new-mexico-united-states",
     ];
     expect(allRegisteredKeys.slice().sort()).toEqual(expectedKeys.sort());
   });
