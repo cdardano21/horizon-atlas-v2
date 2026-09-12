@@ -1,4 +1,4 @@
-import type { BeachAccessFact, MountainOrSkiAccessFact } from "./destination-fact-types";
+import type { BeachAccessFact, MountainOrSkiAccessFact, SafetyStandardFact } from "./destination-fact-types";
 import type { HealthcareMinimumStandard, PreferenceImportance, SafetyMinimumStandard } from "./profile-types";
 import type { ScoringModelVersion } from "./versions";
 import { CURRENT_SCORING_MODEL_VERSION } from "./versions";
@@ -79,9 +79,10 @@ export const HEALTHCARE_STANDARD_DIMENSION_SCORE: Record<HealthcareMinimumStanda
   UNKNOWN: null,
 };
 
-export const SAFETY_STANDARD_DIMENSION_SCORE: Record<SafetyMinimumStandard | "UNKNOWN", number | null> = {
+export const SAFETY_STANDARD_DIMENSION_SCORE: Record<SafetyMinimumStandard | SafetyStandardFact | "UNKNOWN", number | null> = {
   MODERATE_OR_BETTER: 50,
   HIGH_SAFETY_ONLY: 100,
+  ELEVATED_RISK: 0,
   UNKNOWN: null,
 };
 

@@ -3,6 +3,13 @@ import type { HealthcareMinimumStandard, SafetyMinimumStandard } from "./profile
 import type { MoneyRange } from "./result-types";
 
 /**
+ * Destination-side safety fact. The profile still expresses a minimum safety
+ * requirement, but the destination can now state an explicit adverse safety
+ * condition instead of collapsing it into UNKNOWN.
+ */
+export type SafetyStandardFact = SafetyMinimumStandard | "ELEVATED_RISK";
+
+/**
  * Minimal, boring fact shapes for SYNTHETIC destination fixtures.
  *
  * These are raw destination-side FACTS, not verdicts. A future evaluator will
@@ -59,7 +66,7 @@ export interface DestinationHardGateFacts {
   readonly beachAccess: BeachAccessFact;
   readonly mountainOrSkiAccess: MountainOrSkiAccessFact;
   readonly healthcareStandard: HealthcareMinimumStandard | "UNKNOWN";
-  readonly safetyStandard: SafetyMinimumStandard | "UNKNOWN";
+  readonly safetyStandard: SafetyStandardFact | "UNKNOWN";
   readonly lgbtqLegalProtectionStatus: LgbtqLegalProtectionFact;
 }
 
