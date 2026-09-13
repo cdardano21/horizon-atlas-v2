@@ -2700,17 +2700,17 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             />
           ) : null}
 
-          {/* Raw per-module fields (notes/severity/TriState tokens) - developer/admin diagnostic only, never public. */}
-          {hasV31Bundle && developerMode ? (
+          {/* Monthly climate is public; all other raw module cards remain developer/admin-only. */}
+          {hasV31Bundle && (developerMode || (destination.v31Modules?.climateMonthly.length ?? 0) > 0) ? (
             <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
-              <div className="flex flex-wrap items-start justify-between gap-4">
+              {developerMode ? <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Persisted v3.1 modules</p>
                   <h2 className="mt-3 text-2xl font-semibold text-white">Real destination-specific data</h2>
                 </div>
-              </div>
+              </div> : null}
               <div className="mt-6 grid border-t border-white/10 md:grid-cols-2">
-                {v31RichModuleCards.map((card) => (
+                {v31RichModuleCards.filter((card) => developerMode || card.title === "Climate (monthly)").map((card) => (
                   <div key={card.title} className="border-b border-white/10 py-4 md:px-5 md:[&:nth-child(odd)]:border-r">
                     <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#eabc5b]">{card.title}</p>
                     <ul className="mt-2 divide-y divide-white/10">

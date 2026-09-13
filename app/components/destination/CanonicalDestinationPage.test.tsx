@@ -1043,7 +1043,13 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     };
   }
 
-  it("renders all twelve monthly climate rows with month names and unchanged low/high values", () => {
+  it("omits the public monthly climate card when persisted climate is absent", () => {
+    render(<CanonicalDestinationPage destination={buildV31Destination()} />);
+    expect(screen.queryByText("Climate (monthly)")).not.toBeInTheDocument();
+    expect(screen.queryByText("Persisted v3.1 modules")).not.toBeInTheDocument();
+  });
+
+  it.each([false, true])("renders all twelve monthly climate rows with unchanged values (developerMode=%s)", (developerMode) => {
     const destination = buildV31Destination();
     destination.v31Modules = {
       ...destination.v31Modules!,
@@ -1052,7 +1058,11 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
         precipitationMm: null, humidityPct: null,
       })),
     };
-    render(<CanonicalDestinationPage destination={destination} developerMode />);
+    render(<CanonicalDestinationPage destination={destination} developerMode={developerMode} />);
+    if (!developerMode) {
+      expect(screen.queryByText("Persisted v3.1 modules")).not.toBeInTheDocument();
+      expect(screen.queryByText("housing: USD1000–USD2000/month")).not.toBeInTheDocument();
+    }
     const card = screen.getByText("Climate (monthly)").parentElement!;
     const rows = within(card).getAllByRole("listitem");
     expect(rows).toHaveLength(12);
