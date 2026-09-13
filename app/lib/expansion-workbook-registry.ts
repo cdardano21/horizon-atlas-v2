@@ -31,9 +31,19 @@ export interface ExpansionWorkbookRegistryEntry {
   readonly expectedDestinationKeys: readonly string[];
   /** Optional integrity pin; when present, validateExpansionWorkbookRegistry fails if the on-disk file no longer matches. */
   readonly expectedSha256?: string;
+  /** New catalog identities require live publication eligibility before shortlist discovery. */
+  readonly candidateDiscovery?: "published-catalog";
 }
 
 export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntry[] = [
+  {
+    registryId: "non-legacy-pilot-05",
+    workbookPath: "data/non-legacy-pilot-05/DestinationFinderAI-Non-Legacy-Pilot-05-Authoring-Checkpoint-04-v3.3.xlsx",
+    environment: "production",
+    candidateDiscovery: "published-catalog",
+    expectedDestinationKeys: ["whistler-canada", "bansko-bulgaria", "pucon-chile", "noosa-heads-australia", "baden-baden-germany"],
+    expectedSha256: "de17593d31478860766143324582a7d8404e4859decbb32530fc02a1f44c8869",
+  },
   {
     registryId: "batch-01",
     workbookPath: "data/DestinationFinderAI_Expansion_Batch_01_5_Destinations_v3.3.xlsx",

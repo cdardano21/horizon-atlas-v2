@@ -199,6 +199,7 @@ describe("Expansion-workbook preview resolver (registry-driven, generic getCanon
   it("the resolver never returns a key outside the registry's own declared expectedDestinationKeys", () => {
     const allRegisteredKeys = EXPANSION_WORKBOOK_REGISTRY.flatMap((entry) => entry.expectedDestinationKeys);
     const expectedKeys = [
+      "whistler-canada", "bansko-bulgaria", "pucon-chile", "noosa-heads-australia", "baden-baden-germany",
       "the-villages-fl-us", "sofia-bg", "puerto-vallarta-mx", "hoi-an-vn", "queenstown-nz",
       "ascoli-piceno-it", "sarande-al", "dumaguete-ph", "las-terrenas-do", "fairhope-al-us",
       "the-hague-netherlands", "kyoto-japan", "santa-fe-new-mexico-united-states",

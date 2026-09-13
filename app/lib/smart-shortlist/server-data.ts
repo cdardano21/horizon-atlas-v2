@@ -7,6 +7,7 @@ import { EXPANSION_WORKBOOK_REGISTRY, type ExpansionWorkbookRegistryEntry } from
 import type { DeterministicV31CanonicalDestination, DeterministicV31CanonicalLifestyleFeature, DeterministicV31WorkbookImport } from "../workbook-v31-deterministic-core";
 import { loadFrozenWorkbookV31DeterministicImport } from "../workbook-v31-deterministic-core";
 import { buildIntelligenceV2FactsFromWorkbookImport } from "../intelligence-v2/workbook-v32-adapter";
+import { getSupabaseConfig, getSupabaseAuthHeaders, isSupabaseConfigured } from "../supabase";
 import { smartShortlistCandidates } from "./cohort";
 import type { PrototypeCandidate } from "./cohort";
 import type { CoastalSetting, ShortlistFacts } from "./evaluator";
@@ -67,7 +68,15 @@ export function deriveRegisteredAffordability(destination: DeterministicV31Canon
     rowsByHousehold.set(household, [...(rowsByHousehold.get(household) ?? []), row]);
   }
   const midpoint = (household: "single" | "couple") => {
-    const rows = rowsByHousehold.get(household) ?? [];
+    const householdRows = rowsByHousehold.get(household) ?? [];
+    const totals = householdRows.filter((row) => cellString(row.category).toLowerCase() === "u3_r5_total_monthly_estimate");
+    // Keep the historical one-row-per-household format only when no U3-R5 total is supplied.
+    // Invalid or duplicate authored totals must never fall back to a category subtotal.
+    const hasU3R5 = destination.costOfLiving.some((row) => cellString(row.category).toLowerCase() === "u3_r5_total_monthly_estimate");
+    const rows = hasU3R5 ? totals : householdRows;
+    if (totals.length && (totals.length !== 1
+      || cellString(totals[0].lifestyle_tier).toLowerCase() !== "comfortable"
+      || cellString(totals[0].stay_mode_key).toUpperCase() !== "RELOCATE")) return null;
     if (rows.length !== 1 || cellString(rows[0].currency).toUpperCase() !== "USD") return null;
     const low = Number(rows[0].monthly_low);
     const high = Number(rows[0].monthly_high);
@@ -130,6 +139,53 @@ export function coastalSettingFromLifestyleFeatures(
   return "UNKNOWN";
 }
 
+type PublishedCatalogIdentity = { id: string; destination_key: string; slug: string; status: string };
+
+async function loadPublishedCatalogIdentities(keys: readonly string[]): Promise<PublishedCatalogIdentity[]> {
+  if (!keys.length || !isSupabaseConfigured()) return [];
+  const { url } = getSupabaseConfig();
+  const query = new URLSearchParams({
+    select: "id,destination_key,slug,status",
+    destination_key: `in.(${keys.join(",")})`,
+    status: "eq.published",
+  });
+  // Publication is checked afresh; a previously published result cannot bypass a later unpublish.
+  try {
+    const response = await fetch(`${url}/rest/v1/destinations_catalog?${query}`, {
+      headers: getSupabaseAuthHeaders(), cache: "no-store",
+    });
+    if (!response.ok) return [];
+    const rows: PublishedCatalogIdentity[] = await response.json();
+    return Array.isArray(rows) ? rows : [];
+  } catch {
+    // Unavailable publication evidence excludes new identities without breaking legacy candidates.
+    return [];
+  }
+}
+
+export async function discoverRegisteredWorkbookContributions(
+  entry: ExpansionWorkbookRegistryEntry,
+  workbook: DeterministicV31WorkbookImport,
+  existingKeys: ReadonlySet<string>,
+) {
+  const contributions = buildRegisteredWorkbookContributions(entry, workbook, existingKeys);
+  if (entry.candidateDiscovery !== "published-catalog") {
+    // Existing legacy registry discovery remains unchanged.
+    return entry.environment === "preview" ? contributions : { candidates: [], affordabilityRecords: [] };
+  }
+  if (entry.environment !== "production") return { candidates: [], affordabilityRecords: [] };
+  const rows = await loadPublishedCatalogIdentities(contributions.candidates.map((candidate) => candidate.key));
+  const eligible = new Set(contributions.candidates.filter((candidate) => {
+    const owners = rows.filter((row) => row.destination_key === candidate.key || row.slug === candidate.slug);
+    return owners.length === 1 && owners[0].status === "published" && Boolean(owners[0].id)
+      && owners[0].destination_key === candidate.key && owners[0].slug === candidate.slug;
+  }).map((candidate) => candidate.key));
+  return {
+    candidates: contributions.candidates.filter((candidate) => eligible.has(candidate.key)),
+    affordabilityRecords: contributions.affordabilityRecords.filter((record) => eligible.has(record.destinationKey)),
+  };
+}
+
 export async function loadSmartShortlistData(
   registry: readonly ExpansionWorkbookRegistryEntry[] = EXPANSION_WORKBOOK_REGISTRY,
 ): Promise<SmartShortlistData> {
@@ -147,8 +203,8 @@ export async function loadSmartShortlistData(
     if (workbook.validationErrors?.length) {
       throw new Error(`${entry.registryId} failed validation: ${workbook.validationErrors.join("; ")}`);
     }
-    if (entry.environment === "preview") {
-      const contributions = buildRegisteredWorkbookContributions(entry, workbook, new Set(candidateByKey.keys()));
+    {
+      const contributions = await discoverRegisteredWorkbookContributions(entry, workbook, new Set(candidateByKey.keys()));
       for (const candidate of contributions.candidates) {
         candidateByKey.set(candidate.key, candidate);
         candidates.push(candidate);
@@ -157,6 +213,7 @@ export async function loadSmartShortlistData(
     }
 
     for (const key of entry.expectedDestinationKeys) {
+      if (!candidateByKey.has(key)) continue;
       if (loaded.has(key)) throw new Error(`Duplicate Smart Shortlist destination key: ${key}`);
       const canonical = workbook.canonicalDestinations.find((destination) => destination.identity.destinationKey === key);
       const adapted = buildIntelligenceV2FactsFromWorkbookImport(workbook, key);

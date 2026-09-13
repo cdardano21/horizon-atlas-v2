@@ -1,0 +1,14 @@
+{
+  "registryId": "non-legacy-pilot-05",
+  "workbookSha256": "de17593d31478860766143324582a7d8404e4859decbb32530fc02a1f44c8869",
+  "destinationKeys": ["whistler-canada", "bansko-bulgaria", "pucon-chile", "noosa-heads-australia", "baden-baden-germany"],
+  "operation": "CREATE_CATALOG",
+  "update_mode": "MERGE_NONBLANK",
+  "publish_mode": "DRAFT",
+  "allow_explicit_clears": false,
+  "expected_existing_catalog_rows": 0,
+  "expected_per_destination": { "destination_rows": 1, "neighborhoods": 5, "places": 18, "resources": 18, "media": 4 },
+  "production_authorization": "NOT_AUTHORIZED",
+  "execution_path": "executeGuardedDeterministicV31Batch",
+  "notes": "Preflight policy, not execution authorization. CREATE_CATALOG is the guarded catalog operation; new premium state uses the existing first-time empty-state plan. Catalog creation always starts draft. No workbook manifest edit or publication is performed. Any later executor must recheck this hash, the exact scope and zero existing catalog identities before requesting write authorization."
+}
