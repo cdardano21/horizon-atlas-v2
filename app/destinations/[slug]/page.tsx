@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+import { getPublicDestinationEligibility } from "../../lib/public-destination-eligibility";
 import Image from "next/image";
 import Link from "next/link";
 import FavoriteButton from "../../components/FavoriteButton";
@@ -1359,6 +1361,8 @@ function IntelligenceGuideSection({
 
 export default async function DestinationPage({ params, searchParams }: DestinationPageProps) {
   const { slug } = await params;
+  const eligibility = await getPublicDestinationEligibility(slug);
+  if (eligibility === "NONPUBLIC" || eligibility === "UNAVAILABLE") notFound();
   const resolvedSearchParams = searchParams ? await searchParams : undefined;
   const developerMode = resolvedSearchParams?.developer === "1" || resolvedSearchParams?.developer === "true";
 
