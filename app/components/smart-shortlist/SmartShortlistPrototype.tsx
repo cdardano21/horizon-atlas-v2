@@ -15,16 +15,10 @@ import type { SmartShortlistIntelligence } from "../../lib/smart-shortlist/serve
 import DualCurrencyCostEvidence from "./DualCurrencyCostEvidence";
 import OwnedAffordabilityEvidence from "./OwnedAffordabilityEvidence";
 
+import { countryPresets } from "../../lib/smart-shortlist/country-presets";
+
 const steps = ["Where", "Essentials", "Affordability", "Setting", "Details", "Review"] as const;
 const detailTopics = ["Setting", "Affordability", "Cost evidence"] as const;
-const countryPresets = {
-  anywhere: {},
-  us: { includedCountries: ["US"] },
-  outsideUs: { excludedCountries: ["US"] },
-  europe: { includedCountries: ["AL", "BG", "CY", "ES", "FR", "GR", "HR", "IT", "NL", "PT"] },
-  latinAmerica: { includedCountries: ["BR", "CR", "DO", "EC", "MX", "PA", "UY"] },
-  asiaPacific: { includedCountries: ["JP", "MY", "NZ", "PH", "TH", "VN"] },
-} as const;
 
 type CountryPreset = keyof typeof countryPresets;
 type DetailTopic = typeof detailTopics[number];
@@ -196,6 +190,10 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
     } catch {
       return;
     }
+    const requiresFreshResults = saved.countryPreset !== "anywhere"
+      || saved.healthcareMode === "MUST_HAVE" || saved.safetyMode === "MUST_HAVE"
+      || saved.lgbtqMode === "MUST_HAVE" || saved.legalPathMode === "MUST_HAVE"
+      || saved.requireMountain || (saved.requireBudget && Number(saved.budget) > 0);
     const restore = window.setTimeout(() => {
       setStep(steps.length - 1);
       setCountryPreset(saved.countryPreset);
@@ -214,8 +212,8 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
       setDetailTopic(saved.detailTopic);
       setRequireBeach(saved.requireBeach);
       setRequireMountain(saved.requireMountain);
-      setResults(saved.results);
-      setComparison(saved.comparison);
+      setResults(requiresFreshResults ? null : saved.results);
+      setComparison(requiresFreshResults ? [] : saved.comparison);
       setShowExcluded(saved.showExcluded);
       setShowAllRecommended(saved.showAllRecommended);
       setShowAllVerification(saved.showAllVerification);
