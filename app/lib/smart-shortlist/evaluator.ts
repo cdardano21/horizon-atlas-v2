@@ -1,3 +1,4 @@
+import { hasRequiredOceanBeach, type BeachAccessEvidence } from "../intelligence-v2/beach-access";
 import { hasRequiredSkiAccess, type SkiAccessEvidence } from "../intelligence-v2/ski-access";
 import {
   evaluateDocumentedLongStayPathRequirement,
@@ -31,6 +32,7 @@ export type AffordabilityEvidence = {
 };
 
 export type ShortlistFacts = {
+  beachEvidence?: BeachAccessEvidence;
   skiAccess?: SkiAccessEvidence;
   key: string;
   name: string;
@@ -166,16 +168,17 @@ function evaluateCountry(destination: ShortlistFacts, profile: ShortlistProfile)
 
 function evaluateBeach(destination: ShortlistFacts, profile: ShortlistProfile): RequirementReason | null {
   if (!profile.beach) return null;
-  if (profile.beach === "OCEAN_COASTAL") {
-    if (!destination.oceanAccess || destination.oceanAccess === "UNKNOWN") {
-      return { capability: "ocean", state: "UNKNOWN", explanation: "Ocean or coastal access is not explicitly established by the available structured evidence." };
-    }
-    const hasGeneralBeachAccess = destination.beachAccess === "DIRECT_ACCESS" || destination.beachAccess === "NEARBY";
-    const passes = hasGeneralBeachAccess && (destination.oceanAccess === "COASTAL" || destination.oceanAccess === "HYBRID");
+  if (profile.requireBeach || profile.beach === "OCEAN_COASTAL") {
+    const passes = hasRequiredOceanBeach(destination.beachEvidence, profile.beach === "NEARBY_OR_DIRECT");
     return {
-      capability: "ocean",
-      state: passes ? "PASS" : "FAIL",
-      explanation: passes ? "Structured coastal evidence establishes ocean access." : "The available structured evidence establishes inland or non-ocean access.",
+      capability: "ocean", state: passes ? "PASS" : "FAIL",
+      explanation: passes
+        ? destination.beachEvidence!.accessType === "OCEAN_BEACH_DESTINATION"
+          ? `Verified ocean beach destination: ${destination.beachEvidence!.beachName}.`
+          : `Verified nearby ocean beach: ${destination.beachEvidence!.beachName}, approximately ${destination.beachEvidence!.driveMinutes} minutes by road.`
+        : destination.beachEvidence?.accessType === "OCEAN_BEACH_ACCESS_NEARBY"
+          ? "Nearby ocean beach access requires the nearby selection and verified road travel of 45 minutes or less."
+          : "Required ocean beach destination lacks verified practical ocean/sea beach evidence; lake access and broad coastal categories do not qualify.",
     };
   }
   if (destination.beachAccess === "UNKNOWN") return { capability: "beach", state: "UNKNOWN", explanation: "Beach access is unresolved." };

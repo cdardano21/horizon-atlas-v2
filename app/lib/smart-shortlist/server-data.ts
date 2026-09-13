@@ -1,3 +1,4 @@
+import { verifiedBeachAccessByDestination } from "../intelligence-v2/beach-access";
 import { verifiedSkiAccessByDestination } from "../intelligence-v2/ski-access";
 import path from "node:path";
 import { createHash } from "node:crypto";
@@ -14,7 +15,7 @@ import { ownedAffordabilityRecords } from "./owned-affordability-records";
 
 export type SmartShortlistIntelligence = Pick<
   ShortlistFacts,
-  "skiAccess" | "key" | "beachAccess" | "mountainAccess" | "oceanAccess" | "healthcareStandard" | "safetyStandard" | "lgbtqLegalProtectionStatus" | "entryAndStay" | "lifestyleDimensions"
+  "beachEvidence" | "skiAccess" | "key" | "beachAccess" | "mountainAccess" | "oceanAccess" | "healthcareStandard" | "safetyStandard" | "lgbtqLegalProtectionStatus" | "entryAndStay" | "lifestyleDimensions"
 >;
 
 export type SmartShortlistData = {
@@ -163,6 +164,7 @@ export async function loadSmartShortlistData(
 
       loaded.set(key, {
         key,
+        beachEvidence: verifiedBeachAccessByDestination[key],
         skiAccess: verifiedSkiAccessByDestination[key],
         beachAccess: adapted.facts.hardGates.beachAccess,
         mountainAccess: adapted.facts.hardGates.mountainOrSkiAccess === "MOUNTAIN_SCENIC_ONLY"

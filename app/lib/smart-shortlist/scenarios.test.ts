@@ -32,9 +32,9 @@ describe("Smart Shortlist product scenarios", () => {
     expect(group({ mountain: "SKI_RESORT_ACCESS", requireMountain: true }, "MEETS_FILTERS").map(result => result.destination.key)).toEqual(["queenstown-nz"]);
   });
 
-  it("returns Queenstown alone for direct beach plus ski access", () => {
+  it("does not let Queenstown lake access satisfy required ocean beach plus ski access", () => {
     const results = group({ beach: "DIRECT_ACCESS", requireBeach: true, mountain: "SKI_RESORT_ACCESS", requireMountain: true }, "MEETS_FILTERS");
-    expect(results.map((result) => result.destination.key)).toEqual(["queenstown-nz"]);
+    expect(results.map((result) => result.destination.key)).toEqual([]);
   });
 
   it("returns no confirmed result for US plus direct beach plus ski access", () => {

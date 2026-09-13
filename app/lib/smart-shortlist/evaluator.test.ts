@@ -1,3 +1,4 @@
+import { verifiedBeachAccessByDestination } from "../intelligence-v2/beach-access";
 import { describe, expect, it } from "vitest";
 import {
   affordabilityState,
@@ -77,7 +78,7 @@ describe("Smart Shortlist evaluator", () => {
 
   it("keeps unknown requirements out of confirmed results", () => {
     const [result] = evaluateShortlist([destination("unknown", { beachAccess: "UNKNOWN" })], { beach: "DIRECT_ACCESS", requireBeach: true });
-    expect(result.group).toBe("NEEDS_VERIFICATION");
+    expect(result.group).toBe("EXCLUDED");
   });
 
   it("does not let missing affordability outrank a known weakness", () => {
@@ -94,13 +95,13 @@ describe("Smart Shortlist evaluator", () => {
 
   it("creates disjoint groups and deterministic ties without padding", () => {
     const results = evaluateShortlist([
-      destination("z-known", { beachAccess: "DIRECT_ACCESS" }),
-      destination("a-known", { beachAccess: "DIRECT_ACCESS" }),
+      destination("z-known", { beachAccess: "DIRECT_ACCESS", beachEvidence: verifiedBeachAccessByDestination["puerto-vallarta-mx"] }),
+      destination("a-known", { beachAccess: "DIRECT_ACCESS", beachEvidence: verifiedBeachAccessByDestination["puerto-vallarta-mx"] }),
       destination("unknown", { beachAccess: "UNKNOWN" }),
       destination("failed"),
     ], { beach: "DIRECT_ACCESS", requireBeach: true });
-    expect(results.map((result) => result.destination.key)).toEqual(["a-known", "z-known", "unknown", "failed"]);
-    expect(results.map((result) => result.group)).toEqual(["MEETS_FILTERS", "MEETS_FILTERS", "NEEDS_VERIFICATION", "EXCLUDED"]);
+    expect(results.map((result) => result.destination.key)).toEqual(["a-known", "z-known", "failed", "unknown"]);
+    expect(results.map((result) => result.group)).toEqual(["MEETS_FILTERS", "MEETS_FILTERS", "EXCLUDED", "EXCLUDED"]);
     expect(new Set(results.map((result) => result.destination.key)).size).toBe(4);
     expect(results).toHaveLength(4);
   });
@@ -113,23 +114,23 @@ describe("Smart Shortlist evaluator", () => {
 
   it("does not conflate nearby beaches, direct beaches, and ocean access", () => {
     const results = evaluateShortlist([
-      destination("direct", { beachAccess: "DIRECT_ACCESS" }),
+      destination("direct", { beachAccess: "DIRECT_ACCESS", beachEvidence: verifiedBeachAccessByDestination["puerto-vallarta-mx"] }),
       destination("nearby", { beachAccess: "NEARBY" }),
     ], { beach: "DIRECT_ACCESS", requireBeach: true });
     expect(results.map((result) => result.group)).toEqual(["MEETS_FILTERS", "EXCLUDED"]);
-    expect(results.flatMap((result) => result.reasons).some((reason) => /ocean/i.test(reason.explanation))).toBe(false);
+    expect(results[0].reasons[0].explanation).toContain("Verified ocean beach destination");
   });
 
   it("requires explicit coastal evidence for ocean access", () => {
     const results = evaluateShortlist([
-      destination("coastal", { beachAccess: "DIRECT_ACCESS", oceanAccess: "COASTAL" }),
+      destination("coastal", { beachAccess: "DIRECT_ACCESS", oceanAccess: "COASTAL", beachEvidence: verifiedBeachAccessByDestination["puerto-vallarta-mx"] }),
       destination("lake", { beachAccess: "DIRECT_ACCESS", oceanAccess: "INLAND" }),
       destination("generic", { beachAccess: "DIRECT_ACCESS", oceanAccess: "UNKNOWN" }),
     ], { beach: "OCEAN_COASTAL", requireBeach: true });
 
     expect(results.map((result) => [result.destination.key, result.group])).toEqual([
       ["coastal", "MEETS_FILTERS"],
-      ["generic", "NEEDS_VERIFICATION"],
+      ["generic", "EXCLUDED"],
       ["lake", "EXCLUDED"],
     ]);
   });
@@ -153,7 +154,7 @@ describe("Smart Shortlist evaluator", () => {
       destination("z-high", { beachAccess: "UNKNOWN", safetyStandard: "MODERATE_OR_BETTER" }),
     ], {
       beach: "DIRECT_ACCESS",
-      requireBeach: true,
+      documentedLongStayPath: { mode: "MUST_HAVE" },
       safety: { mode: "IMPORTANT_PREFERENCE", minimum: "MODERATE_OR_BETTER" },
     });
 
