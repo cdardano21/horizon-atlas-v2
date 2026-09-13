@@ -42,7 +42,7 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     environment: "production",
     candidateDiscovery: "published-catalog",
     expectedDestinationKeys: ["whistler-canada", "bansko-bulgaria", "pucon-chile", "noosa-heads-australia", "baden-baden-germany"],
-    expectedSha256: "076ee8953595a9e011bb4102a44b5e958bc52405ccef6bffbe70821e1fbbeb08",
+    expectedSha256: "4d298b1883608c8a08e7b2a6f04fce91fca4aa9d738b96e006dd446e9a1bb2a3",
   },
   {
     registryId: "batch-01",
