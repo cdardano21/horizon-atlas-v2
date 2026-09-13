@@ -1043,6 +1043,26 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     };
   }
 
+  it("renders all twelve monthly climate rows with month names and unchanged low/high values", () => {
+    const destination = buildV31Destination();
+    destination.v31Modules = {
+      ...destination.v31Modules!,
+      climateMonthly: Array.from({ length: 12 }, (_, index) => ({
+        monthKey: String(index + 1), avgLowTemp: String(index - 5), avgHighTemp: String(index + 10),
+        precipitationMm: null, humidityPct: null,
+      })),
+    };
+    render(<CanonicalDestinationPage destination={destination} developerMode />);
+    const card = screen.getByText("Climate (monthly)").parentElement!;
+    const rows = within(card).getAllByRole("listitem");
+    expect(rows).toHaveLength(12);
+    ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].forEach((month, index) => {
+      expect(rows[index]).toHaveTextContent(`${month}: ${index - 5}–${index + 10}°`);
+      expect(within(card).getAllByText(`${month}: ${index - 5}–${index + 10}°`)).toHaveLength(1);
+      expect(rows[index]).toBeVisible();
+    });
+  });
+
   it("shows real persisted destination-level scores, never the hardcoded 76/74/72/78 fallback", () => {
     render(<CanonicalDestinationPage destination={buildV31Destination()} />);
 

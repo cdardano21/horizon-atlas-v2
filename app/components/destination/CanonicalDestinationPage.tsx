@@ -1877,7 +1877,12 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
       cards.push({ title: "Cost of living", lines: modules.costOfLiving.map((item) => `${item.category ?? "Category"}: ${item.currency ?? ""}${item.monthlyLow ?? "?"}–${item.currency ?? ""}${item.monthlyHigh ?? "?"}/month`) });
     }
     if (modules.climateMonthly.length > 0) {
-      cards.push({ title: "Climate (monthly)", lines: modules.climateMonthly.slice(0, 6).map((item) => `${item.monthKey}: ${item.avgLowTemp ?? "?"}–${item.avgHighTemp ?? "?"}°`) });
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      cards.push({ title: "Climate (monthly)", lines: modules.climateMonthly.map((item) => {
+        const month = Number(item.monthKey);
+        const label = Number.isInteger(month) ? monthNames[month - 1] ?? item.monthKey : item.monthKey;
+        return `${label}: ${item.avgLowTemp ?? "?"}–${item.avgHighTemp ?? "?"}°`;
+      }) });
     }
     if (modules.housing.length > 0) {
       cards.push({ title: "Housing / property", lines: singletonLines(modules.housing, ["buyingSummary", "rentalSummary"]) });
