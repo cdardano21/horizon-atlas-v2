@@ -189,6 +189,11 @@ export function getDestinationImageSet(destination: Destination, minCount = 3) {
     .map(({ src }) => src)
     .filter((src): src is string => Boolean(src));
 
+  // Callers supply the authored hero first, followed by galleries. Repeated
+  // projections of the same image must not count toward a complete set.
+  const authoredImages = Array.from(new Set(primaryImages));
+  if (authoredImages.length >= 4) return authoredImages;
+
   const curatedPrimary = curatedCityImagesBySlug[destination.slug];
   const curatedVariants = curatedCityImageGalleriesBySlug[destination.slug] ?? [];
   const cityScoped = cityScopedImageUrls(destination);

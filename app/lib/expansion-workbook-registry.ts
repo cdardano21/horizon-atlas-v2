@@ -37,6 +37,14 @@ export interface ExpansionWorkbookRegistryEntry {
 
 export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntry[] = [
   {
+    registryId: "curated-mixed-batch-10-01",
+    workbookPath: "data/curated-mixed-batch-10-01/DestinationFinderAI-Curated-Mixed-Batch-10-01-Authoring-Complete-v3.3.xlsx",
+    environment: "production",
+    candidateDiscovery: "published-catalog",
+    expectedDestinationKeys: ["bariloche-argentina", "mendoza-argentina", "joao-pessoa-brazil", "punta-del-este-uruguay", "ghent-belgium", "wanaka-new-zealand", "stellenbosch-south-africa", "loreto-mexico", "vevey-switzerland", "hakuba-japan"],
+    expectedSha256: "23d4a18924d6a9ccc94d8389c4e76c4a669a5411e0f1385d7d83a7a138c35b48",
+  },
+  {
     registryId: "non-legacy-pilot-05",
     workbookPath: "data/non-legacy-pilot-05/DestinationFinderAI-Non-Legacy-Pilot-05-Authoring-Checkpoint-04-v3.3.xlsx",
     environment: "production",

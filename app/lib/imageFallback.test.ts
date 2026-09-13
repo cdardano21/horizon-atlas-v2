@@ -1,3 +1,4 @@
+import { curatedCityImagesBySlug } from "./curatedCityImages";
 import { describe, expect, it } from "vitest";
 import type { Destination } from "./destinations";
 import { getDestinationImageSet, getDestinationImageUrl } from "./imageFallback";
@@ -115,4 +116,40 @@ describe("imageFallback", () => {
     expect(getDestinationImageUrl({ src: "https://images.unsplash.com/photo-12345?new-braunfels", alt: "New Braunfels river corridor and historic district" }, destination)).toBe("https://images.unsplash.com/photo-12345?new-braunfels");
   });
 
+});
+
+
+describe("complete authored media precedence", () => {
+  const authored = ["hero", "gallery-01", "gallery-02", "gallery-03"].map((role) => `/images/curated-mixed-batch-10-01/ghent-belgium-${role}.jpg`);
+  const destination = (urls: string[]) => ({
+    slug: "ghent-belgium", city: "Ghent", country: "Belgium", emoji: "", match: 0,
+    description: "Ghent", overview: "Ghent", climate: "Temperate", lifestyle: "Urban",
+    transportation: "Transit", tags: [], images: urls.map((src) => ({ src, alt: "Ghent" })),
+  } satisfies Destination);
+
+  it("keeps the hero-first authored set without appending Ghent Wikimedia fallbacks", () => {
+    const result = getDestinationImageSet(destination(authored), 5);
+    expect(result).toEqual(authored);
+    expect(result.filter((url) => /^https?:/.test(url))).toEqual([]);
+  });
+
+  it("deduplicates repeated authored projections without changing order", () => {
+    expect(getDestinationImageSet(destination([...authored, ...authored]), 5)).toEqual(authored);
+  });
+
+  it.each([
+    ["missing gallery", authored.slice(0, 3)],
+    ["missing hero", authored.slice(1)],
+    ["duplicates do not establish completeness", [authored[0], authored[0], authored[1], authored[2]]],
+    ["invalid image does not establish completeness", [...authored.slice(0, 3), "/images/default-image.jpg"]],
+  ])("retains existing fallback policy for %s", (_label, urls) => {
+    const result = getDestinationImageSet(destination(urls), 5);
+    expect(result).toContain(curatedCityImagesBySlug["ghent-belgium"]);
+    expect(result[0]).toBe(urls[0]);
+    expect(new Set(result).size).toBe(result.length);
+  });
+
+  it("preserves fallback-only destinations", () => {
+    expect(getDestinationImageSet(destination([]), 5)).toContain(curatedCityImagesBySlug["ghent-belgium"]);
+  });
 });
