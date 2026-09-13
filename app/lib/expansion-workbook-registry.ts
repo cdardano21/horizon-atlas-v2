@@ -169,7 +169,7 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     // Updated again 2026-09-01 after accepting the exact official Instagram profile for Aromas Café
     // in San Ramón (all other San Ramón targets remain Maps-only unless exact identity evidence is
     // independently confirmed).
-    expectedSha256: "9bc59b700e7eebff35578fbdea1f628b27c8a53cf8a5c9da5d648946039e77ff",
+    expectedSha256: "91bcc28a9df767d20831c698c841fa8ab42e499914f0fc524e87479a07db6373",
   },
   {
     registryId: "legacy-batch-20",

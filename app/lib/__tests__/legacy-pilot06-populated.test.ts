@@ -1,7 +1,13 @@
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { loadFrozenWorkbookV31DeterministicImport } from "../workbook-v31-deterministic-core";
-import { loadExpansionWorkbookDestinationBundle } from "../expansion-workbook-registry";
+import { EXPANSION_WORKBOOK_REGISTRY } from "../expansion-workbook-registry";
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { mapCanonicalDestinationToStoredState } from "../persistence/v31/map-canonical-destination-to-stored-state";
+import { createInMemoryPersistedDestinationReadPort } from "../persistence/v31/in-memory-persisted-destination-read-port";
+import { loadNormalizedPersistedDestinationBundle } from "../persistence/v31/load-normalized-persisted-destination-bundle";
+import type { CanonicalDestinationKey, DestinationId } from "../persistence/v31/types";
 import { buildCanonicalDestinationV31Modules } from "../canonical-destination-loader";
 
 /**
@@ -19,6 +25,25 @@ const AUTHORITATIVE_WORKBOOK_PATH = path.resolve(
   process.cwd(),
   "data/legacy-migration-pilot-06/DestinationFinderAI_Legacy_Pilot_06_Authoritative_v3.3.xlsx",
 );
+
+// Production entries are intentionally excluded by the preview loader. Exercise the
+// same parser -> mapper -> general persisted loader path with an in-memory read port.
+async function loadPilotBundle(key: string) {
+  const entry = EXPANSION_WORKBOOK_REGISTRY.find(e => e.registryId === "legacy-pilot06-populated")!;
+  expect(entry.environment).toBe("production");
+  expect(entry.expectedSha256).toBe("91bcc28a9df767d20831c698c841fa8ab42e499914f0fc524e87479a07db6373");
+  expect(createHash("sha256").update(readFileSync(AUTHORITATIVE_WORKBOOK_PATH)).digest("hex")).toBe(entry.expectedSha256);
+  const workbook = await loadFrozenWorkbookV31DeterministicImport(AUTHORITATIVE_WORKBOOK_PATH);
+  expect(workbook.validationErrors).toEqual([]);
+  const canonical = workbook.canonicalDestinations.find(d => d.identity.destinationKey === key)!;
+  expect(canonical, key).toBeTruthy();
+  expect(canonical.costOfLiving, key).toHaveLength(6);
+  const identity = { destinationKey: key as CanonicalDestinationKey, destinationId: key as DestinationId };
+  const result = await loadNormalizedPersistedDestinationBundle(identity,
+    createInMemoryPersistedDestinationReadPort(identity, mapCanonicalDestinationToStoredState(canonical)));
+  if (result.outcome !== "SUCCESS") throw new Error(`${key}: persisted bundle failed`);
+  return result.bundle;
+}
 
 const EXPECTED_DESTINATION_KEYS = [
   "the-hague-netherlands",
@@ -281,7 +306,7 @@ describe("legacy-migration-pilot-06 AUTHORITATIVE workbook - real deterministic 
 
   it("full pipeline: the in-memory persisted bundle carries best_for (not area_type) into v31Modules.neighborhoods for every destination", async () => {
     for (const key of EXPECTED_DESTINATION_KEYS) {
-      const bundle = await loadExpansionWorkbookDestinationBundle(key);
+      const bundle = await loadPilotBundle(key);
       expect(bundle, key).toBeTruthy();
       if (!bundle) continue;
       const v31Modules = buildCanonicalDestinationV31Modules(bundle);
@@ -298,7 +323,7 @@ describe("legacy-migration-pilot-06 AUTHORITATIVE workbook - real deterministic 
 
   it("full pipeline: v31Modules.costOfLiving and v31Modules.lifestyleFeatures are non-empty for every destination (no false zero when real rows exist)", async () => {
     for (const key of EXPECTED_DESTINATION_KEYS) {
-      const bundle = await loadExpansionWorkbookDestinationBundle(key);
+      const bundle = await loadPilotBundle(key);
       expect(bundle, key).toBeTruthy();
       if (!bundle) continue;
       const v31Modules = buildCanonicalDestinationV31Modules(bundle);
