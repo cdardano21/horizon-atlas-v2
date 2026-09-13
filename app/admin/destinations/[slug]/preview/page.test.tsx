@@ -1,5 +1,8 @@
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+const headersMock = vi.hoisted(() => vi.fn());
+vi.mock("next/headers", () => ({ headers: headersMock }));
 
 const getAuthedAdminMock = vi.hoisted(() => vi.fn());
 const loadCanonicalDestinationForAdminPreviewMock = vi.hoisted(() => vi.fn());
@@ -17,6 +20,7 @@ vi.mock("../../../../lib/canonical-destination-admin-preview", () => ({
 
 vi.mock("next/navigation", () => ({
   notFound: notFoundMock,
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), refresh: vi.fn(), prefetch: vi.fn() }),
 }));
 
 import AdminDestinationPreviewPage from "./page";
@@ -83,9 +87,34 @@ function buildTestDestination() {
 describe("admin destination preview route: security", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    headersMock.mockResolvedValue(new Headers({ host: "localhost:3110" }));
     notFoundMock.mockImplementation(() => {
       throw new Error("NEXT_NOT_FOUND");
     });
+  });
+
+  afterEach(() => vi.unstubAllEnvs());
+
+  it("allows an explicit localhost development preview through the existing privileged loader", async () => {
+    vi.stubEnv("NODE_ENV", "development");
+    getAuthedAdminMock.mockResolvedValue({ user: null, adminRole: null });
+    loadCanonicalDestinationForAdminPreviewMock.mockResolvedValue({ ok: true, destination: buildTestDestination() });
+    render(await AdminDestinationPreviewPage({ params: Promise.resolve({ slug: "new-draft" }), searchParams: Promise.resolve({ local: "1" }) }));
+    expect(loadCanonicalDestinationForAdminPreviewMock).toHaveBeenCalledWith("new-draft");
+    expect(screen.getByText("Preview City")).toBeInTheDocument();
+  });
+
+  it.each([
+    ["production", "localhost:3110", "1"],
+    ["development", "example.com", "1"],
+    ["development", "localhost.example.com", "1"],
+    ["development", "localhost:3110", undefined],
+  ])("denies anonymous preview for %s / %s / %s", async (environment, host, local) => {
+    vi.stubEnv("NODE_ENV", environment);
+    headersMock.mockResolvedValue(new Headers({ host }));
+    getAuthedAdminMock.mockResolvedValue({ user: null, adminRole: null });
+    await expect(AdminDestinationPreviewPage({ params: Promise.resolve({ slug: "new-draft" }), searchParams: Promise.resolve({ local }) })).rejects.toThrow("NEXT_NOT_FOUND");
+    expect(loadCanonicalDestinationForAdminPreviewMock).not.toHaveBeenCalled();
   });
 
   it("rejects an unauthenticated preview request (no user)", async () => {

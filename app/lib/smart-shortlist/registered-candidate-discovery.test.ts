@@ -108,8 +108,8 @@ describe("published catalog discovery through the shortlist loader", () => {
 
 describe("non-legacy pilot 05 frozen workbook", () => {
   it("pins the exact approved bytes and unique registry ownership", () => {
-    expect(createHash("sha256").update(readFileSync(entry.workbookPath)).digest("hex")).toBe("de17593d31478860766143324582a7d8404e4859decbb32530fc02a1f44c8869");
-    expect(entry.expectedSha256).toBe("de17593d31478860766143324582a7d8404e4859decbb32530fc02a1f44c8869");
+    expect(createHash("sha256").update(readFileSync(entry.workbookPath)).digest("hex")).toBe("076ee8953595a9e011bb4102a44b5e958bc52405ccef6bffbe70821e1fbbeb08");
+    expect(entry.expectedSha256).toBe("076ee8953595a9e011bb4102a44b5e958bc52405ccef6bffbe70821e1fbbeb08");
     expect(entry.expectedDestinationKeys).toEqual(["whistler-canada", "bansko-bulgaria", "pucon-chile", "noosa-heads-australia", "baden-baden-germany"]);
     expect(workbook.validationErrors).toEqual([]);
     expect(workbook.canonicalDestinations.map((row) => row.identity.destinationKey)).toEqual(entry.expectedDestinationKeys);

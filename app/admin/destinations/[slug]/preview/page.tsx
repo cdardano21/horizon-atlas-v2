@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getAuthedAdmin } from "../../../../lib/admin-auth";
 import { loadCanonicalDestinationForAdminPreview } from "../../../../lib/canonical-destination-admin-preview";
@@ -5,17 +6,24 @@ import CanonicalDestinationPage from "../../../../components/destination/Canonic
 
 interface AdminDestinationPreviewPageProps {
   params: Promise<{ slug: string }>;
+  searchParams?: Promise<{ local?: string }>;
 }
 
 // Authenticated-admin-only server-side preview of a draft-status v3.1 destination. Uses the same
 // getAuthedAdmin() session/role check already used across app/api/admin/**, a privileged
 // service-role read (never exposed to the client), and the exact same public CanonicalDestinationPage
 // renderer - there is no separate preview renderer. Public RLS and destination status are untouched.
-export default async function AdminDestinationPreviewPage({ params }: AdminDestinationPreviewPageProps) {
+export default async function AdminDestinationPreviewPage({ params, searchParams }: AdminDestinationPreviewPageProps) {
   const { slug } = await params;
   const { user, adminRole } = await getAuthedAdmin();
 
-  if (!user || !adminRole) {
+  const query = await searchParams;
+  const host = (await headers()).get("host") ?? "";
+  // Explicit localhost development preview only. Production still requires the existing admin role.
+  const localPreview = process.env.NODE_ENV === "development" && query?.local === "1"
+    && /^(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/i.test(host);
+
+  if ((!user || !adminRole) && !localPreview) {
     notFound();
   }
 
