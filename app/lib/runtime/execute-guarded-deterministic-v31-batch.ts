@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { buildFirstTimeModuleAuthorizationManifest } from "../persistence/v31/first-time-module-authorization";
+import { buildBatch20PremiumV2ReplayManifest, validateBatch20PremiumV2ReplayAuthorization } from "../persistence/v31/batch-20-01-replay-authorization";
 import { REQUIRED_PRESENCE_MODULES } from "../persistence/v31/load-normalized-persisted-destination-bundle";
 import { interpretOperationManifest, type CanonicalDestinationInput } from "../persistence/v31/manifest";
 import { buildDestinationPlan } from "../persistence/v31/plan-destination";
@@ -284,6 +285,8 @@ export async function executeGuardedDeterministicV31Batch(
 ): Promise<ExecuteGuardedDeterministicV31BatchResult> {
   const invalid = validateInput(input);
   if (invalid) return rejection(input, invalid);
+  const batch20ReplayAuthorization = validateBatch20PremiumV2ReplayAuthorization(input);
+  if (batch20ReplayAuthorization.reason) return rejection(input, batch20ReplayAuthorization.reason);
 
   const allocateDestinationId = input.deps?.allocateDestinationId ?? randomUUID;
   const orchestrateReplay = input.deps?.orchestrateDestinationPlanForBatchCandidate ?? orchestrateDestinationPlanForBatchCandidate;
@@ -312,7 +315,9 @@ export async function executeGuardedDeterministicV31Batch(
       if (hasProfile) {
         planSource = "REPLAY_FROM_PERSISTED_STATE";
         const manifestInterpretation = interpretOperationManifest({
-          manifest: { entries: [] },
+          manifest: batch20ReplayAuthorization.authorized
+            ? buildBatch20PremiumV2ReplayManifest(identity.destinationKey)
+            : { entries: [] },
           canonicalDestinations: [asManifestCanonicalDestination(destination.canonicalDestination)],
           approvedScope,
         });

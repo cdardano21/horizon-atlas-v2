@@ -1,0 +1,82 @@
+{
+  "sarajevo-bosnia-and-herzegovina": {
+    "signaturePhrase": "Ottoman and Austro-Hungarian heritage, café culture, affordability, skiing and hiking",
+    "reviewedRowsSha256": "00010355c4707ab8f6fb36186de2ba4b0859f42d9baff163f4d49ec85fb4c409"
+  },
+  "da-lat-vietnam": {
+    "signaturePhrase": "mild climate, coffee culture, food, flowers, waterfalls and low day-to-day costs",
+    "reviewedRowsSha256": "1c0515b65310bcea11d12b256f97b170403a69e95269f13b6b2e9f3c5292a5e3"
+  },
+  "sete-france": {
+    "signaturePhrase": "beaches, seafood, markets, rail access, canals and authentic year-round city life",
+    "reviewedRowsSha256": "85f2aa60038aeda95eb3ba674ecabfa271be512431bfa7832053acdbc0cbcb8c"
+  },
+  "tainan-taiwan": {
+    "signaturePhrase": "food, healthcare, rail links, safety, cycling and cultural depth",
+    "reviewedRowsSha256": "ddec9afd3d04ba2fb008ebf30dd774775f9572eb1eae82b52d84bdb4d12bff7b"
+  },
+  "arequipa-peru": {
+    "signaturePhrase": "UNESCO architecture, food, sunny dry climate, hospitals and access to Colca Canyon",
+    "reviewedRowsSha256": "474584edf9d6416501b8c932cbf8af1b1356e0c9cefee980c1586f6e79bd3829"
+  },
+  "sibiu-romania": {
+    "signaturePhrase": "walkability, culture, low costs, festivals, safety and mountain access",
+    "reviewedRowsSha256": "f5f9df87ef1772fe9e8960d8a88875a32a8eb18bc0c170ba69dda665aa88edaf"
+  },
+  "ohrid-north-macedonia": {
+    "signaturePhrase": "Lake Ohrid, affordability, history, swimming, cafés and compact scale",
+    "reviewedRowsSha256": "728f748788de0d64eaae4cb7d6da8f64858f5d4fa9e92e47f2539f7885684dcb"
+  },
+  "kuching-malaysia": {
+    "signaturePhrase": "food, English usability, healthcare, value, cultural mix and access to national parks",
+    "reviewedRowsSha256": "6564adbc7d085e54480c858dbcde5bde7cdce7f8e890038961bec9192b6800e8"
+  },
+  "ipoh-malaysia": {
+    "signaturePhrase": "food, low costs, hospitals, rail access, cave temples and manageable urban scale",
+    "reviewedRowsSha256": "85566849cceb954ca382064a6d6a27a264b59f1d3a0e9741dc9d177f9e6dcda0"
+  },
+  "dunedin-new-zealand": {
+    "signaturePhrase": "culture, healthcare, university energy, beaches, wildlife and cooler climate",
+    "reviewedRowsSha256": "1b003eb7822180098c3fab9c94375a4c66104907a6ca9cfd3d66ecfd75806260"
+  },
+  "sucre-bolivia": {
+    "signaturePhrase": "architecture, mild days, affordability, language schools and slower pace",
+    "reviewedRowsSha256": "53082540f6b76be0871f5c226589713ec5527a472d5aca29ba937981bf0640cc"
+  },
+  "loja-ecuador": {
+    "signaturePhrase": "mild climate, low costs, dollar economy, walkable center and access to Podocarpus",
+    "reviewedRowsSha256": "17f8bf4c47aba931e68b4ac35536a96a887a60972f369e8215d11db3ae7fb4c1"
+  },
+  "campeche-mexico": {
+    "signaturePhrase": "colonial beauty, lower costs, walkability, food and relaxed Gulf lifestyle",
+    "reviewedRowsSha256": "7bee0dbe47d9a9c52a7f3527193e1265ec46eea63253d6c8c441bfb8750a1f06"
+  },
+  "oberstdorf-germany": {
+    "signaturePhrase": "skiing, hiking, rail access, healthcare quality, pedestrian center and immaculate infrastructure",
+    "reviewedRowsSha256": "2ab0ae9cc38db1876f36446fce75d3d230bd272a9de2d24aeaeb987ca8dd2bbb"
+  },
+  "frutillar-chile": {
+    "signaturePhrase": "Lake Llanquihue, music, walkability, scenery, calmer pace and Puerto Varas/Puerto Montt access",
+    "reviewedRowsSha256": "b564b87d5672a525dd8519b143bff0b23c4019a5550f41c0f9f59e38c1eb00eb"
+  },
+  "launceston-australia": {
+    "signaturePhrase": "food, cooler climate, hospitals, vineyards, walkable center and outdoor access",
+    "reviewedRowsSha256": "ef60592bf7121361a9601014421cfd629f0ef85b802f843e6ba58c23d4de645f"
+  },
+  "sandpoint-idaho-united-states": {
+    "signaturePhrase": "skiing, boating, walkable downtown, trails, community events and U.S. familiarity",
+    "reviewedRowsSha256": "5e382a4f8b553c381ea1b19632dc64c65d326f93ec66d317dcc8adadffca4e91"
+  },
+  "nelson-new-zealand": {
+    "signaturePhrase": "arts, beaches, cycling, markets, wineries and Abel Tasman access",
+    "reviewedRowsSha256": "9af4a847dd81ea2c77ac531e43b2957750e7d0e37587eb6ac874b6eac2e13a38"
+  },
+  "albany-western-australia": {
+    "signaturePhrase": "beaches, national parks, whale watching, cooler climate, food and strong small-city services",
+    "reviewedRowsSha256": "b1d57ed791c408e96b81053cf2798a9d41b2c48cab6d2541a97c1f3870591db5"
+  },
+  "essaouira-morocco": {
+    "signaturePhrase": "art, seafood, walkability, surf, mild temperatures and strong visual character",
+    "reviewedRowsSha256": "d158aa409732744ea714a7a0a381b43855f5f8ff0814781001eee914302f5225"
+  }
+}
