@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { buildFirstTimeModuleAuthorizationManifest } from "../persistence/v31/first-time-module-authorization";
 import { buildBatch20PremiumV2ReplayManifest, validateBatch20PremiumV2ReplayAuthorization } from "../persistence/v31/batch-20-01-replay-authorization";
+import { buildBatch20PremiumV3ReplayManifest, validateBatch20PremiumV3ReplayAuthorization } from "../persistence/v31/batch-20-02-replay-authorization";
 import { REQUIRED_PRESENCE_MODULES } from "../persistence/v31/load-normalized-persisted-destination-bundle";
 import { interpretOperationManifest, type CanonicalDestinationInput } from "../persistence/v31/manifest";
 import { buildDestinationPlan } from "../persistence/v31/plan-destination";
@@ -38,6 +39,13 @@ const DEFAULT_DIFF_POLICY: DiffPolicy = {
   normalizationVersion: "v31-normalize-1",
   diffPolicyVersion: "v31-diff-1",
 };
+
+const EXECUTE_AUDIT_ACTOR = "codex-guarded-import";
+
+function normalizeExecuteAuditActor(mode: "DRY_RUN" | "EXECUTE", executedBy: string | null | undefined): string | null {
+  if (mode !== "EXECUTE") return executedBy ?? null;
+  return !executedBy || executedBy === "codex-dry-run" ? EXECUTE_AUDIT_ACTOR : executedBy;
+}
 
 interface CatalogResolution {
   readonly destination: BatchDestinationSpec;
@@ -272,7 +280,7 @@ async function auditDestination(
       preExecutionSnapshot: {},
       status: outcome === "SUCCESS" || outcome === "NO_OP" ? "COMPLETED" : "FAILED",
       failureReason: outcome === "FAILED" || outcome === "GATE_REJECTED" ? outcome : null,
-      executedBy: input.executedBy ?? null,
+      executedBy: normalizeExecuteAuditActor(input.mode, input.executedBy),
     });
     return { id: result.id, ok: result.ok, error: result.error };
   } catch (error) {
@@ -285,7 +293,15 @@ export async function executeGuardedDeterministicV31Batch(
 ): Promise<ExecuteGuardedDeterministicV31BatchResult> {
   const invalid = validateInput(input);
   if (invalid) return rejection(input, invalid);
-  const batch20ReplayAuthorization = validateBatch20PremiumV2ReplayAuthorization(input);
+  const batch20PremiumV3Authorization = validateBatch20PremiumV3ReplayAuthorization(input);
+  const batch20PremiumV2Authorization = validateBatch20PremiumV2ReplayAuthorization(input);
+  const batch20ReplayAuthorization = batch20PremiumV3Authorization.reason
+    ? batch20PremiumV3Authorization
+    : batch20PremiumV2Authorization.reason
+      ? batch20PremiumV2Authorization
+      : batch20PremiumV3Authorization.authorized
+        ? batch20PremiumV3Authorization
+        : batch20PremiumV2Authorization;
   if (batch20ReplayAuthorization.reason) return rejection(input, batch20ReplayAuthorization.reason);
 
   const allocateDestinationId = input.deps?.allocateDestinationId ?? randomUUID;
@@ -315,9 +331,11 @@ export async function executeGuardedDeterministicV31Batch(
       if (hasProfile) {
         planSource = "REPLAY_FROM_PERSISTED_STATE";
         const manifestInterpretation = interpretOperationManifest({
-          manifest: batch20ReplayAuthorization.authorized
-            ? buildBatch20PremiumV2ReplayManifest(identity.destinationKey)
-            : { entries: [] },
+          manifest: batch20PremiumV3Authorization.authorized
+            ? buildBatch20PremiumV3ReplayManifest(identity.destinationKey)
+            : batch20PremiumV2Authorization.authorized
+              ? buildBatch20PremiumV2ReplayManifest(identity.destinationKey)
+              : { entries: [] },
           canonicalDestinations: [asManifestCanonicalDestination(destination.canonicalDestination)],
           approvedScope,
         });

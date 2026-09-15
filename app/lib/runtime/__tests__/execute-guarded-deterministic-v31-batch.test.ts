@@ -145,6 +145,28 @@ function input(destinations: readonly BatchDestinationSpec[], client: SqlExecuti
 }
 
 describe("executeGuardedDeterministicV31Batch", () => {
+  it("labels EXECUTE audit rows as guarded imports even when given the reserved dry-run actor", async () => {
+    const destination = spec("audit-label");
+    const fake = transactionalClient([{
+      id: "audit-label-id", slug: destination.bootstrapIdentity.slug, destinationKey: destination.destinationKey,
+      city: destination.bootstrapIdentity.city, country: destination.bootstrapIdentity.country,
+      beachAccess: "COASTAL", mountainOrSkiAccess: null, countryCode: "US",
+    }]);
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify([{ id: "audit-id" }]), { status: 201 }));
+
+    const result = await executeGuardedDeterministicV31Batch({
+      ...input([destination], fake.client),
+      executedBy: "codex-dry-run",
+    });
+
+    expect(result.batchOutcome).toBe("COMPLETED");
+    const auditRequest = fetchSpy.mock.calls[0]?.[1];
+    const body = JSON.parse(String(auditRequest?.body));
+    expect(body.mode).toBe("EXECUTE");
+    expect(body.executed_by).toBe("codex-guarded-import");
+    fetchSpy.mockRestore();
+  });
+
   it("promotes a legacy-slug row inside the same transaction before premium writes", async () => {
     const destination = spec("legacy-key");
     const fake = transactionalClient([{

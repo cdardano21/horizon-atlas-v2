@@ -66,6 +66,20 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     expectedSha256: "899b9d0ec5b7577e97e42f059cda20fae55e9846b7f3e688f8369b3fc0f1df85",
   },
   {
+    registryId: "curated-mixed-batch-20-02",
+    workbookPath: "data/curated-mixed-batch-20-02/DestinationFinderAI-Curated-Mixed-Batch-20-02-PREMIUM-REPAIRED-v6-v3.3.xlsx",
+    environment: "production",
+    candidateDiscovery: "published-catalog",
+    expectedDestinationKeys: [
+      "almunecar-spain", "tavira-portugal", "kalamata-greece", "lucca-italy", "sibenik-croatia",
+      "pak-nam-pran-thailand", "piriapolis-uruguay", "plovdiv-bulgaria", "denia-spain", "viana-do-castelo-portugal",
+      "ascoli-piceno-it", "pezenas-france", "matsuyama-japan", "taitung-taiwan", "quy-nhon-vietnam",
+      "herceg-novi-montenegro", "fethiye-turkiye", "st-george-utah-united-states", "coeur-d-alene-idaho-united-states",
+      "san-luis-obispo-california-united-states",
+    ],
+    expectedSha256: "7ce9be5f9727b9e90796dbe9ba5e2c4e33e617b358dd953e5e910076483fb0be",
+  },
+  {
     registryId: "batch-01",
     workbookPath: "data/DestinationFinderAI_Expansion_Batch_01_5_Destinations_v3.3.xlsx",
     environment: "preview",
