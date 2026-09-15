@@ -23,6 +23,9 @@ export interface DiffKeyedChildrenInput<M extends KeyedChildModuleKey> {
   readonly getStableKey: (
     child: ChildPayloadByModule[M]
   ) => ChildStableKeyByModule[M] | null;
+  /** Optional logical identity used to reconcile legacy rows whose stable key changed between
+   * authoring systems. Return null when the row lacks enough identity to reconcile safely. */
+  readonly getLogicalIdentity?: (child: ChildPayloadByModule[M]) => string | null;
   readonly projectChildForComparison?: (
     child: ChildPayloadByModule[M],
     side: "current" | "incoming",
@@ -52,6 +55,13 @@ export class UnstableChildKeyError extends ChildKeyError {
 export class DuplicateChildKeyError extends ChildKeyError {
   constructor(message: string, module: KeyedChildModuleKey, childKey: StableChildKey) {
     super("DUPLICATE_CHILD_KEY", message, module, childKey);
+  }
+}
+
+export class AmbiguousLogicalIdentityError extends ChildKeyError {
+  constructor(message: string, module: KeyedChildModuleKey) {
+    super("DUPLICATE_CHILD_KEY", message, module, null);
+    this.name = "AMBIGUOUS_LOGICAL_IDENTITY";
   }
 }
 
@@ -141,16 +151,33 @@ export function diffKeyedChildren<M extends KeyedChildModuleKey>(
   }
 
   const incomingByKey = new Map<string, ChildPayloadByModule[M]>();
+  const currentByLogicalIdentity = new Map<string, string[]>();
+  if (input.getLogicalIdentity) {
+    for (const [key, child] of currentByKey) {
+      const identity = input.getLogicalIdentity(child);
+      if (!identity) continue;
+      currentByLogicalIdentity.set(identity, [...(currentByLogicalIdentity.get(identity) ?? []), key]);
+    }
+  }
   for (const child of incomingEntries) {
     const stableKey = input.getStableKey(child);
     const key = stableKeyToString(stableKey as StableChildKey | null);
     if (key === null) {
       throw new UnstableChildKeyError(`Missing stable child key for module ${input.module}`, input.module, stableKey as StableChildKey | null);
     }
-    if (incomingByKey.has(key)) {
-      throw new DuplicateChildKeyError(`Duplicate stable child key ${key} for module ${input.module}`, input.module, key as StableChildKey);
+    let reconciledKey = key;
+    if (!currentByKey.has(key) && input.getLogicalIdentity) {
+      const identity = input.getLogicalIdentity(child);
+      const candidates = identity ? currentByLogicalIdentity.get(identity) ?? [] : [];
+      if (candidates.length > 1) {
+        throw new AmbiguousLogicalIdentityError(`Ambiguous logical identity ${identity} for module ${input.module}`, input.module);
+      }
+      if (candidates.length === 1) reconciledKey = candidates[0]!;
     }
-    incomingByKey.set(key, child);
+    if (incomingByKey.has(reconciledKey)) {
+      throw new DuplicateChildKeyError(`Duplicate stable child key ${reconciledKey} for module ${input.module}`, input.module, reconciledKey as StableChildKey);
+    }
+    incomingByKey.set(reconciledKey, child);
   }
 
   const allKeys = new Set([...currentByKey.keys(), ...incomingByKey.keys()]);

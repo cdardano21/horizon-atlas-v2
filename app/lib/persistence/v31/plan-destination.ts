@@ -163,6 +163,15 @@ function buildChildOperations(currentState: StoredDestinationState, incomingStat
       module,
       currentChildren: currentChildren as readonly never[],
       incomingChildren: incomingChildren as readonly never[],
+      getLogicalIdentity: (child) => {
+        const record = child as Record<string, unknown>;
+        const value = (field: string, rawField: string = field) => String(record[field] ?? record[rawField] ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+        if (module === "neighborhoods") return value("name", "neighborhood_name") || null;
+        if (module === "places") return [value("category", "category_key"), value("name", "place_name")].filter(Boolean).join("|") || null;
+        if (module === "resources") return [value("category", "resource_category"), value("name", "resource_name")].filter(Boolean).join("|") || null;
+        if (module === "eventsSeasonality") return value("summary", "description") || null;
+        return null;
+      },
       projectChildForComparison: (child) => projectKeyedChildComparableRow(module, child),
       getStableKey: (child) => {
         const keyField = {

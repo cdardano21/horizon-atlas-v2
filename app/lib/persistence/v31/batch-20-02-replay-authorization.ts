@@ -1,4 +1,5 @@
 import type { CanonicalDestinationKey, OperationManifest, ReplaceModuleExecutionModuleKey } from "./types";
+import { buildReplayManifest, validateReplayAuthorization, type ReplayAuthorizationInput, type ReplayAuthorizationResult } from "./replay-authorization";
 
 export const BATCH_20_02_PREMIUM_V6_WORKBOOK_SHA256 = "7ce9be5f9727b9e90796dbe9ba5e2c4e33e617b358dd953e5e910076483fb0be";
 const WORKBOOK_SUFFIX = "data/curated-mixed-batch-20-02/DestinationFinderAI-Curated-Mixed-Batch-20-02-PREMIUM-REPAIRED-v6-v3.3.xlsx";
@@ -27,26 +28,13 @@ export const BATCH_20_02_PREMIUM_V6_REPLACEMENT_MODULES = Object.freeze([
   "accessibility", "bureaucracySetup", "workBusiness", "retirementAging", "lifestyleLaws", "realityCheck", "lifestyleFeatures",
 ] as readonly ReplaceModuleExecutionModuleKey[]);
 
-export interface Batch20ReplayAuthorizationInput {
-  readonly workbookPath: string;
-  readonly workbookHash: string | null | undefined;
-  readonly approvedDestinationKeys: readonly string[];
-}
+export type Batch20ReplayAuthorizationInput = ReplayAuthorizationInput;
+export type Batch20ReplayAuthorizationResult = ReplayAuthorizationResult;
 
-export interface Batch20ReplayAuthorizationResult { readonly authorized: boolean; readonly reason: string | null; }
-
-function isBatch20Workbook(path: string): boolean { return path.replaceAll("\\", "/").endsWith(WORKBOOK_SUFFIX); }
-
-function hasExactScope(keys: readonly string[]): boolean {
-  const expected = new Set(BATCH_20_02_PREMIUM_V6_DESTINATION_KEYS);
-  return keys.length === expected.size && new Set(keys).size === expected.size && keys.every((key) => expected.has(key));
-}
+const POLICY = { workbookSuffix: WORKBOOK_SUFFIX, workbookHash: BATCH_20_02_PREMIUM_V6_WORKBOOK_SHA256, destinationKeys: BATCH_20_02_PREMIUM_V6_DESTINATION_KEYS, replacementDestinationKeys: BATCH_20_02_PREMIUM_V6_REPLAY_DESTINATION_KEYS, replacementModules: BATCH_20_02_PREMIUM_V6_REPLACEMENT_MODULES, reason: "curated-mixed-batch-20-02" } as const;
 
 export function validateBatch20PremiumV3ReplayAuthorization(input: Batch20ReplayAuthorizationInput): Batch20ReplayAuthorizationResult {
-  if (!isBatch20Workbook(input.workbookPath)) return { authorized: false, reason: null };
-  if (input.workbookHash !== BATCH_20_02_PREMIUM_V6_WORKBOOK_SHA256) return { authorized: false, reason: "curated-mixed-batch-20-02:WORKBOOK_SHA256_NOT_AUTHORIZED" };
-  if (!hasExactScope(input.approvedDestinationKeys)) return { authorized: false, reason: "curated-mixed-batch-20-02:DESTINATION_SCOPE_NOT_AUTHORIZED" };
-  return { authorized: true, reason: null };
+  return validateReplayAuthorization(input, POLICY);
 }
 
 export function isBatch20PremiumV3ReplayDestinationKey(destinationKey: string): boolean {
@@ -54,13 +42,5 @@ export function isBatch20PremiumV3ReplayDestinationKey(destinationKey: string): 
 }
 
 export function buildBatch20PremiumV3ReplayManifest(destinationKey: CanonicalDestinationKey): OperationManifest {
-  if (!isBatch20PremiumV3ReplayDestinationKey(destinationKey)) return { entries: [] };
-  return {
-    entries: BATCH_20_02_PREMIUM_V6_REPLACEMENT_MODULES.map((targetModule) => ({
-      destinationKey,
-      operation: "REPLACE_MODULE" as const,
-      targetModule,
-      reason: "curated-mixed-batch-20-02:premium-v6-replay-authorization",
-    })),
-  };
+  return buildReplayManifest(destinationKey, { ...POLICY, replacementModules: BATCH_20_02_PREMIUM_V6_REPLACEMENT_MODULES, reason: "curated-mixed-batch-20-02:premium-v6-replay-authorization" });
 }
