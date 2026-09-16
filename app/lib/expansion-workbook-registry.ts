@@ -80,6 +80,22 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
     expectedSha256: "7ce9be5f9727b9e90796dbe9ba5e2c4e33e617b358dd953e5e910076483fb0be",
   },
   {
+    registryId: "curated-mixed-batch-20-03",
+    workbookPath: "data/curated-mixed-batch-20-03/DestinationFinderAI-Curated-Mixed-Batch-20-03-Final-Premium-Completed-v3.3.xlsx",
+    environment: "production",
+    candidateDiscovery: "published-catalog",
+    expectedDestinationKeys: [
+      "flagstaff-arizona-united-states", "ashland-oregon-united-states", "whitefish-montana-united-states",
+      "saratoga-springs-new-york-united-states", "annapolis-maryland-united-states", "wilmington-north-carolina-united-states",
+      "st-augustine-florida-united-states", "hilton-head-island-south-carolina-united-states", "traverse-city-michigan-united-states",
+      "delray-beach-florida-united-states", "lagos-portugal", "chiang-rai-thailand", "guanajuato-mexico",
+      "newport-rhode-island-united-states", "cascais-portugal", "hood-river-oregon-united-states",
+      "eureka-springs-arkansas-united-states", "new-hope-pennsylvania-united-states", "healdsburg-california-united-states",
+      "bocas-del-toro-panama",
+    ],
+    expectedSha256: "b61de798d3b12611e9be0a7c5179771ce538966d51381852feeedf23aab90946",
+  },
+  {
     registryId: "batch-01",
     workbookPath: "data/DestinationFinderAI_Expansion_Batch_01_5_Destinations_v3.3.xlsx",
     environment: "preview",

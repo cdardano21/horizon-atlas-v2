@@ -1,0 +1,82 @@
+{
+  "flagstaff-arizona-united-states": {
+    "signaturePhrase": "Flagstaff",
+    "reviewedRowsSha256": "07057614fcbb837d6f6259810419dfd4cafb2ee2534972946987645df9ecb334"
+  },
+  "ashland-oregon-united-states": {
+    "signaturePhrase": "Ashland",
+    "reviewedRowsSha256": "6afeed27b8715e1ded031095ce952dad8b331bc26779a9f9d2512bb2af2cf587"
+  },
+  "whitefish-montana-united-states": {
+    "signaturePhrase": "Whitefish",
+    "reviewedRowsSha256": "69fe55b5e04ed54c8015c4b5d886523b06e5e266cf7732b06980197fc29769ff"
+  },
+  "saratoga-springs-new-york-united-states": {
+    "signaturePhrase": "Saratoga Springs",
+    "reviewedRowsSha256": "73f9658f38ec4cab90605cdbb40489d372b0a8edc6af8c05086d7be6b611d48d"
+  },
+  "annapolis-maryland-united-states": {
+    "signaturePhrase": "Annapolis",
+    "reviewedRowsSha256": "3cc5daf06b8c9bb73904378afca87d60ebcec1860e9f7487518cdcb7b316c535"
+  },
+  "wilmington-north-carolina-united-states": {
+    "signaturePhrase": "Wilmington",
+    "reviewedRowsSha256": "87c944cb56b8150b4291cdf344c37b028ed92512b10e0beee39c4f28e57e2cb7"
+  },
+  "st-augustine-florida-united-states": {
+    "signaturePhrase": "St. Augustine",
+    "reviewedRowsSha256": "598a19d79e4102eecd33fd3545713df7834514fd8ceded78f324c50e772d60fb"
+  },
+  "hilton-head-island-south-carolina-united-states": {
+    "signaturePhrase": "Hilton Head Island",
+    "reviewedRowsSha256": "67df2e00260c0991a6b745a7bd0a3a3552f71c17bd9ed2e15db108dbcc0cae23"
+  },
+  "traverse-city-michigan-united-states": {
+    "signaturePhrase": "Traverse City",
+    "reviewedRowsSha256": "1e0077cf24909c7e8327dea196e672f1bd2598de5b0f03e809043b340b9987a3"
+  },
+  "delray-beach-florida-united-states": {
+    "signaturePhrase": "Delray Beach",
+    "reviewedRowsSha256": "d7e8d0a51b5a7a48ef1e94ac6b926a19dad9bac8b962f4772954544b3080ab61"
+  },
+  "lagos-portugal": {
+    "signaturePhrase": "Lagos",
+    "reviewedRowsSha256": "08b5fb86e86e14b843ab595b135bf4807c3d523b56e04b19b3f8b0db41ff6b58"
+  },
+  "chiang-rai-thailand": {
+    "signaturePhrase": "Chiang Rai",
+    "reviewedRowsSha256": "9f1e4a74b5a9b3fc9f393571b0304718d00f6a4c8c71176ad2eff7eca7ff282b"
+  },
+  "guanajuato-mexico": {
+    "signaturePhrase": "Guanajuato",
+    "reviewedRowsSha256": "1ed5027e8d6e539b497dd01788b00ede8fa2ee8a89520f085aa66c3370b02287"
+  },
+  "newport-rhode-island-united-states": {
+    "signaturePhrase": "Newport",
+    "reviewedRowsSha256": "aec5c86b212c9c8f98d6912bf95f5593e10b025b7e4db94483f931e3ee17e7ef"
+  },
+  "cascais-portugal": {
+    "signaturePhrase": "Cascais",
+    "reviewedRowsSha256": "91303804e61ad6a5881998df8c05d0f56f84504b9522bd4d11e4438c01ad0eb7"
+  },
+  "hood-river-oregon-united-states": {
+    "signaturePhrase": "Hood River",
+    "reviewedRowsSha256": "78ed4680c4f4a59d29b2d3dc4a7aadba5aca7f5ae2a389351e852fc0ba046b81"
+  },
+  "eureka-springs-arkansas-united-states": {
+    "signaturePhrase": "Eureka Springs",
+    "reviewedRowsSha256": "aa9c02c3131374c6b2f70fd36037ef87488efa4e41bbcbf5767f1d7af4e842a5"
+  },
+  "new-hope-pennsylvania-united-states": {
+    "signaturePhrase": "New Hope",
+    "reviewedRowsSha256": "741058a5224dbfaa44b2d4df1161967a20d1d6ffd47e9c34d0cf93ac20759d06"
+  },
+  "healdsburg-california-united-states": {
+    "signaturePhrase": "Healdsburg",
+    "reviewedRowsSha256": "dc764cb10cf0cdf0b385458efd219f181b1e8f83dbcae311d11a2c946a0c30ef"
+  },
+  "bocas-del-toro-panama": {
+    "signaturePhrase": "Bocas del Toro",
+    "reviewedRowsSha256": "2df34eb654c3c9f4b8a88a8497eabd246a947d703e76582b9fa636b6321e5883"
+  }
+}

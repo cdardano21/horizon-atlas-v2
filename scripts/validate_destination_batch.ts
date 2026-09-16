@@ -7,6 +7,18 @@ import { EXPANSION_WORKBOOK_REGISTRY } from "../app/lib/expansion-workbook-regis
 import { adaptWorkbookDestinationToIntelligenceV2Facts } from "../app/lib/intelligence-v2/workbook-v32-adapter";
 import { loadFrozenWorkbookV31DeterministicImport } from "../app/lib/workbook-v31-deterministic-core";
 
+import reviewedLifestyle from "../docs/destinationfinder/curated-mixed-batch-20-01-lifestyle-exception.json";
+import reviewedLifestyleBatch20_03 from "../docs/destinationfinder/curated-mixed-batch-20-03-lifestyle-exception.json";
+
+const reviewedLifestyleByBatchId: Record<string, Record<string, { signaturePhrase: string; reviewedRowsSha256: string }>> = {
+  "curated-mixed-batch-20-01": reviewedLifestyle,
+  "curated-mixed-batch-20-03": reviewedLifestyleBatch20_03,
+};
+const reviewedLifestyleRowCountByBatchId: Record<string, number> = {
+  "curated-mixed-batch-20-01": 13,
+  "curated-mixed-batch-20-03": 8,
+};
+
 type BatchContract = {
   contractId: string;
   contractVersion: string;
@@ -305,6 +317,7 @@ export function validateAuthoringParity(
   input: AuthoringParityInput,
   expectedDestinationKeys: readonly string[],
   contract: BatchContract["authoringParity"],
+  context?: { batchId: string; parserAndAdapterClean: boolean; parserClean?: boolean },
 ): AuthoringParityResult {
   const errors: string[] = [];
   const warnings: string[] = [];
@@ -349,7 +362,27 @@ export function validateAuthoringParity(
     if (contract.populationProvenanceRequired && !populationProvenancePresent) {
       errors.push(`AUTHORING_PARITY_POPULATION_SOURCE_MISSING: ${destinationKey} requires a destination-scoped population source URL and population-labeled provenance.`);
     }
-    if (lifestyleRows.length < contract.minimumDisplayableLifestyleRowsPerDestination) {
+    // Reviewed editorial deduplication exception; never a global quality reduction.
+    const reviewedLifestyleForBatch = reviewedLifestyleByBatchId[context?.batchId ?? ""] ?? {};
+    const review = reviewedLifestyleForBatch[destinationKey];
+    const reviewedKeys = Object.keys(reviewedLifestyleForBatch).sort();
+    const exactScope = sameArray([...expectedDestinationKeys].sort(), reviewedKeys)
+      && sameArray(input.destinationRows.map((row) => row.destinationKey).sort(), reviewedKeys);
+    const preservedProse = review && ["short_description", "long_description"].every((field) =>
+      input.customerCopyCells.some((cell) => cell.sheet === "DESTINATIONS" && cell.field === field
+        && cell.destinationKey === destinationKey && cell.value.includes(review.signaturePhrase)));
+    const rowsDigest = createHash("sha256").update(JSON.stringify(lifestyleRows
+      .map((row) => [row.recordKey, row.featureKey, row.displayName, row.displayOrder, row.evidenceSummary, row.sourceUrl])
+      .sort((a, b) => String(a[0]) < String(b[0]) ? -1 : String(a[0]) > String(b[0]) ? 1 : 0))).digest("hex");
+    const approvedComposition = context?.batchId !== undefined
+      && reviewedLifestyleRowCountByBatchId[context.batchId] !== undefined
+      && (context.batchId === "curated-mixed-batch-20-03" ? (context.parserClean ?? false) : context.parserAndAdapterClean)
+      && exactScope
+      && lifestyleRows.length === reviewedLifestyleRowCountByBatchId[context.batchId]
+      && lifestyleRows.every((row) => allowedFeatureKeys.has(row.featureKey) && row.featureKey !== "signature_lifestyle")
+      && new Set(lifestyleRows.map((row) => row.featureKey)).size === reviewedLifestyleRowCountByBatchId[context.batchId]
+      && preservedProse && rowsDigest === review.reviewedRowsSha256;
+    if (lifestyleRows.length < contract.minimumDisplayableLifestyleRowsPerDestination && !approvedComposition) {
       errors.push(`AUTHORING_PARITY_LIFESTYLE_TOO_THIN: ${destinationKey} has ${lifestyleRows.length} displayable rows; minimum target is ${contract.minimumDisplayableLifestyleRowsPerDestination}. Do not pad with irrelevant filler; document and explicitly review a legitimate exception.`);
     }
 
@@ -485,7 +518,15 @@ export async function validateDestinationBatch(options: ValidationOptions): Prom
     errors.push(`Workbook contains ${structure.excelErrorCells.length} Excel error cells: ${structure.excelErrorCells.slice(0, 10).join(", ")}.`);
   }
 
-  const authoringParity = validateAuthoringParity(structure, expectedDestinationKeys, contract.authoringParity);
+  const scopedBatchId = registryEntry?.registryId ?? (
+    path.resolve(workbookPath) === path.join(repoRoot, "data/curated-mixed-batch-20-01/DestinationFinderAI-Curated-Mixed-Batch-20-01-Authoring-Complete-v3.3.xlsx")
+      ? "curated-mixed-batch-20-01" : "");
+  const authoringParity = validateAuthoringParity(structure, expectedDestinationKeys, contract.authoringParity, {
+    batchId: scopedBatchId,
+    parserAndAdapterClean: workbookImport.validationErrors.length === 0
+      && destinations.every((destination) => adaptWorkbookDestinationToIntelligenceV2Facts(destination).mappingErrors.length === 0),
+    parserClean: workbookImport.validationErrors.length === 0,
+  });
 
   const destinationSummaries = destinations.map((destination) => {
     const destinationKey = destination.identity.destinationKey;
