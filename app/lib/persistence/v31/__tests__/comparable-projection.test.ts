@@ -457,6 +457,11 @@ describe("Phase 3A.1 comparable projection", () => {
     expect(projectComparableValue("https://Example.com/Path", "url")).toEqual("https://example.com/Path");
   });
 
+  it("normalizes numeric and string decimals to the same database-comparable value", () => {
+    expect(projectComparableObject({ longitude: 9.121700000000001 })).toEqual({ longitude: "9.1217" });
+    expect(projectComparableObject({ longitude: "9.1217" })).toEqual({ longitude: "9.1217" });
+  });
+
   it("projects comparable objects without mutating input", () => {
     const input = {
       shortDescription: "  Café\r\nCity  ",

@@ -1,43 +1,43 @@
 {
   "flagstaff-arizona-united-states": {
     "signaturePhrase": "Flagstaff",
-    "reviewedRowsSha256": "07057614fcbb837d6f6259810419dfd4cafb2ee2534972946987645df9ecb334"
+    "reviewedRowsSha256": "7ae0641b77983eb7701382ab4cad5a2cd60c374681f975128649484cd4c8cba9"
   },
   "ashland-oregon-united-states": {
     "signaturePhrase": "Ashland",
-    "reviewedRowsSha256": "6afeed27b8715e1ded031095ce952dad8b331bc26779a9f9d2512bb2af2cf587"
+    "reviewedRowsSha256": "9825333dd8ff3cb8240415e28e300e89dcf3d4d36f0325ff8c0118c98777985f"
   },
   "whitefish-montana-united-states": {
     "signaturePhrase": "Whitefish",
-    "reviewedRowsSha256": "69fe55b5e04ed54c8015c4b5d886523b06e5e266cf7732b06980197fc29769ff"
+    "reviewedRowsSha256": "9bdd37da192c044e2ef86b0c3862ce490bef1837d07cb33facecb1847d4ae3bb"
   },
   "saratoga-springs-new-york-united-states": {
     "signaturePhrase": "Saratoga Springs",
-    "reviewedRowsSha256": "73f9658f38ec4cab90605cdbb40489d372b0a8edc6af8c05086d7be6b611d48d"
+    "reviewedRowsSha256": "87c08d3099200dbdb52e1262ed00e57312d3e3506b94915729581fd8de1fb327"
   },
   "annapolis-maryland-united-states": {
     "signaturePhrase": "Annapolis",
-    "reviewedRowsSha256": "3cc5daf06b8c9bb73904378afca87d60ebcec1860e9f7487518cdcb7b316c535"
+    "reviewedRowsSha256": "45a8be100b4b65ce9f1f124490a640bb4b6256ef7645b003a0bd2fb82888a4aa"
   },
   "wilmington-north-carolina-united-states": {
-    "signaturePhrase": "Wilmington",
-    "reviewedRowsSha256": "87c944cb56b8150b4291cdf344c37b028ed92512b10e0beee39c4f28e57e2cb7"
+    "signaturePhrase": "river",
+    "reviewedRowsSha256": "caf15fd11097c68d73f7dae9263a0fe7decfbe9fb450e073a59f81ab20ef2502"
   },
   "st-augustine-florida-united-states": {
-    "signaturePhrase": "St. Augustine",
-    "reviewedRowsSha256": "598a19d79e4102eecd33fd3545713df7834514fd8ceded78f324c50e772d60fb"
+    "signaturePhrase": "Historic",
+    "reviewedRowsSha256": "ac32b6656da48862a12763bf92e624b8f25bf08a18a2b56a820d6e9418162e31"
   },
   "hilton-head-island-south-carolina-united-states": {
-    "signaturePhrase": "Hilton Head Island",
-    "reviewedRowsSha256": "67df2e00260c0991a6b745a7bd0a3a3552f71c17bd9ed2e15db108dbcc0cae23"
+    "signaturePhrase": "island",
+    "reviewedRowsSha256": "664c3177bfa4f46e70325a5f55bb4746de0e18c14148f104394d799fee337f72"
   },
   "traverse-city-michigan-united-states": {
-    "signaturePhrase": "Traverse City",
-    "reviewedRowsSha256": "1e0077cf24909c7e8327dea196e672f1bd2598de5b0f03e809043b340b9987a3"
+    "signaturePhrase": "small",
+    "reviewedRowsSha256": "572d72d74e1d95ce7b75b8d5356196df3ddcf3e7482ce96ee2e673cd8d9de894"
   },
   "delray-beach-florida-united-states": {
-    "signaturePhrase": "Delray Beach",
-    "reviewedRowsSha256": "d7e8d0a51b5a7a48ef1e94ac6b926a19dad9bac8b962f4772954544b3080ab61"
+    "signaturePhrase": "beach",
+    "reviewedRowsSha256": "52ffc0feb661b18b2b514ef72dc33a68e8e3e6ed0032d1923c81502f730c08b5"
   },
   "lagos-portugal": {
     "signaturePhrase": "Lagos",

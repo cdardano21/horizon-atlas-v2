@@ -174,6 +174,47 @@ describe("write-port statement translation", () => {
     expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, "media-1", "image", "https://upload.wikimedia.org/example.jpg", "View", "View", "1", "2", true, "Commons", "https://commons.wikimedia.org/wiki/File:Example.jpg", { licenseNotes: "CC BY-SA" }]);
   });
 
+  it("maps resource description and official flags while preserving category, name, and URL", () => {
+    const childOperations: ChildOperation[] = [{
+      kind: "UPDATE_CHILD",
+      module: "resources",
+      stableChildKey: "resource-1" as any,
+      currentChild: null,
+      incomingChild: {
+        resource_key: "resource-1",
+        resource_category: "government",
+        resource_name: "City Hall",
+        description: "Municipal services and local information.",
+        url: "https://city.example.com",
+        official: "1",
+      } as any,
+    }];
+
+    const statements = buildDestinationPlanWriteStatements(basePlan({ childOperations }));
+    expect(statements).toHaveLength(2);
+    const statement = statements[0];
+    expect(statement.text).toContain("premium_resources");
+    expect(statement.text).toContain("description");
+    expect(statement.text).toContain("official");
+    expect(statement.values).toEqual([
+      DEST_ID, DEST_KEY, "resource-1", "government", "City Hall",
+      "Municipal services and local information.", "https://city.example.com", true,
+    ]);
+  });
+
+  it.each([
+    ["1", true],
+    ["0", false],
+  ])("coerces resource official=%s to %s", (incoming, expected) => {
+    const childOperations: ChildOperation[] = [{
+      kind: "UPDATE_CHILD", module: "resources", stableChildKey: "resource-boolean" as any,
+      currentChild: null,
+      incomingChild: { resource_key: "resource-boolean", resource_category: "gov", resource_name: "Office", description: "Help", url: "https://example.com", official: incoming } as any,
+    }];
+    const statement = buildDestinationPlanWriteStatements(basePlan({ childOperations }))[0];
+    expect(statement.values.at(-1)).toBe(expected);
+  });
+
   describe.each(["canonical", "stored"] as const)("%s media sort-order SQL contract", (shape) => {
     it.each([
       [null, 0], [undefined, 0], ["", 0], [" ", 0],

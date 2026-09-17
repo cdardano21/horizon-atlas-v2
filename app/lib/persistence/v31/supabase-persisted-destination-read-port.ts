@@ -146,7 +146,7 @@ export function createSupabasePersistedDestinationReadPort(
 ): PersistedDestinationReadPort {
   return {
     async readRoot(identity) {
-      return readSingleRow(client, "destinations_catalog", "id,destination_key,slug,city,country,beach_access,mountain_or_ski_access,country_code,population,metro_population,elevation", identity, (row) => ({
+      return readSingleRow(client, "destinations_catalog", "id,destination_key,slug,city,country,beach_access,mountain_or_ski_access,country_code,population,metro_population,elevation,latitude,longitude", identity, (row) => ({
         destinationId: String(row.id ?? row.destination_id ?? ""),
         destinationKey: String(row.destination_key ?? ""),
         slug: pickString(row, "slug"),
@@ -159,6 +159,8 @@ export function createSupabasePersistedDestinationReadPort(
         population: row.population == null ? null : String(row.population),
         metroPopulation: row.metro_population == null ? null : String(row.metro_population),
         elevation: row.elevation == null ? null : String(row.elevation),
+        latitude: row.latitude == null ? null : String(row.latitude),
+        longitude: row.longitude == null ? null : String(row.longitude),
       } as PersistedRootRow), "id");
     },
 
@@ -190,7 +192,7 @@ export function createSupabasePersistedDestinationReadPort(
         ["scores", "premium_destination_scores", "destination_id,destination_key,score_key,score_name,score_value,weight,higher_is_better,verified,verified_at", "scores"],
         ["neighborhoods", "premium_neighborhoods", "destination_id,destination_key,neighborhood_key,neighborhood_name,area_type,best_for,summary,housing_character,walkability_rating,safety_rating,transit_rating,pros,cons,google_maps_url", "neighborhoods"],
         ["places", "premium_places", "destination_id,destination_key,place_key,category_key,place_name,description,neighborhood_key,website_url,google_maps_url,source_url,address,phone,display_order", "places"],
-        ["resources", "premium_resources", "destination_id,destination_key,resource_key,resource_category,resource_name,url", "resources"],
+        ["resources", "premium_resources", "destination_id,destination_key,resource_key,resource_category,resource_name,description,url,official", "resources"],
         ["media", "premium_media", "destination_id,destination_key,media_key,media_type,url,caption,alt_text,is_primary,sort_order,verified,source_name,source_url,metadata", "media"],
         ["propertyResources", "premium_property_resources", "destination_id,destination_key,record_key,resource_type,resource_name,url", "propertyResources"],
         ["moveChecklist", "premium_move_checklist", "destination_id,destination_key,checklist_key,summary,checklist_notes", "moveChecklist"],
@@ -263,7 +265,9 @@ export function createSupabasePersistedDestinationReadPort(
                   resourceKey: String(row.resource_key ?? ""),
                   category: pickString(row, "resource_category"),
                   name: pickString(row, "resource_name"),
+                  description: pickString(row, "description"),
                   url: pickString(row, "url"),
+                  official: pickBoolean(row, "official"),
                 };
               case "media":
                 const mediaMetadata = isRecord(row.metadata) ? row.metadata : {};

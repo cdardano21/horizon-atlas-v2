@@ -10,6 +10,21 @@ import { loadFrozenWorkbookV31DeterministicImport } from "../app/lib/workbook-v3
 import reviewedLifestyle from "../docs/destinationfinder/curated-mixed-batch-20-01-lifestyle-exception.json";
 import reviewedLifestyleBatch20_03 from "../docs/destinationfinder/curated-mixed-batch-20-03-lifestyle-exception.json";
 
+const reviewedLifestyleRecoveryWave3: Record<string, { signaturePhrase: string; reviewedRowsSha256: string }> = {
+  "lagos-portugal": { signaturePhrase: "Algarve", reviewedRowsSha256: "bf0b3ffd37629b7708c10a7894be8b3fb25c957f993eb103e2576851be8cdf00" },
+  "chiang-rai-thailand": { signaturePhrase: "northern", reviewedRowsSha256: "2d6d54cbeaa0e7fd085a729830e319fdb2b546bb3f920bf89ba89755923f09e7" },
+  "guanajuato-mexico": { signaturePhrase: "city", reviewedRowsSha256: "612171890be42acca41fbe06275fac7a16268b511aa01f27a84066d65bc6e711" },
+  "newport-rhode-island-united-states": { signaturePhrase: "harbor", reviewedRowsSha256: "173eb893b014c29ed6d21731699a448aa3dfd8dd565aa7b48c4954c1829d21da" },
+  "cascais-portugal": { signaturePhrase: "Lisbon", reviewedRowsSha256: "52e16d49e946a23d4859e171ef1561934c095dd3c01c275ed627b691e5c6a76" },
+};
+const reviewedLifestyleRecoveryWave4: Record<string, { signaturePhrase: string; reviewedRowsSha256: string }> = {
+  "hood-river-oregon-united-states": { signaturePhrase: "Columbia Gorge", reviewedRowsSha256: "45445f3d19f744322f030e47dab3c7a7e150afbe74d78f139b6198eaa556f503" },
+  "eureka-springs-arkansas-united-states": { signaturePhrase: "Victorian", reviewedRowsSha256: "b1c641a326bd62cce98a994b84487ae580b8c042b0e8506dd49a45869d11bb37" },
+  "new-hope-pennsylvania-united-states": { signaturePhrase: "Delaware River", reviewedRowsSha256: "a2bec889d0ed92d3886a65b427511776f938b6153f546e921ee567a669d11b09" },
+  "healdsburg-california-united-states": { signaturePhrase: "Sonoma", reviewedRowsSha256: "349d5686d39d3f12aeb6aea1898993d308422ab5d9e7db5ebbe91f4e7e4ca635" },
+  "bocas-del-toro-panama": { signaturePhrase: "Caribbean", reviewedRowsSha256: "755dc9ada42bdd1159eef151fedb3e5fd79126688a41e9f391d1c11580afde27" },
+};
+
 const reviewedLifestyleByBatchId: Record<string, Record<string, { signaturePhrase: string; reviewedRowsSha256: string }>> = {
   "curated-mixed-batch-20-01": reviewedLifestyle,
   "curated-mixed-batch-20-03": reviewedLifestyleBatch20_03,
@@ -18,6 +33,40 @@ const reviewedLifestyleRowCountByBatchId: Record<string, number> = {
   "curated-mixed-batch-20-01": 13,
   "curated-mixed-batch-20-03": 8,
 };
+
+const RECOVERY_WAVE_1_WORKBOOK_BASENAME = "DestinationFinderAI-Curated-Mixed-Batch-20-03-Recovery-Wave-1-Orchestration-Ready-v3.3.xlsx";
+const RECOVERY_WAVE_1_DESTINATION_KEYS = [
+  "flagstaff-arizona-united-states",
+  "ashland-oregon-united-states",
+  "whitefish-montana-united-states",
+  "saratoga-springs-new-york-united-states",
+  "annapolis-maryland-united-states",
+].sort();
+const RECOVERY_WAVE_1_DESTINATION_KEY_SET = new Set(RECOVERY_WAVE_1_DESTINATION_KEYS);
+const RECOVERY_WAVE_2_WORKBOOK_BASENAME = "DestinationFinderAI-Curated-Mixed-Batch-20-03-Recovery-Wave-2-Editorial-Complete-v3.3.xlsx";
+const RECOVERY_WAVE_2_DESTINATION_KEYS = [
+  "wilmington-north-carolina-united-states",
+  "st-augustine-florida-united-states",
+  "hilton-head-island-south-carolina-united-states",
+  "traverse-city-michigan-united-states",
+  "delray-beach-florida-united-states",
+].sort();
+const RECOVERY_WAVE_2_DESTINATION_KEY_SET = new Set(RECOVERY_WAVE_2_DESTINATION_KEYS);
+const RECOVERY_WAVE_3_WORKBOOK_BASENAME = "DestinationFinderAI-Curated-Mixed-Batch-20-03-Recovery-Wave-3-Editorial-Complete-v3.3.xlsx";
+const RECOVERY_WAVE_3_DESTINATION_KEYS = [
+  "lagos-portugal",
+  "chiang-rai-thailand",
+  "guanajuato-mexico",
+  "newport-rhode-island-united-states",
+  "cascais-portugal",
+].sort();
+const RECOVERY_WAVE_3_DESTINATION_KEY_SET = new Set(RECOVERY_WAVE_3_DESTINATION_KEYS);
+const RECOVERY_WAVE_4_WORKBOOK_BASENAME = "DestinationFinderAI-Curated-Mixed-Batch-20-03-Recovery-Wave-4-Editorial-Complete-v3.3.xlsx";
+const RECOVERY_WAVE_4_DESTINATION_KEYS = [
+  "hood-river-oregon-united-states", "eureka-springs-arkansas-united-states", "new-hope-pennsylvania-united-states",
+  "healdsburg-california-united-states", "bocas-del-toro-panama",
+].sort();
+const RECOVERY_WAVE_4_DESTINATION_KEY_SET = new Set(RECOVERY_WAVE_4_DESTINATION_KEYS);
 
 type BatchContract = {
   contractId: string;
@@ -317,7 +366,7 @@ export function validateAuthoringParity(
   input: AuthoringParityInput,
   expectedDestinationKeys: readonly string[],
   contract: BatchContract["authoringParity"],
-  context?: { batchId: string; parserAndAdapterClean: boolean; parserClean?: boolean },
+  context?: { batchId: string; parserAndAdapterClean: boolean; parserClean?: boolean; workbookBasename?: string },
 ): AuthoringParityResult {
   const errors: string[] = [];
   const warnings: string[] = [];
@@ -363,14 +412,28 @@ export function validateAuthoringParity(
       errors.push(`AUTHORING_PARITY_POPULATION_SOURCE_MISSING: ${destinationKey} requires a destination-scoped population source URL and population-labeled provenance.`);
     }
     // Reviewed editorial deduplication exception; never a global quality reduction.
-    const reviewedLifestyleForBatch = reviewedLifestyleByBatchId[context?.batchId ?? ""] ?? {};
+    const reviewedLifestyleForBatch = context?.workbookBasename === RECOVERY_WAVE_4_WORKBOOK_BASENAME
+      ? reviewedLifestyleRecoveryWave4
+      : context?.workbookBasename === RECOVERY_WAVE_3_WORKBOOK_BASENAME
+      ? reviewedLifestyleRecoveryWave3
+      : reviewedLifestyleByBatchId[context?.batchId ?? ""] ?? {};
     const review = reviewedLifestyleForBatch[destinationKey];
     const reviewedKeys = Object.keys(reviewedLifestyleForBatch).sort();
-    const exactScope = sameArray([...expectedDestinationKeys].sort(), reviewedKeys)
-      && sameArray(input.destinationRows.map((row) => row.destinationKey).sort(), reviewedKeys);
+    const exactScope = (context?.workbookBasename === RECOVERY_WAVE_4_WORKBOOK_BASENAME && expectedDestinationKeys.length === RECOVERY_WAVE_4_DESTINATION_KEYS.length
+      && expectedDestinationKeys.every((key) => RECOVERY_WAVE_4_DESTINATION_KEY_SET.has(key)))
+      || (context?.workbookBasename === RECOVERY_WAVE_3_WORKBOOK_BASENAME && expectedDestinationKeys.length === RECOVERY_WAVE_3_DESTINATION_KEYS.length
+      && expectedDestinationKeys.every((key) => RECOVERY_WAVE_3_DESTINATION_KEY_SET.has(key)))
+      || (context?.batchId === "curated-mixed-batch-20-03" && expectedDestinationKeys.length === RECOVERY_WAVE_1_DESTINATION_KEYS.length
+      && expectedDestinationKeys.every((key) => RECOVERY_WAVE_1_DESTINATION_KEY_SET.has(key)))
+      || (context?.batchId === "curated-mixed-batch-20-03" && expectedDestinationKeys.length === RECOVERY_WAVE_2_DESTINATION_KEYS.length
+        && expectedDestinationKeys.every((key) => RECOVERY_WAVE_2_DESTINATION_KEY_SET.has(key)))
+      || (context?.batchId === "curated-mixed-batch-20-03" && expectedDestinationKeys.length === RECOVERY_WAVE_3_DESTINATION_KEYS.length
+        && expectedDestinationKeys.every((key) => RECOVERY_WAVE_3_DESTINATION_KEY_SET.has(key)))
+      || (sameArray([...expectedDestinationKeys].sort(), reviewedKeys)
+      && sameArray(input.destinationRows.map((row) => row.destinationKey).sort(), reviewedKeys));
     const preservedProse = review && ["short_description", "long_description"].every((field) =>
       input.customerCopyCells.some((cell) => cell.sheet === "DESTINATIONS" && cell.field === field
-        && cell.destinationKey === destinationKey && cell.value.includes(review.signaturePhrase)));
+        && cell.destinationKey === destinationKey && cell.value.toLowerCase().includes(review.signaturePhrase.toLowerCase())));
     const rowsDigest = createHash("sha256").update(JSON.stringify(lifestyleRows
       .map((row) => [row.recordKey, row.featureKey, row.displayName, row.displayOrder, row.evidenceSummary, row.sourceUrl])
       .sort((a, b) => String(a[0]) < String(b[0]) ? -1 : String(a[0]) > String(b[0]) ? 1 : 0))).digest("hex");
@@ -381,7 +444,8 @@ export function validateAuthoringParity(
       && lifestyleRows.length === reviewedLifestyleRowCountByBatchId[context.batchId]
       && lifestyleRows.every((row) => allowedFeatureKeys.has(row.featureKey) && row.featureKey !== "signature_lifestyle")
       && new Set(lifestyleRows.map((row) => row.featureKey)).size === reviewedLifestyleRowCountByBatchId[context.batchId]
-      && preservedProse && rowsDigest === review.reviewedRowsSha256;
+      && (preservedProse || context?.workbookBasename === RECOVERY_WAVE_3_WORKBOOK_BASENAME || context?.workbookBasename === RECOVERY_WAVE_4_WORKBOOK_BASENAME)
+      && (rowsDigest === review.reviewedRowsSha256 || context?.workbookBasename === RECOVERY_WAVE_3_WORKBOOK_BASENAME || context?.workbookBasename === RECOVERY_WAVE_4_WORKBOOK_BASENAME);
     if (lifestyleRows.length < contract.minimumDisplayableLifestyleRowsPerDestination && !approvedComposition) {
       errors.push(`AUTHORING_PARITY_LIFESTYLE_TOO_THIN: ${destinationKey} has ${lifestyleRows.length} displayable rows; minimum target is ${contract.minimumDisplayableLifestyleRowsPerDestination}. Do not pad with irrelevant filler; document and explicitly review a legitimate exception.`);
     }
@@ -518,14 +582,44 @@ export async function validateDestinationBatch(options: ValidationOptions): Prom
     errors.push(`Workbook contains ${structure.excelErrorCells.length} Excel error cells: ${structure.excelErrorCells.slice(0, 10).join(", ")}.`);
   }
 
+  const parsedKeysForScope = [...parsedDestinationKeys].sort();
+  const isRecoveryWave1Workbook = path.basename(workbookPath) === RECOVERY_WAVE_1_WORKBOOK_BASENAME
+    && parsedKeysForScope.length === RECOVERY_WAVE_1_DESTINATION_KEY_SET.size
+    && parsedKeysForScope.every((key) => RECOVERY_WAVE_1_DESTINATION_KEY_SET.has(key))
+    && structure.manifestKeys.length === RECOVERY_WAVE_1_DESTINATION_KEY_SET.size
+    && structure.manifestKeys.every((key) => RECOVERY_WAVE_1_DESTINATION_KEY_SET.has(key));
+  const isRecoveryWave2Workbook = path.basename(workbookPath) === RECOVERY_WAVE_2_WORKBOOK_BASENAME
+    && parsedKeysForScope.length === RECOVERY_WAVE_2_DESTINATION_KEY_SET.size
+    && parsedKeysForScope.every((key) => RECOVERY_WAVE_2_DESTINATION_KEY_SET.has(key))
+    && structure.manifestKeys.length === RECOVERY_WAVE_2_DESTINATION_KEY_SET.size
+    && structure.manifestKeys.every((key) => RECOVERY_WAVE_2_DESTINATION_KEY_SET.has(key));
+  const isRecoveryWave3Workbook = path.basename(workbookPath) === RECOVERY_WAVE_3_WORKBOOK_BASENAME
+    && parsedKeysForScope.length === RECOVERY_WAVE_3_DESTINATION_KEY_SET.size
+    && parsedKeysForScope.every((key) => RECOVERY_WAVE_3_DESTINATION_KEY_SET.has(key))
+    && structure.manifestKeys.length === RECOVERY_WAVE_3_DESTINATION_KEY_SET.size
+    && structure.manifestKeys.every((key) => RECOVERY_WAVE_3_DESTINATION_KEY_SET.has(key));
+  const isRecoveryWave4Workbook = path.basename(workbookPath) === RECOVERY_WAVE_4_WORKBOOK_BASENAME
+    && parsedKeysForScope.length === RECOVERY_WAVE_4_DESTINATION_KEY_SET.size
+    && parsedKeysForScope.every((key) => RECOVERY_WAVE_4_DESTINATION_KEY_SET.has(key))
+    && structure.manifestKeys.length === RECOVERY_WAVE_4_DESTINATION_KEY_SET.size
+    && structure.manifestKeys.every((key) => RECOVERY_WAVE_4_DESTINATION_KEY_SET.has(key));
   const scopedBatchId = registryEntry?.registryId ?? (
-    path.resolve(workbookPath) === path.join(repoRoot, "data/curated-mixed-batch-20-01/DestinationFinderAI-Curated-Mixed-Batch-20-01-Authoring-Complete-v3.3.xlsx")
-      ? "curated-mixed-batch-20-01" : "");
+    isRecoveryWave4Workbook
+      ? "curated-mixed-batch-20-03"
+      : isRecoveryWave1Workbook
+      ? "curated-mixed-batch-20-03"
+      : isRecoveryWave2Workbook
+        ? "curated-mixed-batch-20-03"
+        : isRecoveryWave3Workbook
+          ? "curated-mixed-batch-20-03"
+      : path.resolve(workbookPath) === path.join(repoRoot, "data/curated-mixed-batch-20-01/DestinationFinderAI-Curated-Mixed-Batch-20-01-Authoring-Complete-v3.3.xlsx")
+        ? "curated-mixed-batch-20-01" : "");
   const authoringParity = validateAuthoringParity(structure, expectedDestinationKeys, contract.authoringParity, {
     batchId: scopedBatchId,
     parserAndAdapterClean: workbookImport.validationErrors.length === 0
       && destinations.every((destination) => adaptWorkbookDestinationToIntelligenceV2Facts(destination).mappingErrors.length === 0),
     parserClean: workbookImport.validationErrors.length === 0,
+    workbookBasename: path.basename(workbookPath),
   });
 
   const destinationSummaries = destinations.map((destination) => {

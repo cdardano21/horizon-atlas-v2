@@ -79,7 +79,7 @@ const URL_FIELDS = new Set(["url", "source_url", "image_url", "websiteUrl", "goo
 // timestamptz) compare equal without changing what is actually stored.
 const BOOLEAN_FIELDS = new Set(["verified"]);
 const YES_NO_BOOLEAN_FIELDS = new Set(["privateCareAvailable", "transitSummary", "nonstopUsService"]);
-const DECIMAL_FIELDS = new Set(["monthlyLow", "monthlyHigh", "avgHighTemp", "avgLowTemp", "precipitationMm", "humidityPct"]);
+const DECIMAL_FIELDS = new Set(["monthlyLow", "monthlyHigh", "avgHighTemp", "avgLowTemp", "precipitationMm", "humidityPct", "population", "metroPopulation", "elevation", "latitude", "longitude"]);
 const DATE_FIELDS = new Set(["verifiedAt", "verified_at"]);
 
 function normalizeStringValue(value: string): string | null {
@@ -195,6 +195,9 @@ function normalizeScalarValue(value: ComparableInput, policy: ComparableScalarPo
   }
 
   if (typeof value === "number") {
+    if (policy === "decimal") {
+      return normalizeDecimalValue(String(value));
+    }
     return normalizeNumberValue(value);
   }
 
@@ -238,6 +241,10 @@ function getFieldPolicy(fieldName: string): ComparableScalarPolicy {
     return "date";
   }
   return "ordinary";
+}
+
+export function projectComparableFieldValue(fieldName: string, value: unknown): ComparableValue {
+  return projectComparableValue(value, getFieldPolicy(fieldName));
 }
 
 export function projectComparableValue(value: ComparableInput | unknown, policy: ComparableScalarPolicy = "ordinary"): ComparableValue {
@@ -369,7 +376,9 @@ export function projectKeyedChildComparableRow(module: KeyedChildModuleKey, valu
         resourceKey: pickNullableString(record, ["resourceKey", "resource_key"]),
         category: pickNullableString(record, ["category", "resource_category"]),
         name: pickNullableString(record, ["name", "resource_name"]),
+        description: pickNullableString(record, ["description"]),
         url: pickNullableString(record, ["url"]),
+        official: pickNullableString(record, ["official"]),
       });
     case "media":
       return projectComparableObject({
@@ -469,7 +478,9 @@ function toCanonicalResource(value: DeterministicV31CanonicalDestination["resour
     resourceKey: value.resource_key,
     category: value.resource_category,
     name: value.resource_name,
+    description: value.description,
     url: value.url,
+    official: value.official,
   };
 }
 
@@ -807,6 +818,8 @@ export function projectStoredComparable(state: StoredDestinationState): Comparab
       population: state.identity.population ?? null,
       metroPopulation: state.identity.metroPopulation ?? null,
       elevation: state.identity.elevation ?? null,
+      latitude: state.identity.latitude ?? null,
+      longitude: state.identity.longitude ?? null,
     }),
     editorial: projectComparableObject(state.editorial),
     facts: projectKeyedChildArray(state.facts, KEYED_CHILD_MODULES.facts),
@@ -850,13 +863,19 @@ export function projectStoredComparable(state: StoredDestinationState): Comparab
 export function projectCanonicalComparable(state: DeterministicV31CanonicalDestination): ComparableProjection {
   const projection: ComparableObject = {
     identity: projectComparableObject({
-      ...state.identity,
+      destinationKey: state.identity.destinationKey,
+      slug: state.identity.slug,
+      name: state.identity.name,
+      city: state.identity.city ?? state.identity.name,
+      country: state.identity.country,
       beachAccess: state.destinationRow?.beach_access ?? null,
       mountainOrSkiAccess: state.destinationRow?.mountain_or_ski_access ?? null,
       countryCode: state.destinationRow?.country_code ?? null,
       population: state.identity.population ?? null,
       metroPopulation: state.identity.metroPopulation ?? null,
-      elevation: state.identity.elevation ?? null,
+      elevation: state.identity.elevationMeters ?? null,
+      latitude: state.identity.latitude ?? null,
+      longitude: state.identity.longitude ?? null,
     }),
     editorial: projectComparableObject(state.editorial),
     facts: projectKeyedChildArray(state.facts.map(toCanonicalFact), KEYED_CHILD_MODULES.facts),

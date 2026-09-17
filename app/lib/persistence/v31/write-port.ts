@@ -139,7 +139,7 @@ export const KEYED_CHILD_TABLE_CONFIG: Readonly<Record<KeyedChildModuleKey, Keye
   scores: { table: "premium_destination_scores", stableKeyColumn: "score_key", columns: { scoreValue: "score_value", scoreLabel: "score_name", verified: "verified", verifiedAt: "verified_at" }, conflictColumns: ["destination_id", "destination_key", "score_key"] },
   neighborhoods: { table: "premium_neighborhoods", stableKeyColumn: "neighborhood_key", columns: { name: "neighborhood_name", summary: "summary", areaType: "area_type", bestFor: "best_for", walkabilityRating: "walkability_rating", safetyRating: "safety_rating", transitRating: "transit_rating", housingCharacter: "housing_character", pros: "pros", cons: "cons", googleMapsUrl: "google_maps_url" }, requiredTextColumn: "neighborhood_name", conflictColumns: ["destination_id", "destination_key", "neighborhood_key"] },
   places: { table: "premium_places", stableKeyColumn: "place_key", columns: { category: "category_key", name: "place_name", description: "description", neighborhoodKey: "neighborhood_key", websiteUrl: "website_url", googleMapsUrl: "google_maps_url", sourceUrl: "source_url", address: "address", phone: "phone", displayOrder: "display_order" }, requiredTextColumn: "place_name", conflictColumns: ["destination_id", "destination_key", "place_key"] },
-  resources: { table: "premium_resources", stableKeyColumn: "resource_key", columns: { category: "resource_category", name: "resource_name", url: "url" }, requiredTextColumn: "resource_name", conflictColumns: ["destination_id", "destination_key", "resource_key"] },
+  resources: { table: "premium_resources", stableKeyColumn: "resource_key", columns: { category: "resource_category", name: "resource_name", description: "description", url: "url", official: "official" }, requiredTextColumn: "resource_name", conflictColumns: ["destination_id", "destination_key", "resource_key"] },
   media: { table: "premium_media", stableKeyColumn: "media_key", columns: { kind: "media_type", url: "url", caption: "caption", altText: "alt_text", isPrimary: "is_primary", sortOrder: "sort_order", verified: "verified", sourceName: "source_name", sourceUrl: "source_url" }, conflictColumns: ["destination_id", "destination_key", "media_key"] },
   propertyResources: { table: "premium_property_resources", stableKeyColumn: "record_key", columns: { category: "resource_type", name: "resource_name", url: "url" }, conflictColumns: ["destination_id", "destination_key", "record_key"] },
   moveChecklist: { table: "premium_move_checklist", stableKeyColumn: "checklist_key", columns: { summary: "summary", checklistNotes: "checklist_notes" }, conflictColumns: ["destination_id", "checklist_key"] },
@@ -159,7 +159,7 @@ const KEYED_CHILD_CANONICAL_FALLBACK_FIELD: Readonly<Record<KeyedChildModuleKey,
   scores: { verifiedAt: "verified_at" },
   neighborhoods: { name: "neighborhood_name", areaType: "area_type", bestFor: "best_for", walkabilityRating: "walkability_rating", safetyRating: "safety_rating", transitRating: "transit_rating", housingCharacter: "housing_character", pros: "pros", cons: "cons", googleMapsUrl: "google_maps_url" },
   places: { category: "category_key", name: "place_name", neighborhoodKey: "neighborhood_key", websiteUrl: "website_url", googleMapsUrl: "google_maps_url", sourceUrl: "source_url", displayOrder: "display_order" },
-  resources: { category: "resource_category", name: "resource_name" },
+  resources: { category: "resource_category", name: "resource_name", description: "description", official: "official" },
   media: { kind: "media_type", url: "image_url", altText: "subject", isPrimary: "primary_image", sortOrder: "gallery_order", sourceName: "source_name", sourceUrl: "source_url", licenseNotes: "license_notes" },
   propertyResources: { category: "resource_type", name: "resource_name" },
   moveChecklist: { summary: "task", checklistNotes: "description" },
@@ -237,7 +237,7 @@ export const REPLACE_MODULE_TABLE_CONFIG: Readonly<Record<ReplaceModuleExecution
 // transportation's public_transit_available) is preserved as null rather than guessing a
 // true/false meaning that was never part of the established contract - never invented, never
 // silently coerced to false.
-const REPLACE_MODULE_BOOLEAN_COLUMNS = new Set<string>(["private_care_available", "public_transit_available", "nonstop_us_service", "verified"]);
+const REPLACE_MODULE_BOOLEAN_COLUMNS = new Set<string>(["private_care_available", "public_transit_available", "nonstop_us_service", "verified", "official"]);
 
 // The workbook's actual XLSX boolean cells serialize as literal "1"/"0" text for several columns,
 // not just `verified` (confirmed directly against the frozen golden workbook - Lisbon's own
@@ -247,7 +247,7 @@ const REPLACE_MODULE_BOOLEAN_COLUMNS = new Set<string>(["private_care_available"
 // exactly the kind of silent-drop this hardening pass exists to close. "1"/"0" recognition is
 // therefore extended to every REPLACE_MODULE boolean column. Yes/no are also unambiguous boolean
 // literals; narrative text such as "Limited" remains unrecognized rather than inventing a value.
-const NUMERIC_BOOLEAN_COLUMNS = new Set<string>(["private_care_available", "public_transit_available", "nonstop_us_service", "verified"]);
+const NUMERIC_BOOLEAN_COLUMNS = new Set<string>(["private_care_available", "public_transit_available", "nonstop_us_service", "verified", "official"]);
 
 function coerceReplaceModuleColumnValue(dbColumn: string, value: unknown): unknown {
   if (!REPLACE_MODULE_BOOLEAN_COLUMNS.has(dbColumn)) {
@@ -460,21 +460,29 @@ function buildScalarStatementsForModule(
   operations: readonly ScalarOperation[],
 ): readonly SqlStatement[] {
   if (module === "identity") {
-    const columns: Readonly<Record<string, string>> = { population: "population", metroPopulation: "metro_population", elevation: "elevation" };
+    const columns: Readonly<Record<string, string>> = { population: "population", metroPopulation: "metro_population", elevation: "elevation", latitude: "latitude", longitude: "longitude" };
     const writableOps = operations.filter((op) => op.kind === "CREATE" || op.kind === "UPDATE" || op.kind === "CLEAR");
+    const nameOperation = writableOps.find((operation) => operation.fieldPath === "name");
+    const catalogOps = writableOps.filter((operation) => operation.fieldPath !== "name");
+    const statements: SqlStatement[] = [];
     const assignments: string[] = [];
     const values: unknown[] = [destinationId, destinationKey];
-    for (const operation of writableOps) {
+    for (const operation of catalogOps) {
       const column = columns[operation.fieldPath];
       if (!column) continue;
       values.push(operation.kind === "CLEAR" ? null : operation.incomingValue);
       assignments.push(`${column} = $${values.length}`);
     }
-    if (assignments.length === 0) return [];
-    return [{
-      text: `update public.destinations_catalog set ${assignments.join(", ")}, updated_at = now() where id = $1 and destination_key = $2`,
-      values,
-    }];
+    if (assignments.length > 0) {
+      statements.push({ text: `update public.destinations_catalog set ${assignments.join(", ")}, updated_at = now() where id = $1 and destination_key = $2`, values });
+    }
+    if (nameOperation) {
+      statements.push({
+        text: "update public.premium_destination_profiles set identity_name = $3, updated_at = now() where destination_id = $1 and destination_key = $2",
+        values: [destinationId, destinationKey, nameOperation.kind === "CLEAR" ? null : nameOperation.incomingValue],
+      });
+    }
+    return statements;
   }
   const config: SingletonTableConfig = module === "editorial" ? EDITORIAL_TABLE_CONFIG : SINGLETON_TABLE_CONFIG[module];
   const writableOps = operations.filter((op) => op.kind === "CREATE" || op.kind === "UPDATE" || op.kind === "CLEAR");

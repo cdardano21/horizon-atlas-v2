@@ -79,6 +79,8 @@ describe("createSupabasePersistedDestinationReadPort", () => {
         population: "98,857",
         metroPopulation: "2,655,342",
         elevation: "192 m",
+        latitude: null,
+        longitude: null,
       },
     });
   });
@@ -92,7 +94,7 @@ describe("createSupabasePersistedDestinationReadPort", () => {
 
     expect(client.selectCalls[0]).toEqual({
       table: "destinations_catalog",
-      select: "id,destination_key,slug,city,country,beach_access,mountain_or_ski_access,country_code,population,metro_population,elevation",
+      select: "id,destination_key,slug,city,country,beach_access,mountain_or_ski_access,country_code,population,metro_population,elevation,latitude,longitude",
       filters: [{ column: "id", operator: "eq", value: identity.destinationId }],
     });
   });
@@ -216,7 +218,7 @@ describe("createSupabasePersistedDestinationReadPort", () => {
       scores: [{ destinationId: "dest-id-a", destinationKey: "dest-a", scoreKey: "score-1", scoreValue: "5", scoreLabel: null, methodologyVersion: null, verified: null, verifiedAt: null }],
       neighborhoods: [{ destinationId: "dest-id-a", destinationKey: "dest-a", neighborhoodKey: "hood-1", name: "Old Town", summary: null, areaType: "urban", bestFor: "walkers", walkabilityRating: "high", safetyRating: "high", transitRating: "medium", housingCharacter: "historic", pros: "parks", cons: "traffic", googleMapsUrl: "https://maps.example.com/old-town" }],
       places: [{ destinationId: "dest-id-a", destinationKey: "dest-a", placeKey: "place-1", category: "food", name: "Market", description: "Nice market", neighborhoodKey: "hood-1", websiteUrl: "https://example.com/market", googleMapsUrl: "https://maps.example.com/market", sourceUrl: "https://example.com/source-market", address: "123 Main St", phone: "+1 555-1234", displayOrder: "1" }],
-      resources: [{ destinationId: "dest-id-a", destinationKey: "dest-a", resourceKey: "resource-1", category: "gov", name: "Visa office", url: "https://example.com" }],
+      resources: [{ destinationId: "dest-id-a", destinationKey: "dest-a", resourceKey: "resource-1", category: "gov", name: "Visa office", description: null, url: "https://example.com", official: true }],
       media: [{ destinationId: "dest-id-a", destinationKey: "dest-a", mediaKey: "media-1", kind: "image", url: "https://cdn.example.com/a.jpg", caption: "View", altText: "A", isPrimary: "true", sortOrder: "1", verified: "false", sourceName: "Commons", sourceUrl: "https://example.com/source-image", licenseNotes: "CC BY 4.0" }],
       propertyResources: [{ destinationId: "dest-id-a", destinationKey: "dest-a", itemKey: "property-1", category: "real-estate", name: "Broker", url: "https://example.com/broker" }],
       moveChecklist: [{ destinationId: "dest-id-a", destinationKey: "dest-a", checklistKey: "check-1", summary: "Ship everything", checklistNotes: "Pack carefully" }],
@@ -477,4 +479,3 @@ describe("createSupabasePersistedDestinationReadPort", () => {
     }
   });
 });
-
