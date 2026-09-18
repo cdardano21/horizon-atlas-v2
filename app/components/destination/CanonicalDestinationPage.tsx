@@ -1881,7 +1881,13 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
       cards.push({ title: "Climate (monthly)", lines: modules.climateMonthly.map((item) => {
         const month = Number(item.monthKey);
         const label = Number.isInteger(month) ? monthNames[month - 1] ?? item.monthKey : item.monthKey;
-        return `${label}: ${item.avgLowTemp ?? "?"}–${item.avgHighTemp ?? "?"}°`;
+          const displayTemperature = (value: string | null) => {
+          if (value === null || value.trim() === "") return value ?? "?";
+          const celsius = Number(value);
+          const fahrenheit = (celsius * 9) / 5 + 32;
+          return Number.isFinite(fahrenheit) ? (Number.isInteger(fahrenheit) ? String(fahrenheit) : fahrenheit.toFixed(1)) : value;
+        };
+        return `${label}: ${displayTemperature(item.avgLowTemp)}–${displayTemperature(item.avgHighTemp)}°F`;
       }) });
     }
     if (modules.housing.length > 0) {

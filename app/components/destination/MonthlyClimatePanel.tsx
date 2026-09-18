@@ -20,7 +20,9 @@ function average(values: Array<number | null>) {
 }
 
 export default function MonthlyClimatePanel({ rows }: { rows: MonthlyClimateRow[] }) {
-  const [tempUnit, setTempUnit] = useState<"C" | "F">("C");
+  // Store and receive Celsius values; present the default view in Fahrenheit for the
+  // customer-facing U.S. audience. The unit toggle still allows Celsius comparison.
+  const [tempUnit, setTempUnit] = useState<"C" | "F">("F");
   const [rainUnit, setRainUnit] = useState<"mm" | "in">("mm");
 
   const normalized = useMemo(() => {

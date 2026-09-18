@@ -1067,8 +1067,11 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     const rows = within(card).getAllByRole("listitem");
     expect(rows).toHaveLength(12);
     ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].forEach((month, index) => {
-      expect(rows[index]).toHaveTextContent(`${month}: ${index - 5}–${index + 10}°`);
-      expect(within(card).getAllByText(`${month}: ${index - 5}–${index + 10}°`)).toHaveLength(1);
+      const lowF = (index - 5) * 9 / 5 + 32;
+      const highF = (index + 10) * 9 / 5 + 32;
+      const format = (value: number) => Number.isInteger(value) ? String(value) : value.toFixed(1);
+      expect(rows[index]).toHaveTextContent(`${month}: ${format(lowF)}–${format(highF)}°F`);
+      expect(within(card).getAllByText(`${month}: ${format(lowF)}–${format(highF)}°F`)).toHaveLength(1);
       expect(rows[index]).toBeVisible();
     });
   });

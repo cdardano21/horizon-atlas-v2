@@ -805,7 +805,8 @@ export const buildCanonicalDestinationFromPersistedBundle = (
     const overallLow = Math.min(...lows);
     const overallHigh = Math.max(...highs);
     const round1 = (value: number) => Math.round(value * 10) / 10;
-    return `Monthly averages range from ${round1(overallLow)}\u00b0C to ${round1(overallHigh)}\u00b0C across the year`;
+    const toFahrenheit = (value: number) => (value * 9) / 5 + 32;
+    return `Monthly averages range from ${round1(toFahrenheit(overallLow))}\u00b0F to ${round1(toFahrenheit(overallHigh))}\u00b0F across the year`;
   };
   const v31AverageTemperatures = formatAverageTemperatures();
   const v31KnowledgeProfileOverrides = {
