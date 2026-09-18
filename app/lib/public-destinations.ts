@@ -5,6 +5,7 @@ import { isSupabaseConfigured, supabaseFetch } from "./supabase";
 
 type DestinationCatalogRow = {
   id: string;
+  destination_key?: string | null;
   slug: string;
   city: string;
   country: string;
@@ -15,6 +16,17 @@ type DestinationCatalogRow = {
   lifestyle_summary: string | null;
   transportation_summary: string | null;
   metadata?: Record<string, unknown> | null;
+};
+
+type DestinationMediaRow = {
+  destination_id: string;
+  destination_key: string | null;
+  media_key: string;
+  url: string | null;
+  caption: string | null;
+  alt_text: string | null;
+  sort_order?: number | null;
+  is_primary?: boolean | null;
 };
 
 const EXCLUDED_TAGS = new Set([
@@ -93,7 +105,7 @@ const buildFallbackCatalogDestination = (destination: {
   metadata: null,
 });
 
-const buildCatalogDestination = (row: DestinationCatalogRow, fallback?: Destination): Destination => ({
+const buildCatalogDestination = (row: DestinationCatalogRow, fallback?: Destination, media: DestinationMediaRow[] = []): Destination => ({
   slug: row.slug || fallback?.slug || "",
   city: row.city || fallback?.city || "",
   country: row.country || fallback?.country || "",
@@ -104,7 +116,18 @@ const buildCatalogDestination = (row: DestinationCatalogRow, fallback?: Destinat
   climate: row.climate_summary || fallback?.climate || "",
   lifestyle: row.lifestyle_summary || fallback?.lifestyle || "",
   transportation: row.transportation_summary || fallback?.transportation || "",
-  images: fallback?.images ?? [],
+  images: fallback?.images?.length
+    ? fallback.images
+    : media
+      .filter((item) => Boolean(item.url?.trim()))
+      .sort((left, right) => Number(right.is_primary) - Number(left.is_primary)
+        || (left.sort_order ?? 0) - (right.sort_order ?? 0)
+        || left.media_key.localeCompare(right.media_key))
+      .map((item) => ({
+        src: item.url!.trim(),
+        alt: item.alt_text?.trim() || row.city || fallback?.city || "Destination view",
+        caption: item.caption?.trim() || row.city || fallback?.city || "Destination",
+      })),
   tags: fallback?.tags ?? [],
   title: fallback?.title,
   subtitle: fallback?.subtitle,
@@ -124,8 +147,23 @@ const buildCatalogDestination = (row: DestinationCatalogRow, fallback?: Destinat
 export const buildPublicDestinationCatalogList = (
   catalogRows: DestinationCatalogRow[],
   localDestinations: Destination[] = enrichedDestinations,
+  mediaRows: DestinationMediaRow[] = [],
 ): Destination[] => {
   const mergedBySlug = new Map<string, Destination>();
+  const mediaByDestinationId = new Map<string, DestinationMediaRow[]>();
+  const mediaByDestinationKey = new Map<string, DestinationMediaRow[]>();
+
+  for (const media of mediaRows) {
+    const byId = mediaByDestinationId.get(media.destination_id) ?? [];
+    byId.push(media);
+    mediaByDestinationId.set(media.destination_id, byId);
+
+    if (media.destination_key) {
+      const byKey = mediaByDestinationKey.get(media.destination_key) ?? [];
+      byKey.push(media);
+      mediaByDestinationKey.set(media.destination_key, byKey);
+    }
+  }
 
   for (const destination of localDestinations) {
     if (!destination.slug) continue;
@@ -145,7 +183,10 @@ export const buildPublicDestinationCatalogList = (
     rowsWithSlug += 1;
 
     const baseDestination = mergedBySlug.get(row.slug);
-    mergedBySlug.set(row.slug, buildCatalogDestination(row, baseDestination));
+    const persistedMedia = mediaByDestinationId.get(row.id)
+      ?? (row.destination_key ? mediaByDestinationKey.get(row.destination_key) : undefined)
+      ?? [];
+    mergedBySlug.set(row.slug, buildCatalogDestination(row, baseDestination, persistedMedia));
   }
 
   debugPublicCatalog("after published/slug filters", { publishedRows, rowsWithSlug });
@@ -198,7 +239,7 @@ const fetchAllPublishedCatalogRows = async (): Promise<CatalogFetchResult> => {
   for (let page = 0; page < MAX_CATALOG_PAGES; page += 1) {
     const cursorClause = cursor ? `&id=gt.${encodeURIComponent(cursor)}` : "";
     const response = await supabaseFetch(
-      `/rest/v1/destinations_catalog?select=id,slug,city,country,status,description,overview,climate_summary,lifestyle_summary,transportation_summary,metadata&order=id.asc&limit=${PUBLIC_CATALOG_PAGE_SIZE}${cursorClause}`,
+      `/rest/v1/destinations_catalog?select=id,destination_key,slug,city,country,status,description,overview,climate_summary,lifestyle_summary,transportation_summary,metadata&order=id.asc&limit=${PUBLIC_CATALOG_PAGE_SIZE}${cursorClause}`,
       { cache: "no-store" },
     );
 
@@ -230,6 +271,20 @@ const fetchAllPublishedCatalogRows = async (): Promise<CatalogFetchResult> => {
 
   debugPublicCatalog("supabase pagination hit MAX_CATALOG_PAGES guard", { rows: rows.length });
   return { ok: true, rows };
+};
+
+const fetchCatalogMediaRows = async (): Promise<DestinationMediaRow[]> => {
+  const response = await supabaseFetch(
+    "/rest/v1/premium_media?select=destination_id,destination_key,media_key,url,caption,alt_text,sort_order,is_primary&order=destination_id.asc,sort_order.asc,media_key.asc&limit=10000",
+    { cache: "no-store" },
+  );
+
+  if (!response.ok) {
+    debugPublicCatalog("premium media response not ok; preserving existing image sources", { status: response.status });
+    return [];
+  }
+
+  return (await response.json()) as DestinationMediaRow[];
 };
 
 export async function getPublicDestinations(): Promise<Destination[]> {
@@ -272,12 +327,13 @@ export async function getPublicDestinations(): Promise<Destination[]> {
       ...rows.filter((row) => normalizeCatalogRowStatus(row.status) === "published"),
       ...fallbackDestinations,
     ];
+    const mediaRows = publishedRows.length > 0 ? await fetchCatalogMediaRows() : [];
     debugPublicCatalog("supabase rows returned", {
       count: rows.length,
       publishedCount: publishedRows.length,
       slugs: publishedRows.slice(0, 8).map((row) => row.slug),
     });
-    const mergedDestinations = buildPublicDestinationCatalogList(publishedRows, localDestinations);
+    const mergedDestinations = buildPublicDestinationCatalogList(publishedRows, localDestinations, mediaRows);
     logLoadedCatalogSummary(mergedDestinations, "supabase-merged");
     return mergedDestinations;
   } catch (error) {

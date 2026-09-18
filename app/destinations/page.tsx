@@ -3,6 +3,7 @@ import DestinationSearch from "../components/DestinationSearch";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { getExploreDestinations } from "../lib/explore-destinations";
+import { getMatchingExperience } from "../lib/smart-shortlist/feature-flag";
 
 type DestinationsPageProps = {
   searchParams: Promise<{ q?: string; tag?: string | string[] }>;
@@ -12,10 +13,11 @@ export default async function DestinationsPage({ searchParams }: DestinationsPag
   const params = await searchParams;
   const exploreDestinations = await getExploreDestinations();
   const featuredCountries = Array.from(new Set(exploreDestinations.map((destination) => destination.country))).slice(0, 5);
+  const matching = getMatchingExperience();
 
   return (
     <main className="atlas-shell min-h-screen bg-[linear-gradient(180deg,#03142a_0%,#061d37_52%,#04152b_100%)] text-[#edf2fb]">
-      <Navbar />
+      <Navbar matchingHref={matching.href} matchingLabel={matching.label} />
 
       <section className="relative isolate min-h-[610px] overflow-hidden border-b border-[#e4b85230] pt-[72px] sm:min-h-[650px]">
         <Image
@@ -63,7 +65,7 @@ export default async function DestinationsPage({ searchParams }: DestinationsPag
         initialQuery={params.q ?? ""}
         initialTags={Array.isArray(params.tag) ? params.tag : params.tag ? [params.tag] : []}
       />
-      <Footer />
+      <Footer matchingHref={matching.href} matchingLabel={matching.label} />
     </main>
   );
 }

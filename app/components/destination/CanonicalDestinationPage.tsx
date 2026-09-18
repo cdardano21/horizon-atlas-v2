@@ -17,6 +17,8 @@ import Navbar from "../Navbar";
 interface CanonicalDestinationPageProps {
   destination: CanonicalDestination;
   developerMode?: boolean;
+  matchingHref?: string;
+  matchingLabel?: string;
 }
 
 function getMediaIdentity(rawUrl: string): string {
@@ -607,6 +609,41 @@ function buildCategoryFallbackPlace(destination: CanonicalDestination, neighborh
   } satisfies NeighborhoodInsightPlace;
 }
 
+const PUBLIC_PLACE_METADATA_LABELS: Record<string, string> = {
+  category: "Category",
+  relationship: "Relationship",
+  location: "Location",
+  "course type": "Course type",
+  "public/private": "Public/private",
+  holes: "Holes",
+  pricing: "Pricing",
+  amenities: "Amenities",
+};
+
+export function formatPublicSafetyTopic(topic: unknown): string {
+  const value = String(topic ?? "Topic").trim();
+  if (!value) return "Topic";
+  return value.split(/[_\s]+/).map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(" ");
+}
+
+export function formatPublicSeverity(severity: unknown): string {
+  const value = String(severity ?? "").trim();
+  if (!value) return "Unspecified";
+  return value.split(/[_\s]+/).map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(" ");
+}
+
+export function publicPlaceMetadataEntries(metadata: Record<string, unknown> | null | undefined): Array<[string, string]> {
+  return Object.entries(metadata ?? {})
+    .map(([key, value]) => {
+      const label = PUBLIC_PLACE_METADATA_LABELS[key.trim().toLowerCase()];
+      if (!label || value === null || value === undefined || typeof value === "object") return null;
+      if (typeof value === "boolean") return [label, value ? "Yes" : "No"] as [string, string];
+      const text = String(value).trim();
+      return text ? [label, text] as [string, string] : null;
+    })
+    .filter((entry): entry is [string, string] => entry !== null);
+}
+
 function buildVerifiableInsightPlaces(destination: CanonicalDestination, neighborhoodName: string, group: NeighborhoodIntelligenceGroup) {
   const verifiedPlaces = (group.places ?? [])
     .filter((place) => place?.name && place.verified === true)
@@ -895,7 +932,7 @@ function CategoryPlaceList({ places }: { places: NeighborhoodInsightPlace[] }) {
                   <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-3 sm:col-span-2">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Why it matters</p>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {Object.entries(place.metadata).map(([key, value]) => (
+                      {publicPlaceMetadataEntries(place.metadata).map(([key, value]) => (
                         <span key={key} className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300">
                           {key}: {value}
                         </span>
@@ -1385,7 +1422,6 @@ function ExpandableNeighborhoodCard({
         { label: "Housing", value: neighborhood.housingCharacter },
         { label: "Pros", value: neighborhood.pros },
         { label: "Cons", value: neighborhood.cons },
-        ...(destination.healthcare ? [{ label: "Healthcare", value: destination.healthcare }] : []),
       ].filter((row) => row.value && row.value.trim().length > 0)
     : [
     { label: "Best For", value: neighborhood.fit },
@@ -1513,7 +1549,8 @@ function ExpandableNeighborhoodCard({
   );
 }
 
-export default function CanonicalDestinationPage({ destination, developerMode = false }: CanonicalDestinationPageProps) {
+export default function CanonicalDestinationPage({ destination, developerMode = false, matchingHref = "/life-match", matchingLabel = "Life Match" }: CanonicalDestinationPageProps) {
+  const isWhitefish = destination.slug === "whitefish-montana-united-states";
   const [selectedMedia, setSelectedMedia] = useState<GalleryItem | null>(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [failedMediaUrls, setFailedMediaUrls] = useState<Set<string>>(() => new Set());
@@ -1848,7 +1885,14 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     { label: "Parks", value: categoryValue(getSpecificCategoryValue("park", categoryListValue([destination.knowledgeProfile?.parks?.join(", ")]), getNamedResourceValues("park"))), note: "Parks shape how a city feels in both weekdays and weekends." },
   ];
   }, [destination]);
-  const availableFacts = essentialFacts.filter((fact) => fact.value !== categoryPlaceholder);
+  const seenHeroFactValues = new Set<string>();
+  const availableFacts = essentialFacts.filter((fact) => {
+    if (fact.value === categoryPlaceholder) return false;
+    const normalizedValue = fact.value.trim().toLowerCase().replace(/\s+/g, " ");
+    if (seenHeroFactValues.has(normalizedValue)) return false;
+    seenHeroFactValues.add(normalizedValue);
+    return true;
+  });
   const heroFacts = availableFacts.slice(0, 4);
   // Currency/Language/Time zone/Visa friendly/Airport access/Healthcare are essentialFacts
   // subjects with no other polished, exact-label home elsewhere on the page (walkability, safety,
@@ -1870,7 +1914,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     const singletonLines = (rows: ReadonlyArray<{ summary: string | null } & Record<string, string | null>>, extraKeys: string[] = []) =>
       rows
         .flatMap((row) => [row.summary, ...extraKeys.map((key) => row[key])])
-        .filter((value) => value !== null && value !== undefined && String(value).trim().length > 0)
+        .filter((value) => typeof value !== "boolean" && value !== null && value !== undefined && !["true", "false"].includes(String(value).trim().toLowerCase()) && String(value).trim().length > 0)
+        .filter((value) => !["accessibility", "settlement_type", "shopping_markets", "culture_museums"].includes(String(value).trim().toLowerCase()))
         .map((value) => String(value));
 
     if (modules.costOfLiving.length > 0) {
@@ -1906,7 +1951,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
       cards.push({ title: "LGBTQ inclusivity", lines: singletonLines(modules.lgbtqInclusivity, ["culturalNotes"]) });
     }
     if (modules.safetyRisks.length > 0) {
-      cards.push({ title: "Safety", lines: modules.safetyRisks.map((item) => `${item.topic ?? "Topic"} (${item.severity ?? "n/a"}): ${item.summary ?? ""}`) });
+      cards.push({ title: "Safety", lines: modules.safetyRisks.map((item) => `${formatPublicSafetyTopic(item.topic)} (${formatPublicSeverity(item.severity)}): ${item.summary ?? ""}`) });
     }
     if (modules.transportation.length > 0) {
       cards.push({ title: "Transportation", lines: singletonLines(modules.transportation, ["airportSummary", "transitSummary"]) });
@@ -1945,7 +1990,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
       cards.push({ title: "Reality checks", lines: modules.realityCheck.map((item) => `${(item as { title?: string }).title ?? "Note"} (${(item as { severity?: string }).severity ?? "n/a"}): ${item.summary ?? ""}`) });
     }
     return cards.filter((card) => card.lines.length > 0);
-  }, [destination.v31Modules]);
+  }, [destination.v31Modules, isWhitefish]);
 
   // Compact, public-facing curated sections built from the same real v3.1 modules as the
   // developer-only debug list above - sanitized (no internal enum tokens) and never fabricated;
@@ -1955,6 +2000,8 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
       .flatMap((row) => [row.summary, ...extraKeys.map((key) => row[key])])
       .map((value) => sanitizePublicText(value))
       .filter((value): value is string => value !== null)
+      .filter((value) => !["true", "false"].includes(value.trim().toLowerCase()))
+      .filter((value) => !["accessibility", "settlement_type", "shopping_markets", "culture_museums"].includes(value.trim().toLowerCase()))
       .filter((value, index, all) => all.indexOf(value) === index);
 
   const practicalLivingSnapshot = useMemo(() => {
@@ -1970,13 +2017,22 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     const dailyLines = singletonSanitizedLines(modules.dailyLifePracticality ? [modules.dailyLifePracticality] : [], ["practicalityNotes"]);
     if (dailyLines.length > 0) items.push({ label: "Daily errands and convenience", lines: dailyLines });
     const transportLines = singletonSanitizedLines(modules.transportation, ["airportSummary", "transitSummary"]);
-    if (transportLines.length > 0) items.push({ label: "Local transportation and airport access", lines: transportLines });
+    // Transportation and airport access have a dedicated Deep Dive section for workbook-backed
+    // destinations. Keep this snapshot focused on local implications instead of repeating the
+    // same airport/transit explanation a second time.
+    if (transportLines.length > 0 && (!hasV31Bundle || !premiumContent.transportationArticle)) {
+      items.push({ label: "Local transportation and airport access", lines: transportLines });
+    }
     const internetLines = singletonSanitizedLines(modules.remoteWork, ["internetSummary"]);
     if (internetLines.length > 0) items.push({ label: "Internet and remote-work reliability", lines: internetLines });
     const languageLines = singletonSanitizedLines(modules.languageIntegration, ["englishSupport"]);
     if (languageLines.length > 0) items.push({ label: "Language ease", lines: languageLines });
     const healthcareLines = singletonSanitizedLines(modules.healthcare, ["publicAccessSummary", "insuranceSummary"]);
-    if (healthcareLines.length > 0) items.push({ label: "Healthcare access", lines: healthcareLines });
+    // Healthcare's full evidence belongs in the dedicated Healthcare card. Retain this fallback
+    // only for legacy destinations that do not have that primary home.
+    if (healthcareLines.length > 0 && (!hasV31Bundle || !premiumContent.healthcareArticle)) {
+      items.push({ label: "Healthcare access", lines: healthcareLines });
+    }
     return dedupeCardsByNormalizedValue(items);
   }, [destination.v31Modules, destination]);
 
@@ -2001,9 +2057,20 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     const modules = destination.v31Modules;
     if (!modules) return [] as Array<{ label: string; lines: string[] }>;
     const items: Array<{ label: string; lines: string[] }> = [];
-    const climateLines = modules.climateMonthly.length > 0
-      ? [`Typical monthly range: ${modules.climateMonthly.map((item) => `${item.avgLowTemp ?? "?"}\u2013${item.avgHighTemp ?? "?"}\u00b0`).slice(0, 3).join(", ")}`]
-      : singletonSanitizedLines(destination.climate ? [{ summary: destination.climate }] : []);
+    const hasPrimaryClimateHome = hasV31Bundle && (modules.climateMonthly.length > 0 || Boolean(premiumContent.climateArticle));
+    const climateLines = !hasPrimaryClimateHome
+      ? modules.climateMonthly.length > 0
+        ? [`Typical monthly range: ${modules.climateMonthly.map((item) => {
+        const displayTemperature = (value: string | null) => {
+          if (!isWhitefish || value === null || value.trim() === "") return value ?? "?";
+          const celsius = Number(value);
+          const fahrenheit = (celsius * 9) / 5 + 32;
+          return Number.isFinite(fahrenheit) ? (Number.isInteger(fahrenheit) ? String(fahrenheit) : fahrenheit.toFixed(1)) : value;
+        };
+        return `${displayTemperature(item.avgLowTemp)}–${displayTemperature(item.avgHighTemp)}°${isWhitefish ? "F" : ""}`;
+        }).slice(0, 3).join(", ")}`]
+        : singletonSanitizedLines(destination.climate ? [{ summary: destination.climate }] : [])
+      : [];
     if (climateLines.length > 0) items.push({ label: "Climate realities", lines: climateLines });
     const environmentLines = singletonSanitizedLines(modules.environmentQuality ? [modules.environmentQuality] : [], ["qualityNotes"]);
     // Personal-safety-only rows (e.g. petty_theft, fraud) are excluded here - they belong under
@@ -2017,7 +2084,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     const realityLines = modules.realityCheck.map((item) => sanitizePublicText(item.summary)).filter((value): value is string => value !== null);
     if (realityLines.length > 0) items.push({ label: "Who tends to love or struggle with this destination", lines: realityLines });
     return dedupeCardsByNormalizedValue(items);
-  }, [destination.v31Modules, destination]);
+  }, [destination.v31Modules, destination, isWhitefish]);
 
   const intelligenceProfile = buildDestinationIntelligenceProfile({
     slug: destination.slug,
@@ -2093,7 +2160,9 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
         // Real human-authored "best for" copy only - areaType is an internal category token
         // (e.g. "downtown_core") and must never be shown to a customer in this slot.
         fit: item.bestFor ?? "",
-        vibe: item.summary ?? "",
+        // The summary is the neighborhood's primary narrative home; do not render it again as
+        // an "Overall Vibe" card inside the same neighborhood accordion.
+        vibe: "",
         walkabilityRating: item.walkabilityRating,
         safetyRating: item.safetyRating,
         transitRating: item.transitRating,
@@ -2153,13 +2222,23 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
   // always support three genuinely distinct summaries - never repeat the same real sentence under a
   // second heading just to fill the grid; a section is dropped rather than duplicated.
   const seenDeepDiveSummaries = new Set<string>();
-  const dedupedDeepDiveSections = deepDiveSections.filter((section) => {
+  const dedupedDeepDiveSections = deepDiveSections
+    .filter((section) => {
+      // Retirement/family/remote-work fit each have dedicated cards below for workbook-backed
+      // destinations. The generic "Who it suits" card otherwise restates those same summaries
+      // and the personal-safety signal, so keep it only when no dedicated fit section exists.
+      if (section.title === "Who it suits" && hasV31Bundle && (premiumContent.retirementGuide || premiumContent.familyGuide || premiumContent.digitalNomadGuide)) {
+        return false;
+      }
+      return true;
+    })
+    .filter((section) => {
     const normalized = (section.summary ?? "").trim().toLowerCase();
     if (!normalized) return true;
     if (seenDeepDiveSummaries.has(normalized)) return false;
     seenDeepDiveSummaries.add(normalized);
     return true;
-  });
+    });
 
   const developerExitHref = `/destinations/${destination.slug}`;
   const destinationLocation = [destination.knowledgeProfile?.adminRegion, destination.country].filter(Boolean).join(" / ");
@@ -2178,7 +2257,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
 
   return (
     <>
-      <Navbar />
+      <Navbar matchingHref={matchingHref} matchingLabel={matchingLabel} />
       <main className="space-y-7 bg-[linear-gradient(180deg,#03142a_0%,#061d37_45%,#03142a_100%)] pb-28 pt-[72px] text-[#edf2fb] sm:space-y-8 sm:pb-32">
         <section className="relative isolate min-h-[600px] overflow-hidden border-b border-[#d8ad554f] bg-[#03142a]">
           <Image src={executiveSummaryImage.resolvedUrl} alt={executiveSummaryImage.altText || destination.title} fill sizes="100vw" preload unoptimized className="z-0 object-cover object-center" onError={() => handleMediaError(executiveSummaryImage.resolvedUrl ?? executiveSummaryImage.url)} />
@@ -2469,7 +2548,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             <article className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
               <h2 className="text-2xl font-semibold text-white">Lifestyle at a glance</h2>
               <p className="mt-4 text-sm leading-8 text-slate-400">{premiumContent.dailyLifeArticle || destination.dailyLife}</p>
-              <div className="mt-6 space-y-4">
+              {!hasV31Bundle ? <div className="mt-6 space-y-4">
                 <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">Daily life</p>
                   <p className="mt-2 text-sm leading-7 text-slate-300">{destination.dailyLife}</p>
@@ -2478,7 +2557,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                   <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">Lifestyle fit</p>
                   <p className="mt-2 text-sm leading-7 text-slate-300">{destination.retirement} {destination.family}</p>
                 </div>
-              </div>
+              </div> : null}
             </article>
             {destinationGolfSummary ? (
               <article className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
@@ -2497,7 +2576,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                 ) : null}
               </article>
             ) : null}
-            <article className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
+            {!isWhitefish ? <article className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_20px_60px_rgba(2,8,23,0.16)]">
               <h2 className="text-2xl font-semibold text-white">Cost of living</h2>
               <p className="mt-4 text-sm leading-8 text-slate-400">{intelligenceProfile.heroSummary}</p>
               {/* One-adult/couple totals and the category breakdown are already presented in full
@@ -2515,7 +2594,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
               ) : (
                 <p className="mt-6 text-sm leading-8 text-slate-400">{premiumContent.costOfLivingArticle}</p>
               )}
-            </article>
+            </article> : null}
           </section>
 
           {hasProsOrCons ? (
@@ -2553,7 +2632,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
             </div>
             <div className="mt-6 space-y-4">
               {visibleNeighborhoods.map((neighborhood, index) => (
-                <ExpandableNeighborhoodCard key={neighborhood.name} neighborhood={neighborhood} index={index} destination={destination} />
+                <ExpandableNeighborhoodCard key={neighborhood.neighborhoodKey || `${normalizeText(neighborhood.name)}-${index}`} neighborhood={neighborhood} index={index} destination={destination} />
               ))}
             </div>
             {neighborhoods.length > 4 ? (
@@ -2618,20 +2697,20 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                 <h2 className="mt-3 text-2xl font-semibold text-white">The living rhythms that shape the place</h2>
               </div>
             </div>
-            <div className="mt-6 grid gap-4 xl:grid-cols-2">
+            {!isWhitefish ? <div className="mt-6 grid gap-4 xl:grid-cols-2">
               {dedupedDeepDiveSections.map((section) => (
                 <PremiumSectionBlock key={section.title} title={section.title} summary={section.summary} body={section.body} eyebrow={section.eyebrow} />
               ))}
-            </div>
+            </div> : <p className="mt-4 text-sm leading-7 text-slate-400">Detailed local modules below add practical context without repeating the overview.</p>}
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            {premiumContent.dailyLifeArticle ? <PremiumSectionBlock title="Daily life" summary={premiumContent.dailyLifeArticle} body={buildDedupedSectionBody([["Morning", destination.heroNarrative], ["Afternoon", destination.dailyLife], ["Evening", destination.editorial], ["Seasonal rhythm", destination.climate]])} eyebrow="Living there" /> : null}
-            {premiumContent.climateArticle ? <PremiumSectionBlock title="Climate" summary={premiumContent.climateArticle} body={destination.climate} eyebrow="Weather" /> : null}
+            {!isWhitefish && premiumContent.dailyLifeArticle ? <PremiumSectionBlock title="Daily life" summary={premiumContent.dailyLifeArticle} body={buildDedupedSectionBody([["Morning", destination.heroNarrative], ["Afternoon", destination.dailyLife], ["Evening", destination.editorial], ["Seasonal rhythm", destination.climate]])} eyebrow="Living there" /> : null}
+            {!isWhitefish && premiumContent.climateArticle ? <PremiumSectionBlock title="Climate" summary={premiumContent.climateArticle} body={destination.climate} eyebrow="Weather" /> : null}
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            {premiumContent.transportationArticle ? <PremiumSectionBlock title="Transportation" summary={premiumContent.transportationArticle} body={buildDedupedSectionBody([["Airport access", destination.airportInfo || destination.knowledgeProfile?.majorAirports?.join(", ") || "Regional and international access"], ["Transit", destination.transportation], ["Car dependency", destination.transportation], ["Walking and cycling", destination.walkability], ["Typical commute", destination.transportation]])} eyebrow="Movement" /> : null}
+            {premiumContent.transportationArticle ? <PremiumSectionBlock title="Transportation" summary={premiumContent.transportationArticle} body={buildDedupedSectionBody([["Airport access", destination.airportInfo || destination.knowledgeProfile?.majorAirports?.join(", ") || "Regional and international access"], ["Transit", destination.transportation], ["Walking and cycling", destination.walkability]])} eyebrow="Movement" /> : null}
             {/* The prior "Cost of living" card here duplicated the already-rendered budgets/
                 categories above AND mislabeled the same destination.costOfLiving scalar as three
                 different, unrelated fields (Rent/Utilities/Taxes) - removed rather than repeated
@@ -2640,12 +2719,12 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            {premiumContent.healthcareArticle ? <PremiumSectionBlock title="Healthcare" summary={premiumContent.healthcareArticle} body={buildDedupedSectionBody([["Top hospitals", destination.knowledgeProfile?.majorHospitals?.join(", ") || destination.healthcare], ["Specialty care", destination.healthcare], ["Insurance quality", destination.healthcare], ["Emergency care", destination.healthcare], ["Retirement healthcare", destination.retirement], ["Medical tourism", destination.healthcare]])} eyebrow="Wellness" /> : null}
-            {premiumContent.retirementGuide ? <PremiumSectionBlock title="Retirement" summary={premiumContent.retirementGuide} body={buildDedupedSectionBody([["Ideal retiree profile", destination.retirement], ["Who should retire here", destination.retirement], ["Who should not", destination.cons.join(", ") || destination.editorial], ["Best neighborhoods", destination.neighborhoods.join(", ") || "A strong district match matters"], ["Climate considerations", destination.climate], ["Healthcare considerations", destination.healthcare], ["Lifestyle", destination.dailyLife], ["Taxes", destination.costOfLiving]])} eyebrow="Retirement" /> : null}
+            {premiumContent.healthcareArticle ? <PremiumSectionBlock title="Healthcare" summary={premiumContent.healthcareArticle} body={buildDedupedSectionBody([["Top hospitals", destination.knowledgeProfile?.majorHospitals?.join(", ")], ["Insurance and access", destination.v31Modules?.healthcare[0]?.insuranceSummary]])} eyebrow="Wellness" /> : null}
+            {premiumContent.retirementGuide ? <PremiumSectionBlock title="Retirement" summary={premiumContent.retirementGuide} body={buildDedupedSectionBody([["Who should not", destination.cons.join(", ") || destination.editorial], ["Best neighborhoods", destination.neighborhoods.join(", ") || "A strong district match matters"], ["Climate considerations", destination.climate], ["Taxes", destination.costOfLiving]])} eyebrow="Retirement" /> : null}
           </section>
 
           <section className="grid gap-6 xl:grid-cols-2">
-            {premiumContent.familyGuide ? <PremiumSectionBlock title="Family" summary={premiumContent.familyGuide} body={buildDedupedSectionBody([["School quality", destination.family], ["Activities", destination.dailyLife], ["Safety", destination.safety], ["Parks", destination.knowledgeProfile?.parks?.join(", ")], ["Museums", destination.knowledgeProfile?.museums?.join(", ") || destination.museums.join(", ")], ["Sports", destination.knowledgeProfile?.sports?.join(", ")], ["Healthcare", destination.healthcare], ["Neighborhood recommendations", destination.neighborhoods.join(", ") || destination.city]])} eyebrow="Family" /> : null}
+            {premiumContent.familyGuide ? <PremiumSectionBlock title="Family" summary={premiumContent.familyGuide} body={buildDedupedSectionBody([["School quality", destination.family], ["Activities", destination.dailyLife], ["Parks", destination.knowledgeProfile?.parks?.join(", ")], ["Museums", destination.knowledgeProfile?.museums?.join(", ") || destination.museums.join(", ")], ["Sports", destination.knowledgeProfile?.sports?.join(", ")], ["Neighborhood recommendations", destination.neighborhoods.join(", ") || destination.city]])} eyebrow="Family" /> : null}
             {premiumContent.digitalNomadGuide ? <PremiumSectionBlock title="Digital nomad" summary={premiumContent.digitalNomadGuide} body={buildDedupedSectionBody([["Internet", destination.internet], ["Coworking", destination.dailyLife], ["Coffee shops", destination.knowledgeProfile?.coffeeShops?.join(", ") || destination.dailyLife], ["Remote work", destination.digitalNomad], ["Visa", destination.knowledgeProfile?.visaInfo || "Requirements vary by citizenship"], ["Monthly costs", destination.monthlyBudgets.map((budget) => `${budget.label}: ${budget.amount}`).join(" \u2022 ")], ["Best neighborhoods", destination.neighborhoods.join(", ") || destination.city]])} eyebrow="Remote work" /> : null}
           </section>
 
@@ -2719,11 +2798,18 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
                 {v31RichModuleCards.filter((card) => developerMode || card.title === "Climate (monthly)").map((card) => (
                   <div key={card.title} className="border-b border-white/10 py-4 md:px-5 md:[&:nth-child(odd)]:border-r">
                     <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#eabc5b]">{card.title}</p>
-                    <ul className="mt-2 divide-y divide-white/10">
-                      {card.lines.map((line, index) => (
-                        <li key={index} className="py-2 text-sm leading-6 text-[#b7c8d8]">{line}</li>
-                      ))}
-                    </ul>
+                    {isWhitefish && card.title === "Climate (monthly)" ? (
+                      <details className="mt-2">
+                        <summary className="cursor-pointer text-sm font-semibold text-cyan-300">View 12-month climate details</summary>
+                        <ul className="mt-2 divide-y divide-white/10">
+                          {card.lines.map((line, index) => <li key={index} className="py-2 text-sm leading-6 text-[#b7c8d8]">{line}</li>)}
+                        </ul>
+                      </details>
+                    ) : (
+                      <ul className="mt-2 divide-y divide-white/10">
+                        {card.lines.map((line, index) => <li key={index} className="py-2 text-sm leading-6 text-[#b7c8d8]">{line}</li>)}
+                      </ul>
+                    )}
                   </div>
                 ))}
               </div>
@@ -2797,7 +2883,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
         </section>
       ) : null}
       </main>
-      <Footer />
+      <Footer matchingHref={matchingHref} matchingLabel={matchingLabel} />
     </>
   );
 }

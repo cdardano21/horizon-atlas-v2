@@ -4,9 +4,18 @@ import { createSupabasePersistedDestinationReadPort } from "../persistence/v31/s
 import { loadNormalizedPersistedDestinationBundle } from "../persistence/v31/load-normalized-persisted-destination-bundle";
 import { supabaseFetch } from "../supabase";
 
-export async function loadPersistedDestinationFromRuntime(identity: ResolvedDestinationIdentity): Promise<PersistedDestinationReadResult> {
+type PersistedDestinationReadTransport = (path: string, options?: RequestInit) => Promise<Response>;
+
+export interface PersistedDestinationReadRuntimeDependencies {
+  readonly fetcher?: PersistedDestinationReadTransport;
+}
+
+export async function loadPersistedDestinationFromRuntime(
+  identity: ResolvedDestinationIdentity,
+  dependencies: PersistedDestinationReadRuntimeDependencies = {},
+): Promise<PersistedDestinationReadResult> {
   const client = createPersistedDestinationReadClient({
-    fetcher: supabaseFetch,
+    fetcher: dependencies.fetcher ?? supabaseFetch,
   });
 
   const port = createSupabasePersistedDestinationReadPort(client);

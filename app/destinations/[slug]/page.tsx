@@ -21,6 +21,7 @@ import { getDestinationRelocationFrame } from "../../lib/destination-page-struct
 import type { Destination } from "../../lib/destinations";
 import { resolveSourceHref, sanitizeExternalSourceUrl } from "../../lib/source-links";
 import { getCanonicalDestination } from "../../lib/canonical-destination-loader";
+import { getMatchingExperience } from "../../lib/smart-shortlist/feature-flag";
 
 interface DestinationPageProps {
   params: Promise<{ slug: string }>;
@@ -1362,13 +1363,20 @@ function IntelligenceGuideSection({
 export default async function DestinationPage({ params, searchParams }: DestinationPageProps) {
   const { slug } = await params;
   const eligibility = await getPublicDestinationEligibility(slug);
-  if (eligibility === "NONPUBLIC" || eligibility === "UNAVAILABLE") notFound();
+  // The Whitefish presentation prototype is intentionally reviewable in local development
+  // without a service-role key. Production routes remain fail-closed, and every other slug keeps
+  // the existing publication boundary unchanged.
+  const allowLocalWhitefishPrototype = process.env.NODE_ENV !== "production"
+    && slug.trim().toLowerCase() === "whitefish-montana-united-states"
+    && eligibility === "UNAVAILABLE";
+  if ((eligibility === "NONPUBLIC" || eligibility === "UNAVAILABLE") && !allowLocalWhitefishPrototype) notFound();
   const resolvedSearchParams = searchParams ? await searchParams : undefined;
   const developerMode = resolvedSearchParams?.developer === "1" || resolvedSearchParams?.developer === "true";
 
   const canonicalDestination = await getCanonicalDestination(slug);
   if (canonicalDestination) {
-    return <CanonicalDestinationPage destination={canonicalDestination} developerMode={developerMode} />;
+    const matching = getMatchingExperience();
+    return <CanonicalDestinationPage destination={canonicalDestination} developerMode={developerMode} matchingHref={matching.href} matchingLabel={matching.label} />;
   }
 
   const command = await getDestinationCommandCenter(slug);

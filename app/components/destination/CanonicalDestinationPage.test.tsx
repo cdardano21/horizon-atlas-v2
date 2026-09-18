@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import CanonicalDestinationPage from "./CanonicalDestinationPage";
+import CanonicalDestinationPage, { formatPublicSafetyTopic, formatPublicSeverity, publicPlaceMetadataEntries } from "./CanonicalDestinationPage";
 import type { CanonicalDestination } from "../../lib/canonical-destination-model";
 import { buildNeighborhoodIntelligenceSeedData } from "../../lib/neighborhood-intelligence-seed-data";
 import { isPlaceWebsiteVisible } from "../../lib/website-verification";
@@ -281,6 +281,19 @@ describe("CanonicalDestinationPage", () => {
     expect(screen.getAllByText("Climate")[0].closest("div")?.textContent).toContain("884 mm/month");
     expect(screen.getAllByText("Airport access")[0].closest("div")?.textContent).toContain("San Antonio International Airport");
     expect(screen.getAllByText("Healthcare")[0].closest("div")?.textContent).toContain("Resolute Baptist Hospital");
+  });
+
+  it("does not spend two hero intelligence slots on the same approved value", () => {
+    const destination = buildDestination();
+    destination.walkability = "A compact center supported by the same local transit network.";
+    destination.transportation = "A compact center supported by the same local transit network.";
+
+    render(<CanonicalDestinationPage destination={destination} />);
+
+    const heroIntelligence = screen.getByRole("complementary");
+    expect(within(heroIntelligence).getByText("Walkability")).toBeInTheDocument();
+    expect(within(heroIntelligence).queryByText("Transit")).not.toBeInTheDocument();
+    expect(within(heroIntelligence).getByText("Healthcare")).toBeInTheDocument();
   });
 
   it("surfaces named healthcare resources already present in the canonical payload instead of falling back to generic copy", () => {
@@ -1076,6 +1089,21 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     });
   });
 
+  it("converts Whitefish monthly Celsius values to Fahrenheit in the presentation layer", () => {
+    const destination = buildV31Destination();
+    destination.slug = "whitefish-montana-united-states";
+    destination.v31Modules = {
+      ...destination.v31Modules!,
+      climateMonthly: [{
+        monthKey: "1", avgLowTemp: "-10", avgHighTemp: "-2",
+        precipitationMm: null, humidityPct: null,
+      }],
+    };
+    render(<CanonicalDestinationPage destination={destination} />);
+    expect(screen.getByText("Jan: 14–28.4°F")).toBeInTheDocument();
+    expect(screen.queryByText("Jan: -10–-2°F")).not.toBeInTheDocument();
+  });
+
   it("shows real persisted destination-level scores, never the hardcoded 76/74/72/78 fallback", () => {
     render(<CanonicalDestinationPage destination={buildV31Destination()} />);
 
@@ -1095,6 +1123,30 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     expect(screen.queryByText(/Real City center/i)).not.toBeInTheDocument();
   });
 
+  it("keeps v3.1 evidence in one primary section instead of repeating it in secondary snapshots", () => {
+    render(<CanonicalDestinationPage destination={buildV31Destination()} />);
+
+    expect(screen.getAllByText("Real neighborhood one summary.")).toHaveLength(1);
+    expect(screen.queryByText("Local transportation and airport access")).not.toBeInTheDocument();
+    expect(screen.queryByText("Healthcare access")).not.toBeInTheDocument();
+    expect(screen.queryByText("Climate realities")).not.toBeInTheDocument();
+  });
+
+  it("keeps duplicate neighborhood display names on distinct stable keys without React key warnings", () => {
+    const destination = buildV31Destination();
+    destination.v31Modules = {
+      ...destination.v31Modules!,
+      neighborhoods: [
+        { neighborhoodKey: "legacy-centro", name: "Centro Storico", summary: "Older context.", areaType: "historic" },
+        { neighborhoodKey: "batch-centro", name: "Centro Storico", summary: "Current context.", areaType: "historic" },
+      ],
+    };
+    const error = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    render(<CanonicalDestinationPage destination={destination} />);
+    expect(error.mock.calls.flat().join(" ")).not.toMatch(/same key.*Centro Storico/i);
+    error.mockRestore();
+  });
+
   it("does not render generic legacy editorial template phrases for a v3.1 destination", () => {
     render(<CanonicalDestinationPage destination={buildV31Destination()} />);
 
@@ -1109,6 +1161,24 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     expect(screen.getAllByText(/Real healthcare summary/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Real remote work summary/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Real pets summary/i).length).toBeGreaterThan(0);
+  });
+
+  it("humanizes safety topics and omits raw booleans and internal metadata keys", () => {
+    expect(formatPublicSafetyTopic("urban_crime")).toBe("Urban Crime");
+    expect(formatPublicSeverity("medium")).toBe("Medium");
+    expect(publicPlaceMetadataEntries({ Category: "Transit", internal_key: "secret", official: true })).toEqual([["Category", "Transit"]]);
+    const destination = buildV31Destination();
+    destination.v31Modules = {
+      ...destination.v31Modules!,
+      safetyRisks: [{ itemKey: "risk-1", summary: "Crime context varies by neighborhood.", topic: "urban_crime", severity: "medium" }],
+      transportation: [{ summary: "Local buses serve the core.", transitSummary: true as unknown as string }],
+      accessibility: [{ summary: "Historic paving requires route planning.", mobilityNotes: "accessibility" }],
+    };
+    render(<CanonicalDestinationPage destination={destination} developerMode />);
+    expect(screen.getByText(/Urban Crime \(Medium\)/)).toBeInTheDocument();
+    expect(screen.queryByText(/urban_crime \(medium\)/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^true$/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^accessibility$/)).not.toBeInTheDocument();
   });
 
   it("never renders the raw v3.1 rich module debug section to a public (non-developer) visitor, even for a v3.1 destination", () => {
@@ -1669,4 +1739,3 @@ describe("CanonicalDestinationPage - v3.1 renderer-integration authority contrac
     });
   });
 });
-

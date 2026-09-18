@@ -18,6 +18,14 @@ describe("public destination route eligibility boundary", () => {
     render(await DestinationPage({ params: Promise.resolve({ slug: "bariloche-argentina" }) }));
     expect(screen.getByRole("heading", { name: "Authored public content" })).toBeTruthy();
   });
+
+  it("allows the Whitefish lean prototype to load locally when catalog eligibility is unavailable", async () => {
+    mocks.eligibility.mockResolvedValue("UNAVAILABLE");
+    mocks.canonical.mockResolvedValue({ title: "Whitefish prototype" });
+    render(await DestinationPage({ params: Promise.resolve({ slug: "whitefish-montana-united-states" }) }));
+    expect(screen.getByRole("heading", { name: "Whitefish prototype" })).toBeTruthy();
+    expect(mocks.canonical).toHaveBeenCalledWith("whitefish-montana-united-states");
+  });
   it("preserves canonical generation for unknown non-catalog slugs", async () => {
     mocks.eligibility.mockResolvedValue("UNKNOWN"); mocks.canonical.mockResolvedValue({ title: "Existing fallback" });
     render(await DestinationPage({ params: Promise.resolve({ slug: "unknown-island" }) }));
