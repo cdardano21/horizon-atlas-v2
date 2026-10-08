@@ -80,6 +80,8 @@
     "import:workbook": "./.venv/bin/python scripts/import_workbook_destinations.py 81Horizon-Atlas-CLEAN.xlsx"
   },
   "dependencies": {
+    "@xmldom/xmldom": "0.9.12",
+    "fflate": "0.8.3",
     "next": "16.2.11",
     "pg": "^8.22.0",
     "react": "19.2.4",
