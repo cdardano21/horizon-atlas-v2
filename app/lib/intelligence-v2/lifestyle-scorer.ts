@@ -31,7 +31,7 @@ function clamp01(value: number): number {
   return Math.min(1, Math.max(0, value));
 }
 
-function resolveDimensionRawValue(dimensionKey: string, destination: SyntheticDestinationFixture): number | null {
+function resolveDimensionRawValue(dimensionKey: string, destination: Pick<SyntheticDestinationFixture, "hardGates" | "lifestyleDimensions">): number | null {
   if (dimensionKey === "beachLifestyle") return BEACH_ACCESS_DIMENSION_SCORE[destination.hardGates.beachAccess];
   if (dimensionKey === "mountainOutdoorLifestyle") return MOUNTAIN_ACCESS_DIMENSION_SCORE[destination.hardGates.mountainOrSkiAccess];
   if (dimensionKey === "healthcareQuality") return HEALTHCARE_STANDARD_DIMENSION_SCORE[destination.hardGates.healthcareStandard];

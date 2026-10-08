@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { NormalizedPersistedDestinationBundle } from "../app/lib/persistence/v31/materialize-stored-destination-state";
 import type { PersistedDestinationReadResult } from "../app/lib/persistence/v31/types";
+import { resolvePersistedStateForBatchCandidate } from "../app/lib/runtime/resolve-persisted-state-for-batch-candidate";
 import { summarizePersistedBundleResult } from "./rollback-harness-result-shape";
 
 function createBundle(overrides: Partial<NormalizedPersistedDestinationBundle> = {}): NormalizedPersistedDestinationBundle {
@@ -60,7 +61,7 @@ describe("summarizePersistedBundleResult", () => {
     const result: PersistedDestinationReadResult = {
       outcome: "SUCCESS",
       bundle: createBundle({
-        scores: [{ scoreKey: "score-1", scoreValue: "5", scoreLabel: "Great", methodologyVersion: "v1" }],
+        scores: [{ scoreKey: "score-1", scoreValue: "5", scoreLabel: "Great", methodologyVersion: "v1", verified: null, verifiedAt: null }],
       }),
     };
 
@@ -84,18 +85,17 @@ describe("summarizePersistedBundleResult", () => {
     expect(summary.failureReason).toBeNull();
   });
 
-  it("preserves failure details for failed results", () => {
-    const result: PersistedDestinationReadResult = {
-      outcome: "FAILED",
-      failure: {
-        reason: "DB_READ_FAILED",
-        destinationIdentity: {
-          destinationId: "dest-1",
-          destinationKey: "dest-a",
-        },
-        module: "facts",
-      },
-    };
+  it("preserves failure details for failed results", async () => {
+    const resolved = await resolvePersistedStateForBatchCandidate(
+      { destinationId: "dest-1", destinationKey: "dest-a" },
+      { loadPersistedDestinationFromRuntime: async (destinationIdentity) => ({
+        outcome: "FAILED",
+        failure: { reason: "DB_READ_FAILED", destinationIdentity, module: "facts" },
+      }) },
+    );
+    expect(resolved.status).toBe("LOADED");
+    if (resolved.status !== "LOADED") throw new Error("Expected resolved fixture identity");
+    const result = resolved.result;
 
     const summary = summarizePersistedBundleResult("Pilot B", result);
 
@@ -108,13 +108,10 @@ describe("summarizePersistedBundleResult", () => {
   });
 
   it("handles optional module arrays without crashing", () => {
-    const result: PersistedDestinationReadResult = {
-      outcome: "SUCCESS",
-      bundle: createBundle({
-        facts: undefined as unknown as readonly { factKey: string; factGroup: string | null; valueText: string | null; displayLabel: string | null; sourceName: string | null }[],
-        scores: undefined as unknown as readonly { scoreKey: string; scoreValue: string | null; scoreLabel: string | null; methodologyVersion: string | null }[],
-      }),
-    };
+    const bundle = createBundle();
+    Object.defineProperty(bundle, "facts", { value: undefined });
+    Object.defineProperty(bundle, "scores", { value: undefined });
+    const result: PersistedDestinationReadResult = { outcome: "SUCCESS", bundle };
 
     const summary = summarizePersistedBundleResult("Pilot C", result);
 

@@ -191,7 +191,7 @@ export async function runDeterministicV31BatchOrchestration(
   }
 
   const canonicalByKey = new Map<string, DeterministicV31CanonicalDestination>(
-    workbookImport.canonicalDestinations.map((destination: DeterministicV31CanonicalDestination) => [destination.identity.destinationKey, destination] as const),
+    (workbookImport.canonicalDestinations ?? []).map((destination: DeterministicV31CanonicalDestination) => [destination.identity.destinationKey, destination] as const),
   );
 
   const approvedScopeEntries: Array<{ destinationKey: string; destinationId: string }> = [];

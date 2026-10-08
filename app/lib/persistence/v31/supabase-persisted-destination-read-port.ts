@@ -76,7 +76,7 @@ function createGroupedFailure(module: PersistedPresenceModuleKey): GroupedReadFa
 }
 
 function createReadResult<T>(value: T | null): QueryResult<T> {
-  return { ok: true, value };
+  return { ok: true, value: value ?? undefined };
 }
 
 async function readSingleRow<T>(

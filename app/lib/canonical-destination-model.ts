@@ -225,6 +225,7 @@ export type NeighborhoodIntelligencePlace = {
   imageUrl?: string;
   rating?: string;
   reviewCount?: string;
+  priceLevel?: string;
   courseType?: string;
   publicStatus?: string;
   holes?: string;

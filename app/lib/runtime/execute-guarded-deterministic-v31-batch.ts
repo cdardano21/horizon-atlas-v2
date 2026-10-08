@@ -293,8 +293,13 @@ export async function executeGuardedDeterministicV31Batch(
 ): Promise<ExecuteGuardedDeterministicV31BatchResult> {
   const invalid = validateInput(input);
   if (invalid) return rejection(input, invalid);
-  const batch20PremiumV3Authorization = validateBatch20PremiumV3ReplayAuthorization(input);
-  const batch20PremiumV2Authorization = validateBatch20PremiumV2ReplayAuthorization(input);
+  const replayAuthorizationInput = {
+    workbookPath: input.workbookPath,
+    workbookHash: input.workbookHash,
+    approvedDestinationKeys: input.approvedDestinationKeys,
+  };
+  const batch20PremiumV3Authorization = validateBatch20PremiumV3ReplayAuthorization(replayAuthorizationInput);
+  const batch20PremiumV2Authorization = validateBatch20PremiumV2ReplayAuthorization(replayAuthorizationInput);
   const batch20ReplayAuthorization = batch20PremiumV3Authorization.reason
     ? batch20PremiumV3Authorization
     : batch20PremiumV2Authorization.reason

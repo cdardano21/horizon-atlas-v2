@@ -239,7 +239,9 @@ function replacementManifest(destination: DeterministicV31CanonicalDestination, 
     const canonicalField = moduleKey === "environmentQuality"
       ? (field === "summary" ? canonicalRaw?.summary ?? canonicalRaw?.air_quality_summary : canonicalRaw?.qualityNotes ?? canonicalRaw?.water_quality_summary)
       : (field === "summary" ? canonicalRaw?.summary ?? canonicalRaw?.grocery_access : canonicalRaw?.practicalityNotes ?? canonicalRaw?.things_residents_wish_they_knew);
-    const storedField = stored[moduleKey]?.[field];
+    const storedField = moduleKey === "environmentQuality"
+      ? stored.environmentQuality?.[field]
+      : stored.dailyLifePracticality?.[field];
     if ((canonicalField === null || canonicalField === undefined || canonicalField === "") && storedField != null) {
       entries.push({ destinationKey, operation: "CLEAR_FIELD", targetModule: moduleKey, targetFieldPath: field, reason: "Final-authoritative singleton field is blank" });
     }
@@ -409,9 +411,9 @@ async function main(): Promise<void> {
       const plan = buildDestinationPlan({ resolvedDestinationIdentity: identity, canonicalDestination: destination, storedDestinationState: storedByKey[identity.destinationKey], manifestInterpretation: interpretation, diffPolicy: DIFF_POLICY, approvedScope });
       plans.push(plan);
       const desired = projectCanonicalComparable(destination);
-      const catalog = planCatalogWriteOperation({ kind: "EXISTING", resolvedDestinationIdentity: identity, canonicalDestination: destination, current: { destinationKey: scopeRow.currentDestinationKey, slug: scopeRow.slug, city: scopeRow.city, country: scopeRow.country, beachAccess: scopeRow.beachAccess, mountainOrSkiAccess: scopeRow.mountainOrSkiAccess, countryCode: scopeRow.countryCode } });
+      const catalog = planCatalogWriteOperation({ kind: "EXISTING", resolvedDestinationIdentity: identity, canonicalDestination: destination, current: { destinationKey: scopeRow.currentDestinationKey, beachAccess: scopeRow.beachAccess, mountainOrSkiAccess: scopeRow.mountainOrSkiAccess, countryCode: scopeRow.countryCode } });
       const expectedIdentity = plan.expectedComparablePostState.identity as Record<string, unknown>;
-      const expected = catalog ? { ...plan.expectedComparablePostState, identity: { ...expectedIdentity, slug: catalog.slug, name: catalog.city, city: catalog.city, country: catalog.country, beachAccess: catalog.beachAccess, mountainOrSkiAccess: catalog.mountainOrSkiAccess, countryCode: catalog.countryCode } } : plan.expectedComparablePostState;
+      const expected = catalog ? { ...plan.expectedComparablePostState, identity: { ...expectedIdentity, destinationKey: catalog.destinationKey, beachAccess: catalog.beachAccess, mountainOrSkiAccess: catalog.mountainOrSkiAccess, countryCode: catalog.countryCode } } : plan.expectedComparablePostState;
       const mismatchedPaths = differencePaths(expected, desired);
       exactness.push({ destinationKey: scopeRow.destinationKey, currentComparableSha256: sha256(stableString(projectStoredComparable(storedByKey[identity.destinationKey]))), desiredComparableSha256: sha256(stableString(desired)), expectedComparableSha256: sha256(stableString(expected)), exact: mismatchedPaths.length === 0, mismatchedPaths, catalogOperation: catalog });
       if (catalog) catalogStatementCount += buildCatalogWriteStatements(catalog).length;

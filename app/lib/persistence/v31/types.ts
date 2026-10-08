@@ -347,13 +347,13 @@ export type StoredMoveChecklistStateShape<T extends DeterministicV31CanonicalMov
 };
 
 export type StoredEnvironmentQualityStateShape<T extends DeterministicV31CanonicalEnvironmentQualityState | null> = T extends null ? null : {
-  readonly summary: CanonicalNullableString<T["air_quality_summary"]>;
-  readonly qualityNotes: CanonicalNullableString<T["water_quality_summary"]>;
+  readonly summary: string | null;
+  readonly qualityNotes: string | null;
 };
 
 export type StoredDailyLifePracticalityStateShape<T extends DeterministicV31CanonicalDailyLifePracticalityState | null> = T extends null ? null : {
-  readonly summary: CanonicalNullableString<T["grocery_access"]>;
-  readonly practicalityNotes: CanonicalNullableString<T["things_residents_wish_they_knew"]>;
+  readonly summary: string | null;
+  readonly practicalityNotes: string | null;
 };
 
 export type StoredEventsSeasonalityStateShape<T extends DeterministicV31CanonicalEventsSeasonalityState> = {
@@ -484,7 +484,7 @@ type ModuleFieldMapping = {
 type CanonicalModuleConformanceSet<M extends keyof ModuleFieldMapping> = Extract<keyof CanonicalModuleShape<M>, keyof ModuleFieldMapping[M]>;
 type PersistenceModuleConformanceSet<M extends keyof ModuleFieldMapping> = Extract<keyof StoredModuleShape<M>, ModuleFieldMapping[M][keyof ModuleFieldMapping[M]]>;
 
-type _TopLevelModuleConformance = AssertTrue<IsEqual<keyof DeterministicV31CanonicalDestination, keyof StoredDestinationState>>;
+type _TopLevelModuleConformance = AssertTrue<IsEqual<Exclude<keyof DeterministicV31CanonicalDestination, "destinationRow">, keyof StoredDestinationState>>;
 type _FactsFieldConformance = AssertTrue<IsEqual<CanonicalModuleConformanceSet<"facts">, keyof ModuleFieldMapping["facts"]>>;
 type _FactsPersistenceFieldConformance = AssertTrue<IsEqual<PersistenceModuleConformanceSet<"facts">, ModuleFieldMapping["facts"][keyof ModuleFieldMapping["facts"]]>>;
 type _ScoresFieldConformance = AssertTrue<IsEqual<CanonicalModuleConformanceSet<"scores">, keyof ModuleFieldMapping["scores"]>>;
@@ -656,7 +656,7 @@ export interface ScalarClearOperation {
   readonly kind: "CLEAR";
   readonly module: ScalarModuleKey;
   readonly fieldPath: string;
-  readonly currentValue: Exclude<ScalarValue, null>;
+  readonly currentValue: ScalarValue;
   readonly incomingValue: null;
 }
 
@@ -920,7 +920,7 @@ export interface ChildDeleteOperation<M extends KeyedChildModuleKey> {
   readonly kind: "DELETE_CHILD";
   readonly module: M;
   readonly stableChildKey: ChildStableKeyByModule[M];
-  readonly currentChild: ChildPayloadByModule[M];
+  readonly currentChild: ChildPayloadByModule[M] | null;
   readonly incomingChild: null;
 }
 

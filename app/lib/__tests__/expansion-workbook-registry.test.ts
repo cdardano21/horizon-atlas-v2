@@ -196,9 +196,31 @@ describe("Expansion-workbook preview resolver (registry-driven, generic getCanon
     }
   }, 30000);
 
-  it("the resolver never returns a key outside the registry's own declared expectedDestinationKeys", () => {
+  it("matches the independently reviewed registry-scope key snapshot, preserving declaration multiplicity", () => {
     const allRegisteredKeys = EXPANSION_WORKBOOK_REGISTRY.flatMap((entry) => entry.expectedDestinationKeys);
     const expectedKeys = [
+      // Curated Mixed Batch 10-01.
+      "bariloche-argentina", "mendoza-argentina", "joao-pessoa-brazil", "punta-del-este-uruguay", "ghent-belgium",
+      "wanaka-new-zealand", "stellenbosch-south-africa", "loreto-mexico", "vevey-switzerland", "hakuba-japan",
+      // Curated Mixed Batch 20-01.
+      "sarajevo-bosnia-and-herzegovina", "da-lat-vietnam", "sete-france", "tainan-taiwan", "arequipa-peru",
+      "sibiu-romania", "ohrid-north-macedonia", "kuching-malaysia", "ipoh-malaysia", "dunedin-new-zealand",
+      "sucre-bolivia", "loja-ecuador", "campeche-mexico", "oberstdorf-germany", "frutillar-chile",
+      "launceston-australia", "sandpoint-idaho-united-states", "nelson-new-zealand", "albany-western-australia", "essaouira-morocco",
+      // Curated Mixed Batch 20-02. Overlaps with older cohorts are intentional.
+      "almunecar-spain", "tavira-portugal", "kalamata-greece", "lucca-italy", "sibenik-croatia",
+      "pak-nam-pran-thailand", "piriapolis-uruguay", "plovdiv-bulgaria", "denia-spain", "viana-do-castelo-portugal",
+      "ascoli-piceno-it", "pezenas-france", "matsuyama-japan", "taitung-taiwan", "quy-nhon-vietnam",
+      "herceg-novi-montenegro", "fethiye-turkiye", "st-george-utah-united-states", "coeur-d-alene-idaho-united-states",
+      "san-luis-obispo-california-united-states",
+      // Curated Mixed Batch 20-03.
+      "flagstaff-arizona-united-states", "ashland-oregon-united-states", "whitefish-montana-united-states",
+      "saratoga-springs-new-york-united-states", "annapolis-maryland-united-states", "wilmington-north-carolina-united-states",
+      "st-augustine-florida-united-states", "hilton-head-island-south-carolina-united-states", "traverse-city-michigan-united-states",
+      "delray-beach-florida-united-states", "lagos-portugal", "chiang-rai-thailand", "guanajuato-mexico",
+      "newport-rhode-island-united-states", "cascais-portugal", "hood-river-oregon-united-states",
+      "eureka-springs-arkansas-united-states", "new-hope-pennsylvania-united-states", "healdsburg-california-united-states",
+      "bocas-del-toro-panama",
       "whistler-canada", "bansko-bulgaria", "pucon-chile", "noosa-heads-australia", "baden-baden-germany",
       "the-villages-fl-us", "sofia-bg", "puerto-vallarta-mx", "hoi-an-vn", "queenstown-nz",
       "ascoli-piceno-it", "sarande-al", "dumaguete-ph", "las-terrenas-do", "fairhope-al-us",

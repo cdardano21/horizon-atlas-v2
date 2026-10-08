@@ -3,10 +3,16 @@ import { verifiedSkiAccessByDestination } from "../intelligence-v2/ski-access";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
+import type { Destination } from "../destinations";
 import { EXPANSION_WORKBOOK_REGISTRY, type ExpansionWorkbookRegistryEntry } from "../expansion-workbook-registry";
+import { getDestinationHeroImage } from "../imageFallback";
 import type { DeterministicV31CanonicalDestination, DeterministicV31CanonicalLifestyleFeature, DeterministicV31WorkbookImport } from "../workbook-v31-deterministic-core";
 import { loadFrozenWorkbookV31DeterministicImport } from "../workbook-v31-deterministic-core";
 import { buildIntelligenceV2FactsFromWorkbookImport } from "../intelligence-v2/workbook-v32-adapter";
+import { createInMemoryPersistedDestinationReadPort } from "../persistence/v31/in-memory-persisted-destination-read-port";
+import { loadNormalizedPersistedDestinationBundle } from "../persistence/v31/load-normalized-persisted-destination-bundle";
+import { mapCanonicalDestinationToStoredState } from "../persistence/v31/map-canonical-destination-to-stored-state";
+import type { CanonicalDestinationKey, DestinationId, ResolvedDestinationIdentity } from "../persistence/v31/types";
 import { getSupabaseConfig, getSupabaseAuthHeaders, isSupabaseConfigured } from "../supabase";
 import { smartShortlistCandidates } from "./cohort";
 import type { PrototypeCandidate } from "./cohort";
@@ -19,9 +25,15 @@ export type SmartShortlistIntelligence = Pick<
   "beachEvidence" | "skiAccess" | "key" | "beachAccess" | "mountainAccess" | "oceanAccess" | "healthcareStandard" | "safetyStandard" | "lgbtqLegalProtectionStatus" | "entryAndStay" | "lifestyleDimensions"
 >;
 
+export type SmartShortlistMedia = {
+  key: string;
+  heroImage: { src: string; alt: string } | null;
+};
+
 export type SmartShortlistData = {
   candidates: readonly PrototypeCandidate[];
   intelligence: readonly SmartShortlistIntelligence[];
+  destinationMedia: readonly SmartShortlistMedia[];
   affordabilityRecords: readonly OwnedAffordabilityRecord[];
 };
 
@@ -38,7 +50,7 @@ export function deriveRegisteredCandidate(destination: DeterministicV31Canonical
     name,
     slug: cellString(destination.identity.slug) || key,
     country,
-    countryCode: cellString(destination.destinationRow.country_code).toUpperCase(),
+    countryCode: cellString(destination.destinationRow?.country_code).toUpperCase(),
     summary: cellString(destination.editorial.shortDescription) || `${name}, ${country}`,
     beachAccess: "UNKNOWN",
     mountainAccess: "UNKNOWN",
@@ -193,6 +205,7 @@ export async function loadSmartShortlistData(
   const affordabilityRecords = [...ownedAffordabilityRecords];
   const candidateByKey = new Map(candidates.map((candidate) => [candidate.key, candidate]));
   const loaded = new Map<string, SmartShortlistIntelligence>();
+  const loadedMedia = new Map<string, SmartShortlistMedia>();
 
   for (const entry of registry) {
     const workbookPath = path.resolve(process.cwd(), entry.workbookPath);
@@ -214,10 +227,33 @@ export async function loadSmartShortlistData(
 
     for (const key of entry.expectedDestinationKeys) {
       if (!candidateByKey.has(key)) continue;
-      if (loaded.has(key)) throw new Error(`Duplicate Smart Shortlist destination key: ${key}`);
-      const canonical = workbook.canonicalDestinations.find((destination) => destination.identity.destinationKey === key);
+      // Registry entries are processed in source-precedence order: current production
+      // workbooks precede legacy/preview workbooks. Keep the first resolved representation
+      // and ignore later declarations of the same canonical key rather than surfacing the
+      // same destination twice.
+      if (loaded.has(key)) continue;
+      const canonical = workbook.canonicalDestinations?.find((destination) => destination.identity.destinationKey === key);
       const adapted = buildIntelligenceV2FactsFromWorkbookImport(workbook, key);
       if (!canonical || !adapted) throw new Error(`${entry.registryId} does not contain expected destination key: ${key}`);
+
+      const identity: ResolvedDestinationIdentity = {
+        destinationKey: key as CanonicalDestinationKey,
+        destinationId: key as DestinationId,
+      };
+      const stored = mapCanonicalDestinationToStoredState(canonical);
+      const persisted = await loadNormalizedPersistedDestinationBundle(identity, createInMemoryPersistedDestinationReadPort(identity, stored));
+      if (persisted.outcome !== "SUCCESS") throw new Error(`Persisted adaptation failed for ${key}: ${persisted.failure.reason}`);
+      const candidate = candidateByKey.get(key)!;
+      const orderedMedia = [...persisted.bundle.media].sort((left, right) => left.mediaKey.localeCompare(right.mediaKey));
+      const mediaByUrl = new Map(orderedMedia.map((item) => [item.url, item]));
+      const mediaDestination = {
+        slug: candidate.slug,
+        city: candidate.name,
+        country: candidate.country,
+        images: orderedMedia.map((item) => ({ src: item.url, alt: item.altText })),
+      } as Destination;
+      const heroUrl = getDestinationHeroImage(mediaDestination);
+      const heroRow = heroUrl ? mediaByUrl.get(heroUrl) : undefined;
 
       loaded.set(key, {
         key,
@@ -239,6 +275,12 @@ export async function loadSmartShortlistData(
         },
         lifestyleDimensions: adapted.facts.lifestyleDimensions.dimensionValues,
       });
+      loadedMedia.set(key, {
+        key,
+        heroImage: heroUrl && heroRow
+          ? { src: heroUrl, alt: heroRow.altText?.trim() || `${candidate.name}, ${candidate.country}` }
+          : null,
+      });
     }
   }
 
@@ -247,6 +289,7 @@ export async function loadSmartShortlistData(
   return {
     candidates,
     intelligence: candidates.map((candidate) => loaded.get(candidate.key)!),
+    destinationMedia: candidates.map((candidate) => loadedMedia.get(candidate.key)!),
     affordabilityRecords,
   };
 }

@@ -216,7 +216,16 @@ const splitFactListValue = (value: string | null | undefined) => {
     .filter(Boolean);
 };
 
-const getFactTextValue = (fact: Record<string, unknown>) => {
+type KnowledgeProfileFact = Partial<Record<
+  "factGroup" | "fact_group" | "group" | "group_name"
+  | "factKey" | "fact_key" | "key" | "fact"
+  | "displayLabel" | "display_label" | "label" | "name" | "title"
+  | "valueText" | "value_text" | "value" | "text"
+  | "displayValue" | "display_value" | "factValue" | "fact_value",
+  unknown
+>>;
+
+const getFactTextValue = (fact: KnowledgeProfileFact) => {
   const candidates = [fact.valueText, fact.value_text, fact.value, fact.text, fact.displayValue, fact.display_value, fact.factValue, fact.fact_value];
   for (const candidate of candidates) {
     if (typeof candidate === "string" && candidate.trim()) {
@@ -229,7 +238,7 @@ const getFactTextValue = (fact: Record<string, unknown>) => {
   return "";
 };
 
-const findFactValue = (facts: Array<Record<string, unknown>> | undefined, aliases: string[]) => {
+const findFactValue = (facts: KnowledgeProfileFact[] | undefined, aliases: string[]) => {
   const normalizedAliases = aliases.map((alias) => alias.toLowerCase());
 
   for (const fact of facts ?? []) {
@@ -246,7 +255,7 @@ const findFactValue = (facts: Array<Record<string, unknown>> | undefined, aliase
   return "";
 };
 
-const mergeFactsForKnowledgeProfile = (primaryFacts: Array<Record<string, unknown>> | undefined, fallbackFacts: Array<Record<string, unknown>> | undefined) => {
+const mergeFactsForKnowledgeProfile = (primaryFacts: KnowledgeProfileFact[] | undefined, fallbackFacts: KnowledgeProfileFact[] | undefined) => {
   const mergedFacts = [...(primaryFacts ?? []), ...(fallbackFacts ?? [])];
   const seen = new Set<string>();
 
@@ -267,7 +276,7 @@ const mergeFactsForKnowledgeProfile = (primaryFacts: Array<Record<string, unknow
   });
 };
 
-const buildKnowledgeProfileFromFacts = (facts: Array<Record<string, unknown>> | undefined): CanonicalDestinationKnowledgeProfile => {
+const buildKnowledgeProfileFromFacts = (facts: KnowledgeProfileFact[] | undefined): CanonicalDestinationKnowledgeProfile => {
   const population = normalizeTextValue(findFactValue(facts, ["population", "city_population", "resident_population", "population_size"]));
   const metroPopulation = normalizeTextValue(findFactValue(facts, ["metro_population", "metro_area_population", "metro"]));
   const elevation = normalizeTextValue(findFactValue(facts, ["elevation", "elevation_m", "elevation_ft"]));
@@ -575,10 +584,10 @@ const loadDeterministicV31WorkbookDestinationData = async (slug: string): Promis
     }
 
     const canonicalFacts = Array.isArray((canonicalDestination as { facts?: unknown }).facts)
-      ? ((canonicalDestination as { facts?: Array<Record<string, unknown>> }).facts ?? [])
+      ? ((canonicalDestination as { facts?: KnowledgeProfileFact[] }).facts ?? [])
       : [];
     const importDestinationFacts = Array.isArray((importResult.destinations.find((destination) => destination.destinationKey === resolvedIdentity.value) as { facts?: unknown } | undefined)?.facts)
-      ? ((importResult.destinations.find((destination) => destination.destinationKey === resolvedIdentity.value) as { facts?: Array<Record<string, unknown>> }).facts ?? [])
+      ? ((importResult.destinations.find((destination) => destination.destinationKey === resolvedIdentity.value) as { facts?: KnowledgeProfileFact[] }).facts ?? [])
       : [];
     const knowledgeProfile = applyIdentityKnowledgeProfileOverrides(
       buildKnowledgeProfileFromFacts(mergeFactsForKnowledgeProfile(canonicalFacts, importDestinationFacts)),

@@ -14,6 +14,8 @@ export interface PersistedRootRow {
   readonly population?: string | null;
   readonly metroPopulation?: string | null;
   readonly elevation?: string | null;
+  readonly latitude?: string | null;
+  readonly longitude?: string | null;
 }
 
 export interface PersistedProfileRow {
@@ -138,6 +140,13 @@ export interface PersistedResourceRow {
   readonly category: string | null;
   readonly name: string | null;
   readonly url: string | null;
+  readonly description?: string | null;
+  readonly official?: string | null;
+  readonly stayModeKey?: string | null;
+  readonly sourceName?: string | null;
+  readonly sourceUrl?: string | null;
+  readonly verified?: string | null;
+  readonly verifiedAt?: string | null;
 }
 
 export interface PersistedMediaRow {
@@ -163,6 +172,11 @@ export interface PersistedPropertyResourceRow {
   readonly category: string | null;
   readonly name: string | null;
   readonly url: string | null;
+  readonly description?: string | null;
+  readonly official?: string | null;
+  readonly sourceUrl?: string | null;
+  readonly verified?: string | null;
+  readonly verifiedAt?: string | null;
 }
 
 export interface PersistedMoveChecklistRow {
@@ -403,6 +417,8 @@ export function normalizePersistedDestinationRows(input: {
       population: input.root.population ?? null,
       metroPopulation: input.root.metroPopulation ?? null,
       elevation: input.root.elevation ?? null,
+      latitude: input.root.latitude ?? null,
+      longitude: input.root.longitude ?? null,
     },
     editorial: {
       shortDescription: input.profile.shortDescription,

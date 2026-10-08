@@ -8,7 +8,7 @@ import { getWorkbookFallbackDestinationData } from "./workbook-new-braunfels-fal
 import { loadPremiumWorkbookDestinationData, type PremiumWorkbookNormalizedDestinationData } from "./workbook-runtime-loader";
 import { loadPersistedDestinationFromRuntime } from "./runtime/persisted-destination-read-runtime";
 import type { NormalizedPersistedDestinationBundle } from "./persistence/v31/materialize-stored-destination-state";
-import type { ResolvedDestinationIdentity } from "./persistence/v31/types";
+import type { CanonicalDestinationKey, DestinationId, ResolvedDestinationIdentity } from "./persistence/v31/types";
 import { loadExpansionWorkbookDestinationBundle, loadExpansionWorkbookRawIdentity, resolveExpansionWorkbookDestinationKey } from "./expansion-workbook-registry";
 import { buildGeneratedScalarDiscoveryLinks, buildGeneratedTravelResources, mergeAuthoredAndGeneratedResources } from "./destination-travel-resources";
 import { sanitizePublicText } from "./sanitize-public-text";
@@ -352,8 +352,8 @@ const resolvePersistedRuntimeDestinationIdentity = (slug: string, row: Record<st
       : "";
 
   return {
-    destinationKey,
-    destinationId,
+    destinationKey: destinationKey as CanonicalDestinationKey,
+    destinationId: destinationId as DestinationId,
   };
 };
 
@@ -420,10 +420,10 @@ const mapPlacesAndResources = (bundle: NormalizedPersistedDestinationBundle): { 
 const mapMedia = (bundle: NormalizedPersistedDestinationBundle): CanonicalDestinationV31Modules["media"] =>
   [...bundle.media]
     .sort((left, right) => Number(right.isPrimary === "true" || right.isPrimary === "1") - Number(left.isPrimary === "true" || left.isPrimary === "1") || Number(left.sortOrder ?? Number.MAX_SAFE_INTEGER) - Number(right.sortOrder ?? Number.MAX_SAFE_INTEGER))
-    .map((item) => ({ mediaKey: item.mediaKey, kind: item.kind, url: item.url, caption: item.caption, altText: item.altText, isPrimary: item.isPrimary, sortOrder: item.sortOrder, verified: item.verified }));
+    .map((item) => ({ mediaKey: item.mediaKey, kind: item.kind, url: item.url, caption: item.caption, altText: item.altText, isPrimary: item.isPrimary ?? null, sortOrder: item.sortOrder ?? null, verified: item.verified ?? null }));
 
 const mapCostAndClimate = (bundle: NormalizedPersistedDestinationBundle): { costOfLiving: CanonicalDestinationV31Modules["costOfLiving"]; climateMonthly: CanonicalDestinationV31Modules["climateMonthly"]; housing: CanonicalDestinationV31Modules["housing"] } => ({
-  costOfLiving: bundle.costOfLiving.map((item) => ({ itemKey: item.itemKey, category: item.category, monthlyLow: item.monthlyLow, monthlyHigh: item.monthlyHigh, currency: item.currency, householdType: item.householdType, lifestyleTier: item.lifestyleTier })),
+  costOfLiving: bundle.costOfLiving.map((item) => ({ itemKey: item.itemKey, category: item.category, monthlyLow: item.monthlyLow, monthlyHigh: item.monthlyHigh, currency: item.currency, householdType: item.householdType ?? null, lifestyleTier: item.lifestyleTier ?? null })),
   climateMonthly: bundle.climateMonthly.map((item) => ({ monthKey: item.monthKey, avgHighTemp: item.avgHighTemp, avgLowTemp: item.avgLowTemp, precipitationMm: item.precipitationMm, humidityPct: item.humidityPct })),
   housing: bundle.housing.map((item) => ({ summary: item.summary, buyingSummary: item.buyingSummary, rentalSummary: item.rentalSummary })),
 });
@@ -655,7 +655,7 @@ export const buildCanonicalDestinationFromPersistedBundle = (
     .map((item) => normalizeTextValue(item.name))
     .filter(Boolean);
   const neighborhoods = selectRicherPersistedArraySource(persistedNeighborhoods, workbookNeighborhoods, fallbackDestination.neighborhoods ?? []);
-  const neighborhoodIntelligence = buildWorkbookNeighborhoodIntelligence(workbookData) ?? fallbackDestination.neighborhoodIntelligence;
+  const neighborhoodIntelligence = buildWorkbookNeighborhoodIntelligence(workbookData ?? null) ?? fallbackDestination.neighborhoodIntelligence ?? undefined;
 
   const premiumEditorialContent = {
     ...fallbackDestination.premiumEditorialContent,
@@ -1576,7 +1576,7 @@ export const buildWorkbookDestinationFromData = (slug: string, workbookData: Pre
   } as CanonicalDestination;
 };
 
-export const buildFallbackCanonicalDestination = (slug: string): CanonicalDestination | null => {
+export const buildFallbackCanonicalDestination = (slug: string): CanonicalDestination => {
   const local = localDestinations.find((item) => item.slug === slug);
   const workbookFallback = getWorkbookFallbackDestinationData(slug);
   const inferredName = slug
@@ -1598,7 +1598,7 @@ export const buildFallbackCanonicalDestination = (slug: string): CanonicalDestin
     transportation: "",
     researchProfile: {},
     premiumEditorialContent: undefined,
-  } as typeof local;
+  } as NonNullable<typeof local>;
 
   const city = workbookFallback?.city ?? fallbackSource.city;
   const country = workbookFallback?.country ?? fallbackSource.country;
@@ -1708,6 +1708,7 @@ export const buildFallbackCanonicalDestination = (slug: string): CanonicalDestin
       researchTimestamp: new Date().toISOString(),
     },
     scoring: [],
+    aiScoringExplanation: "",
     neighborhoodIntelligence,
   };
 };
@@ -1863,7 +1864,12 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
     const allowWorkbookFallbackSupplementation = Boolean(workbookData?.source === "runtime-loader" && isWorkbookFallbackMediaDestination(normalizedSlug));
     const filteredWorkbookMedia = mergeDestinationSpecificMedia(
       resolvedWorkbookMedia.map((item) => ({ kind: item.kind, url: item.url, altText: item.altText, caption: item.caption, isPrimary: item.isPrimary, sourceUrl: item.sourceUrl, attribution: item.attribution, license: item.license })),
-      getWorkbookFallbackDestinationData(normalizedSlug)?.media ?? fallbackMedia,
+      (getWorkbookFallbackDestinationData(normalizedSlug)?.media ?? fallbackMedia).map((item) => ({
+        ...item,
+        sourceUrl: item.sourceUrl,
+        attribution: item.attribution,
+        license: item.license,
+      })),
       destinationIdentityTokens,
       allowWorkbookFallbackSupplementation,
     );

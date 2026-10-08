@@ -64,6 +64,7 @@ function createNeighborhoodPlace({
   return {
     id,
     name,
+    category: "",
     description,
     whyItMatters,
     address,
@@ -152,13 +153,14 @@ function validateNeighborhoodIntelligenceSeedData(groups: NeighborhoodIntelligen
   return issues;
 }
 
-function collectAnchorCandidates(destination: Pick<CanonicalDestination, "city" | "country" | "title" | "slug" | "knowledgeProfile" | "description" | "overview" | "transportation" | "lifestyle" | "climate" | "neighborhoods" | "restaurants" | "golf" | "beaches" | "outdoorRecreation">): string[] {
+type NeighborhoodSeedDestination = Pick<CanonicalDestination, "city" | "country" | "title" | "slug" | "knowledgeProfile"> & Partial<Pick<CanonicalDestination, "editorial" | "overview" | "transportation" | "climate" | "neighborhoods" | "restaurants" | "golf" | "beaches" | "outdoorRecreation">>;
+
+function collectAnchorCandidates(destination: NeighborhoodSeedDestination): string[] {
   const knowledgeProfile = destination.knowledgeProfile;
   const sourceText = [
-    destination.description,
+    destination.editorial,
     destination.overview,
     destination.transportation,
-    destination.lifestyle,
     destination.climate,
     ...(knowledgeProfile?.bestNeighborhoods ?? []),
     ...(knowledgeProfile?.parks ?? []),
@@ -215,7 +217,7 @@ function collectAnchorCandidates(destination: Pick<CanonicalDestination, "city" 
     .sort((left, right) => (left.length > right.length ? 1 : -1));
 }
 
-function buildGenericNeighborhoodIntelligenceSeedData(destination: Pick<CanonicalDestination, "city" | "country" | "title" | "slug" | "knowledgeProfile" | "description" | "overview" | "transportation" | "lifestyle" | "climate" | "neighborhoods" | "restaurants" | "golf" | "beaches" | "outdoorRecreation">): NeighborhoodIntelligenceGroup[] {
+function buildGenericNeighborhoodIntelligenceSeedData(destination: NeighborhoodSeedDestination): NeighborhoodIntelligenceGroup[] {
   const destinationName = destination.title || destination.city || "This destination";
   const regionName = destination.knowledgeProfile?.adminRegion || destination.country || "the region";
   const anchorCandidates = collectAnchorCandidates(destination);

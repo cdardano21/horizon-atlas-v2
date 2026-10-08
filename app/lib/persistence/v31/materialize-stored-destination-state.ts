@@ -13,6 +13,8 @@ export interface NormalizedPersistedDestinationBundle {
     readonly population?: string | null;
     readonly metroPopulation?: string | null;
     readonly elevation?: string | null;
+    readonly latitude?: string | null;
+    readonly longitude?: string | null;
   };
   readonly editorial: {
     readonly shortDescription: string | null;
@@ -70,13 +72,13 @@ export interface NormalizedPersistedDestinationBundle {
     readonly category: string | null;
     readonly name: string | null;
     readonly url: string | null;
-    readonly description: string | null;
-    readonly official: string | null;
-    readonly stayModeKey: string | null;
-    readonly sourceName: string | null;
-    readonly sourceUrl: string | null;
-    readonly verified: string | null;
-    readonly verifiedAt: string | null;
+    readonly description?: string | null;
+    readonly official?: string | null;
+    readonly stayModeKey?: string | null;
+    readonly sourceName?: string | null;
+    readonly sourceUrl?: string | null;
+    readonly verified?: string | null;
+    readonly verifiedAt?: string | null;
   }>;
   readonly media: ReadonlyArray<{
     readonly mediaKey: string;
@@ -84,6 +86,9 @@ export interface NormalizedPersistedDestinationBundle {
     readonly url: string | null;
     readonly caption: string | null;
     readonly altText: string | null;
+    readonly isPrimary?: string | null;
+    readonly sortOrder?: string | null;
+    readonly verified?: string | null;
     readonly sourceName: string | null;
     readonly sourceUrl: string | null;
     readonly licenseNotes: string | null;
@@ -94,6 +99,8 @@ export interface NormalizedPersistedDestinationBundle {
     readonly monthlyLow: string | null;
     readonly monthlyHigh: string | null;
     readonly currency: string | null;
+    readonly householdType?: string | null;
+    readonly lifestyleTier?: string | null;
     readonly stayModeKey: string | null;
     readonly verified: string | null;
     readonly verifiedAt: string | null;
@@ -120,11 +127,11 @@ export interface NormalizedPersistedDestinationBundle {
     readonly category: string | null;
     readonly name: string | null;
     readonly url: string | null;
-    readonly description: string | null;
-    readonly official: string | null;
-    readonly sourceUrl: string | null;
-    readonly verified: string | null;
-    readonly verifiedAt: string | null;
+    readonly description?: string | null;
+    readonly official?: string | null;
+    readonly sourceUrl?: string | null;
+    readonly verified?: string | null;
+    readonly verifiedAt?: string | null;
   }>;
   readonly healthcare: ReadonlyArray<{
     readonly summary: string | null;
@@ -318,6 +325,8 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
       population: asNullableString(bundle.identity.population),
       metroPopulation: asNullableString(bundle.identity.metroPopulation),
       elevation: asNullableString(bundle.identity.elevation),
+      latitude: asNullableString(bundle.identity.latitude),
+      longitude: asNullableString(bundle.identity.longitude),
     },
     editorial: {
       shortDescription: asNullableString(bundle.editorial.shortDescription),
@@ -387,6 +396,9 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
       url: asNullableString(media.url),
       caption: asNullableString(media.caption),
       altText: asNullableString(media.altText),
+      isPrimary: asNullableString(media.isPrimary),
+      sortOrder: asNullableString(media.sortOrder),
+      verified: asNullableString(media.verified),
       sourceName: asNullableString(media.sourceName),
       sourceUrl: asNullableString(media.sourceUrl),
       licenseNotes: asNullableString(media.licenseNotes),

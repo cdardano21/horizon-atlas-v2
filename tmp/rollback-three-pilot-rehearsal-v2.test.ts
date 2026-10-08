@@ -70,7 +70,7 @@ async function parseEnvConnectionString(): Promise<string> {
   const fallbackHostMap: Record<string, string> = {
     "aws-0-us-west-1.pooler.supabase.com": "54.177.55.191",
   };
-  let resolvedAddress = fallbackHostMap[url.hostname];
+  let resolvedAddress: string | undefined = fallbackHostMap[url.hostname];
   if (!resolvedAddress) {
     try {
       resolvedAddress = (await lookup(url.hostname, { all: true }))[0]?.address;
@@ -180,8 +180,8 @@ function splitSqlStatements(sqlText: string): string[] {
 }
 
 async function queryRows(client: Client, sql: string, params: readonly unknown[] = []): Promise<readonly Record<string, unknown>[]> {
-  const result = await client.query(sql, params);
-  return result.rows as readonly Record<string, unknown>[];
+  const result = await client.query<Record<string, unknown>>(sql, [...params]);
+  return result.rows;
 }
 
 async function getTableMetrics(client: Client, table: string): Promise<Record<string, unknown>> {
@@ -235,12 +235,12 @@ async function buildReadPort(client: Client) {
         sql += ` WHERE ${clauses.join(" AND ")}`;
       }
       const result = await client.query(sql, values);
-      return result.rows as readonly Record<string, unknown>[];
+      return result.rows;
     },
   });
 }
 
-async function runRehearsal(): Promise<Record<string, unknown>> {
+async function runRehearsal() {
   const connectionString = await parseEnvConnectionString();
   const client = new Client({ connectionString, ssl: { rejectUnauthorized: false }, connectionTimeoutMillis: 10000 });
   await client.connect();

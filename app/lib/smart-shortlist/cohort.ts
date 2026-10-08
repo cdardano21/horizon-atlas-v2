@@ -7,6 +7,15 @@ export type PrototypeCandidate = ShortlistFacts & { slug: string; country: strin
 export const SMART_SHORTLIST_COHORT_VERSION = "sealed-u1-reconstruction-20260906";
 export const smartShortlistCandidates: PrototypeCandidate[] = [
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "the-villages-fl-us",
     "name": "The Villages",
     "slug": "the-villages-florida-united-states",
@@ -98,6 +107,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "sofia-bg",
     "name": "Sofia",
     "slug": "sofia-bulgaria",
@@ -189,6 +207,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "puerto-vallarta-mx",
     "name": "Puerto Vallarta",
     "slug": "puerto-vallarta-mexico",
@@ -280,6 +307,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "hoi-an-vn",
     "name": "Hoi An",
     "slug": "hoi-an-vietnam",
@@ -371,6 +407,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "queenstown-nz",
     "name": "Queenstown",
     "slug": "queenstown-new-zealand",
@@ -462,6 +507,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "ascoli-piceno-it",
     "name": "Ascoli Piceno",
     "slug": "ascoli-piceno-italy",
@@ -491,6 +545,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "sarande-al",
     "name": "Sarandë",
     "slug": "sarande-albania",
@@ -520,6 +583,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "dumaguete-ph",
     "name": "Dumaguete City",
     "slug": "dumaguete-philippines",
@@ -555,6 +627,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "las-terrenas-do",
     "name": "Las Terrenas",
     "slug": "las-terrenas-dominican-republic",
@@ -600,6 +681,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "fairhope-al-us",
     "name": "Fairhope",
     "slug": "fairhope-alabama",
@@ -645,6 +735,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "the-hague-netherlands",
     "name": "The Hague",
     "slug": "the-hague-netherlands",
@@ -714,6 +813,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "san-ramon-costa-rica",
     "name": "San Ramón",
     "slug": "san-ramon-costa-rica",
@@ -734,6 +842,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "st-john-s-canada",
     "name": "St. John's",
     "slug": "st-john-s-canada",
@@ -754,6 +871,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "santa-fe-new-mexico-united-states",
     "name": "Santa Fe",
     "slug": "santa-fe-new-mexico-united-states",
@@ -774,6 +900,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "st-cloud-minnesota-united-states",
     "name": "St. Cloud",
     "slug": "st-cloud-minnesota-united-states",
@@ -794,6 +929,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "kyoto-japan",
     "name": "Kyoto",
     "slug": "kyoto-japan",
@@ -863,6 +1007,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "ajijic-mexico",
     "name": "Ajijic",
     "slug": "ajijic-mexico",
@@ -969,6 +1122,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "boquete-panama",
     "name": "Boquete",
     "slug": "boquete-panama",
@@ -1068,6 +1230,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "chiang-mai-thailand",
     "name": "Chiang Mai",
     "slug": "chiang-mai-thailand",
@@ -1174,6 +1345,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "cuenca-ecuador",
     "name": "Cuenca",
     "slug": "cuenca-ecuador",
@@ -1280,6 +1460,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "da-nang-vietnam",
     "name": "Da Nang",
     "slug": "da-nang-vietnam",
@@ -1386,6 +1575,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "florianopolis-brazil",
     "name": "Florianópolis",
     "slug": "florianopolis-brazil",
@@ -1492,6 +1690,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "funchal-portugal",
     "name": "Funchal",
     "slug": "funchal-portugal",
@@ -1598,6 +1805,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "george-town-malaysia",
     "name": "George Town",
     "slug": "george-town-malaysia",
@@ -1710,6 +1926,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "hua-hin-thailand",
     "name": "Hua Hin",
     "slug": "hua-hin-thailand",
@@ -1816,6 +2041,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "lucca-italy",
     "name": "Lucca",
     "slug": "lucca-italy",
@@ -1933,6 +2167,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "merida-mexico",
     "name": "Mérida",
     "slug": "merida-mexico",
@@ -2039,6 +2282,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "monopoli-italy",
     "name": "Monopoli",
     "slug": "monopoli-italy",
@@ -2161,6 +2413,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "montevideo-uruguay",
     "name": "Montevideo",
     "slug": "montevideo-uruguay",
@@ -2267,6 +2528,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     "costSources": []
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "nafplio-greece",
     "name": "Nafplio",
     "slug": "nafplio-greece",
@@ -2379,6 +2649,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "nice-france",
     "name": "Nice",
     "slug": "nice-france",
@@ -2496,6 +2775,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "palm-springs-california-united-states",
     "name": "Palm Springs",
     "slug": "palm-springs-california-united-states",
@@ -2608,6 +2896,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "paphos-cyprus",
     "name": "Paphos",
     "slug": "paphos-cyprus",
@@ -2730,6 +3027,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "santander-spain",
     "name": "Santander",
     "slug": "santander-spain",
@@ -2842,6 +3148,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "savannah-georgia-united-states",
     "name": "Savannah",
     "slug": "savannah-georgia-united-states",
@@ -2954,6 +3269,15 @@ export const smartShortlistCandidates: PrototypeCandidate[] = [
     ]
   },
   {
+    "healthcareStandard": "UNKNOWN",
+    "safetyStandard": "UNKNOWN",
+    "lgbtqLegalProtectionStatus": "UNKNOWN",
+    "entryAndStay": {
+      "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+      "permanentResidencyPathAvailable": "UNKNOWN",
+      "retirementVisaProgramAvailable": "UNKNOWN",
+      "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+    },
     "key": "sibenik-croatia",
     "name": "Šibenik",
     "slug": "sibenik-croatia",

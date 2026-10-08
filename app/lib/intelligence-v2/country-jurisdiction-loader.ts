@@ -22,7 +22,7 @@ export interface SharedCountryJurisdictionWorkbook {
 }
 
 export interface CountryJurisdictionWorkbookReadResult {
-  readonly sheets: readonly Array<{ name: string; headers: readonly string[]; rows: readonly Record<string, string | number | null>[] }>;
+  readonly sheets: ReadonlyArray<{ name: string; headers: readonly string[]; rows: readonly Record<string, string | number | null>[] }>;
 }
 
 export function parseWorkbookCountryJurisdictionRow(raw: Record<string, string | number | null>): CountryJurisdictionFact {

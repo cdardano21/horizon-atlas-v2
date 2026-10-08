@@ -21,7 +21,7 @@
 // a separate hash comparison - that distinction is intentional to keep this report honest.
 import type { DeterministicV31CanonicalDestination } from "../workbook-v31-deterministic-core";
 import { buildFirstTimeModuleAuthorizationManifest } from "../persistence/v31/first-time-module-authorization";
-import { interpretOperationManifest } from "../persistence/v31/manifest";
+import { interpretOperationManifest, type CanonicalDestinationInput } from "../persistence/v31/manifest";
 import { buildDestinationPlan } from "../persistence/v31/plan-destination";
 import {
   checkExecutionGates,
@@ -165,7 +165,7 @@ function buildFirstTimePlan(
   );
   const manifestInterpretation = interpretOperationManifest({
     manifest,
-    canonicalDestinations: [canonicalDestination],
+    canonicalDestinations: [canonicalDestination as unknown as CanonicalDestinationInput],
     approvedScope,
   });
   const resolvedDestinationIdentity: ResolvedDestinationIdentity = {
@@ -312,7 +312,7 @@ export async function executeDeterministicV31Batch(input: ExecuteDeterministicV3
           planSource = "REPLAY_FROM_PERSISTED_STATE";
           const manifestInterpretation = interpretOperationManifest({
             manifest: { entries: [] },
-            canonicalDestinations: [destination.canonicalDestination],
+            canonicalDestinations: [destination.canonicalDestination as unknown as CanonicalDestinationInput],
             approvedScope,
           });
           const replayResult = await orchestrateReplayPlan(

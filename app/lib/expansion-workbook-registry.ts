@@ -154,7 +154,7 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
   },
   {
     registryId: "legacy-carryover-batch-20-03",
-    workbookPath: "data/legacy-carryover-batch-20-03/DestinationFinderAI-Next-Legacy-Batch-20-Premium-Enriched-Corrected-v3.3.xlsx",
+    workbookPath: "data/legacy-carryover-batch-20-03/DestinationFinderAI-Batch-20-03-Media-Repaired-Non-Media-Preserved-v3.3.xlsx",
     environment: "preview",
     expectedDestinationKeys: [
       "aomori-japan", "kamakura-japan", "porto-portugal", "kranj-slovenia", "coimbra-portugal",
@@ -162,7 +162,7 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
       "matsumoto-japan", "morioka-japan", "sendai-japan", "cavtat-croatia", "sirmione-italy",
       "celje-slovenia", "nagasaki-japan", "perugia-italy", "novigrad-croatia", "ioannina-greece",
     ],
-    expectedSha256: "6bae082ce0d8d2f43975971004824d202d8dcfd73be336d75d6670dd1f6f8bc7",
+    expectedSha256: "4b8000f89855fb1cc063d145bd3548874bc3cb6caf21e3e9ca91b5727fe7aa9a",
   },
   {
     registryId: "legacy-carryover-batch-20-04",

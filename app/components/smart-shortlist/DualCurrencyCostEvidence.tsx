@@ -76,7 +76,7 @@ export default function DualCurrencyCostEvidence({
           : "Comparable local household total unavailable"}
       </p>
 
-      {localRange && conversionAvailable ? (
+      {converted && conversionAvailable ? (
         <div className="mt-3 border-l-4 border-[#bd7b36] bg-[#fff8ea] p-3">
           <p className="text-xs font-bold uppercase text-[#774719]">
             {conversionStatus === "STALE" ? `Stale ${displayCurrency} estimate` : `Estimated ${displayCurrency} equivalent`}

@@ -73,8 +73,8 @@ export function diffScalar(input: DiffScalarInput): ScalarOperation {
       kind: "UPDATE",
       module,
       fieldPath: input.fieldPath,
-      currentValue: currentSemantic,
-      incomingValue: incomingSemantic,
+      currentValue: asNonNullScalar(currentSemantic),
+      incomingValue: asNonNullScalar(incomingSemantic),
     };
   }
 
@@ -82,7 +82,7 @@ export function diffScalar(input: DiffScalarInput): ScalarOperation {
     kind: "UNCHANGED",
     module,
     fieldPath: input.fieldPath,
-    currentValue: currentSemantic,
-    incomingValue: incomingSemantic,
+    currentValue: asNonNullScalar(currentSemantic),
+    incomingValue: asNonNullScalar(incomingSemantic),
   };
 }

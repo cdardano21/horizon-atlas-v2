@@ -207,7 +207,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ desti
           memberDetails: payloadForEnrichment.metadata?.memberDetails as Record<string, unknown> | undefined,
           editorialContent: payloadForEnrichment.metadata?.editorialContent as Record<string, unknown>,
           researchProfile: payloadForEnrichment.metadata?.researchProfile as Record<string, unknown>,
-          neighborhoodIntelligence: payloadForEnrichment.metadata?.neighborhoodIntelligence as Array<unknown>,
+          neighborhoodIntelligence: payloadForEnrichment.metadata?.neighborhoodIntelligence as ReturnType<typeof buildDestinationEnrichmentMetadata>["neighborhoodIntelligence"],
           knowledgeProfile: payloadForEnrichment.metadata?.knowledgeProfile as Record<string, unknown>,
           premiumEditorialContent: payloadForEnrichment.metadata?.premiumEditorialContent as Record<string, unknown>,
         };

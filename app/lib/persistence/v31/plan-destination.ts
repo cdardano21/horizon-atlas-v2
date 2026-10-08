@@ -760,7 +760,7 @@ export function buildDestinationPlan(input: BuildDestinationPlanInput): Destinat
   const identityFields = [
     { fieldPath: "population", currentValue: input.storedDestinationState.identity.population ?? null, incomingValue: input.canonicalDestination.identity.population ?? null },
     { fieldPath: "metroPopulation", currentValue: input.storedDestinationState.identity.metroPopulation ?? null, incomingValue: input.canonicalDestination.identity.metroPopulation ?? null },
-    { fieldPath: "elevation", currentValue: input.storedDestinationState.identity.elevation ?? null, incomingValue: input.canonicalDestination.identity.elevation ?? null },
+    { fieldPath: "elevation", currentValue: input.storedDestinationState.identity.elevation ?? null, incomingValue: input.canonicalDestination.identity.elevationMeters ?? null },
   ];
   scalarOperations.push(...buildScalarOperationsForIdentity(identityFields, input.diffPolicy));
 

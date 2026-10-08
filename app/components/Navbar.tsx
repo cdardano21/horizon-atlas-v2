@@ -5,13 +5,17 @@ import { useState } from "react";
 import AuthStatus from "./AuthStatus";
 import HorizonAtlasLogo from "./HorizonAtlasLogo";
 
-const links = [
+const baseLinks = [
   { label: "How It Works", href: "#how-it-works" },
   { label: "Destinations", href: "/destinations" },
-  { label: "Life Match", href: "/life-match" },
   { label: "Compare", href: "/compare" },
   { label: "Resources", href: "/about" },
 ];
+
+type NavbarProps = {
+  matchingHref?: string;
+  matchingLabel?: string;
+};
 
 const toTestIdToken = (value: string) =>
   value
@@ -19,8 +23,13 @@ const toTestIdToken = (value: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-export default function Navbar() {
+export default function Navbar({ matchingHref = "/life-match", matchingLabel = "Life Match" }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const links = [
+    ...baseLinks.slice(0, 2),
+    { label: matchingLabel, href: matchingHref },
+    ...baseLinks.slice(2),
+  ];
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-[#e4b85230] bg-[#03142ae8] shadow-[0_14px_35px_-24px_rgba(0,0,0,0.9)] backdrop-blur-xl">

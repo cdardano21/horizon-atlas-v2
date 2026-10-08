@@ -321,7 +321,7 @@ function buildNeighborhoodQuery(destination: CanonicalDestination, neighborhoodN
   return [neighborhoodName, term, destination.city, destination.country].filter(Boolean).join(" ").trim();
 }
 
-function dedupeResourceItems(items: NeighborhoodResourceItem[]) {
+function dedupeResourceItems<T extends { label: string; url: string }>(items: T[]): T[] {
   const seen = new Set<string>();
   return items.filter((item) => {
     const key = `${item.label}::${item.url}`;
@@ -1701,7 +1701,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
     researchProfile: {
       overview: destination.overview,
       feel: destination.dailyLife,
-      whyPeopleLoveIt: destination.whyThisPlaceFeelsDistinct ? [destination.whyThisPlaceFeelsDistinct] : undefined,
+      whyPeopleLoveIt: destination.whyThisPlaceFeelsDistinct || undefined,
       climate: destination.climate,
       costOfLiving: destination.costOfLiving,
       housing: destination.costOfLiving,
@@ -2179,6 +2179,7 @@ export default function CanonicalDestinationPage({ destination, developerMode = 
 
     return {
       ...item,
+      neighborhoodKey: "neighborhoodKey" in item && typeof item.neighborhoodKey === "string" ? item.neighborhoodKey : undefined,
       profile,
       whyItWorks: summary,
       fit,

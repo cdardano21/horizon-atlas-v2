@@ -139,7 +139,7 @@ export function diffSingletonModule<M extends SingletonModuleKey>(input: DiffSin
   evaluatePolicy(input.policy);
 
   const fieldDefinitions = input.fieldDefinitions ?? [];
-  const descriptors = fieldDefinitions.length > 0
+  const descriptors: readonly SingletonFieldDefinition[] = fieldDefinitions.length > 0
     ? fieldDefinitions
     : collectFieldPaths(input.currentValue, input.incomingValue).map((fieldPath) => ({ fieldPath }));
 

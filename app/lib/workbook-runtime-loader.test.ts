@@ -185,7 +185,7 @@ describe("workbook runtime loader helpers", () => {
     const destination = await loadPremiumWorkbookDestinationData("demo-town");
 
     expect(destination).not.toBeNull();
-    expect(execFileSyncMocked).toHaveBeenCalledWith(expect.any(String), expect.any(Array), expect.objectContaining({ cwd: workspaceDir }));
+    expect(execFileSyncMocked).toHaveBeenCalledWith(expect.any(String), expect.any(Array), expect.objectContaining({ cwd: process.cwd() }));
     const pythonCommand = execFileSyncMocked.mock.calls[0]?.[0];
     expect(pythonCommand).toBeDefined();
     expect(pythonCommand).not.toContain(".venv/bin/python");
@@ -271,6 +271,8 @@ describe("workbook runtime loader helpers", () => {
   });
 
   it("resolves live pilot slugs through the deterministic v3.1 workbook import", async () => {
+    const actualChildProcess = await vi.importActual<typeof import("node:child_process")>("node:child_process");
+    execFileSyncMocked.mockImplementation(actualChildProcess.execFileSync);
     const destination = await loadPremiumWorkbookDestinationData("lisbon-portugal");
 
     expect(destination).not.toBeNull();
@@ -280,6 +282,8 @@ describe("workbook runtime loader helpers", () => {
   });
 
   it("maps workbook population, metro population, and elevation for Lisbon without hardcoding pilot values", async () => {
+    const actualChildProcess = await vi.importActual<typeof import("node:child_process")>("node:child_process");
+    execFileSyncMocked.mockImplementation(actualChildProcess.execFileSync);
     const destination = await loadPremiumWorkbookDestinationData("lisbon-portugal");
 
     expect(destination).not.toBeNull();
@@ -291,6 +295,8 @@ describe("workbook runtime loader helpers", () => {
   });
 
   it("maps the same workbook population, metro population, and elevation columns for New Braunfels using the shared mapping path", async () => {
+    const actualChildProcess = await vi.importActual<typeof import("node:child_process")>("node:child_process");
+    execFileSyncMocked.mockImplementation(actualChildProcess.execFileSync);
     const destination = await loadPremiumWorkbookDestinationData("new-braunfels-texas-united-states");
 
     expect(destination).not.toBeNull();
@@ -300,6 +306,8 @@ describe("workbook runtime loader helpers", () => {
   });
 
   it("maps the same workbook population, metro population, and elevation columns for Summerlin using the shared mapping path", async () => {
+    const actualChildProcess = await vi.importActual<typeof import("node:child_process")>("node:child_process");
+    execFileSyncMocked.mockImplementation(actualChildProcess.execFileSync);
     const destination = await loadPremiumWorkbookDestinationData("summerlin-las-vegas-nevada");
 
     expect(destination).not.toBeNull();

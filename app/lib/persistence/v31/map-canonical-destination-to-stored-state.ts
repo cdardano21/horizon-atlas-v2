@@ -13,7 +13,7 @@ function asStoredKey<T extends string>(value: unknown): T {
   return (value == null ? "" : String(value)) as T;
 }
 
-function ensureUniqueChildRows<T extends Record<string, unknown>, K extends keyof T>(rows: readonly T[], keyField: K): Array<T> {
+function ensureUniqueChildRows<T extends object, K extends keyof T>(rows: readonly T[], keyField: K): Array<T> {
   const counts = new Map<string, number>();
 
   return rows.map((row, index) => {
@@ -57,7 +57,7 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       countryCode: asStoredNullableString(canonicalDestination.destinationRow?.country_code),
       population: asStoredNullableString(canonicalDestination.identity.population),
       metroPopulation: asStoredNullableString(canonicalDestination.identity.metroPopulation),
-      elevation: asStoredNullableString(canonicalDestination.identity.elevation),
+      elevation: asStoredNullableString(canonicalDestination.identity.elevationMeters),
     },
     editorial: {
       shortDescription: asStoredNullableString(canonicalDestination.editorial.shortDescription),
@@ -136,7 +136,7 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       licenseNotes: asStoredNullableString(media.license_notes),
     })),
     costOfLiving: costOfLiving.map((item) => ({
-      itemKey: asStoredKey<StoredDestinationState["costOfLiving"][number]["itemKey"]>(asStoredChild(item, "record_key")),
+      itemKey: asStoredKey<string>(asStoredChild(item, "record_key")),
       category: asStoredNullableString(item.category),
       monthlyLow: asStoredNullableString(item.monthly_low),
       monthlyHigh: asStoredNullableString(item.monthly_high),
@@ -148,7 +148,7 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       verifiedAt: asStoredNullableString(item.verified_at),
     })),
     climateMonthly: climateMonthly.map((month) => ({
-      monthKey: asStoredKey<StoredDestinationState["climateMonthly"][number]["monthKey"]>(asStoredChild(month, "month")),
+      monthKey: asStoredKey<string>(asStoredChild(month, "month")),
       avgHighTemp: asStoredNullableString(month.avg_high_c),
       avgLowTemp: asStoredNullableString(month.avg_low_c),
       precipitationMm: asStoredNullableString(month.rainfall_mm),
@@ -352,4 +352,3 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
     })),
   };
 }
-

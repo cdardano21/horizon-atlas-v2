@@ -184,7 +184,7 @@ export async function getDeliveredDestinationImage(source: string | null): Promi
 }
 
 export function destinationImageResponse(image: CachedImage) {
-  return new Response(image.bytes, {
+  return new Response(Buffer.from(image.bytes), {
     headers: {
       "Cache-Control": CACHE_CONTROL,
       "Content-Type": image.contentType,

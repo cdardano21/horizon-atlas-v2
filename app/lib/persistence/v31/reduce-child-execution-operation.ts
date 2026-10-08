@@ -52,7 +52,8 @@ function compareComparableValues(left: ComparableValue | null, right: Comparable
   return false;
 }
 
-function areSemanticallyEqual<T extends object>(left: T, right: T): boolean {
+function areSemanticallyEqual<T extends object | null>(left: T, right: T): boolean {
+  if (left === null || right === null) return left === right;
   return compareComparableValues(projectComparableObject(left), projectComparableObject(right));
 }
 

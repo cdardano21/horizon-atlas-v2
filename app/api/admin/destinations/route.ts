@@ -235,7 +235,11 @@ export async function POST(request: Request) {
     const { accessToken, user, adminRole } = await getAuthedAdmin();
     if (shouldUseAdminLocalFallback(accessToken, user, adminRole)) {
       const payload: DestinationInsertPayload = await request.json();
-      const destination = createAdminFallbackDestination(payload);
+      const { city, country, slug } = normalizeDestinationIdentity(payload);
+      if (!city || !country || !slug) {
+        return Response.json({ error: "City, country, and slug are required." }, { status: 400 });
+      }
+      const destination = createAdminFallbackDestination({ ...payload, city, country, slug });
       return Response.json({ destination }, { status: 200 });
     }
 

@@ -92,8 +92,8 @@ function transactionalClient(initial: readonly CatalogRow[], failPremiumKey?: st
       if (sql.startsWith("select 1 as present from public.premium_destination_profiles")) {
         return { rows: [], rowCount: 0 };
       }
-      if (sql.startsWith("select id from public.destinations_catalog where (destination_key = $1 or slug = $2) and id <> $3")) {
-        const matches = [...rows.values()].filter((row) => (row.destinationKey === values[0] || row.slug === values[1]) && row.id !== values[2]);
+      if (sql.startsWith("select id from public.destinations_catalog where destination_key = $1 and id <> $2")) {
+        const matches = [...rows.values()].filter((row) => row.destinationKey === values[0] && row.id !== values[1]);
         return { rows: matches.map((row) => ({ id: row.id })), rowCount: matches.length };
       }
       if (sql.startsWith("select id from public.destinations_catalog where slug = $1 or destination_key = $2")) {
@@ -101,15 +101,12 @@ function transactionalClient(initial: readonly CatalogRow[], failPremiumKey?: st
         return { rows: matches.map((row) => ({ id: row.id })), rowCount: matches.length };
       }
       if (sql.startsWith("update public.destinations_catalog")) {
-        const row = rows.get(String(values[7]));
-        if (!row || row.destinationKey !== values[8] || row.slug !== values[9] || row.city !== values[10] || row.country !== values[11]) return { rows: [], rowCount: 0 };
+        const row = rows.get(String(values[4]));
+        if (!row || row.destinationKey !== values[5]) return { rows: [], rowCount: 0 };
         row.destinationKey = String(values[0]);
-        row.slug = String(values[1]);
-        row.city = String(values[2]);
-        row.country = String(values[3]);
-        row.beachAccess = values[4] as string | null;
-        row.mountainOrSkiAccess = values[5] as string | null;
-        row.countryCode = values[6] as string | null;
+        row.beachAccess = values[1] as string | null;
+        row.mountainOrSkiAccess = values[2] as string | null;
+        row.countryCode = values[3] as string | null;
         return { rows: [{ id: row.id }], rowCount: 1 };
       }
       if (sql.startsWith("insert into public.destinations_catalog")) {
@@ -242,7 +239,7 @@ describe("executeGuardedDeterministicV31Batch", () => {
     expect(fake.log.some(({ text }) => text === "BEGIN" || text.startsWith("insert ") || text.startsWith("update ") || text.startsWith("delete "))).toBe(false);
   });
 
-  it("dry-runs a first import with Lifestyle features without reading an undefined stored module", async () => {
+  it("does not automatically authorize or write Lifestyle features on a first import", async () => {
     const destination = spec("lifestyle-first-import");
     destination.canonicalDestination.lifestyleFeatures = [{
       destination_key: "lifestyle-first-import",
@@ -276,9 +273,10 @@ describe("executeGuardedDeterministicV31Batch", () => {
     });
 
     expect(result).toMatchObject({ batchOutcome: "COMPLETED", attempted: 1, failed: 0, totalStatementsExecuted: 0 });
-    expect(prepared[0].moduleExecutionOperations).toEqual([
-      expect.objectContaining({ module: "lifestyleFeatures", expectedBefore: [], expectedAfter: [expect.any(Object)] }),
-    ]);
+    expect(prepared).toHaveLength(1);
+    expect(prepared[0].moduleExecutionOperations).toEqual([]);
+    expect(prepared[0].expectedComparablePostState.lifestyleFeatures).toEqual([]);
+    expect(fake.log.some(({ text }) => /^(insert|update|delete) /i.test(text))).toBe(false);
   });
 
   it("rejects an ambiguous canonical-key/legacy-slug resolution before any write", async () => {

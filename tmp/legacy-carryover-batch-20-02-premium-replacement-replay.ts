@@ -197,7 +197,7 @@ function expectedWithCatalog(plan: DestinationPlan, catalog: CatalogWriteOperati
   return {
     ...plan.expectedComparablePostState,
     identity: {
-      ...identity, slug: catalog.slug, name: catalog.city, city: catalog.city, country: catalog.country,
+      ...identity, destinationKey: catalog.destinationKey,
       beachAccess: catalog.beachAccess, mountainOrSkiAccess: catalog.mountainOrSkiAccess, countryCode: catalog.countryCode,
     },
   };

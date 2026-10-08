@@ -49,8 +49,9 @@ describe("buildPublicDestinationCatalogList", () => {
   });
 
   it("fetches a wider Supabase catalog window and filters published rows locally", async () => {
-    mockedSupabaseFetch.mockResolvedValue(
-      new Response(
+    mockedSupabaseFetch.mockImplementation(async (path) => {
+      if (path.startsWith("/rest/v1/premium_media?")) return jsonResponse([]);
+      return new Response(
         JSON.stringify([
           {
             id: "row-5",
@@ -74,8 +75,8 @@ describe("buildPublicDestinationCatalogList", () => {
           },
         ]),
         { status: 200, headers: { "Content-Type": "application/json" } },
-      ),
-    );
+      );
+    });
 
     const list = await getPublicDestinations();
 
@@ -245,6 +246,44 @@ describe("buildPublicDestinationCatalogList", () => {
 
     expect(list.some((destination) => destination.slug === "devon-pa-usa")).toBe(true);
   });
+
+  it("restores persisted canonical media only when the Browse destination has no existing image", () => {
+    const existingImage = "https://upload.wikimedia.org/existing.jpg";
+    const restoredImage = "https://upload.wikimedia.org/restored.jpg";
+    const localDestination: Destination = {
+      slug: "existing-city",
+      city: "Existing City",
+      country: "Testland",
+      emoji: "",
+      match: 0,
+      description: "Existing description",
+      overview: "Existing overview",
+      climate: "Warm",
+      lifestyle: "Relaxed",
+      transportation: "Connected",
+      images: [{ src: existingImage, alt: "Existing alt", caption: "Existing caption" }],
+      tags: [],
+    };
+
+    const list = buildPublicDestinationCatalogList(
+      [
+        { ...makeCatalogRow(1), id: "destination-1", destination_key: "existing-key", slug: "existing-city", city: "Existing City" },
+        { ...makeCatalogRow(2), id: "destination-2", destination_key: "restored-key", slug: "restored-city", city: "Restored City" },
+      ],
+      [localDestination],
+      [
+        { destination_id: "destination-1", destination_key: "existing-key", media_key: "media-1", url: "https://upload.wikimedia.org/replacement.jpg", caption: "Replacement", alt_text: "Replacement", sort_order: 1, is_primary: true },
+        { destination_id: "destination-2", destination_key: "restored-key", media_key: "media-2", url: restoredImage, caption: "Restored caption", alt_text: "Restored alt", sort_order: 2, is_primary: false },
+        { destination_id: "destination-2", destination_key: "restored-key", media_key: "media-1", url: "https://upload.wikimedia.org/restored-primary.jpg", caption: "Primary caption", alt_text: "Primary alt", sort_order: 1, is_primary: true },
+      ],
+    );
+
+    expect(list.find((destination) => destination.slug === "existing-city")?.images).toEqual(localDestination.images);
+    expect(list.find((destination) => destination.slug === "restored-city")?.images).toEqual([
+      { src: "https://upload.wikimedia.org/restored-primary.jpg", alt: "Primary alt", caption: "Primary caption" },
+      { src: restoredImage, alt: "Restored alt", caption: "Restored caption" },
+    ]);
+  });
 });
 
 describe("getPublicDestinations pagination", () => {
@@ -256,47 +295,50 @@ describe("getPublicDestinations pagination", () => {
     mockedSupabaseFetch.mockReset();
   });
 
-  it("retrieves exactly 1,000 rows across two requests (full page + empty page)", async () => {
+  it("retrieves exactly 1,000 rows across two catalog page requests plus one media request", async () => {
     const firstPage = Array.from({ length: 1000 }, (_, index) => makeCatalogRow(index));
     mockedSupabaseFetch
       .mockResolvedValueOnce(jsonResponse(firstPage))
+      .mockResolvedValueOnce(jsonResponse([]))
       .mockResolvedValueOnce(jsonResponse([]));
 
     const list = await getPublicDestinations();
 
-    expect(mockedSupabaseFetch).toHaveBeenCalledTimes(2);
+    expect(mockedSupabaseFetch).toHaveBeenCalledTimes(3);
     expect(list).toHaveLength(1000);
     const uniqueSlugs = new Set(list.map((destination) => destination.slug));
     expect(uniqueSlugs.size).toBe(1000);
   });
 
-  it("retrieves more than 1,000 rows completely across two pages (1,000 + 5)", async () => {
+  it("retrieves more than 1,000 rows across two catalog pages (1,000 + 5) plus one media request", async () => {
     const firstPage = Array.from({ length: 1000 }, (_, index) => makeCatalogRow(index));
     const secondPage = Array.from({ length: 5 }, (_, index) => makeCatalogRow(1000 + index));
     mockedSupabaseFetch
       .mockResolvedValueOnce(jsonResponse(firstPage))
-      .mockResolvedValueOnce(jsonResponse(secondPage));
+      .mockResolvedValueOnce(jsonResponse(secondPage))
+      .mockResolvedValueOnce(jsonResponse([]));
 
     const list = await getPublicDestinations();
 
-    expect(mockedSupabaseFetch).toHaveBeenCalledTimes(2);
+    expect(mockedSupabaseFetch).toHaveBeenCalledTimes(3);
     expect(list).toHaveLength(1005);
     const uniqueSlugs = new Set(list.map((destination) => destination.slug));
     expect(uniqueSlugs.size).toBe(1005);
   });
 
-  it("retrieves at least 2,005 synthetic rows across three pages with no duplicates or gaps", async () => {
+  it("retrieves at least 2,005 synthetic rows across three catalog pages plus one media request with no duplicates or gaps", async () => {
     const firstPage = Array.from({ length: 1000 }, (_, index) => makeCatalogRow(index));
     const secondPage = Array.from({ length: 1000 }, (_, index) => makeCatalogRow(1000 + index));
     const thirdPage = Array.from({ length: 5 }, (_, index) => makeCatalogRow(2000 + index));
     mockedSupabaseFetch
       .mockResolvedValueOnce(jsonResponse(firstPage))
       .mockResolvedValueOnce(jsonResponse(secondPage))
-      .mockResolvedValueOnce(jsonResponse(thirdPage));
+      .mockResolvedValueOnce(jsonResponse(thirdPage))
+      .mockResolvedValueOnce(jsonResponse([]));
 
     const list = await getPublicDestinations();
 
-    expect(mockedSupabaseFetch).toHaveBeenCalledTimes(3);
+    expect(mockedSupabaseFetch).toHaveBeenCalledTimes(4);
     expect(list).toHaveLength(2005);
     const uniqueSlugs = new Set(list.map((destination) => destination.slug));
     expect(uniqueSlugs.size).toBe(2005);
@@ -312,7 +354,8 @@ describe("getPublicDestinations pagination", () => {
     const secondPage = Array.from({ length: 3 }, (_, index) => makeCatalogRow(1000 + index));
     mockedSupabaseFetch
       .mockResolvedValueOnce(jsonResponse(firstPage))
-      .mockResolvedValueOnce(jsonResponse(secondPage));
+      .mockResolvedValueOnce(jsonResponse(secondPage))
+      .mockResolvedValueOnce(jsonResponse([]));
 
     await getPublicDestinations();
 
@@ -362,4 +405,3 @@ describe("getPublicDestinations pagination", () => {
     expect(list.some((destination) => destination.slug.startsWith("synthetic-city-"))).toBe(false);
   });
 });
-

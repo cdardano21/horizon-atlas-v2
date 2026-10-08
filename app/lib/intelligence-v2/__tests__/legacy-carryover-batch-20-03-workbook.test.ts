@@ -8,8 +8,8 @@ import { buildRegisteredWorkbookContributions, deriveRegisteredAffordability } f
 import { loadFrozenWorkbookV31DeterministicImport, type DeterministicV31CanonicalDestination, type DeterministicV31WorkbookImport } from "../../workbook-v31-deterministic-core";
 import { adaptWorkbookDestinationToIntelligenceV2Facts } from "../workbook-v32-adapter";
 
-const WORKBOOK_PATH = path.resolve(process.cwd(), "data/legacy-carryover-batch-20-03/DestinationFinderAI-Next-Legacy-Batch-20-Premium-Enriched-Corrected-v3.3.xlsx");
-const EXPECTED_SHA256 = "6bae082ce0d8d2f43975971004824d202d8dcfd73be336d75d6670dd1f6f8bc7";
+const WORKBOOK_PATH = path.resolve(process.cwd(), "data/legacy-carryover-batch-20-03/DestinationFinderAI-Batch-20-03-Media-Repaired-Non-Media-Preserved-v3.3.xlsx");
+const EXPECTED_SHA256 = "4b8000f89855fb1cc063d145bd3548874bc3cb6caf21e3e9ca91b5727fe7aa9a";
 const EXPECTED_KEYS = [
   "aomori-japan", "kamakura-japan", "porto-portugal", "kranj-slovenia", "coimbra-portugal",
   "kumamoto-japan", "beppu-japan", "sapporo-japan", "lecce-italy", "athens-greece",
@@ -30,6 +30,37 @@ describe("legacy carryover batch 20-03 workbook", () => {
   it("pins the authoritative workbook and exact approved scope", () => {
     expect(createHash("sha256").update(readFileSync(WORKBOOK_PATH)).digest("hex")).toBe(EXPECTED_SHA256);
     expect(destinations.map((destination) => destination.identity.destinationKey)).toEqual(EXPECTED_KEYS);
+    const entry = EXPANSION_WORKBOOK_REGISTRY.find((candidate) => candidate.registryId === "legacy-carryover-batch-20-03")!;
+    expect(path.resolve(process.cwd(), entry.workbookPath)).toBe(WORKBOOK_PATH);
+    expect(entry.expectedSha256).toBe(EXPECTED_SHA256);
+  });
+
+  it("preserves all 960 cached climate values", () => {
+    const fields = ["avg_high_c", "avg_low_c", "rainfall_mm", "humidity_pct"] as const;
+    const values = destinations.flatMap((destination) => {
+      expect(destination.climateMonthly).toHaveLength(12);
+      return destination.climateMonthly.flatMap((month) => fields.map((field) => month[field]));
+    });
+    expect(values).toHaveLength(960);
+    for (const value of values) {
+      expect(value).not.toBeNull();
+      expect(String(value ?? "").trim()).not.toBe("");
+      expect(Number.isFinite(Number(value))).toBe(true);
+    }
+  });
+
+  it("provides four direct media images with subject text per destination", () => {
+    for (const destination of destinations) {
+      expect(destination.media).toHaveLength(4);
+      for (const media of destination.media) {
+        const url = new URL(String(media.image_url));
+        expect(url.protocol).toBe("https:");
+        expect(url.hostname).toBe("upload.wikimedia.org");
+        expect(url.pathname).toMatch(/\.(?:jpe?g|png|webp)$/i);
+        expect(media.image_url).not.toContain("Special:MediaSearch");
+        expect(String(media.subject ?? "").trim()).not.toBe("");
+      }
+    }
   });
 
   it("preserves the authored recommendation and lifestyle rows through stored-state mapping", () => {

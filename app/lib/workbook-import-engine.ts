@@ -1378,7 +1378,7 @@ export const buildPremiumV2WorkbookContractPreview = ({
       slug: destinationMatch.slug || normalizeSlug(destinationMatch.name || "workbook-destination"),
       name: destinationMatch.name,
       matchedExisting,
-      source: matchedExisting ? "existing" : "workbook",
+      source: matchedExisting ? "existing" as const : "workbook" as const,
     };
   });
 

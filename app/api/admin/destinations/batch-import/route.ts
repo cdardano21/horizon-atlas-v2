@@ -354,7 +354,14 @@ export async function POST(request: Request) {
     const hasMultiSheetWorkbookPayload = Array.isArray(payload.workbookSheets) && payload.workbookSheets.length > 0;
 
     let plan: Array<Record<string, unknown>> = [];
-    let summary = buildImportSummary({ plan: [], totalRows: rows.length });
+    let summary: ReturnType<typeof buildImportSummary> & Partial<{
+      destinationCount: number;
+      neighborhoodCount: number;
+      placeCount: number;
+      resourceCount: number;
+      mediaCount: number;
+      rejectedCount: number;
+    }> = buildImportSummary({ plan: [], totalRows: rows.length });
     let compatibilityNotes: Array<{ sheetName: string; unsupportedColumns: string[]; note: string }> = [];
 
     if (hasMultiSheetWorkbookPayload) {
@@ -498,7 +505,7 @@ export async function POST(request: Request) {
           importedRow: row,
         };
       });
-      summary = buildImportSummary({ plan, totalRows: rows.length });
+      summary = buildImportSummary({ plan: plan as never[], totalRows: rows.length });
     } else {
       plan = buildBatchImportPlan({
         rows,
@@ -511,7 +518,22 @@ export async function POST(request: Request) {
       summary = buildImportSummary({ plan: plan as never[], totalRows: rows.length });
     }
 
-    const preview = plan.filter((entry) => entry.action !== "reject" && entry.action !== "skip");
+    const preview = plan.filter((entry) => entry.action !== "reject" && entry.action !== "skip") as Array<{
+      rowNumber: number;
+      action: "create" | "update" | "reject" | "skip";
+      slug: string;
+      city: string;
+      country: string;
+      status?: string;
+      tier?: string;
+      description?: string;
+      overview?: string;
+      existingId?: string;
+      existingSlug?: string;
+      destinationSlug?: string;
+      entityType?: string;
+      importedRow?: Record<string, unknown>;
+    }>;
     if (previewOnly) {
       const contractPreview = hasMultiSheetWorkbookPayload
         ? buildPremiumV2WorkbookContractPreview({

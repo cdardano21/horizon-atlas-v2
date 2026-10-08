@@ -71,6 +71,7 @@ export type DestinationResearchProfile = {
   bestNeighborhoods?: string[];
   food?: string[];
   attractions?: string[];
+  landmarks?: string[];
   hiddenGems?: string[];
   museums?: string[];
   parks?: string[];
@@ -298,11 +299,48 @@ export type Destination = {
   premiumEditorialContent?: PremiumEditorialContent;
   knowledgeProfile?: DestinationKnowledgeProfile;
   healthcare?: string;
+  costOfLiving?: string;
+  walkability?: string;
+  internet?: string;
+  safety?: string;
+  neighborhoods?: string[];
+  restaurants?: string[];
+  museums?: string[];
+  golf?: string[];
+  beaches?: string[];
+  outdoorRecreation?: string[];
+  pros?: string[];
+  cons?: string[];
+  retirement?: string;
+  digitalNomad?: string;
+  family?: string;
+  weather?: string;
+  monthlyBudgets?: import("./canonical-destination-model").CanonicalDestinationBudget[];
+  airportInfo?: string;
+  googleMapsUrl?: string;
+  googleEarthUrl?: string;
+  officialTourismUrl?: string;
+  wikipediaUrl?: string;
+  youtubeUrl?: string;
+  tiktokUrl?: string;
+  instagramUrl?: string;
+  webcamUrl?: string;
+  resources?: import("./canonical-destination-model").CanonicalDestinationResource[];
+  realEstateResources?: import("./canonical-destination-model").CanonicalDestinationResource[];
+  rentalResources?: import("./canonical-destination-model").CanonicalDestinationResource[];
+  healthcareResources?: import("./canonical-destination-model").CanonicalDestinationResource[];
+  visaResources?: import("./canonical-destination-model").CanonicalDestinationResource[];
+  weatherResources?: import("./canonical-destination-model").CanonicalDestinationResource[];
+  structuredResources?: import("./canonical-destination-model").CanonicalDestinationResource[];
+  videos?: import("./canonical-destination-model").CanonicalDestinationVideo[];
+  media?: import("./canonical-destination-model").CanonicalDestinationMedia[];
+  heroImages?: import("./canonical-destination-model").CanonicalDestinationMedia[];
+  mediaGallery?: import("./canonical-destination-model").CanonicalDestinationMedia[];
+  sections?: Record<string, import("./canonical-destination-model").CanonicalDestinationSection>;
+  ai?: import("./canonical-destination-model").CanonicalDestinationAiState;
+  scoring?: import("./canonical-destination-model").CanonicalDestinationScoringCategory[];
+  aiScoringExplanation?: string;
   dailyLife?: string;
-  memberDetails?: {
-    airports?: Array<{ name?: string }>;
-    hospitals?: Array<{ name?: string }>;
-  };
 };
 
 const sanitizeCatalogNarrativeText = (value: string) =>
@@ -6368,6 +6406,7 @@ const rawDestinations: Destination[] = [
   },
   {
     slug: "chicago-illinois-united-states",
+    images: [],
     city: "Chicago",
     country: "United States",
     emoji: "12",
@@ -6376,9 +6415,7 @@ const rawDestinations: Destination[] = [
     subtitle: "A premium big-city base for culture, healthcare, sports, and daily life that still feels grounded in neighborhood character.",
     description: "Chicago is the rare American metropolis that feels both grand and practical: a skyline of steel and stone, a lakefront of parks and beaches, and a neighborhood fabric that still rewards walking. It offers world-class museums, serious food, a deep sports culture, and a transit network that makes car-light living genuinely possible for many residents. The tradeoffs are real: winter is long and windy, and neighborhood safety and price vary dramatically by block and district.",
     overview: "Chicago is best understood as a city of distinct districts rather than a single center. The Loop and Riverwalk bring the downtown core into focus, but the real depth comes from neighborhoods like Lincoln Park, Lakeview, River North, West Loop, Wicker Park, Hyde Park, Gold Coast, and the South Side’s cultural corridors. Millennium Park, The Art Institute, Museum Campus, Navy Pier, the Magnificent Mile, and Lake Michigan all shape the city’s identity, yet long-stay life is defined by the everyday experience of coffee shops, CTA trains and buses, local grocery runs, and the rhythms of each neighborhood.",
-    climate: "Chicago has a classic humid continental climate: warm, often humid summers; cold, windy winters; and real seasonal drama. July and August can be sticky and bright, but the city is at its most livable in late spring and early fall. Winter brings snow, lake-effect wind, and a very real test of tolerance for cold, while the lake moderates temperatures somewhat along the shoreline and in some neighborhoods.",
     lifestyle: "Chicago is a city for people who want culture without surrendering their everyday life to spectacle. Residents move between work, neighborhood cafés, gym classes, museum visits, baseball games, and weekend trips to the lakefront. The city rewards a life built around blocks, transit lines, and local rituals rather than a single flagship attraction. That is why the best long-stay experience often comes from choosing a neighborhood with care and then learning its routines over time.",
-    transportation: "Chicago’s transportation story is one of its greatest advantages. CTA trains and buses reach much of the city with real efficiency, and the Metra commuter rail extends that reach into suburbs and commuting corridors. O’Hare and Midway provide strong air access, while walkability is excellent in the central neighborhoods and more variable in the outer reaches. For many residents, a car is optional in the core and a burden in others, which makes neighborhood choice and transit familiarity exceptionally important.",
     heroNarrative: "Chicago is one of the few North American cities where the everyday experience can feel as compelling as the skyline. The city’s identity comes from neighborhoods that still have a civic and social life of their own: the lakefront calm of Lincoln Park, the restaurant energy of West Loop, the late-night pulse of River North, the student and museum culture of Hyde Park, and the historic residential character of Gold Coast. It has one of the strongest museum ecosystems in the country, excellent healthcare institutions, serious sports culture, and a waterfront that gives even the densest parts of town a breathing space. Chicago is not effortless, but when it is chosen well it offers an unusually rich balance of culture, connectivity, and value.",
     introduction: "Chicago is a city of neighborhoods, institutions, and weather that demands respect. It rewards residents who can appreciate both the grand civic architecture and the modest rituals of daily life.",
     researchProfile: {
@@ -6497,9 +6534,6 @@ const rawDestinations: Destination[] = [
       climateRisks: "Winter storms, lake-effect wind, and sharp seasonal swings matter more than many newcomers expect",
       naturalDisasterRisks: "The city faces some flood and severe weather risk, but headline natural disasters are less central than winter and infrastructure issues"
     },
-    title: "Chicago, Illinois",
-    subtitle: "A premium big-city base for culture, healthcare, sports, and daily life that still feels grounded in neighborhood character.",
-    heroNarrative: "Chicago is one of the few North American cities where the everyday experience can feel as compelling as the skyline. The city’s identity comes from neighborhoods that still have a civic and social life of their own: the lakefront calm of Lincoln Park, the restaurant energy of West Loop, the late-night pulse of River North, the student and museum culture of Hyde Park, and the historic residential character of Gold Coast. It has one of the strongest museum ecosystems in the country, excellent healthcare institutions, serious sports culture, and a waterfront that gives even the densest parts of town a breathing space. Chicago is not effortless, but when it is chosen well it offers an unusually rich balance of culture, connectivity, and value.",
     lifestyleNarrative: "Chicago rewards residents who value city depth and neighborhood routine over a purely scenic or resort-like life.",
     climateNarrative: "Chicago’s climate is dramatic and seasonal, with long winters that demand planning and active summers that feel richer because of the lakefront.",
     transportationNarrative: "The CTA and Metra make many neighborhoods genuinely usable without a car, which is one of the city’s biggest strengths.",

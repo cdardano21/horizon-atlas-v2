@@ -11,9 +11,9 @@ import type {
   RetirementIncomeTreatmentFact,
   SafetyStandardFact,
   TriStateFact,
-} from "../destination-fact-types";
-import type { HealthcareMinimumStandard } from "../profile-types";
-import type { MoneyRange } from "../result-types";
+} from "./destination-fact-types";
+import type { HealthcareMinimumStandard } from "./profile-types";
+import type { MoneyRange } from "./result-types";
 
 export interface WorkbookAdapterMappingError {
   readonly factPath: string;
@@ -44,6 +44,17 @@ export function toTriState(raw: string | null | undefined, factPath: string, she
   if (lowered === "unknown") return "UNKNOWN";
   errors.push({ factPath, sheet, rawValue: raw ?? null, message: `Invalid TriState token "${raw}" (expected Yes/No/Unknown/blank).` });
   return "UNKNOWN";
+}
+
+/** Property-only vocabulary extension for the exact structured workbook token. */
+export function normalizePropertyPurchaseAllowed(
+  raw: string | null | undefined,
+  factPath: string,
+  sheet: string,
+  errors: WorkbookAdapterMappingError[],
+): TriStateFact {
+  if (raw?.trim() === "GENERALLY_YES") return "YES";
+  return toTriState(raw, factPath, sheet, errors);
 }
 
 /** Strict membership check for workbook tokens that are already written in the exact engine-enum casing (e.g. beach_access = "NEARBY"). Blank -> fallback. Invalid -> fallback + reported mapping error. */
@@ -126,7 +137,10 @@ export function normalizeHealthcareStandard(
 
 const LGBTQ_CRIMINALIZED_PATTERN = /criminal/i;
 const LGBTQ_NO_PROTECTIONS_PATTERN = /(no legal protections|not legally protected|lacks? legal protection)/i;
-const LGBTQ_PROTECTIONS_IN_PLACE_PATTERN = /(legal protections?|legal recognition|legally protected|legally recognized)/i;
+const LGBTQ_PROTECTIONS_IN_PLACE_PATTERN = /(legal protections?|legal recognition|legally protected|legally recognized|same-sex marriage is legal (?:nationally|nationwide))/i;
+
+/** Exact committed enum tokens, matched case-insensitively (this function's existing prose patterns are all case-insensitive too) before any natural-language regex is attempted - lets a verified writeback source supply the canonical machine value directly instead of fragile prose, without ever treating arbitrary unrecognized text as a valid enum. */
+const LGBTQ_EXACT_ENUM_TOKENS: readonly LgbtqLegalProtectionFact[] = ["LEGAL_PROTECTIONS_IN_PLACE", "NO_LEGAL_PROTECTIONS", "CRIMINALIZED", "UNKNOWN"];
 
 /**
  * Narrow, explicit, generic keyword rule over ONLY `legal_protections` (never
@@ -137,6 +151,9 @@ const LGBTQ_PROTECTIONS_IN_PLACE_PATTERN = /(legal protections?|legal recognitio
 export function normalizeLgbtqLegalProtectionStatus(legalProtections: string | null | undefined): LgbtqLegalProtectionFact {
   const value = normalizeCell(legalProtections);
   if (value === "") return "UNKNOWN";
+  const upperValue = value.toUpperCase();
+  const exactToken = LGBTQ_EXACT_ENUM_TOKENS.find((token) => token === upperValue);
+  if (exactToken) return exactToken;
   if (LGBTQ_CRIMINALIZED_PATTERN.test(value)) return "CRIMINALIZED";
   if (LGBTQ_NO_PROTECTIONS_PATTERN.test(value)) return "NO_LEGAL_PROTECTIONS";
   if (LGBTQ_PROTECTIONS_IN_PLACE_PATTERN.test(value)) return "LEGAL_PROTECTIONS_IN_PLACE";
@@ -227,9 +244,10 @@ export interface CostOfLivingRowInput {
  * it must never be summed on top of them (that would double-count every
  * category). This is a generic normalization convention, not a Batch #1
  * special case - any current or future workbook using this category name gets
- * the same protection.
+ * the same protection. `total_monthly_budget` is the same reserved-rollup
+ * convention under the naming dialect used by the legacy-batch-20 workbook.
  */
-const NON_ADDITIVE_COST_ROLLUP_CATEGORIES: ReadonlySet<string> = new Set(["total_monthly"]);
+const NON_ADDITIVE_COST_ROLLUP_CATEGORIES: ReadonlySet<string> = new Set(["total_monthly", "total_monthly_budget"]);
 
 /** Relative-divergence threshold (percent of the stored rollup value) above which a component-sum-vs-rollup mismatch is worth a non-blocking, informational mapping-error note. Purely diagnostic - never changes the computed range. */
 const COST_ROLLUP_RECONCILIATION_TOLERANCE_PERCENT = 10;
@@ -239,13 +257,24 @@ const COST_ROLLUP_RECONCILIATION_TOLERANCE_PERCENT = 10;
  * destination's rows collapse to exactly one such group with distinct
  * categories and a single currency - ambiguous/duplicate/multi-currency data
  * returns null (UNKNOWN) rather than guessing which rows to sum. Within the
- * selected group, `total_monthly` (see `NON_ADDITIVE_COST_ROLLUP_CATEGORIES`)
- * is excluded from the sum; if no additive component rows remain (a
- * rollup-only group), the result is null (UNKNOWN) rather than inventing a
- * component breakdown from the rollup alone.
+ * selected group, reserved rollup categories (see
+ * `NON_ADDITIVE_COST_ROLLUP_CATEGORIES`) are excluded from the sum; if no
+ * additive component rows remain (a rollup-only group), the result is null
+ * (UNKNOWN) rather than inventing a component breakdown from the rollup alone.
+ *
+ * Structural tie-break: when rows collapse to MORE than one group, but
+ * exactly one of those groups has household_type "single", that group is
+ * deterministically selected (mirrors normalizeHouseholdSize's existing
+ * single -> 1 default convention) instead of bailing to null. Any other
+ * multi-group shape - zero "single" groups, or 2+ "single" groups (e.g.
+ * differing single-only lifestyle tiers, a genuinely conflicting estimate) -
+ * remains an unresolved ambiguity and still returns null.
  */
 export function normalizeMonthlyCostRange(rows: readonly CostOfLivingRowInput[], sheet: string, errors: WorkbookAdapterMappingError[]): MoneyRange | null {
-  if (rows.length === 0) return null;
+  if (rows.length === 0) {
+    errors.push({ factPath: "cost.estimatedMonthlyCostRange", sheet, rawValue: null, message: "Canonical single::practical COST_OF_LIVING range is absent." });
+    return null;
+  }
 
   const groupKey = (r: CostOfLivingRowInput) => `${normalizeCell(r.householdType).toLowerCase()}::${normalizeCell(r.lifestyleTier).toLowerCase()}`;
   const groups = new Map<string, CostOfLivingRowInput[]>();
@@ -255,17 +284,36 @@ export function normalizeMonthlyCostRange(rows: readonly CostOfLivingRowInput[],
     arr.push(row);
     groups.set(key, arr);
   }
-  if (groups.size !== 1) {
-    errors.push({
-      factPath: "cost.estimatedMonthlyCostRange",
-      sheet,
-      rawValue: null,
-      message: `COST_OF_LIVING rows span ${groups.size} distinct household_type/lifestyle_tier combinations; cannot safely select one range.`,
-    });
+
+  const practicalGroup = groups.get("single::practical");
+  const hasHousingGroup = groups.has("single::housing");
+
+  let group: CostOfLivingRowInput[];
+  if (practicalGroup) {
+    if (practicalGroup.length !== 1) {
+      errors.push({ factPath: "cost.estimatedMonthlyCostRange", sheet, rawValue: null, message: `Canonical single::practical COST_OF_LIVING data contains ${practicalGroup.length} rows; expected exactly one unambiguous range.` });
+      return null;
+    }
+    group = practicalGroup;
+  } else if (hasHousingGroup) {
+    errors.push({ factPath: "cost.estimatedMonthlyCostRange", sheet, rawValue: null, message: "Canonical single::practical COST_OF_LIVING range is absent; single::housing is supporting rent detail only and cannot be substituted." });
     return null;
+  } else if (groups.size === 1) {
+    [group] = Array.from(groups.values());
+  } else {
+    const singleGroups = Array.from(groups.entries()).filter(([key]) => key.startsWith("single::"));
+    if (singleGroups.length !== 1) {
+      errors.push({
+        factPath: "cost.estimatedMonthlyCostRange",
+        sheet,
+        rawValue: null,
+        message: `COST_OF_LIVING rows span ${groups.size} distinct household_type/lifestyle_tier combinations; cannot safely select one range.`,
+      });
+      return null;
+    }
+    [, group] = singleGroups[0];
   }
 
-  const [group] = Array.from(groups.values());
   const categories = group.map((r) => normalizeCell(r.category).toLowerCase()).filter(Boolean);
   if (new Set(categories).size !== categories.length) {
     errors.push({ factPath: "cost.estimatedMonthlyCostRange", sheet, rawValue: null, message: "Duplicate category rows within the selected COST_OF_LIVING group; cannot safely sum." });
@@ -280,6 +328,16 @@ export function normalizeMonthlyCostRange(rows: readonly CostOfLivingRowInput[],
 
   const componentRows = group.filter((r) => !NON_ADDITIVE_COST_ROLLUP_CATEGORIES.has(normalizeCell(r.category).toLowerCase()));
   const rollupRows = group.filter((r) => NON_ADDITIVE_COST_ROLLUP_CATEGORIES.has(normalizeCell(r.category).toLowerCase()));
+
+  if (practicalGroup) {
+    const [practicalRow] = practicalGroup;
+    const practicalLow = toNullableNumber(practicalRow.monthlyLow, "cost.estimatedMonthlyCostRange", sheet, errors);
+    const practicalHigh = toNullableNumber(practicalRow.monthlyHigh, "cost.estimatedMonthlyCostRange", sheet, errors);
+    if (practicalLow === null || practicalHigh === null || practicalLow < 0 || practicalHigh < practicalLow) {
+      errors.push({ factPath: "cost.estimatedMonthlyCostRange", sheet, rawValue: `${normalizeCell(practicalRow.monthlyLow)}::${normalizeCell(practicalRow.monthlyHigh)}`, message: "Canonical single::practical COST_OF_LIVING range is incomplete, malformed, negative, or has monthly_low greater than monthly_high." });
+      return null;
+    }
+  }
 
   let low = 0;
   let high = 0;
@@ -327,7 +385,7 @@ export function normalizeMonthlyCostRange(rows: readonly CostOfLivingRowInput[],
 
 /** Workbook STAY_MODES catalog order (a fixed, generic, destination-agnostic taxonomy - see STAY_MODES sheet). UNSURE is never a meaningful anchor for either tourist or long-stay facts. */
 const TOURIST_ROW_STAY_MODE_PRIORITY: readonly string[] = ["SHORT_1_3_MONTHS", "EXTENDED_3_12_MONTHS"];
-const LONG_STAY_ROW_STAY_MODE_PRIORITY: readonly string[] = ["LONG_TERM_PERMANENT", "EXTENDED_3_12_MONTHS"];
+const LONG_STAY_ROW_STAY_MODE_PRIORITY: readonly string[] = ["LONG_TERM_PERMANENT", "EXTENDED_3_12_MONTHS", "RELOCATE"];
 
 export function selectRowByStayModePriority<T extends { stay_mode_key?: string | null }>(rows: readonly T[], priority: readonly string[]): T | null {
   for (const key of priority) {

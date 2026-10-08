@@ -1,15 +1,21 @@
 import Link from "next/link";
 import HorizonAtlasLogo from "./HorizonAtlasLogo";
 
-const links = [
-  { label: "Life Match", href: "/life-match" },
+const baseLinks = [
   { label: "Explore", href: "#destinations" },
   { label: "Destinations", href: "#destinations" },
   { label: "Pricing", href: "#pricing" },
   { label: "Contact", href: "#contact" },
 ];
 
-export default function Footer() {
+type FooterProps = {
+  matchingHref?: string;
+  matchingLabel?: string;
+};
+
+export default function Footer({ matchingHref = "/life-match", matchingLabel = "Life Match" }: FooterProps) {
+  const links = [{ label: matchingLabel, href: matchingHref }, ...baseLinks];
+
   return (
     <footer className="border-t border-[#f4d08b26] bg-[linear-gradient(180deg,rgba(6,20,40,0.86),rgba(5,16,31,0.94))] px-8 py-16 text-[#cad8ea]">
       <div className="mx-auto flex max-w-7xl flex-col gap-10 md:flex-row md:items-center md:justify-between">

@@ -11,7 +11,7 @@ export type HarnessBundleSummary = {
   readonly failureModule: string | null;
 };
 
-const BUNDLE_MODULE_KEYS: readonly string[] = [
+const BUNDLE_MODULE_KEYS: readonly (keyof NormalizedPersistedDestinationBundle)[] = [
   "facts",
   "scores",
   "neighborhoods",
@@ -52,7 +52,7 @@ function toRecord(value: unknown): Record<string, unknown> | null {
 
 function collectPresenceModules(bundle: NormalizedPersistedDestinationBundle): readonly string[] {
   return BUNDLE_MODULE_KEYS.filter((moduleKey) => {
-    const value = (bundle as Record<string, unknown>)[moduleKey];
+    const value = bundle[moduleKey];
     if (Array.isArray(value)) {
       return value.length > 0;
     }

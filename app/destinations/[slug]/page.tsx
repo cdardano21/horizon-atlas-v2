@@ -149,7 +149,8 @@ function soundsRoboticNarrative(value: string | null | undefined) {
 
 function buildEditorialOverview(command: CommandCenterData, destinationOverride?: Partial<Destination>) {
   const destination = destinationOverride ?? command.destination;
-  const cityKey = destination.city.trim().toLowerCase();
+  const city = destination.city ?? "";
+  const cityKey = city.trim().toLowerCase();
   const isCavtat = cityKey === "cavtat";
   const isHiroshima = cityKey === "hiroshima";
   const tags = destination.tags ?? [];
@@ -159,22 +160,22 @@ function buildEditorialOverview(command: CommandCenterData, destinationOverride?
   const recreation = summarizeRows([...command.beaches, ...command.recreationFacilities, ...command.golfCourses], 3);
   const airportAnchor = pickPlaceAnchor(
     [command.airports[0]?.name, destination.transportation],
-    `${destination.city} airport network`,
-    destination.city,
+    `${city} airport network`,
+    city,
   );
   const healthcareAnchor = pickPlaceAnchor(
     [command.healthcareFacilities[0]?.name],
-    `${destination.city} healthcare network`,
-    destination.city,
+    `${city} healthcare network`,
+    city,
   );
   const practicalAnchor = pickPlaceAnchor(
     [command.foodSpots[0]?.name, command.recreationFacilities[0]?.name, command.beaches[0]?.name, command.practicalInfo[0]?.name],
-    `${destination.city} daily core`,
-    destination.city,
+    `${city} daily core`,
+    city,
   );
   const neighborhoodAnchor = neighborhoods.length > 1
     ? `${neighborhoods[0]} and ${neighborhoods[1]}`
-    : neighborhoods[0] ?? `central ${destination.city}`;
+    : neighborhoods[0] ?? `central ${city}`;
   const humanIntroFallback = isCavtat
     ? "Cavtat is a small Adriatic harbor town on the Rat and Sustjepan peninsulas, just south of Dubrovnik, with palm-lined promenades and clear coves that keep daily life close to the water."
     : coastal
@@ -748,8 +749,8 @@ function buildLifeScenarios(command: CommandCenterData) {
 
 function buildMagazineDescription(command: CommandCenterData, destinationOverride?: Partial<Destination>) {
   const destination = destinationOverride ?? command.destination;
-  const city = destination.city;
-  const country = destination.country;
+  const city = destination.city ?? "";
+  const country = destination.country ?? "";
   const cityKey = city.trim().toLowerCase();
   const isCavtat = cityKey === "cavtat";
   const isHiroshima = cityKey === "hiroshima";
@@ -1479,7 +1480,12 @@ export default async function DestinationPage({ params, searchParams }: Destinat
   const rapidAnswersFallback = buildRapidAnswers(command);
   const coreQaFallback = buildCoreRelocationQa(command);
   const practicalTopLinksFallback = buildPracticalTopLinks(destination.city, destination.country);
-  const visibleNarratives = buildVisibleEditorialNarratives(destination, researchProfile, editorialFallback);
+  const visibleNarratives = buildVisibleEditorialNarratives(destination, researchProfile, {
+    intro: editorialFallback.intro ?? "",
+    follow: editorialFallback.follow ?? "",
+    dek: editorialFallback.dek ?? "",
+    quote: editorialFallback.quote ?? "",
+  });
   const editorial = visibleNarratives.editorial;
   const dayHere = destination.dayMoments && (destination.dayMoments.timeline.length > 0 || (destination.dayMoments.weekend?.length ?? 0) > 0 || (destination.dayMoments.scoutingChecks?.length ?? 0) > 0)
     ? {

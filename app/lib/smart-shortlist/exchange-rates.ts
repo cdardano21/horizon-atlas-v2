@@ -67,12 +67,12 @@ function parseDecimal(value: string): { integer: bigint; scale: bigint } {
   const fraction = match[2] ?? "";
   return {
     integer: BigInt(`${value.split(".")[0]}${fraction}`),
-    scale: 10n ** BigInt(fraction.length),
+    scale: BigInt(10) ** BigInt(fraction.length),
   };
 }
 
 function roundHalfUp(numerator: bigint, denominator: bigint): bigint {
-  return (numerator * 2n + denominator) / (denominator * 2n);
+  return (numerator * BigInt(2) + denominator) / (denominator * BigInt(2));
 }
 
 function utcDate(value: string): Date {

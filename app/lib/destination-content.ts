@@ -222,14 +222,7 @@ const selectCatalogNarrativeValue = (
 
 export const buildVisibleEditorialNarratives = (
   destination: Partial<Pick<Destination, "description" | "overview" | "lifestyle" | "climate" | "transportation" | "introduction" | "heroNarrative" | "lifestyleNarrative" | "climateNarrative" | "transportationNarrative" | "verdict">>,
-  researchProfile: Partial<{
-    overview: string | null;
-    whyPeopleLoveIt: string | null;
-    retirementSuitability: string | null;
-    feel: string | null;
-    climate: string | null;
-    transportation: string | null;
-  }> | null,
+  researchProfile: Partial<DestinationResearchProfile> | null,
   editorialFallback: { intro: string; follow: string; dek: string; quote: string },
 ) => {
   const intro = chooseNarrativeText(
@@ -244,7 +237,7 @@ export const buildVisibleEditorialNarratives = (
   );
 
   const dek = chooseNarrativeText(
-    [destination.verdict, destination.lifestyleNarrative, destination.lifestyle, researchProfile?.retirementSuitability, researchProfile?.longFormEditorial, destination.description, destination.overview],
+    [destination.verdict, destination.lifestyleNarrative, destination.lifestyle, researchProfile?.longStaySuitability, researchProfile?.longFormEditorial, destination.description, destination.overview],
     editorialFallback.dek,
     intro,
   );
@@ -397,6 +390,9 @@ const buildDestinationFromAdminFallback = (slug: string, local: Destination | un
     slug: matchingFallback.slug || local?.slug || slug,
     city: matchingFallback.city || local?.city || "",
     country: matchingFallback.country || local?.country || "",
+    emoji: local?.emoji ?? "📍",
+    match: local?.match ?? 0,
+    images: local?.images ?? [],
     description,
     overview,
     climate,
@@ -488,12 +484,13 @@ export const buildDestinationFromCatalogRow = (
     ?? editorialContent?.lifestyleNarrative
     ?? editorialContent?.heroNarrative
     ?? (local?.researchProfile as Partial<DestinationResearchProfile> | undefined)?.whyThisPlaceFeelsDistinct;
+  const hasResearchNarrative = Boolean(editorialContent?.longFormEditorial || editorialContent?.whyThisPlaceFeelsDistinct || editorialContent?.destinationOverview || researchProfile?.feel);
   const mergedResearchProfile = researchProfile ? {
     ...(local?.researchProfile ?? {}),
     ...researchProfile,
     longFormEditorial: inferredLongFormEditorial,
     whyThisPlaceFeelsDistinct: inferredWhyThisPlaceFeelsDistinct,
-  } as DestinationResearchProfile : (editorialContent?.longFormEditorial || editorialContent?.whyThisPlaceFeelsDistinct || editorialContent?.destinationOverview || researchProfile?.feel)
+  } as DestinationResearchProfile : hasResearchNarrative
     ? ({
         ...(local?.researchProfile ?? {}),
         longFormEditorial: inferredLongFormEditorial,
