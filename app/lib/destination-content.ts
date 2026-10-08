@@ -1,4 +1,3 @@
-import fs from "node:fs";
 import { enrichedDestinations, getDestinationEditorialFields } from "./destination-enrichment";
 import { listAdminFallbackDestinations } from "./admin-local-fallback";
 import { getSourceOnlyNarrative } from "./source-only-destination-narratives";
@@ -66,17 +65,6 @@ export type DestinationVideoLink = {
   label: string;
   url: string;
   embedUrl: string | null;
-};
-
-const TRACE_LOG_PATH = process.env.HORIZON_ATLAS_TRACE_LOG ?? "/tmp/horizon-atlas-trace.log";
-
-const writeTrace = (label: string, payload: unknown) => {
-  try {
-    const line = `[${new Date().toISOString()}] ${label} ${JSON.stringify(payload)}\n`;
-    fs.appendFileSync(TRACE_LOG_PATH, line);
-  } catch {
-    // ignore trace-file failures
-  }
 };
 
 const WEAK_NARRATIVE_PATTERNS = [
@@ -600,22 +588,16 @@ const fetchCatalogRowsForDestination = async (
   local: Pick<Destination, "slug" | "city" | "country"> | undefined,
 ) => {
   const resolvedSlug = resolveDestinationSlug(slug);
-  console.log("[destination-content] fetchCatalogRowsForDestination:start", { slug, resolvedSlug, local });
-  writeTrace("[destination-content] fetchCatalogRowsForDestination:start", { slug, resolvedSlug, local });
   const exactResponse = await supabaseFetch(
     `/rest/v1/destinations_catalog?select=id,slug,city,country,tier,status,hero_image_url,description,overview,climate_summary,lifestyle_summary,transportation_summary,metadata&slug=eq.${encodeURIComponent(resolvedSlug)}&limit=1`,
     { cache: "no-store" },
   );
 
   if (!exactResponse.ok) {
-    console.log("[destination-content] branch:exact-response-not-ok", { status: exactResponse.status });
-    writeTrace("[destination-content] branch:exact-response-not-ok", { status: exactResponse.status });
     return [] as DestinationCatalogRow[];
   }
 
   const exactRows = (await exactResponse.json()) as DestinationCatalogRow[];
-  console.log("[destination-content] exactRows", { count: exactRows.length, rows: exactRows });
-  writeTrace("[destination-content] exactRows", { count: exactRows.length, rows: exactRows });
   if (exactRows.length > 0) {
     return exactRows;
   }
@@ -623,43 +605,29 @@ const fetchCatalogRowsForDestination = async (
   const city = local?.city?.trim();
   const country = local?.country?.trim();
   if (!city || !country) {
-    console.log("[destination-content] branch:no-city-country-for-address-fallback", { city, country });
-    writeTrace("[destination-content] branch:no-city-country-for-address-fallback", { city, country });
     return exactRows;
   }
 
-  console.log("[destination-content] branch:address-fallback", { city, country });
-  writeTrace("[destination-content] branch:address-fallback", { city, country });
   const addressResponse = await supabaseFetch(
     `/rest/v1/destinations_catalog?select=id,slug,city,country,tier,status,hero_image_url,description,overview,climate_summary,lifestyle_summary,transportation_summary,metadata&city=eq.${encodeURIComponent(city)}&country=eq.${encodeURIComponent(country)}&limit=10`,
     { cache: "no-store" },
   );
 
   if (!addressResponse.ok) {
-    console.log("[destination-content] branch:address-response-not-ok", { status: addressResponse.status });
-    writeTrace("[destination-content] branch:address-response-not-ok", { status: addressResponse.status });
     return exactRows;
   }
 
   const addressRows = (await addressResponse.json()) as DestinationCatalogRow[];
-  console.log("[destination-content] addressRows", { count: addressRows.length, rows: addressRows });
-  writeTrace("[destination-content] addressRows", { count: addressRows.length, rows: addressRows });
   return addressRows;
 };
 
 export async function getDestinationContent(slug: string): Promise<DestinationContent | null> {
   const resolvedSlug = resolveDestinationSlug(slug);
-  console.log("[destination-content] getDestinationContent:start", { slug, resolvedSlug });
-  writeTrace("[destination-content] getDestinationContent:start", { slug, resolvedSlug });
   const local = enrichedDestinations.find((item) => item.slug === resolvedSlug || item.slug === slug);
 
   const localWithFallbackOverrides = buildDestinationFromAdminFallback(resolvedSlug, local);
-  console.log("[destination-content] localWithFallbackOverrides", { localWithFallbackOverrides });
-  writeTrace("[destination-content] localWithFallbackOverrides", { localWithFallbackOverrides });
 
   if (!isSupabaseConfigured()) {
-    console.log("[destination-content] branch:supabase-not-configured");
-    writeTrace("[destination-content] branch:supabase-not-configured", {});
     const destination = buildDestinationFromLocalContent(localWithFallbackOverrides, resolvedSlug);
     if (!destination) return null;
     const result = {
@@ -669,22 +637,14 @@ export async function getDestinationContent(slug: string): Promise<DestinationCo
       resourceLinks: [],
       videoLinks: [],
     } as DestinationContent;
-    console.log("[destination-content] return:local", result);
-    writeTrace("[destination-content] return:local", result);
     return result;
   }
 
   try {
-    console.log("[destination-content] branch:supabase-configured");
-    writeTrace("[destination-content] branch:supabase-configured", {});
     const rows = await fetchCatalogRowsForDestination(resolvedSlug, localWithFallbackOverrides);
     const row = findDestinationCatalogRow(resolvedSlug, localWithFallbackOverrides, rows);
-    console.log("[destination-content] selected-row", { row });
-    writeTrace("[destination-content] selected-row", { row });
 
     if (!row) {
-      console.log("[destination-content] branch:no-catalog-row");
-      writeTrace("[destination-content] branch:no-catalog-row", {});
       const destination = buildDestinationFromLocalContent(localWithFallbackOverrides, resolvedSlug);
       if (!destination) return null;
       const result = {
@@ -694,8 +654,6 @@ export async function getDestinationContent(slug: string): Promise<DestinationCo
         resourceLinks: [],
         videoLinks: [],
       } as DestinationContent;
-      console.log("[destination-content] return:local-no-row", result);
-      writeTrace("[destination-content] return:local-no-row", result);
       return result;
     }
 
@@ -735,12 +693,9 @@ export async function getDestinationContent(slug: string): Promise<DestinationCo
         embedUrl: item.embed_url,
       })),
     } as DestinationContent;
-    console.log("[destination-content] return:supabase", result);
-    writeTrace("[destination-content] return:supabase", result);
     return result;
   } catch (error) {
     console.error("[destination-content] branch:catch", error);
-    writeTrace("[destination-content] branch:catch", { error });
     const destination = buildDestinationFromLocalContent(localWithFallbackOverrides, resolvedSlug);
     if (!destination) return null;
     const result = {
@@ -750,8 +705,6 @@ export async function getDestinationContent(slug: string): Promise<DestinationCo
       resourceLinks: [],
       videoLinks: [],
     } as DestinationContent;
-    console.log("[destination-content] return:local-catch", result);
-    writeTrace("[destination-content] return:local-catch", result);
     return result;
   }
 }

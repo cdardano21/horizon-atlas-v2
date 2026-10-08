@@ -1,17 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const TRACE_LOG_PATH = process.env.HORIZON_ATLAS_TRACE_LOG ?? "/tmp/horizon-atlas-trace.log";
-
-const writeTrace = (label: string, payload: unknown) => {
-  try {
-    const line = `[${new Date().toISOString()}] ${label} ${JSON.stringify(payload)}\n`;
-    fs.appendFileSync(TRACE_LOG_PATH, line);
-  } catch {
-    // ignore trace-file failures
-  }
-};
-
 const loadDotEnvFiles = () => {
   const searchDirs: string[] = [];
   let currentDir = process.cwd();
@@ -140,8 +129,6 @@ export async function supabaseFetch(path: string, options: SupabaseRequestOption
     headers.set("Content-Type", "application/json");
   }
 
-  console.log("[supabase] fetch:start", { path, fullUrl, headers: Object.fromEntries(headers.entries()) });
-  writeTrace("[supabase] fetch:start", { path, fullUrl, headers: Object.fromEntries(headers.entries()) });
 
   try {
     const response = await fetch(fullUrl, {
@@ -149,12 +136,9 @@ export async function supabaseFetch(path: string, options: SupabaseRequestOption
       headers,
     });
 
-    console.log("[supabase] fetch:response", { path, fullUrl, status: response.status, ok: response.ok });
-    writeTrace("[supabase] fetch:response", { path, fullUrl, status: response.status, ok: response.ok });
     return response;
   } catch (error) {
     console.error("[supabase] fetch:error", { path, fullUrl, error });
-    writeTrace("[supabase] fetch:error", { path, fullUrl, error });
     throw error;
   }
 }

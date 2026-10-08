@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import RouteFrame from "../../components/RouteFrame";
 import { buildDestinationVerificationReport } from "../../lib/destination-verification";
 
@@ -9,6 +10,7 @@ function statusPillClass(status: "verified" | "review_required" | "missing" | "h
 }
 
 export default async function AdminVerificationPage() {
+  await connection();
   const report = await buildDestinationVerificationReport();
   const reviewRows = report.destinations.filter((row) => row.manualReviewRequired);
 
