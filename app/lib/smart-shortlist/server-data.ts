@@ -13,7 +13,7 @@ import { createInMemoryPersistedDestinationReadPort } from "../persistence/v31/i
 import { loadNormalizedPersistedDestinationBundle } from "../persistence/v31/load-normalized-persisted-destination-bundle";
 import { mapCanonicalDestinationToStoredState } from "../persistence/v31/map-canonical-destination-to-stored-state";
 import type { CanonicalDestinationKey, DestinationId, ResolvedDestinationIdentity } from "../persistence/v31/types";
-import { getSupabaseConfig, getSupabaseAuthHeaders, isSupabaseConfigured } from "../supabase";
+import { loadPublishedCatalogIdentities } from "../published-catalog-identities";
 import { smartShortlistCandidates } from "./cohort";
 import type { PrototypeCandidate } from "./cohort";
 import type { CoastalSetting, ShortlistFacts } from "./evaluator";
@@ -151,29 +151,6 @@ export function coastalSettingFromLifestyleFeatures(
   return "UNKNOWN";
 }
 
-type PublishedCatalogIdentity = { id: string; destination_key: string; slug: string; status: string };
-
-async function loadPublishedCatalogIdentities(keys: readonly string[]): Promise<PublishedCatalogIdentity[]> {
-  if (!keys.length || !isSupabaseConfigured()) return [];
-  const { url } = getSupabaseConfig();
-  const query = new URLSearchParams({
-    select: "id,destination_key,slug,status",
-    destination_key: `in.(${keys.join(",")})`,
-    status: "eq.published",
-  });
-  // Publication is checked afresh; a previously published result cannot bypass a later unpublish.
-  try {
-    const response = await fetch(`${url}/rest/v1/destinations_catalog?${query}`, {
-      headers: getSupabaseAuthHeaders(), cache: "no-store",
-    });
-    if (!response.ok) return [];
-    const rows: PublishedCatalogIdentity[] = await response.json();
-    return Array.isArray(rows) ? rows : [];
-  } catch {
-    // Unavailable publication evidence excludes new identities without breaking legacy candidates.
-    return [];
-  }
-}
 
 export async function discoverRegisteredWorkbookContributions(
   entry: ExpansionWorkbookRegistryEntry,

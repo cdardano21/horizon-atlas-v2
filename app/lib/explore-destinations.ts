@@ -1,8 +1,8 @@
 import type { Destination } from "./destinations";
 import { getPublicDestinations } from "./public-destinations";
-import { loadPublishedSmartShortlistData, type SmartShortlistData } from "./smart-shortlist/server-data";
+import { loadPublishedExploreProjection, type ExploreProjectionData } from "./explore-projection";
 
-type ExploreCandidateData = Pick<SmartShortlistData, "candidates" | "destinationMedia">;
+type ExploreCandidateData = ExploreProjectionData;
 
 export function buildExploreDestinationList(
   publicDestinations: readonly Destination[],
@@ -47,7 +47,7 @@ export function buildExploreDestinationList(
 export async function getExploreDestinations(): Promise<Destination[]> {
   const [publicDestinations, candidateData] = await Promise.all([
     getPublicDestinations(),
-    loadPublishedSmartShortlistData(),
+    loadPublishedExploreProjection(),
   ]);
 
   return buildExploreDestinationList(publicDestinations, candidateData);

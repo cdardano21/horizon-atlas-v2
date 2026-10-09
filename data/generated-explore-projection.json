@@ -1,0 +1,3441 @@
+{
+  "version": 1,
+  "sourceSignature": "c6a60086d823c671db2385c6c12c2e22a08521659f8ec400d9c9c387a7d15d70",
+  "digest": "a7d896bec7b4fa3a8888f39462c1aeeead8f1b5e0d626fdb999d7cc2cff0c67a",
+  "data": {
+    "candidates": [
+      {
+        "key": "the-villages-fl-us",
+        "slug": "the-villages-florida-united-states",
+        "name": "The Villages",
+        "country": "United States",
+        "summary": "A vast 55+ master-planned community built around golf-cart mobility, recreation, healthcare access, town squares and an unusually dense social calendar."
+      },
+      {
+        "key": "sofia-bg",
+        "slug": "sofia-bulgaria",
+        "name": "Sofia",
+        "country": "Bulgaria",
+        "summary": "A high-elevation European capital combining metro-connected urban life, Roman and Orthodox heritage, comparatively moderate costs and immediate access to Vitosha Mountain."
+      },
+      {
+        "key": "puerto-vallarta-mx",
+        "slug": "puerto-vallarta-mexico",
+        "name": "Puerto Vallarta",
+        "country": "Mexico",
+        "summary": "A Pacific coast city where a walkable historic center, beaches, strong dining, established expat networks and direct North American air service meet tropical weather."
+      },
+      {
+        "key": "hoi-an-vn",
+        "slug": "hoi-an-vietnam",
+        "name": "Hoi An",
+        "country": "Vietnam",
+        "summary": "A compact UNESCO-listed trading-port city with exceptional walkability in the historic core, low everyday costs, beach access and a strong café-and-food culture."
+      },
+      {
+        "key": "queenstown-nz",
+        "slug": "queenstown-new-zealand",
+        "name": "Queenstown",
+        "country": "New Zealand",
+        "summary": "A spectacular Southern Alps lake town with world-class outdoor recreation, strong tourism infrastructure, excellent safety and a severe housing-cost premium."
+      },
+      {
+        "key": "ascoli-piceno-it",
+        "slug": "ascoli-piceno-italy",
+        "name": "Ascoli Piceno",
+        "country": "Italy",
+        "summary": "Elegant travertine city in southern Marche combining a walkable historic center, food culture and Apennine access."
+      },
+      {
+        "key": "sarande-al",
+        "slug": "sarande-albania",
+        "name": "Sarandë",
+        "country": "Albania",
+        "summary": "Ionian coastal city with a long promenade, seasonal international energy and comparatively moderate living costs."
+      },
+      {
+        "key": "dumaguete-ph",
+        "slug": "dumaguete-philippines",
+        "name": "Dumaguete City",
+        "country": "Philippines",
+        "summary": "English-usable university city with a strong retiree community, regional healthcare and attractive Philippine living costs."
+      },
+      {
+        "key": "las-terrenas-do",
+        "slug": "las-terrenas-dominican-republic",
+        "name": "Las Terrenas",
+        "country": "Dominican Republic",
+        "summary": "International Caribbean beach town with multiple residential zones, foreign ownership rights and pensioner residence paths."
+      },
+      {
+        "key": "fairhope-al-us",
+        "slug": "fairhope-alabama",
+        "name": "Fairhope",
+        "country": "United States",
+        "summary": "Polished Mobile Bay community with a walkable downtown, golf, parks, arts and a full-service local hospital."
+      },
+      {
+        "key": "the-hague-netherlands",
+        "slug": "the-hague-netherlands",
+        "name": "The Hague",
+        "country": "Netherlands",
+        "summary": "International seat of government with tram-served neighborhoods, North Sea beaches, major museums and a calmer daily rhythm than Amsterdam."
+      },
+      {
+        "key": "san-ramon-costa-rica",
+        "slug": "san-ramon-costa-rica",
+        "name": "San Ramón",
+        "country": "Costa Rica",
+        "summary": "Cooler coffee-country town with a walkable center, regional hospital and authentic Costa Rican daily life, balanced by rain, Spanish dependence and limited urban amenities."
+      },
+      {
+        "key": "st-john-s-canada",
+        "slug": "st-john-s-canada",
+        "name": "St. John's",
+        "country": "Canada",
+        "summary": "Colourful Atlantic capital with serious coastal hiking, universities, healthcare and nightlife, offset by wind, fog, winter weather and geographic isolation."
+      },
+      {
+        "key": "santa-fe-new-mexico-united-states",
+        "slug": "santa-fe-new-mexico-united-states",
+        "name": "Santa Fe",
+        "country": "United States",
+        "summary": "Adobe state capital with an outsized art, food and museum scene, immediate mountain access and significant housing, altitude and healthcare tradeoffs."
+      },
+      {
+        "key": "st-cloud-minnesota-united-states",
+        "slug": "st-cloud-minnesota-united-states",
+        "name": "St. Cloud",
+        "country": "United States",
+        "summary": "Central Minnesota service hub on the Mississippi with attainable housing, strong healthcare, colleges and excellent regional trails—but severe winters and car dependence."
+      },
+      {
+        "key": "kyoto-japan",
+        "slug": "kyoto-japan",
+        "name": "Kyoto",
+        "country": "Japan",
+        "summary": "Japan’s former imperial capital: temple districts, university neighborhoods, exceptional rail access and intense seasonal tourism inside a hot-summer basin."
+      },
+      {
+        "key": "ajijic-mexico",
+        "slug": "ajijic-mexico",
+        "name": "Ajijic",
+        "country": "Mexico",
+        "summary": "A colorful Lake Chapala village known for cobblestone streets, a lively arts community, mild highland weather, and one of Mexico's most established international-resident networks. Guadalajara broadens airport and specialist-care access."
+      },
+      {
+        "key": "boquete-panama",
+        "slug": "boquete-panama",
+        "name": "Boquete",
+        "country": "Panama",
+        "summary": "A green highland town surrounded by coffee farms, cloud-forest trails, and mountain scenery, with a cooler climate and an established international community. David supplies broader shopping and specialist services."
+      },
+      {
+        "key": "chiang-mai-thailand",
+        "slug": "chiang-mai-thailand",
+        "name": "Chiang Mai",
+        "country": "Thailand",
+        "summary": "Northern Thailand's cultural capital offers temples, markets, mountain access, healthcare, cafés, and creative energy—alongside a serious seasonal smoke problem. Neighborhood choice and season matter enormously here."
+      },
+      {
+        "key": "cuenca-ecuador",
+        "slug": "cuenca-ecuador",
+        "name": "Cuenca",
+        "country": "Ecuador",
+        "summary": "A cultured Andean city of rivers, plazas, markets, and historic architecture, offering an urban lifestyle at high elevation with a well-established international community. The tram and river corridors shape everyday movement."
+      },
+      {
+        "key": "da-nang-vietnam",
+        "slug": "da-nang-vietnam",
+        "name": "Da Nang",
+        "country": "Vietnam",
+        "summary": "A fast-growing Vietnamese coastal city with a broad urban beach, riverfront districts, excellent regional access, abundant food, and a modern everyday pace. Its airport makes regional travel unusually convenient."
+      },
+      {
+        "key": "florianopolis-brazil",
+        "slug": "florianopolis-brazil",
+        "name": "Florianópolis",
+        "country": "Brazil",
+        "summary": "An island-and-mainland city celebrated for beaches, trails, lagoons, surfing, and technology, with neighborhood lifestyles ranging from urban to distinctly coastal. Island traffic makes neighborhood choice especially important."
+      },
+      {
+        "key": "funchal-portugal",
+        "slug": "funchal-portugal",
+        "name": "Funchal",
+        "country": "Portugal",
+        "summary": "Madeira's subtropical capital rises from the Atlantic in steep, garden-filled neighborhoods, offering urban services, dramatic scenery, and year-round outdoor access. Steep slopes make address selection unusually consequential."
+      },
+      {
+        "key": "george-town-malaysia",
+        "slug": "george-town-malaysia",
+        "name": "George Town",
+        "country": "Malaysia",
+        "summary": "Penang's heritage capital combines celebrated street food, multicultural neighborhoods, historic architecture, modern hospitals, and island access in a hot tropical setting. The wider Penang urban area extends well beyond the old town."
+      },
+      {
+        "key": "hua-hin-thailand",
+        "slug": "hua-hin-thailand",
+        "name": "Hua Hin",
+        "country": "Thailand",
+        "summary": "A long-established Thai beach city known for golf, markets, hospitals, seafood, and relatively easy access to Bangkok, with a relaxed but seasonal rhythm. Central and outlying districts function very differently."
+      },
+      {
+        "key": "lucca-italy",
+        "slug": "lucca-italy",
+        "name": "Lucca",
+        "country": "Italy",
+        "summary": "A refined Tuscan city enclosed by Renaissance walls, with a walkable center, cycling, music, markets, and rail access to Pisa and Florence. Life inside and outside the walls feels meaningfully different."
+      },
+      {
+        "key": "merida-mexico",
+        "slug": "merida-mexico",
+        "name": "Mérida",
+        "country": "Mexico",
+        "summary": "Yucatán's gracious capital blends Maya heritage, colonial architecture, neighborhood markets, strong regional healthcare, and an active cultural calendar with serious tropical heat. Its neighborhoods offer sharply different versions of city life."
+      },
+      {
+        "key": "monopoli-italy",
+        "slug": "monopoli-italy",
+        "name": "Monopoli",
+        "country": "Italy",
+        "summary": "A working Adriatic port city in Puglia where a whitewashed old town, small beaches, seafood, and rail links support an appealing coastal routine. Its winter rhythm is quieter and more locally focused."
+      },
+      {
+        "key": "montevideo-uruguay",
+        "slug": "montevideo-uruguay",
+        "name": "Montevideo",
+        "country": "Uruguay",
+        "summary": "Uruguay's relaxed coastal capital pairs long Rambla walks, distinctive neighborhoods, cultural life, and strong urban services with a comparatively high regional cost of living. Each major neighborhood has a notably different personality."
+      },
+      {
+        "key": "nafplio-greece",
+        "slug": "nafplio-greece",
+        "name": "Nafplio",
+        "country": "Greece",
+        "summary": "A picturesque Peloponnese seafront city with a walkable old town, fortress views, café-lined squares, and easy access to major archaeological sites. Its quieter off-season character deserves equal attention."
+      },
+      {
+        "key": "nice-france",
+        "slug": "nice-france",
+        "name": "Nice",
+        "country": "France",
+        "summary": "A sophisticated Mediterranean city with beaches, markets, museums, tram service, a major airport, and effortless access to the French Riviera and nearby Italy. Neighborhood selection can reduce both cost and crowding."
+      },
+      {
+        "key": "palm-springs-california-united-states",
+        "slug": "palm-springs-california-united-states",
+        "name": "Palm Springs",
+        "country": "United States",
+        "summary": "A design-forward desert city known for mid-century architecture, mountain views, golf, LGBTQ+ community life, and winter sunshine—balanced by extreme summer heat. Seasonal population changes are part of its identity."
+      },
+      {
+        "key": "paphos-cyprus",
+        "slug": "paphos-cyprus",
+        "name": "Paphos",
+        "country": "Cyprus",
+        "summary": "A sunny Cypriot coastal city combining archaeological sites, beaches, an international community, and its own airport with a spread-out, car-oriented layout. Coastal, central, and hillside communities function quite differently."
+      },
+      {
+        "key": "santander-spain",
+        "slug": "santander-spain",
+        "name": "Santander",
+        "country": "Spain",
+        "summary": "A green northern Spanish bay city with beaches, promenades, cultural institutions, healthcare, and a cooler Atlantic climate than the Mediterranean coast. Its Atlantic weather creates a distinctly greener lifestyle."
+      },
+      {
+        "key": "savannah-georgia-united-states",
+        "slug": "savannah-georgia-united-states",
+        "name": "Savannah",
+        "country": "United States",
+        "summary": "A deeply atmospheric Southern city of live-oak squares, historic architecture, art, food, and riverfront energy, with heat, humidity, storms, and tourism to consider. Block-level conditions matter more than the postcard image suggests."
+      },
+      {
+        "key": "sibenik-croatia",
+        "slug": "sibenik-croatia",
+        "name": "Šibenik",
+        "country": "Croatia",
+        "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "bariloche-argentina",
+        "slug": "bariloche-argentina",
+        "name": "Bariloche",
+        "country": "Argentina",
+        "summary": "A Patagonian lake city framed by the Andes, combining a real urban center with skiing, hiking, beaches, craft beer, chocolate and year-round outdoor access."
+      },
+      {
+        "key": "mendoza-argentina",
+        "slug": "mendoza-argentina",
+        "name": "Mendoza",
+        "country": "Argentina",
+        "summary": "A leafy Andean city built around wine, wide boulevards, parks and café culture, with strong everyday services and easy access to Argentina’s premier vineyard region."
+      },
+      {
+        "key": "joao-pessoa-brazil",
+        "slug": "joao-pessoa-brazil",
+        "name": "João Pessoa",
+        "country": "Brazil",
+        "summary": "A relaxed northeastern Brazilian capital with urban beaches, a long waterfront promenade, strong value, tropical weather and more everyday infrastructure than a resort town."
+      },
+      {
+        "key": "punta-del-este-uruguay",
+        "slug": "punta-del-este-uruguay",
+        "name": "Punta del Este",
+        "country": "Uruguay",
+        "summary": "Uruguay’s polished Atlantic resort city, balancing calm bay beaches and open-ocean surf with high-rise living, restaurants, marinas and a highly seasonal social calendar."
+      },
+      {
+        "key": "ghent-belgium",
+        "slug": "ghent-belgium",
+        "name": "Ghent",
+        "country": "Belgium",
+        "summary": "A compact Flemish university city with canals, medieval architecture, cycling, restaurants and a car-light center that delivers big-city culture at a human scale."
+      },
+      {
+        "key": "wanaka-new-zealand",
+        "slug": "wanaka-new-zealand",
+        "name": "Wānaka",
+        "country": "New Zealand",
+        "summary": "A fast-growing South Island lake town with immediate access to mountains, hiking, skiing and water recreation, plus a polished café scene and strong outdoor community."
+      },
+      {
+        "key": "stellenbosch-south-africa",
+        "slug": "stellenbosch-south-africa",
+        "name": "Stellenbosch",
+        "country": "South Africa",
+        "summary": "A historic Cape Winelands university town combining oak-lined streets, acclaimed restaurants and wine estates with mountain trails and quick access to Cape Town."
+      },
+      {
+        "key": "loreto-mexico",
+        "slug": "loreto-mexico",
+        "name": "Loreto",
+        "country": "Mexico",
+        "summary": "A small Sea of Cortez town with a historic mission center, marine park, fishing, calm-water recreation and direct access to the dramatic Sierra de la Giganta."
+      },
+      {
+        "key": "vevey-switzerland",
+        "slug": "vevey-switzerland",
+        "name": "Vevey",
+        "country": "Switzerland",
+        "summary": "A compact French-speaking city on Lake Geneva with a walkable waterfront, culture, rail access and vineyard scenery, pairing Swiss infrastructure with a relaxed Riviera setting."
+      },
+      {
+        "key": "hakuba-japan",
+        "slug": "hakuba-japan",
+        "name": "Hakuba",
+        "country": "Japan",
+        "summary": "A Japanese Alps village surrounded by major ski areas, mountain trails and onsen culture, with a growing international community and dramatic four-season scenery."
+      },
+      {
+        "key": "whistler-canada",
+        "slug": "whistler-canada",
+        "name": "Whistler",
+        "country": "Canada",
+        "summary": "A purpose-built alpine resort town where skiing, mountain biking, lakes, golf and a walkable village support a highly active year-round lifestyle."
+      },
+      {
+        "key": "bansko-bulgaria",
+        "slug": "bansko-bulgaria",
+        "name": "Bansko",
+        "country": "Bulgaria",
+        "summary": "A historic Bulgarian mountain town at the foot of the Pirin range, combining a major ski area with a compact old center, lower costs and four-season outdoor access."
+      },
+      {
+        "key": "pucon-chile",
+        "slug": "pucon-chile",
+        "name": "Pucón",
+        "country": "Chile",
+        "summary": "A compact Chilean lake town beneath Villarrica volcano, built around outdoor adventure, hot springs, national parks and a lively tourism-centered center."
+      },
+      {
+        "key": "noosa-heads-australia",
+        "slug": "noosa-heads-australia",
+        "name": "Noosa Heads",
+        "country": "Australia",
+        "summary": "A polished Sunshine Coast beach town where Main Beach, Hastings Street and Noosa National Park create a walkable core with strong dining and outdoor appeal."
+      },
+      {
+        "key": "baden-baden-germany",
+        "slug": "baden-baden-germany",
+        "name": "Baden-Baden",
+        "country": "Germany",
+        "summary": "An elegant Black Forest spa city centered on thermal baths, parks, museums, classical culture and a compact urban core with strong access to nature."
+      },
+      {
+        "key": "sarajevo-bosnia-and-herzegovina",
+        "slug": "sarajevo-bosnia-and-herzegovina",
+        "name": "Sarajevo",
+        "country": "Bosnia and Herzegovina",
+        "summary": "Sarajevo is a dramatic valley capital ringed by Olympic mountains, combining Ottoman and Austro-Hungarian heritage, café culture, affordability, skiing and hiking with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "da-lat-vietnam",
+        "slug": "da-lat-vietnam",
+        "name": "Da Lat",
+        "country": "Vietnam",
+        "summary": "Da Lat is a pine-covered Vietnamese highland city built around lakes, gardens and cool uplands, combining mild climate, coffee culture, food, flowers, waterfalls and low day-to-day costs with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "sete-france",
+        "slug": "sete-france",
+        "name": "Sète",
+        "country": "France",
+        "summary": "Sète is a working Mediterranean port threaded by canals between the sea and Étang de Thau, combining beaches, seafood, markets, rail access, canals and authentic year-round city life with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "tainan-taiwan",
+        "slug": "tainan-taiwan",
+        "name": "Tainan",
+        "country": "Taiwan",
+        "summary": "Tainan is Taiwan’s old capital, dense with temples, lanes, night markets and low-rise neighborhoods, combining food, healthcare, rail links, safety, cycling and cultural depth with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "arequipa-peru",
+        "slug": "arequipa-peru",
+        "name": "Arequipa",
+        "country": "Peru",
+        "summary": "Arequipa is a high-altitude white-stone city beneath El Misti volcano, combining UNESCO architecture, food, sunny dry climate, hospitals and access to Colca Canyon with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "sibiu-romania",
+        "slug": "sibiu-romania",
+        "name": "Sibiu",
+        "country": "Romania",
+        "summary": "Sibiu is a compact Transylvanian city of fortified squares, tiled roofs and nearby Carpathians, combining walkability, culture, low costs, festivals, safety and mountain access with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "ohrid-north-macedonia",
+        "slug": "ohrid-north-macedonia",
+        "name": "Ohrid",
+        "country": "North Macedonia",
+        "summary": "Ohrid is a UNESCO lake city of churches, stone lanes and mountain-backed water, combining Lake Ohrid, affordability, history, swimming, cafés and compact scale with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "kuching-malaysia",
+        "slug": "kuching-malaysia",
+        "name": "Kuching",
+        "country": "Malaysia",
+        "summary": "Kuching is a relaxed Borneo capital on the Sarawak River with rainforests and wildlife close by, combining food, English usability, healthcare, value, cultural mix and access to national parks with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "ipoh-malaysia",
+        "slug": "ipoh-malaysia",
+        "name": "Ipoh",
+        "country": "Malaysia",
+        "summary": "Ipoh is a Malaysian heritage city surrounded by dramatic limestone karsts, combining food, low costs, hospitals, rail access, cave temples and manageable urban scale with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "dunedin-new-zealand",
+        "slug": "dunedin-new-zealand",
+        "name": "Dunedin",
+        "country": "New Zealand",
+        "summary": "Dunedin is a hilly southern university city with Victorian architecture and wildlife-rich coastline, combining culture, healthcare, university energy, beaches, wildlife and cooler climate with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "sucre-bolivia",
+        "slug": "sucre-bolivia",
+        "name": "Sucre",
+        "country": "Bolivia",
+        "summary": "Sucre is a graceful highland capital of white colonial facades and university life, combining architecture, mild days, affordability, language schools and slower pace with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "loja-ecuador",
+        "slug": "loja-ecuador",
+        "name": "Loja",
+        "country": "Ecuador",
+        "summary": "Loja is a temperate Andean city known for music, universities and nearby cloud-forest landscapes, combining mild climate, low costs, dollar economy, walkable center and access to Podocarpus with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "campeche-mexico",
+        "slug": "campeche-mexico",
+        "name": "Campeche",
+        "country": "Mexico",
+        "summary": "Campeche is a walled UNESCO city on the Gulf of Mexico with pastel streets and a broad malecón, combining colonial beauty, lower costs, walkability, food and relaxed Gulf lifestyle with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "oberstdorf-germany",
+        "slug": "oberstdorf-germany",
+        "name": "Oberstdorf",
+        "country": "Germany",
+        "summary": "Oberstdorf is a polished Bavarian alpine town beneath the Allgäu peaks, combining skiing, hiking, rail access, healthcare quality, pedestrian center and immaculate infrastructure with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "frutillar-chile",
+        "slug": "frutillar-chile",
+        "name": "Frutillar",
+        "country": "Chile",
+        "summary": "Frutillar is a German-influenced lakeside town facing snowcapped Osorno volcano, combining Lake Llanquihue, music, walkability, scenery, calmer pace and Puerto Varas/Puerto Montt access with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "launceston-australia",
+        "slug": "launceston-australia",
+        "name": "Launceston",
+        "country": "Australia",
+        "summary": "Launceston is a compact northern Tasmanian city at the gateway to wine country and Cataract Gorge, combining food, cooler climate, hospitals, vineyards, walkable center and outdoor access with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "sandpoint-idaho-united-states",
+        "slug": "sandpoint-idaho-united-states",
+        "name": "Sandpoint",
+        "country": "United States",
+        "summary": "Sandpoint is a small Idaho lake town with Schweitzer Mountain rising directly above Lake Pend Oreille, combining skiing, boating, walkable downtown, trails, community events and U.S. familiarity with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "nelson-new-zealand",
+        "slug": "nelson-new-zealand",
+        "name": "Nelson",
+        "country": "New Zealand",
+        "summary": "Nelson is a sunny upper-South-Island city between Tasman Bay, vineyards and national parks, combining arts, beaches, cycling, markets, wineries and Abel Tasman access with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "albany-western-australia",
+        "slug": "albany-western-australia",
+        "name": "Albany",
+        "country": "Australia",
+        "summary": "Albany is a historic port city on Western Australia’s wild southern coast, combining beaches, national parks, whale watching, cooler climate, food and strong small-city services with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "essaouira-morocco",
+        "slug": "essaouira-morocco",
+        "name": "Essaouira",
+        "country": "Morocco",
+        "summary": "Essaouira is a blue-and-white Atlantic medina wrapped by ramparts, fishing port and broad windswept beach, combining art, seafood, walkability, surf, mild temperatures and strong visual character with enough everyday infrastructure for serious long stays."
+      },
+      {
+        "key": "almunecar-spain",
+        "slug": "almunecar-spain",
+        "name": "Almuñécar",
+        "country": "Spain",
+        "summary": "Almuñécar pairs a walkable Andalusian old town with a long Costa Tropical waterfront, subtropical gardens, Moorish fortifications and easy day-to-day beach life without the scale or resort intensity of Málaga."
+      },
+      {
+        "key": "tavira-portugal",
+        "slug": "tavira-portugal",
+        "name": "Tavira",
+        "country": "Portugal",
+        "summary": "Tavira is an elegant eastern-Algarve town on the Gilão River, with tiled streets, a castle ridge, ferry-linked island beaches and a calmer year-round rhythm than the Algarve’s larger resort centers."
+      },
+      {
+        "key": "kalamata-greece",
+        "slug": "kalamata-greece",
+        "name": "Kalamata",
+        "country": "Greece",
+        "summary": "Kalamata combines a real Greek regional city, a long swimmable seafront, serious food culture and direct access to the Taygetos mountains, giving it more year-round substance than a small island resort."
+      },
+      {
+        "key": "pak-nam-pran-thailand",
+        "slug": "pak-nam-pran-thailand",
+        "name": "Pak Nam Pran",
+        "country": "Thailand",
+        "summary": "Pak Nam Pran is the quieter coastal alternative south of Hua Hin: a low-rise beach community of fishing villages, mangroves, kite-surfing and seafood with Sam Roi Yot’s limestone landscape close by."
+      },
+      {
+        "key": "piriapolis-uruguay",
+        "slug": "piriapolis-uruguay",
+        "name": "Piriápolis",
+        "country": "Uruguay",
+        "summary": "Piriápolis is a small Uruguayan beach city with a broad rambla, early-20th-century resort architecture, walkable services and low hills behind the coast, offering a calmer alternative to Punta del Este."
+      },
+      {
+        "key": "plovdiv-bulgaria",
+        "slug": "plovdiv-bulgaria",
+        "name": "Plovdiv",
+        "country": "Bulgaria",
+        "summary": "Plovdiv layers Roman ruins, Ottoman-era houses, Kapana’s creative district and a large everyday Bulgarian city into one of Europe’s most compelling value-oriented long-stay bases."
+      },
+      {
+        "key": "denia-spain",
+        "slug": "denia-spain",
+        "name": "Dénia",
+        "country": "Spain",
+        "summary": "Dénia combines a working Mediterranean port, castle-topped historic center, long sandy beaches, rocky coves and UNESCO-recognized gastronomy beneath the Montgó massif."
+      },
+      {
+        "key": "viana-do-castelo-portugal",
+        "slug": "viana-do-castelo-portugal",
+        "name": "Viana do Castelo",
+        "country": "Portugal",
+        "summary": "Viana do Castelo combines a handsome Minho historic center, Lima River waterfront, Atlantic beaches and the Santa Luzia hillside with a cooler, greener climate than southern Portugal."
+      },
+      {
+        "key": "pezenas-france",
+        "slug": "pezenas-france",
+        "name": "Pézenas",
+        "country": "France",
+        "summary": "Pézenas is a small Languedoc market town of hôtels particuliers, artisan workshops, Molière associations and café-lined stone streets, close enough to Mediterranean beaches without being a beach resort."
+      },
+      {
+        "key": "matsuyama-japan",
+        "slug": "matsuyama-japan",
+        "name": "Matsuyama",
+        "country": "Japan",
+        "summary": "Matsuyama blends one of Japan’s finest original castles, the historic Dōgo Onsen district, streetcars and a livable Shikoku regional-city scale, with lower pressure and costs than Tokyo or Kyoto."
+      },
+      {
+        "key": "taitung-taiwan",
+        "slug": "taitung-taiwan",
+        "name": "Taitung",
+        "country": "Taiwan",
+        "summary": "Taitung is Taiwan’s slower Pacific-side city, framed by mountains and ocean with Indigenous culture, cycling, hot springs and open landscapes that feel radically different from Taipei’s density."
+      },
+      {
+        "key": "quy-nhon-vietnam",
+        "slug": "quy-nhon-vietnam",
+        "name": "Quy Nhon",
+        "country": "Vietnam",
+        "summary": "Quy Nhon is a long, curving Vietnamese beach city with a strong seafood culture, Cham heritage and easy coastal access, still feeling more local and lower-key than Da Nang or Nha Trang."
+      },
+      {
+        "key": "herceg-novi-montenegro",
+        "slug": "herceg-novi-montenegro",
+        "name": "Herceg Novi",
+        "country": "Montenegro",
+        "summary": "Herceg Novi terraces down to the Bay of Kotor in layers of stone stairs, fortresses, gardens and waterfront promenades, with a milder, greener feel than much of Montenegro’s coast."
+      },
+      {
+        "key": "fethiye-turkiye",
+        "slug": "fethiye-turkiye",
+        "name": "Fethiye",
+        "country": "Türkiye",
+        "summary": "Fethiye is a Turkish Mediterranean harbor city with a real year-round center, Lycian archaeology, marinas and access to Ölüdeniz, Babadağ and the Lycian Way."
+      },
+      {
+        "key": "st-george-utah-united-states",
+        "slug": "st-george-utah-united-states",
+        "name": "St. George",
+        "country": "United States",
+        "summary": "St. George is a fast-growing red-rock city with golf, trail systems, strong healthcare and immediate access to Snow Canyon, trading mild winters for very hot summers and a car-oriented layout."
+      },
+      {
+        "key": "coeur-d-alene-idaho-united-states",
+        "slug": "coeur-d-alene-idaho-united-states",
+        "name": "Coeur d'Alene",
+        "country": "United States",
+        "summary": "Coeur d'Alene pairs a polished lakefront downtown with Tubbs Hill trails, boating and four-season Inland Northwest scenery, while Spokane supplies big-city air access and deeper services nearby."
+      },
+      {
+        "key": "san-luis-obispo-california-united-states",
+        "slug": "san-luis-obispo-california-united-states",
+        "name": "San Luis Obispo",
+        "country": "United States",
+        "summary": "San Luis Obispo combines a genuinely walkable Central Coast downtown, Cal Poly energy, weekly farmers markets and immediate hill trails, with beaches and Edna Valley wine country minutes away."
+      },
+      {
+        "key": "flagstaff-arizona-united-states",
+        "slug": "flagstaff-arizona-united-states",
+        "name": "Flagstaff",
+        "country": "United States",
+        "summary": "Flagstaff combines pine forest, volcanic terrain, a lively historic downtown and a university town sitting above 6,900 feet with the San Francisco Peaks on the skyline, with a lifestyle that particularly suits active adults and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "ashland-oregon-united-states",
+        "slug": "ashland-oregon-united-states",
+        "name": "Ashland",
+        "country": "United States",
+        "summary": "Ashland combines a compact arts town where Lithia Park reaches into downtown, theater drives the cultural calendar and trails climb quickly toward the Siskiyous, with a lifestyle that particularly suits theater lovers and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "whitefish-montana-united-states",
+        "slug": "whitefish-montana-united-states",
+        "name": "Whitefish",
+        "country": "United States",
+        "summary": "Whitefish combines a polished but still outdoors-first mountain town where a working rail stop, a walkable downtown, Whitefish Lake and a major ski mountain all sit within the same compact lifestyle orbit, with a lifestyle that particularly suits skiers and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "saratoga-springs-new-york-united-states",
+        "slug": "saratoga-springs-new-york-united-states",
+        "name": "Saratoga Springs",
+        "country": "United States",
+        "summary": "Saratoga Springs combines a handsome upstate city whose identity blends horse racing, mineral springs, performing arts, college energy and a downtown that is active well beyond summer visitors, with a lifestyle that particularly suits culture-minded retirees and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "annapolis-maryland-united-states",
+        "slug": "annapolis-maryland-united-states",
+        "name": "Annapolis",
+        "country": "United States",
+        "summary": "Annapolis combines a compact state capital where brick colonial streets meet a working harbor, the Naval Academy, sailing culture and a restaurant scene that spills toward City Dock, with a lifestyle that particularly suits sailors and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "wilmington-north-carolina-united-states",
+        "slug": "wilmington-north-carolina-united-states",
+        "name": "Wilmington",
+        "country": "United States",
+        "summary": "Wilmington combines a riverfront city with a real historic downtown, a growing food-and-creative scene and three distinct beach communities close enough to shape daily life without turning Wilmington into a pure resort town, with a lifestyle that particularly suits beach lovers who still want a city and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "st-augustine-florida-united-states",
+        "slug": "st-augustine-florida-united-states",
+        "name": "St. Augustine",
+        "country": "United States",
+        "summary": "St. Augustine combines the nation's oldest continuously occupied European-founded city paired with Atlantic beaches, live music, old neighborhoods and enough year-round tourism to keep the center animated, with a lifestyle that particularly suits history fans and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "hilton-head-island-south-carolina-united-states",
+        "slug": "hilton-head-island-south-carolina-united-states",
+        "name": "Hilton Head Island",
+        "country": "United States",
+        "summary": "Hilton Head Island combines a low-rise barrier island where beach access, bike paths, golf and manicured residential communities define the lifestyle more than a traditional downtown, with a lifestyle that particularly suits golfers and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "traverse-city-michigan-united-states",
+        "slug": "traverse-city-michigan-united-states",
+        "name": "Traverse City",
+        "country": "United States",
+        "summary": "Traverse City combines a small Great Lakes city with a surprisingly sophisticated restaurant scene, bayfront beaches, wineries on two peninsulas and a downtown that stays useful after vacation season, with a lifestyle that particularly suits food-and-wine travelers and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "delray-beach-florida-united-states",
+        "slug": "delray-beach-florida-united-states",
+        "name": "Delray Beach",
+        "country": "United States",
+        "summary": "Delray Beach combines a beach city with a genuine walkable entertainment spine: Atlantic Avenue ties restaurants, galleries and nightlife to the ocean in a way many South Florida communities do not, with a lifestyle that particularly suits beach-focused retirees and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "lagos-portugal",
+        "slug": "lagos-portugal",
+        "name": "Lagos",
+        "country": "Portugal",
+        "summary": "Lagos combines a compact Algarve town where golden cliffs, coves, a walled historic center and an active marina create far more year-round texture than a purpose-built beach resort, with a lifestyle that particularly suits sun-seeking retirees and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "chiang-rai-thailand",
+        "slug": "chiang-rai-thailand",
+        "name": "Chiang Rai",
+        "country": "Thailand",
+        "summary": "Chiang Rai combines a laid-back northern Thai city whose temples, art, coffee culture and surrounding mountains make it feel creative and regionally distinctive without Chiang Mai's scale, with a lifestyle that particularly suits slow travelers and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "guanajuato-mexico",
+        "slug": "guanajuato-mexico",
+        "name": "Guanajuato",
+        "country": "Mexico",
+        "summary": "Guanajuato combines a theatrical UNESCO hill city of tunnels, plazas, university life and brightly stacked neighborhoods where culture is not a district but the city’s operating system, with a lifestyle that particularly suits arts and festival lovers and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "newport-rhode-island-united-states",
+        "slug": "newport-rhode-island-united-states",
+        "name": "Newport",
+        "country": "United States",
+        "summary": "Newport combines a compact sailing city where Gilded Age architecture, a working harbor, festivals and coastal walks create genuine urban energy inside a small New England footprint, with a lifestyle that particularly suits sailors and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "cascais-portugal",
+        "slug": "cascais-portugal",
+        "name": "Cascais",
+        "country": "Portugal",
+        "summary": "Cascais combines an Atlantic town that combines beaches, a polished historic center, surfing, golf and an easy rail link to Lisbon, giving it both resort atmosphere and metropolitan practicality, with a lifestyle that particularly suits international retirees and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "hood-river-oregon-united-states",
+        "slug": "hood-river-oregon-united-states",
+        "name": "Hood River",
+        "country": "United States",
+        "summary": "Hood River combines a wind-and-water sports hub surrounded by orchards, wineries, waterfalls and Mount Hood, with enough breweries and restaurants to feel far more energetic than its population suggests, with a lifestyle that particularly suits windsurfers and kiteboarders and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "eureka-springs-arkansas-united-states",
+        "slug": "eureka-springs-arkansas-united-states",
+        "name": "Eureka Springs",
+        "country": "United States",
+        "summary": "Eureka Springs combines a steep, eccentric Victorian mountain town where art galleries, live music, LGBTQ-friendly events, springs and winding streets create a bohemian destination unlike the surrounding Ozarks, with a lifestyle that particularly suits artists and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "new-hope-pennsylvania-united-states",
+        "slug": "new-hope-pennsylvania-united-states",
+        "name": "New Hope",
+        "country": "United States",
+        "summary": "New Hope combines a tiny but high-energy Delaware River town where theater, galleries, restaurants, nightlife and a walkable bridge to Lambertville create an outsized weekend and arts scene, with a lifestyle that particularly suits arts lovers and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "healdsburg-california-united-states",
+        "slug": "healdsburg-california-united-states",
+        "name": "Healdsburg",
+        "country": "United States",
+        "summary": "Healdsburg combines a polished Sonoma wine-country town where an elegant plaza, destination restaurants, tasting rooms and the Russian River sit inside a genuinely walkable small-city core, with a lifestyle that particularly suits food and wine travelers and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "bocas-del-toro-panama",
+        "slug": "bocas-del-toro-panama",
+        "name": "Bocas del Toro",
+        "country": "Panama",
+        "summary": "Bocas del Toro combines a colorful Caribbean island town where water taxis function like buses, surf breaks and beaches replace suburban amenities, and an international traveler/expat scene keeps the waterfront lively, with a lifestyle that particularly suits divers and travelers who want a destination with real everyday texture."
+      },
+      {
+        "key": "tivat-montenegro",
+        "slug": "tivat-montenegro",
+        "name": "Tivat",
+        "country": "Montenegro",
+        "summary": "Tivat is a compact Bay of Kotor town transformed by the redevelopment of a former naval base into Porto Montenegro, a polished marina district of yachts, promenades, hotels and restaurants. Beyond the luxury waterfront, Kalimanj harbor, the old naval heritage and nearby Vrmac Peninsula preserve a more local coastal character. Its airport, flat center and central bay location make Tivat one of Montenegro’s easiest bases."
+      },
+      {
+        "key": "matera-italy",
+        "slug": "matera-italy",
+        "name": "Matera",
+        "country": "Italy",
+        "summary": "Matera rises from a limestone ravine in a sculptural maze of cave houses, rock churches, stairways and terraces. The Sassi districts appear ancient because they are: people have occupied this landscape for millennia. Today restored caves hold homes, museums, restaurants and hotels, but the city’s raw geology and difficult social history remain visible beneath the cinematic beauty."
+      },
+      {
+        "key": "trieste-italy",
+        "slug": "trieste-italy",
+        "name": "Trieste",
+        "country": "Italy",
+        "summary": "Trieste is an Adriatic port city with Vienna’s architectural manners, Slavic undertones and a fiercely local coffeehouse culture. Piazza Unità d’Italia opens directly to the sea, while steep streets climb toward the Karst Plateau. Habsburg palaces, literary cafés, Orthodox churches and working docks give the city a borderland identity unlike anywhere else in Italy."
+      },
+      {
+        "key": "braga-portugal",
+        "slug": "braga-portugal",
+        "name": "Braga",
+        "country": "Portugal",
+        "summary": "Braga combines baroque churches, granite streets, leafy squares and a large student population in the green Minho region of northern Portugal. The city is deeply associated with Portuguese Catholic tradition, yet its cafés, university neighborhoods and expanding technology sector keep it from feeling frozen in history."
+      },
+      {
+        "key": "valencia-spain",
+        "slug": "valencia-spain",
+        "name": "Valencia",
+        "country": "Spain",
+        "summary": "Valencia combines Mediterranean beaches, a dense historic center and the futuristic architecture of the City of Arts and Sciences within one remarkably livable urban fabric. The former Turia riverbed now forms a ribbon of parks and cycling paths across the city, connecting neighborhoods, museums, sports facilities and the coast."
+      },
+      {
+        "key": "rijeka-croatia",
+        "slug": "rijeka-croatia",
+        "name": "Rijeka",
+        "country": "Croatia",
+        "summary": "Rijeka is Croatia’s principal working port, a city of Habsburg façades, shipyards, steep neighborhoods and a creative scene that feels more urban and unvarnished than the country’s resort towns. Korzo serves as the social spine, while Trsat Castle watches over Kvarner Bay from the hills above."
+      },
+      {
+        "key": "zadar-croatia",
+        "slug": "zadar-croatia",
+        "name": "Zadar",
+        "country": "Croatia",
+        "summary": "Zadar layers Roman streets, medieval churches and contemporary waterfront art on a compact peninsula facing the islands of northern Dalmatia. At sunset, waves play the Sea Organ beneath marble steps while the nearby Greeting to the Sun turns the promenade into a glowing public stage."
+      },
+      {
+        "key": "piran-slovenia",
+        "slug": "piran-slovenia",
+        "name": "Piran",
+        "country": "Slovenia",
+        "summary": "Piran is a tightly packed Venetian-style town at the tip of Slovenia’s short Adriatic coast. Terracotta roofs rise from Tartini Square toward St. George’s Church, while stone lanes descend to a fishing harbor and sea walls. Its scale, architecture and car-light center give it the intimacy of a carefully preserved maritime village."
+      },
+      {
+        "key": "rovinj-croatia",
+        "slug": "rovinj-croatia",
+        "name": "Rovinj",
+        "country": "Croatia",
+        "summary": "Rovinj rises from the western Istrian coast in a tight spiral of stone lanes crowned by the bell tower of St. Euphemia. Once an island, the old town still feels maritime at every turn, with fishing boats in the harbor, pastel Venetian façades and glimpses of blue water between buildings. Outside the historic core, pine-shaded coves and Zlatni Rt forest park soften the resort atmosphere with easy access to swimming and cycling."
+      },
+      {
+        "key": "kanazawa-japan",
+        "slug": "kanazawa-japan",
+        "name": "Kanazawa",
+        "country": "Japan",
+        "summary": "Kanazawa is a refined castle city on Japan’s Sea of Japan coast, known for Kenroku-en Garden, preserved samurai and geisha districts, contemporary art and exceptional traditional crafts. It offers much of Kyoto’s cultural depth in a smaller, less overwhelming setting, with gold leaf, Kaga cuisine and carefully maintained historic neighborhoods shaping its identity."
+      },
+      {
+        "key": "polignano-a-mare-italy",
+        "slug": "polignano-a-mare-italy",
+        "name": "Polignano a Mare",
+        "country": "Italy",
+        "summary": "Polignano a Mare clings to limestone cliffs above the Adriatic, with whitewashed lanes, sea caves and balconies overlooking impossibly blue water. Lama Monachile, the town’s narrow pebble cove beneath a Roman bridge, is the signature view, but the real pleasure lies in the compact old town and the constant presence of the sea."
+      },
+      {
+        "key": "cefalu-italy",
+        "slug": "cefalu-italy",
+        "name": "Cefalù",
+        "country": "Italy",
+        "summary": "Cefalù is a compact Sicilian seaside town where a golden Norman cathedral, medieval lanes and a broad sandy beach sit beneath the massive limestone profile of La Rocca. The town manages to combine a genuine historic center with one of Sicily’s most accessible beach settings, which explains both its enduring popularity and its heavy summer crowds."
+      },
+      {
+        "key": "taormina-italy",
+        "slug": "taormina-italy",
+        "name": "Taormina",
+        "country": "Italy",
+        "summary": "Taormina occupies a dramatic terrace above Sicily’s Ionian coast, where the ancient theater frames views of Mount Etna and the sea. Corso Umberto, flowered balconies, elegant hotels and the cable car down to Mazzarò and Isola Bella create a polished resort atmosphere that has attracted international travelers since the Grand Tour."
+      },
+      {
+        "key": "podgorica-montenegro",
+        "slug": "podgorica-montenegro",
+        "name": "Podgorica",
+        "country": "Montenegro",
+        "summary": "Podgorica is a low-rise Balkan capital spread across the Morača and Ribnica rivers, with broad boulevards, café culture and a fragmented mix of Ottoman remains, Yugoslav-era planning and new commercial districts. It lacks the postcard drama of Montenegro’s coast, but it functions as the country’s practical transport, administrative and business hub."
+      },
+      {
+        "key": "kotor-montenegro",
+        "slug": "kotor-montenegro",
+        "name": "Kotor",
+        "country": "Montenegro",
+        "summary": "Kotor is a fortified medieval town compressed between the dark mountains of the Dinaric Alps and the deep blue waters of its namesake bay. Inside the walls, polished stone lanes lead to Romanesque churches, Venetian palaces and tiny squares, while the steep path to San Giovanni Fortress reveals one of the Adriatic’s most dramatic panoramas."
+      },
+      {
+        "key": "bergamo-italy",
+        "slug": "bergamo-italy",
+        "name": "Bergamo",
+        "country": "Italy",
+        "summary": "Bergamo is a prosperous Lombardy city split between the modern Città Bassa and the walled Città Alta, which rises above it on a hilltop of cobbled lanes, Romanesque churches and elegant piazzas. A pair of funiculars and the UNESCO-listed Venetian walls turn the city’s vertical geography into part of the experience."
+      },
+      {
+        "key": "pietrasanta-italy",
+        "slug": "pietrasanta-italy",
+        "name": "Pietrasanta",
+        "country": "Italy",
+        "summary": "Pietrasanta is a small Tuscan art town between the Apuan Alps and the Versilia coast, where marble workshops, bronze foundries and contemporary galleries sit around a refined medieval center. Known as the “Little Athens” of Italy, it feels less like a resort and more like a working international studio community."
+      },
+      {
+        "key": "alicante-spain",
+        "slug": "alicante-spain",
+        "name": "Alicante",
+        "country": "Spain",
+        "summary": "Alicante is a bright Mediterranean city built around Postiguet Beach, a palm-lined esplanade and the rocky height of Santa Bárbara Castle. Its compact center combines a working Spanish city, busy marina, university population and easy access to the resort towns of the Costa Blanca. | Alicante is a sunny Mediterranean city with beaches, a major airport and lower costs than Madrid or Barcelona."
+      },
+      {
+        "key": "verona-italy",
+        "slug": "verona-italy",
+        "name": "Verona",
+        "country": "Italy",
+        "summary": "Verona is a richly layered northern Italian city where a Roman amphitheater, medieval bridges, Renaissance palaces and riverside neighborhoods coexist within a compact historic center. The Arena’s summer opera season gives the city an international cultural presence far beyond its association with Romeo and Juliet."
+      },
+      {
+        "key": "radovljica-slovenia",
+        "slug": "radovljica-slovenia",
+        "name": "Radovljica",
+        "country": "Slovenia",
+        "summary": "A graceful Upper Carniolan town with a beautifully preserved medieval core, strong food traditions and the Julian Alps filling the horizon."
+      },
+      {
+        "key": "osaka-japan",
+        "slug": "osaka-japan",
+        "name": "Osaka",
+        "country": "Japan",
+        "summary": "Japan's great food-and-commerce metropolis: fast, funny, energetic and remarkably easy to live in without a car."
+      },
+      {
+        "key": "sitges-spain",
+        "slug": "sitges-spain",
+        "name": "Sitges",
+        "country": "Spain",
+        "summary": "A polished Mediterranean beach town with a walkable historic center, serious food, arts heritage and one of Spain's most visible LGBTQ social scenes."
+      },
+      {
+        "key": "estepona-spain",
+        "slug": "estepona-spain",
+        "name": "Estepona",
+        "country": "Spain",
+        "summary": "A flower-filled Costa del Sol town that has become noticeably more polished while keeping a more relaxed residential feel than nearby Marbella."
+      },
+      {
+        "key": "lake-bled-slovenia",
+        "slug": "lake-bled-slovenia",
+        "name": "Bled",
+        "country": "Slovenia",
+        "summary": "Slovenia's iconic alpine-lake town: exceptionally beautiful, easy to walk around and highly seasonal."
+      },
+      {
+        "key": "olbia-italy",
+        "slug": "olbia-italy",
+        "name": "Olbia",
+        "country": "Italy",
+        "summary": "Sardinia's practical northeastern hub: a real working city with an airport, port and access to extraordinary beaches."
+      },
+      {
+        "key": "hiroshima-japan",
+        "slug": "hiroshima-japan",
+        "name": "Hiroshima",
+        "country": "Japan",
+        "summary": "A highly livable regional capital where rivers, trams, food and modern daily life sit alongside some of the world's most important peace-history sites."
+      },
+      {
+        "key": "kobe-japan",
+        "slug": "kobe-japan",
+        "name": "Kobe",
+        "country": "Japan",
+        "summary": "A cosmopolitan port city squeezed dramatically between Osaka Bay and the Rokko mountains, with excellent rail access and a calmer rhythm than Osaka."
+      },
+      {
+        "key": "alghero-italy",
+        "slug": "alghero-italy",
+        "name": "Alghero",
+        "country": "Italy",
+        "summary": "A fortified Sardinian seaside city with Catalan character, walkable walls, beaches on the doorstep and one of the island's strongest long-stay settings."
+      },
+      {
+        "key": "hakodate-japan",
+        "slug": "hakodate-japan",
+        "name": "Hakodate",
+        "country": "Japan",
+        "summary": "A compact southern-Hokkaido port with trams, seafood, historic hillside streets and one of Japan's great night views."
+      },
+      {
+        "key": "desenzano-del-garda-italy",
+        "slug": "desenzano-del-garda-italy",
+        "name": "Desenzano del Garda",
+        "country": "Italy",
+        "summary": "Lake Garda's most practical southern-shore town, combining rail access, an active historic center, swimming and year-round services."
+      },
+      {
+        "key": "onomichi-japan",
+        "slug": "onomichi-japan",
+        "name": "Onomichi",
+        "country": "Japan",
+        "summary": "A cinematic Seto Inland Sea port of hillside temples, narrow lanes and ferries, best known as the western gateway to the Shimanami Kaido."
+      },
+      {
+        "key": "cartagena-spain",
+        "slug": "cartagena-spain",
+        "name": "Cartagena",
+        "country": "Spain",
+        "summary": "A substantial Mediterranean port city where Roman archaeology, naval history and ordinary regional life coexist without resort-town gloss."
+      },
+      {
+        "key": "gijon-spain",
+        "slug": "gijon-spain",
+        "name": "Gijón",
+        "country": "Spain",
+        "summary": "A green Atlantic city with a broad urban beach, cider culture and a strong everyday-local feel."
+      },
+      {
+        "key": "girona-spain",
+        "slug": "girona-spain",
+        "name": "Girona",
+        "country": "Spain",
+        "summary": "A compact Catalan city with medieval streets, riverfront architecture, serious food and some of Spain's best cycling access."
+      },
+      {
+        "key": "ptuj-slovenia",
+        "slug": "ptuj-slovenia",
+        "name": "Ptuj",
+        "country": "Slovenia",
+        "summary": "Slovenia's oldest recorded town, centered on a hilltop castle, wine traditions, thermal baths and an unusually relaxed pace."
+      },
+      {
+        "key": "koper-slovenia",
+        "slug": "koper-slovenia",
+        "name": "Koper",
+        "country": "Slovenia",
+        "summary": "Slovenia's main port city, blending a Venetian old center, bilingual coastal culture and immediate access to the country's short Adriatic shoreline."
+      },
+      {
+        "key": "murcia-spain",
+        "slug": "murcia-spain",
+        "name": "Murcia",
+        "country": "Spain",
+        "summary": "A sunny regional capital with a strong university presence, excellent produce and noticeably lower everyday costs than Spain's headline coastal cities."
+      },
+      {
+        "key": "takayama-japan",
+        "slug": "takayama-japan",
+        "name": "Takayama",
+        "country": "Japan",
+        "summary": "A beautifully preserved mountain city in the Japanese Alps, known for merchant streets, morning markets, festival culture and Hida beef."
+      },
+      {
+        "key": "dubrovnik-croatia",
+        "slug": "dubrovnik-croatia",
+        "name": "Dubrovnik",
+        "country": "Croatia",
+        "summary": "One of Europe's most spectacular walled cities, with immediate Adriatic swimming and extraordinary beauty paired with very real crowding and housing pressure."
+      },
+      {
+        "key": "aomori-japan",
+        "slug": "aomori-japan",
+        "name": "Aomori",
+        "country": "Japan",
+        "summary": "A compact northern Japanese port city where serious snow, seafood, Nebuta culture and quick access to Hakkoda make everyday life feel distinctly Tohoku."
+      },
+      {
+        "key": "kamakura-japan",
+        "slug": "kamakura-japan",
+        "name": "Kamakura",
+        "country": "Japan",
+        "summary": "A temple-rich coastal city south of Tokyo where surf beaches, wooded hills and an unusually walkable historic core create one of Japan’s most attractive small-city lifestyles."
+      },
+      {
+        "key": "porto-portugal",
+        "slug": "porto-portugal",
+        "name": "Porto",
+        "country": "Portugal",
+        "summary": "Portugal’s granite-and-azulejo northern capital pairs a dramatic Douro riverfront with walkable neighborhoods, serious food and wine, Atlantic beaches and excellent regional transport."
+      },
+      {
+        "key": "kranj-slovenia",
+        "slug": "kranj-slovenia",
+        "name": "Kranj",
+        "country": "Slovenia",
+        "summary": "A compact Alpine gateway built above a river canyon, with a handsome old town, easy Ljubljana access and mountain recreation close enough to shape everyday life."
+      },
+      {
+        "key": "coimbra-portugal",
+        "slug": "coimbra-portugal",
+        "name": "Coimbra",
+        "country": "Portugal",
+        "summary": "Portugal’s historic university city combines a youthful academic pulse, monumental heritage and a calmer, more affordable daily rhythm than Lisbon or Porto."
+      },
+      {
+        "key": "kumamoto-japan",
+        "slug": "kumamoto-japan",
+        "name": "Kumamoto",
+        "country": "Japan",
+        "summary": "A tram-friendly Kyushu regional capital anchored by its great castle, spring-fed gardens and easy access to Aso’s volcanic landscape."
+      },
+      {
+        "key": "beppu-japan",
+        "slug": "beppu-japan",
+        "name": "Beppu",
+        "country": "Japan",
+        "summary": "Japan’s great hot-spring city, squeezed between Beppu Bay and volcanic mountains, where public baths and steam vents are part of ordinary neighborhood life."
+      },
+      {
+        "key": "sapporo-japan",
+        "slug": "sapporo-japan",
+        "name": "Sapporo",
+        "country": "Japan",
+        "summary": "A full-scale northern metropolis with exceptional food, major-city services and genuine powder skiing less than an hour from downtown."
+      },
+      {
+        "key": "lecce-italy",
+        "slug": "lecce-italy",
+        "name": "Lecce",
+        "country": "Italy",
+        "summary": "A honey-colored Baroque city in southern Puglia with elegant streets, excellent food and quick access to both Adriatic and Ionian beaches."
+      },
+      {
+        "key": "athens-greece",
+        "slug": "athens-greece",
+        "name": "Athens",
+        "country": "Greece",
+        "summary": "A sprawling Mediterranean capital where world-class antiquity, late-night neighborhood life and improving urban culture sit beside heat, traffic and very real block-by-block differences."
+      },
+      {
+        "key": "matsumoto-japan",
+        "slug": "matsumoto-japan",
+        "name": "Matsumoto",
+        "country": "Japan",
+        "summary": "A cultured mountain city with one of Japan’s great original castles and direct access to the Northern Alps, Kamikochi and serious winter sports."
+      },
+      {
+        "key": "morioka-japan",
+        "slug": "morioka-japan",
+        "name": "Morioka",
+        "country": "Japan",
+        "summary": "A graceful Tohoku regional capital framed by Mount Iwate, known for craft traditions, three signature noodle styles and an easy Shinkansen connection to Tokyo."
+      },
+      {
+        "key": "sendai-japan",
+        "slug": "sendai-japan",
+        "name": "Sendai",
+        "country": "Japan",
+        "summary": "Tohoku’s largest city balances major-city healthcare, universities and shopping with broad green boulevards, coastal access and mountain day trips."
+      },
+      {
+        "key": "cavtat-croatia",
+        "slug": "cavtat-croatia",
+        "name": "Cavtat",
+        "country": "Croatia",
+        "summary": "A polished harbor town south of Dubrovnik with clear-water swimming, a walkable waterfront and airport convenience, but a distinctly seasonal housing and service market."
+      },
+      {
+        "key": "sirmione-italy",
+        "slug": "sirmione-italy",
+        "name": "Sirmione",
+        "country": "Italy",
+        "summary": "Lake Garda’s dramatic peninsula town combines thermal spas, waterfront walking and extraordinary scenery with heavy tourism and tight historic-center access."
+      },
+      {
+        "key": "celje-slovenia",
+        "slug": "celje-slovenia",
+        "name": "Celje",
+        "country": "Slovenia",
+        "summary": "A practical Slovenian regional city with a lively old center, one of the country’s great castles and quick access to hills, spas and the Savinja Valley."
+      },
+      {
+        "key": "nagasaki-japan",
+        "slug": "nagasaki-japan",
+        "name": "Nagasaki",
+        "country": "Japan",
+        "summary": "A steep, beautiful port city shaped by centuries of international exchange, with trams, extraordinary harbor views and one of Japan’s most distinctive urban identities."
+      },
+      {
+        "key": "perugia-italy",
+        "slug": "perugia-italy",
+        "name": "Perugia",
+        "country": "Italy",
+        "summary": "Umbria’s hilltop capital mixes Etruscan and medieval streets with two universities, major festivals and a surprisingly youthful daily culture."
+      },
+      {
+        "key": "novigrad-croatia",
+        "slug": "novigrad-croatia",
+        "name": "Novigrad",
+        "country": "Croatia",
+        "summary": "A small Istrian fishing town with Venetian streets, easy swimming and excellent regional food, offering a calmer coastal alternative to Rovinj or Poreč."
+      },
+      {
+        "key": "ioannina-greece",
+        "slug": "ioannina-greece",
+        "name": "Ioannina",
+        "country": "Greece",
+        "summary": "A youthful lake city in mountainous Epirus where Ottoman history, student energy and easy access to Zagori create a very different Greek lifestyle from the islands or Athens."
+      },
+      {
+        "key": "siracusa-italy",
+        "slug": "siracusa-italy",
+        "name": "Siracusa",
+        "country": "Italy",
+        "summary": "Baroque-and-Greek waterfront city on Sicily’s southeast coast, with Ortigia lanes, archaeological depth, markets and easy sea access."
+      },
+      {
+        "key": "toyama-japan",
+        "slug": "toyama-japan",
+        "name": "Toyama",
+        "country": "Japan",
+        "summary": "A polished Hokuriku city between Toyama Bay and the Japanese Alps, known for seafood, glass art and exceptional mountain access."
+      },
+      {
+        "key": "kardamyli-greece",
+        "slug": "kardamyli-greece",
+        "name": "Kardamyli",
+        "country": "Greece",
+        "summary": "A stone-built Mani village where Taygetos mountains meet clear Messenian water, with hiking, swimming and a refined low-key atmosphere."
+      },
+      {
+        "key": "trogir-croatia",
+        "slug": "trogir-croatia",
+        "name": "Trogir",
+        "country": "Croatia",
+        "summary": "A compact UNESCO island old town near Split with Venetian stonework, a lively waterfront and easy airport access."
+      },
+      {
+        "key": "korcula-town-croatia",
+        "slug": "korcula-town-croatia",
+        "name": "Korčula Town",
+        "country": "Croatia",
+        "summary": "A fortified Adriatic town of limestone alleys, sea views and island culture, with beaches and vineyards close at hand."
+      },
+      {
+        "key": "fukuoka-japan",
+        "slug": "fukuoka-japan",
+        "name": "Fukuoka",
+        "country": "Japan",
+        "summary": "A youthful, food-obsessed Japanese city with beaches, excellent transit, an international airport and an unusually relaxed big-city rhythm."
+      },
+      {
+        "key": "maribor-slovenia",
+        "slug": "maribor-slovenia",
+        "name": "Maribor",
+        "country": "Slovenia",
+        "summary": "A relaxed Slovenian regional city on the Drava, with wine culture, a walkable center and Pohorje skiing at the urban edge."
+      },
+      {
+        "key": "mali-losinj-croatia",
+        "slug": "mali-losinj-croatia",
+        "name": "Mali Lošinj",
+        "country": "Croatia",
+        "summary": "A colorful island harbor surrounded by pine forest and clear Adriatic coves, with a strong wellness and boating identity."
+      },
+      {
+        "key": "naha-japan",
+        "slug": "naha-japan",
+        "name": "Naha",
+        "country": "Japan",
+        "summary": "Okinawa’s compact capital blends subtropical island life, Ryukyuan culture, monorail convenience and an energetic food-and-market scene."
+      },
+      {
+        "key": "niigata-japan",
+        "slug": "niigata-japan",
+        "name": "Niigata",
+        "country": "Japan",
+        "summary": "A spacious Sea of Japan port city known for rice, sake, seafood and easy access to snowy mountain country."
+      },
+      {
+        "key": "kagoshima-japan",
+        "slug": "kagoshima-japan",
+        "name": "Kagoshima",
+        "country": "Japan",
+        "summary": "A southern Japanese city facing active Sakurajima, with ferries, hot springs, palm-lined streets and a distinctly volcanic landscape."
+      },
+      {
+        "key": "bari-italy",
+        "slug": "bari-italy",
+        "name": "Bari",
+        "country": "Italy",
+        "summary": "Puglia’s energetic Adriatic capital mixes a working seafront, atmospheric old town, excellent food and strong regional transport."
+      },
+      {
+        "key": "miyazaki-japan",
+        "slug": "miyazaki-japan",
+        "name": "Miyazaki",
+        "country": "Japan",
+        "summary": "A sunny southern Kyushu city with surf beaches, palms, shrines and an easygoing outdoor lifestyle."
+      },
+      {
+        "key": "hvar-town-croatia",
+        "slug": "hvar-town-croatia",
+        "name": "Hvar Town",
+        "country": "Croatia",
+        "summary": "A glamorous Dalmatian harbor town of limestone lanes, hillside views, boats and bright Adriatic water."
+      },
+      {
+        "key": "oviedo-spain",
+        "slug": "oviedo-spain",
+        "name": "Oviedo",
+        "country": "Spain",
+        "summary": "Asturias’ elegant inland capital combines immaculate streets, cider culture, pre-Romanesque heritage and quick access to green mountains and coast."
+      },
+      {
+        "key": "cagliari-italy",
+        "slug": "cagliari-italy",
+        "name": "Cagliari",
+        "country": "Italy",
+        "summary": "Sardinia’s lively capital offers a hilltop historic center, a long urban beach, markets and lagoon landscapes within one compact city."
+      },
+      {
+        "key": "naxos-town-greece",
+        "slug": "naxos-town-greece",
+        "name": "Naxos Town",
+        "country": "Greece",
+        "summary": "A Cycladic port town with a Venetian old quarter, immediate beaches and a large island hinterland of villages and mountains."
+      },
+      {
+        "key": "corfu-town-greece",
+        "slug": "corfu-town-greece",
+        "name": "Corfu Town",
+        "country": "Greece",
+        "summary": "A refined Ionian capital shaped by Venetian architecture, arcaded squares, fortresses and lush island scenery."
+      },
+      {
+        "key": "thessaloniki-greece",
+        "slug": "thessaloniki-greece",
+        "name": "Thessaloniki",
+        "country": "Greece",
+        "summary": "Greece’s northern metropolis is a food-and-culture city on the Thermaic Gulf, with a huge waterfront, university energy and deep Byzantine history."
+      },
+      {
+        "key": "okayama-japan",
+        "slug": "okayama-japan",
+        "name": "Okayama",
+        "country": "Japan",
+        "summary": "A sunny, practical western Japanese city anchored by Korakuen and Okayama Castle, with excellent rail access to the Setouchi region."
+      },
+      {
+        "key": "chattanooga-tennessee-united-states",
+        "slug": "chattanooga-tennessee-united-states",
+        "name": "Chattanooga",
+        "country": "United States",
+        "summary": "Riverfront Tennessee city framed by Lookout Mountain, with a revitalized downtown, serious outdoor access, and an unusually easygoing urban scale."
+      },
+      {
+        "key": "greenville-south-carolina-united-states",
+        "slug": "greenville-south-carolina-united-states",
+        "name": "Greenville",
+        "country": "United States",
+        "summary": "Compact Upstate city with a polished downtown, Falls Park at its center, a strong food scene, and easy Blue Ridge access."
+      },
+      {
+        "key": "tucson-arizona-united-states",
+        "slug": "tucson-arizona-united-states",
+        "name": "Tucson",
+        "country": "United States",
+        "summary": "Distinctive Sonoran Desert city with mountain-ringed views, UNESCO-recognized food culture, strong healthcare, and winter sunshine."
+      },
+      {
+        "key": "st-petersburg-florida-united-states",
+        "slug": "st-petersburg-florida-united-states",
+        "name": "St. Petersburg",
+        "country": "United States",
+        "summary": "Sunny Gulf Coast city with a walkable waterfront downtown, major museums, lively neighborhoods, and beaches just across the barrier islands."
+      },
+      {
+        "key": "fort-collins-colorado-united-states",
+        "slug": "fort-collins-colorado-united-states",
+        "name": "Fort Collins",
+        "country": "United States",
+        "summary": "Bike-friendly Front Range university city with a handsome Old Town, craft-beer culture, strong parks, and quick access to Horsetooth Reservoir."
+      },
+      {
+        "key": "boise-idaho-united-states",
+        "slug": "boise-idaho-united-states",
+        "name": "Boise",
+        "country": "United States",
+        "summary": "Fast-growing western capital with a lively downtown, Basque heritage, river greenbelt, foothill trails, and easy airport access."
+      },
+      {
+        "key": "leiria-portugal",
+        "slug": "leiria-portugal",
+        "name": "Leiria",
+        "country": "Portugal",
+        "summary": "Under-the-radar central Portuguese city with a castle above the old center, everyday services, lower pressure than Lisbon or Porto, and coast access."
+      },
+      {
+        "key": "granada-spain",
+        "slug": "granada-spain",
+        "name": "Granada",
+        "country": "Spain",
+        "summary": "Andalusian university city where the Alhambra, Albaicín lanes, tapas culture, and Sierra Nevada access create unusual depth for its size."
+      },
+      {
+        "key": "bilbao-spain",
+        "slug": "bilbao-spain",
+        "name": "Bilbao",
+        "country": "Spain",
+        "summary": "Prosperous Basque city with excellent transit, serious food and museum culture, green hills, and Atlantic beaches within the metro."
+      },
+      {
+        "key": "osijek-croatia",
+        "slug": "osijek-croatia",
+        "name": "Osijek",
+        "country": "Croatia",
+        "summary": "Affordable eastern Croatian river city with cycling paths, Austro-Hungarian architecture, café life, and a calmer pace than the Adriatic coast."
+      },
+      {
+        "key": "vienna-austria",
+        "slug": "vienna-austria",
+        "name": "Vienna",
+        "country": "Austria",
+        "summary": "Highly livable Central European capital with world-class transit, museums, parks, coffeehouse culture, and unusually strong public services."
+      },
+      {
+        "key": "ljubljana-slovenia",
+        "slug": "ljubljana-slovenia",
+        "name": "Ljubljana",
+        "country": "Slovenia",
+        "summary": "Green, compact capital built around a café-lined river, strong cycling, human-scale neighborhoods, and easy access to Slovenia’s mountains and coast."
+      },
+      {
+        "key": "tallinn-estonia",
+        "slug": "tallinn-estonia",
+        "name": "Tallinn",
+        "country": "Estonia",
+        "summary": "Digital-first Baltic capital where a medieval old town, creative districts, seaside neighborhoods, and efficient public services share a compact footprint."
+      },
+      {
+        "key": "kuala-lumpur-malaysia",
+        "slug": "kuala-lumpur-malaysia",
+        "name": "Kuala Lumpur",
+        "country": "Malaysia",
+        "summary": "Modern Southeast Asian capital with excellent food, private healthcare, high-rise living, major air connections, and strong value for a large city."
+      },
+      {
+        "key": "taipei-taiwan",
+        "slug": "taipei-taiwan",
+        "name": "Taipei",
+        "country": "Taiwan",
+        "summary": "Safe, transit-rich East Asian capital with exceptional food, mountain access, efficient healthcare, and neighborhoods that reward walking."
+      },
+      {
+        "key": "busan-south-korea",
+        "slug": "busan-south-korea",
+        "name": "Busan",
+        "country": "South Korea",
+        "summary": "Mountain-and-sea metropolis with urban beaches, seafood markets, strong transit, and a less intense pace than Seoul."
+      },
+      {
+        "key": "adelaide-australia",
+        "slug": "adelaide-australia",
+        "name": "Adelaide",
+        "country": "Australia",
+        "summary": "Manageable Australian capital ringed by parklands, with beaches, festivals, strong healthcare, and wine regions at the edge of the metro."
+      },
+      {
+        "key": "oaxaca-mexico",
+        "slug": "oaxaca-mexico",
+        "name": "Oaxaca",
+        "country": "Mexico",
+        "summary": "Highland cultural capital built around markets, mezcal, extraordinary regional cooking, craft traditions, and a highly walkable historic center."
+      },
+      {
+        "key": "pereira-colombia",
+        "slug": "pereira-colombia",
+        "name": "Pereira",
+        "country": "Colombia",
+        "summary": "Coffee-region hub with springlike temperatures, modern services, strong regional access, and green mountain landscapes in every direction."
+      },
+      {
+        "key": "salinas-ecuador",
+        "slug": "salinas-ecuador",
+        "name": "Salinas",
+        "country": "Ecuador",
+        "summary": "Pacific beach city on Ecuador’s Santa Elena peninsula with high-rise waterfront living, warm weather, and straightforward U.S.-dollar budgeting."
+      },
+      {
+        "key": "asheville-north-carolina-united-states",
+        "slug": "asheville-north-carolina-united-states",
+        "name": "Asheville",
+        "country": "United States",
+        "summary": "Blue Ridge mountain city with an unusually strong mix of arts, food, breweries, historic neighborhoods and quick access to serious outdoor recreation."
+      },
+      {
+        "key": "portland-maine-united-states",
+        "slug": "portland-maine-united-states",
+        "name": "Portland",
+        "country": "United States",
+        "summary": "Compact Maine port city with a walkable historic core, celebrated food scene, working waterfront and unusually easy access to islands and beaches."
+      },
+      {
+        "key": "bend-oregon-united-states",
+        "slug": "bend-oregon-united-states",
+        "name": "Bend",
+        "country": "United States",
+        "summary": "High-desert Oregon base where river trails, mountain sports, breweries and a lively downtown support an outdoors-first long-stay lifestyle."
+      },
+      {
+        "key": "sarasota-florida-united-states",
+        "slug": "sarasota-florida-united-states",
+        "name": "Sarasota",
+        "country": "United States",
+        "summary": "Gulf Coast city combining beaches, arts institutions, dining and strong retiree infrastructure with a polished, comfortable everyday feel."
+      },
+      {
+        "key": "reno-nevada-united-states",
+        "slug": "reno-nevada-united-states",
+        "name": "Reno",
+        "country": "United States",
+        "summary": "High-desert Nevada city with Tahoe access, a growing food and arts scene, university energy and no state individual income tax."
+      },
+      {
+        "key": "salamanca-spain",
+        "slug": "salamanca-spain",
+        "name": "Salamanca",
+        "country": "Spain",
+        "summary": "Golden-stone university city with exceptional walkability, monumental architecture, youthful street life and comparatively approachable Spanish living costs."
+      },
+      {
+        "key": "san-sebastian-spain",
+        "slug": "san-sebastian-spain",
+        "name": "San Sebastián",
+        "country": "Spain",
+        "summary": "Sophisticated Basque coastal city pairing extraordinary food, urban beaches, elegant neighborhoods and excellent walkability in a compact setting."
+      },
+      {
+        "key": "evora-portugal",
+        "slug": "evora-portugal",
+        "name": "Évora",
+        "country": "Portugal",
+        "summary": "UNESCO-listed Alentejo city with Roman and medieval layers, a walkable walled center, strong food culture and a slower inland Portuguese rhythm."
+      },
+      {
+        "key": "prague-other-europe",
+        "slug": "prague-other-europe",
+        "name": "Prague",
+        "country": "Czechia",
+        "summary": "Grand Central European capital with superb transit, architectural depth, lively neighborhoods and a daily cost structure still below many western peers."
+      },
+      {
+        "key": "treviso-italy",
+        "slug": "treviso-italy",
+        "name": "Treviso",
+        "country": "Italy",
+        "summary": "Canal-laced Veneto city with elegant arcades, excellent food, cycling culture and easy rail access to Venice without Venice’s daily tourism pressure."
+      },
+      {
+        "key": "annecy-france",
+        "slug": "annecy-france",
+        "name": "Annecy",
+        "country": "France",
+        "summary": "Alpine lake city with a postcard old town, extensive cycling and water recreation, mountain access and a polished French quality of life."
+      },
+      {
+        "key": "ho-chi-minh-city-vietnam",
+        "slug": "ho-chi-minh-city-vietnam",
+        "name": "Ho Chi Minh City",
+        "country": "Vietnam",
+        "summary": "Fast-moving southern Vietnamese metropolis where food, cafés, modern services and relatively low daily costs meet intense traffic and tropical heat."
+      },
+      {
+        "key": "tokyo-japan",
+        "slug": "tokyo-japan",
+        "name": "Tokyo",
+        "country": "Japan",
+        "summary": "Vast but remarkably orderly metropolis with world-class transit, exceptional food and services, deep neighborhood variety and near-frictionless daily convenience."
+      },
+      {
+        "key": "bali-indonesia",
+        "slug": "bali-indonesia",
+        "name": "Bali",
+        "country": "Indonesia",
+        "summary": "Tropical Indonesian island offering beaches, temples, wellness, remote-work infrastructure and radically different lifestyles between its major districts."
+      },
+      {
+        "key": "auckland-new-zealand",
+        "slug": "auckland-new-zealand",
+        "name": "Auckland",
+        "country": "New Zealand",
+        "summary": "Harbor-focused New Zealand metropolis with beaches, islands, multicultural food and strong services, balanced by high housing costs and traffic."
+      },
+      {
+        "key": "cusco-peru",
+        "slug": "cusco-peru",
+        "name": "Cusco",
+        "country": "Peru",
+        "summary": "High-altitude Andean city where Inca foundations, colonial streets, markets and mountain access create one of Latin America’s most distinctive long-stay settings."
+      },
+      {
+        "key": "valdivia-chile",
+        "slug": "valdivia-chile",
+        "name": "Valdivia",
+        "country": "Chile",
+        "summary": "River city in southern Chile with green landscapes, university culture, breweries, seafood and a cooler, wetter climate than most Latin American retirement hubs."
+      },
+      {
+        "key": "cordoba-argentina",
+        "slug": "cordoba-argentina",
+        "name": "Córdoba",
+        "country": "Argentina",
+        "summary": "Large Argentine university city with colonial architecture, energetic neighborhoods, healthcare depth and easy access to the Sierras de Córdoba."
+      },
+      {
+        "key": "buenos-aires-argentina",
+        "slug": "buenos-aires-argentina",
+        "name": "Buenos Aires",
+        "country": "Argentina",
+        "summary": "A vast, energetic capital where grand architecture, late-night dining, neighborhood cafés and serious cultural life meet a practical big-city rhythm."
+      },
+      {
+        "key": "brisbane-australia",
+        "slug": "brisbane-australia",
+        "name": "Brisbane",
+        "country": "Australia",
+        "summary": "A sunny river city with outdoor living, strong services and fast-growing urban energy, balancing subtropical ease with a practical Australian big-city base."
+      },
+      {
+        "key": "bruges-belgium",
+        "slug": "bruges-belgium",
+        "name": "Bruges",
+        "country": "Belgium",
+        "summary": "A compact Flemish heritage city where canals, cycling and medieval streets support an unusually beautiful, walkable everyday lifestyle beyond the tourist core."
+      },
+      {
+        "key": "curitiba-brazil",
+        "slug": "curitiba-brazil",
+        "name": "Curitiba",
+        "country": "Brazil",
+        "summary": "A high-elevation southern Brazilian capital known for parks, organized urban planning and cooler weather, with a practical everyday character beneath its modern image."
+      },
+      {
+        "key": "santiago-chile",
+        "slug": "santiago-chile",
+        "name": "Santiago",
+        "country": "Chile",
+        "summary": "A sophisticated Andean capital with strong services, metro connectivity and dramatic mountain views, pairing urban convenience with quick access to wine country and outdoor escapes."
+      },
+      {
+        "key": "bogota-colombia",
+        "slug": "bogota-colombia",
+        "name": "Bogota",
+        "country": "Colombia",
+        "summary": "A high-altitude Andean capital with heavyweight culture, food and professional life, offering immense urban variety alongside traffic, weather and neighborhood-selection tradeoffs."
+      },
+      {
+        "key": "makarska-croatia",
+        "slug": "makarska-croatia",
+        "name": "Makarska",
+        "country": "Croatia",
+        "summary": "A compact Adriatic town squeezed between clear water and the Biokovo massif, delivering a walkable seaside lifestyle with dramatic scenery and strong seasonal swings."
+      },
+      {
+        "key": "aix-en-provence-france",
+        "slug": "aix-en-provence-france",
+        "name": "Aix-en-Provence",
+        "country": "France",
+        "summary": "An elegant Provençal university city of fountains, markets and café-lined streets, offering polished daily life with countryside access and excellent regional connections."
+      },
+      {
+        "key": "chania-greece",
+        "slug": "chania-greece",
+        "name": "Chania",
+        "country": "Greece",
+        "summary": "A Venetian-harbor city in western Crete combining walkable historic streets, excellent food and quick access to beaches, mountains and some of Greece's best outdoor scenery."
+      },
+      {
+        "key": "aosta-italy",
+        "slug": "aosta-italy",
+        "name": "Aosta",
+        "country": "Italy",
+        "summary": "A compact Alpine capital surrounded by some of Europe's highest peaks, pairing Roman history and Italian daily life with exceptional access to hiking, skiing and mountain villages."
+      },
+      {
+        "key": "kurashiki-japan",
+        "slug": "kurashiki-japan",
+        "name": "Kurashiki",
+        "country": "Japan",
+        "summary": "A cultured western Japanese city where the preserved Bikan canal district, museums and textile heritage meet a substantial modern city near the Seto Inland Sea."
+      },
+      {
+        "key": "todos-santos-mexico",
+        "slug": "todos-santos-mexico",
+        "name": "Todos Santos",
+        "country": "Mexico",
+        "summary": "A small Baja California Sur arts town between desert and Pacific, offering galleries, restaurants and surf-country scenery with a slower rhythm than nearby resort centers."
+      },
+      {
+        "key": "muscat-oman",
+        "slug": "muscat-oman",
+        "name": "Muscat",
+        "country": "Oman",
+        "summary": "A low-rise Gulf capital framed by rugged mountains and the Arabian Sea, combining exceptional cleanliness, modern infrastructure and Omani tradition in a car-oriented urban landscape."
+      },
+      {
+        "key": "panama-city-panama",
+        "slug": "panama-city-panama",
+        "name": "Panama City",
+        "country": "Panama",
+        "summary": "A tropical finance and logistics capital with a modern skyline, historic Casco Viejo and easy regional air access, pairing urban convenience with heat, traffic and coastal humidity."
+      },
+      {
+        "key": "cape-town-south-africa",
+        "slug": "cape-town-south-africa",
+        "name": "Cape Town",
+        "country": "South Africa",
+        "summary": "A spectacular coastal metropolis where Table Mountain, beaches, wine country and serious urban culture create one of the world's strongest city-and-nature combinations."
+      },
+      {
+        "key": "seoul-south-korea",
+        "slug": "seoul-south-korea",
+        "name": "Seoul",
+        "country": "South Korea",
+        "summary": "A hyper-connected global capital where transit, food, shopping and late-night energy operate at extraordinary scale, balanced by mountains, river parks and highly efficient daily systems."
+      },
+      {
+        "key": "a-coruna-spain",
+        "slug": "a-coruna-spain",
+        "name": "A Coruña",
+        "country": "Spain",
+        "summary": "A compact Galician Atlantic city with beaches inside the urban fabric, a lively waterfront and strong food culture, offering a practical alternative to Spain's larger metros."
+      },
+      {
+        "key": "phuket-thailand",
+        "slug": "phuket-thailand",
+        "name": "Phuket",
+        "country": "Thailand",
+        "summary": "Thailand's largest island combines beaches, international services and a mature visitor economy, offering easy tropical living alongside traffic, seasonality and rapid development."
+      },
+      {
+        "key": "belfast-united-kingdom",
+        "slug": "belfast-united-kingdom",
+        "name": "Belfast",
+        "country": "United Kingdom",
+        "summary": "A compact, reinvented Northern Irish capital with strong music, pub and cultural life, improving waterfront districts and easy access to dramatic coast and countryside."
+      },
+      {
+        "key": "albuquerque-new-mexico-united-states",
+        "slug": "albuquerque-new-mexico-united-states",
+        "name": "Albuquerque",
+        "country": "United States",
+        "summary": "A high-desert Southwestern city with dramatic Sandia Mountain access, deep Hispanic and Native cultural influence, spacious living and a distinctive Route 66 identity."
+      }
+    ],
+    "destinationMedia": [
+      {
+        "key": "the-villages-fl-us",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/The_Villages%2C_Florida.jpg",
+          "alt": "Community streetscape and built environment"
+        }
+      },
+      {
+        "key": "sofia-bg",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Alexander_Nevsky_Cathedral%2C_Sofia.jpg",
+          "alt": "Sofia's landmark Orthodox cathedral"
+        }
+      },
+      {
+        "key": "puerto-vallarta-mx",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Puerto_Vallarta_Malecon_%2816229716913%29.jpg",
+          "alt": "Oceanfront promenade and city life"
+        }
+      },
+      {
+        "key": "hoi-an-vn",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Japanese_bridge_Hoi_An.jpg",
+          "alt": "Hoi An UNESCO heritage core"
+        }
+      },
+      {
+        "key": "queenstown-nz",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Queenstown_with_Lake_Wakatipu.jpg",
+          "alt": "Town and lake panorama"
+        }
+      },
+      {
+        "key": "ascoli-piceno-it",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/ascoli-piceno-italy-hero.jpg",
+          "alt": "Historic streets of Ascoli Piceno"
+        }
+      },
+      {
+        "key": "sarande-al",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Albania_057_-_Sarand%C3%AB_waterfront.jpg",
+          "alt": "Hero — Sarandë waterfront from the sea"
+        }
+      },
+      {
+        "key": "dumaguete-ph",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Dumaguete_City_Rizal_Boulevard.jpg",
+          "alt": "Hero — Rizal Boulevard waterfront"
+        }
+      },
+      {
+        "key": "las-terrenas-do",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Las_Terrenas_Beach%2C_Dominican_Republic.jpg",
+          "alt": "Hero — Las Terrenas beach panorama"
+        }
+      },
+      {
+        "key": "fairhope-al-us",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Fairhope_Pier.JPG",
+          "alt": "Hero — Fairhope pier/bayfront"
+        }
+      },
+      {
+        "key": "the-hague-netherlands",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Binnenhof%2C_The_Hague_-hu-1806.jpg",
+          "alt": "Binnenhof parliament complex, The Hague"
+        }
+      },
+      {
+        "key": "san-ramon-costa-rica",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/San_Ram%C3%B3n_Nonato_Church%2C_Costa_Rica_01.jpg",
+          "alt": "San Ramón Nonato Church, Costa Rica"
+        }
+      },
+      {
+        "key": "st-john-s-canada",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Family_Road_Trip_to_Newfoundland_July_12th-28th_2017_%2838763713452%29.jpg",
+          "alt": "Jellybean Row, St. John's"
+        }
+      },
+      {
+        "key": "santa-fe-new-mexico-united-states",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Palace_of_the_Governors_pano.jpg",
+          "alt": "Palace of the Governors, Santa Fe"
+        }
+      },
+      {
+        "key": "st-cloud-minnesota-united-states",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Mississippi_River_Portage_at_Munsinger_Gardens%2C_Saint_Cloud%2C_Minnesota_%2824113713931%29.jpg",
+          "alt": "Munsinger Gardens, Saint Cloud"
+        }
+      },
+      {
+        "key": "kyoto-japan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Double_torii_path_at_Fushimi_Inari_Taisha_Shrine%2C_Kyoto%2C_Japan.jpg",
+          "alt": "Fushimi Inari Taisha torii gates, Kyoto"
+        }
+      },
+      {
+        "key": "ajijic-mexico",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Ajijic%20%28julio%20de%202025%29%202.jpg",
+          "alt": "Ajijic"
+        }
+      },
+      {
+        "key": "boquete-panama",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Aerial%20View%20of%20Panama%20Farmland.jpg",
+          "alt": "Boquete"
+        }
+      },
+      {
+        "key": "chiang-mai-thailand",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/014%20Gable%20Design%20%289203392295%29.jpg",
+          "alt": "Chiang Mai"
+        }
+      },
+      {
+        "key": "cuenca-ecuador",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Abordaje%20de%20bus%20urbano%20en%20la%20Terminal%20Terrestre%20de%20Cuenca.jpg",
+          "alt": "Cuenca"
+        }
+      },
+      {
+        "key": "da-nang-vietnam",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/-i---i-%20%2849357485913%29.jpg",
+          "alt": "Da Nang"
+        }
+      },
+      {
+        "key": "florianopolis-brazil",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Antigo%20Armazem%20Vieira.jpg",
+          "alt": "Florianópolis"
+        }
+      },
+      {
+        "key": "funchal-portugal",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/015%20Developing%20Funchal.jpg",
+          "alt": "Funchal"
+        }
+      },
+      {
+        "key": "george-town-malaysia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/%27Put%20Put%27%20hawker%20stall%20inside%20small%20food%20market%20in%20George%20Town%2C%20Penang.jpg",
+          "alt": "George Town"
+        }
+      },
+      {
+        "key": "hua-hin-thailand",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Along%20the%20line%20to%20Hua%20Hin%20%2812249907885%29.jpg",
+          "alt": "Hua Hin"
+        }
+      },
+      {
+        "key": "lucca-italy",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/lucca-italy-hero.jpg",
+          "alt": "Medieval street in Lucca"
+        }
+      },
+      {
+        "key": "merida-mexico",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Catedral%20de%20M%C3%A9rida%20%28San%20Ildefonso%29%20M%C3%A9rida%2C%20Yucat%C3%A1n%2C%20M%C3%A9xico%20-%204.jpg",
+          "alt": "Mérida"
+        }
+      },
+      {
+        "key": "monopoli-italy",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Admiralty%20Chart%20No%20199%20Brindisi%20to%20Ortona%2C%20Published%201881.jpg",
+          "alt": "Monopoli"
+        }
+      },
+      {
+        "key": "montevideo-uruguay",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Legislative%20Palace%20in%20Montevideo%20-%20Uruguay.jpg",
+          "alt": "Montevideo"
+        }
+      },
+      {
+        "key": "nafplio-greece",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/%2B%201829%20bis%201834%20war%20Nauplia%20provisorische%20Hauptstadt%20Griechenlands.%2001.jpg",
+          "alt": "Nafplio"
+        }
+      },
+      {
+        "key": "nice-france",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Corse%20vue%20de%20Nice.jpg",
+          "alt": "Nice"
+        }
+      },
+      {
+        "key": "palm-springs-california-united-states",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Albert%20Frey%20Bel%20Vista%203.png",
+          "alt": "Palm Springs"
+        }
+      },
+      {
+        "key": "paphos-cyprus",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Archbishop%20Makarios%20III.%20Paphos.JPG",
+          "alt": "Paphos"
+        }
+      },
+      {
+        "key": "santander-spain",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Playa%20Sardinero%20-%20Santander%20-%20Spain.jpg",
+          "alt": "Santander"
+        }
+      },
+      {
+        "key": "savannah-georgia-united-states",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/A%20laboratory%20technician%20at%20the%20CDC%20Field%20Station%20in%20Savannah%20pours%20a%20water%20sample%20containing%20both%20mosquito%20larvae%20and%20pupae%20into%20a%20pupal%20separator%2C%20which%20was%20used%20to%20separate%20these%20two%20stages%20of%20development.jpg",
+          "alt": "Savannah"
+        }
+      },
+      {
+        "key": "sibenik-croatia",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
+          "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "bariloche-argentina",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-10-01/bariloche-argentina-hero.jpg",
+          "alt": "Lake Nahuel Huapi and the Andes near Bariloche"
+        }
+      },
+      {
+        "key": "mendoza-argentina",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-10-01/mendoza-argentina-hero.jpg",
+          "alt": "The snow-covered Andes seen from Mendoza"
+        }
+      },
+      {
+        "key": "joao-pessoa-brazil",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-10-01/joao-pessoa-brazil-hero.jpg",
+          "alt": "Palm-lined beach on the João Pessoa coast"
+        }
+      },
+      {
+        "key": "punta-del-este-uruguay",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-10-01/punta-del-este-uruguay-hero.jpg",
+          "alt": "Playa Mansa and Punta del Este’s waterfront skyline"
+        }
+      },
+      {
+        "key": "ghent-belgium",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-10-01/ghent-belgium-hero.jpg",
+          "alt": "Historic waterfront buildings along Ghent’s Graslei"
+        }
+      },
+      {
+        "key": "wanaka-new-zealand",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-10-01/wanaka-new-zealand-hero.jpg",
+          "alt": "The Wānaka Tree with Lake Wānaka and mountains at sunrise"
+        }
+      },
+      {
+        "key": "stellenbosch-south-africa",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-10-01/stellenbosch-south-africa-hero.jpg",
+          "alt": "Stellenbosch Mountain above a residential neighbourhood"
+        }
+      },
+      {
+        "key": "loreto-mexico",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-10-01/loreto-mexico-hero.jpg",
+          "alt": "Stone arches and palms at the Mission of Our Lady of Loreto"
+        }
+      },
+      {
+        "key": "vevey-switzerland",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-10-01/vevey-switzerland-hero.jpg",
+          "alt": "Vevey, vineyards and Lake Geneva beneath the Alps"
+        }
+      },
+      {
+        "key": "hakuba-japan",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-10-01/hakuba-japan-hero.jpg",
+          "alt": "Sunrise over cloud-covered mountains in Hakuba"
+        }
+      },
+      {
+        "key": "whistler-canada",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/View%20of%20whistler.jpg",
+          "alt": "Whistler town and mountains"
+        }
+      },
+      {
+        "key": "bansko-bulgaria",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Bansko%20Town%20in%20Summer.jpg",
+          "alt": "Bansko town and Pirin"
+        }
+      },
+      {
+        "key": "pucon-chile",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Plaza%20de%20Puc%C3%B3n.jpg",
+          "alt": "Pucón and Villarrica volcano"
+        }
+      },
+      {
+        "key": "noosa-heads-australia",
+        "heroImage": {
+          "src": "/images/noosa-heads-australia-hero.jpg",
+          "alt": "Noosa Main Beach"
+        }
+      },
+      {
+        "key": "baden-baden-germany",
+        "heroImage": {
+          "src": "/images/baden-baden-germany-hero.jpg",
+          "alt": "Baden-Baden Kurpark / city setting"
+        }
+      },
+      {
+        "key": "sarajevo-bosnia-and-herzegovina",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/sarajevo-bosnia-and-herzegovina-hero.jpg",
+          "alt": "Sarajevo skyline and surrounding hills"
+        }
+      },
+      {
+        "key": "da-lat-vietnam",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/da-lat-vietnam-hero.jpg",
+          "alt": "Da Lat highland greenhouses and city"
+        }
+      },
+      {
+        "key": "sete-france",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/sete-france-hero.jpg",
+          "alt": "Aerial Sète harbor and canals"
+        }
+      },
+      {
+        "key": "tainan-taiwan",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/tainan-taiwan-hero.jpg",
+          "alt": "Traditional Tainan architecture"
+        }
+      },
+      {
+        "key": "arequipa-peru",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/arequipa-peru-hero.jpg",
+          "alt": "Arequipa cathedral and El Misti"
+        }
+      },
+      {
+        "key": "sibiu-romania",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/sibiu-romania-hero.jpg",
+          "alt": "Sibiu historic architecture"
+        }
+      },
+      {
+        "key": "ohrid-north-macedonia",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/ohrid-north-macedonia-hero.jpg",
+          "alt": "Ohrid and Lake Ohrid panorama"
+        }
+      },
+      {
+        "key": "kuching-malaysia",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/kuching-malaysia-hero.jpg",
+          "alt": "Sarawak State Legislative Assembly and river"
+        }
+      },
+      {
+        "key": "ipoh-malaysia",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/ipoh-malaysia-hero.jpg",
+          "alt": "Ipoh old-world shophouse architecture"
+        }
+      },
+      {
+        "key": "dunedin-new-zealand",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/dunedin-new-zealand-hero.jpg",
+          "alt": "Dunedin Railway Station"
+        }
+      },
+      {
+        "key": "sucre-bolivia",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/sucre-bolivia-hero.jpg",
+          "alt": "Sucre colonial plaza and architecture"
+        }
+      },
+      {
+        "key": "loja-ecuador",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/loja-ecuador-hero.jpg",
+          "alt": "Puerta de la Ciudad in Loja"
+        }
+      },
+      {
+        "key": "campeche-mexico",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/campeche-mexico-hero.jpg",
+          "alt": "Colorful colonial street in Campeche"
+        }
+      },
+      {
+        "key": "oberstdorf-germany",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/oberstdorf-germany-hero.jpg",
+          "alt": "Oberstdorf town and mountains at sunset"
+        }
+      },
+      {
+        "key": "frutillar-chile",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/frutillar-chile-hero.jpg",
+          "alt": "Lake Llanquihue and Osorno Volcano"
+        }
+      },
+      {
+        "key": "launceston-australia",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/launceston-australia-hero.jpg",
+          "alt": "South Esk River boardwalk"
+        }
+      },
+      {
+        "key": "sandpoint-idaho-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/sandpoint-idaho-united-states-hero.jpg",
+          "alt": "Lake Pend Oreille"
+        }
+      },
+      {
+        "key": "nelson-new-zealand",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/nelson-new-zealand-hero.jpg",
+          "alt": "Nelson street and mountain backdrop"
+        }
+      },
+      {
+        "key": "albany-western-australia",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/albany-western-australia-hero.jpg",
+          "alt": "Albany coastal panorama"
+        }
+      },
+      {
+        "key": "essaouira-morocco",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-01/essaouira-morocco-hero.jpg",
+          "alt": "Essaouira historic port and blue boats"
+        }
+      },
+      {
+        "key": "almunecar-spain",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/almunecar-spain-hero.jpg",
+          "alt": "Almuñécar coast, San Cristóbal and Peñón del Santo"
+        }
+      },
+      {
+        "key": "tavira-portugal",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/tavira-portugal-hero.jpg",
+          "alt": "Tavira Praça da República and Câmara Municipal"
+        }
+      },
+      {
+        "key": "kalamata-greece",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/kalamata-greece-hero.jpg",
+          "alt": "Greek Orthodox church in Kalamata"
+        }
+      },
+      {
+        "key": "pak-nam-pran-thailand",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/pak-nam-pran-thailand-hero.jpg",
+          "alt": "Pak Nam Pran Gulf shoreline"
+        }
+      },
+      {
+        "key": "piriapolis-uruguay",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/piriapolis-uruguay-hero.jpg",
+          "alt": "Piriápolis beach and rambla"
+        }
+      },
+      {
+        "key": "plovdiv-bulgaria",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/plovdiv-bulgaria-hero.jpg",
+          "alt": "Plovdiv cityscape"
+        }
+      },
+      {
+        "key": "denia-spain",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/denia-spain-hero.jpg",
+          "alt": "Dénia coast and Mediterranean"
+        }
+      },
+      {
+        "key": "viana-do-castelo-portugal",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/viana-do-castelo-portugal-hero.jpg",
+          "alt": "Viana do Castelo waterfront"
+        }
+      },
+      {
+        "key": "pezenas-france",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/pezenas-france-hero.jpg",
+          "alt": "Pézenas historic street"
+        }
+      },
+      {
+        "key": "matsuyama-japan",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/matsuyama-japan-hero.jpg",
+          "alt": "Matsuyama neighborhood street"
+        }
+      },
+      {
+        "key": "taitung-taiwan",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/taitung-taiwan-hero.jpg",
+          "alt": "Taitung Tianhou Temple"
+        }
+      },
+      {
+        "key": "quy-nhon-vietnam",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/quy-nhon-vietnam-hero.jpg",
+          "alt": "Quy Nhon beach"
+        }
+      },
+      {
+        "key": "herceg-novi-montenegro",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/herceg-novi-montenegro-hero.jpg",
+          "alt": "Herceg Novi and Boka Bay"
+        }
+      },
+      {
+        "key": "fethiye-turkiye",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/fethiye-turkiye-hero.jpg",
+          "alt": "Fethiye bay and coastal city"
+        }
+      },
+      {
+        "key": "st-george-utah-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/st-george-utah-united-states-hero.jpg",
+          "alt": "Red-rock canyon near St. George"
+        }
+      },
+      {
+        "key": "coeur-d-alene-idaho-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/coeur-d-alene-idaho-united-states-hero.jpg",
+          "alt": "Lake Coeur d'Alene beach"
+        }
+      },
+      {
+        "key": "san-luis-obispo-california-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-02/san-luis-obispo-california-united-states-hero.jpg",
+          "alt": "San Luis Obispo neighborhood and hills"
+        }
+      },
+      {
+        "key": "flagstaff-arizona-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/flagstaff-arizona-united-states-hero.jpg",
+          "alt": "Downtown Flagstaff, Arizona.jpg"
+        }
+      },
+      {
+        "key": "ashland-oregon-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/ashland-oregon-united-states-hero.jpg",
+          "alt": "Ashland Historic District (Ashland, Oregon).jpg"
+        }
+      },
+      {
+        "key": "whitefish-montana-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/whitefish-montana-united-states-hero.jpg",
+          "alt": "Downtown-whitefish-2006.jpg"
+        }
+      },
+      {
+        "key": "saratoga-springs-new-york-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/saratoga-springs-new-york-united-states-hero.jpg",
+          "alt": "Saratoga Springs, NY, post office.jpg"
+        }
+      },
+      {
+        "key": "annapolis-maryland-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/annapolis-maryland-united-states-hero.jpg",
+          "alt": "Maryland State House MD1.jpg"
+        }
+      },
+      {
+        "key": "wilmington-north-carolina-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/wilmington-north-carolina-united-states-hero.jpg",
+          "alt": "Wilmington, North Carolina.jpg"
+        }
+      },
+      {
+        "key": "st-augustine-florida-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/st-augustine-florida-united-states-hero.jpg",
+          "alt": "St Augustine, Florida Feb 2024 - St George Street.jpg"
+        }
+      },
+      {
+        "key": "hilton-head-island-south-carolina-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/hilton-head-island-south-carolina-united-states-hero.png",
+          "alt": "Hilton Head Island Lighthouse June 2026.png"
+        }
+      },
+      {
+        "key": "traverse-city-michigan-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/traverse-city-michigan-united-states-hero.jpg",
+          "alt": "Boardman Lake Trail Traverse City.jpg"
+        }
+      },
+      {
+        "key": "delray-beach-florida-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/delray-beach-florida-united-states-hero.jpg",
+          "alt": "Delray Beach, Florida.jpg"
+        }
+      },
+      {
+        "key": "lagos-portugal",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/lagos-portugal-hero.jpg",
+          "alt": "Lagos, Portugal.jpg"
+        }
+      },
+      {
+        "key": "chiang-rai-thailand",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/chiang-rai-thailand-hero.jpg",
+          "alt": "Wat Rong Khun - Chiang Rai.jpg"
+        }
+      },
+      {
+        "key": "guanajuato-mexico",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/guanajuato-mexico-hero.jpg",
+          "alt": "Guanajuato city.jpg"
+        }
+      },
+      {
+        "key": "newport-rhode-island-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/newport-rhode-island-united-states-hero.jpg",
+          "alt": "Newport Rhode Island harbor 1.jpg"
+        }
+      },
+      {
+        "key": "cascais-portugal",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/cascais-portugal-hero.jpg",
+          "alt": "Cascais. Portugal.jpg"
+        }
+      },
+      {
+        "key": "hood-river-oregon-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/hood-river-oregon-united-states-hero.jpg",
+          "alt": "Hood River Waterfront Park along the Columbia River - DPLA - 64a507b030c25a6a674ab3f401463348.jpg"
+        }
+      },
+      {
+        "key": "eureka-springs-arkansas-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/eureka-springs-arkansas-united-states-hero.jpg",
+          "alt": "09-02-06-EurekaSprings.jpg"
+        }
+      },
+      {
+        "key": "new-hope-pennsylvania-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/new-hope-pennsylvania-united-states-hero.jpg",
+          "alt": "New Hope PA from Goat Hill Overlook 04222018.jpg"
+        }
+      },
+      {
+        "key": "healdsburg-california-united-states",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/healdsburg-california-united-states-hero.jpg",
+          "alt": "Healdsburg, California - 51072887797.jpg"
+        }
+      },
+      {
+        "key": "bocas-del-toro-panama",
+        "heroImage": {
+          "src": "/images/curated-mixed-batch-20-03/bocas-del-toro-panama-hero.jpg",
+          "alt": "Bocas del Toro Panama.jpg"
+        }
+      },
+      {
+        "key": "tivat-montenegro",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Sunset_in_Montenegro.jpg",
+          "alt": "Sunset reflections on Tivat Bay"
+        }
+      },
+      {
+        "key": "matera-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Matera_-_View_from_Sant%27Agostino.jpg",
+          "alt": "Matera from Sant’Agostino"
+        }
+      },
+      {
+        "key": "trieste-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/57/Trieste_%2828766391880%29.jpg",
+          "alt": "Trieste and its Adriatic setting"
+        }
+      },
+      {
+        "key": "braga-portugal",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Stairs_in_Bom_Jesus-Braga.JPG",
+          "alt": "Bom Jesus do Monte stairway"
+        }
+      },
+      {
+        "key": "valencia-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/7/73/Sunset_In_The_City_Of_Arts_And_Sciences_Valencia_Spain_%2858944456%29.jpeg",
+          "alt": "Sunset at the City of Arts and Sciences"
+        }
+      },
+      {
+        "key": "rijeka-croatia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/f5/RijekaCroatiaAerial2.jpg",
+          "alt": "Aerial view of Rijeka and its port"
+        }
+      },
+      {
+        "key": "zadar-croatia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Roman_Forum_in_Zadar%2C_Croatia_%2848607823862%29.jpg",
+          "alt": "Roman Forum and historic Zadar"
+        }
+      },
+      {
+        "key": "piran-slovenia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Piran%2C_Slovenia%2C_Viewpoint.jpg",
+          "alt": "Piran’s peninsula and rooftops"
+        }
+      },
+      {
+        "key": "rovinj-croatia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/db/Town_of_Rovinj%2C_Croatia_%2820063724820%29.jpg",
+          "alt": "Rovinj’s harbor and old-town skyline"
+        }
+      },
+      {
+        "key": "kanazawa-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Kanazawa_Kanazawa-jo_Sakura_06.jpg",
+          "alt": "Cherry blossoms at Kanazawa Castle"
+        }
+      },
+      {
+        "key": "polignano-a-mare-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/ac/Polignano_a_Mare_-_lama_Monachile_-_202209012226.jpeg",
+          "alt": "Lama Monachile and Polignano’s cliffs"
+        }
+      },
+      {
+        "key": "cefalu-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/43/Cefalu01%28js%29.jpg",
+          "alt": "Cefalù beach and historic waterfront"
+        }
+      },
+      {
+        "key": "taormina-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a6/The_Greek_theatre_Taormina.jpg",
+          "alt": "Taormina’s ancient theater at sunset"
+        }
+      },
+      {
+        "key": "podgorica-montenegro",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/f5/P064720-426794_-_Panoramic_view_of_Podgorica.jpg",
+          "alt": "Panoramic view of Podgorica"
+        }
+      },
+      {
+        "key": "kotor-montenegro",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/26/20090719_Crkva_Gospa_od_Zdravlja_Kotor_Bay_Montenegro.jpg",
+          "alt": "Our Lady of Health and Kotor Bay"
+        }
+      },
+      {
+        "key": "bergamo-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a3/Bergamo_%2816290952257%29.jpg",
+          "alt": "Sunset over Bergamo"
+        }
+      },
+      {
+        "key": "pietrasanta-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Sunset_in_a_beach_in_Marina_di_Pietrasanta_2.jpg",
+          "alt": "Sunset at Marina di Pietrasanta"
+        }
+      },
+      {
+        "key": "alicante-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Port_of_Alicante_7.jpg",
+          "alt": "Alicante’s port and urban coastline"
+        }
+      },
+      {
+        "key": "verona-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Verona_cityscape_sunny.jpg",
+          "alt": "Verona cityscape in sunlight"
+        }
+      },
+      {
+        "key": "radovljica-slovenia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/3.4.13%203%20Radovljica%2016%20%288617784108%29.jpg",
+          "alt": "Radovljica"
+        }
+      },
+      {
+        "key": "osaka-japan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Expo%202025%20in%20Osaka%2C%20Japan%2008.jpg",
+          "alt": "Osaka"
+        }
+      },
+      {
+        "key": "sitges-spain",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Al%20voltant%20de%20la%20punta%20de%20les%20Coves%20-%2020221120%20120130.jpg",
+          "alt": "Sitges"
+        }
+      },
+      {
+        "key": "estepona-spain",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Archivo%20Historico%20Municipal%20de%20Estepona.jpg",
+          "alt": "Estepona"
+        }
+      },
+      {
+        "key": "lake-bled-slovenia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bled%20%2814843568936%29.jpg",
+          "alt": "Bled"
+        }
+      },
+      {
+        "key": "olbia-italy",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Belvedere%20.jpg",
+          "alt": "Olbia"
+        }
+      },
+      {
+        "key": "hiroshima-japan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Hiroshima%20montage2.jpg",
+          "alt": "Hiroshima"
+        }
+      },
+      {
+        "key": "kobe-japan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/GlobalRainbow%20%40Kobe%202020%20%2850678905841%29.jpg",
+          "alt": "Kobe"
+        }
+      },
+      {
+        "key": "alghero-italy",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/%2BAlghero%2C%20eine%20Stadt%20mit%20katalanischem%20Erbe.%2001.jpg",
+          "alt": "Alghero"
+        }
+      },
+      {
+        "key": "hakodate-japan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/A%20girl%20playing%20a%20slide%20in%20Goryokaku%20Park%2C%20Misaki%2C%20Japan%3B%20August%202009.jpg",
+          "alt": "Hakodate"
+        }
+      },
+      {
+        "key": "desenzano-del-garda-italy",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/25015%20Desenzano%20del%20Garda%2C%20Province%20of%20Brescia%2C%20Italy%20-%20panoramio%20%2812%29.jpg",
+          "alt": "Desenzano del Garda"
+        }
+      },
+      {
+        "key": "onomichi-japan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Onomichi.jpg",
+          "alt": "Onomichi"
+        }
+      },
+      {
+        "key": "cartagena-spain",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cartagena%201962.jpg",
+          "alt": "Cartagena"
+        }
+      },
+      {
+        "key": "gijon-spain",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Montaje%20Gijon.jpg",
+          "alt": "Gijón"
+        }
+      },
+      {
+        "key": "girona-spain",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/5.%20Gerona%2C%20desde%20el%20puente%20de%20Piedra.jpg",
+          "alt": "Girona"
+        }
+      },
+      {
+        "key": "ptuj-slovenia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/2250%20Ptuj%2C%20Slovenia%20-%20panoramio%20%284%29.jpg",
+          "alt": "Ptuj"
+        }
+      },
+      {
+        "key": "koper-slovenia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/2005%20-%2008%20Koper%2001.jpg",
+          "alt": "Koper"
+        }
+      },
+      {
+        "key": "murcia-spain",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Catedral%20de%20Murcia%20-%20Elena%20en%20el%20campanario.jpg",
+          "alt": "Murcia"
+        }
+      },
+      {
+        "key": "takayama-japan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Takayama.jpg",
+          "alt": "Takayama"
+        }
+      },
+      {
+        "key": "dubrovnik-croatia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/2-Dubrovnik.jpg",
+          "alt": "Dubrovnik"
+        }
+      },
+      {
+        "key": "aomori-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Sceanery_of_the_Aomori_Waterfront_20200621.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Sceanery of the Aomori Waterfront 20200621"
+        }
+      },
+      {
+        "key": "kamakura-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Tsurugaoka_Hachimangu_Shrine.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Tsurugaoka Hachimangu Shrine"
+        }
+      },
+      {
+        "key": "porto-portugal",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Puente_Don_Luis_I%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_13.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Puente Don Luis I, Oporto, Portugal, 2012 05 09, DD 13"
+        }
+      },
+      {
+        "key": "kranj-slovenia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Kranj_19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Kranj 19"
+        }
+      },
+      {
+        "key": "coimbra-portugal",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/52/Coimbra_November_2012-1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Coimbra November 2012 1"
+        }
+      },
+      {
+        "key": "kumamoto-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/87/Kumamoto_castle_and_ginkgo.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Kumamoto castle and ginkgo"
+        }
+      },
+      {
+        "key": "beppu-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Beppu_City.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Beppu City"
+        }
+      },
+      {
+        "key": "sapporo-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Odori_Park_%2815982613668%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Odori Park (15982613668)"
+        }
+      },
+      {
+        "key": "lecce-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Piazza_Del_Duomo_Lecce_Italy_Travel_Photography_%28171395721%29.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Piazza Del Duomo Lecce Italy Travel Photography (171395721)"
+        }
+      },
+      {
+        "key": "athens-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/84/20101024_Acropolis_panoramic_view_from_Areopagus_hill_Athens_Greece.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "20101024 Acropolis panoramic view from Areopagus hill Athens Greece"
+        }
+      },
+      {
+        "key": "matsumoto-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/f7/130608_Matsumoto_Castle_Matsumoto_Nagano_pref_Japan02bs4.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "130608 Matsumoto Castle Matsumoto Nagano pref Japan02bs4"
+        }
+      },
+      {
+        "key": "morioka-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/13/%E9%AB%98%E6%9D%BE%E3%81%AE%E6%B1%A0%E3%81%A8%E5%B2%A9%E6%89%8B%E5%B1%B1_Takamatsu-no-Ike_Pond_%5E_Mt._Iwate_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "高松の池と岩手山 Takamatsu no Ike Pond ^ Mt. Iwate panoramio"
+        }
+      },
+      {
+        "key": "sendai-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/88/Downtown_Buildings_Sendai_02.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Downtown Buildings Sendai 02"
+        }
+      },
+      {
+        "key": "cavtat-croatia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Cavtat_Croatia_2008-10-07.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Cavtat Croatia 2008 10 07"
+        }
+      },
+      {
+        "key": "sirmione-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/9/96/Sirmione%2C_Province_of_Brescia%2C_Italy_-_panoramio_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Sirmione, Province of Brescia, Italy panoramio (1)"
+        }
+      },
+      {
+        "key": "celje-slovenia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Old_castle_of_Celje_ofter_the_sunset.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Old castle of Celje ofter the sunset"
+        }
+      },
+      {
+        "key": "nagasaki-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/9/94/Nagasaki_City_view_from_Mt_Inasa02s5.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Nagasaki City view from Mt Inasa02s5"
+        }
+      },
+      {
+        "key": "perugia-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/6d/IMG_0750_-_Perugia_-_Chiesa_di_san_Domenico_al_tramonto_-_Foto_G._Dall%27Orto_5_ago_2006.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "IMG 0750 Perugia Chiesa di san Domenico al tramonto Foto G. Dall'Orto 5 ago 2006"
+        }
+      },
+      {
+        "key": "novigrad-croatia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/be/Novigrad_%28Croatia%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Novigrad (Croatia)"
+        }
+      },
+      {
+        "key": "ioannina-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/3/33/07Joannina07.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "07Joannina07"
+        }
+      },
+      {
+        "key": "siracusa-italy",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Ortigia%20Siracusa%20Lungomare.jpg",
+          "alt": "Siracusa premium wide hero"
+        }
+      },
+      {
+        "key": "toyama-japan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Fugan%20Canal%20Kansui%20Park%20260123%2038.jpg",
+          "alt": "Toyama premium wide hero"
+        }
+      },
+      {
+        "key": "kardamyli-greece",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Kadamyli%20from%20Proastio.jpg",
+          "alt": "Kardamyli premium wide hero"
+        }
+      },
+      {
+        "key": "trogir-croatia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Kamerlengo%20Fortress%2C%20Trogir%20(HR)%20-%20panoramio.jpg",
+          "alt": "Trogir premium wide hero"
+        }
+      },
+      {
+        "key": "korcula-town-croatia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Kor%C4%8Dula%20Old%20Town%2C%20Croatia%20(2024).jpg",
+          "alt": "Korčula Town premium wide hero"
+        }
+      },
+      {
+        "key": "fukuoka-japan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Fukuoka%20Skyline%20of%20Seaside%20Momochi.jpg",
+          "alt": "Fukuoka premium wide hero"
+        }
+      },
+      {
+        "key": "maribor-slovenia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/View%20on%20Lent%20in%20Maribor%2C%20Slovenia%20(30282286067).jpg",
+          "alt": "Maribor premium wide hero"
+        }
+      },
+      {
+        "key": "mali-losinj-croatia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Losinj%20037.jpg",
+          "alt": "Mali Lošinj premium wide hero"
+        }
+      },
+      {
+        "key": "naha-japan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Naha%20Okinawa%20Japan%20Shuri-Castle-01.jpg",
+          "alt": "Naha premium wide hero"
+        }
+      },
+      {
+        "key": "niigata-japan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Niigata%20city%20night%20view.jpg",
+          "alt": "Niigata premium wide hero / river cityscape at dusk"
+        }
+      },
+      {
+        "key": "kagoshima-japan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sakurajima%20from%20kagoshima.jpg",
+          "alt": "Kagoshima premium wide hero"
+        }
+      },
+      {
+        "key": "bari-italy",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Basilica%20Pontificia%20San%20Nicola%20Bari.jpg",
+          "alt": "Bari premium hero / Basilica di San Nicola and seafront"
+        }
+      },
+      {
+        "key": "miyazaki-japan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/2021-01-07%20Aoshima%20Island%20(Miyazaki)%E9%9D%92%E5%B3%B6%20(%E5%AE%AE%E5%B4%8E%E7%9C%8C)DJI%200255%20(2)%E7%A9%BA%E6%92%AE.jpg",
+          "alt": "Miyazaki premium wide hero"
+        }
+      },
+      {
+        "key": "hvar-town-croatia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Aerial%20image%20of%20Hvar%20(view%20from%20the%20south).jpg",
+          "alt": "Hvar Town premium wide hero"
+        }
+      },
+      {
+        "key": "oviedo-spain",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sierra%20Naranco%20(panorama)%2C%20Oviedo%2C%20Espa%C3%B1a.jpg",
+          "alt": "Oviedo premium wide hero"
+        }
+      },
+      {
+        "key": "cagliari-italy",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cagliari%20dal%20Bastione%20Santa%20Croce.jpg",
+          "alt": "Cagliari premium wide hero / city panorama"
+        }
+      },
+      {
+        "key": "naxos-town-greece",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Naxos%20%CE%9D%CE%AC%CE%BE%CE%BF%CF%82%202020-08-20%2005%20Chora.jpg",
+          "alt": "Naxos Town premium wide hero"
+        }
+      },
+      {
+        "key": "corfu-town-greece",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/The%20Old%20Fortress%20and%20the%20Old%20Town%20of%20Corfu%20-%20September%202017.jpg",
+          "alt": "Corfu Town premium wide hero"
+        }
+      },
+      {
+        "key": "thessaloniki-greece",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Thessaloniki%20beach%20promenade.jpg",
+          "alt": "Thessaloniki premium wide hero"
+        }
+      },
+      {
+        "key": "okayama-japan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Korakuen%20(japanese%20garden)%20and%20Okayama%20castle.jpg",
+          "alt": "Okayama premium wide hero"
+        }
+      },
+      {
+        "key": "chattanooga-tennessee-united-states",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Chattanooga,_Tennessee_Skyline.JPG",
+          "alt": "Chattanooga skyline, river and Walnut Street Bridge"
+        }
+      },
+      {
+        "key": "greenville-south-carolina-united-states",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Greenville,_SC_Skyline_from_the_Main_Street_Bridge_over_Reedy_River.jpg",
+          "alt": "Downtown Greenville skyline and river"
+        }
+      },
+      {
+        "key": "tucson-arizona-united-states",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/View_of_Tucson_from_Sentinel_Peak_2.jpg",
+          "alt": "Tucson skyline and desert basin"
+        }
+      },
+      {
+        "key": "st-petersburg-florida-united-states",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Downtown_St_Petersburg_Skyline_Dec_2024_(cropped).jpg",
+          "alt": "St. Petersburg waterfront skyline"
+        }
+      },
+      {
+        "key": "fort-collins-colorado-united-states",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Horsetooth_Reservoir_panorama.jpg",
+          "alt": "Horsetooth Reservoir and foothills"
+        }
+      },
+      {
+        "key": "boise-idaho-united-states",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Boise%20Downtown%20Panoramic.jpg",
+          "alt": "Boise downtown skyline and foothills"
+        }
+      },
+      {
+        "key": "leiria-portugal",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Leiria%20and%20its%20castle%20-%20Portugal%20-%20panoramio.jpg",
+          "alt": "Leiria Castle and city"
+        }
+      },
+      {
+        "key": "granada-spain",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Alhambra%20Granada%20panorama.jpg",
+          "alt": "Alhambra and Granada"
+        }
+      },
+      {
+        "key": "bilbao-spain",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Panoramica%20bilbao.jpg",
+          "alt": "Bilbao city panorama"
+        }
+      },
+      {
+        "key": "osijek-croatia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Osijek%20panorama%20from%20Drava.jpg",
+          "alt": "Osijek and the Drava"
+        }
+      },
+      {
+        "key": "vienna-austria",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Wien%20Panorama.jpg",
+          "alt": "Vienna panorama"
+        }
+      },
+      {
+        "key": "ljubljana-slovenia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Panorama%20over%20Old%20Town%20from%20Ljubljana%20Castle%20-%20Ljubljana%20-%20Slovenia%20(54557308241).jpg",
+          "alt": "Ljubljana Old Town panorama"
+        }
+      },
+      {
+        "key": "tallinn-estonia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tallinn%20Old%20Town%20Skyline%20(52432521369).jpg",
+          "alt": "Tallinn Old Town skyline"
+        }
+      },
+      {
+        "key": "kuala-lumpur-malaysia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Kuala%20Lumpur%20skyline%20with%20Tunku%20Abdul%20Rahman%20drone%20show%20during%20Merdeka%20midnight,%202026.jpg",
+          "alt": "Kuala Lumpur skyline and city center at night"
+        }
+      },
+      {
+        "key": "taipei-taiwan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/%E6%99%9A%E9%9C%9E%E4%B8%8B%E7%9A%84%E5%8F%B0%E5%8C%97101.jpg",
+          "alt": "Taipei 101 skyline at sunset"
+        }
+      },
+      {
+        "key": "busan-south-korea",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Haeundae%20Skyline.jpg",
+          "alt": "Haeundae skyline and coast"
+        }
+      },
+      {
+        "key": "adelaide-australia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Adelaide%20CBD%20skyline%20across%20the%20River%20Torrens,%20July%202026%20(028A8459).jpg",
+          "alt": "Adelaide skyline across River Torrens"
+        }
+      },
+      {
+        "key": "oaxaca-mexico",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Oaxaca%20de%20Ju%C3%A1rez,%20vistas%202.jpg",
+          "alt": "Oaxaca city and valley panorama"
+        }
+      },
+      {
+        "key": "pereira-colombia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Skyline%20Pereira.jpg",
+          "alt": "Pereira skyline and Andean setting"
+        }
+      },
+      {
+        "key": "salinas-ecuador",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Salinas%20beach%20view%20in%20ecuador%20south%20america.jpg",
+          "alt": "Salinas beachfront and skyline"
+        }
+      },
+      {
+        "key": "asheville-north-carolina-united-states",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Asheville%20North%20Carolina%20Skyline%20July%202023.jpg",
+          "alt": "Asheville skyline framed by the Blue Ridge mountain setting."
+        }
+      },
+      {
+        "key": "portland-maine-united-states",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Portland%20waterfront%20and%20skyline.jpg",
+          "alt": "Portland's working waterfront and compact skyline on Casco Bay."
+        }
+      },
+      {
+        "key": "bend-oregon-united-states",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Deschutes%20River,%20Drake%20Park,%20Bend,%20Oregon%202012.jpg",
+          "alt": "The Deschutes River through Drake Park in central Bend."
+        }
+      },
+      {
+        "key": "sarasota-florida-united-states",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sarasota%20from%20Ringling%20Causeway.jpg",
+          "alt": "Sarasota skyline seen across the bay from Ringling Causeway."
+        }
+      },
+      {
+        "key": "reno-nevada-united-states",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Skyline%20of%20Reno,%20Nevada%202024-10-13%201.jpg",
+          "alt": "Reno's downtown skyline against its high-desert setting."
+        }
+      },
+      {
+        "key": "salamanca-spain",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Vista%20panor%C3%A1mica%20de%20la%20ciudad%20de%20Salamanca.jpg",
+          "alt": "Panoramic view across Salamanca's golden-stone historic skyline."
+        }
+      },
+      {
+        "key": "san-sebastian-spain",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/San%20Sebastian%20Bay%20Panorama.jpg",
+          "alt": "Panorama across La Concha Bay and San Sebastián's urban waterfront."
+        }
+      },
+      {
+        "key": "evora-portugal",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Evora%20panorama.jpg",
+          "alt": "Broad panorama of Évora's historic center and Alentejo setting."
+        }
+      },
+      {
+        "key": "prague-other-europe",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Prague%20panorama.jpg",
+          "alt": "Wide panorama across Prague's historic skyline and Vltava basin."
+        }
+      },
+      {
+        "key": "treviso-italy",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Piazza%20dei%20Signori%20Treviso%202025.jpg",
+          "alt": "Treviso's Piazza dei Signori, a defining civic space in the historic center."
+        }
+      },
+      {
+        "key": "annecy-france",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Panorama%20-%20Lac%20d'Annecy.jpg",
+          "alt": "Panoramic view across Lake Annecy and its Alpine setting."
+        }
+      },
+      {
+        "key": "ho-chi-minh-city-vietnam",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Ho%20Chi%20Minh%20City%20Skyline.jpg",
+          "alt": "Ho Chi Minh City's contemporary skyline across the urban core."
+        }
+      },
+      {
+        "key": "tokyo-japan",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/View%20of%20the%20Tokyo%20skyline%20from%20the%20top%20of%20Sunshine%20City.jpg",
+          "alt": "Tokyo skyline from Ikebukuro, showing the immense scale of the metropolis."
+        }
+      },
+      {
+        "key": "bali-indonesia",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/1%20bali%20jatiluwih%20rice%20terrace%20panorama.jpg",
+          "alt": "Panoramic view of the Jatiluwih rice terraces, one of Bali's defining cultural landscapes."
+        }
+      },
+      {
+        "key": "auckland-new-zealand",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Auckland%20skyline.jpg",
+          "alt": "Auckland skyline and urban harbor setting."
+        }
+      },
+      {
+        "key": "cusco-peru",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Panorama%20of%20Cusco,%20Peru.jpg",
+          "alt": "Panoramic view across Cusco's high-altitude historic urban basin."
+        }
+      },
+      {
+        "key": "valdivia-chile",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Costanera%20valdivia.jpg",
+          "alt": "Valdivia's riverfront and Pedro de Valdivia Bridge in the city's defining waterside setting."
+        }
+      },
+      {
+        "key": "cordoba-argentina",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Panoramic%20photo%20of%20Cordoba,%20Argentina.jpg",
+          "alt": "Ultra-wide panorama across central Córdoba, Argentina."
+        }
+      },
+      {
+        "key": "buenos-aires-argentina",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Puerto_Madero%2C_Buenos_Aires_%2840689219792%29_%28cropped%29.jpg/1280px-Puerto_Madero%2C_Buenos_Aires_%2840689219792%29_%28cropped%29.jpg",
+          "alt": "Puerto Madero, Buenos Aires (40689219792) (cropped)"
+        }
+      },
+      {
+        "key": "brisbane-australia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Brisbane_CBD_seen_from_Kangaroo_Point%2C_2024%2C_01_%282%29.jpg/1280px-Brisbane_CBD_seen_from_Kangaroo_Point%2C_2024%2C_01_%282%29.jpg",
+          "alt": "Brisbane CBD seen from Kangaroo Point, 2024, 01 (2)"
+        }
+      },
+      {
+        "key": "bruges-belgium",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Bruges_Belgium_De-groote-Hollander-Huidenvettersplein-12-03.jpg/1280px-Bruges_Belgium_De-groote-Hollander-Huidenvettersplein-12-03.jpg",
+          "alt": "Bruges Belgium De-groote-Hollander-Huidenvettersplein-12-03"
+        }
+      },
+      {
+        "key": "curitiba-brazil",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Vista_da_Torre_das_Merc%C3%AAs_em_Curitiba.jpg/1280px-Vista_da_Torre_das_Merc%C3%AAs_em_Curitiba.jpg",
+          "alt": "Vista da Torre das Mercês em Curitiba"
+        }
+      },
+      {
+        "key": "santiago-chile",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Santiago_de_Chile%2C_Desde_Cerro_San_Crist%C3%B3bal_%28cropped_panorama%29.jpg/1280px-Santiago_de_Chile%2C_Desde_Cerro_San_Crist%C3%B3bal_%28cropped_panorama%29.jpg",
+          "alt": "Santiago de Chile, Desde Cerro San Cristóbal (cropped panorama)"
+        }
+      },
+      {
+        "key": "bogota-colombia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/BOGOTA_CITY_%28cropped%29.jpg/1280px-BOGOTA_CITY_%28cropped%29.jpg",
+          "alt": "BOGOTA CITY (cropped)"
+        }
+      },
+      {
+        "key": "makarska-croatia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Sv._Petar%2C_Makarska_iz_zraka0036.JPG/1280px-Sv._Petar%2C_Makarska_iz_zraka0036.JPG",
+          "alt": "Sv. Petar, Makarska iz zraka0036"
+        }
+      },
+      {
+        "key": "aix-en-provence-france",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Aix-en-Provence_-_Pavillon_Vend%C3%B4me.jpg/1280px-Aix-en-Provence_-_Pavillon_Vend%C3%B4me.jpg",
+          "alt": "Aix-en-Provence - Pavillon Vendôme"
+        }
+      },
+      {
+        "key": "chania-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Aerial_view_of_the_Old_Venetian_Harbour_in_Chania%2C_Greece.jpg/1280px-Aerial_view_of_the_Old_Venetian_Harbour_in_Chania%2C_Greece.jpg",
+          "alt": "Aerial view of the Old Venetian Harbour in Chania, Greece"
+        }
+      },
+      {
+        "key": "aosta-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Aosta_and_mountains.jpg/1280px-Aosta_and_mountains.jpg",
+          "alt": "Aosta and mountains"
+        }
+      },
+      {
+        "key": "kurashiki-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/251101_Mount_Tsurugata_Kurashiki_Okayama_pref_Japan02s3.jpg/1280px-251101_Mount_Tsurugata_Kurashiki_Okayama_pref_Japan02s3.jpg",
+          "alt": "251101 Mount Tsurugata Kurashiki Okayama pref Japan02s3"
+        }
+      },
+      {
+        "key": "todos-santos-mexico",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Todos%20Santos%2C%20Baja%20California%20Sur%20%2820909055919%29.jpg?width=1280",
+          "alt": "Todos Santos, Baja California Sur (20909055919)"
+        }
+      },
+      {
+        "key": "muscat-oman",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Sultan_Qaboos_Street_in_Muscat_2019-11-30.jpg/1280px-Sultan_Qaboos_Street_in_Muscat_2019-11-30.jpg",
+          "alt": "Sultan Qaboos Street in Muscat 2019-11-30"
+        }
+      },
+      {
+        "key": "panama-city-panama",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Southbound_on_the_Panama_Canal_approaching_the_Centennial_Bridge.jpg/1280px-Southbound_on_the_Panama_Canal_approaching_the_Centennial_Bridge.jpg",
+          "alt": "Southbound on the Panama Canal approaching the Centennial Bridge"
+        }
+      },
+      {
+        "key": "cape-town-south-africa",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Cape_Town_City_DSC_3621_%28cropped%29.jpg/1280px-Cape_Town_City_DSC_3621_%28cropped%29.jpg",
+          "alt": "Cape Town City DSC 3621 (cropped)"
+        }
+      },
+      {
+        "key": "seoul-south-korea",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Seoul_%28175734251%29_%28cropped%29.jpg/1280px-Seoul_%28175734251%29_%28cropped%29.jpg",
+          "alt": "Seoul (175734251) (cropped)"
+        }
+      },
+      {
+        "key": "a-coruna-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Ayuntamiento%2C_La_Coru%C3%B1a%2C_Espa%C3%B1a%2C_2015-09-25%2C_DD_44.jpg/1280px-Ayuntamiento%2C_La_Coru%C3%B1a%2C_Espa%C3%B1a%2C_2015-09-25%2C_DD_44.jpg",
+          "alt": "Ayuntamiento, La Coruña, España, 2015-09-25, DD 44"
+        }
+      },
+      {
+        "key": "phuket-thailand",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Phuket_Aerial.jpg/1280px-Phuket_Aerial.jpg",
+          "alt": "Phuket Aerial"
+        }
+      },
+      {
+        "key": "belfast-united-kingdom",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Custom_House%2C_River_Lagan%2C_Belfast.jpg/1280px-Custom_House%2C_River_Lagan%2C_Belfast.jpg",
+          "alt": "Custom House, River Lagan, Belfast"
+        }
+      },
+      {
+        "key": "albuquerque-new-mexico-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Albuquerque%2C_New_Mexico_skyline.jpg/1280px-Albuquerque%2C_New_Mexico_skyline.jpg",
+          "alt": "Albuquerque, New Mexico skyline"
+        }
+      }
+    ]
+  }
+}
