@@ -32,3 +32,17 @@ describe("public destination route eligibility boundary", () => {
     expect(screen.getByRole("heading", { name: "Existing fallback" })).toBeTruthy();
   });
 });
+
+it("shows safe runtime provenance only in developer view", async () => {
+  mocks.eligibility.mockResolvedValue("PUBLISHED");
+  mocks.canonical.mockImplementation(async (_slug, diagnostics) => {
+    if (diagnostics) Object.assign(diagnostics, { configured: true, branch: "persisted-bundle", persistedOutcome: "SUCCESS" });
+    return { title: "Authored public content", v31Modules: {} };
+  });
+  const view = render(await DestinationPage({ params: Promise.resolve({ slug: "makarska-croatia" }), searchParams: Promise.resolve({ developer: "1" }) }));
+  expect(screen.getByLabelText("V3.1 runtime diagnostics").textContent).toContain('"v31ModulesAtRenderer": true');
+  expect(screen.getByLabelText("V3.1 runtime diagnostics").textContent).toContain('"persistedOutcome": "SUCCESS"');
+  view.unmount();
+  render(await DestinationPage({ params: Promise.resolve({ slug: "makarska-croatia" }) }));
+  expect(screen.queryByLabelText("V3.1 runtime diagnostics")).toBeNull();
+});

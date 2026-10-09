@@ -20,7 +20,7 @@ import { toConsumerCopy } from "../../lib/consumer-copy";
 import { getDestinationRelocationFrame } from "../../lib/destination-page-structure";
 import type { Destination } from "../../lib/destinations";
 import { resolveSourceHref, sanitizeExternalSourceUrl } from "../../lib/source-links";
-import { getCanonicalDestination } from "../../lib/canonical-destination-loader";
+import { getCanonicalDestination, type CanonicalRuntimeDiagnostics } from "../../lib/canonical-destination-loader";
 import { getMatchingExperience } from "../../lib/smart-shortlist/feature-flag";
 
 interface DestinationPageProps {
@@ -1374,10 +1374,19 @@ export default async function DestinationPage({ params, searchParams }: Destinat
   const resolvedSearchParams = searchParams ? await searchParams : undefined;
   const developerMode = resolvedSearchParams?.developer === "1" || resolvedSearchParams?.developer === "true";
 
-  const canonicalDestination = await getCanonicalDestination(slug);
+  const diagnostics: CanonicalRuntimeDiagnostics | undefined = developerMode ? {} : undefined;
+  const canonicalDestination = developerMode
+    ? await getCanonicalDestination(slug, diagnostics)
+    : await getCanonicalDestination(slug);
   if (canonicalDestination) {
     const matching = getMatchingExperience();
-    return <CanonicalDestinationPage destination={canonicalDestination} developerMode={developerMode} matchingHref={matching.href} matchingLabel={matching.label} />;
+    return <>
+      {developerMode ? <aside aria-label="V3.1 runtime diagnostics" className="relative z-50 mt-20 bg-slate-950 p-4 text-white">
+        <h2>V3.1 runtime diagnostics</h2>
+        <pre>{JSON.stringify({ ...diagnostics, renderer: "CanonicalDestinationPage", v31ModulesAtRenderer: Boolean(canonicalDestination.v31Modules) }, null, 2)}</pre>
+      </aside> : null}
+      <CanonicalDestinationPage destination={canonicalDestination} developerMode={developerMode} matchingHref={matching.href} matchingLabel={matching.label} />
+    </>;
   }
 
   const command = await getDestinationCommandCenter(slug);

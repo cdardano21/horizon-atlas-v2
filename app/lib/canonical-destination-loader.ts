@@ -1,3 +1,4 @@
+import { getSupabaseConfigurationPresence } from "./supabase";
 import { destinations as localDestinations } from "./destinations";
 import { buildDestinationKnowledgeProfile } from "./destination-knowledge-engine";
 import type { CanonicalDestination, CanonicalDestinationBudget, CanonicalDestinationCostProfile, CanonicalDestinationKnowledgeProfile, CanonicalDestinationMedia, CanonicalDestinationResource, CanonicalDestinationV31Modules, ImportedVerifiedDestinationFacts, NeighborhoodIntelligenceGroup, PremiumEditorialContent } from "./canonical-destination-model";
@@ -1713,7 +1714,35 @@ export const buildFallbackCanonicalDestination = (slug: string): CanonicalDestin
   };
 };
 
-export async function getCanonicalDestination(slug: string): Promise<CanonicalDestination | null> {
+export interface CanonicalRuntimeDiagnostics {
+  urlPresent?: boolean;
+  publicKeyPresent?: boolean;
+  configured?: boolean;
+  catalogFound?: boolean;
+  catalogMatchesRequestedIdentity?: boolean;
+  persistedIdentityResolved?: boolean;
+  persistedOutcome?: string;
+  persistedFailureReason?: string;
+  persistedFailureModule?: string | null;
+  bundleMatchesResolvedIdentity?: boolean;
+  branch?: string;
+  fallbackReason?: string;
+}
+
+export async function getCanonicalDestination(slug: string, diagnostics?: CanonicalRuntimeDiagnostics): Promise<CanonicalDestination | null> {
+  if (diagnostics) {
+    Object.assign(diagnostics, getSupabaseConfigurationPresence(), {
+      configured: isSupabaseConfigured(), persistedOutcome: "NOT_ATTEMPTED",
+    });
+  }
+  const recordBranch = (details: Record<string, unknown>) => {
+    // Only fixed branch/reason tokens enter the diagnostic; no rows, IDs or errors.
+    if (diagnostics && details.phase === "branch") {
+      diagnostics.branch = String(details.branch);
+      if (typeof details.reason === "string") diagnostics.fallbackReason = details.reason;
+    }
+    logCanonicalDestinationBranch(details);
+  };
   const normalizedSlug = slug.trim().toLowerCase();
 
   // Only the 3 golden regression-fixture pilots ever live-parse the frozen workbook at request time.
@@ -1725,7 +1754,7 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
   const workbookData = isGoldenPilotFixtureSlug ? await loadPremiumWorkbookDestinationData(normalizedSlug) : null;
   const fallbackDestination = buildFallbackCanonicalDestination(normalizedSlug);
 
-  logCanonicalDestinationBranch({ phase: "start", slug: normalizedSlug, workbookResolved: Boolean(workbookData), workbookKey: workbookData?.destinationKey ?? null, workbookSlug: workbookData?.slug ?? null });
+  recordBranch({ phase: "start", slug: normalizedSlug, workbookResolved: Boolean(workbookData), workbookKey: workbookData?.destinationKey ?? null, workbookSlug: workbookData?.slug ?? null });
 
   // Generic, registry-driven local-only preview path (see expansion-workbook-registry.ts): resolves any
   // registered preview-environment expansion-workbook destination (Batch #2 today, future batches via
@@ -1738,20 +1767,20 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
     const expansionWorkbookBundle = await loadExpansionWorkbookDestinationBundle(expansionWorkbookDestinationKey);
     if (expansionWorkbookBundle) {
       const expansionWorkbookRawIdentity = await loadExpansionWorkbookRawIdentity(expansionWorkbookDestinationKey);
-      logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "expansion-workbook-preview", destinationKey: expansionWorkbookDestinationKey });
+      recordBranch({ phase: "branch", slug: normalizedSlug, branch: "expansion-workbook-preview", destinationKey: expansionWorkbookDestinationKey });
       return buildCanonicalDestinationFromPersistedBundle(normalizedSlug, fallbackDestination, expansionWorkbookBundle, null, expansionWorkbookRawIdentity);
     }
   }
 
   if (!isSupabaseConfigured()) {
     if (workbookData) {
-      logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "workbook-only", reason: "supabase-unconfigured" });
+      recordBranch({ phase: "branch", slug: normalizedSlug, branch: "workbook-only", reason: "supabase-unconfigured" });
       return buildWorkbookDestinationFromData(normalizedSlug, workbookData);
     }
 
     const fallback = buildFallbackCanonicalDestination(normalizedSlug);
     if (!fallback) return null;
-    logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "fallback", reason: "supabase-unconfigured-and-no-workbook" });
+    recordBranch({ phase: "branch", slug: normalizedSlug, branch: "fallback", reason: "supabase-unconfigured-and-no-workbook" });
     return fallback;
   }
 
@@ -1763,7 +1792,7 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
     let rows = response.ok ? ((await response.json()) as Array<Record<string, unknown>>) : [];
     let row = rows[0];
 
-    logCanonicalDestinationBranch({ phase: "row-check", slug: normalizedSlug, rowFound: Boolean(row), rowDestinationKey: typeof row?.destination_key === "string" ? row.destination_key : null, rowSlug: typeof row?.slug === "string" ? row.slug : null });
+    recordBranch({ phase: "row-check", slug: normalizedSlug, rowFound: Boolean(row), rowDestinationKey: typeof row?.destination_key === "string" ? row.destination_key : null, rowSlug: typeof row?.slug === "string" ? row.slug : null });
 
     if (!row) {
       // SAFE IDENTITY RESOLUTION ONLY: exact destination_key equality, then an explicit reviewed
@@ -1795,8 +1824,9 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
     }
 
     if (!row) {
+      if (diagnostics) diagnostics.catalogFound = false;
       if (workbookData) {
-        logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "workbook-only", reason: "no-supabase-row" });
+        recordBranch({ phase: "branch", slug: normalizedSlug, branch: "workbook-only", reason: "no-supabase-row" });
         return buildWorkbookDestinationFromData(normalizedSlug, workbookData);
       }
 
@@ -1804,19 +1834,35 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
       if (!fallback) {
         return null;
       }
-      logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "fallback", reason: "no-supabase-row-and-no-workbook" });
+      recordBranch({ phase: "branch", slug: normalizedSlug, branch: "fallback", reason: "no-supabase-row-and-no-workbook" });
       return fallback;
     }
 
     const persistedRuntimeIdentity = resolvePersistedRuntimeDestinationIdentity(normalizedSlug, row);
-    logCanonicalDestinationBranch({ phase: "persisted-identity", slug: normalizedSlug, persistedIdentity: persistedRuntimeIdentity, rowDestinationKey: typeof row?.destination_key === "string" ? row.destination_key : null });
+    if (diagnostics) {
+      diagnostics.catalogFound = true;
+      diagnostics.catalogMatchesRequestedIdentity = row.slug === normalizedSlug || row.destination_key === normalizedSlug;
+      diagnostics.persistedIdentityResolved = Boolean(persistedRuntimeIdentity);
+      if (!persistedRuntimeIdentity) diagnostics.fallbackReason = "missing-persisted-identity";
+    }
+    recordBranch({ phase: "persisted-identity", slug: normalizedSlug, persistedIdentity: persistedRuntimeIdentity, rowDestinationKey: typeof row?.destination_key === "string" ? row.destination_key : null });
     if (persistedRuntimeIdentity) {
+      if (diagnostics) diagnostics.persistedOutcome = "IN_PROGRESS";
       const persistedRuntimeResult = await loadPersistedDestinationFromRuntime(persistedRuntimeIdentity);
+      if (diagnostics) {
+        diagnostics.persistedOutcome = persistedRuntimeResult.outcome;
+        if (persistedRuntimeResult.outcome === "FAILED") {
+          diagnostics.persistedFailureReason = persistedRuntimeResult.failure.reason;
+          diagnostics.persistedFailureModule = persistedRuntimeResult.failure.module ?? null;
+        } else if (persistedRuntimeResult.outcome === "SUCCESS") {
+          diagnostics.bundleMatchesResolvedIdentity = persistedRuntimeResult.bundle.destinationKey === persistedRuntimeIdentity.destinationKey;
+        }
+      }
       if (persistedRuntimeResult.outcome === "SUCCESS" && persistedRuntimeResult.bundle) {
-        logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "persisted-bundle", destinationKey: persistedRuntimeIdentity.destinationKey, destinationId: persistedRuntimeIdentity.destinationId, bundleIdentity: persistedRuntimeResult.bundle.identity });
+        recordBranch({ phase: "branch", slug: normalizedSlug, branch: "persisted-bundle", destinationKey: persistedRuntimeIdentity.destinationKey, destinationId: persistedRuntimeIdentity.destinationId, bundleIdentity: persistedRuntimeResult.bundle.identity });
         return buildCanonicalDestinationFromPersistedBundle(normalizedSlug, fallbackDestination, persistedRuntimeResult.bundle, workbookData);
       }
-      logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "row-workbook-merge", reason: "persisted-read-missed", persistedOutcome: persistedRuntimeResult.outcome });
+      recordBranch({ phase: "branch", slug: normalizedSlug, branch: "row-workbook-merge", reason: "persisted-read-missed", persistedOutcome: persistedRuntimeResult.outcome });
     }
 
     const rawImportedFacts = parseImportedVerifiedFacts((row.metadata as Record<string, unknown> | undefined)?.importedVerifiedFacts);
@@ -2115,17 +2161,18 @@ export async function getCanonicalDestination(slug: string): Promise<CanonicalDe
       premiumV2Modules: Object.keys(premiumV2Modules).length > 0 ? premiumV2Modules : undefined,
     };
 
-    logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "row-workbook-merge", destinationKey: workbookData?.destinationKey ?? null, workbookSlug: workbookData?.slug ?? null, rowDestinationKey: typeof row?.destination_key === "string" ? row.destination_key : null });
+    recordBranch({ phase: "branch", slug: normalizedSlug, branch: "row-workbook-merge", destinationKey: workbookData?.destinationKey ?? null, workbookSlug: workbookData?.slug ?? null, rowDestinationKey: typeof row?.destination_key === "string" ? row.destination_key : null });
     return destination;
   } catch {
+    if (diagnostics?.persistedOutcome === "IN_PROGRESS") diagnostics.persistedOutcome = "THREW";
     if (workbookData) {
-      logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "workbook-only", reason: "supabase-exception" });
+      recordBranch({ phase: "branch", slug: normalizedSlug, branch: "workbook-only", reason: "supabase-exception" });
       return buildWorkbookDestinationFromData(normalizedSlug, workbookData);
     }
 
     const fallback = buildFallbackCanonicalDestination(normalizedSlug);
     if (!fallback) return null;
-    logCanonicalDestinationBranch({ phase: "branch", slug: normalizedSlug, branch: "fallback", reason: "exception" });
+    recordBranch({ phase: "branch", slug: normalizedSlug, branch: "fallback", reason: "exception" });
     return fallback;
   }
 }

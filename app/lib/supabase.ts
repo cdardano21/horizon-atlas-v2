@@ -97,6 +97,12 @@ export const getSupabaseConfig = () => {
 
 export const getSupabaseServiceRoleKey = () => SUPABASE_SERVICE_ROLE_KEY;
 
+// Safe presence-only diagnostics; never expose environment values or credentials.
+export const getSupabaseConfigurationPresence = () => ({
+  urlPresent: Boolean(SUPABASE_URL),
+  publicKeyPresent: Boolean(SUPABASE_PUBLISHABLE_KEY),
+});
+
 export const getSupabaseAuthHeaders = (accessToken?: string | null) => {
   const { anonKey } = getSupabaseConfig();
   const serviceRoleKey = getSupabaseServiceRoleKey();

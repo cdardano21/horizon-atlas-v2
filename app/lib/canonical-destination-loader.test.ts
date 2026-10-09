@@ -1,9 +1,14 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+afterEach(() => { vi.useRealTimers(); });
+
+const configuration = vi.hoisted(() => ({ enabled: true }));
 
 const loadPremiumWorkbookDestinationDataMock = vi.hoisted(() => vi.fn());
 
 vi.mock("./supabase", () => ({
-  isSupabaseConfigured: () => true,
+  isSupabaseConfigured: () => configuration.enabled,
+  getSupabaseConfigurationPresence: () => ({ urlPresent: configuration.enabled, publicKeyPresent: configuration.enabled }),
   supabaseFetch: vi.fn(),
 }));
 
@@ -59,7 +64,7 @@ vi.mock("./workbook-runtime-loader", async (importOriginal) => {
   };
 });
 
-import { buildWorkbookDestinationFromData, getCanonicalDestination } from "./canonical-destination-loader";
+import { buildWorkbookDestinationFromData, getCanonicalDestination, type CanonicalRuntimeDiagnostics } from "./canonical-destination-loader";
 import { loadPersistedDestinationFromRuntime } from "./runtime/persisted-destination-read-runtime";
 import { supabaseFetch } from "./supabase";
 import { getWorkbookFallbackDestinationData } from "./workbook-new-braunfels-fallback";
@@ -71,6 +76,7 @@ const mockedLoadPremiumWorkbookDestinationData = vi.mocked(loadPremiumWorkbookDe
 describe("canonical destination loader", () => {
   beforeEach(async () => {
     vi.clearAllMocks();
+    configuration.enabled = true;
     mockedLoadPremiumWorkbookDestinationData.mockImplementation(async (slug: string) => {
       const actualModule = await vi.importActual<typeof import("./workbook-runtime-loader")>("./workbook-runtime-loader");
       return actualModule.loadPremiumWorkbookDestinationData(slug);
@@ -904,6 +910,34 @@ describe("canonical destination loader", () => {
     expect(destination?.monthlyBudgets.length).toBeGreaterThan(0);
     expect(destination?.realEstateResources.length).toBeGreaterThan(0);
     expect(destination?.healthcareResources.length).toBeGreaterThan(0);
+  });
+
+  it("diagnoses unconfigured production fallback without Python or changing output", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date("2026-10-08T12:00:00Z"));
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("PATH", "/no-python");
+    configuration.enabled = false;
+    try {
+      const diagnostics: CanonicalRuntimeDiagnostics = {};
+      const expected = await getCanonicalDestination("demo-town");
+      const actual = await getCanonicalDestination("demo-town", diagnostics);
+      expect(actual).toEqual(expected);
+      expect(diagnostics).toMatchObject({ configured: false, urlPresent: false, publicKeyPresent: false, persistedOutcome: "NOT_ATTEMPTED", branch: "fallback", fallbackReason: "supabase-unconfigured-and-no-workbook" });
+      expect(mockedSupabaseFetch).not.toHaveBeenCalled();
+    } finally { configuration.enabled = true; vi.unstubAllEnvs(); }
+  });
+
+  it("reports a failed persisted read without changing fallback output", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date("2026-10-08T12:00:00Z"));
+    mockedSupabaseFetch.mockResolvedValue({ ok: true, json: async () => [{ id: "test-id", destination_key: "demo-town", slug: "demo-town" }] } as Response);
+    const diagnostics: CanonicalRuntimeDiagnostics = {};
+    const expected = await getCanonicalDestination("demo-town");
+    const actual = await getCanonicalDestination("demo-town", diagnostics);
+    expect(actual).toEqual(expected);
+    expect(diagnostics).toMatchObject({ catalogFound: true, catalogMatchesRequestedIdentity: true, persistedIdentityResolved: true, persistedOutcome: "FAILED", persistedFailureReason: "DB_READ_FAILED" });
+    expect(JSON.stringify(diagnostics)).not.toContain("test-id");
   });
 
   it("leaves section-specific canonical fields empty when no destination-specific data exists", async () => {
@@ -1913,11 +1947,31 @@ describe("STEP 11: renderer-integration authority contract", () => {
   });
 
   describe("destination-level score mapping (STEP 5 - display mapping only, no quiz/recommendation logic)", () => {
+    it("diagnoses persisted production loading with Python unavailable without changing data", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date("2026-10-08T12:00:00Z"));
+      vi.stubEnv("NODE_ENV", "production");
+      vi.stubEnv("PATH", "/no-python");
+      try {
+        mockExactCatalogRow("plovdiv-bg", "plovdiv-bulgaria");
+        mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "plovdiv-bg" }) } as never);
+        const expected = await getCanonicalDestination("plovdiv-bulgaria");
+        const diagnostics: CanonicalRuntimeDiagnostics = {};
+        const actual = await getCanonicalDestination("plovdiv-bulgaria", diagnostics);
+        expect(actual).toEqual(expected);
+        expect(actual?.v31Modules).toBeTruthy();
+        expect(diagnostics).toMatchObject({ configured: true, persistedOutcome: "SUCCESS", branch: "persisted-bundle" });
+        expect(mockedLoadPremiumWorkbookDestinationData).not.toHaveBeenCalled();
+      } finally { configuration.enabled = true; vi.unstubAllEnvs(); }
+    });
+
     it("maps real persisted DESTINATION_SCORES rows into v31Modules.scores", async () => {
       mockExactCatalogRow("plovdiv-bg", "plovdiv-bulgaria");
       mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({ outcome: "SUCCESS", bundle: buildFullNormalizedBundle({ destinationKey: "plovdiv-bg" }) } as never);
 
-      const destination = await getCanonicalDestination("plovdiv-bulgaria");
+      const diagnostics: CanonicalRuntimeDiagnostics = {};
+      const destination = await getCanonicalDestination("plovdiv-bulgaria", diagnostics);
+      expect(diagnostics).toMatchObject({ configured: true, persistedOutcome: "SUCCESS", branch: "persisted-bundle", bundleMatchesResolvedIdentity: true });
 
       expect(destination?.v31Modules?.scores).toEqual([
         { scoreKey: "retirement", scoreValue: "91", scoreLabel: "Excellent" },
