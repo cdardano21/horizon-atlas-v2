@@ -63,10 +63,10 @@ describe("life-match candidate filtering", () => {
       { registryId: "batch-c", environment: "production", expectedDestinationKeys: ["prod-city"] },
     ];
 
-    expect(getRegisteredWorkbookDestinationKeys(registry)).toEqual(["alpha-city", "beta-city", "gamma-city"]);
+    expect(getRegisteredWorkbookDestinationKeys(registry)).toEqual(["alpha-city", "beta-city", "gamma-city", "prod-city"]);
 
-    const publicDestinations = [makeDestination("gamma-city", "Gamma City"), makeDestination("legacy-city", "Legacy City")];
-    expect(getLifeMatchCandidateDestinations(publicDestinations, registry).map((destination) => destination.slug)).toEqual(["gamma-city"]);
+    const publicDestinations = [makeDestination("gamma-city", "Gamma City"), makeDestination("prod-city", "Production City"), makeDestination("legacy-city", "Legacy City")];
+    expect(getLifeMatchCandidateDestinations(publicDestinations, registry).map((destination) => destination.slug)).toEqual(["gamma-city", "prod-city"]);
   });
 
   it("does not change the public destination loader contract or produce fallback values for unregistered entries", () => {
@@ -81,4 +81,14 @@ describe("life-match candidate filtering", () => {
     expect(candidateDestinations[0].slug).toBe("the-villages-fl-us");
     expect(candidateDestinations.some((destination) => destination.slug === "some-public-legacy-city")).toBe(false);
   });
+});
+
+it("resolves existing registered route aliases and deduplicates aliases by identity", () => {
+  const candidates = getLifeMatchCandidateDestinations([
+    makeDestination("the-villages-florida-united-states"),
+    makeDestination("the-villages-fl-us"),
+    makeDestination("ajijic-mexico"),
+    makeDestination("legacy-only"),
+  ]);
+  expect(candidates.map(candidate => candidate.slug)).toEqual(["the-villages-florida-united-states", "ajijic-mexico"]);
 });

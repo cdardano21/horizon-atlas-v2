@@ -6,7 +6,7 @@ vi.mock("../../lib/canonical-destination-loader", () => ({ getCanonicalDestinati
 vi.mock("next/navigation", () => ({ notFound: () => { throw new Error("NEXT_NOT_FOUND"); }, useRouter: () => ({}) }));
 vi.mock("../../components/destination/CanonicalDestinationPage", () => ({ default: ({ destination }: { destination: { title: string } }) => <h1>{destination.title}</h1> }));
 import DestinationPage from "./page";
-beforeEach(() => { vi.clearAllMocks(); mocks.canonical.mockResolvedValue({ title: "Authored public content" }); });
+beforeEach(() => { vi.clearAllMocks(); mocks.canonical.mockResolvedValue({ title: "Authored public content", v31Modules: {} }); });
 describe("public destination route eligibility boundary", () => {
   it.each(["NONPUBLIC", "UNAVAILABLE"])("stops %s before loading draft or generated content", async eligibility => {
     mocks.eligibility.mockResolvedValue(eligibility);
@@ -45,4 +45,17 @@ it("shows safe runtime provenance only in developer view", async () => {
   view.unmount();
   render(await DestinationPage({ params: Promise.resolve({ slug: "makarska-croatia" }) }));
   expect(screen.queryByLabelText("V3.1 runtime diagnostics")).toBeNull();
+});
+
+it.each([null, { title: "Legacy fallback" }])("blocks registered identities before secondary Legacy fallback: %j", async result => {
+  mocks.eligibility.mockResolvedValue("PUBLISHED");
+  mocks.canonical.mockResolvedValue(result);
+  await expect(DestinationPage({ params: Promise.resolve({ slug: "makarska-croatia" }) })).rejects.toThrow("NEXT_NOT_FOUND");
+});
+
+it("blocks resolved authoritative aliases before secondary fallback", async () => {
+  const { AuthoritativeDestinationUnavailableError } = await import("../../lib/authoritative-destination-identity");
+  mocks.eligibility.mockResolvedValue("PUBLISHED");
+  mocks.canonical.mockRejectedValue(new AuthoritativeDestinationUnavailableError());
+  await expect(DestinationPage({ params: Promise.resolve({ slug: "catalog-alias" }) })).rejects.toThrow("NEXT_NOT_FOUND");
 });

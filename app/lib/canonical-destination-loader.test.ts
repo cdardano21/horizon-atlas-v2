@@ -1,10 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-afterEach(() => { vi.useRealTimers(); });
+afterEach(() => { vi.useRealTimers(); configuration.authoritative = false; configuration.enabled = true; vi.unstubAllEnvs(); });
 
-const configuration = vi.hoisted(() => ({ enabled: true }));
+const configuration = vi.hoisted(() => ({ enabled: true, authoritative: false }));
 
 const loadPremiumWorkbookDestinationDataMock = vi.hoisted(() => vi.fn());
+
+vi.mock("./authoritative-destination-identity", async importOriginal => ({ ...await importOriginal<typeof import("./authoritative-destination-identity")>(), isAuthoritativeDestinationIdentity: () => configuration.authoritative }));
 
 vi.mock("./supabase", () => ({
   isSupabaseConfigured: () => configuration.enabled,
@@ -370,6 +372,7 @@ describe("canonical destination loader", () => {
       }],
     } as Response);
 
+    configuration.authoritative = true;
     mockedLoadPersistedDestinationFromRuntime.mockResolvedValue({
       outcome: "SUCCESS",
       bundle: {
@@ -910,6 +913,31 @@ describe("canonical destination loader", () => {
     expect(destination?.monthlyBudgets.length).toBeGreaterThan(0);
     expect(destination?.realEstateResources.length).toBeGreaterThan(0);
     expect(destination?.healthcareResources.length).toBeGreaterThan(0);
+  });
+
+  it.each([401, 403, 500])("protects authoritative identities from HTTP %s Legacy fallback", async status => {
+    configuration.authoritative = true;
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("PATH", "/no-python");
+    mockedSupabaseFetch.mockResolvedValue({ ok: false, status } as Response);
+    const diagnostics: CanonicalRuntimeDiagnostics = {};
+    await expect(getCanonicalDestination("demo-town", diagnostics)).rejects.toThrow("Authoritative destination data is unavailable");
+    expect(diagnostics.branch).toBe("unavailable");
+  });
+
+  it("protects authoritative identities when configuration is absent", async () => {
+    configuration.authoritative = true;
+    configuration.enabled = false;
+    vi.stubEnv("NODE_ENV", "production");
+    await expect(getCanonicalDestination("demo-town")).rejects.toThrow("Authoritative destination data is unavailable");
+  });
+
+  it.each([false, true])("protects authoritative identities when persisted reads fail or throw (%s)", async throws => {
+    configuration.authoritative = true;
+    vi.stubEnv("NODE_ENV", "production");
+    mockedSupabaseFetch.mockResolvedValue({ ok: true, json: async () => [{ id: "test-id", destination_key: "demo-town", slug: "demo-town" }] } as Response);
+    if (throws) mockedLoadPersistedDestinationFromRuntime.mockRejectedValueOnce(new Error("read failed"));
+    await expect(getCanonicalDestination("demo-town")).rejects.toThrow("Authoritative destination data is unavailable");
   });
 
   it("diagnoses unconfigured production fallback without Python or changing output", async () => {

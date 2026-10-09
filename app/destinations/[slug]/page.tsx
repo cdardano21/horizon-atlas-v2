@@ -1,3 +1,4 @@
+import { AuthoritativeDestinationUnavailableError, isAuthoritativeDestinationIdentity } from "../../lib/authoritative-destination-identity";
 import { notFound } from "next/navigation";
 import { getPublicDestinationEligibility } from "../../lib/public-destination-eligibility";
 import Image from "next/image";
@@ -1375,9 +1376,16 @@ export default async function DestinationPage({ params, searchParams }: Destinat
   const developerMode = resolvedSearchParams?.developer === "1" || resolvedSearchParams?.developer === "true";
 
   const diagnostics: CanonicalRuntimeDiagnostics | undefined = developerMode ? {} : undefined;
-  const canonicalDestination = developerMode
-    ? await getCanonicalDestination(slug, diagnostics)
-    : await getCanonicalDestination(slug);
+  let canonicalDestination;
+  try {
+    canonicalDestination = developerMode
+      ? await getCanonicalDestination(slug, diagnostics)
+      : await getCanonicalDestination(slug);
+  } catch (error) {
+    if (error instanceof AuthoritativeDestinationUnavailableError) notFound();
+    throw error;
+  }
+  if (!allowLocalWhitefishPrototype && isAuthoritativeDestinationIdentity(slug) && !canonicalDestination?.v31Modules) notFound();
   if (canonicalDestination) {
     const matching = getMatchingExperience();
     return <>

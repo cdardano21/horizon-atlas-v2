@@ -3,7 +3,7 @@ import LifeMatchResultImage from "../components/LifeMatchResultImage";
 import ResultsHistorySaver from "../components/ResultsHistorySaver";
 import type { Destination } from "../lib/destinations";
 import { getLifeMatchCandidateDestinations } from "../lib/life-match-candidates";
-import { getPublicDestinations } from "../lib/public-destinations";
+import { getExploreDestinations } from "../lib/explore-destinations";
 import { rankDestinationsForRetirementDna } from "../lib/recommendation-engine";
 import {
   computeRetirementDnaProfile,
@@ -84,7 +84,7 @@ const scoreDestination = (destination: Destination, selectedTags: string[]) => {
 
 export default async function ResultsPage({ searchParams }: ResultsPageProps) {
   const params = searchParams ? await searchParams : undefined;
-  const publicDestinations = await getPublicDestinations();
+  const publicDestinations = await getExploreDestinations();
   const lifeMatchCandidateDestinations = getLifeMatchCandidateDestinations(publicDestinations);
   const selectedTags = parseTags(params?.tags);
   const dnaPayload = parseDna(params?.dna);

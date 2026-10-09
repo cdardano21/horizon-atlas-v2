@@ -1,3 +1,4 @@
+import { AuthoritativeDestinationUnavailableError, isAuthoritativeDestinationIdentity } from "./authoritative-destination-identity";
 import { getSupabaseConfigurationPresence } from "./supabase";
 import { destinations as localDestinations } from "./destinations";
 import { buildDestinationKnowledgeProfile } from "./destination-knowledge-engine";
@@ -1770,6 +1771,11 @@ export async function getCanonicalDestination(slug: string, diagnostics?: Canoni
     return payload as Array<Record<string, unknown>>;
   };
   const normalizedSlug = slug.trim().toLowerCase();
+  let requiresAuthoritativeBundle = isAuthoritativeDestinationIdentity(normalizedSlug);
+  const unavailable = (reason: string): never => {
+    recordBranch({ phase: "branch", slug: normalizedSlug, branch: "unavailable", reason });
+    throw new AuthoritativeDestinationUnavailableError();
+  };
 
   // Only the 3 golden regression-fixture pilots ever live-parse the frozen workbook at request time.
   // Every other destination (including all future batch-imported destinations) renders purely from
@@ -1799,6 +1805,7 @@ export async function getCanonicalDestination(slug: string, diagnostics?: Canoni
   }
 
   if (!isSupabaseConfigured()) {
+    if (requiresAuthoritativeBundle) return unavailable("authoritative-supabase-unconfigured");
     if (workbookData) {
       recordBranch({ phase: "branch", slug: normalizedSlug, branch: "workbook-only", reason: "supabase-unconfigured" });
       return buildWorkbookDestinationFromData(normalizedSlug, workbookData);
@@ -1841,6 +1848,7 @@ export async function getCanonicalDestination(slug: string, diagnostics?: Canoni
 
     if (!row) {
       if (diagnostics) diagnostics.catalogFound = false;
+      if (requiresAuthoritativeBundle) return unavailable("authoritative-catalog-unavailable");
       if (workbookData) {
         recordBranch({ phase: "branch", slug: normalizedSlug, branch: "workbook-only", reason: "no-supabase-row" });
         return buildWorkbookDestinationFromData(normalizedSlug, workbookData);
@@ -1854,6 +1862,7 @@ export async function getCanonicalDestination(slug: string, diagnostics?: Canoni
       return fallback;
     }
 
+    requiresAuthoritativeBundle ||= typeof row.destination_key === "string" && isAuthoritativeDestinationIdentity(row.destination_key);
     const persistedRuntimeIdentity = resolvePersistedRuntimeDestinationIdentity(normalizedSlug, row);
     if (diagnostics) {
       diagnostics.catalogFound = true;
@@ -1876,10 +1885,15 @@ export async function getCanonicalDestination(slug: string, diagnostics?: Canoni
       }
       if (persistedRuntimeResult.outcome === "SUCCESS" && persistedRuntimeResult.bundle) {
         recordBranch({ phase: "branch", slug: normalizedSlug, branch: "persisted-bundle", destinationKey: persistedRuntimeIdentity.destinationKey, destinationId: persistedRuntimeIdentity.destinationId, bundleIdentity: persistedRuntimeResult.bundle.identity });
+        if (requiresAuthoritativeBundle && persistedRuntimeResult.bundle.destinationKey !== persistedRuntimeIdentity.destinationKey) {
+          return unavailable("authoritative-bundle-identity-mismatch");
+        }
         return buildCanonicalDestinationFromPersistedBundle(normalizedSlug, fallbackDestination, persistedRuntimeResult.bundle, workbookData);
       }
       recordBranch({ phase: "branch", slug: normalizedSlug, branch: "row-workbook-merge", reason: "persisted-read-missed", persistedOutcome: persistedRuntimeResult.outcome });
     }
+
+    if (requiresAuthoritativeBundle) return unavailable("authoritative-persisted-bundle-unavailable");
 
     const rawImportedFacts = parseImportedVerifiedFacts((row.metadata as Record<string, unknown> | undefined)?.importedVerifiedFacts);
     const fallbackNeighborhoods = fallbackDestination?.neighborhoods ?? (Array.isArray(row.neighborhoods) ? row.neighborhoods.map(String) : []);
@@ -2179,8 +2193,10 @@ export async function getCanonicalDestination(slug: string, diagnostics?: Canoni
 
     recordBranch({ phase: "branch", slug: normalizedSlug, branch: "row-workbook-merge", destinationKey: workbookData?.destinationKey ?? null, workbookSlug: workbookData?.slug ?? null, rowDestinationKey: typeof row?.destination_key === "string" ? row.destination_key : null });
     return destination;
-  } catch {
+  } catch (error) {
+    if (error instanceof AuthoritativeDestinationUnavailableError) throw error;
     if (diagnostics?.persistedOutcome === "IN_PROGRESS") diagnostics.persistedOutcome = "THREW";
+    if (requiresAuthoritativeBundle) return unavailable("authoritative-load-exception");
     if (workbookData) {
       recordBranch({ phase: "branch", slug: normalizedSlug, branch: "workbook-only", reason: "supabase-exception" });
       return buildWorkbookDestinationFromData(normalizedSlug, workbookData);

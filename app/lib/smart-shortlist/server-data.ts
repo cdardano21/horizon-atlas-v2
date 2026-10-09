@@ -200,6 +200,7 @@ export async function discoverRegisteredWorkbookContributions(
 
 export async function loadSmartShortlistData(
   registry: readonly ExpansionWorkbookRegistryEntry[] = EXPANSION_WORKBOOK_REGISTRY,
+  includeAllRegistered = false,
 ): Promise<SmartShortlistData> {
   const candidates = [...smartShortlistCandidates];
   const affordabilityRecords = [...ownedAffordabilityRecords];
@@ -217,7 +218,9 @@ export async function loadSmartShortlistData(
       throw new Error(`${entry.registryId} failed validation: ${workbook.validationErrors.join("; ")}`);
     }
     {
-      const contributions = await discoverRegisteredWorkbookContributions(entry, workbook, new Set(candidateByKey.keys()));
+      const contributions = includeAllRegistered
+        ? buildRegisteredWorkbookContributions(entry, workbook, new Set(candidateByKey.keys()))
+        : await discoverRegisteredWorkbookContributions(entry, workbook, new Set(candidateByKey.keys()));
       for (const candidate of contributions.candidates) {
         candidateByKey.set(candidate.key, candidate);
         candidates.push(candidate);
@@ -296,4 +299,26 @@ export async function loadSmartShortlistData(
 
 export async function loadSmartShortlistIntelligence(): Promise<readonly SmartShortlistIntelligence[]> {
   return (await loadSmartShortlistData()).intelligence;
+}
+
+/** Public discovery uses all registry owners, then requires fresh, exact publication evidence. */
+export async function loadPublishedSmartShortlistData(
+  registry: readonly ExpansionWorkbookRegistryEntry[] = EXPANSION_WORKBOOK_REGISTRY,
+): Promise<SmartShortlistData> {
+  const data = await loadSmartShortlistData(registry, true);
+  const registered = new Set(registry.flatMap(entry => [...entry.expectedDestinationKeys]));
+  const rows = await loadPublishedCatalogIdentities([...registered]);
+  const candidates = data.candidates.filter(candidate => {
+    if (!registered.has(candidate.key)) return false;
+    const owners = rows.filter(row => row.destination_key === candidate.key || row.slug === candidate.slug);
+    return owners.length === 1 && owners[0].status === "published" && Boolean(owners[0].id)
+      && owners[0].destination_key === candidate.key && owners[0].slug === candidate.slug;
+  });
+  const eligible = new Set(candidates.map(candidate => candidate.key));
+  return {
+    candidates,
+    intelligence: data.intelligence.filter(item => eligible.has(item.key)),
+    destinationMedia: data.destinationMedia.filter(item => eligible.has(item.key)),
+    affordabilityRecords: data.affordabilityRecords.filter(item => eligible.has(item.destinationKey)),
+  };
 }
