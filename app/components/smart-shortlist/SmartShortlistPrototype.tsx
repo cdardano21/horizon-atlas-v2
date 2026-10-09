@@ -353,14 +353,13 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
             <Image src="/brand/destinationfinder-ai-logo.png" alt="" width={42} height={42} className="h-10 w-10 object-contain" />
             <span className="font-display text-xl font-semibold">Smart Shortlist</span>
           </Link>
-          <span className="border border-[#bd7b36] bg-[#fff3df] px-3 py-1 text-xs font-bold uppercase text-[#774719]">Local prototype</span>
         </div>
       </header>
 
       <div className="atlas-section pt-10">
         <div className="mb-8 grid gap-5 lg:grid-cols-[1fr_auto] lg:items-end">
           <div className="max-w-3xl">
-            <p className="text-xs font-bold uppercase text-[var(--atlas-accent)]">36 deeply researched places</p>
+            <p className="text-xs font-bold uppercase text-[var(--atlas-accent)]">Discover destinations matched to your lifestyle, budget, and priorities.</p>
             <h1 className="mt-3 text-4xl font-semibold leading-tight sm:text-5xl">Find places worth a closer look.</h1>
             <p className="mt-4 max-w-2xl text-base leading-7 text-[var(--atlas-muted)]">Choose a few boundaries, then inspect the evidence and tradeoffs. Unknown facts stay visible. No overall match percentage.</p>
           </div>
