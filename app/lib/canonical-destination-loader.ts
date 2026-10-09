@@ -1715,6 +1715,10 @@ export const buildFallbackCanonicalDestination = (slug: string): CanonicalDestin
 };
 
 export interface CanonicalRuntimeDiagnostics {
+  projectReference?: string | null;
+  publicKeyVariable?: string | null;
+  publicKeySha256?: string | null;
+  branchOverrideStatus?: "UNVERIFIED";
   urlPresent?: boolean;
   publicKeyPresent?: boolean;
   configured?: boolean;

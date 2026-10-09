@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 
 const loadDotEnvFiles = () => {
@@ -77,6 +78,13 @@ const SUPABASE_PUBLISHABLE_KEY = readEnvValue(
   "SUPABASE_PUBLISHABLE_KEY",
   "SUPABASE_ANON_KEY",
 );
+// Capture provenance at the same module initialization as the effective key.
+const SUPABASE_PUBLIC_KEY_VARIABLE = [
+  "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+  "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+  "SUPABASE_PUBLISHABLE_KEY",
+  "SUPABASE_ANON_KEY",
+].find((name) => Boolean(process.env[name]?.trim())) ?? null;
 const SUPABASE_SERVICE_ROLE_KEY = readEnvValue("SUPABASE_SECRET_KEY", "SUPABASE_SERVICE_ROLE_KEY");
 
 const requiredMessage =
@@ -97,11 +105,26 @@ export const getSupabaseConfig = () => {
 
 export const getSupabaseServiceRoleKey = () => SUPABASE_SERVICE_ROLE_KEY;
 
-// Safe presence-only diagnostics; never expose environment values or credentials.
-export const getSupabaseConfigurationPresence = () => ({
-  urlPresent: Boolean(SUPABASE_URL),
-  publicKeyPresent: Boolean(SUPABASE_PUBLISHABLE_KEY),
-});
+// Called only for explicitly requested developer diagnostics. Never return raw credentials.
+export const getSupabaseConfigurationPresence = () => {
+  let projectReference: string | null = null;
+  try {
+    const hostname = new URL(SUPABASE_URL).hostname;
+    projectReference = /^([a-z0-9]+)\.supabase\.co$/.exec(hostname)?.[1] ?? null;
+  } catch {
+    // Invalid or absent URL: do not expose the raw value.
+  }
+  return {
+    urlPresent: Boolean(SUPABASE_URL),
+    publicKeyPresent: Boolean(SUPABASE_PUBLISHABLE_KEY),
+    projectReference,
+    publicKeyVariable: SUPABASE_PUBLIC_KEY_VARIABLE,
+    publicKeySha256: SUPABASE_PUBLISHABLE_KEY
+      ? createHash("sha256").update(SUPABASE_PUBLISHABLE_KEY, "utf8").digest("hex")
+      : null,
+    branchOverrideStatus: "UNVERIFIED" as const,
+  };
+};
 
 export const getSupabaseAuthHeaders = (accessToken?: string | null) => {
   const { anonKey } = getSupabaseConfig();
