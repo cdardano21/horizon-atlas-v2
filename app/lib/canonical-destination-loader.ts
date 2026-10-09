@@ -1718,6 +1718,12 @@ export interface CanonicalRuntimeDiagnostics {
   urlPresent?: boolean;
   publicKeyPresent?: boolean;
   configured?: boolean;
+  catalogQueries?: Array<{
+    lookup: "slug" | "destination_key" | "pilot_alias";
+    httpStatus?: number;
+    outcome: "REQUEST_FAILED" | "HTTP_ERROR" | "JSON_ERROR" | "MALFORMED_RESPONSE" | "EMPTY_ROWS" | "ROWS";
+    rowCount?: number;
+  }>;
   catalogFound?: boolean;
   catalogMatchesRequestedIdentity?: boolean;
   persistedIdentityResolved?: boolean;
@@ -1742,6 +1748,22 @@ export async function getCanonicalDestination(slug: string, diagnostics?: Canoni
       if (typeof details.reason === "string") diagnostics.fallbackReason = details.reason;
     }
     logCanonicalDestinationBranch(details);
+  };
+  const readCatalogRows = async (requestPath: string, lookup: "slug" | "destination_key" | "pilot_alias") => {
+    const query: NonNullable<CanonicalRuntimeDiagnostics["catalogQueries"]>[number] = { lookup, outcome: "REQUEST_FAILED" };
+    if (diagnostics) (diagnostics.catalogQueries ??= []).push(query);
+    const response = await supabaseFetch(requestPath, { cache: "no-store" });
+    query.httpStatus = response.status;
+    if (!response.ok) {
+      query.outcome = "HTTP_ERROR";
+      return [];
+    }
+    query.outcome = "JSON_ERROR";
+    const payload = await response.json();
+    query.outcome = Array.isArray(payload) ? (payload.length ? "ROWS" : "EMPTY_ROWS") : "MALFORMED_RESPONSE";
+    if (Array.isArray(payload)) query.rowCount = payload.length;
+    // Preserve the original lookup semantics; never expose response bodies or errors.
+    return payload as Array<Record<string, unknown>>;
   };
   const normalizedSlug = slug.trim().toLowerCase();
 
@@ -1785,11 +1807,7 @@ export async function getCanonicalDestination(slug: string, diagnostics?: Canoni
   }
 
   try {
-    const response = await supabaseFetch(`/rest/v1/destinations_catalog?slug=eq.${encodeURIComponent(normalizedSlug)}&select=*`, {
-      cache: "no-store",
-    });
-
-    let rows = response.ok ? ((await response.json()) as Array<Record<string, unknown>>) : [];
+    let rows = await readCatalogRows(`/rest/v1/destinations_catalog?slug=eq.${encodeURIComponent(normalizedSlug)}&select=*`, "slug");
     let row = rows[0];
 
     recordBranch({ phase: "row-check", slug: normalizedSlug, rowFound: Boolean(row), rowDestinationKey: typeof row?.destination_key === "string" ? row.destination_key : null, rowSlug: typeof row?.slug === "string" ? row.slug : null });
@@ -1801,19 +1819,13 @@ export async function getCanonicalDestination(slug: string, diagnostics?: Canoni
       // This replaced an unsafe fuzzy substring search that previously matched, e.g.,
       // "the-villages-florida-united-states" (whose first hyphen-token is "the") to an unrelated
       // "Athens" row, and "puerto-vallarta-mexico" to an unrelated "Puerto Escondido" row.
-      const exactKeyResponse = await supabaseFetch(`/rest/v1/destinations_catalog?destination_key=eq.${encodeURIComponent(normalizedSlug)}&select=*`, {
-        cache: "no-store",
-      });
-      const exactKeyRows = exactKeyResponse.ok ? ((await exactKeyResponse.json()) as Array<Record<string, unknown>>) : [];
+      const exactKeyRows = await readCatalogRows(`/rest/v1/destinations_catalog?destination_key=eq.${encodeURIComponent(normalizedSlug)}&select=*`, "destination_key");
       row = exactKeyRows[0];
 
       if (!row) {
         const aliasedDestinationKey = GOLDEN_PILOT_FIXTURE_SLUG_ALIASES.get(normalizedSlug);
         if (aliasedDestinationKey) {
-          const aliasResponse = await supabaseFetch(`/rest/v1/destinations_catalog?destination_key=eq.${encodeURIComponent(aliasedDestinationKey)}&select=*`, {
-            cache: "no-store",
-          });
-          const aliasRows = aliasResponse.ok ? ((await aliasResponse.json()) as Array<Record<string, unknown>>) : [];
+          const aliasRows = await readCatalogRows(`/rest/v1/destinations_catalog?destination_key=eq.${encodeURIComponent(aliasedDestinationKey)}&select=*`, "pilot_alias");
           row = aliasRows[0];
         }
       }

@@ -928,6 +928,37 @@ describe("canonical destination loader", () => {
     } finally { configuration.enabled = true; vi.unstubAllEnvs(); }
   });
 
+  it.each([401, 403, 404, 500])("distinguishes HTTP %s from a successful empty catalog without exposing response bodies", async (status) => {
+    vi.stubEnv("NODE_ENV", "production");
+    const json = vi.fn();
+    mockedSupabaseFetch.mockResolvedValue({ ok: false, status, json } as unknown as Response);
+    try {
+      const diagnostics: CanonicalRuntimeDiagnostics = {};
+      await getCanonicalDestination("demo-town", diagnostics);
+      expect(diagnostics.catalogQueries).toEqual([
+        { lookup: "slug", httpStatus: status, outcome: "HTTP_ERROR" },
+        { lookup: "destination_key", httpStatus: status, outcome: "HTTP_ERROR" },
+      ]);
+      expect(json).not.toHaveBeenCalled();
+      expect(diagnostics.persistedOutcome).toBe("NOT_ATTEMPTED");
+    } finally { vi.unstubAllEnvs(); }
+  });
+
+  it("records successful zero-row lookups separately from request failures", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    try {
+      mockedSupabaseFetch.mockResolvedValue({ ok: true, status: 200, json: async () => [] } as Response);
+      const empty: CanonicalRuntimeDiagnostics = {};
+      await getCanonicalDestination("demo-town", empty);
+      expect(empty.catalogQueries?.map(query => query.outcome)).toEqual(["EMPTY_ROWS", "EMPTY_ROWS"]);
+      mockedSupabaseFetch.mockRejectedValue(new Error("sensitive transport detail"));
+      const failed: CanonicalRuntimeDiagnostics = {};
+      await getCanonicalDestination("demo-town", failed);
+      expect(failed.catalogQueries).toEqual([{ lookup: "slug", outcome: "REQUEST_FAILED" }]);
+      expect(JSON.stringify(failed)).not.toContain("sensitive");
+    } finally { vi.unstubAllEnvs(); }
+  });
+
   it("reports a failed persisted read without changing fallback output", async () => {
     vi.useFakeTimers({ toFake: ["Date"] });
     vi.setSystemTime(new Date("2026-10-08T12:00:00Z"));
