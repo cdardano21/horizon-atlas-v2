@@ -1733,6 +1733,7 @@ export interface CanonicalRuntimeDiagnostics {
   catalogMatchesRequestedIdentity?: boolean;
   persistedIdentityResolved?: boolean;
   persistedOutcome?: string;
+  persistedHttpStatus?: number;
   persistedFailureReason?: string;
   persistedFailureModule?: string | null;
   bundleMatchesResolvedIdentity?: boolean;
@@ -1873,7 +1874,13 @@ export async function getCanonicalDestination(slug: string, diagnostics?: Canoni
     recordBranch({ phase: "persisted-identity", slug: normalizedSlug, persistedIdentity: persistedRuntimeIdentity, rowDestinationKey: typeof row?.destination_key === "string" ? row.destination_key : null });
     if (persistedRuntimeIdentity) {
       if (diagnostics) diagnostics.persistedOutcome = "IN_PROGRESS";
-      const persistedRuntimeResult = await loadPersistedDestinationFromRuntime(persistedRuntimeIdentity);
+      const persistedRuntimeResult = diagnostics ? await loadPersistedDestinationFromRuntime(persistedRuntimeIdentity, {
+        fetcher: async (path, options) => {
+          const response = await supabaseFetch(path, options);
+          if (!response.ok) diagnostics.persistedHttpStatus = response.status;
+          return response;
+        },
+      }) : await loadPersistedDestinationFromRuntime(persistedRuntimeIdentity);
       if (diagnostics) {
         diagnostics.persistedOutcome = persistedRuntimeResult.outcome;
         if (persistedRuntimeResult.outcome === "FAILED") {

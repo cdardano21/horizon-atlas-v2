@@ -45,3 +45,11 @@ describe("public catalog eligibility", () => {
     expect(await getPublicDestinationEligibility("wanaka-new-zealand")).toBe("UNAVAILABLE");
   });
 });
+
+ it.each([401, 403])("records HTTP %s without changing the unavailable decision", async status => {
+  const fetcher = vi.fn().mockResolvedValue({ ok: false, status }); vi.stubGlobal("fetch", fetcher);
+  const diagnostic = {};
+  expect(await getPublicDestinationEligibility("makarska-croatia", diagnostic)).toBe("UNAVAILABLE");
+  expect(diagnostic).toEqual({ reason: "HTTP_ERROR", httpStatus: status });
+  expect(fetcher).toHaveBeenCalledTimes(1);
+});
