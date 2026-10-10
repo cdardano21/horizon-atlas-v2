@@ -1,3 +1,4 @@
+import { reviewedWorkbookBeachEvidence } from "../intelligence-v2/reviewed-workbook-beach-evidence";
 import { verifiedBeachAccessByDestination } from "../intelligence-v2/beach-access";
 import { verifiedSkiAccessByDestination } from "../intelligence-v2/ski-access";
 import path from "node:path";
@@ -237,7 +238,8 @@ export async function loadSmartShortlistData(
 
       loaded.set(key, {
         key,
-        beachEvidence: verifiedBeachAccessByDestination[key],
+        beachEvidence: reviewedWorkbookBeachEvidence(canonical, entry.registryId, actualSha256)
+          ?? verifiedBeachAccessByDestination[key],
         skiAccess: verifiedSkiAccessByDestination[key],
         beachAccess: adapted.facts.hardGates.beachAccess,
         mountainAccess: adapted.facts.hardGates.mountainOrSkiAccess === "MOUNTAIN_SCENIC_ONLY"
