@@ -12,11 +12,13 @@ import { useFavorites } from "./favorites";
 type CompareClientProps = {
   destinations: Destination[];
   initialSlugs: string[];
+  budgetsBySlug?: Record<string, string>;
 };
 
 type CompareEntry = {
   destination: Destination;
   intelligence: DestinationIntelligence;
+  coupleBudget?: string;
 };
 
 type MetricRow = {
@@ -67,8 +69,8 @@ const compareGroups: MetricGroup[] = [
     description: "Budget signals should start the conversation, not replace local verification.",
     rows: [
       { label: "Cost-of-living score", scoreCategory: "Cost of Living" },
-      { label: "Estimated monthly budget", value: (entry) => metricValue(entry, "Cost of Living", "estimated monthly budget") },
-      { label: "Couple budget", value: (entry) => metricValue(entry, "Cost of Living", "couple budget") },
+      { label: "Budget basis", value: () => "Two adults sharing housing · comfortable lifestyle · relocation" },
+      { label: "Couple budget (USD)", value: (entry) => entry.coupleBudget ?? "USD estimate unavailable." },
     ],
   },
   {
@@ -185,7 +187,7 @@ function MetricValue({ entry, row, strongestScore, leadingCount }: { entry: Comp
   return <p className={value === UNAVAILABLE ? "text-sm leading-6 text-[#758a9d]" : "text-sm leading-6 text-[#d5e0e9]"}>{value}</p>;
 }
 
-export default function CompareClient({ destinations, initialSlugs }: CompareClientProps) {
+export default function CompareClient({ destinations, initialSlugs, budgetsBySlug = {} }: CompareClientProps) {
   const { favoriteSlugs } = useFavorites();
   const defaultSlugs = useMemo(() => destinations.slice(0, 3).map((destination) => destination.slug), [destinations]);
   const shouldAutoUseFavorites = initialSlugs.length === 0 || initialSlugs.join(",") === defaultSlugs.join(",");
@@ -206,7 +208,8 @@ export default function CompareClient({ destinations, initialSlugs }: CompareCli
   const entries = useMemo(() => selected.map((destination) => ({
     destination,
     intelligence: getDestinationIntelligence(destination),
-  })), [selected]);
+    coupleBudget: budgetsBySlug[destination.slug],
+  })), [selected, budgetsBySlug]);
 
   const availableDestinations = useMemo(() => destinations
     .filter((destination) => !effectiveSlugs.includes(destination.slug))

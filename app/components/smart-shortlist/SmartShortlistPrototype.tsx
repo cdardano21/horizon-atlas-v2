@@ -487,7 +487,7 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
             <section className="flex flex-wrap items-end justify-between gap-4 border-y border-[var(--atlas-border)] bg-white/65 px-5 py-6">
               <div>
                 <p className="text-xs font-bold uppercase text-[var(--atlas-accent)]">Evidence-first results</p>
-                <h2 className="mt-2 text-3xl font-semibold">{displayedResults.length} places shown from 36</h2>
+                <h2 className="mt-2 text-3xl font-semibold">Your matching destinations</h2>
                 <p className="mt-2 text-sm text-[var(--atlas-muted)]">An initial set of places meeting required filters is shown, followed by places needing verification. Counted controls reveal every additional result; excluded places remain separate.</p>
                 <p className="mt-1 text-xs text-[var(--atlas-muted)]">Lifestyle scores use only supported selected preferences. Equal scores remain equal; destination key is only the final deterministic tie-breaker.</p>
                 <p className="mt-1 text-xs text-[var(--atlas-muted)]">Important preferences affect ordering but do not exclude a destination. Confirmed mismatches are labeled as tradeoffs.</p>

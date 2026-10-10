@@ -61,7 +61,7 @@ describe("Smart Shortlist prototype", () => {
     }
 
     fireEvent.click(screen.getByRole("button", { name: "Build shortlist" }));
-    expect(screen.getByRole("heading", { name: "12 places shown from 36" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Your matching destinations" })).toBeInTheDocument();
     expect(screen.getByText(/excluded places remain separate/i)).toBeInTheDocument();
     expect(screen.queryByText(/match percentage/i)).toBeInTheDocument();
     expect(screen.getByText("Your target monthly budget: $4,500 USD")).toBeInTheDocument();

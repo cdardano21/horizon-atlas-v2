@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getPublicDestinations } from "../lib/public-destinations";
 import CompareClient from "../components/CompareClient";
+import { loadCompareBudgets } from "../lib/compare-budgets";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 type ComparePageProps = {
@@ -25,6 +26,7 @@ const selectDestinations = (publicDestinations: ReturnType<typeof getPublicDesti
 export default async function ComparePage({ searchParams }: ComparePageProps) {
   const params = searchParams ? await searchParams : undefined;
   const publicDestinations = await getPublicDestinations();
+  const budgetsBySlug = await loadCompareBudgets(publicDestinations);
   const selected = selectDestinations(publicDestinations, params);
   const initialSlugs = selected.map((destination) => destination.slug);
 
@@ -65,7 +67,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
       </section>
 
       <section className="mx-auto max-w-[1440px] px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
-        <CompareClient destinations={publicDestinations} initialSlugs={initialSlugs} />
+        <CompareClient destinations={publicDestinations} initialSlugs={initialSlugs} budgetsBySlug={budgetsBySlug} />
       </section>
     </main>
   );

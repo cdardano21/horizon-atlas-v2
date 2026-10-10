@@ -13,6 +13,15 @@ describe("Smart Shortlist population wording", () => {
     expect(screen.queryByText(/evaluated in this session/)).not.toBeInTheDocument();
   });
 
+  it.each([0, 1, 3])("uses timeless results wording for %i supplied candidates", (count) => {
+    render(<SmartShortlistPrototype candidates={smartShortlistCandidates.slice(0, count)} intelligence={[]} />);
+    for (let step = 0; step < 5; step += 1) fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    fireEvent.click(screen.getByRole("button", { name: "Build shortlist" }));
+    expect(screen.getByRole("heading", { name: "Your matching destinations" })).toBeInTheDocument();
+    expect(screen.queryByText(/places shown from|from 36/i)).not.toBeInTheDocument();
+    expect(screen.getByText("Discover destinations matched to your lifestyle, budget, and priorities.")).toBeInTheDocument();
+  });
+
   it("keeps the same wording after matching and candidate changes without exposing evaluated counts", () => {
     const { rerender } = render(<SmartShortlistPrototype candidates={smartShortlistCandidates.slice(0, 3)} intelligence={[]} />);
     for (let step = 0; step < 5; step += 1) fireEvent.click(screen.getByRole("button", { name: "Continue" }));
