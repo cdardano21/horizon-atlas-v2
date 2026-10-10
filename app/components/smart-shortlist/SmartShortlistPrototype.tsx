@@ -50,7 +50,7 @@ interface SavedShortlistSession {
 
 const savedSessionKey = "destinationfinder-smart-shortlist-return-v1";
 
-const controlClass = "w-full border border-[var(--atlas-border)] bg-white px-4 py-3 text-left text-sm font-semibold text-[var(--atlas-ink)] transition hover:border-[var(--atlas-accent)] disabled:cursor-not-allowed disabled:opacity-45";
+const controlClass = "w-full border px-4 py-3 text-left text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-45";
 const selectClass = "mt-2 w-full border border-[var(--atlas-border)] bg-white px-3 py-3";
 const snapshot = U3_R3_FIXTURE_SNAPSHOT;
 const snapshotAsOfDate = "2026-09-06";
@@ -128,8 +128,9 @@ function RequirementReasons({ reasons, preferenceCapabilities }: {
 
 function ChoiceButton({ active, children, onClick }: { active: boolean; children: React.ReactNode; onClick: () => void }) {
   return (
-    <button type="button" onClick={onClick} aria-pressed={active} className={`${controlClass} ${active ? "border-[var(--atlas-accent)] bg-[#e8f0eb] text-[var(--atlas-accent)]" : ""}`}>
+    <button type="button" onClick={onClick} aria-pressed={active} className={`${controlClass} focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b7791f] ${active ? "border-[#1f5f63] bg-[#1f5f63] text-white hover:border-[#1f5f63] hover:bg-[#1f5f63]" : "border-[var(--atlas-border)] bg-white text-[var(--atlas-ink)] hover:border-[var(--atlas-accent)]"}`}>
       {children}
+      {active && <span aria-hidden="true" className="ml-2">✓</span>}
     </button>
   );
 }
