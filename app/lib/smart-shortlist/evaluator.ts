@@ -41,6 +41,8 @@ export type ShortlistFacts = {
   mountainAccess: "SKI_RESORT_ACCESS" | "MOUNTAIN_ACCESS" | "NONE" | "UNKNOWN";
   oceanAccess?: CoastalSetting;
   healthcareStandard: HealthcareMinimumStandard | "UNKNOWN";
+  /** A private-care flag establishes a lower tier, not an assessment of international standards. */
+  healthcareEvidenceScope?: "PRIVATE_CARE_AVAILABILITY_ONLY";
   safetyStandard: SafetyStandardFact | "UNKNOWN";
   lgbtqLegalProtectionStatus: LgbtqLegalProtectionFact;
   entryAndStay: Pick<DestinationEntryAndStayFacts,
@@ -234,7 +236,11 @@ function hardConstraintReason(
 
 function evaluateHealthcare(destination: ShortlistFacts, profile: ShortlistProfile): RequirementReason | null {
   if (!profile.healthcare || profile.healthcare.mode === "NOT_A_FACTOR") return null;
-  return hardConstraintReason("healthcare", evaluateHealthcareMinimumStandard(profile.healthcare.minimum, destination.healthcareStandard), {
+  const actual = profile.healthcare.minimum === "INTERNATIONAL_STANDARD"
+    && destination.healthcareEvidenceScope === "PRIVATE_CARE_AVAILABILITY_ONLY"
+    ? "UNKNOWN"
+    : destination.healthcareStandard;
+  return hardConstraintReason("healthcare", evaluateHealthcareMinimumStandard(profile.healthcare.minimum, actual), {
     HEALTHCARE_STANDARD_MEETS_MINIMUM: "Healthcare evidence meets the selected minimum.",
     HEALTHCARE_STANDARD_BELOW_MINIMUM: "Healthcare evidence is below the selected minimum.",
     HEALTHCARE_STANDARD_UNKNOWN: "The healthcare standard is not yet verified.",

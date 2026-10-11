@@ -23,7 +23,7 @@ import { ownedAffordabilityRecords } from "./owned-affordability-records";
 
 export type SmartShortlistIntelligence = Pick<
   ShortlistFacts,
-  "beachEvidence" | "skiAccess" | "key" | "beachAccess" | "mountainAccess" | "oceanAccess" | "healthcareStandard" | "safetyStandard" | "lgbtqLegalProtectionStatus" | "entryAndStay" | "lifestyleDimensions"
+  "beachEvidence" | "skiAccess" | "key" | "beachAccess" | "mountainAccess" | "oceanAccess" | "healthcareStandard" | "healthcareEvidenceScope" | "safetyStandard" | "lgbtqLegalProtectionStatus" | "entryAndStay" | "lifestyleDimensions"
 >;
 
 export type SmartShortlistMedia = {
@@ -247,6 +247,7 @@ export async function loadSmartShortlistData(
           : adapted.facts.hardGates.mountainOrSkiAccess,
         oceanAccess: coastalSettingFromLifestyleFeatures(canonical.lifestyleFeatures),
         healthcareStandard: adapted.facts.hardGates.healthcareStandard,
+        healthcareEvidenceScope: "PRIVATE_CARE_AVAILABILITY_ONLY",
         safetyStandard: adapted.facts.hardGates.safetyStandard,
         lgbtqLegalProtectionStatus: adapted.facts.hardGates.lgbtqLegalProtectionStatus,
         entryAndStay: {

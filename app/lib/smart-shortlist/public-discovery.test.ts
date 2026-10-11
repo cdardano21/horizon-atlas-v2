@@ -35,6 +35,7 @@ describe("published authoritative discovery", () => {
       const expected = catalog.filter(row => row.status === "published").map(row => row.destination_key).sort();
       expect(data.candidates.map(row => row.key).sort()).toEqual(expected);
       expect(data.intelligence.map(row => row.key).sort()).toEqual(expected);
+      expect(data.intelligence.every(row => row.healthcareEvidenceScope === "PRIVATE_CARE_AVAILABILITY_ONLY")).toBe(true);
       expect(data.destinationMedia.map(row => row.key).sort()).toEqual(expected);
       expect(data.affordabilityRecords.every(row => expected.includes(row.destinationKey))).toBe(true);
       expect(data.candidates.some(row => registry[0].expectedDestinationKeys.includes(row.key))).toBe(true);
