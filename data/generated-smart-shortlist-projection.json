@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "3e4aa48f6a8a291d289ccbd2cacf2b6ce01a925cd6a426e168bfc2be37b802c4",
-  "digest": "4bd2691a51c81d1e7d511a709f9f20ccc0934210ed7406e4c09339bb0fd7ad74",
+  "sourceSignature": "69bccb0e499f79257dcd9aae159bc3432f83e18740d468e0014132cb635710e8",
+  "digest": "efe4671ba024bf38af3517831a1b0f26175339ae4412fba42a05372f5da64da7",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,36 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "malaga-spain",
+        "name": "Málaga",
+        "slug": "malaga-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "A Mediterranean city combining a historic cultural center, distinct urban beaches and varied residential districts; housing, noise and access differ substantially by address.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -10539,6 +10569,23 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "malaga-spain",
+        "beachAccess": "DIRECT_ACCESS",
+        "mountainAccess": "MOUNTAIN_ACCESS",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "GOOD_PRIVATE_AVAILABLE",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "LEGAL_PROTECTIONS_IN_PLACE",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "bariloche-argentina",
         "beachAccess": "DIRECT_ACCESS",
         "mountainAccess": "SKI_RESORT_ACCESS",
@@ -14526,6 +14573,13 @@
         }
       },
       {
+        "key": "malaga-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/24/Alcazaba_of_M%C3%A1laga%2C_Spain.jpg",
+          "alt": "Alcazaba architecture in Málaga"
+        }
+      },
+      {
         "key": "bariloche-argentina",
         "heroImage": {
           "src": "/images/curated-mixed-batch-10-01/bariloche-argentina-hero.jpg",
@@ -16180,6 +16234,12 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "malaga-spain",
+        "singleMonthlyUsd": 2550,
+        "coupleMonthlyUsd": 3250,
         "estimateYear": 2026
       },
       {

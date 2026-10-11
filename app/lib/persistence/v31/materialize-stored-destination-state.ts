@@ -92,6 +92,7 @@ export interface NormalizedPersistedDestinationBundle {
     readonly sourceName: string | null;
     readonly sourceUrl: string | null;
     readonly licenseNotes: string | null;
+    readonly verifiedAt?: string | null;
   }>;
   readonly costOfLiving: ReadonlyArray<{
     readonly itemKey: string;
@@ -146,6 +147,8 @@ export interface NormalizedPersistedDestinationBundle {
     readonly verifiedAt: string | null;
   }>;
   readonly visaResidency: ReadonlyArray<{
+    readonly visaType?: string | null;
+    readonly residencyOption?: string | null;
     readonly summary: string | null;
     readonly residencyPath: string | null;
     readonly citizenshipPath: string | null;
@@ -402,6 +405,7 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
       sourceName: asNullableString(media.sourceName),
       sourceUrl: asNullableString(media.sourceUrl),
       licenseNotes: asNullableString(media.licenseNotes),
+      verifiedAt: asNullableString(media.verifiedAt),
     })),
     costOfLiving: bundle.costOfLiving.map((item) => ({
       itemKey: item.itemKey as StoredDestinationState["costOfLiving"][number]["itemKey"],
@@ -456,6 +460,8 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
       verifiedAt: asNullableString(state.verifiedAt),
     })),
     visaResidency: bundle.visaResidency.map((state) => ({
+      ...(state.visaType !== undefined ? { visaType: asNullableString(state.visaType) } : {}),
+      ...(state.residencyOption !== undefined ? { residencyOption: asNullableString(state.residencyOption) } : {}),
       summary: asNullableString(state.summary),
       residencyPath: asNullableString(state.residencyPath),
       citizenshipPath: asNullableString(state.citizenshipPath),

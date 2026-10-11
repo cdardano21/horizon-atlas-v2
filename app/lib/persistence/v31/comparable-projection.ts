@@ -2,6 +2,17 @@ import type { DeterministicV31CanonicalDestination } from "../../workbook-v31-de
 import type { KeyedChildModuleKey } from "./types";
 import type { StoredDestinationState } from "./types";
 
+/** Keep the persisted classification and authored explanation distinct.
+ * summary is display-only: old rows without a narrative retain their label.
+ */
+export function visaResidencyFields(visaType: string | null | undefined, residencyOption: string | null | undefined) {
+  return {
+    visaType: visaType ?? null,
+    residencyOption: residencyOption ?? null,
+    summary: residencyOption?.trim() ? residencyOption : visaType ?? null,
+  };
+}
+
 export type ComparablePrimitive = null | string | number | boolean;
 export interface ComparableObject {
   [key: string]: ComparableValue;
@@ -77,7 +88,7 @@ const URL_FIELDS = new Set(["url", "source_url", "image_url", "websiteUrl", "goo
 // name-based policy here (mirroring URL_FIELDS) lets semantically-equal but differently-formatted
 // representations (workbook "0"/"1" vs DB-stringified "false"/"true"; bare date vs full
 // timestamptz) compare equal without changing what is actually stored.
-const BOOLEAN_FIELDS = new Set(["verified"]);
+const BOOLEAN_FIELDS = new Set(["verified", "isPrimary", "official"]);
 const YES_NO_BOOLEAN_FIELDS = new Set(["privateCareAvailable", "transitSummary", "nonstopUsService"]);
 const DECIMAL_FIELDS = new Set(["monthlyLow", "monthlyHigh", "avgHighTemp", "avgLowTemp", "precipitationMm", "humidityPct", "population", "metroPopulation", "elevation", "latitude", "longitude"]);
 const DATE_FIELDS = new Set(["verifiedAt", "verified_at"]);
@@ -390,6 +401,10 @@ export function projectKeyedChildComparableRow(module: KeyedChildModuleKey, valu
         sourceName: pickNullableString(record, ["sourceName", "source_name"]),
         sourceUrl: pickNullableString(record, ["sourceUrl", "source_url"]),
         licenseNotes: pickNullableString(record, ["licenseNotes", "license_notes"]),
+        isPrimary: pickNullableString(record, ["isPrimary", "primary_image"]),
+        sortOrder: pickNullableString(record, ["sortOrder", "gallery_order"]),
+        verified: pickNullableString(record, ["verified"]),
+        verifiedAt: pickNullableString(record, ["verifiedAt", "verified_at"]),
       });
     case "propertyResources":
       return projectComparableObject({
@@ -494,6 +509,10 @@ function toCanonicalMedia(value: DeterministicV31CanonicalDestination["media"][n
     sourceName: value.source_name,
     sourceUrl: value.source_url,
     licenseNotes: value.license_notes,
+    isPrimary: value.primary_image,
+    sortOrder: value.gallery_order,
+    verified: value.verified,
+    verifiedAt: value.verified_at,
   };
 }
 
@@ -561,7 +580,7 @@ function toCanonicalHealthcareState(value: DeterministicV31CanonicalDestination[
 
 function toCanonicalVisaResidencyState(value: DeterministicV31CanonicalDestination["visaResidency"][number]): ComparableObjectInput {
   return {
-    summary: value.visa_type,
+    ...visaResidencyFields(value.visa_type, value.residency_option),
     residencyPath: value.permanent_residency_path,
     citizenshipPath: value.citizenship_path,
     stayModeKey: value.stay_mode_key,
@@ -827,7 +846,7 @@ export function projectStoredComparable(state: StoredDestinationState): Comparab
     neighborhoods: projectKeyedChildArray(state.neighborhoods, KEYED_CHILD_MODULES.neighborhoods),
     places: projectKeyedChildArray(state.places, KEYED_CHILD_MODULES.places),
     resources: projectKeyedChildArray(state.resources.map((entry) => projectKeyedChildComparableRow("resources", entry)), KEYED_CHILD_MODULES.resources),
-    media: projectKeyedChildArray(state.media, KEYED_CHILD_MODULES.media),
+    media: projectKeyedChildArray(state.media.map((entry) => ({ ...entry, isPrimary: entry.isPrimary ?? null, sortOrder: entry.sortOrder ?? null, verified: entry.verified ?? null, verifiedAt: entry.verifiedAt ?? null })), KEYED_CHILD_MODULES.media),
     costOfLiving: projectRecordKeyArray(state.costOfLiving),
     climateMonthly: projectOrderedArray(state.climateMonthly),
     housing: projectOrderedArray(state.housing),

@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "c6a60086d823c671db2385c6c12c2e22a08521659f8ec400d9c9c387a7d15d70",
-  "digest": "a7d896bec7b4fa3a8888f39462c1aeeead8f1b5e0d626fdb999d7cc2cff0c67a",
+  "sourceSignature": "01b9bcf36350f1cf795a231e9f38ba3d3c671271026a8e46074b510135060050",
+  "digest": "8ba74575042898f051519e537d0bdb45d3eef49ed7061b01d391c3fca6cde4a7",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,13 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "malaga-spain",
+        "slug": "malaga-spain",
+        "name": "Málaga",
+        "country": "Spain",
+        "summary": "A Mediterranean city combining a historic cultural center, distinct urban beaches and varied residential districts; housing, noise and access differ substantially by address."
       },
       {
         "key": "bariloche-argentina",
@@ -1971,6 +1978,13 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "malaga-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/24/Alcazaba_of_M%C3%A1laga%2C_Spain.jpg",
+          "alt": "Alcazaba architecture in Málaga"
         }
       },
       {

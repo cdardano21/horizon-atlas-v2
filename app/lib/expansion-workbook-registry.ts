@@ -36,6 +36,16 @@ export interface ExpansionWorkbookRegistryEntry {
 }
 
 export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntry[] = [
+{
+  "registryId": "legacy-malaga-01",
+  "workbookPath": "data/legacy-malaga-01/DestinationFinderAI-Malaga-Premium-Owner-Review-v3-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "malaga-spain"
+  ],
+  "expectedSha256": "143bc306c4f7fa844ea3f787dba4e4f2a83a64d3089953cbfc0ab069245b01a5"
+},
   {
     registryId: "curated-mixed-batch-10-01",
     workbookPath: "data/curated-mixed-batch-10-01/DestinationFinderAI-Curated-Mixed-Batch-10-01-Authoring-Complete-v3.3.xlsx",

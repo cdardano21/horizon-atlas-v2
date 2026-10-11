@@ -1,0 +1,212 @@
+{
+  "snapshot": {
+    "createdAt": "2026-10-11T20:51:50.605Z",
+    "catalog": [
+      {
+        "id": "66f27e80-a7bf-4e60-b2e1-47c28d9e4a0b",
+        "slug": "malaga-spain",
+        "city": "M\u00e1laga",
+        "country": "Spain",
+        "destination_key": null,
+        "status": "published",
+        "beach_access": null,
+        "mountain_or_ski_access": null,
+        "country_code": null,
+        "population": null,
+        "metro_population": null,
+        "elevation": null,
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "modules": {
+      "premium_accessibility": [],
+      "premium_bureaucracy_setup": [],
+      "premium_climate_monthly": [],
+      "premium_community_social": [],
+      "premium_connectivity_remote_work": [],
+      "premium_cost_of_living": [],
+      "premium_daily_life_practicality": [],
+      "premium_destination_facts": [],
+      "premium_destination_module_presence": [],
+      "premium_destination_profiles": [],
+      "premium_destination_scores": [],
+      "premium_environment_quality": [],
+      "premium_events_seasonality": [],
+      "premium_family_education": [],
+      "premium_healthcare_insurance": [],
+      "premium_housing_property": [],
+      "premium_language_integration": [],
+      "premium_lgbtq_inclusivity": [],
+      "premium_lifestyle_features": [],
+      "premium_lifestyle_laws": [],
+      "premium_media": [],
+      "premium_move_checklist": [],
+      "premium_neighborhoods": [],
+      "premium_pets": [],
+      "premium_places": [],
+      "premium_property_resources": [],
+      "premium_reality_check": [],
+      "premium_resources": [],
+      "premium_retirement_aging": [],
+      "premium_safety_risks": [],
+      "premium_sources": [],
+      "premium_taxes_finance": [],
+      "premium_transport_airports": [],
+      "premium_visa_residency": [],
+      "premium_work_business": []
+    }
+  },
+  "entry": {
+    "registryId": "legacy-malaga-01",
+    "workbookPath": "data/legacy-malaga-01/DestinationFinderAI-Malaga-Premium-Owner-Review-v3-v3.3.xlsx",
+    "environment": "production",
+    "candidateDiscovery": "published-catalog",
+    "expectedDestinationKeys": [
+      "malaga-spain"
+    ],
+    "expectedSha256": "143bc306c4f7fa844ea3f787dba4e4f2a83a64d3089953cbfc0ab069245b01a5"
+  },
+  "supplement": {
+    "entries": [
+      {
+        "destinationKey": "malaga-spain",
+        "operation": "REPLACE_MODULE",
+        "targetModule": "lifestyleFeatures",
+        "reason": "M\u00e1laga-only supplemental import of the 14 owner-approved workbook lifestyle rows; same explicit-manifest precedent as historical carryover import. Requires fresh empty-module proof and separate execution approval."
+      }
+    ]
+  },
+  "prepared": {
+    "modulePresenceOperations": [
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "facts"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "scores"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "neighborhoods"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "places"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "resources"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "media"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "propertyResources"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "moveChecklist"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "eventsSeasonality"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "sources"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "costOfLiving"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "climateMonthly"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "housing"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "healthcare"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "visaResidency"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "taxesFinance"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "lgbtqInclusivity"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "safetyRisks"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "transportation"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "remoteWork"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "languageIntegration"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "pets"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "familyEducation"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "communitySocial"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "accessibility"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "bureaucracySetup"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "workBusiness"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "retirementAging"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "lifestyleLaws"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "realityCheck"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "environmentQuality"
+      },
+      {
+        "kind": "INITIALIZE_MODULE",
+        "module": "dailyLifePracticality"
+      }
+    ]
+  }
+}

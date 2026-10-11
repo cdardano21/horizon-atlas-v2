@@ -1,3 +1,4 @@
+import { visaResidencyFields } from "./visa-residency-fields";
 import { diffKeyedChildren } from "./diff-keyed-children";
 import { diffNonKeyedRepeatableModule } from "./diff-non-keyed";
 import { diffScalar } from "./diff-scalar";
@@ -271,7 +272,10 @@ function normalizeReplaceModuleExecutionPayload<M extends ReplaceModuleExecution
       } as ReplaceModuleExecutionPayload<M>;
     case "visaResidency":
       return {
-        summary: (record.summary as string | null | undefined) ?? (record.visa_type as string | null | undefined) ?? null,
+        ...visaResidencyFields(
+          ("visaType" in record ? record.visaType : "visa_type" in record ? record.visa_type : record.summary) as string | null | undefined,
+          (record.residencyOption ?? record.residency_option) as string | null | undefined,
+        ),
         residencyPath: (record.residencyPath as string | null | undefined) ?? (record.permanent_residency_path as string | null | undefined) ?? null,
         citizenshipPath: (record.citizenshipPath as string | null | undefined) ?? (record.citizenship_path as string | null | undefined) ?? null,
         stayModeKey: (record.stayModeKey as string | null | undefined) ?? (record.stay_mode_key as string | null | undefined) ?? null,
@@ -758,6 +762,7 @@ export function buildDestinationPlan(input: BuildDestinationPlanInput): Destinat
   scalarOperations.push(...buildScalarOperationsForSingletonModule("dailyLifePracticality", currentDailyLifePracticality, incomingDailyLifePracticality, input.diffPolicy));
 
   const identityFields = [
+    { fieldPath: "name", currentValue: input.storedDestinationState.identity.name ?? null, incomingValue: input.canonicalDestination.identity.name ?? null },
     { fieldPath: "population", currentValue: input.storedDestinationState.identity.population ?? null, incomingValue: input.canonicalDestination.identity.population ?? null },
     { fieldPath: "metroPopulation", currentValue: input.storedDestinationState.identity.metroPopulation ?? null, incomingValue: input.canonicalDestination.identity.metroPopulation ?? null },
     { fieldPath: "elevation", currentValue: input.storedDestinationState.identity.elevation ?? null, incomingValue: input.canonicalDestination.identity.elevationMeters ?? null },

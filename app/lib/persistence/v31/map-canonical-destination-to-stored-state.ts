@@ -1,3 +1,4 @@
+import { visaResidencyFields } from "./visa-residency-fields";
 import type { DeterministicV31CanonicalDestination } from "../../workbook-v31-deterministic-core";
 import type { CanonicalDestinationKey, StoredDestinationState } from "./types";
 
@@ -134,6 +135,7 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       sourceName: asStoredNullableString(media.source_name),
       sourceUrl: asStoredNullableString(media.source_url),
       licenseNotes: asStoredNullableString(media.license_notes),
+      verifiedAt: asStoredNullableString(media.verified_at),
     })),
     costOfLiving: costOfLiving.map((item) => ({
       itemKey: asStoredKey<string>(asStoredChild(item, "record_key")),
@@ -188,10 +190,7 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       verifiedAt: asStoredNullableString(state.verified_at),
     })),
     visaResidency: canonicalDestination.visaResidency.map((state) => ({
-      // "summary" must be real prose shown to customers - visa_type is a controlled categorical
-      // token (e.g. "STATUS_DEPENDENT") and must never be used here; residency_option is the real
-      // human-written explanation sentence for the same row.
-      summary: asStoredNullableString(state.residency_option),
+      ...visaResidencyFields(state.visa_type, state.residency_option),
       residencyPath: asStoredNullableString(state.permanent_residency_path),
       citizenshipPath: asStoredNullableString(state.citizenship_path),
       stayModeKey: asStoredNullableString(state.stay_mode_key),

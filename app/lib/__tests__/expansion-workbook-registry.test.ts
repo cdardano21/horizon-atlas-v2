@@ -199,6 +199,8 @@ describe("Expansion-workbook preview resolver (registry-driven, generic getCanon
   it("matches the independently reviewed registry-scope key snapshot, preserving declaration multiplicity", () => {
     const allRegisteredKeys = EXPANSION_WORKBOOK_REGISTRY.flatMap((entry) => entry.expectedDestinationKeys);
     const expectedKeys = [
+      "malaga-spain", // Owner-approved Málaga addition; retain all existing declarations.
+
       // Curated Mixed Batch 10-01.
       "bariloche-argentina", "mendoza-argentina", "joao-pessoa-brazil", "punta-del-este-uruguay", "ghent-belgium",
       "wanaka-new-zealand", "stellenbosch-south-africa", "loreto-mexico", "vevey-switzerland", "hakuba-japan",

@@ -160,7 +160,7 @@ const KEYED_CHILD_CANONICAL_FALLBACK_FIELD: Readonly<Record<KeyedChildModuleKey,
   neighborhoods: { name: "neighborhood_name", areaType: "area_type", bestFor: "best_for", walkabilityRating: "walkability_rating", safetyRating: "safety_rating", transitRating: "transit_rating", housingCharacter: "housing_character", pros: "pros", cons: "cons", googleMapsUrl: "google_maps_url" },
   places: { category: "category_key", name: "place_name", neighborhoodKey: "neighborhood_key", websiteUrl: "website_url", googleMapsUrl: "google_maps_url", sourceUrl: "source_url", displayOrder: "display_order" },
   resources: { category: "resource_category", name: "resource_name", description: "description", official: "official" },
-  media: { kind: "media_type", url: "image_url", altText: "subject", isPrimary: "primary_image", sortOrder: "gallery_order", sourceName: "source_name", sourceUrl: "source_url", licenseNotes: "license_notes" },
+  media: { kind: "media_type", url: "image_url", altText: "subject", isPrimary: "primary_image", sortOrder: "gallery_order", sourceName: "source_name", sourceUrl: "source_url", licenseNotes: "license_notes", verifiedAt: "verified_at" },
   propertyResources: { category: "resource_type", name: "resource_name" },
   moveChecklist: { summary: "task", checklistNotes: "description" },
   eventsSeasonality: { summary: "description", seasonalityNotes: "weather_context" },
@@ -210,7 +210,7 @@ export const REPLACE_MODULE_TABLE_CONFIG: Readonly<Record<ReplaceModuleExecution
   climateMonthly: { table: "premium_climate_monthly", keyStrategy: "record_key", columns: { monthKey: "month_key", avgHighTemp: "avg_high_temp", avgLowTemp: "avg_low_temp", precipitationMm: "precipitation_mm", humidityPct: "humidity_pct" } },
   housing: { table: "premium_housing_property", keyStrategy: "record_key", columns: { summary: "restrictions_summary", buyingSummary: "buying_process_summary", rentalSummary: "rental_rules_notes", stayModeKey: "stay_mode_key", canForeignersBuy: "can_foreigners_buy", residencyRequiredToBuy: "residency_required_to_buy", verified: "verified", verifiedAt: "verified_at" } },
   healthcare: { table: "premium_healthcare_insurance", keyStrategy: "record_key", columns: { summary: "system_summary", publicAccessSummary: "public_access_foreigners", insuranceSummary: "international_insurance_notes", privateCareAvailable: "private_care_available", topic: "topic", englishSpeakingCare: "english_speaking_care", typicalGpVisitCost: "typical_gp_visit_cost", typicalSpecialistCost: "typical_specialist_cost", verified: "verified", verifiedAt: "verified_at" } },
-  visaResidency: { table: "premium_visa_residency", keyStrategy: "record_key", columns: { summary: "visa_type", residencyPath: "permanent_residency_path", citizenshipPath: "citizenship_path", stayModeKey: "stay_mode_key", travelerNationality: "traveler_nationality", verified: "verified", verifiedAt: "verified_at" } },
+  visaResidency: { table: "premium_visa_residency", keyStrategy: "record_key", columns: { visaType: "visa_type", residencyOption: "residency_option", residencyPath: "permanent_residency_path", citizenshipPath: "citizenship_path", stayModeKey: "stay_mode_key", travelerNationality: "traveler_nationality", verified: "verified", verifiedAt: "verified_at" } },
   taxesFinance: { table: "premium_taxes_finance", keyStrategy: "record_key", columns: { summary: "summary", notes: "notes", verified: "verified", verifiedAt: "verified_at" } },
   safetyRisks: { table: "premium_safety_risks", keyStrategy: "record_key", columns: { topic: "topic", severity: "severity", summary: "summary", verified: "verified", verifiedAt: "verified_at" } },
   transportation: { table: "premium_transport_airports", keyStrategy: "record_key", columns: { summary: "summary", airportSummary: "name", transitSummary: "public_transit_available", topic: "topic", distanceKm: "distance_km", typicalDriveMinutes: "typical_drive_minutes", nonstopUsService: "nonstop_us_service", carNeededRating: "car_needed_rating", parkingNotes: "parking_notes", rideshareNotes: "rideshare_notes", verified: "verified", verifiedAt: "verified_at" } },
@@ -300,7 +300,15 @@ function buildReplaceModuleStatements(
         ].filter(([, value]) => typeof value === "string" && value.trim() !== "" && coerceReplaceModuleColumnValue("public_transit_available", value) === null))
         : {};
       const columnEntries = [
-        ...Object.entries(config.columns),
+        ...Object.entries(config.columns).flatMap(([field, column]) => {
+          // Old plans carried only summary as the classification. Preserve their
+          // exact SQL values; new plans carry the two existing columns explicitly.
+          if (operation.module === "visaResidency" && !("visaType" in record) && !("residencyOption" in record)) {
+            if (field === "residencyOption") return [];
+            if (field === "visaType") return [["summary", column]];
+          }
+          return [[field, column]];
+        }),
         ...(operation.module === "healthcare" ? [["__costQualifiers", "metadata"]] : []),
         ...(Object.keys(transportationQualifiers).length > 0 ? [["__booleanQualifiers", "metadata"]] : []),
       ];
@@ -408,7 +416,7 @@ function buildKeyedChildStatements(
       const columnValues = columnEntries.map(([storedField, dbColumn]) => coerceReplaceModuleColumnValue(dbColumn, readChildField(child, storedField, operation.module)));
       if (operation.module === "media") {
         columnNames.push("metadata");
-        columnValues.push({ licenseNotes: readChildField(child, "licenseNotes", operation.module) });
+        columnValues.push({ licenseNotes: readChildField(child, "licenseNotes", operation.module), verifiedAt: readChildField(child, "verifiedAt", operation.module) });
       }
 
       const conflictTarget = buildKeyedChildConflictTarget(operation.module, config.conflictColumns);

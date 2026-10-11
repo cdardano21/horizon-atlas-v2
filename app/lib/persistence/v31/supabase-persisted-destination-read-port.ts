@@ -1,3 +1,4 @@
+import { visaResidencyFields } from "./visa-residency-fields";
 import type { PersistedDestinationReadPort, ReadResult } from "./persisted-destination-read-port";
 import type { PersistedPresenceModuleKey, ResolvedDestinationIdentity } from "./types";
 import type {
@@ -285,6 +286,7 @@ export function createSupabasePersistedDestinationReadPort(
                   sourceName: pickString(row, "source_name"),
                   sourceUrl: pickString(row, "source_url"),
                   licenseNotes: pickString(mediaMetadata, "licenseNotes"),
+                  verifiedAt: pickString(mediaMetadata, "verifiedAt"),
                 };
               case "propertyResources":
                 return {
@@ -410,7 +412,7 @@ export function createSupabasePersistedDestinationReadPort(
         ["climateMonthly", "premium_climate_monthly", "destination_id,destination_key,record_key,month_key,avg_high_temp,avg_low_temp,precipitation_mm,humidity_pct", "climateMonthly"],
         ["housing", "premium_housing_property", "destination_id,destination_key,record_key,restrictions_summary,buying_process_summary,rental_rules_notes,stay_mode_key,can_foreigners_buy,residency_required_to_buy,verified,verified_at", "housing"],
         ["healthcare", "premium_healthcare_insurance", "destination_id,destination_key,record_key,system_summary,public_access_foreigners,international_insurance_notes,private_care_available,topic,english_speaking_care,typical_gp_visit_cost,typical_specialist_cost,metadata,verified,verified_at", "healthcare"],
-        ["visaResidency", "premium_visa_residency", "destination_id,destination_key,record_key,visa_type,permanent_residency_path,citizenship_path,stay_mode_key,traveler_nationality,verified,verified_at", "visaResidency"],
+        ["visaResidency", "premium_visa_residency", "destination_id,destination_key,record_key,visa_type,residency_option,permanent_residency_path,citizenship_path,stay_mode_key,traveler_nationality,verified,verified_at", "visaResidency"],
         ["taxesFinance", "premium_taxes_finance", "destination_id,destination_key,record_key,summary,notes,verified,verified_at", "taxesFinance"],
         ["lgbtqInclusivity", "premium_lgbtq_inclusivity", "destination_id,destination_key,position,summary,cultural_notes,overall_rating,legal_protections,social_acceptance,pride_events,nightlife_social,healthcare_access,areas_resources,safety_considerations,verified,verified_at", "lgbtqInclusivity"],
         ["safetyRisks", "premium_safety_risks", "destination_id,destination_key,record_key,topic,severity,summary,verified,verified_at", "safetyRisks"],
@@ -491,7 +493,7 @@ export function createSupabasePersistedDestinationReadPort(
                 return {
                   destinationId: String(row.destination_id ?? ""),
                   destinationKey: String(row.destination_key ?? ""),
-                  summary: pickString(row, "visa_type"),
+                  ...visaResidencyFields(pickString(row, "visa_type"), pickString(row, "residency_option")),
                   residencyPath: pickString(row, "permanent_residency_path"),
                   citizenshipPath: pickString(row, "citizenship_path"),
                   stayModeKey: pickString(row, "stay_mode_key"),

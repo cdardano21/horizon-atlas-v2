@@ -147,6 +147,7 @@ export type StoredMediaShape<T extends DeterministicV31CanonicalMedia> = {
   readonly sourceName: CanonicalNullableString<T["source_name"]>;
   readonly sourceUrl: CanonicalNullableString<T["source_url"]>;
   readonly licenseNotes: CanonicalNullableString<T["license_notes"]>;
+  readonly verifiedAt?: CanonicalNullableString<T["verified_at"]>;
 };
 
 export type StoredCostOfLivingItemShape<T extends DeterministicV31CanonicalCostOfLivingItem> = {
@@ -207,6 +208,8 @@ export type StoredHealthcareStateShape<T extends DeterministicV31CanonicalHealth
 };
 
 export type StoredVisaResidencyStateShape<T extends DeterministicV31CanonicalVisaResidencyState> = {
+  readonly visaType?: string | null;
+  readonly residencyOption?: string | null;
   readonly summary: CanonicalNullableString<T["visa_type"]>;
   readonly residencyPath: CanonicalNullableString<T["permanent_residency_path"]>;
   readonly citizenshipPath: CanonicalNullableString<T["citizenship_path"]>;
@@ -458,7 +461,7 @@ type ModuleFieldMapping = {
   housing: { restrictions_summary: "summary"; buying_process_summary: "buyingSummary"; rental_rules_notes: "rentalSummary" };
   propertyResources: { resource_key: "itemKey"; resource_type: "category"; resource_name: "name"; url: "url"; description: "description"; official: "official"; source_url: "sourceUrl"; verified: "verified"; verified_at: "verifiedAt" };
   healthcare: { system_summary: "summary"; public_access_foreigners: "publicAccessSummary"; international_insurance_notes: "insuranceSummary"; private_care_available: "privateCareAvailable" };
-  visaResidency: { visa_type: "summary"; permanent_residency_path: "residencyPath"; citizenship_path: "citizenshipPath" };
+  visaResidency: { visa_type: "visaType"; residency_option: "residencyOption"; permanent_residency_path: "residencyPath"; citizenship_path: "citizenshipPath" };
   taxesFinance: { summary: "summary"; income_tax_notes: "notes" };
   lgbtqInclusivity: { evidence_summary: "summary"; community_scene: "culturalNotes" };
   safetyRisks: { record_key: "itemKey"; risk_type: "topic"; severity: "severity"; summary: "summary" };

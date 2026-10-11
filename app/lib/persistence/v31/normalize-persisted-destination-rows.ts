@@ -163,6 +163,7 @@ export interface PersistedMediaRow {
   readonly sourceName: string | null;
   readonly sourceUrl: string | null;
   readonly licenseNotes: string | null;
+  readonly verifiedAt?: string | null;
 }
 
 export interface PersistedPropertyResourceRow {
@@ -258,6 +259,8 @@ export interface PersistedHealthcareRow {
 }
 
 export interface PersistedVisaResidencyRow {
+  readonly visaType?: string | null;
+  readonly residencyOption?: string | null;
   readonly destinationId: string;
   readonly destinationKey: string;
   readonly summary: string | null;

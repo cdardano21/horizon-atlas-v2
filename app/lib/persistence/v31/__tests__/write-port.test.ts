@@ -171,7 +171,7 @@ describe("write-port statement translation", () => {
 
     expect(statements[0].text).toContain("premium_media");
     for (const column of ["is_primary", "sort_order", "verified"]) expect(statements[0].text).toContain(column);
-    expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, "media-1", "image", "https://upload.wikimedia.org/example.jpg", "View", "View", "1", "2", true, "Commons", "https://commons.wikimedia.org/wiki/File:Example.jpg", { licenseNotes: "CC BY-SA" }]);
+    expect(statements[0].values).toEqual([DEST_ID, DEST_KEY, "media-1", "image", "https://upload.wikimedia.org/example.jpg", "View", "View", "1", "2", true, "Commons", "https://commons.wikimedia.org/wiki/File:Example.jpg", { licenseNotes: "CC BY-SA", verifiedAt: null }]);
   });
 
   it("maps resource description and official flags while preserving category, name, and URL", () => {

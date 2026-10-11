@@ -149,6 +149,7 @@ const REPLACE_MODULE_CASES: readonly ReplaceModuleCase[] = [
     module: "visaResidency",
     canonicalRow: {
       visa_type: "visaResidency:visa_type",
+      residency_option: "visaResidency:residency_option",
       permanent_residency_path: "visaResidency:permanent_residency_path",
       citizenship_path: "visaResidency:citizenship_path",
       stay_mode_key: "visaResidency:stay_mode_key",
