@@ -7,6 +7,8 @@ const estimate = (destinationKey: string, singleMonthlyUsd: number, coupleMonthl
   estimateYear: 2026,
 });
 
+// Santa Fe, St. Cloud, San Ramón and St. John’s intentionally have no approved budget.
+// Keep them absent so the existing evaluator reports UNKNOWN rather than a substitute estimate.
 export const ownedAffordabilityRecords: readonly OwnedAffordabilityRecord[] = Object.freeze([
   estimate("the-villages-fl-us", 4400, 6900),
   estimate("sofia-bg", 1850, 2950),
@@ -19,10 +21,6 @@ export const ownedAffordabilityRecords: readonly OwnedAffordabilityRecord[] = Ob
   estimate("las-terrenas-do", 2250, 3600),
   estimate("fairhope-al-us", 3500, 5500),
   estimate("the-hague-netherlands", 2950, 3800),
-  estimate("san-ramon-costa-rica", 2500, 4000),
-  estimate("st-john-s-canada", 3650, 5750),
-  estimate("santa-fe-new-mexico-united-states", 4750, 7450),
-  estimate("st-cloud-minnesota-united-states", 3500, 5500),
   estimate("kyoto-japan", 2200, 2950),
   estimate("ajijic-mexico", 2050, 3250),
   estimate("boquete-panama", 2150, 3450),

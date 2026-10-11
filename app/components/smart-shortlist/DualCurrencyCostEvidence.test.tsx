@@ -8,31 +8,31 @@ const chiangMai = smartShortlistCandidates.find((candidate) => candidate.key ===
 const unavailableCandidate = smartShortlistCandidates.find((candidate) => candidate.costRows.some((row) => row.currency === "NZD"))!;
 
 describe("DualCurrencyCostEvidence", () => {
-  it("keeps the original local amount visible beside a labeled fixture estimate", () => {
+  it("keeps original local evidence while suppressing fixture equivalents and rate provenance", () => {
     render(<DualCurrencyCostEvidence candidate={chiangMai} localRange={chiangMai.localTotals.single} displayCurrency="USD" snapshot={U3_R3_FIXTURE_SNAPSHOT} asOfDate="2026-09-06" household="single" />);
     expect(screen.getAllByText(/THB 25,000-THB 50,000/).length).toBeGreaterThan(0);
-    expect(screen.getByText(/\$700-\$1,400/)).toBeInTheDocument();
-    expect(screen.getByText("Deterministic architecture fixture (not live)")).toBeInTheDocument();
-    expect(screen.getByText(/Effective September 4, 2026/)).toBeInTheDocument();
+    expect(screen.queryByText(/\$700-\$1,400/)).not.toBeInTheDocument();
+    expect(screen.queryByText("Deterministic architecture fixture (not live)")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Effective September 4, 2026/)).not.toBeInTheDocument();
     expect(screen.getByText(/categories do not add ranking points/)).toBeInTheDocument();
   });
 
-  it("shows an explicit unavailable state while preserving an unsupported local currency", () => {
+  it("preserves an unsupported local currency without advertising a fixture conversion", () => {
     const localRange = { monthlyLow: 2_000, monthlyHigh: 3_000, currency: "NZD", verifiedAt: "2026-08-31" };
     render(<DualCurrencyCostEvidence candidate={unavailableCandidate} localRange={localRange} displayCurrency="USD" snapshot={U3_R3_FIXTURE_SNAPSHOT} asOfDate="2026-09-06" household="single" />);
-    expect(screen.getByText("USD conversion unavailable")).toBeInTheDocument();
+    expect(screen.queryByText(/USD equivalent|USD conversion unavailable/)).not.toBeInTheDocument();
     expect(screen.getByText(/NZ\$2,000-NZ\$3,000/)).toBeInTheDocument();
   });
 
-  it("labels stale rates and retains the effective date", () => {
+  it("does not expose fixture rates even when their status becomes stale", () => {
     const staleSnapshot: ExchangeRateSnapshot = {
       ...U3_R3_FIXTURE_SNAPSHOT,
       rates: U3_R3_FIXTURE_SNAPSHOT.rates.map((rate) => rate.baseCurrency === "THB" ? { ...rate, status: "STALE" } : rate),
     };
     render(<DualCurrencyCostEvidence candidate={chiangMai} localRange={chiangMai.localTotals.single} displayCurrency="USD" snapshot={staleSnapshot} asOfDate="2026-09-06" household="single" />);
-    expect(screen.getByText("Stale USD estimate")).toBeInTheDocument();
-    expect(screen.getByText(/refresh before relying/)).toBeInTheDocument();
-    expect(screen.getByText(/Effective September 4, 2026/)).toBeInTheDocument();
+    expect(screen.queryByText("Stale USD estimate")).not.toBeInTheDocument();
+    expect(screen.queryByText(/refresh before relying/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Effective September 4, 2026/)).not.toBeInTheDocument();
   });
 
   it("exposes research provenance, precision, proxy status, confidence, and detailed rows", () => {

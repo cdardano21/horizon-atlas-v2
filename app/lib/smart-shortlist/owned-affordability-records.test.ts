@@ -3,14 +3,14 @@ import { smartShortlistCandidates } from "./cohort";
 import { ownedAffordabilityByDestination, ownedAffordabilityRecords } from "./owned-affordability-records";
 
 describe("owned affordability registry", () => {
-  it("covers exactly the approved 36 destinations without changing the cohort", () => {
-    expect(ownedAffordabilityRecords).toHaveLength(36);
-    expect(new Set(ownedAffordabilityRecords.map((record) => record.destinationKey)).size).toBe(36);
-    expect([...ownedAffordabilityByDestination.keys()].sort()).toEqual(smartShortlistCandidates.map((candidate) => candidate.key).sort());
+  it("retains 32 estimates and preserves all 36 destination identities", () => {
+    expect(ownedAffordabilityRecords).toHaveLength(32);
+    expect(new Set(ownedAffordabilityRecords.map((record) => record.destinationKey)).size).toBe(32);
+    expect([...ownedAffordabilityByDestination.keys()].sort()).toEqual(smartShortlistCandidates.map((candidate) => candidate.key).filter((key) => !["san-ramon-costa-rica", "st-john-s-canada", "santa-fe-new-mexico-united-states", "st-cloud-minnesota-united-states"].includes(key)).sort());
     expect(smartShortlistCandidates.reduce((sum, candidate) => sum + candidate.costRows.length, 0)).toBe(237);
   });
 
-  it("provides one usable single and couple estimate in 2026 USD for every destination", () => {
+  it("provides one usable single and couple estimate in 2026 USD for each retained destination", () => {
     for (const record of ownedAffordabilityRecords) {
       expect(record).toEqual({
         destinationKey: record.destinationKey,

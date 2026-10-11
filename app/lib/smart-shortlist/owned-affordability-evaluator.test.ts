@@ -50,3 +50,21 @@ describe("owned affordability shortlist gate", () => {
     expect(result.reasons).toContainEqual(expect.objectContaining({ capability: "affordability", state: "UNKNOWN" }));
   });
 });
+const intentionallyUnknownKeys = ["san-ramon-costa-rica", "st-john-s-canada", "santa-fe-new-mexico-united-states", "st-cloud-minnesota-united-states"];
+describe("intentionally UNKNOWN household budgets", () => {
+  it.each(intentionallyUnknownKeys)("keeps %s UNKNOWN at a required $4,500 couple budget", (key) => {
+    const candidates = smartShortlistCandidates.filter(candidate => candidate.key === key);
+    expect(candidates).toHaveLength(1);
+    const [result] = evaluateShortlistWithOwnedAffordability(candidates, {}, { amountUsd: 4500, household: "couple", require: true });
+    expect(result.group).toBe("NEEDS_VERIFICATION");
+    expect(result.affordabilityDecision).toBeUndefined();
+    expect(result.reasons.filter(reason => reason.capability === "affordability")).toEqual([{ capability: "affordability", state: "UNKNOWN", explanation: "No validated couple household affordability estimate is available." }]);
+  });
+  it("preserves independent exclusions and does not require a budget when none was selected", () => {
+    const candidates = smartShortlistCandidates.filter(candidate => intentionallyUnknownKeys.includes(candidate.key));
+    expect(evaluateShortlistWithOwnedAffordability(candidates, {}).every(result => result.group === "MEETS_FILTERS")).toBe(true);
+    const results = evaluateShortlistWithOwnedAffordability(candidates, { includedCountries: ["JP"] }, { amountUsd: 4500, household: "couple", require: true });
+    expect(results.every(result => result.group === "EXCLUDED")).toBe(true);
+    expect(results.every(result => result.reasons.some(reason => reason.capability === "affordability" && reason.state === "UNKNOWN"))).toBe(true);
+  });
+});

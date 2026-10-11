@@ -65,14 +65,14 @@ describe("Smart Shortlist prototype", () => {
     expect(screen.getByText(/excluded places remain separate/i)).toBeInTheDocument();
     expect(screen.queryByText(/match percentage/i)).toBeInTheDocument();
     expect(screen.getByText("Your target monthly budget: $4,500 USD")).toBeInTheDocument();
-    expect(screen.getByText(/Supporting local-cost conversion uses one deterministic fixture/)).toBeInTheDocument();
+    expect(screen.getByText(/Original local-currency evidence is shown without test-fixture/)).toBeInTheDocument();
     expect(screen.getByText(/Estimated comfortable monthly living cost in 2026 USD/)).toBeInTheDocument();
-    expect(screen.getAllByText("Deterministic architecture fixture (not live)").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Deterministic architecture fixture (not live)")).not.toBeInTheDocument();
     expect(screen.getAllByText("Estimated total monthly living cost")).toHaveLength(12);
     expect(screen.getAllByText(/Within budget|Close to budget|Over budget/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/USD$/).length).toBeGreaterThan(0);
-    expect(screen.getAllByText("USD conversion unavailable").length).toBeGreaterThan(0);
-    expect(screen.getByText(/Stale rates retain their effective date/)).toBeInTheDocument();
+    expect(screen.queryByText(/Estimated USD equivalent/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Stale rates retain their effective date/)).not.toBeInTheDocument();
 
     const compareBoxes = screen.getAllByRole("checkbox", { name: "Compare" }) as HTMLInputElement[];
     expect(compareBoxes.filter((box) => box.checked)).toHaveLength(3);
@@ -270,4 +270,57 @@ describe("Smart Shortlist prototype", () => {
     expect(card).toHaveTextContent("Important-preference tradeoff — Safety · FAIL:");
     expect(card.closest("section")).toHaveTextContent("Meets your required filters");
   });
+});
+
+describe("targeted affordability and currency presentation", () => {
+  const keys = ["san-ramon-costa-rica", "st-john-s-canada", "santa-fe-new-mexico-united-states", "st-cloud-minnesota-united-states"];
+  it("shows all four intentionally missing budgets without numeric PASS/FAIL in results or comparison", () => {
+    render(<SmartShortlistPrototype candidates={smartShortlistCandidates.filter(candidate => keys.includes(candidate.key))} intelligence={intelligence} />);
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    fireEvent.change(screen.getByRole("combobox", { name: "Household" }), { target: { value: "couple" } });
+    fireEvent.change(screen.getByRole("textbox", { name: "Target monthly budget in USD" }), { target: { value: "4500" } });
+    for (let i = 0; i < 3; i++) fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    fireEvent.click(screen.getByRole("button", { name: "Build shortlist" }));
+    expect(screen.getAllByRole("article")).toHaveLength(4);
+    for (const card of screen.getAllByRole("article")) {
+      expect(card).toHaveTextContent("USD estimate unavailable");
+      expect(card).toHaveTextContent("Affordability · UNKNOWN");
+      expect(card).not.toHaveTextContent(/Affordability · PASS|Affordability · FAIL|Estimated monthly cost is/);
+    }
+    fireEvent.click(screen.getAllByRole("checkbox", { name: "Compare" })[0]);
+    expect(screen.getByRole("table")).toHaveTextContent("USD estimate unavailable");
+  });
+  it("retains researched USD and original THB evidence without fixture equivalents in cards or comparisons", () => {
+    render(<SmartShortlistPrototype candidates={smartShortlistCandidates.filter(candidate => candidate.key === "chiang-mai-thailand")} intelligence={intelligence} />);
+    for (let i = 0; i < 5; i++) fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    fireEvent.click(screen.getByRole("button", { name: "Build shortlist" }));
+    for (const element of [screen.getByRole("article"), screen.getByRole("table")]) {
+      expect(element).toHaveTextContent("$1,450 USD");
+      expect(element).toHaveTextContent("THB 25,000-THB 50,000");
+      expect(element).not.toHaveTextContent(/\$700|\$1,400|Estimated USD equivalent|Deterministic architecture fixture/);
+    }
+  });
+});
+
+it("does not restore a cached rejected estimate from return navigation", async () => {
+  const candidate = smartShortlistCandidates.find(candidate => candidate.key === "san-ramon-costa-rica")!;
+  const { unmount } = render(<SmartShortlistPrototype candidates={[candidate]} intelligence={intelligence} />);
+  for (let i = 0; i < 5; i++) fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+  fireEvent.click(screen.getByRole("button", { name: "Build shortlist" }));
+  const link = screen.getByRole("link", { name: "Open destination guide" });
+  link.addEventListener("click", event => event.preventDefault(), { once: true });
+  fireEvent.click(link);
+  const key = "destinationfinder-smart-shortlist-return-v1";
+  const saved = JSON.parse(sessionStorage.getItem(key)!);
+  saved.budget = "4500";
+  saved.requireBudget = false;
+  saved.results[0].affordabilityDecision = { state: "WITHIN_BUDGET", estimatedMonthlyUsd: 4000, budgetUsd: 4500, reason: "Estimated monthly cost is $4,000 against your $4,500 monthly budget." };
+  sessionStorage.setItem(key, JSON.stringify(saved));
+  unmount();
+  render(<SmartShortlistPrototype candidates={[candidate]} intelligence={intelligence} />);
+  await waitFor(() => expect(screen.getByRole("button", { name: "Build shortlist" })).toBeInTheDocument());
+  expect(screen.queryByText(/Estimated monthly cost is \$4,000/)).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Build shortlist" }));
+  expect(screen.getByRole("article")).toHaveTextContent("Affordability · UNKNOWN");
 });

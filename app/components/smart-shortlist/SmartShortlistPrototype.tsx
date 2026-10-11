@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { smartShortlistCandidates, type PrototypeCandidate } from "../../lib/smart-shortlist/cohort";
-import { convertRangeForDisplay, U3_R3_FIXTURE_SNAPSHOT } from "../../lib/smart-shortlist/exchange-rates";
+import { U3_R3_FIXTURE_SNAPSHOT } from "../../lib/smart-shortlist/exchange-rates";
 import type { EssentialRequirementMode, EvaluatedDestination, HardOnlyRequirementMode, ShortlistProfile } from "../../lib/smart-shortlist/evaluator";
 import type { HealthcareMinimumStandard, SafetyMinimumStandard } from "../../lib/intelligence-v2/profile-types";
 import { evaluateShortlistWithOwnedAffordability, type OwnedEvaluatedDestination } from "../../lib/smart-shortlist/owned-affordability-evaluator";
@@ -61,19 +61,6 @@ function formatMoney(value: number | bigint, currency: string) {
 
 function localTotal(candidate: PrototypeCandidate, household: "single" | "couple") {
   return candidate.localTotals[household];
-}
-
-function convertedTotal(candidate: PrototypeCandidate, household: "single" | "couple", displayCurrency: string) {
-  const total = localTotal(candidate, household);
-  if (!total) return null;
-  return convertRangeForDisplay({
-    low: total.monthlyLow,
-    high: total.monthlyHigh,
-    baseCurrency: total.currency,
-    displayCurrency,
-    snapshot,
-    asOfDate: snapshotAsOfDate,
-  });
 }
 
 function groupCopy(group: EvaluatedDestination["group"], noFilters: boolean) {
@@ -191,7 +178,10 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
     } catch {
       return;
     }
-    const requiresFreshResults = saved.countryPreset !== "anywhere"
+    const hasRejectedBudget = saved.results.some((result) =>
+      ["san-ramon-costa-rica", "st-john-s-canada", "santa-fe-new-mexico-united-states", "st-cloud-minnesota-united-states"].includes(result.destination.key)
+      && (result.affordabilityDecision || result.reasons.some((reason) => reason.capability === "affordability" && reason.state !== "UNKNOWN")));
+    const requiresFreshResults = hasRejectedBudget || saved.countryPreset !== "anywhere"
       || saved.healthcareMode === "MUST_HAVE" || saved.safetyMode === "MUST_HAVE"
       || saved.lgbtqMode === "MUST_HAVE" || saved.legalPathMode === "MUST_HAVE"
       || saved.requireMountain || (saved.requireBudget && Number(saved.budget) > 0);
@@ -501,8 +491,7 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
             <section className="border border-[#bd7b36] bg-[#fff8ea] p-5 text-sm">
               <p className="font-bold text-[#774719]">About these estimates</p>
               <p className="mt-1 text-[var(--atlas-muted)]">{AFFORDABILITY_ESTIMATE_DEFINITION}</p>
-              <p className="mt-2 text-xs text-[var(--atlas-muted)]">Supporting local-cost conversion uses one deterministic fixture for the session and does not change the USD affordability estimate.</p>
-              <p className="mt-2 text-xs text-[var(--atlas-muted)]">Missing pairs show conversion unavailable. Stale rates retain their effective date and a visible warning. Weekends and declared market holidays do not consume freshness days.</p>
+              <p className="mt-2 text-xs text-[var(--atlas-muted)]">Original local-currency evidence is shown without test-fixture exchange-rate conversions.</p>
             </section>
 
             {hasZeroSurvivors && (
@@ -596,9 +585,9 @@ export default function SmartShortlistPrototype({ candidates: suppliedCandidates
                     <tbody>{comparisonTopicOrder.map((topic) => topic === "Setting" ? (
                       <tr key={topic} data-comparison-section={topic}><th className="border-b border-[var(--atlas-border)] p-3">Setting</th>{comparisonRows.map((candidate) => <td key={candidate.key} className="border-b border-[var(--atlas-border)] p-3">{candidate.beachAccess.replaceAll("_", " ")}<br />{candidate.mountainAccess.replaceAll("_", " ")}</td>)}</tr>
                     ) : topic === "Affordability" ? (
-                      <tr key={topic} data-comparison-section={topic}><th className="border-b border-[var(--atlas-border)] p-3">Estimated total monthly cost</th>{comparisonRows.map((candidate) => { const owned = affordabilityByDestination.get(candidate.key); const estimate = owned && (household === "single" ? owned.singleMonthlyUsd : owned.coupleMonthlyUsd); return <td key={candidate.key} className="border-b border-[var(--atlas-border)] p-3">{estimate ? `${formatMoney(estimate, "USD")} USD` : "Estimate unavailable"}<br /><span className="text-xs text-[var(--atlas-muted)]">2026 estimate · {household === "single" ? "one adult" : "two adults"}</span></td>; })}</tr>
+                      <tr key={topic} data-comparison-section={topic}><th className="border-b border-[var(--atlas-border)] p-3">Estimated total monthly cost</th>{comparisonRows.map((candidate) => { const owned = affordabilityByDestination.get(candidate.key); const estimate = owned && (household === "single" ? owned.singleMonthlyUsd : owned.coupleMonthlyUsd); return <td key={candidate.key} className="border-b border-[var(--atlas-border)] p-3">{estimate ? `${formatMoney(estimate, "USD")} USD` : "USD estimate unavailable"}<br /><span className="text-xs text-[var(--atlas-muted)]">2026 estimate · {household === "single" ? "one adult" : "two adults"}</span></td>; })}</tr>
                     ) : (
-                      <tr key={topic} data-comparison-section={topic}><th className="p-3">Cost evidence</th>{comparisonRows.map((candidate) => { const total = localTotal(candidate, household); const converted = convertedTotal(candidate, household, displayCurrency); const available = Boolean(converted && converted.low.convertedAmount !== null && converted.high.convertedAmount !== null); return <td key={candidate.key} className="p-3">{total ? `${formatMoney(total.monthlyLow, total.currency)}-${formatMoney(total.monthlyHigh, total.currency)}` : "Original range unavailable"}<br />{available ? `${formatMoney(converted!.low.convertedAmount!, displayCurrency)}-${formatMoney(converted!.high.convertedAmount!, displayCurrency)}` : `${displayCurrency} conversion unavailable`}<br /><span className="text-xs text-[var(--atlas-muted)]">{candidate.costRows.length} detailed rows · {candidate.costSources.length} sources</span></td>; })}</tr>
+                      <tr key={topic} data-comparison-section={topic}><th className="p-3">Cost evidence</th>{comparisonRows.map((candidate) => { const total = localTotal(candidate, household); return <td key={candidate.key} className="p-3">{total ? `${formatMoney(total.monthlyLow, total.currency)}-${formatMoney(total.monthlyHigh, total.currency)}` : "Original range unavailable"}<br /><span className="text-xs text-[var(--atlas-muted)]">{candidate.costRows.length} detailed rows · {candidate.costSources.length} sources</span></td>; })}</tr>
                     ))}</tbody>
                   </table>
                 </div>

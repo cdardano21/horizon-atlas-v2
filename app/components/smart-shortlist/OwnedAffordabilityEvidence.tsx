@@ -21,7 +21,7 @@ export default function OwnedAffordabilityEvidence({ record, household, decision
   return (
     <div className="mt-5 border-l-4 border-[var(--atlas-accent)] bg-[#eef4ef] p-4 text-sm">
       <p className="text-xs font-bold uppercase text-[var(--atlas-accent)]">Estimated total monthly living cost</p>
-      <p className="mt-1 text-lg font-semibold">{estimate ? `${usd(estimate)} USD` : "Estimate unavailable"}</p>
+      <p className="mt-1 text-lg font-semibold">{estimate ? `${usd(estimate)} USD` : "USD estimate unavailable"}</p>
       <p className="mt-1 text-xs text-[var(--atlas-muted)]">2026 estimate · {household === "single" ? "one adult" : "two adults"}</p>
       {decision && <p className="mt-2 text-xs text-[var(--atlas-muted)]">Your budget: {usd(decision.budgetUsd)} USD</p>}
       {decision && <p className="mt-3 font-bold">{stateLabel[decision.state]}</p>}

@@ -1,5 +1,5 @@
 import type { PrototypeCandidate } from "../../lib/smart-shortlist/cohort";
-import { convertRangeForDisplay, type ExchangeRateSnapshot } from "../../lib/smart-shortlist/exchange-rates";
+import { convertRangeForDisplay, U3_R3_FIXTURE_SNAPSHOT, type ExchangeRateSnapshot } from "../../lib/smart-shortlist/exchange-rates";
 
 type LocalRange = {
   monthlyLow: number;
@@ -54,7 +54,9 @@ export default function DualCurrencyCostEvidence({
   compact = false,
 }: Props) {
   const evidence = evidenceDescription(candidate);
-  const converted = localRange ? convertRangeForDisplay({
+  const fixtureSnapshot = snapshot.provider.id === U3_R3_FIXTURE_SNAPSHOT.provider.id
+    || snapshot.rates.some((rate) => rate.status === "FIXTURE");
+  const converted = !fixtureSnapshot && localRange ? convertRangeForDisplay({
     low: localRange.monthlyLow,
     high: localRange.monthlyHigh,
     baseCurrency: localRange.currency,
@@ -89,7 +91,7 @@ export default function DualCurrencyCostEvidence({
           </p>
           {conversionStatus === "STALE" && <p className="mt-2 text-xs font-bold text-[#8a4b21]">Stale rate shown with its date; refresh before relying on it.</p>}
         </div>
-      ) : localRange ? (
+      ) : !fixtureSnapshot && localRange ? (
         <div className="mt-3 border-l-4 border-[#8a4b21] bg-[#fff4ec] p-3">
           <p className="font-bold text-[#8a4b21]">{displayCurrency} conversion unavailable</p>
           <p className="mt-1 text-xs text-[var(--atlas-muted)]">No direct {localRange.currency}/{displayCurrency} pair exists in this session snapshot. The local amount remains available.</p>
@@ -102,8 +104,8 @@ export default function DualCurrencyCostEvidence({
         <details className="mt-4 border-t border-[var(--atlas-border)] pt-3">
           <summary className="cursor-pointer font-bold text-[var(--atlas-accent)]">Detailed cost information</summary>
           <dl className="mt-3 grid gap-2 text-xs text-[var(--atlas-muted)] sm:grid-cols-2">
-            <div><dt className="font-bold text-[var(--atlas-ink)]">Exchange-rate source</dt><dd>{snapshot.provider.name}</dd></div>
-            <div><dt className="font-bold text-[var(--atlas-ink)]">Rate effective date</dt><dd>{converted?.low.effectiveDate ? displayDate(converted.low.effectiveDate) : "Unavailable"}</dd></div>
+            {!fixtureSnapshot && <div><dt className="font-bold text-[var(--atlas-ink)]">Exchange-rate source</dt><dd>{snapshot.provider.name}</dd></div>}
+            {!fixtureSnapshot && <div><dt className="font-bold text-[var(--atlas-ink)]">Rate effective date</dt><dd>{converted?.low.effectiveDate ? displayDate(converted.low.effectiveDate) : "Unavailable"}</dd></div>}
             <div><dt className="font-bold text-[var(--atlas-ink)]">Research source</dt><dd>{source ? <a href={source.url} className="underline underline-offset-2">{source.name}</a> : "No retained cost source"}</dd></div>
             <div><dt className="font-bold text-[var(--atlas-ink)]">Research date</dt><dd>{localRange?.verifiedAt ? displayDate(localRange.verifiedAt) : "Unavailable"}</dd></div>
             <div><dt className="font-bold text-[var(--atlas-ink)]">Geographic precision</dt><dd>{evidence.precision}</dd></div>
