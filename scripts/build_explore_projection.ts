@@ -1,3 +1,4 @@
+import { createSmartShortlistProjection, smartShortlistProjectionPath, validateSmartShortlistProjection } from "../app/lib/smart-shortlist/projection";
 import { readFileSync, writeFileSync } from "node:fs";
 import { EXPANSION_WORKBOOK_REGISTRY } from "../app/lib/expansion-workbook-registry";
 import { loadSmartShortlistData } from "../app/lib/smart-shortlist/server-data";
@@ -32,3 +33,16 @@ if (process.argv.includes("--check")) {
   writeFileSync(exploreProjectionPath, serialized);
 }
 console.log(`Explore projection validated: ${data.candidates.length} identities, ${registry.length} pinned workbooks`);
+
+// Reuse the same offline assembly for matching; no second decode or publication read.
+const matchingProjection = createSmartShortlistProjection(source, registry);
+validateSmartShortlistProjection(matchingProjection, registry);
+const matchingSerialized = JSON.stringify(matchingProjection, null, 2) + "\n";
+if (process.argv.includes("--check")) {
+  if (readFileSync(smartShortlistProjectionPath, "utf8") !== matchingSerialized) {
+    throw new Error("Smart Shortlist projection differs from current validated source; regenerate before release");
+  }
+} else {
+  writeFileSync(smartShortlistProjectionPath, matchingSerialized);
+}
+console.log(`Smart Shortlist projection validated: ${matchingProjection.data.candidates.length} identities, ${registry.length} pinned workbooks`);

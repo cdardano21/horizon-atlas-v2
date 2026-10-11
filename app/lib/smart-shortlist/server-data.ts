@@ -1,3 +1,4 @@
+import { loadPublishedSmartShortlistProjection } from "./projection";
 import { reviewedWorkbookBeachEvidence } from "../intelligence-v2/reviewed-workbook-beach-evidence";
 import { verifiedBeachAccessByDestination } from "../intelligence-v2/beach-access";
 import { verifiedSkiAccessByDestination } from "../intelligence-v2/ski-access";
@@ -283,8 +284,10 @@ export async function loadSmartShortlistIntelligence(): Promise<readonly SmartSh
 
 /** Public discovery uses all registry owners, then requires fresh, exact publication evidence. */
 export async function loadPublishedSmartShortlistData(
-  registry: readonly ExpansionWorkbookRegistryEntry[] = EXPANSION_WORKBOOK_REGISTRY,
+  registry?: readonly ExpansionWorkbookRegistryEntry[],
 ): Promise<SmartShortlistData> {
+  // Explicit registries retain the workbook path for offline validation and contract tests.
+  if (!registry) return loadPublishedSmartShortlistProjection();
   const data = await loadSmartShortlistData(registry, true);
   const registered = new Set(registry.flatMap(entry => [...entry.expectedDestinationKeys]));
   const rows = await loadPublishedCatalogIdentities([...registered]);
