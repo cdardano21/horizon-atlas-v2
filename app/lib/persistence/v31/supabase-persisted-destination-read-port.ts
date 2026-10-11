@@ -198,7 +198,7 @@ export function createSupabasePersistedDestinationReadPort(
         ["propertyResources", "premium_property_resources", "destination_id,destination_key,record_key,resource_type,resource_name,url", "propertyResources"],
         ["moveChecklist", "premium_move_checklist", "destination_id,destination_key,checklist_key,summary,checklist_notes", "moveChecklist"],
         ["eventsSeasonality", "premium_events_seasonality", "destination_id,destination_key,event_seasonality_key,summary,seasonality_notes", "eventsSeasonality"],
-        ["sources", "premium_sources", "destination_id,destination_key,source_key,source_name,source_url,source_type", "sources"],
+        ["sources", "premium_sources", "destination_id,destination_key,source_key,source_name,source_url,source_type,notes", "sources"],
       ] as const;
 
       const results = await Promise.all(
@@ -321,6 +321,7 @@ export function createSupabasePersistedDestinationReadPort(
                   name: pickString(row, "source_name"),
                   url: pickString(row, "source_url"),
                   type: pickString(row, "source_type"),
+                  notes: pickString(row, "notes"),
                 };
               default:
                 throw new Error(`Unhandled keyed-child module: ${String(moduleName)}`);
@@ -408,14 +409,14 @@ export function createSupabasePersistedDestinationReadPort(
 
     async readReplaceModules(identity) {
       const queries = [
-        ["costOfLiving", "premium_cost_of_living", "destination_id,destination_key,record_key,category,monthly_low,monthly_high,currency,household_type,lifestyle_tier,stay_mode_key,verified,verified_at", "costOfLiving"],
+        ["costOfLiving", "premium_cost_of_living", "destination_id,destination_key,record_key,category,included_notes,monthly_low,monthly_high,currency,household_type,lifestyle_tier,stay_mode_key,verified,verified_at", "costOfLiving"],
         ["climateMonthly", "premium_climate_monthly", "destination_id,destination_key,record_key,month_key,avg_high_temp,avg_low_temp,precipitation_mm,humidity_pct", "climateMonthly"],
         ["housing", "premium_housing_property", "destination_id,destination_key,record_key,restrictions_summary,buying_process_summary,rental_rules_notes,stay_mode_key,can_foreigners_buy,residency_required_to_buy,verified,verified_at", "housing"],
         ["healthcare", "premium_healthcare_insurance", "destination_id,destination_key,record_key,system_summary,public_access_foreigners,international_insurance_notes,private_care_available,topic,english_speaking_care,typical_gp_visit_cost,typical_specialist_cost,metadata,verified,verified_at", "healthcare"],
         ["visaResidency", "premium_visa_residency", "destination_id,destination_key,record_key,visa_type,residency_option,permanent_residency_path,citizenship_path,stay_mode_key,traveler_nationality,verified,verified_at", "visaResidency"],
         ["taxesFinance", "premium_taxes_finance", "destination_id,destination_key,record_key,summary,notes,verified,verified_at", "taxesFinance"],
         ["lgbtqInclusivity", "premium_lgbtq_inclusivity", "destination_id,destination_key,position,summary,cultural_notes,overall_rating,legal_protections,social_acceptance,pride_events,nightlife_social,healthcare_access,areas_resources,safety_considerations,verified,verified_at", "lgbtqInclusivity"],
-        ["safetyRisks", "premium_safety_risks", "destination_id,destination_key,record_key,topic,severity,summary,verified,verified_at", "safetyRisks"],
+        ["safetyRisks", "premium_safety_risks", "destination_id,destination_key,record_key,topic,severity,summary,verified,verified_at,metadata", "safetyRisks"],
         ["transportation", "premium_transport_airports", "destination_id,destination_key,record_key,summary,name,public_transit_available,topic,distance_km,typical_drive_minutes,nonstop_us_service,car_needed_rating,parking_notes,rideshare_notes,verified,verified_at,metadata", "transportation"],
         ["remoteWork", "premium_connectivity_remote_work", "destination_id,destination_key,record_key,remote_work_notes,avg_download_mbps,us_time_zone_fit,fiber_available,mobile_5g,utility_reliability,coworking_summary,verified,verified_at", "remoteWork"],
         ["languageIntegration", "premium_language_integration", "destination_id,destination_key,position,summary,english_support,primary_language,english_proficiency,government_english_access,medical_english_access,language_resources,verified,verified_at", "languageIntegration"],
@@ -441,6 +442,7 @@ export function createSupabasePersistedDestinationReadPort(
                   destinationKey: String(row.destination_key ?? ""),
                   itemKey: String(row.record_key ?? ""),
                   category: pickString(row, "category"),
+                  includedNotes: pickString(row, "included_notes"),
                   monthlyLow: row.monthly_low == null ? null : String(row.monthly_low),
                   monthlyHigh: row.monthly_high == null ? null : String(row.monthly_high),
                   currency: pickString(row, "currency"),
@@ -534,6 +536,7 @@ export function createSupabasePersistedDestinationReadPort(
                   destinationKey: String(row.destination_key ?? ""),
                   itemKey: String(row.record_key ?? ""),
                   topic: pickString(row, "topic"),
+                  mitigationNotes: pickMetadataString(row, "mitigation_notes"),
                   severity: pickString(row, "severity"),
                   summary: pickString(row, "summary"),
                   verified: row.verified == null ? null : String(row.verified),

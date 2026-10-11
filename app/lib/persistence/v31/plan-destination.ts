@@ -1,3 +1,4 @@
+import { normalizeHealthcareAvailabilityUnknown } from "./healthcare-availability-storage";
 import { visaResidencyFields } from "./visa-residency-fields";
 import { diffKeyedChildren } from "./diff-keyed-children";
 import { diffNonKeyedRepeatableModule } from "./diff-non-keyed";
@@ -227,6 +228,7 @@ function normalizeReplaceModuleExecutionPayload<M extends ReplaceModuleExecution
   switch (module) {
     case "costOfLiving":
       return {
+        includedNotes: (record.includedNotes as string | null | undefined) ?? (record.included_notes as string | null | undefined) ?? null,
         itemKey: (record.itemKey as string | null | undefined) ?? (record.record_key as string | null | undefined) ?? null,
         category: (record.category as string | null | undefined) ?? null,
         monthlyLow: (record.monthlyLow as string | null | undefined) ?? (record.monthly_low as string | null | undefined) ?? null,
@@ -262,7 +264,7 @@ function normalizeReplaceModuleExecutionPayload<M extends ReplaceModuleExecution
         summary: (record.summary as string | null | undefined) ?? (record.system_summary as string | null | undefined) ?? null,
         publicAccessSummary: (record.publicAccessSummary as string | null | undefined) ?? (record.public_access_foreigners as string | null | undefined) ?? null,
         insuranceSummary: (record.insuranceSummary as string | null | undefined) ?? (record.international_insurance_notes as string | null | undefined) ?? null,
-        privateCareAvailable: (record.privateCareAvailable as string | boolean | null | undefined) ?? (record.private_care_available as string | boolean | null | undefined) ?? null,
+        privateCareAvailable: normalizeHealthcareAvailabilityUnknown((record.privateCareAvailable as string | boolean | null | undefined) ?? (record.private_care_available as string | boolean | null | undefined)),
         topic: (record.topic as string | null | undefined) ?? null,
         englishSpeakingCare: (record.englishSpeakingCare as string | null | undefined) ?? (record.english_speaking_care as string | null | undefined) ?? null,
         typicalGpVisitCost: (record.typicalGpVisitCost as string | null | undefined) ?? (record.typical_gp_visit_cost as string | null | undefined) ?? null,
@@ -307,6 +309,7 @@ function normalizeReplaceModuleExecutionPayload<M extends ReplaceModuleExecution
       } as ReplaceModuleExecutionPayload<M>;
     case "safetyRisks":
       return {
+        mitigationNotes: (record.mitigationNotes as string | null | undefined) ?? (record.mitigation_notes as string | null | undefined) ?? null,
         itemKey: (record.itemKey as string | null | undefined) ?? (record.record_key as string | null | undefined) ?? null,
         topic: (record.topic as string | null | undefined) ?? (record.risk_type as string | null | undefined) ?? null,
         severity: (record.severity as string | null | undefined) ?? null,

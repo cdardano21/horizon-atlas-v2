@@ -151,6 +151,7 @@ export type StoredMediaShape<T extends DeterministicV31CanonicalMedia> = {
 };
 
 export type StoredCostOfLivingItemShape<T extends DeterministicV31CanonicalCostOfLivingItem> = {
+  readonly includedNotes?: string | null;
   readonly itemKey: CanonicalNullableString<T["record_key"]>;
   readonly category: CanonicalNullableString<T["category"]>;
   readonly monthlyLow: CanonicalNullableString<T["monthly_low"]>;
@@ -242,6 +243,7 @@ export type StoredLgbtqInclusivityStateShape<T extends DeterministicV31Canonical
 };
 
 export type StoredSafetyRiskShape<T extends DeterministicV31CanonicalSafetyRisk> = {
+  readonly mitigationNotes?: string | null;
   readonly itemKey: SafetyRiskKey;
   readonly topic: CanonicalNullableString<T["risk_type"]>;
   readonly severity: CanonicalNullableString<T["severity"]>;
@@ -366,6 +368,7 @@ export type StoredEventsSeasonalityStateShape<T extends DeterministicV31Canonica
 };
 
 export type StoredSourceShape<T extends DeterministicV31CanonicalSource> = {
+  readonly notes?: string | null;
   readonly sourceKey: SourceKey;
   readonly name: CanonicalNullableString<T["source_name"]>;
   readonly url: CanonicalNullableString<T["source_url"]>;

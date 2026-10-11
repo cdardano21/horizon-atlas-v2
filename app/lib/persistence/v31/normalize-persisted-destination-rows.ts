@@ -197,6 +197,7 @@ export interface PersistedEventsSeasonalityRow {
 }
 
 export interface PersistedSourceRow {
+  readonly notes?: string | null;
   readonly destinationId: string;
   readonly destinationKey: string;
   readonly sourceKey: string;
@@ -206,6 +207,7 @@ export interface PersistedSourceRow {
 }
 
 export interface PersistedCostOfLivingRow {
+  readonly includedNotes?: string | null;
   readonly destinationId: string;
   readonly destinationKey: string;
   readonly itemKey: string;
@@ -290,6 +292,7 @@ export interface PersistedPositionedRow {
 }
 
 export interface PersistedSafetyRiskRow {
+  readonly mitigationNotes?: string | null;
   readonly destinationId: string;
   readonly destinationKey: string;
   readonly itemKey: string;

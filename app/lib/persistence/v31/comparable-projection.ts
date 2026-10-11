@@ -1,3 +1,4 @@
+import { normalizeHealthcareAvailabilityUnknown } from "./healthcare-availability-storage";
 import type { DeterministicV31CanonicalDestination } from "../../workbook-v31-deterministic-core";
 import type { KeyedChildModuleKey } from "./types";
 import type { StoredDestinationState } from "./types";
@@ -431,6 +432,7 @@ export function projectKeyedChildComparableRow(module: KeyedChildModuleKey, valu
         name: pickNullableString(record, ["name", "source_name"]),
         url: pickNullableString(record, ["url", "source_url"]),
         type: pickNullableString(record, ["type", "source_type"]),
+        notes: pickNullableString(record, ["notes"]),
       });
   }
 }
@@ -518,6 +520,7 @@ function toCanonicalMedia(value: DeterministicV31CanonicalDestination["media"][n
 
 function toCanonicalCostOfLivingItem(value: DeterministicV31CanonicalDestination["costOfLiving"][number]): ComparableObjectInput {
   return {
+    includedNotes: value.included_notes,
     itemKey: value.record_key,
     category: value.category,
     monthlyLow: value.monthly_low,
@@ -568,7 +571,7 @@ function toCanonicalHealthcareState(value: DeterministicV31CanonicalDestination[
     summary: value.system_summary,
     publicAccessSummary: value.public_access_foreigners,
     insuranceSummary: value.international_insurance_notes,
-    privateCareAvailable: value.private_care_available,
+    privateCareAvailable: normalizeHealthcareAvailabilityUnknown(value.private_care_available),
     topic: value.topic,
     englishSpeakingCare: value.english_speaking_care,
     typicalGpVisitCost: value.typical_gp_visit_cost,
@@ -618,6 +621,7 @@ function toCanonicalLgbtqInclusivityState(value: DeterministicV31CanonicalDestin
 
 function toCanonicalSafetyRisk(value: DeterministicV31CanonicalDestination["safetyRisks"][number]): ComparableObjectInput {
   return {
+    mitigationNotes: value.mitigation_notes,
     itemKey: value.record_key,
     topic: value.risk_type,
     severity: value.severity,
@@ -796,6 +800,7 @@ function toCanonicalEventsSeasonalityState(value: DeterministicV31CanonicalDesti
 
 function toCanonicalSource(value: DeterministicV31CanonicalDestination["sources"][number]): ComparableObjectInput {
   return {
+    notes: value.notes,
     sourceKey: value.source_key,
     name: value.source_name,
     url: value.source_url,
@@ -847,7 +852,7 @@ export function projectStoredComparable(state: StoredDestinationState): Comparab
     places: projectKeyedChildArray(state.places, KEYED_CHILD_MODULES.places),
     resources: projectKeyedChildArray(state.resources.map((entry) => projectKeyedChildComparableRow("resources", entry)), KEYED_CHILD_MODULES.resources),
     media: projectKeyedChildArray(state.media.map((entry) => ({ ...entry, isPrimary: entry.isPrimary ?? null, sortOrder: entry.sortOrder ?? null, verified: entry.verified ?? null, verifiedAt: entry.verifiedAt ?? null })), KEYED_CHILD_MODULES.media),
-    costOfLiving: projectRecordKeyArray(state.costOfLiving),
+    costOfLiving: projectRecordKeyArray(state.costOfLiving.map(row => ({ ...row, includedNotes: row.includedNotes ?? null }))),
     climateMonthly: projectOrderedArray(state.climateMonthly),
     housing: projectOrderedArray(state.housing),
     propertyResources: projectKeyedChildArray(state.propertyResources.map((entry) => projectKeyedChildComparableRow("propertyResources", entry)), KEYED_CHILD_MODULES.propertyResources),
@@ -855,7 +860,7 @@ export function projectStoredComparable(state: StoredDestinationState): Comparab
     visaResidency: projectOrderedArray(state.visaResidency),
     taxesFinance: projectOrderedArray(state.taxesFinance),
     lgbtqInclusivity: projectOrderedArray(state.lgbtqInclusivity),
-    safetyRisks: projectRecordKeyArray(state.safetyRisks),
+    safetyRisks: projectRecordKeyArray(state.safetyRisks.map(row => ({ ...row, mitigationNotes: row.mitigationNotes ?? null }))),
     transportation: projectOrderedArray(state.transportation),
     remoteWork: projectOrderedArray(state.remoteWork),
     languageIntegration: projectOrderedArray(state.languageIntegration),
@@ -872,7 +877,7 @@ export function projectStoredComparable(state: StoredDestinationState): Comparab
     environmentQuality: state.environmentQuality === null ? null : projectComparableObject({ summary: state.environmentQuality.summary, qualityNotes: state.environmentQuality.qualityNotes }),
     dailyLifePracticality: state.dailyLifePracticality === null ? null : projectComparableObject({ summary: state.dailyLifePracticality.summary, practicalityNotes: state.dailyLifePracticality.practicalityNotes }),
     eventsSeasonality: projectKeyedChildArray(state.eventsSeasonality, KEYED_CHILD_MODULES.eventsSeasonality),
-    sources: projectKeyedChildArray(state.sources, KEYED_CHILD_MODULES.sources),
+    sources: projectKeyedChildArray(state.sources.map(row => ({ ...row, notes: row.notes ?? null })), KEYED_CHILD_MODULES.sources),
     lifestyleFeatures: projectKeyedChildArray(state.lifestyleFeatures ?? [], "recordKey"),
   };
 

@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "01b9bcf36350f1cf795a231e9f38ba3d3c671271026a8e46074b510135060050",
-  "digest": "8ba74575042898f051519e537d0bdb45d3eef49ed7061b01d391c3fca6cde4a7",
+  "sourceSignature": "d0242241e423870d902a58d3a3908fe39da2c98750c8c499c0b1b26492385d04",
+  "digest": "44e2cc394e45702cc48895527e7c7f12b2cbb6db628f4a6ca137ab453b1b9e66",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,34 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "bangkok-thailand",
+        "slug": "bangkok-thailand",
+        "name": "Bangkok",
+        "country": "Thailand",
+        "summary": "Bangkok combines a large urban transport network with distinct historic and contemporary districts. Plan around actual daily journeys rather than treating the whole metropolis as one interchangeable neighborhood."
+      },
+      {
+        "key": "barcelona-spain",
+        "slug": "barcelona-spain",
+        "name": "Barcelona",
+        "country": "Spain",
+        "summary": "Barcelona combines markets, cultural institutions and distinct urban districts. Eixample, Gracia, Poblenou and the old-city market areas offer different starting points for a longer stay."
+      },
+      {
+        "key": "san-miguel-de-allende-mexico",
+        "slug": "san-miguel-de-allende-mexico",
+        "name": "San Miguel de Allende",
+        "country": "Mexico",
+        "summary": "San Miguel de Allende offers a heritage-centered cultural setting with named galleries, a public library and local dining. Separate the historic town from surrounding excursions and municipality-wide statistics."
+      },
+      {
+        "key": "atenas-costa-rica",
+        "slug": "atenas-costa-rica",
+        "name": "Atenas",
+        "country": "Costa Rica",
+        "summary": "Atenas requires a clear distinction between the central town and the wider canton. A property advertised as Atenas may sit in a different district with a substantially different daily routine."
       },
       {
         "key": "malaga-spain",
@@ -1978,6 +2006,34 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "bangkok-thailand",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Templo_Wat_Arun%2C_Bangkok%2C_Tailandia%2C_2013-08-22%2C_DD_30.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Bangkok Wat Arun"
+        }
+      },
+      {
+        "key": "barcelona-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/0/02/Barcelona_March_2015-2b.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Barcelona panorama"
+        }
+      },
+      {
+        "key": "san-miguel-de-allende-mexico",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/ce/ParroquiaSanMiguelFacade2019.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "San Miguel de Allende Parroquia"
+        }
+      },
+      {
+        "key": "atenas-costa-rica",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Atenas_Costa_Rica_Catholic_Church.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Atenas Costa Rica church"
         }
       },
       {

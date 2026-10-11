@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "69bccb0e499f79257dcd9aae159bc3432f83e18740d468e0014132cb635710e8",
-  "digest": "efe4671ba024bf38af3517831a1b0f26175339ae4412fba42a05372f5da64da7",
+  "sourceSignature": "15628f329d7f704c60136c85c154439ba3b81c4ff80f662f83195b40c29946c4",
+  "digest": "643ea6c875441cbd34b40b550c014410e0e34b04135a7595f70941bac28dac55",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,126 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "bangkok-thailand",
+        "name": "Bangkok",
+        "slug": "bangkok-thailand",
+        "country": "Thailand",
+        "countryCode": "TH",
+        "summary": "Bangkok combines a large urban transport network with distinct historic and contemporary districts. Plan around actual daily journeys rather than treating the whole metropolis as one interchangeable neighborhood.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "barcelona-spain",
+        "name": "Barcelona",
+        "slug": "barcelona-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "Barcelona combines markets, cultural institutions and distinct urban districts. Eixample, Gracia, Poblenou and the old-city market areas offer different starting points for a longer stay.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "san-miguel-de-allende-mexico",
+        "name": "San Miguel de Allende",
+        "slug": "san-miguel-de-allende-mexico",
+        "country": "Mexico",
+        "countryCode": "MX",
+        "summary": "San Miguel de Allende offers a heritage-centered cultural setting with named galleries, a public library and local dining. Separate the historic town from surrounding excursions and municipality-wide statistics.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "atenas-costa-rica",
+        "name": "Atenas",
+        "slug": "atenas-costa-rica",
+        "country": "Costa Rica",
+        "countryCode": "CR",
+        "summary": "Atenas requires a clear distinction between the central town and the wider canton. A property advertised as Atenas may sit in a different district with a substantially different daily routine.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -10569,6 +10689,74 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "bangkok-thailand",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "GOOD_PRIVATE_AVAILABLE",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "barcelona-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "GOOD_PRIVATE_AVAILABLE",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "san-miguel-de-allende-mexico",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "GOOD_PRIVATE_AVAILABLE",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "atenas-costa-rica",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "malaga-spain",
         "beachAccess": "DIRECT_ACCESS",
         "mountainAccess": "MOUNTAIN_ACCESS",
@@ -14573,6 +14761,34 @@
         }
       },
       {
+        "key": "bangkok-thailand",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Templo_Wat_Arun%2C_Bangkok%2C_Tailandia%2C_2013-08-22%2C_DD_30.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Bangkok Wat Arun"
+        }
+      },
+      {
+        "key": "barcelona-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/0/02/Barcelona_March_2015-2b.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Barcelona panorama"
+        }
+      },
+      {
+        "key": "san-miguel-de-allende-mexico",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/ce/ParroquiaSanMiguelFacade2019.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "San Miguel de Allende Parroquia"
+        }
+      },
+      {
+        "key": "atenas-costa-rica",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Atenas_Costa_Rica_Catholic_Church.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Atenas Costa Rica church"
+        }
+      },
+      {
         "key": "malaga-spain",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/2/24/Alcazaba_of_M%C3%A1laga%2C_Spain.jpg",
@@ -16234,6 +16450,30 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "bangkok-thailand",
+        "singleMonthlyUsd": 1350,
+        "coupleMonthlyUsd": 1800,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "barcelona-spain",
+        "singleMonthlyUsd": 2675,
+        "coupleMonthlyUsd": 3400,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "san-miguel-de-allende-mexico",
+        "singleMonthlyUsd": 1550,
+        "coupleMonthlyUsd": 2075,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "atenas-costa-rica",
+        "singleMonthlyUsd": 1650,
+        "coupleMonthlyUsd": 2125,
         "estimateYear": 2026
       },
       {

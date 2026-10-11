@@ -1,3 +1,4 @@
+import { normalizeHealthcareAvailabilityUnknown } from "./healthcare-availability-storage";
 import { visaResidencyFields } from "./visa-residency-fields";
 import type { DeterministicV31CanonicalDestination } from "../../workbook-v31-deterministic-core";
 import type { CanonicalDestinationKey, StoredDestinationState } from "./types";
@@ -140,6 +141,7 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
     costOfLiving: costOfLiving.map((item) => ({
       itemKey: asStoredKey<string>(asStoredChild(item, "record_key")),
       category: asStoredNullableString(item.category),
+      includedNotes: asStoredNullableString(item.included_notes),
       monthlyLow: asStoredNullableString(item.monthly_low),
       monthlyHigh: asStoredNullableString(item.monthly_high),
       currency: asStoredNullableString(item.currency),
@@ -181,7 +183,7 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       summary: asStoredNullableString(state.system_summary),
       publicAccessSummary: asStoredNullableString(state.public_access_foreigners),
       insuranceSummary: asStoredNullableString(state.international_insurance_notes),
-      privateCareAvailable: asStoredNullableString(state.private_care_available),
+      privateCareAvailable: normalizeHealthcareAvailabilityUnknown(state.private_care_available),
       topic: asStoredNullableString(state.topic),
       englishSpeakingCare: asStoredNullableString(state.english_speaking_care),
       typicalGpVisitCost: asStoredNullableString(state.typical_gp_visit_cost),
@@ -221,6 +223,7 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
     safetyRisks: safetyRisks.map((risk) => ({
       itemKey: asStoredKey<StoredDestinationState["safetyRisks"][number]["itemKey"]>(asStoredChild(risk, "record_key")),
       topic: asStoredNullableString(risk.risk_type),
+      mitigationNotes: asStoredNullableString(risk.mitigation_notes),
       severity: asStoredNullableString(risk.severity),
       summary: asStoredNullableString(risk.summary),
       verified: asStoredNullableString(risk.verified),
@@ -330,6 +333,7 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       name: asStoredNullableString(source.source_name),
       url: asStoredNullableString(source.source_url),
       type: asStoredNullableString(source.source_type),
+      notes: asStoredNullableString(source.notes),
     })),
     lifestyleFeatures: lifestyleFeatures.map((feature) => ({
       recordKey: asStoredKey<StoredDestinationState["lifestyleFeatures"][number]["recordKey"]>(asStoredChild(feature, "record_key")),

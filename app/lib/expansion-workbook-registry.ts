@@ -37,6 +37,46 @@ export interface ExpansionWorkbookRegistryEntry {
 
 export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntry[] = [
 {
+  "registryId": "legacy-bangkok-thailand-01",
+  "workbookPath": "data/legacy-bangkok-thailand-01/DestinationFinderAI-bangkok-thailand-Premium-Review-r2-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "bangkok-thailand"
+  ],
+  "expectedSha256": "e4c95528a6dc9415f8ee46e0541cf43ca872c7209625de8ed40b031e2345239a"
+},
+{
+  "registryId": "legacy-barcelona-spain-01",
+  "workbookPath": "data/legacy-barcelona-spain-01/DestinationFinderAI-barcelona-spain-Premium-Review-r2-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "barcelona-spain"
+  ],
+  "expectedSha256": "6ec73e9700d985bc2d1b8e99f32ce192cb9d8d9f1b65aa7be62afc1f63841f79"
+},
+{
+  "registryId": "legacy-san-miguel-de-allende-mexico-01",
+  "workbookPath": "data/legacy-san-miguel-de-allende-mexico-01/DestinationFinderAI-san-miguel-de-allende-mexico-Premium-Review-r2-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "san-miguel-de-allende-mexico"
+  ],
+  "expectedSha256": "1e52277a2f95a98ba043bf1d829ebe3a2a1a07f951d8beba0de927505544cc6e"
+},
+{
+  "registryId": "legacy-atenas-costa-rica-01",
+  "workbookPath": "data/legacy-atenas-costa-rica-01/DestinationFinderAI-atenas-costa-rica-Premium-Review-r2-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "atenas-costa-rica"
+  ],
+  "expectedSha256": "65d7e815b337e07f6e756e8ea793e8a33c8711ff9f370ab7d7cb225b9685d7d6"
+},
+{
   "registryId": "legacy-malaga-01",
   "workbookPath": "data/legacy-malaga-01/DestinationFinderAI-Malaga-Premium-Owner-Review-v3-v3.3.xlsx",
   "environment": "production",

@@ -97,6 +97,7 @@ export interface NormalizedPersistedDestinationBundle {
   readonly costOfLiving: ReadonlyArray<{
     readonly itemKey: string;
     readonly category: string | null;
+    readonly includedNotes?: string | null;
     readonly monthlyLow: string | null;
     readonly monthlyHigh: string | null;
     readonly currency: string | null;
@@ -139,6 +140,7 @@ export interface NormalizedPersistedDestinationBundle {
     readonly publicAccessSummary: string | null;
     readonly insuranceSummary: string | null;
     readonly privateCareAvailable?: boolean | null;
+    readonly mitigationNotes?: string | null;
     readonly topic: string | null;
     readonly englishSpeakingCare: string | null;
     readonly typicalGpVisitCost: string | null;
@@ -179,6 +181,7 @@ export interface NormalizedPersistedDestinationBundle {
   }>;
   readonly safetyRisks: ReadonlyArray<{
     readonly itemKey: string;
+    readonly mitigationNotes?: string | null;
     readonly topic: string | null;
     readonly severity: string | null;
     readonly summary: string | null;
@@ -189,6 +192,7 @@ export interface NormalizedPersistedDestinationBundle {
     readonly summary: string | null;
     readonly airportSummary: string | null;
     readonly transitSummary: string | null;
+    readonly mitigationNotes?: string | null;
     readonly topic: string | null;
     readonly distanceKm: string | null;
     readonly typicalDriveMinutes: string | null;
@@ -285,6 +289,7 @@ export interface NormalizedPersistedDestinationBundle {
     readonly seasonalityNotes: string | null;
   }>;
   readonly sources: ReadonlyArray<{
+    readonly notes?: string | null;
     readonly sourceKey: string;
     readonly name: string | null;
     readonly url: string | null;
@@ -410,6 +415,7 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
     costOfLiving: bundle.costOfLiving.map((item) => ({
       itemKey: item.itemKey as StoredDestinationState["costOfLiving"][number]["itemKey"],
       category: asNullableString(item.category),
+      includedNotes: asNullableString(item.includedNotes),
       monthlyLow: asNullableString(item.monthlyLow),
       monthlyHigh: asNullableString(item.monthlyHigh),
       currency: asNullableString(item.currency),
@@ -493,6 +499,7 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
     safetyRisks: bundle.safetyRisks.map((risk) => ({
       itemKey: risk.itemKey as StoredDestinationState["safetyRisks"][number]["itemKey"],
       topic: asNullableString(risk.topic),
+      mitigationNotes: asNullableString(risk.mitigationNotes),
       severity: asNullableString(risk.severity),
       summary: asNullableString(risk.summary),
       verified: asNullableString(risk.verified),
@@ -602,6 +609,7 @@ export function materializeStoredDestinationStateFromNormalizedPersistedBundle(b
       name: asNullableString(source.name),
       url: asNullableString(source.url),
       type: asNullableString(source.type),
+      notes: asNullableString(source.notes),
     })),
     lifestyleFeatures: (bundle.lifestyleFeatures ?? []).map((feature) => ({
       recordKey: feature.recordKey as StoredDestinationState["lifestyleFeatures"][number]["recordKey"],

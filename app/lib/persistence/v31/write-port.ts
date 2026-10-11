@@ -144,7 +144,7 @@ export const KEYED_CHILD_TABLE_CONFIG: Readonly<Record<KeyedChildModuleKey, Keye
   propertyResources: { table: "premium_property_resources", stableKeyColumn: "record_key", columns: { category: "resource_type", name: "resource_name", url: "url" }, conflictColumns: ["destination_id", "destination_key", "record_key"] },
   moveChecklist: { table: "premium_move_checklist", stableKeyColumn: "checklist_key", columns: { summary: "summary", checklistNotes: "checklist_notes" }, conflictColumns: ["destination_id", "checklist_key"] },
   eventsSeasonality: { table: "premium_events_seasonality", stableKeyColumn: "event_seasonality_key", columns: { summary: "summary", seasonalityNotes: "seasonality_notes" }, conflictColumns: ["destination_id", "event_seasonality_key"] },
-  sources: { table: "premium_sources", stableKeyColumn: "source_key", columns: { name: "source_name", url: "source_url", type: "source_type" }, requiredTextColumn: "source_name", conflictColumns: ["destination_id", "destination_key", "source_key"] },
+  sources: { table: "premium_sources", stableKeyColumn: "source_key", columns: { name: "source_name", url: "source_url", type: "source_type", notes: "notes" }, requiredTextColumn: "source_name", conflictColumns: ["destination_id", "destination_key", "source_key"] },
 };
 
 // Real canonical destination objects (parsed directly from a workbook) only carry the sheet's raw
@@ -164,7 +164,7 @@ const KEYED_CHILD_CANONICAL_FALLBACK_FIELD: Readonly<Record<KeyedChildModuleKey,
   propertyResources: { category: "resource_type", name: "resource_name" },
   moveChecklist: { summary: "task", checklistNotes: "description" },
   eventsSeasonality: { summary: "description", seasonalityNotes: "weather_context" },
-  sources: { name: "source_name", url: "source_url", type: "source_type" },
+  sources: { name: "source_name", url: "source_url", type: "source_type", notes: "notes" },
 };
 
 interface SingletonTableConfig {
@@ -206,7 +206,7 @@ interface ReplaceModuleTableConfig {
 // - "record_key" tables: unique(destination_id, destination_key, record_key)
 // - "position" tables: unique(destination_id, position), position >= 1
 export const REPLACE_MODULE_TABLE_CONFIG: Readonly<Record<ReplaceModuleExecutionModuleKey, ReplaceModuleTableConfig>> = {
-  costOfLiving: { table: "premium_cost_of_living", keyStrategy: "record_key", columns: { category: "category", monthlyLow: "monthly_low", monthlyHigh: "monthly_high", currency: "currency", householdType: "household_type", lifestyleTier: "lifestyle_tier", stayModeKey: "stay_mode_key", verified: "verified", verifiedAt: "verified_at" } },
+  costOfLiving: { table: "premium_cost_of_living", keyStrategy: "record_key", columns: { category: "category", includedNotes: "included_notes", monthlyLow: "monthly_low", monthlyHigh: "monthly_high", currency: "currency", householdType: "household_type", lifestyleTier: "lifestyle_tier", stayModeKey: "stay_mode_key", verified: "verified", verifiedAt: "verified_at" } },
   climateMonthly: { table: "premium_climate_monthly", keyStrategy: "record_key", columns: { monthKey: "month_key", avgHighTemp: "avg_high_temp", avgLowTemp: "avg_low_temp", precipitationMm: "precipitation_mm", humidityPct: "humidity_pct" } },
   housing: { table: "premium_housing_property", keyStrategy: "record_key", columns: { summary: "restrictions_summary", buyingSummary: "buying_process_summary", rentalSummary: "rental_rules_notes", stayModeKey: "stay_mode_key", canForeignersBuy: "can_foreigners_buy", residencyRequiredToBuy: "residency_required_to_buy", verified: "verified", verifiedAt: "verified_at" } },
   healthcare: { table: "premium_healthcare_insurance", keyStrategy: "record_key", columns: { summary: "system_summary", publicAccessSummary: "public_access_foreigners", insuranceSummary: "international_insurance_notes", privateCareAvailable: "private_care_available", topic: "topic", englishSpeakingCare: "english_speaking_care", typicalGpVisitCost: "typical_gp_visit_cost", typicalSpecialistCost: "typical_specialist_cost", verified: "verified", verifiedAt: "verified_at" } },
@@ -310,6 +310,7 @@ function buildReplaceModuleStatements(
           return [[field, column]];
         }),
         ...(operation.module === "healthcare" ? [["__costQualifiers", "metadata"]] : []),
+        ...(operation.module === "safetyRisks" && "mitigationNotes" in record ? [["__mitigationNotes", "metadata"]] : []),
         ...(Object.keys(transportationQualifiers).length > 0 ? [["__booleanQualifiers", "metadata"]] : []),
       ];
       const columnNames = columnEntries.map(([, dbColumn]) => dbColumn);
@@ -320,7 +321,10 @@ function buildReplaceModuleStatements(
         )
         : {};
       const columnValues = columnEntries.map(([storedField, dbColumn]) => {
-        if (dbColumn === "metadata") return operation.module === "healthcare" ? costQualifiers : transportationQualifiers;
+        if (dbColumn === "metadata") {
+          if (operation.module === "safetyRisks") return { mitigation_notes: record.mitigationNotes ?? null };
+          return operation.module === "healthcare" ? costQualifiers : transportationQualifiers;
+        }
         if (dbColumn === "typical_gp_visit_cost") {
           return healthcareNumericStorageValue(record[storedField], costQualifiers.typical_gp_visit_cost_qualifier);
         }
