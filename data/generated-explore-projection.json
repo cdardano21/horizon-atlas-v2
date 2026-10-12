@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "672cbf90aea2e3c3634f308c04c5b64466f4a1df4df7b0fb3ca761e1d69f1463",
-  "digest": "9fe151ee5f0f52b1b993db2339e3a3920b64ea9012b08502c5e3d27ee88f70e5",
+  "sourceSignature": "1c0146d3b49e1947a2ed81112f091a4c0f037f202a7c61b9d6225d54d8ba6531",
+  "digest": "6e5954fccc950f632f98ada74dab6c0dcbf8b4cfb13a56e8e3dab8ccfd2577ae",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,13 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "antigua-guatemala-guatemala",
+        "slug": "antigua-guatemala-guatemala",
+        "name": "Antigua Guatemala",
+        "country": "Guatemala",
+        "summary": "Antigua Guatemala combines a compact historic centre, named church and convent sites, cafés and surrounding village communities."
       },
       {
         "key": "perth-australia",
@@ -2167,6 +2174,13 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "antigua-guatemala-guatemala",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Arco_de_Santa_Catalina_Antigua_Guatemala_edit2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Santa Catalina Arch, Antigua Guatemala"
         }
       },
       {

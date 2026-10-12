@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "7b8d5baf38d1e6c2a25be4aca8692535696e61a0c2647a0a34b93b5fe37c1a53",
-  "digest": "491073d48e42fe808202ec3652ea3ca44e5f1866956a1fc3aff0284c8004c78e",
+  "sourceSignature": "196c1de7102b5a125ad01e447084c3c726c1833a444d7b2596d1f3ac5c5f3848",
+  "digest": "00632fdf82bb270f0afd1fdcbe91b4a70fa10f2f825a76e94239a0475904639c",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,36 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "antigua-guatemala-guatemala",
+        "name": "Antigua Guatemala",
+        "slug": "antigua-guatemala-guatemala",
+        "country": "Guatemala",
+        "countryCode": "GT",
+        "summary": "Antigua Guatemala combines a compact historic centre, named church and convent sites, cafés and surrounding village communities.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -11379,6 +11409,23 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "antigua-guatemala-guatemala",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "perth-australia",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -15842,6 +15889,13 @@
         }
       },
       {
+        "key": "antigua-guatemala-guatemala",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Arco_de_Santa_Catalina_Antigua_Guatemala_edit2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Santa Catalina Arch, Antigua Guatemala"
+        }
+      },
+      {
         "key": "perth-australia",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/d/da/Perth_%28AU%29%2C_View_from_Kings_Park_--_2019_--_0525-30.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -17692,6 +17746,12 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "antigua-guatemala-guatemala",
+        "singleMonthlyUsd": 1375,
+        "coupleMonthlyUsd": 1975,
         "estimateYear": 2026
       },
       {
