@@ -37,6 +37,56 @@ export interface ExpansionWorkbookRegistryEntry {
 
 export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntry[] = [
 {
+  "registryId": "legacy-las-palmas-spain-01",
+  "workbookPath": "data/legacy-las-palmas-spain-01/DestinationFinderAI-las-palmas-de-gran-canaria-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "las-palmas-spain"
+  ],
+  "expectedSha256": "07e3dff9b63f8fb4c54911868ebca9492968aebed899a752b83c8eed32b1eba1"
+},
+{
+  "registryId": "legacy-la-rochelle-france-01",
+  "workbookPath": "data/legacy-la-rochelle-france-01/DestinationFinderAI-la-rochelle-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "la-rochelle-france"
+  ],
+  "expectedSha256": "9e6a5a67ff9a43662d754de540e0a7231a8277f76df53967ce3f06160f627e0e"
+},
+{
+  "registryId": "legacy-freiburg-im-breisgau-germany-01",
+  "workbookPath": "data/legacy-freiburg-im-breisgau-germany-01/DestinationFinderAI-freiburg-im-breisgau-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "freiburg-im-breisgau-germany"
+  ],
+  "expectedSha256": "0c5874e01684e8b2659d2f8d189f9f940ddbc2907d0201b105d91f77f0733410"
+},
+{
+  "registryId": "legacy-viseu-portugal-01",
+  "workbookPath": "data/legacy-viseu-portugal-01/DestinationFinderAI-viseu-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "viseu-portugal"
+  ],
+  "expectedSha256": "841e73e2aa6c69dbc4f6e8d3f5b775e19d2722870f26e7fa0344d57255978549"
+},
+{
+  "registryId": "legacy-taichung-taiwan-01",
+  "workbookPath": "data/legacy-taichung-taiwan-01/DestinationFinderAI-taichung-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "taichung-taiwan"
+  ],
+  "expectedSha256": "ca00d75716c630c6dcd6f0e7df83134fb7d8b7a862d2f71cc30049647241387e"
+},
+{
   "registryId": "legacy-hobart-australia-01",
   "workbookPath": "data/legacy-hobart-australia-01/DestinationFinderAI-hobart-Premium-Candidate-v3.3.xlsx",
   "environment": "production",

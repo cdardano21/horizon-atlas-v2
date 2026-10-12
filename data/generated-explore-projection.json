@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "d1402170f5f0ac75a73f7f06a22fc3160b4d7aff8c9d2f4cc89ab1033e383cbe",
-  "digest": "2af87ea40259e410f035447042bf363aa1c74d3ed88697e626e89a60448ba382",
+  "sourceSignature": "cc4cf88c2f0334140029de0e44269b64001f48b9519d2113125bf2930aa2f3cd",
+  "digest": "b6b84cbdf2264b953a4ec34b456b9bbbaee95ddf4e5d411753161b65f9891937",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "las-palmas-spain",
+        "slug": "las-palmas-spain",
+        "name": "Las Palmas de Gran Canaria",
+        "country": "Spain",
+        "summary": "Las Palmas de Gran Canaria offers two distinct starting points for a longer stay: the historic Vegueta–Triana core and the northern beach-and-port districts."
+      },
+      {
+        "key": "la-rochelle-france",
+        "slug": "la-rochelle-france",
+        "name": "La Rochelle",
+        "country": "France",
+        "summary": "La Rochelle is a maritime city whose Old Port, historical streets and cultural venues can support a longer stay beyond a summer itinerary."
+      },
+      {
+        "key": "freiburg-im-breisgau-germany",
+        "slug": "freiburg-im-breisgau-germany",
+        "name": "Freiburg im Breisgau",
+        "country": "Germany",
+        "summary": "Freiburg im Breisgau combines a historic core with distinct residential quarters and the Black Forest edge."
+      },
+      {
+        "key": "viseu-portugal",
+        "slug": "viseu-portugal",
+        "name": "Viseu",
+        "country": "Portugal",
+        "summary": "Viseu is an inland city whose historic core, public gardens and Dão cultural setting offer a different long-stay proposition from Portugal’s beach cities."
+      },
+      {
+        "key": "taichung-taiwan",
+        "slug": "taichung-taiwan",
+        "name": "Taichung",
+        "country": "Taiwan",
+        "summary": "Taichung’s central urban districts provide several different long-stay settings: historic commerce in Central District, museums and greenway activity in West District, shopping and university-related activity in North District, and the theater and newer commercial areas of Xitun."
       },
       {
         "key": "hobart-australia",
@@ -2041,6 +2076,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "las-palmas-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Playa_de_las_Canteras%2C_Las_Palmas_de_Gran_Canaria_-_51605256627.jpg",
+          "alt": "Boats on Las Canteras beach at dusk"
+        }
+      },
+      {
+        "key": "la-rochelle-france",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b4/La_rochelle%2C_Le_vieux_port.JPG",
+          "alt": "Aerial view of La Rochelle’s Old Port"
+        }
+      },
+      {
+        "key": "freiburg-im-breisgau-germany",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/65/Freiburg_im_Breisgau%2C_M%C3%BCnsterplatz_--_2025_--_8135.jpg",
+          "alt": "Münsterplatz in Freiburg im Breisgau"
+        }
+      },
+      {
+        "key": "viseu-portugal",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Viseu_-_S%C3%A9_1.jpg",
+          "alt": "The cathedral façade in Viseu"
+        }
+      },
+      {
+        "key": "taichung-taiwan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/2a/VVG_Theater_Cafe_in_the_National_Taichung_Theater_January_2026.jpg",
+          "alt": "VVG Theater café interior signage, Taichung"
         }
       },
       {
