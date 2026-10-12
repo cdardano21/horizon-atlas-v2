@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "196c1de7102b5a125ad01e447084c3c726c1833a444d7b2596d1f3ac5c5f3848",
-  "digest": "00632fdf82bb270f0afd1fdcbe91b4a70fa10f2f825a76e94239a0475904639c",
+  "sourceSignature": "e007255dbeb9b01d801047071b860f16454047a2b22c45feb291343c1b8ae298",
+  "digest": "b2b3c768bd248cb60ad54af63a1b9945360d84eae940c9239b0075b127519967",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,126 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "cadiz-spain",
+        "name": "Cádiz",
+        "slug": "cadiz-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "Cádiz offers a compact historic-city routine beside the Atlantic, with markets and cultural sites close enough to revisit rather than tick off once.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "heidelberg-germany",
+        "name": "Heidelberg",
+        "slug": "heidelberg-germany",
+        "country": "Germany",
+        "countryCode": "DE",
+        "summary": "Heidelberg is more than an attractive old town: the university, medical campus and residential districts create different daily routines.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "puerto-varas-chile",
+        "name": "Puerto Varas",
+        "slug": "puerto-varas-chile",
+        "country": "Chile",
+        "countryCode": "CL",
+        "summary": "Puerto Varas offers a lake-oriented urban base with heritage streets and regional excursions, but it should not be confused with neighboring Frutillar or with the much wider commune.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "nagano-japan",
+        "name": "Nagano",
+        "slug": "nagano-japan",
+        "country": "Japan",
+        "countryCode": "JP",
+        "summary": "Nagano combines a station-centered urban routine with Zenkoji temple culture and a municipality extending into mountain districts.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -11409,6 +11529,74 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "cadiz-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "heidelberg-germany",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "puerto-varas-chile",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "nagano-japan",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "antigua-guatemala-guatemala",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -15889,6 +16077,34 @@
         }
       },
       {
+        "key": "cadiz-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Inside_of_C%C3%A1diz_Cathedral_%286931279748%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Interior of Cádiz Cathedral, Spain"
+        }
+      },
+      {
+        "key": "heidelberg-germany",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/de/Castle%2C_Old_Bridge_%28Heidelberg%29_Night_Aug_2020.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Heidelberg Castle and Old Bridge at night"
+        }
+      },
+      {
+        "key": "puerto-varas-chile",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/4f/00_1691_Church_of_Puerto_Varas_%28Chile%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Sagrado Corazón church, Puerto Varas, Chile"
+        }
+      },
+      {
+        "key": "nagano-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/66/Zenkoji_temple_4.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Zenkoji temple, Nagano, Japan"
+        }
+      },
+      {
         "key": "antigua-guatemala-guatemala",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Arco_de_Santa_Catalina_Antigua_Guatemala_edit2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -17746,6 +17962,30 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "cadiz-spain",
+        "singleMonthlyUsd": 2000,
+        "coupleMonthlyUsd": 2700,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "heidelberg-germany",
+        "singleMonthlyUsd": 2575,
+        "coupleMonthlyUsd": 3575,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "puerto-varas-chile",
+        "singleMonthlyUsd": 1400,
+        "coupleMonthlyUsd": 1975,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "nagano-japan",
+        "singleMonthlyUsd": 1300,
+        "coupleMonthlyUsd": 1850,
         "estimateYear": 2026
       },
       {
