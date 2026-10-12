@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "d0242241e423870d902a58d3a3908fe39da2c98750c8c499c0b1b26492385d04",
-  "digest": "44e2cc394e45702cc48895527e7c7f12b2cbb6db628f4a6ca137ab453b1b9e66",
+  "sourceSignature": "cf2153e30cb53ee217bbf315c65e1eefc8d239a1f5a6c24fbdff67f944f21fd6",
+  "digest": "ff5a5efa74acb5ce2e5c64d3a92ab1de9ef1d3f644f91dedac9ec083b81ac67c",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,34 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "la-paz-mexico",
+        "slug": "la-paz-mexico",
+        "name": "La Paz",
+        "country": "Mexico",
+        "summary": "La Paz pairs a bayfront promenade with a compact cultural center in Baja California Sur."
+      },
+      {
+        "key": "queretaro-mexico",
+        "slug": "queretaro-mexico",
+        "name": "Querétaro",
+        "country": "Mexico",
+        "summary": "Santiago de Querétaro offers an inland historic-city setting organized around plazas, cultural buildings and the aqueduct."
+      },
+      {
+        "key": "bologna-italy",
+        "slug": "bologna-italy",
+        "name": "Bologna",
+        "country": "Italy",
+        "summary": "Bologna’s food markets, porticoes and museums provide a practical framework for a long stay."
+      },
+      {
+        "key": "medellin-colombia",
+        "slug": "medellin-colombia",
+        "name": "Medellín",
+        "country": "Colombia",
+        "summary": "Medellín’s official visitor material distinguishes Laureles, El Poblado and Ciudad del Río rather than presenting one uniform urban lifestyle."
       },
       {
         "key": "bangkok-thailand",
@@ -2006,6 +2034,34 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "la-paz-mexico",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/La_Paz_malecon_1702_p2.jpg/1280px-La_Paz_malecon_1702_p2.jpg",
+          "alt": "La Paz promenade, Baja California Sur, Mexico"
+        }
+      },
+      {
+        "key": "queretaro-mexico",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Acueducto_20170917p1.jpg/1280px-Acueducto_20170917p1.jpg",
+          "alt": "Santiago de Querétaro Aqueduct, México"
+        }
+      },
+      {
+        "key": "bologna-italy",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Bologna_-_Piazza_Maggiore_-_202109271358.jpg/1280px-Bologna_-_Piazza_Maggiore_-_202109271358.jpg",
+          "alt": "Bologna - Piazza Maggiore palazzo Re Enzo"
+        }
+      },
+      {
+        "key": "medellin-colombia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Medellin_Milla_de_Oro.jpg/1280px-Medellin_Milla_de_Oro.jpg",
+          "alt": "Medellín milla de oro"
         }
       },
       {

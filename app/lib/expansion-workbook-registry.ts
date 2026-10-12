@@ -37,6 +37,46 @@ export interface ExpansionWorkbookRegistryEntry {
 
 export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntry[] = [
 {
+  "registryId": "legacy-la-paz-mexico-01",
+  "workbookPath": "data/legacy-la-paz-mexico-01/DestinationFinderAI-la-paz-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "la-paz-mexico"
+  ],
+  "expectedSha256": "5dc227cfffae5195ddb77291e5aef318981184b0e2d81e57c7c47c9cad4762c0"
+},
+{
+  "registryId": "legacy-queretaro-mexico-01",
+  "workbookPath": "data/legacy-queretaro-mexico-01/DestinationFinderAI-queretaro-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "queretaro-mexico"
+  ],
+  "expectedSha256": "4a71f7715bea089f18b74a884b32ea0be8233270ea253eb196ff2557f7e8461c"
+},
+{
+  "registryId": "legacy-bologna-italy-01",
+  "workbookPath": "data/legacy-bologna-italy-01/DestinationFinderAI-bologna-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "bologna-italy"
+  ],
+  "expectedSha256": "3f6940da7f9a3d1fb9318174dda83267ab420cc10b53178a6dc4bcb842612783"
+},
+{
+  "registryId": "legacy-medellin-colombia-01",
+  "workbookPath": "data/legacy-medellin-colombia-01/DestinationFinderAI-medellin-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "medellin-colombia"
+  ],
+  "expectedSha256": "0a6db8f1b35db77eacc28f81ca9907b07bf1f0d09cb586947e7f47ceda9a9566"
+},
+{
   "registryId": "legacy-bangkok-thailand-01",
   "workbookPath": "data/legacy-bangkok-thailand-01/DestinationFinderAI-bangkok-thailand-Premium-Review-r2-v3.3.xlsx",
   "environment": "production",

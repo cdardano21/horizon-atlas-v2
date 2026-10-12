@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "15628f329d7f704c60136c85c154439ba3b81c4ff80f662f83195b40c29946c4",
-  "digest": "643ea6c875441cbd34b40b550c014410e0e34b04135a7595f70941bac28dac55",
+  "sourceSignature": "7e7f6997075535d23f673bb4997889b34c59927b4e17a920e205e36f4959d72d",
+  "digest": "4ebb13291aa7d3423670e5d5d6341335bf9fad9279097641b2bcd91dddfd747d",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,126 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "la-paz-mexico",
+        "name": "La Paz",
+        "slug": "la-paz-mexico",
+        "country": "Mexico",
+        "countryCode": "MX",
+        "summary": "La Paz pairs a bayfront promenade with a compact cultural center in Baja California Sur.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "queretaro-mexico",
+        "name": "Querétaro",
+        "slug": "queretaro-mexico",
+        "country": "Mexico",
+        "countryCode": "MX",
+        "summary": "Santiago de Querétaro offers an inland historic-city setting organized around plazas, cultural buildings and the aqueduct.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "bologna-italy",
+        "name": "Bologna",
+        "slug": "bologna-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "Bologna’s food markets, porticoes and museums provide a practical framework for a long stay.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "medellin-colombia",
+        "name": "Medellín",
+        "slug": "medellin-colombia",
+        "country": "Colombia",
+        "countryCode": "CO",
+        "summary": "Medellín’s official visitor material distinguishes Laureles, El Poblado and Ciudad del Río rather than presenting one uniform urban lifestyle.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -10689,6 +10809,74 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "la-paz-mexico",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "GOOD_PRIVATE_AVAILABLE",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "queretaro-mexico",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "GOOD_PRIVATE_AVAILABLE",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "bologna-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "medellin-colombia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "GOOD_PRIVATE_AVAILABLE",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "bangkok-thailand",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -14761,6 +14949,34 @@
         }
       },
       {
+        "key": "la-paz-mexico",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/La_Paz_malecon_1702_p2.jpg/1280px-La_Paz_malecon_1702_p2.jpg",
+          "alt": "La Paz promenade, Baja California Sur, Mexico"
+        }
+      },
+      {
+        "key": "queretaro-mexico",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Acueducto_20170917p1.jpg/1280px-Acueducto_20170917p1.jpg",
+          "alt": "Santiago de Querétaro Aqueduct, México"
+        }
+      },
+      {
+        "key": "bologna-italy",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Bologna_-_Piazza_Maggiore_-_202109271358.jpg/1280px-Bologna_-_Piazza_Maggiore_-_202109271358.jpg",
+          "alt": "Bologna - Piazza Maggiore palazzo Re Enzo"
+        }
+      },
+      {
+        "key": "medellin-colombia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Medellin_Milla_de_Oro.jpg/1280px-Medellin_Milla_de_Oro.jpg",
+          "alt": "Medellín milla de oro"
+        }
+      },
+      {
         "key": "bangkok-thailand",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Templo_Wat_Arun%2C_Bangkok%2C_Tailandia%2C_2013-08-22%2C_DD_30.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -16450,6 +16666,30 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "la-paz-mexico",
+        "singleMonthlyUsd": 1475,
+        "coupleMonthlyUsd": 2000,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "queretaro-mexico",
+        "singleMonthlyUsd": 1500,
+        "coupleMonthlyUsd": 2100,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "bologna-italy",
+        "singleMonthlyUsd": 2375,
+        "coupleMonthlyUsd": 3300,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "medellin-colombia",
+        "singleMonthlyUsd": 1725,
+        "coupleMonthlyUsd": 2375,
         "estimateYear": 2026
       },
       {
