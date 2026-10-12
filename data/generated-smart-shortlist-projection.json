@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "f27d4544481bc12b3916e1dff216981a4dde928c7d5c72cd6bfd007750ae616b",
-  "digest": "3a0c80935fac0b38bc1426b4a464e7b6de32bb8d339dca76ce63d5bf2c94e98f",
+  "sourceSignature": "7b8d5baf38d1e6c2a25be4aca8692535696e61a0c2647a0a34b93b5fe37c1a53",
+  "digest": "491073d48e42fe808202ec3652ea3ca44e5f1866956a1fc3aff0284c8004c78e",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,126 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "perth-australia",
+        "name": "Perth",
+        "slug": "perth-australia",
+        "country": "Australia",
+        "countryCode": "AU",
+        "summary": "Perth combines Swan River city life with a much wider coastal metropolitan area.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "cork-ireland",
+        "name": "Cork",
+        "slug": "cork-ireland",
+        "country": "Ireland",
+        "countryCode": "IE",
+        "summary": "Cork offers a compact food-and-culture centre around the River Lee, with residential choices extending into hillier and more suburban districts.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "turin-italy",
+        "name": "Turin",
+        "slug": "turin-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "Turin offers a dense urban routine built around museums, arcades, markets and public transport.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "escazu-costa-rica",
+        "name": "Escazú",
+        "slug": "escazu-costa-rica",
+        "country": "Costa Rica",
+        "countryCode": "CR",
+        "summary": "Escazú is a varied canton west of San José, not one uniform expat neighbourhood.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -11259,6 +11379,74 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "perth-australia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "cork-ireland",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "turin-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "escazu-costa-rica",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "puebla-mexico",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -15654,6 +15842,34 @@
         }
       },
       {
+        "key": "perth-australia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/da/Perth_%28AU%29%2C_View_from_Kings_Park_--_2019_--_0525-30.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Perth skyline and Swan River viewed from Kings Park"
+        }
+      },
+      {
+        "key": "cork-ireland",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Weir_lee_fields_cork.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "River Lee weir and riverside buildings, Cork, Ireland"
+        }
+      },
+      {
+        "key": "turin-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Po_river_%40_Observatory_%40_Mole_Antonelliana_%40_Turin_%2849278540976%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Po River and Turin viewed from the Mole Antonelliana"
+        }
+      },
+      {
+        "key": "escazu-costa-rica",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Iglesia_San_Miguel_-_Escazu_-Costa_Rica_%285%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "San Miguel church, Escazú, Costa Rica"
+        }
+      },
+      {
         "key": "puebla-mexico",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Catedral_de_Puebla%2C_M%C3%A9xico%2C_2013-10-11%2C_DD_05.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -17476,6 +17692,30 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "perth-australia",
+        "singleMonthlyUsd": 2825,
+        "coupleMonthlyUsd": 3600,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "cork-ireland",
+        "singleMonthlyUsd": 3300,
+        "coupleMonthlyUsd": 4275,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "turin-italy",
+        "singleMonthlyUsd": 1900,
+        "coupleMonthlyUsd": 2650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "escazu-costa-rica",
+        "singleMonthlyUsd": 1975,
+        "coupleMonthlyUsd": 2850,
         "estimateYear": 2026
       },
       {

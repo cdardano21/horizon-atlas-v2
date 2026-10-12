@@ -36,6 +36,8 @@ export interface ExpansionWorkbookRegistryEntry {
 }
 
 export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntry[] = [
+{"registryId": "legacy-perth-australia-01", "workbookPath": "data/legacy-perth-australia-01/DestinationFinderAI-perth-Premium-Candidate-v3.3.xlsx", "expectedSha256": "dfc8755b270594da2360903a0866eb44f2afc87bf5bae72ead10aa2477ed9d18", "expectedDestinationKeys": ["perth-australia"], "environment": "production", "candidateDiscovery": "published-catalog"},{"registryId": "legacy-cork-ireland-01", "workbookPath": "data/legacy-cork-ireland-01/DestinationFinderAI-cork-Premium-Candidate-v3.3.xlsx", "expectedSha256": "cc132c2fc956577cb795161f98c2ee0bb6b5af41de8eb103689dadaa36036329", "expectedDestinationKeys": ["cork-ireland"], "environment": "production", "candidateDiscovery": "published-catalog"},{"registryId": "legacy-turin-italy-01", "workbookPath": "data/legacy-turin-italy-01/DestinationFinderAI-turin-Premium-Candidate-v3.3.xlsx", "expectedSha256": "51181eec874d3e96fea3a9c3729ccab75bd163d449ea406e3a80c0387d876508", "expectedDestinationKeys": ["turin-italy"], "environment": "production", "candidateDiscovery": "published-catalog"},{"registryId": "legacy-escazu-costa-rica-01", "workbookPath": "data/legacy-escazu-costa-rica-01/DestinationFinderAI-escazu-Premium-Candidate-v3.3.xlsx", "expectedSha256": "1bcda4d1d9c70aa4bfe32324324e101e091048c37e5478264c93f3a6a156c6b7", "expectedDestinationKeys": ["escazu-costa-rica"], "environment": "production", "candidateDiscovery": "published-catalog"},
+
 {
   "registryId": "legacy-puebla-mexico-01",
   "workbookPath": "data/legacy-puebla-mexico-01/DestinationFinderAI-puebla-Premium-Candidate-v3.3.xlsx",

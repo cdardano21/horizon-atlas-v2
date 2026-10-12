@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "c468015ec6e4822f13a23145fc31891ea30a36c8605822500e9d5f55368a2c52",
-  "digest": "b8f2cd148a7ffdce99c22b5287aed24722979501e67c5a2298490fd0c8e94f62",
+  "sourceSignature": "672cbf90aea2e3c3634f308c04c5b64466f4a1df4df7b0fb3ca761e1d69f1463",
+  "digest": "9fe151ee5f0f52b1b993db2339e3a3920b64ea9012b08502c5e3d27ee88f70e5",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,34 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "perth-australia",
+        "slug": "perth-australia",
+        "name": "Perth",
+        "country": "Australia",
+        "summary": "Perth combines Swan River city life with a much wider coastal metropolitan area."
+      },
+      {
+        "key": "cork-ireland",
+        "slug": "cork-ireland",
+        "name": "Cork",
+        "country": "Ireland",
+        "summary": "Cork offers a compact food-and-culture centre around the River Lee, with residential choices extending into hillier and more suburban districts."
+      },
+      {
+        "key": "turin-italy",
+        "slug": "turin-italy",
+        "name": "Turin",
+        "country": "Italy",
+        "summary": "Turin offers a dense urban routine built around museums, arcades, markets and public transport."
+      },
+      {
+        "key": "escazu-costa-rica",
+        "slug": "escazu-costa-rica",
+        "name": "Escazú",
+        "country": "Costa Rica",
+        "summary": "Escazú is a varied canton west of San José, not one uniform expat neighbourhood."
       },
       {
         "key": "puebla-mexico",
@@ -2139,6 +2167,34 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "perth-australia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/da/Perth_%28AU%29%2C_View_from_Kings_Park_--_2019_--_0525-30.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Perth skyline and Swan River viewed from Kings Park"
+        }
+      },
+      {
+        "key": "cork-ireland",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Weir_lee_fields_cork.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "River Lee weir and riverside buildings, Cork, Ireland"
+        }
+      },
+      {
+        "key": "turin-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Po_river_%40_Observatory_%40_Mole_Antonelliana_%40_Turin_%2849278540976%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Po River and Turin viewed from the Mole Antonelliana"
+        }
+      },
+      {
+        "key": "escazu-costa-rica",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Iglesia_San_Miguel_-_Escazu_-Costa_Rica_%285%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "San Miguel church, Escazú, Costa Rica"
         }
       },
       {
