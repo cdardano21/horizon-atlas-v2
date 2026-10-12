@@ -37,6 +37,46 @@ export interface ExpansionWorkbookRegistryEntry {
 
 export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntry[] = [
 {
+  "registryId": "legacy-puebla-mexico-01",
+  "workbookPath": "data/legacy-puebla-mexico-01/DestinationFinderAI-puebla-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "puebla-mexico"
+  ],
+  "expectedSha256": "11421e242948e2df3c824f75e8de769d3faac3fd6cb81984364d374a9b4a4c21"
+},
+{
+  "registryId": "legacy-split-croatia-01",
+  "workbookPath": "data/legacy-split-croatia-01/DestinationFinderAI-split-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "split-croatia"
+  ],
+  "expectedSha256": "af0278137841414099d38a9bd481d5a2ed607aa70dd45a68290ba3a4e964f07d"
+},
+{
+  "registryId": "legacy-cebu-city-philippines-01",
+  "workbookPath": "data/legacy-cebu-city-philippines-01/DestinationFinderAI-cebu-city-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "cebu-city-philippines"
+  ],
+  "expectedSha256": "c0a85a77574289ff1f1fdce559173f1fa400e0c8cbf42fa871cbf809678acf56"
+},
+{
+  "registryId": "legacy-halifax-canada-01",
+  "workbookPath": "data/legacy-halifax-canada-01/DestinationFinderAI-halifax-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "halifax-canada"
+  ],
+  "expectedSha256": "25951cf5e533bb087a562842880b06b8d4fcb2157d04390db16eb49ecfa9f4b3"
+},
+{
   "registryId": "legacy-wellington-new-zealand-01",
   "workbookPath": "data/legacy-wellington-new-zealand-01/DestinationFinderAI-wellington-Premium-Candidate-v3.3.xlsx",
   "environment": "production",

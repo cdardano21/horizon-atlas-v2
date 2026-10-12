@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "ef13cf1a1a9f522b2d5ae24fa5002a631379289b5fc203d51647a089dc3c7d46",
-  "digest": "261d1e156ef9ca434fbcab7b19dfdf4b01575beb9700639af395fce2b9b53285",
+  "sourceSignature": "f27d4544481bc12b3916e1dff216981a4dde928c7d5c72cd6bfd007750ae616b",
+  "digest": "3a0c80935fac0b38bc1426b4a464e7b6de32bb8d339dca76ce63d5bf2c94e98f",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,126 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "puebla-mexico",
+        "name": "Puebla",
+        "slug": "puebla-mexico",
+        "country": "Mexico",
+        "countryCode": "MX",
+        "summary": "Puebla offers a historic urban setting with museums, regional cooking and residential barrios around the central grid.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "split-croatia",
+        "name": "Split",
+        "slug": "split-croatia",
+        "country": "Croatia",
+        "countryCode": "HR",
+        "summary": "Split combines a lived-in historic core, working port and residential districts around the Marjan peninsula and eastern coast.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "cebu-city-philippines",
+        "name": "Cebu City",
+        "slug": "cebu-city-philippines",
+        "country": "Philippines",
+        "countryCode": "PH",
+        "summary": "Cebu City pairs business districts and major shopping complexes with an older heritage centre and upland residential areas.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "halifax-canada",
+        "name": "Halifax",
+        "slug": "halifax-canada",
+        "country": "Canada",
+        "countryCode": "CA",
+        "summary": "Halifax offers harbour-oriented city life, cultural institutions and residential districts with different relationships to the downtown core.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -11139,6 +11259,74 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "puebla-mexico",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "split-croatia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "cebu-city-philippines",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "halifax-canada",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "wellington-new-zealand",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -15466,6 +15654,34 @@
         }
       },
       {
+        "key": "puebla-mexico",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Catedral_de_Puebla%2C_M%C3%A9xico%2C_2013-10-11%2C_DD_05.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Cathedral façade, Puebla, Mexico"
+        }
+      },
+      {
+        "key": "split-croatia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Harbour%2C_Split_%28P1080940-Pano%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Split harbour waterfront, Croatia"
+        }
+      },
+      {
+        "key": "cebu-city-philippines",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a1/San_Pedro_Fort_Cebu_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Fort San Pedro entrance, Cebu City, Philippines"
+        }
+      },
+      {
+        "key": "halifax-canada",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/4e/2022-08-15_01_Wide_angle_view_of_Halifax_skyline%2C_Nova_Scotia%2C_Canada.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Halifax skyline and waterfront, Nova Scotia, Canada"
+        }
+      },
+      {
         "key": "wellington-new-zealand",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/4/42/Wellington_Waterfront.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -17260,6 +17476,30 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "puebla-mexico",
+        "singleMonthlyUsd": 1150,
+        "coupleMonthlyUsd": 1625,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "split-croatia",
+        "singleMonthlyUsd": 2100,
+        "coupleMonthlyUsd": 2975,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "cebu-city-philippines",
+        "singleMonthlyUsd": 950,
+        "coupleMonthlyUsd": 1300,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "halifax-canada",
+        "singleMonthlyUsd": 2500,
+        "coupleMonthlyUsd": 3350,
         "estimateYear": 2026
       },
       {

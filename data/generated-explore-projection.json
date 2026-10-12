@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "2f7bf431545302f03d64929ade36a4e8d881116003c71f85b7e19bba5a53110d",
-  "digest": "ff380da71912782eafbc3d834d7caeb6726ed220e10e0578ca0f042f00a0cab5",
+  "sourceSignature": "c468015ec6e4822f13a23145fc31891ea30a36c8605822500e9d5f55368a2c52",
+  "digest": "b8f2cd148a7ffdce99c22b5287aed24722979501e67c5a2298490fd0c8e94f62",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,34 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "puebla-mexico",
+        "slug": "puebla-mexico",
+        "name": "Puebla",
+        "country": "Mexico",
+        "summary": "Puebla offers a historic urban setting with museums, regional cooking and residential barrios around the central grid."
+      },
+      {
+        "key": "split-croatia",
+        "slug": "split-croatia",
+        "name": "Split",
+        "country": "Croatia",
+        "summary": "Split combines a lived-in historic core, working port and residential districts around the Marjan peninsula and eastern coast."
+      },
+      {
+        "key": "cebu-city-philippines",
+        "slug": "cebu-city-philippines",
+        "name": "Cebu City",
+        "country": "Philippines",
+        "summary": "Cebu City pairs business districts and major shopping complexes with an older heritage centre and upland residential areas."
+      },
+      {
+        "key": "halifax-canada",
+        "slug": "halifax-canada",
+        "name": "Halifax",
+        "country": "Canada",
+        "summary": "Halifax offers harbour-oriented city life, cultural institutions and residential districts with different relationships to the downtown core."
       },
       {
         "key": "wellington-new-zealand",
@@ -2111,6 +2139,34 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "puebla-mexico",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Catedral_de_Puebla%2C_M%C3%A9xico%2C_2013-10-11%2C_DD_05.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Cathedral façade, Puebla, Mexico"
+        }
+      },
+      {
+        "key": "split-croatia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Harbour%2C_Split_%28P1080940-Pano%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Split harbour waterfront, Croatia"
+        }
+      },
+      {
+        "key": "cebu-city-philippines",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a1/San_Pedro_Fort_Cebu_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Fort San Pedro entrance, Cebu City, Philippines"
+        }
+      },
+      {
+        "key": "halifax-canada",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/4e/2022-08-15_01_Wide_angle_view_of_Halifax_skyline%2C_Nova_Scotia%2C_Canada.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Halifax skyline and waterfront, Nova Scotia, Canada"
         }
       },
       {
