@@ -106,6 +106,7 @@ type ClimateValidationRow = {
   month: unknown;
   // Direct values or cached formula results; formulas are never evaluated here.
   values: unknown[];
+  uncachedFormulaFields?: string[];
 };
 
 export function validateClimateRows(rows: readonly ClimateValidationRow[], expectedKeys: readonly string[]): string[] {
@@ -124,8 +125,14 @@ export function validateClimateRows(rows: readonly ClimateValidationRow[], expec
     }
     fields.forEach((field, index) => {
       const value = row.values[index];
+      // PREMIUM_REQUIREMENTS permits humidity only where reliable; never coerce estimates or numeric strings.
+      const missingHumidity = field === "humidity_pct" && (value == null
+        || (typeof value === "string" && ["", "UNKNOWN"].includes(value.trim().toUpperCase())));
+      if (missingHumidity && !row.uncachedFormulaFields?.includes(field)) return;
       if (typeof value !== "number" || !Number.isFinite(value)) {
         errors.push(`${label}: ${field} requires a finite numeric direct value or cached formula result.`);
+      } else if (field === "humidity_pct" && (value < 0 || value > 100)) {
+        errors.push(`${label}: humidity_pct must be between 0 and 100 percent.`);
       }
     });
   }
@@ -224,6 +231,8 @@ for row in cached_workbook["CLIMATE_MONTHLY"].iter_rows(min_row=2):
     "destinationKey": str(row[0].value or ""),
     "month": row[1].value,
     "values": [cell.value for cell in row[2:6]],
+    "uncachedFormulaFields": [field for field, cell in zip(["avg_high_c", "avg_low_c", "rainfall_mm", "humidity_pct"], row[2:6])
+      if cell.value is None and workbook["CLIMATE_MONTHLY"][cell.coordinate].data_type == "f"],
   })
 
 excel_error_cells = []

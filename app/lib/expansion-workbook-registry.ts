@@ -37,6 +37,16 @@ export interface ExpansionWorkbookRegistryEntry {
 
 export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntry[] = [
 {
+  "registryId": "legacy-hobart-australia-01",
+  "workbookPath": "data/legacy-hobart-australia-01/DestinationFinderAI-hobart-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "hobart-australia"
+  ],
+  "expectedSha256": "f36f9db752dbe3a4c544f3a1645613a373858e2190590fb00dd058481b322bbf"
+},
+{
   "registryId": "legacy-la-paz-mexico-01",
   "workbookPath": "data/legacy-la-paz-mexico-01/DestinationFinderAI-la-paz-Premium-Candidate-v3.3.xlsx",
   "environment": "production",

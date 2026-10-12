@@ -126,6 +126,28 @@ describe("climate direct values and cached formula results", () => {
       "CLIMATE_MONTHLY fixture-city/1: avg_high_c requires a finite numeric direct value or cached formula result.",
     );
   });
+  it.each([null, undefined, "", "  ", "UNKNOWN", " unknown "])("accepts genuinely unavailable humidity %s", (value) => {
+    const fixture = rows(); fixture.forEach(row => { row.values[3] = value; });
+    expect(validateClimateRows(fixture, ["fixture-city"])).toEqual([]);
+  });
+  it.each([0, 65.5, 100])("accepts valid humidity percentage %s", (value) => {
+    const fixture = rows(); fixture[0].values[3] = value;
+    expect(validateClimateRows(fixture, ["fixture-city"])).toEqual([]);
+  });
+  it.each([-1, 101, NaN, Infinity, true, "65", "65%", "N/A", "=50+10"])("rejects invalid humidity %s", (value) => {
+    const fixture = rows(); fixture[0].values[3] = value;
+    expect(validateClimateRows(fixture, ["fixture-city"])).toHaveLength(1);
+    expect(validateClimateRows(fixture, ["fixture-city"])[0]).toContain("humidity_pct");
+  });
+  it("does not treat an uncached humidity formula as missing research", () => {
+    const fixture = rows().map(row => ({ ...row, uncachedFormulaFields: ["humidity_pct"] }));
+    fixture[0].values[3] = null;
+    expect(validateClimateRows(fixture, ["fixture-city"])).toHaveLength(1);
+  });
+  it.each([1, 2])("still requires the other climate field at index %s", (index) => {
+    const fixture = rows(); fixture[0].values[index] = null; fixture[0].values[3] = null;
+    expect(validateClimateRows(fixture, ["fixture-city"])).toHaveLength(1);
+  });
   it("rejects duplicate months even when the row count remains twelve", () => {
     const fixture = rows(); fixture[11].month = 1;
     const errors = validateClimateRows(fixture, ["fixture-city"]);
@@ -147,7 +169,7 @@ describe("climate direct values and cached formula results", () => {
 
 
 describe("climate workbook cell integration", () => {
-  it.each(["direct", "missing", "invalid", "uncached-formula"])("validates %s climate cells from actual workbook bytes", async (mode) => {
+  it.each(["direct", "missing", "invalid", "uncached-formula", "humidity-missing", "humidity-unknown", "humidity-invalid", "humidity-uncached-formula"])("validates %s climate cells from actual workbook bytes", async (mode) => {
     const dir = mkdtempSync(path.join(os.tmpdir(), "climate-validator-test-"));
     const workbookPath = path.join(dir, "fixture.xlsx");
     try {
@@ -158,13 +180,20 @@ s=w['CLIMATE_MONTHLY']
 if sys.argv[3]=='missing': s['C2']=None
 if sys.argv[3]=='invalid': s['C2']='invalid'
 if sys.argv[3]=='uncached-formula': s['C2']='=20+5'
+if sys.argv[3]=='humidity-missing': s['F2']=None
+if sys.argv[3]=='humidity-unknown': s['F2']='UNKNOWN'
+if sys.argv[3]=='humidity-invalid': s['F2']=101
+if sys.argv[3]=='humidity-uncached-formula': s['F2']='=50+10'
 w.save(sys.argv[2])
 `, WORKBOOK_PATH, workbookPath, mode]);
       const expectedDestinationKeys = [...EXPANSION_WORKBOOK_REGISTRY.find(entry => entry.registryId === "next-batch-20-private-import-authorized")!.expectedDestinationKeys];
       const report = await validateDestinationBatch({ workbookPath, expectedDestinationKeys });
-      if (mode === "direct") {
+      if (["direct", "humidity-missing", "humidity-unknown"].includes(mode)) {
         expect(report.errors).toEqual([]);
         expect(report.authoringReadinessStatus).toBe("AUTHORING_COMPLETE");
+      } else if (mode.startsWith("humidity-")) {
+        expect(report.errors.some(error => error.includes("humidity_pct"))).toBe(true);
+        expect(report.authoringReadinessStatus).toBe("REVIEW_REQUIRED");
       } else {
         expect(report.errors.some(error => error.includes("avg_high_c requires a finite numeric direct value or cached formula result"))).toBe(true);
         expect(report.authoringReadinessStatus).toBe("REVIEW_REQUIRED");

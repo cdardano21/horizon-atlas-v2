@@ -36,11 +36,11 @@ const row = (index: number, status = "published") => {
 afterEach(() => { reads.mode = "normal"; vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
 describe("complete matching projection", () => {
-  it("preserves serialized matching inputs and evaluated outcomes for all 254 identities", async () => {
+  it("preserves serialized matching inputs and evaluated outcomes for all 255 identities", async () => {
     const original = await loadSmartShortlistData(EXPANSION_WORKBOOK_REGISTRY, true);
     const expected = createSmartShortlistProjection(original);
     const actual = artifact();
-    expect(actual.data.candidates).toHaveLength(254);
+    expect(actual.data.candidates).toHaveLength(255);
     expect(JSON.stringify(actual)).toBe(JSON.stringify(expected));
     const restored = validateSmartShortlistProjection(actual);
     expect(JSON.stringify(restored)).toBe(JSON.stringify(expected.data));
@@ -105,10 +105,10 @@ describe("complete matching projection", () => {
     expect(() => validateSmartShortlistProjection(artifact(), EXPANSION_WORKBOOK_REGISTRY.slice(1))).toThrow(/stale or corrupt/);
     expect(() => validateSmartShortlistProjection(artifact(), EXPANSION_WORKBOOK_REGISTRY, () => Buffer.from("changed"))).toThrow(/SHA-256/);
   });
-  it("checks all twenty-one pinned workbooks on each validation", () => {
+  it("checks all twenty-six pinned workbooks on each validation", () => {
     const reader = vi.fn((file: string) => readFileSync(file));
     validateSmartShortlistProjection(artifact(), EXPANSION_WORKBOOK_REGISTRY, reader);
-    expect(reader).toHaveBeenCalledTimes(25);
+    expect(reader).toHaveBeenCalledTimes(26);
   });
   it("rejects corrupted matching evidence", () => {
     const value = artifact(); value.data.intelligence = [];

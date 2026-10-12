@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "7e7f6997075535d23f673bb4997889b34c59927b4e17a920e205e36f4959d72d",
-  "digest": "4ebb13291aa7d3423670e5d5d6341335bf9fad9279097641b2bcd91dddfd747d",
+  "sourceSignature": "45f982c382ff708eef0d6f13c781dc7d30c20595ddc6baf2e28792ac8a60828f",
+  "digest": "931f1041d244bc91951c8fc91fb2c34bfd57416514473feef76f2780d0be1ed6",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,36 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "hobart-australia",
+        "name": "Hobart",
+        "slug": "hobart-australia",
+        "country": "Australia",
+        "countryCode": "AU",
+        "summary": "Hobart combines a working-waterfront city center, Salamanca’s visitor activity and Battery Point’s historic residential setting.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -10809,6 +10839,23 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "hobart-australia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "GOOD_PRIVATE_AVAILABLE",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "la-paz-mexico",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -14949,6 +14996,13 @@
         }
       },
       {
+        "key": "hobart-australia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/bf/Restaurants_at_Salamanca_Place.jpg",
+          "alt": "Line of restaurants at Salamanca Place in Hobart, Tasmania"
+        }
+      },
+      {
         "key": "la-paz-mexico",
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/La_Paz_malecon_1702_p2.jpg/1280px-La_Paz_malecon_1702_p2.jpg",
@@ -16666,6 +16720,12 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "hobart-australia",
+        "singleMonthlyUsd": 2900,
+        "coupleMonthlyUsd": 3850,
         "estimateYear": 2026
       },
       {

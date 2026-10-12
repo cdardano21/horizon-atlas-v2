@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "cf2153e30cb53ee217bbf315c65e1eefc8d239a1f5a6c24fbdff67f944f21fd6",
-  "digest": "ff5a5efa74acb5ce2e5c64d3a92ab1de9ef1d3f644f91dedac9ec083b81ac67c",
+  "sourceSignature": "d1402170f5f0ac75a73f7f06a22fc3160b4d7aff8c9d2f4cc89ab1033e383cbe",
+  "digest": "2af87ea40259e410f035447042bf363aa1c74d3ed88697e626e89a60448ba382",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,13 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "hobart-australia",
+        "slug": "hobart-australia",
+        "name": "Hobart",
+        "country": "Australia",
+        "summary": "Hobart combines a working-waterfront city center, Salamanca’s visitor activity and Battery Point’s historic residential setting."
       },
       {
         "key": "la-paz-mexico",
@@ -2034,6 +2041,13 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "hobart-australia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/bf/Restaurants_at_Salamanca_Place.jpg",
+          "alt": "Line of restaurants at Salamanca Place in Hobart, Tasmania"
         }
       },
       {
