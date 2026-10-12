@@ -37,6 +37,56 @@ export interface ExpansionWorkbookRegistryEntry {
 
 export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntry[] = [
 {
+  "registryId": "legacy-wellington-new-zealand-01",
+  "workbookPath": "data/legacy-wellington-new-zealand-01/DestinationFinderAI-wellington-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "wellington-new-zealand"
+  ],
+  "expectedSha256": "07bb830864f42c3562fb93bf42e1837c0304d9ba25951ee9b63f88df9c608970"
+},
+{
+  "registryId": "legacy-charleston-south-carolina-united-states-01",
+  "workbookPath": "data/legacy-charleston-south-carolina-united-states-01/DestinationFinderAI-charleston-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "charleston-south-carolina-united-states"
+  ],
+  "expectedSha256": "5dce07577b9eaf50f69033dc8aa3ded836230f1f64dfce9448643af7359d8c1b"
+},
+{
+  "registryId": "legacy-kota-kinabalu-malaysia-01",
+  "workbookPath": "data/legacy-kota-kinabalu-malaysia-01/DestinationFinderAI-kota-kinabalu-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "kota-kinabalu-malaysia"
+  ],
+  "expectedSha256": "e616707a47a9389736a47e35c8f31223c03f9838094aa50db943e18a3e97bb61"
+},
+{
+  "registryId": "legacy-montpellier-france-01",
+  "workbookPath": "data/legacy-montpellier-france-01/DestinationFinderAI-montpellier-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "montpellier-france"
+  ],
+  "expectedSha256": "a4b1776599ed1484bece6c10f51097e74138355ae9e8faabda6fefa7ae2bb5ec"
+},
+{
+  "registryId": "legacy-victoria-canada-01",
+  "workbookPath": "data/legacy-victoria-canada-01/DestinationFinderAI-victoria-Premium-Candidate-v3.3.xlsx",
+  "environment": "production",
+  "candidateDiscovery": "published-catalog",
+  "expectedDestinationKeys": [
+    "victoria-canada"
+  ],
+  "expectedSha256": "0bf1ab0885786b687d4c5ff6f75a634a5959f6f4d79218f3d5a1b23310946d02"
+},
+{
   "registryId": "legacy-las-palmas-spain-01",
   "workbookPath": "data/legacy-las-palmas-spain-01/DestinationFinderAI-las-palmas-de-gran-canaria-Premium-Candidate-v3.3.xlsx",
   "environment": "production",

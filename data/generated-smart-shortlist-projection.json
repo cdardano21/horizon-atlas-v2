@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "14cc68ec2afdc0f72c8b484daef1469d44db5c3bd31c6180bef28a4ee79f95cc",
-  "digest": "e9e46d591339de2ae3e2b4eac2b4fa8fbec374af896618cb4d5938b381bf9723",
+  "sourceSignature": "ef13cf1a1a9f522b2d5ae24fa5002a631379289b5fc203d51647a089dc3c7d46",
+  "digest": "261d1e156ef9ca434fbcab7b19dfdf4b01575beb9700639af395fce2b9b53285",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "wellington-new-zealand",
+        "name": "Wellington",
+        "slug": "wellington-new-zealand",
+        "country": "New Zealand",
+        "countryCode": "NZ",
+        "summary": "Wellington combines a compact capital-city centre with waterfront cultural life and hillside residential districts.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "charleston-south-carolina-united-states",
+        "name": "Charleston",
+        "slug": "charleston-south-carolina-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Charleston offers an unusually rich historic urban setting and a strong dining scene.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "kota-kinabalu-malaysia",
+        "name": "Kota Kinabalu",
+        "slug": "kota-kinabalu-malaysia",
+        "country": "Malaysia",
+        "countryCode": "MY",
+        "summary": "Kota Kinabalu is a compact coastal gateway to Sabah, with markets and city services distinct from island and mountain excursions.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "montpellier-france",
+        "name": "Montpellier",
+        "slug": "montpellier-france",
+        "country": "France",
+        "countryCode": "FR",
+        "summary": "Montpellier pairs a medieval centre with planned districts extending toward the Lez.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "victoria-canada",
+        "name": "Victoria",
+        "slug": "victoria-canada",
+        "country": "Canada",
+        "countryCode": "CA",
+        "summary": "Victoria offers a compact harbour city with distinctive residential districts and access to Vancouver Island.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -10989,6 +11139,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "wellington-new-zealand",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "charleston-south-carolina-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "kota-kinabalu-malaysia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "montpellier-france",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "victoria-canada",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "las-palmas-spain",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -15231,6 +15466,41 @@
         }
       },
       {
+        "key": "wellington-new-zealand",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/42/Wellington_Waterfront.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Wellington waterfront, New Zealand"
+        }
+      },
+      {
+        "key": "charleston-south-carolina-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/ba/CharlestonSC_RainbowRow_500px.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Rainbow Row historic houses, Charleston, South Carolina"
+        }
+      },
+      {
+        "key": "kota-kinabalu-malaysia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/db/Kota_Kinabalu_waterfront%2C_2024_%2802%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Kota Kinabalu waterfront at dusk, Sabah"
+        }
+      },
+      {
+        "key": "montpellier-france",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Montpellier-_Place_de_la_Com%C3%A9die_-_52262234358.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Place de la Comédie, Montpellier"
+        }
+      },
+      {
+        "key": "victoria-canada",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/50/Inner_Harbour_Causeway%2C_Downtown_Victoria_BC.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Inner Harbour causeway and British Columbia Parliament Buildings, Victoria"
+        }
+      },
+      {
         "key": "las-palmas-spain",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Playa_de_las_Canteras%2C_Las_Palmas_de_Gran_Canaria_-_51605256627.jpg",
@@ -16990,6 +17260,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "wellington-new-zealand",
+        "singleMonthlyUsd": 2175,
+        "coupleMonthlyUsd": 2825,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "charleston-south-carolina-united-states",
+        "singleMonthlyUsd": 3675,
+        "coupleMonthlyUsd": 5000,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "kota-kinabalu-malaysia",
+        "singleMonthlyUsd": 1075,
+        "coupleMonthlyUsd": 1475,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "montpellier-france",
+        "singleMonthlyUsd": 1975,
+        "coupleMonthlyUsd": 2875,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "victoria-canada",
+        "singleMonthlyUsd": 2550,
+        "coupleMonthlyUsd": 3400,
         "estimateYear": 2026
       },
       {

@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "cc4cf88c2f0334140029de0e44269b64001f48b9519d2113125bf2930aa2f3cd",
-  "digest": "b6b84cbdf2264b953a4ec34b456b9bbbaee95ddf4e5d411753161b65f9891937",
+  "sourceSignature": "2f7bf431545302f03d64929ade36a4e8d881116003c71f85b7e19bba5a53110d",
+  "digest": "ff380da71912782eafbc3d834d7caeb6726ed220e10e0578ca0f042f00a0cab5",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "wellington-new-zealand",
+        "slug": "wellington-new-zealand",
+        "name": "Wellington",
+        "country": "New Zealand",
+        "summary": "Wellington combines a compact capital-city centre with waterfront cultural life and hillside residential districts."
+      },
+      {
+        "key": "charleston-south-carolina-united-states",
+        "slug": "charleston-south-carolina-united-states",
+        "name": "Charleston",
+        "country": "United States",
+        "summary": "Charleston offers an unusually rich historic urban setting and a strong dining scene."
+      },
+      {
+        "key": "kota-kinabalu-malaysia",
+        "slug": "kota-kinabalu-malaysia",
+        "name": "Kota Kinabalu",
+        "country": "Malaysia",
+        "summary": "Kota Kinabalu is a compact coastal gateway to Sabah, with markets and city services distinct from island and mountain excursions."
+      },
+      {
+        "key": "montpellier-france",
+        "slug": "montpellier-france",
+        "name": "Montpellier",
+        "country": "France",
+        "summary": "Montpellier pairs a medieval centre with planned districts extending toward the Lez."
+      },
+      {
+        "key": "victoria-canada",
+        "slug": "victoria-canada",
+        "name": "Victoria",
+        "country": "Canada",
+        "summary": "Victoria offers a compact harbour city with distinctive residential districts and access to Vancouver Island."
       },
       {
         "key": "las-palmas-spain",
@@ -2076,6 +2111,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "wellington-new-zealand",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/42/Wellington_Waterfront.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Wellington waterfront, New Zealand"
+        }
+      },
+      {
+        "key": "charleston-south-carolina-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/ba/CharlestonSC_RainbowRow_500px.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Rainbow Row historic houses, Charleston, South Carolina"
+        }
+      },
+      {
+        "key": "kota-kinabalu-malaysia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/db/Kota_Kinabalu_waterfront%2C_2024_%2802%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Kota Kinabalu waterfront at dusk, Sabah"
+        }
+      },
+      {
+        "key": "montpellier-france",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Montpellier-_Place_de_la_Com%C3%A9die_-_52262234358.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Place de la Comédie, Montpellier"
+        }
+      },
+      {
+        "key": "victoria-canada",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/50/Inner_Harbour_Causeway%2C_Downtown_Victoria_BC.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Inner Harbour causeway and British Columbia Parliament Buildings, Victoria"
         }
       },
       {
