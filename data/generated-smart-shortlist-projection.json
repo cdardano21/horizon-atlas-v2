@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "862fe4b2a9f5ad62a9b83036a9e4f0dba15d35b7733b9c9d45324916d8cb0fc1",
-  "digest": "376f43534bb2b6df5777b078f7950e552a27bc416d0de197c6fdf37c7df1b8cf",
+  "sourceSignature": "44fd86a2aa0313ba1b89dbbc9de47f6f98d2fce67748c649d60289f9bb05472b",
+  "digest": "fe23e1738df94cfdc40c642c9e42633fcc596beeabd853d992ab71501d3ba81a",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "tbilisi-georgia",
+        "name": "Tbilisi",
+        "slug": "tbilisi-georgia",
+        "country": "Georgia",
+        "countryCode": "GE",
+        "summary": "Tbilisi is a river-valley capital where a hillside heritage core, broad central avenues and residential districts offer different daily routines.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "rethymno-greece",
+        "name": "Rethymno",
+        "slug": "rethymno-greece",
+        "country": "Greece",
+        "countryCode": "GR",
+        "summary": "Rethymno combines a compact historic core with modern residential streets and eastern coastal neighborhoods.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "nantes-france",
+        "name": "Nantes",
+        "slug": "nantes-france",
+        "country": "France",
+        "countryCode": "FR",
+        "summary": "Nantes offers a working urban base with cultural venues, markets and distinct residential districts.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "san-diego-california-united-states",
+        "name": "San Diego",
+        "slug": "san-diego-california-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "San Diego offers urban neighborhoods, cultural parks and coastal settings within a large municipality.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "jeju-city-south-korea",
+        "name": "Jeju City",
+        "slug": "jeju-city-south-korea",
+        "country": "South Korea",
+        "countryCode": "KR",
+        "summary": "Jeju City is the northern urban base of Jeju Island, with an older civic core, newer commercial neighborhoods and an airport-side coast.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -11979,6 +12129,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "tbilisi-georgia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "rethymno-greece",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "nantes-france",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "san-diego-california-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "jeju-city-south-korea",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "edinburgh-united-kingdom",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -16782,6 +17017,41 @@
         }
       },
       {
+        "key": "tbilisi-georgia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/44/Tbilisi%2C_City_centre%2C_Georgia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Tbilisi: Tbilisi, City centre, Georgia"
+        }
+      },
+      {
+        "key": "rethymno-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Kreta_%28GR%29%2C_Rethymno%2C_Alter_Hafen_--_2023_--_8329.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Rethymno: Kreta (GR), Rethymno, Alter Hafen -- 2023 -- 8329"
+        }
+      },
+      {
+        "key": "nantes-france",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Loire-Atlantique_Nantes_Chateau_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Nantes: Loire-Atlantique Nantes Chateau - panoramio"
+        }
+      },
+      {
+        "key": "san-diego-california-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b1/California_Tower_seen_from_the_Alcazar_Garden%2C_Balboa_Park%2C_San_Diego%2C_California.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "San Diego: California Tower seen from the Alcazar Garden, Balboa Park, San Diego, California"
+        }
+      },
+      {
+        "key": "jeju-city-south-korea",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/9/91/Gwandeokjeong_Pavilion_and_Jeju_Mok_Office.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Jeju City: Gwandeokjeong Pavilion and Jeju Mok Office"
+        }
+      },
+      {
         "key": "edinburgh-united-kingdom",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Edinburgh_Castle_-_A_-_Sarah_Stierch.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -18772,6 +19042,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "tbilisi-georgia",
+        "singleMonthlyUsd": 1325,
+        "coupleMonthlyUsd": 1900,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "rethymno-greece",
+        "singleMonthlyUsd": 1700,
+        "coupleMonthlyUsd": 2350,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "nantes-france",
+        "singleMonthlyUsd": 1900,
+        "coupleMonthlyUsd": 2700,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "san-diego-california-united-states",
+        "singleMonthlyUsd": 3800,
+        "coupleMonthlyUsd": 5025,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "jeju-city-south-korea",
+        "singleMonthlyUsd": 1350,
+        "coupleMonthlyUsd": 2000,
         "estimateYear": 2026
       },
       {

@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "05b855ad45d23ee8c8431943f2fc1e8668ae751db25e3ef2f3a5e2507b56a2b8",
-  "digest": "1345a52a5d38c6b3e9d0e90c3c03db1fac677769340caa4de9dcca2a2e5f0cef",
+  "sourceSignature": "32d6e381e0aee3a676554a175e64fcc7f9535cb9668337ac60decc6f6dee3098",
+  "digest": "472ae03610734ef0fff37ccd572fbd3ada065adbd85f0bf70d39ecc216456d11",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "tbilisi-georgia",
+        "slug": "tbilisi-georgia",
+        "name": "Tbilisi",
+        "country": "Georgia",
+        "summary": "Tbilisi is a river-valley capital where a hillside heritage core, broad central avenues and residential districts offer different daily routines."
+      },
+      {
+        "key": "rethymno-greece",
+        "slug": "rethymno-greece",
+        "name": "Rethymno",
+        "country": "Greece",
+        "summary": "Rethymno combines a compact historic core with modern residential streets and eastern coastal neighborhoods."
+      },
+      {
+        "key": "nantes-france",
+        "slug": "nantes-france",
+        "name": "Nantes",
+        "country": "France",
+        "summary": "Nantes offers a working urban base with cultural venues, markets and distinct residential districts."
+      },
+      {
+        "key": "san-diego-california-united-states",
+        "slug": "san-diego-california-united-states",
+        "name": "San Diego",
+        "country": "United States",
+        "summary": "San Diego offers urban neighborhoods, cultural parks and coastal settings within a large municipality."
+      },
+      {
+        "key": "jeju-city-south-korea",
+        "slug": "jeju-city-south-korea",
+        "name": "Jeju City",
+        "country": "South Korea",
+        "summary": "Jeju City is the northern urban base of Jeju Island, with an older civic core, newer commercial neighborhoods and an airport-side coast."
       },
       {
         "key": "edinburgh-united-kingdom",
@@ -2307,6 +2342,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "tbilisi-georgia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/44/Tbilisi%2C_City_centre%2C_Georgia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Tbilisi: Tbilisi, City centre, Georgia"
+        }
+      },
+      {
+        "key": "rethymno-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Kreta_%28GR%29%2C_Rethymno%2C_Alter_Hafen_--_2023_--_8329.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Rethymno: Kreta (GR), Rethymno, Alter Hafen -- 2023 -- 8329"
+        }
+      },
+      {
+        "key": "nantes-france",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Loire-Atlantique_Nantes_Chateau_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Nantes: Loire-Atlantique Nantes Chateau - panoramio"
+        }
+      },
+      {
+        "key": "san-diego-california-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b1/California_Tower_seen_from_the_Alcazar_Garden%2C_Balboa_Park%2C_San_Diego%2C_California.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "San Diego: California Tower seen from the Alcazar Garden, Balboa Park, San Diego, California"
+        }
+      },
+      {
+        "key": "jeju-city-south-korea",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/9/91/Gwandeokjeong_Pavilion_and_Jeju_Mok_Office.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Jeju City: Gwandeokjeong Pavilion and Jeju Mok Office"
         }
       },
       {
