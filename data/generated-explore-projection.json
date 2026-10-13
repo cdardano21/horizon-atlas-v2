@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "0bd323d16f7fd2791d49e8f538b79176db01528ec0dd05734eea87a9a3a1dd4b",
-  "digest": "ac1d8d2b076c764f5dc37e459043ab76153e951804bd213248d123bdeb48d64c",
+  "sourceSignature": "05b855ad45d23ee8c8431943f2fc1e8668ae751db25e3ef2f3a5e2507b56a2b8",
+  "digest": "1345a52a5d38c6b3e9d0e90c3c03db1fac677769340caa4de9dcca2a2e5f0cef",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "edinburgh-united-kingdom",
+        "slug": "edinburgh-united-kingdom",
+        "name": "Edinburgh",
+        "country": "United Kingdom",
+        "summary": "Edinburgh offers distinct old-town, Georgian, port and seaside residential settings."
+      },
+      {
+        "key": "christchurch-new-zealand",
+        "slug": "christchurch-new-zealand",
+        "name": "Christchurch",
+        "country": "New Zealand",
+        "summary": "Christchurch housing searches span the rebuilt center, established suburbs, hills and coast."
+      },
+      {
+        "key": "utrecht-netherlands",
+        "slug": "utrecht-netherlands",
+        "name": "Utrecht",
+        "country": "Netherlands",
+        "summary": "Utrecht combines a canal-centered historic core with residential districts and a major rail interchange."
+      },
+      {
+        "key": "hanoi-vietnam",
+        "slug": "hanoi-vietnam",
+        "name": "Hanoi",
+        "country": "Vietnam",
+        "summary": "Hanoi combines a dense historic core, lakeside search areas and a much larger municipal territory."
+      },
+      {
+        "key": "mexico-city-mexico",
+        "slug": "mexico-city-mexico",
+        "name": "Mexico City",
+        "country": "Mexico",
+        "summary": "Mexico City rewards a neighborhood-based long stay rather than constant cross-city journeys."
       },
       {
         "key": "graz-austria",
@@ -2272,6 +2307,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "edinburgh-united-kingdom",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Edinburgh_Castle_-_A_-_Sarah_Stierch.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Edinburgh: Edinburgh Castle - A - Sarah Stierch"
+        }
+      },
+      {
+        "key": "christchurch-new-zealand",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Autumn_at_the_Christchurch_Botanical_Gardens._%2814130557508%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Christchurch: Autumn at the Christchurch Botanical Gardens. (14130557508)"
+        }
+      },
+      {
+        "key": "utrecht-netherlands",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/1c/De_Oudegracht_in_Utrecht..jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Utrecht: De Oudegracht in Utrecht."
+        }
+      },
+      {
+        "key": "hanoi-vietnam",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Hanoi_-_Hoan_Kiem_See_-_Jadeberg-Tempel_0004.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Hanoi: Hanoi - Hoan Kiem See - Jadeberg-Tempel 0004"
+        }
+      },
+      {
+        "key": "mexico-city-mexico",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Palacio_de_Bellas_Artes%2C_M%C3%A9xico_D.F.%2C_M%C3%A9xico%2C_2013-10-13%2C_DD_40.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Mexico City: Palacio de Bellas Artes, México D.F., México, 2013-10-13, DD 40"
         }
       },
       {

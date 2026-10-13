@@ -36,6 +36,11 @@ export interface ExpansionWorkbookRegistryEntry {
 }
 
 export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntry[] = [
+{"registryId": "legacy-edinburgh-united-kingdom-01", "workbookPath": "data/legacy-edinburgh-united-kingdom-01/DestinationFinderAI-edinburgh-Premium-Candidate-v3.3.xlsx", "expectedSha256": "d593edfb85c198261df85dcc4300b17a9383ae5a6cdc50bc65d5167947cff95a", "expectedDestinationKeys": ["edinburgh-united-kingdom"], "environment": "production", "candidateDiscovery": "published-catalog"},
+{"registryId": "legacy-christchurch-new-zealand-01", "workbookPath": "data/legacy-christchurch-new-zealand-01/DestinationFinderAI-christchurch-Premium-Candidate-v3.3.xlsx", "expectedSha256": "96917b617fb01a740c65318520f209000d17c2489d39f155bf4e1371f1f3b7da", "expectedDestinationKeys": ["christchurch-new-zealand"], "environment": "production", "candidateDiscovery": "published-catalog"},
+{"registryId": "legacy-utrecht-netherlands-01", "workbookPath": "data/legacy-utrecht-netherlands-01/DestinationFinderAI-utrecht-Premium-Candidate-v3.3.xlsx", "expectedSha256": "4374c69cb76c46c14e687614b8674931a5d19cfa9baf50545ecfea2024aad046", "expectedDestinationKeys": ["utrecht-netherlands"], "environment": "production", "candidateDiscovery": "published-catalog"},
+{"registryId": "legacy-hanoi-vietnam-01", "workbookPath": "data/legacy-hanoi-vietnam-01/DestinationFinderAI-hanoi-Premium-Candidate-v3.3.xlsx", "expectedSha256": "7c0e41c1ea83ceb4a5c661e319c72418f32146ca04f77054d12ca36fd43c12a1", "expectedDestinationKeys": ["hanoi-vietnam"], "environment": "production", "candidateDiscovery": "published-catalog"},
+{"registryId": "legacy-mexico-city-mexico-01", "workbookPath": "data/legacy-mexico-city-mexico-01/DestinationFinderAI-mexico-city-Premium-Candidate-v3.3.xlsx", "expectedSha256": "141f15e09c30491bc77af271ea1a272b01f6926cf862046baa8d07d7e56ddb44", "expectedDestinationKeys": ["mexico-city-mexico"], "environment": "production", "candidateDiscovery": "published-catalog"},
 {
   "registryId": "legacy-graz-austria-01",
   "workbookPath": "data/legacy-graz-austria-01/DestinationFinderAI-graz-Premium-Candidate-v3.3.xlsx",

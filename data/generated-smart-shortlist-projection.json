@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "e6eecc1e202f8770042678c9b8baccf037b453178db62469471c1eb2482b6fe5",
-  "digest": "d05be11d12a65d46d10e035e0996f8f98b943f3b16dfc0e988503d14315c2a09",
+  "sourceSignature": "862fe4b2a9f5ad62a9b83036a9e4f0dba15d35b7733b9c9d45324916d8cb0fc1",
+  "digest": "376f43534bb2b6df5777b078f7950e552a27bc416d0de197c6fdf37c7df1b8cf",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "edinburgh-united-kingdom",
+        "name": "Edinburgh",
+        "slug": "edinburgh-united-kingdom",
+        "country": "United Kingdom",
+        "countryCode": "GB",
+        "summary": "Edinburgh offers distinct old-town, Georgian, port and seaside residential settings.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "christchurch-new-zealand",
+        "name": "Christchurch",
+        "slug": "christchurch-new-zealand",
+        "country": "New Zealand",
+        "countryCode": "NZ",
+        "summary": "Christchurch housing searches span the rebuilt center, established suburbs, hills and coast.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "utrecht-netherlands",
+        "name": "Utrecht",
+        "slug": "utrecht-netherlands",
+        "country": "Netherlands",
+        "countryCode": "NL",
+        "summary": "Utrecht combines a canal-centered historic core with residential districts and a major rail interchange.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "hanoi-vietnam",
+        "name": "Hanoi",
+        "slug": "hanoi-vietnam",
+        "country": "Vietnam",
+        "countryCode": "VN",
+        "summary": "Hanoi combines a dense historic core, lakeside search areas and a much larger municipal territory.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "mexico-city-mexico",
+        "name": "Mexico City",
+        "slug": "mexico-city-mexico",
+        "country": "Mexico",
+        "countryCode": "MX",
+        "summary": "Mexico City rewards a neighborhood-based long stay rather than constant cross-city journeys.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -11829,6 +11979,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "edinburgh-united-kingdom",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "christchurch-new-zealand",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "utrecht-netherlands",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "hanoi-vietnam",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "mexico-city-mexico",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "graz-austria",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -16547,6 +16782,41 @@
         }
       },
       {
+        "key": "edinburgh-united-kingdom",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Edinburgh_Castle_-_A_-_Sarah_Stierch.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Edinburgh: Edinburgh Castle - A - Sarah Stierch"
+        }
+      },
+      {
+        "key": "christchurch-new-zealand",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Autumn_at_the_Christchurch_Botanical_Gardens._%2814130557508%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Christchurch: Autumn at the Christchurch Botanical Gardens. (14130557508)"
+        }
+      },
+      {
+        "key": "utrecht-netherlands",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/1c/De_Oudegracht_in_Utrecht..jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Utrecht: De Oudegracht in Utrecht."
+        }
+      },
+      {
+        "key": "hanoi-vietnam",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Hanoi_-_Hoan_Kiem_See_-_Jadeberg-Tempel_0004.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Hanoi: Hanoi - Hoan Kiem See - Jadeberg-Tempel 0004"
+        }
+      },
+      {
+        "key": "mexico-city-mexico",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Palacio_de_Bellas_Artes%2C_M%C3%A9xico_D.F.%2C_M%C3%A9xico%2C_2013-10-13%2C_DD_40.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Mexico City: Palacio de Bellas Artes, México D.F., México, 2013-10-13, DD 40"
+        }
+      },
+      {
         "key": "graz-austria",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/2/27/Graz_-_Lend_-_Ansicht_v_Schlossberg_-_2025_05_23.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -18502,6 +18772,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "edinburgh-united-kingdom",
+        "singleMonthlyUsd": 2925,
+        "coupleMonthlyUsd": 3975,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "christchurch-new-zealand",
+        "singleMonthlyUsd": 1750,
+        "coupleMonthlyUsd": 2450,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "utrecht-netherlands",
+        "singleMonthlyUsd": 2725,
+        "coupleMonthlyUsd": 3750,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "hanoi-vietnam",
+        "singleMonthlyUsd": 1225,
+        "coupleMonthlyUsd": 1650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "mexico-city-mexico",
+        "singleMonthlyUsd": 1750,
+        "coupleMonthlyUsd": 2400,
         "estimateYear": 2026
       },
       {
