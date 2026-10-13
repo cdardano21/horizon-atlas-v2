@@ -37,6 +37,56 @@ export interface ExpansionWorkbookRegistryEntry {
 
 export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntry[] = [
 {
+  "registryId": "legacy-graz-austria-01",
+  "workbookPath": "data/legacy-graz-austria-01/DestinationFinderAI-graz-Premium-Candidate-v3.3.xlsx",
+  "expectedSha256": "16b3f7a164299dcdb83b73d3a4f53e09ee99a54d79596e91346e67c135cf6d11",
+  "expectedDestinationKeys": [
+    "graz-austria"
+  ],
+  "environment": "production",
+  "candidateDiscovery": "published-catalog"
+},
+{
+  "registryId": "legacy-ponta-delgada-portugal-01",
+  "workbookPath": "data/legacy-ponta-delgada-portugal-01/DestinationFinderAI-ponta-delgada-Premium-Candidate-v3.3.xlsx",
+  "expectedSha256": "0163f3aaac295a362fe536a4cda119e448aeba08b620e857a71e4e099e9c89fb",
+  "expectedDestinationKeys": [
+    "ponta-delgada-portugal"
+  ],
+  "environment": "production",
+  "candidateDiscovery": "published-catalog"
+},
+{
+  "registryId": "legacy-quebec-city-canada-01",
+  "workbookPath": "data/legacy-quebec-city-canada-01/DestinationFinderAI-quebec-city-Premium-Candidate-v3.3.xlsx",
+  "expectedSha256": "7aff177e67663cd4e96d5b36d002fa18c4f33b8a4640c28afffa681eed310442",
+  "expectedDestinationKeys": [
+    "quebec-city-canada"
+  ],
+  "environment": "production",
+  "candidateDiscovery": "published-catalog"
+},
+{
+  "registryId": "legacy-seville-spain-01",
+  "workbookPath": "data/legacy-seville-spain-01/DestinationFinderAI-seville-Premium-Candidate-v3.3.xlsx",
+  "expectedSha256": "80a3d5ead976418a2d904420d6e771bd1cfa976b886bc080b66d3ae416fac3c5",
+  "expectedDestinationKeys": [
+    "seville-spain"
+  ],
+  "environment": "production",
+  "candidateDiscovery": "published-catalog"
+},
+{
+  "registryId": "legacy-lyon-france-01",
+  "workbookPath": "data/legacy-lyon-france-01/DestinationFinderAI-lyon-Premium-Candidate-v3.3.xlsx",
+  "expectedSha256": "8e6f5cb321dbef9afa4258b51176f620c6b55e32faf364188e0cd98684108836",
+  "expectedDestinationKeys": [
+    "lyon-france"
+  ],
+  "environment": "production",
+  "candidateDiscovery": "published-catalog"
+},
+{
   "registryId": "legacy-colonia-del-sacramento-uruguay-01",
   "workbookPath": "data/legacy-colonia-del-sacramento-uruguay-01/DestinationFinderAI-colonia-del-sacramento-Premium-Candidate-v3.3.xlsx",
   "expectedSha256": "9f45d73ecd7c1acfe8a323b021e4415b691c1f5e929d6da382ea827b26c536b7",

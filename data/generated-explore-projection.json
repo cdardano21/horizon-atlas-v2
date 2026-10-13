@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "1b8edde9d47ec7293b556c760e7a713eab897e8fda364296873ce1070c5204c8",
-  "digest": "13e8e354a496bb2383c694cda31ef42f6112ed42fcafc55bcf152abe0db38b7d",
+  "sourceSignature": "0bd323d16f7fd2791d49e8f538b79176db01528ec0dd05734eea87a9a3a1dd4b",
+  "digest": "ac1d8d2b076c764f5dc37e459043ab76153e951804bd213248d123bdeb48d64c",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "graz-austria",
+        "slug": "graz-austria",
+        "name": "Graz",
+        "country": "Austria",
+        "summary": "Graz combines a historic center, university districts and a design-oriented west bank."
+      },
+      {
+        "key": "ponta-delgada-portugal",
+        "slug": "ponta-delgada-portugal",
+        "name": "Ponta Delgada",
+        "country": "Portugal",
+        "summary": "Ponta Delgada is an island-city base on São Miguel."
+      },
+      {
+        "key": "quebec-city-canada",
+        "slug": "quebec-city-canada",
+        "name": "Québec City",
+        "country": "Canada",
+        "summary": "Québec City offers distinct upper- and lower-town routines, French-language daily life and a strong seasonal contrast."
+      },
+      {
+        "key": "seville-spain",
+        "slug": "seville-spain",
+        "name": "Seville",
+        "country": "Spain",
+        "summary": "Seville combines a compact heritage core with distinct residential districts on both sides of the river."
+      },
+      {
+        "key": "lyon-france",
+        "slug": "lyon-france",
+        "name": "Lyon",
+        "country": "France",
+        "summary": "Lyon offers contrasting historic riverfront, hill and neighborhood-center routines."
       },
       {
         "key": "colonia-del-sacramento-uruguay",
@@ -2237,6 +2272,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "graz-austria",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/27/Graz_-_Lend_-_Ansicht_v_Schlossberg_-_2025_05_23.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Graz: Graz - Lend - Ansicht v Schlossberg - 2025 05 23"
+        }
+      },
+      {
+        "key": "ponta-delgada-portugal",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/85/Portas_da_Cidade%2C_Ponta_Delgada%2C_isla_de_San_Miguel%2C_Azores%2C_Portugal%2C_2020-07-29%2C_DD_123-125_HDR.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Ponta Delgada: Portas da Cidade, Ponta Delgada, isla de San Miguel, Azores, Portugal, 2020-07-29, DD 123-125 HDR"
+        }
+      },
+      {
+        "key": "quebec-city-canada",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Old_lower_town_Quebec.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Québec City: Old lower town Quebec"
+        }
+      },
+      {
+        "key": "seville-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Plaza_de_Espa%C3%B1a%2C_Seville_3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Seville: Plaza de España, Seville 3"
+        }
+      },
+      {
+        "key": "lyon-france",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/6c/01._Panorama_de_Lyon_pris_depuis_le_toit_de_la_Basilique_de_Fourvi%C3%A8re.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Lyon: 01. Panorama de Lyon pris depuis le toit de la Basilique de Fourvière"
         }
       },
       {
