@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "32d6e381e0aee3a676554a175e64fcc7f9535cb9668337ac60decc6f6dee3098",
-  "digest": "472ae03610734ef0fff37ccd572fbd3ada065adbd85f0bf70d39ecc216456d11",
+  "sourceSignature": "cf511623a2e29e699a7bfdd2919c5423afffbc5e7b2b5bfdfac804b25dd1f6b6",
+  "digest": "3cf61289a3a877570d6738f69669659842bfd248aa299b7bfeec09d0c38b653c",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "asuncion-paraguay",
+        "slug": "asuncion-paraguay",
+        "name": "Asunción",
+        "country": "Paraguay",
+        "summary": "Asunción pairs a historic river-facing center with newer residential and commercial districts farther east."
+      },
+      {
+        "key": "la-serena-chile",
+        "slug": "la-serena-chile",
+        "name": "La Serena",
+        "country": "Chile",
+        "summary": "La Serena combines a historic inland center with coastal apartment districts."
+      },
+      {
+        "key": "coronado-panama",
+        "slug": "coronado-panama",
+        "name": "Coronado",
+        "country": "Panama",
+        "summary": "Coronado is a Pacific resort-residential setting where beach homes, condominium complexes and the highway commercial corridor create different daily routines."
+      },
+      {
+        "key": "salerno-italy",
+        "slug": "salerno-italy",
+        "name": "Salerno",
+        "country": "Italy",
+        "summary": "Salerno combines a compact medieval core, a seafront urban routine and residential districts extending east."
+      },
+      {
+        "key": "morelia-mexico",
+        "slug": "morelia-mexico",
+        "name": "Morelia",
+        "country": "Mexico",
+        "summary": "Morelia offers a substantial historic center, university and cultural life, and contrasting residential settings beyond the central monuments."
       },
       {
         "key": "tbilisi-georgia",
@@ -2342,6 +2377,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "asuncion-paraguay",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Asuncion_nubes_sobre_el_rio_%2834520523923%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Asunción: Asuncion nubes sobre el rio (34520523923)"
+        }
+      },
+      {
+        "key": "la-serena-chile",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/10/Faro_Monumental_de_La_Serena._08.12.2022.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "La Serena: Faro Monumental de La Serena. 08.12.2022"
+        }
+      },
+      {
+        "key": "coronado-panama",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/54/Playa_Coronado_%284165175000%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Coronado: Playa Coronado (4165175000)"
+        }
+      },
+      {
+        "key": "salerno-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/d8/Facciata_esterna_duomo_salerno.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Salerno: Facciata esterna duomo salerno"
+        }
+      },
+      {
+        "key": "morelia-mexico",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/2b/Catedral_de_Morelia_Michoac%C3%A1n_M%C3%A9xico.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Morelia: Catedral de Morelia Michoacán México"
         }
       },
       {

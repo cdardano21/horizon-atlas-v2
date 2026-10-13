@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "44fd86a2aa0313ba1b89dbbc9de47f6f98d2fce67748c649d60289f9bb05472b",
-  "digest": "fe23e1738df94cfdc40c642c9e42633fcc596beeabd853d992ab71501d3ba81a",
+  "sourceSignature": "6596e10b610f4c808ec229b9768e3bc582bfc427414dbe28de868a38e9d5bd46",
+  "digest": "aa8d830ef9d80effe5757246ffa389a48514678540ff93123578c94619ae0759",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "asuncion-paraguay",
+        "name": "Asunción",
+        "slug": "asuncion-paraguay",
+        "country": "Paraguay",
+        "countryCode": "PY",
+        "summary": "Asunción pairs a historic river-facing center with newer residential and commercial districts farther east.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "la-serena-chile",
+        "name": "La Serena",
+        "slug": "la-serena-chile",
+        "country": "Chile",
+        "countryCode": "CL",
+        "summary": "La Serena combines a historic inland center with coastal apartment districts.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "coronado-panama",
+        "name": "Coronado",
+        "slug": "coronado-panama",
+        "country": "Panama",
+        "countryCode": "PA",
+        "summary": "Coronado is a Pacific resort-residential setting where beach homes, condominium complexes and the highway commercial corridor create different daily routines.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "salerno-italy",
+        "name": "Salerno",
+        "slug": "salerno-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "Salerno combines a compact medieval core, a seafront urban routine and residential districts extending east.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "morelia-mexico",
+        "name": "Morelia",
+        "slug": "morelia-mexico",
+        "country": "Mexico",
+        "countryCode": "MX",
+        "summary": "Morelia offers a substantial historic center, university and cultural life, and contrasting residential settings beyond the central monuments.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -12129,6 +12279,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "asuncion-paraguay",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "la-serena-chile",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "coronado-panama",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "salerno-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "morelia-mexico",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "tbilisi-georgia",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -17017,6 +17252,41 @@
         }
       },
       {
+        "key": "asuncion-paraguay",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Asuncion_nubes_sobre_el_rio_%2834520523923%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Asunción: Asuncion nubes sobre el rio (34520523923)"
+        }
+      },
+      {
+        "key": "la-serena-chile",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/10/Faro_Monumental_de_La_Serena._08.12.2022.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "La Serena: Faro Monumental de La Serena. 08.12.2022"
+        }
+      },
+      {
+        "key": "coronado-panama",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/54/Playa_Coronado_%284165175000%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Coronado: Playa Coronado (4165175000)"
+        }
+      },
+      {
+        "key": "salerno-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/d8/Facciata_esterna_duomo_salerno.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Salerno: Facciata esterna duomo salerno"
+        }
+      },
+      {
+        "key": "morelia-mexico",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/2b/Catedral_de_Morelia_Michoac%C3%A1n_M%C3%A9xico.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Morelia: Catedral de Morelia Michoacán México"
+        }
+      },
+      {
         "key": "tbilisi-georgia",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/4/44/Tbilisi%2C_City_centre%2C_Georgia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -19042,6 +19312,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "asuncion-paraguay",
+        "singleMonthlyUsd": 1400,
+        "coupleMonthlyUsd": 1925,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "la-serena-chile",
+        "singleMonthlyUsd": 1150,
+        "coupleMonthlyUsd": 1625,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "coronado-panama",
+        "singleMonthlyUsd": 2575,
+        "coupleMonthlyUsd": 3375,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "salerno-italy",
+        "singleMonthlyUsd": 1775,
+        "coupleMonthlyUsd": 2500,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "morelia-mexico",
+        "singleMonthlyUsd": 1000,
+        "coupleMonthlyUsd": 1450,
         "estimateYear": 2026
       },
       {
