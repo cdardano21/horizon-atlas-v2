@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "4fb72def819894976fe054c34db17cf6c39ac999bd68743f86a6e1daced5b26f",
-  "digest": "d31b3ca9c0529b33331473e35c93704cdd0b48a97940cc9bd27f037057008a76",
+  "sourceSignature": "1b8edde9d47ec7293b556c760e7a713eab897e8fda364296873ce1070c5204c8",
+  "digest": "13e8e354a496bb2383c694cda31ef42f6112ed42fcafc55bcf152abe0db38b7d",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "colonia-del-sacramento-uruguay",
+        "slug": "colonia-del-sacramento-uruguay",
+        "name": "Colonia del Sacramento",
+        "country": "Uruguay",
+        "summary": "Colonia rewards a slower riverfront routine and repeated visits to its historic quarter."
+      },
+      {
+        "key": "leiden-netherlands",
+        "slug": "leiden-netherlands",
+        "name": "Leiden",
+        "country": "Netherlands",
+        "summary": "Leiden combines a compact university-city center with a major rail hub and medical campus."
+      },
+      {
+        "key": "salta-argentina",
+        "slug": "salta-argentina",
+        "name": "Salta",
+        "country": "Argentina",
+        "summary": "Salta offers a historic civic center, museums and a strong regional cultural identity."
+      },
+      {
+        "key": "pula-croatia",
+        "slug": "pula-croatia",
+        "name": "Pula",
+        "country": "Croatia",
+        "summary": "Pula combines Roman monuments and an ordinary working city with a strongly seasonal visitor economy."
+      },
+      {
+        "key": "grecia-costa-rica",
+        "slug": "grecia-costa-rica",
+        "name": "Grecia",
+        "country": "Costa Rica",
+        "summary": "Grecia offers a central market and civic core within a much broader canton."
       },
       {
         "key": "cadiz-spain",
@@ -2202,6 +2237,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "colonia-del-sacramento-uruguay",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/44/Colonia-ViewFromLighthouse.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Colonia del Sacramento: Colonia-ViewFromLighthouse"
+        }
+      },
+      {
+        "key": "leiden-netherlands",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Leiden_canal_%289037052638%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Leiden: Leiden canal (9037052638)"
+        }
+      },
+      {
+        "key": "salta-argentina",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Patio_interno_del_Cabildo_de_Salta.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Salta: Patio interno del Cabildo de Salta"
+        }
+      },
+      {
+        "key": "pula-croatia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/61/Croatia_Pula_Temple_of_Roma_and_Augustus_2014-10-11_11-30-05.jpg",
+          "alt": "Temple of Roma and Augustus, Pula"
+        }
+      },
+      {
+        "key": "grecia-costa-rica",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/6d/ALTAR_IN_THE_CATHEDRAL_AT_GRECIA%2C_COSTA_RICA.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Church interior in Grecia, Costa Rica"
         }
       },
       {

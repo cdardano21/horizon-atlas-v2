@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "e007255dbeb9b01d801047071b860f16454047a2b22c45feb291343c1b8ae298",
-  "digest": "b2b3c768bd248cb60ad54af63a1b9945360d84eae940c9239b0075b127519967",
+  "sourceSignature": "d6a5fbe35d44a8dc4d362096a23774fc9977fbbca26a8292550dba54f2fadc4a",
+  "digest": "177c634a2c0f3e706aa8f136a4868bbd83b11bf0d27a47a9e14d22dbbb5d5bca",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "colonia-del-sacramento-uruguay",
+        "name": "Colonia del Sacramento",
+        "slug": "colonia-del-sacramento-uruguay",
+        "country": "Uruguay",
+        "countryCode": "UY",
+        "summary": "Colonia rewards a slower riverfront routine and repeated visits to its historic quarter.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "leiden-netherlands",
+        "name": "Leiden",
+        "slug": "leiden-netherlands",
+        "country": "Netherlands",
+        "countryCode": "NL",
+        "summary": "Leiden combines a compact university-city center with a major rail hub and medical campus.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "salta-argentina",
+        "name": "Salta",
+        "slug": "salta-argentina",
+        "country": "Argentina",
+        "countryCode": "AR",
+        "summary": "Salta offers a historic civic center, museums and a strong regional cultural identity.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "pula-croatia",
+        "name": "Pula",
+        "slug": "pula-croatia",
+        "country": "Croatia",
+        "countryCode": "HR",
+        "summary": "Pula combines Roman monuments and an ordinary working city with a strongly seasonal visitor economy.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "grecia-costa-rica",
+        "name": "Grecia",
+        "slug": "grecia-costa-rica",
+        "country": "Costa Rica",
+        "countryCode": "CR",
+        "summary": "Grecia offers a central market and civic core within a much broader canton.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -11529,6 +11679,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "colonia-del-sacramento-uruguay",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "leiden-netherlands",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "salta-argentina",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "pula-croatia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "grecia-costa-rica",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "cadiz-spain",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -16077,6 +16312,41 @@
         }
       },
       {
+        "key": "colonia-del-sacramento-uruguay",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/44/Colonia-ViewFromLighthouse.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Colonia del Sacramento: Colonia-ViewFromLighthouse"
+        }
+      },
+      {
+        "key": "leiden-netherlands",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Leiden_canal_%289037052638%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Leiden: Leiden canal (9037052638)"
+        }
+      },
+      {
+        "key": "salta-argentina",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Patio_interno_del_Cabildo_de_Salta.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Salta: Patio interno del Cabildo de Salta"
+        }
+      },
+      {
+        "key": "pula-croatia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/61/Croatia_Pula_Temple_of_Roma_and_Augustus_2014-10-11_11-30-05.jpg",
+          "alt": "Temple of Roma and Augustus, Pula"
+        }
+      },
+      {
+        "key": "grecia-costa-rica",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/6d/ALTAR_IN_THE_CATHEDRAL_AT_GRECIA%2C_COSTA_RICA.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Church interior in Grecia, Costa Rica"
+        }
+      },
+      {
         "key": "cadiz-spain",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Inside_of_C%C3%A1diz_Cathedral_%286931279748%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -17962,6 +18232,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "colonia-del-sacramento-uruguay",
+        "singleMonthlyUsd": 1675,
+        "coupleMonthlyUsd": 2325,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "leiden-netherlands",
+        "singleMonthlyUsd": 3125,
+        "coupleMonthlyUsd": 4075,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "salta-argentina",
+        "singleMonthlyUsd": 1175,
+        "coupleMonthlyUsd": 1600,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "pula-croatia",
+        "singleMonthlyUsd": 2025,
+        "coupleMonthlyUsd": 2850,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "grecia-costa-rica",
+        "singleMonthlyUsd": 2050,
+        "coupleMonthlyUsd": 2800,
         "estimateYear": 2026
       },
       {

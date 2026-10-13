@@ -36,6 +36,56 @@ export interface ExpansionWorkbookRegistryEntry {
 }
 
 export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntry[] = [
+{
+  "registryId": "legacy-colonia-del-sacramento-uruguay-01",
+  "workbookPath": "data/legacy-colonia-del-sacramento-uruguay-01/DestinationFinderAI-colonia-del-sacramento-Premium-Candidate-v3.3.xlsx",
+  "expectedSha256": "9f45d73ecd7c1acfe8a323b021e4415b691c1f5e929d6da382ea827b26c536b7",
+  "expectedDestinationKeys": [
+    "colonia-del-sacramento-uruguay"
+  ],
+  "environment": "production",
+  "candidateDiscovery": "published-catalog"
+},
+{
+  "registryId": "legacy-leiden-netherlands-01",
+  "workbookPath": "data/legacy-leiden-netherlands-01/DestinationFinderAI-leiden-Premium-Candidate-v3.3.xlsx",
+  "expectedSha256": "85c5679ec8ad3684dac185ddacb84520de89b226552a70b5abe92715c816cfdd",
+  "expectedDestinationKeys": [
+    "leiden-netherlands"
+  ],
+  "environment": "production",
+  "candidateDiscovery": "published-catalog"
+},
+{
+  "registryId": "legacy-salta-argentina-01",
+  "workbookPath": "data/legacy-salta-argentina-01/DestinationFinderAI-salta-Premium-Candidate-v3.3.xlsx",
+  "expectedSha256": "17dcb27730960e3c5174c354dd3b70e772e4c1bc74f5ab37a3b930ae5a27fec4",
+  "expectedDestinationKeys": [
+    "salta-argentina"
+  ],
+  "environment": "production",
+  "candidateDiscovery": "published-catalog"
+},
+{
+  "registryId": "legacy-pula-croatia-01",
+  "workbookPath": "data/legacy-pula-croatia-01/DestinationFinderAI-pula-Premium-Candidate-v3.3.xlsx",
+  "expectedSha256": "74d67f52a25f7a7d9a24566931c303655401dc2746a55a20f6102fafe44c5829",
+  "expectedDestinationKeys": [
+    "pula-croatia"
+  ],
+  "environment": "production",
+  "candidateDiscovery": "published-catalog"
+},
+{
+  "registryId": "legacy-grecia-costa-rica-01",
+  "workbookPath": "data/legacy-grecia-costa-rica-01/DestinationFinderAI-grecia-Premium-Candidate-v3.3.xlsx",
+  "expectedSha256": "563cf4d1227eacf7f9619367a100a7928c5070f7c67b269c4d5108e96e73c0ad",
+  "expectedDestinationKeys": [
+    "grecia-costa-rica"
+  ],
+  "environment": "production",
+  "candidateDiscovery": "published-catalog"
+},
 {"registryId": "legacy-cadiz-spain-01", "workbookPath": "data/legacy-cadiz-spain-01/DestinationFinderAI-cadiz-Premium-Candidate-v3.3.xlsx", "environment": "production", "candidateDiscovery": "published-catalog", "expectedDestinationKeys": ["cadiz-spain"], "expectedSha256": "545a732f506605a3c397af32ed826e62d1be0e3a54f7ceb48094b9aaabcfb2f9"},{"registryId": "legacy-heidelberg-germany-01", "workbookPath": "data/legacy-heidelberg-germany-01/DestinationFinderAI-heidelberg-Premium-Candidate-v3.3.xlsx", "environment": "production", "candidateDiscovery": "published-catalog", "expectedDestinationKeys": ["heidelberg-germany"], "expectedSha256": "ff0443b36d84853cd8728bd99394e5957fbeda342fff90807bc268fc8bfb155a"},{"registryId": "legacy-puerto-varas-chile-01", "workbookPath": "data/legacy-puerto-varas-chile-01/DestinationFinderAI-puerto-varas-Premium-Candidate-v3.3.xlsx", "environment": "production", "candidateDiscovery": "published-catalog", "expectedDestinationKeys": ["puerto-varas-chile"], "expectedSha256": "cd147ba6b0a2b700c590852691fe6be4a3695487cafb0f2085dfb77af7eeaebc"},{"registryId": "legacy-nagano-japan-01", "workbookPath": "data/legacy-nagano-japan-01/DestinationFinderAI-nagano-Premium-Candidate-v3.3.xlsx", "environment": "production", "candidateDiscovery": "published-catalog", "expectedDestinationKeys": ["nagano-japan"], "expectedSha256": "9011f323dbab5f83fbe843b4a3f069d37ff40f71c78fe533e9f21679bbefdca3"},
 {
   "registryId": "legacy-antigua-guatemala-guatemala-01",
