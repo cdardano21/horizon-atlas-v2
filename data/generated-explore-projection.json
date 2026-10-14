@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "cf511623a2e29e699a7bfdd2919c5423afffbc5e7b2b5bfdfac804b25dd1f6b6",
-  "digest": "3cf61289a3a877570d6738f69669659842bfd248aa299b7bfeec09d0c38b653c",
+  "sourceSignature": "42483eed4f081ddfcb616364e544da3e7e307bd834a2e9d18e8aad788b4c526d",
+  "digest": "5678c4da3a9c536b124078f6b63b830708de292d7f362c54651b08bc1c29cf4f",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "encarnacion-paraguay",
+        "slug": "encarnacion-paraguay",
+        "name": "Encarnación",
+        "country": "Paraguay",
+        "summary": "Encarnación offers a Paraná riverfront routine alongside a central shopping district and residential areas with different travel needs."
+      },
+      {
+        "key": "nara-japan",
+        "slug": "nara-japan",
+        "name": "Nara",
+        "country": "Japan",
+        "summary": "Nara supports a cultural routine around temples and parkland, but a long-stay address should also work for groceries, healthcare and rail journeys."
+      },
+      {
+        "key": "regensburg-germany",
+        "slug": "regensburg-germany",
+        "name": "Regensburg",
+        "country": "Germany",
+        "summary": "Regensburg combines a historic Danube core with residential districts beyond the most visited lanes."
+      },
+      {
+        "key": "siem-reap-cambodia",
+        "slug": "siem-reap-cambodia",
+        "name": "Siem Reap",
+        "country": "Cambodia",
+        "summary": "Siem Reap can support a cultural long stay, but temple excursions, everyday city errands and medical contingency planning are different needs."
+      },
+      {
+        "key": "vitoria-brazil",
+        "slug": "vitoria-brazil",
+        "name": "Vitória",
+        "country": "Brazil",
+        "summary": "Vitória combines historic island districts with mainland residential areas."
       },
       {
         "key": "asuncion-paraguay",
@@ -2377,6 +2412,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "encarnacion-paraguay",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/66/Atardecer_en_Avenida_Costanera_de_la_ciudad_de_Encarnaci%C3%B3n_%28Paraguay%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Encarnación: Atardecer en Avenida Costanera de la ciudad de Encarnación (Paraguay)"
+        }
+      },
+      {
+        "key": "nara-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Todaiji_temple_in_Nara_%2811140757433%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Nara: Todaiji temple in Nara (11140757433)"
+        }
+      },
+      {
+        "key": "regensburg-germany",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/29/Regensburg_08_2006_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Regensburg: Regensburg 08 2006 2"
+        }
+      },
+      {
+        "key": "siem-reap-cambodia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Angkor_Wat_Aerial_View_Siem_Reap_Cambodia_2011.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Siem Reap: Angkor Wat Aerial View Siem Reap Cambodia 2011 — Angkor excursion, outside the central urban neighborhood"
+        }
+      },
+      {
+        "key": "vitoria-brazil",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/3/30/Vit%C3%B3ria%2C_Esp%C3%ADrito_Santo_skyline.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Vitória: Vitória, Espírito Santo skyline"
         }
       },
       {

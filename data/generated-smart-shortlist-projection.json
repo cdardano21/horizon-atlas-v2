@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "6596e10b610f4c808ec229b9768e3bc582bfc427414dbe28de868a38e9d5bd46",
-  "digest": "aa8d830ef9d80effe5757246ffa389a48514678540ff93123578c94619ae0759",
+  "sourceSignature": "b17c9426696cb123136adbb29fc81d1fe4ea01d210fe5252bc27d088973dec8b",
+  "digest": "144abe7864acc6c34957a552d136605a83d1322188b503d6e77896ec59647760",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "encarnacion-paraguay",
+        "name": "Encarnación",
+        "slug": "encarnacion-paraguay",
+        "country": "Paraguay",
+        "countryCode": "PY",
+        "summary": "Encarnación offers a Paraná riverfront routine alongside a central shopping district and residential areas with different travel needs.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "nara-japan",
+        "name": "Nara",
+        "slug": "nara-japan",
+        "country": "Japan",
+        "countryCode": "JP",
+        "summary": "Nara supports a cultural routine around temples and parkland, but a long-stay address should also work for groceries, healthcare and rail journeys.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "regensburg-germany",
+        "name": "Regensburg",
+        "slug": "regensburg-germany",
+        "country": "Germany",
+        "countryCode": "DE",
+        "summary": "Regensburg combines a historic Danube core with residential districts beyond the most visited lanes.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "siem-reap-cambodia",
+        "name": "Siem Reap",
+        "slug": "siem-reap-cambodia",
+        "country": "Cambodia",
+        "countryCode": "KH",
+        "summary": "Siem Reap can support a cultural long stay, but temple excursions, everyday city errands and medical contingency planning are different needs.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "vitoria-brazil",
+        "name": "Vitória",
+        "slug": "vitoria-brazil",
+        "country": "Brazil",
+        "countryCode": "BR",
+        "summary": "Vitória combines historic island districts with mainland residential areas.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -12279,6 +12429,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "encarnacion-paraguay",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "nara-japan",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "regensburg-germany",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "siem-reap-cambodia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "vitoria-brazil",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "asuncion-paraguay",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -17252,6 +17487,41 @@
         }
       },
       {
+        "key": "encarnacion-paraguay",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/66/Atardecer_en_Avenida_Costanera_de_la_ciudad_de_Encarnaci%C3%B3n_%28Paraguay%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Encarnación: Atardecer en Avenida Costanera de la ciudad de Encarnación (Paraguay)"
+        }
+      },
+      {
+        "key": "nara-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Todaiji_temple_in_Nara_%2811140757433%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Nara: Todaiji temple in Nara (11140757433)"
+        }
+      },
+      {
+        "key": "regensburg-germany",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/29/Regensburg_08_2006_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Regensburg: Regensburg 08 2006 2"
+        }
+      },
+      {
+        "key": "siem-reap-cambodia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Angkor_Wat_Aerial_View_Siem_Reap_Cambodia_2011.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Siem Reap: Angkor Wat Aerial View Siem Reap Cambodia 2011 — Angkor excursion, outside the central urban neighborhood"
+        }
+      },
+      {
+        "key": "vitoria-brazil",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/3/30/Vit%C3%B3ria%2C_Esp%C3%ADrito_Santo_skyline.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Vitória: Vitória, Espírito Santo skyline"
+        }
+      },
+      {
         "key": "asuncion-paraguay",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Asuncion_nubes_sobre_el_rio_%2834520523923%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -19312,6 +19582,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "encarnacion-paraguay",
+        "singleMonthlyUsd": 1125,
+        "coupleMonthlyUsd": 1475,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "nara-japan",
+        "singleMonthlyUsd": 1100,
+        "coupleMonthlyUsd": 1600,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "regensburg-germany",
+        "singleMonthlyUsd": 1975,
+        "coupleMonthlyUsd": 2775,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "siem-reap-cambodia",
+        "singleMonthlyUsd": 1000,
+        "coupleMonthlyUsd": 1500,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "vitoria-brazil",
+        "singleMonthlyUsd": 1050,
+        "coupleMonthlyUsd": 1475,
         "estimateYear": 2026
       },
       {
