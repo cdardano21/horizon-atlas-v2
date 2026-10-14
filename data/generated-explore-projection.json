@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "42483eed4f081ddfcb616364e544da3e7e307bd834a2e9d18e8aad788b4c526d",
-  "digest": "5678c4da3a9c536b124078f6b63b830708de292d7f362c54651b08bc1c29cf4f",
+  "sourceSignature": "a8cf5c7da2052402bd149c738e2449341f82de7a774e65cca9809c05e9bcb66b",
+  "digest": "08c59f698dca6a4da0f7fb110e1e66284a341ff6a27d33d88c5e8344bee38596",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "ensenada-mexico",
+        "slug": "ensenada-mexico",
+        "name": "Ensenada",
+        "country": "Mexico",
+        "summary": "Ensenada combines an urban Pacific port with seafood culture and access to wine-country excursions."
+      },
+      {
+        "key": "cluj-napoca-romania",
+        "slug": "cluj-napoca-romania",
+        "name": "Cluj-Napoca",
+        "country": "Romania",
+        "summary": "Cluj-Napoca offers university-city culture, parks and a substantial urban services base."
+      },
+      {
+        "key": "tampere-finland",
+        "slug": "tampere-finland",
+        "name": "Tampere",
+        "country": "Finland",
+        "summary": "Tampere combines industrial heritage, lake landscapes and a daily transit network."
+      },
+      {
+        "key": "rennes-france",
+        "slug": "rennes-france",
+        "name": "Rennes",
+        "country": "France",
+        "summary": "Rennes combines a historic centre, food markets, cultural institutions and a metropolitan transport network."
+      },
+      {
+        "key": "york-united-kingdom",
+        "slug": "york-united-kingdom",
+        "name": "York",
+        "country": "United Kingdom",
+        "summary": "York offers a compact historic core, rail heritage and a large visitor economy."
       },
       {
         "key": "encarnacion-paraguay",
@@ -2412,6 +2447,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "ensenada-mexico",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/67/Puerto_Ensenada.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Ensenada: Puerto Ensenada"
+        }
+      },
+      {
+        "key": "cluj-napoca-romania",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Cluj_center.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Cluj-Napoca: Cluj center"
+        }
+      },
+      {
+        "key": "tampere-finland",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/82/Tampere_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Tampere: Tampere 01"
+        }
+      },
+      {
+        "key": "rennes-france",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/52/Hotel-de-Ville-Rennes-01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Rennes: Hotel-de-Ville-Rennes-01"
+        }
+      },
+      {
+        "key": "york-united-kingdom",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/7/78/York_Minster%2C_exterior.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "York: York Minster, exterior"
         }
       },
       {

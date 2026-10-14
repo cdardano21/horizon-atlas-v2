@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "b17c9426696cb123136adbb29fc81d1fe4ea01d210fe5252bc27d088973dec8b",
-  "digest": "144abe7864acc6c34957a552d136605a83d1322188b503d6e77896ec59647760",
+  "sourceSignature": "0dc1312499304f12487047e66a5000ad2f546f133eb46f52b17160d8f8eceeb8",
+  "digest": "4ea1b10fa4cce503a2adf4f03fb47c9c0bcc291de2f1d5a5ecf6c60431b08395",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "ensenada-mexico",
+        "name": "Ensenada",
+        "slug": "ensenada-mexico",
+        "country": "Mexico",
+        "countryCode": "MX",
+        "summary": "Ensenada combines an urban Pacific port with seafood culture and access to wine-country excursions.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "cluj-napoca-romania",
+        "name": "Cluj-Napoca",
+        "slug": "cluj-napoca-romania",
+        "country": "Romania",
+        "countryCode": "RO",
+        "summary": "Cluj-Napoca offers university-city culture, parks and a substantial urban services base.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "tampere-finland",
+        "name": "Tampere",
+        "slug": "tampere-finland",
+        "country": "Finland",
+        "countryCode": "FI",
+        "summary": "Tampere combines industrial heritage, lake landscapes and a daily transit network.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "rennes-france",
+        "name": "Rennes",
+        "slug": "rennes-france",
+        "country": "France",
+        "countryCode": "FR",
+        "summary": "Rennes combines a historic centre, food markets, cultural institutions and a metropolitan transport network.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "york-united-kingdom",
+        "name": "York",
+        "slug": "york-united-kingdom",
+        "country": "United Kingdom",
+        "countryCode": "GB",
+        "summary": "York offers a compact historic core, rail heritage and a large visitor economy.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -12429,6 +12579,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "ensenada-mexico",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "cluj-napoca-romania",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "tampere-finland",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "rennes-france",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "york-united-kingdom",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "encarnacion-paraguay",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -17487,6 +17722,41 @@
         }
       },
       {
+        "key": "ensenada-mexico",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/67/Puerto_Ensenada.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Ensenada: Puerto Ensenada"
+        }
+      },
+      {
+        "key": "cluj-napoca-romania",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Cluj_center.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Cluj-Napoca: Cluj center"
+        }
+      },
+      {
+        "key": "tampere-finland",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/82/Tampere_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Tampere: Tampere 01"
+        }
+      },
+      {
+        "key": "rennes-france",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/52/Hotel-de-Ville-Rennes-01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Rennes: Hotel-de-Ville-Rennes-01"
+        }
+      },
+      {
+        "key": "york-united-kingdom",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/7/78/York_Minster%2C_exterior.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "York: York Minster, exterior"
+        }
+      },
+      {
         "key": "encarnacion-paraguay",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/6/66/Atardecer_en_Avenida_Costanera_de_la_ciudad_de_Encarnaci%C3%B3n_%28Paraguay%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -19582,6 +19852,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "ensenada-mexico",
+        "singleMonthlyUsd": 1250,
+        "coupleMonthlyUsd": 1700,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "cluj-napoca-romania",
+        "singleMonthlyUsd": 1325,
+        "coupleMonthlyUsd": 1850,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "tampere-finland",
+        "singleMonthlyUsd": 2050,
+        "coupleMonthlyUsd": 2850,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "rennes-france",
+        "singleMonthlyUsd": 1850,
+        "coupleMonthlyUsd": 2700,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "york-united-kingdom",
+        "singleMonthlyUsd": 2725,
+        "coupleMonthlyUsd": 3800,
         "estimateYear": 2026
       },
       {
