@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "a8cf5c7da2052402bd149c738e2449341f82de7a774e65cca9809c05e9bcb66b",
-  "digest": "08c59f698dca6a4da0f7fb110e1e66284a341ff6a27d33d88c5e8344bee38596",
+  "sourceSignature": "5f328ef4cf7103c019ccfaca1566d4dfb1a67af0fc91d54f51820ddb902bfc0b",
+  "digest": "4502f4f776ca608eb61984d08eee429ed22719f33d09eed0061990bc9f5ee0df",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "vina-del-mar-chile",
+        "slug": "vina-del-mar-chile",
+        "name": "Viña del Mar",
+        "country": "Chile",
+        "summary": "Viña del Mar combines Pacific promenades, gardens and an established urban service base."
+      },
+      {
+        "key": "trento-italy",
+        "slug": "trento-italy",
+        "name": "Trento",
+        "country": "Italy",
+        "summary": "Trento offers a compact historic center, university activity and an Alpine-valley base with museums and regional transport."
+      },
+      {
+        "key": "heredia-costa-rica",
+        "slug": "heredia-costa-rica",
+        "name": "Heredia",
+        "country": "Costa Rica",
+        "summary": "Heredia offers a university-city base with a compact historic center and a wider metropolitan housing market."
+      },
+      {
+        "key": "brasov-romania",
+        "slug": "brasov-romania",
+        "name": "Brașov",
+        "country": "Romania",
+        "summary": "Brașov combines a historic center with larger residential districts and access to mountain outings."
+      },
+      {
+        "key": "luang-prabang-laos",
+        "slug": "luang-prabang-laos",
+        "name": "Luang Prabang",
+        "country": "Laos",
+        "summary": "Luang Prabang is a heritage-city base at the Mekong and Nam Khan, suited to deliberate cultural routines rather than big-city service expectations."
       },
       {
         "key": "ensenada-mexico",
@@ -2447,6 +2482,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "vina-del-mar-chile",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/13/Vi%C3%B1a_del_Mar_Avenida_Marina%2C_Castillo_Wulff_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Pacific shore along Avenida Marina, Viña del Mar"
+        }
+      },
+      {
+        "key": "trento-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/24/Trento-view_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Trento and the Adige valley from a hillside vineyard"
+        }
+      },
+      {
+        "key": "heredia-costa-rica",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/f4/Heredia%2C_Costa_Rica.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "El Fortín in central Heredia"
+        }
+      },
+      {
+        "key": "brasov-romania",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Brasov%2C_Piata_Sfatului.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Piața Sfatului and the former council house, Brașov"
+        }
+      },
+      {
+        "key": "luang-prabang-laos",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Mountains_Mekong_river_and_dwellings_seen_from_Mount_Phou_Si_at_dusk_in_Luang_Prabang_Laos.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Mekong and Luang Prabang rooftops viewed from Phou Si"
         }
       },
       {

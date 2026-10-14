@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "0dc1312499304f12487047e66a5000ad2f546f133eb46f52b17160d8f8eceeb8",
-  "digest": "4ea1b10fa4cce503a2adf4f03fb47c9c0bcc291de2f1d5a5ecf6c60431b08395",
+  "sourceSignature": "81f32b7f33dac904dfc086da718ea19e8e457b0537d32e9ba26ee1d10e8e0979",
+  "digest": "ea96870a320fcd3965e3d5607fb3db1b1dfe7104a6b86d4db9c201a3497c4e47",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "vina-del-mar-chile",
+        "name": "Viña del Mar",
+        "slug": "vina-del-mar-chile",
+        "country": "Chile",
+        "countryCode": "CL",
+        "summary": "Viña del Mar combines Pacific promenades, gardens and an established urban service base.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "trento-italy",
+        "name": "Trento",
+        "slug": "trento-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "Trento offers a compact historic center, university activity and an Alpine-valley base with museums and regional transport.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "heredia-costa-rica",
+        "name": "Heredia",
+        "slug": "heredia-costa-rica",
+        "country": "Costa Rica",
+        "countryCode": "CR",
+        "summary": "Heredia offers a university-city base with a compact historic center and a wider metropolitan housing market.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "brasov-romania",
+        "name": "Brașov",
+        "slug": "brasov-romania",
+        "country": "Romania",
+        "countryCode": "RO",
+        "summary": "Brașov combines a historic center with larger residential districts and access to mountain outings.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "luang-prabang-laos",
+        "name": "Luang Prabang",
+        "slug": "luang-prabang-laos",
+        "country": "Laos",
+        "countryCode": "LA",
+        "summary": "Luang Prabang is a heritage-city base at the Mekong and Nam Khan, suited to deliberate cultural routines rather than big-city service expectations.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -12579,6 +12729,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "vina-del-mar-chile",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "trento-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "heredia-costa-rica",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "brasov-romania",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "luang-prabang-laos",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "ensenada-mexico",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -17722,6 +17957,41 @@
         }
       },
       {
+        "key": "vina-del-mar-chile",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/13/Vi%C3%B1a_del_Mar_Avenida_Marina%2C_Castillo_Wulff_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Pacific shore along Avenida Marina, Viña del Mar"
+        }
+      },
+      {
+        "key": "trento-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/24/Trento-view_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Trento and the Adige valley from a hillside vineyard"
+        }
+      },
+      {
+        "key": "heredia-costa-rica",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/f4/Heredia%2C_Costa_Rica.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "El Fortín in central Heredia"
+        }
+      },
+      {
+        "key": "brasov-romania",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Brasov%2C_Piata_Sfatului.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Piața Sfatului and the former council house, Brașov"
+        }
+      },
+      {
+        "key": "luang-prabang-laos",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Mountains_Mekong_river_and_dwellings_seen_from_Mount_Phou_Si_at_dusk_in_Luang_Prabang_Laos.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Mekong and Luang Prabang rooftops viewed from Phou Si"
+        }
+      },
+      {
         "key": "ensenada-mexico",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/6/67/Puerto_Ensenada.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -19852,6 +20122,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "vina-del-mar-chile",
+        "singleMonthlyUsd": 1225,
+        "coupleMonthlyUsd": 1675,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "trento-italy",
+        "singleMonthlyUsd": 2000,
+        "coupleMonthlyUsd": 2625,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "heredia-costa-rica",
+        "singleMonthlyUsd": 1625,
+        "coupleMonthlyUsd": 2225,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "brasov-romania",
+        "singleMonthlyUsd": 1325,
+        "coupleMonthlyUsd": 1825,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "luang-prabang-laos",
+        "singleMonthlyUsd": 1225,
+        "coupleMonthlyUsd": 1700,
         "estimateYear": 2026
       },
       {
