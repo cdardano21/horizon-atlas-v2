@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "dfe4e532ff0942cc87d583aed4aadceaed6c4e64ecdb42a691a246940dd40e97",
-  "digest": "7c2733b44fa4e5cf4c7b424d577a2f69ab72c8a9e9ea4ab5420db516cc0eaa6a",
+  "sourceSignature": "9014abacab96b3bd8c2680059c52a44c09dd0021cc19d91b8e1b5d63b4cf4466",
+  "digest": "656b15ee5be270cec738fe92f43bc333220e8902e5b6589ade51a3c73885084a",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "aguascalientes-mexico",
+        "name": "Aguascalientes",
+        "slug": "aguascalientes-mexico",
+        "country": "Mexico",
+        "countryCode": "MX",
+        "summary": "Aguascalientes is an inland city with historic barrios, railway heritage and the seasonal San Marcos fair.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "galway-ireland",
+        "name": "Galway",
+        "slug": "galway-ireland",
+        "country": "Ireland",
+        "countryCode": "IE",
+        "summary": "Galway combines a compact cultural center, university life and an Atlantic waterfront.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "ann-arbor-michigan-united-states",
+        "name": "Ann Arbor",
+        "slug": "ann-arbor-michigan-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Ann Arbor offers university museums, distinct downtown districts and a strong local-food setting.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "izola-slovenia",
+        "name": "Izola",
+        "slug": "izola-slovenia",
+        "country": "Slovenia",
+        "countryCode": "SI",
+        "summary": "Izola retains a compact fishing-town and Venetian-heritage setting on Slovenia’s coast.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "takamatsu-japan",
+        "name": "Takamatsu",
+        "slug": "takamatsu-japan",
+        "country": "Japan",
+        "countryCode": "JP",
+        "summary": "Takamatsu combines a Seto Inland Sea port, garden and museum outings, shopping arcades and Sanuki food culture.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -12879,6 +13029,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "aguascalientes-mexico",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "galway-ireland",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "ann-arbor-michigan-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "izola-slovenia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "takamatsu-japan",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "cuernavaca-mexico",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -18192,6 +18427,41 @@
         }
       },
       {
+        "key": "aguascalientes-mexico",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Centro_de_Aguascalientes.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Historic central street in Aguascalientes at night"
+        }
+      },
+      {
+        "key": "galway-ireland",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/de/Galway_City_Centre_-_geograph.org.uk_-_5092846.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Galway city-center street in the Latin Quarter"
+        }
+      },
+      {
+        "key": "ann-arbor-michigan-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/df/Michigan_Theater%2C_Liberty_Street%2C_Ann_Arbor%2C_MI_-_54380295137.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Michigan Theater on Liberty Street, Ann Arbor"
+        }
+      },
+      {
+        "key": "izola-slovenia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Izola_-_panorama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Izola town and marina panorama"
+        }
+      },
+      {
+        "key": "takamatsu-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Ritsurin_Garden%2C_Kagawa_Prefecture%3B_November_2019_%2803%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Bridge and pond in Ritsurin Garden, Takamatsu"
+        }
+      },
+      {
         "key": "cuernavaca-mexico",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/8/88/Zona_metropolitana_de_Cuernavaca%2C_vista_CIVAC_%282019%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -20392,6 +20662,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "aguascalientes-mexico",
+        "singleMonthlyUsd": 1300,
+        "coupleMonthlyUsd": 1750,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "galway-ireland",
+        "singleMonthlyUsd": 3625,
+        "coupleMonthlyUsd": 4750,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "ann-arbor-michigan-united-states",
+        "singleMonthlyUsd": 3125,
+        "coupleMonthlyUsd": 4225,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "izola-slovenia",
+        "singleMonthlyUsd": 2175,
+        "coupleMonthlyUsd": 3000,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "takamatsu-japan",
+        "singleMonthlyUsd": 1050,
+        "coupleMonthlyUsd": 1500,
         "estimateYear": 2026
       },
       {

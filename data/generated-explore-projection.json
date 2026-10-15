@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "359f41c87029bd617a6caea456c115dc2ded17e0f0ce1bfc919b5edfb81ddaef",
-  "digest": "cee60b1694c46e0cfb2579f6efa8ac8b8803c3e2d16f36580cb8b7fb3397205f",
+  "sourceSignature": "6a74ba76b13a561d4bf4e28a8090cee3a6e6c7ae9ef998c4bf4b9c84c84f76c1",
+  "digest": "f04c54f019a30a9a406d9a256d6fa60eda47094bb9cb7b54a2d2ce428d53b7fc",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "aguascalientes-mexico",
+        "slug": "aguascalientes-mexico",
+        "name": "Aguascalientes",
+        "country": "Mexico",
+        "summary": "Aguascalientes is an inland city with historic barrios, railway heritage and the seasonal San Marcos fair."
+      },
+      {
+        "key": "galway-ireland",
+        "slug": "galway-ireland",
+        "name": "Galway",
+        "country": "Ireland",
+        "summary": "Galway combines a compact cultural center, university life and an Atlantic waterfront."
+      },
+      {
+        "key": "ann-arbor-michigan-united-states",
+        "slug": "ann-arbor-michigan-united-states",
+        "name": "Ann Arbor",
+        "country": "United States",
+        "summary": "Ann Arbor offers university museums, distinct downtown districts and a strong local-food setting."
+      },
+      {
+        "key": "izola-slovenia",
+        "slug": "izola-slovenia",
+        "name": "Izola",
+        "country": "Slovenia",
+        "summary": "Izola retains a compact fishing-town and Venetian-heritage setting on Slovenia’s coast."
+      },
+      {
+        "key": "takamatsu-japan",
+        "slug": "takamatsu-japan",
+        "name": "Takamatsu",
+        "country": "Japan",
+        "summary": "Takamatsu combines a Seto Inland Sea port, garden and museum outings, shopping arcades and Sanuki food culture."
       },
       {
         "key": "cuernavaca-mexico",
@@ -2517,6 +2552,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "aguascalientes-mexico",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Centro_de_Aguascalientes.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Historic central street in Aguascalientes at night"
+        }
+      },
+      {
+        "key": "galway-ireland",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/de/Galway_City_Centre_-_geograph.org.uk_-_5092846.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Galway city-center street in the Latin Quarter"
+        }
+      },
+      {
+        "key": "ann-arbor-michigan-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/df/Michigan_Theater%2C_Liberty_Street%2C_Ann_Arbor%2C_MI_-_54380295137.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Michigan Theater on Liberty Street, Ann Arbor"
+        }
+      },
+      {
+        "key": "izola-slovenia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Izola_-_panorama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Izola town and marina panorama"
+        }
+      },
+      {
+        "key": "takamatsu-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Ritsurin_Garden%2C_Kagawa_Prefecture%3B_November_2019_%2803%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Bridge and pond in Ritsurin Garden, Takamatsu"
         }
       },
       {
