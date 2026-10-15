@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "6a74ba76b13a561d4bf4e28a8090cee3a6e6c7ae9ef998c4bf4b9c84c84f76c1",
-  "digest": "f04c54f019a30a9a406d9a256d6fa60eda47094bb9cb7b54a2d2ce428d53b7fc",
+  "sourceSignature": "3ee04dad1a799b315e71f0655c70915d629d3f164c0b765564a7be5fcc138930",
+  "digest": "2f4f276355c20b89c7c89baa636c023c1ce462976157ba4f45c0cf88e3c532b7",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "las-tablas-panama",
+        "slug": "las-tablas-panama",
+        "name": "Las Tablas",
+        "country": "Panama",
+        "summary": "Las Tablas rewards a different kind of long stay from a beach resort."
+      },
+      {
+        "key": "manta-ecuador",
+        "slug": "manta-ecuador",
+        "name": "Manta",
+        "country": "Ecuador",
+        "summary": "Manta’s shoreline is only one part of the city."
+      },
+      {
+        "key": "nuremberg-germany",
+        "slug": "nuremberg-germany",
+        "name": "Nuremberg",
+        "country": "Germany",
+        "summary": "Nuremberg becomes more interesting as a place to live when you stop organizing every day around the castle."
+      },
+      {
+        "key": "strasbourg-france",
+        "slug": "strasbourg-france",
+        "name": "Strasbourg",
+        "country": "France",
+        "summary": "Strasbourg offers a convincing everyday life beyond the photograph of Petite France."
+      },
+      {
+        "key": "kaunas-lithuania",
+        "slug": "kaunas-lithuania",
+        "name": "Kaunas",
+        "country": "Lithuania",
+        "summary": "Kaunas asks you to pay attention to levels as well as distances."
       },
       {
         "key": "aguascalientes-mexico",
@@ -2552,6 +2587,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "las-tablas-panama",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/86/Las_Tablas_Vista_a%C3%A9rea.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Aerial view of Las Tablas and its surrounding landscape, Panama."
+        }
+      },
+      {
+        "key": "manta-ecuador",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/ef/2022-10-04a_Wide_view_of_the_city_of_Manta%2C_Ecuador.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Manta waterfront and working port, photographed in October 2022."
+        }
+      },
+      {
+        "key": "nuremberg-germany",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Nuremberg_View_Old_Town.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Nuremberg’s old-town skyline on a snowy evening."
+        }
+      },
+      {
+        "key": "strasbourg-france",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/60/Strasbourg_Canal_and_Bridge.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Canal and bridge in Strasbourg’s Petite France quarter."
+        }
+      },
+      {
+        "key": "kaunas-lithuania",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Vytautas_the_Great_Bridge_from_hill%2C_Kaunas%2C_Lithuania_-_Diliff.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Vytautas the Great Bridge and Kaunas old town viewed from the hillside."
         }
       },
       {

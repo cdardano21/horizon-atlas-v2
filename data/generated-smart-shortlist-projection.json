@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "9014abacab96b3bd8c2680059c52a44c09dd0021cc19d91b8e1b5d63b4cf4466",
-  "digest": "656b15ee5be270cec738fe92f43bc333220e8902e5b6589ade51a3c73885084a",
+  "sourceSignature": "5e9d7424c6e7bfe0843a6b425f03c8d6549cddfb25b3ad7b5ced8f486a6f07f5",
+  "digest": "6082217e1c10fbbf0024d361b30e969894289842b1fac7ca207039e02cf24e90",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "las-tablas-panama",
+        "name": "Las Tablas",
+        "slug": "las-tablas-panama",
+        "country": "Panama",
+        "countryCode": "PA",
+        "summary": "Las Tablas rewards a different kind of long stay from a beach resort.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "manta-ecuador",
+        "name": "Manta",
+        "slug": "manta-ecuador",
+        "country": "Ecuador",
+        "countryCode": "EC",
+        "summary": "Manta’s shoreline is only one part of the city.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "nuremberg-germany",
+        "name": "Nuremberg",
+        "slug": "nuremberg-germany",
+        "country": "Germany",
+        "countryCode": "DE",
+        "summary": "Nuremberg becomes more interesting as a place to live when you stop organizing every day around the castle.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "strasbourg-france",
+        "name": "Strasbourg",
+        "slug": "strasbourg-france",
+        "country": "France",
+        "countryCode": "FR",
+        "summary": "Strasbourg offers a convincing everyday life beyond the photograph of Petite France.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "kaunas-lithuania",
+        "name": "Kaunas",
+        "slug": "kaunas-lithuania",
+        "country": "Lithuania",
+        "countryCode": "LT",
+        "summary": "Kaunas asks you to pay attention to levels as well as distances.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -13029,6 +13179,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "las-tablas-panama",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "manta-ecuador",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "nuremberg-germany",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "strasbourg-france",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "kaunas-lithuania",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "aguascalientes-mexico",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -18427,6 +18662,41 @@
         }
       },
       {
+        "key": "las-tablas-panama",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/86/Las_Tablas_Vista_a%C3%A9rea.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Aerial view of Las Tablas and its surrounding landscape, Panama."
+        }
+      },
+      {
+        "key": "manta-ecuador",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/ef/2022-10-04a_Wide_view_of_the_city_of_Manta%2C_Ecuador.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Manta waterfront and working port, photographed in October 2022."
+        }
+      },
+      {
+        "key": "nuremberg-germany",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Nuremberg_View_Old_Town.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Nuremberg’s old-town skyline on a snowy evening."
+        }
+      },
+      {
+        "key": "strasbourg-france",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/60/Strasbourg_Canal_and_Bridge.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Canal and bridge in Strasbourg’s Petite France quarter."
+        }
+      },
+      {
+        "key": "kaunas-lithuania",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Vytautas_the_Great_Bridge_from_hill%2C_Kaunas%2C_Lithuania_-_Diliff.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Vytautas the Great Bridge and Kaunas old town viewed from the hillside."
+        }
+      },
+      {
         "key": "aguascalientes-mexico",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Centro_de_Aguascalientes.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -20662,6 +20932,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "las-tablas-panama",
+        "singleMonthlyUsd": 1400,
+        "coupleMonthlyUsd": 1875,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "manta-ecuador",
+        "singleMonthlyUsd": 1675,
+        "coupleMonthlyUsd": 2250,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "nuremberg-germany",
+        "singleMonthlyUsd": 2150,
+        "coupleMonthlyUsd": 2975,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "strasbourg-france",
+        "singleMonthlyUsd": 2000,
+        "coupleMonthlyUsd": 2775,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "kaunas-lithuania",
+        "singleMonthlyUsd": 1600,
+        "coupleMonthlyUsd": 2150,
         "estimateYear": 2026
       },
       {
