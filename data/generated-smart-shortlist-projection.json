@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "81f32b7f33dac904dfc086da718ea19e8e457b0537d32e9ba26ee1d10e8e0979",
-  "digest": "ea96870a320fcd3965e3d5607fb3db1b1dfe7104a6b86d4db9c201a3497c4e47",
+  "sourceSignature": "dfe4e532ff0942cc87d583aed4aadceaed6c4e64ecdb42a691a246940dd40e97",
+  "digest": "7c2733b44fa4e5cf4c7b424d577a2f69ab72c8a9e9ea4ab5420db516cc0eaa6a",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "cuernavaca-mexico",
+        "name": "Cuernavaca",
+        "slug": "cuernavaca-mexico",
+        "country": "Mexico",
+        "countryCode": "MX",
+        "summary": "Cuernavaca offers historic gardens, museums and established urban services in Morelos.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "el-valle-de-anton-panama",
+        "name": "El Valle de Antón",
+        "slug": "el-valle-de-anton-panama",
+        "country": "Panama",
+        "countryCode": "PA",
+        "summary": "El Valle de Antón is an inland valley base for markets, birdwatching and trail outings.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "bentonville-arkansas-united-states",
+        "name": "Bentonville",
+        "slug": "bentonville-arkansas-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Bentonville combines art institutions, a central dining district and a strong cycling identity.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "canberra-australia",
+        "name": "Canberra",
+        "slug": "canberra-australia",
+        "country": "Australia",
+        "countryCode": "AU",
+        "summary": "Canberra offers national cultural institutions and distinct residential precincts around Lake Burley Griffin.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "zagreb-croatia",
+        "name": "Zagreb",
+        "slug": "zagreb-croatia",
+        "country": "Croatia",
+        "countryCode": "HR",
+        "summary": "Zagreb offers an inland capital-city lifestyle with markets, museums and an extensive public-transport network.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -12729,6 +12879,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "cuernavaca-mexico",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "el-valle-de-anton-panama",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "bentonville-arkansas-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "canberra-australia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "zagreb-croatia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "vina-del-mar-chile",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -17957,6 +18192,41 @@
         }
       },
       {
+        "key": "cuernavaca-mexico",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/88/Zona_metropolitana_de_Cuernavaca%2C_vista_CIVAC_%282019%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Cuernavaca metropolitan area viewed toward CIVAC in 2019; wider urban region"
+        }
+      },
+      {
+        "key": "el-valle-de-anton-panama",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Valle-de-Anton-2019-Panama-DG.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "El Valle de Antón valley and settlement, 2019"
+        }
+      },
+      {
+        "key": "bentonville-arkansas-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Downtown_Bentonville%2C_AR.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Downtown Bentonville streetscape"
+        }
+      },
+      {
+        "key": "canberra-australia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b6/Parliament_House_at_dusk%2C_Canberra_ACT.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Parliament House at dusk, Canberra"
+        }
+      },
+      {
+        "key": "zagreb-croatia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Estatua_de_Tomislav_de_Croacia%2C_Zagreb%2C_Croacia%2C_2014-04-20%2C_DD_05.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "King Tomislav monument and Art Pavilion, Zagreb"
+        }
+      },
+      {
         "key": "vina-del-mar-chile",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/1/13/Vi%C3%B1a_del_Mar_Avenida_Marina%2C_Castillo_Wulff_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -20122,6 +20392,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "cuernavaca-mexico",
+        "singleMonthlyUsd": 1125,
+        "coupleMonthlyUsd": 1575,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "el-valle-de-anton-panama",
+        "singleMonthlyUsd": 1850,
+        "coupleMonthlyUsd": 2500,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "bentonville-arkansas-united-states",
+        "singleMonthlyUsd": 2650,
+        "coupleMonthlyUsd": 3500,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "canberra-australia",
+        "singleMonthlyUsd": 2875,
+        "coupleMonthlyUsd": 3625,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "zagreb-croatia",
+        "singleMonthlyUsd": 1975,
+        "coupleMonthlyUsd": 2725,
         "estimateYear": 2026
       },
       {
