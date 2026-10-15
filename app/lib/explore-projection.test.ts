@@ -45,7 +45,7 @@ describe("validated Explore projection", () => {
       candidates: source.candidates.filter(c => registered.has(c.key)).map(selectExploreCandidate),
       destinationMedia: source.destinationMedia.filter(m => registered.has(m.key)),
     };
-    expect(registered.size).toBe(338);
+    expect(registered.size).toBe(343);
     expect(validateExploreProjection(artifact())).toEqual(expected);
     // Empty public data exercises every workbook summary and hero fallback, not just
     // today's successful catalog/media responses.
@@ -98,7 +98,7 @@ describe("validated Explore projection", () => {
   it("checks every pinned workbook on every load", () => {
     const reader = vi.fn((file: string) => readFileSync(file));
     validateExploreProjection(artifact(), EXPANSION_WORKBOOK_REGISTRY, reader);
-    expect(reader).toHaveBeenCalledTimes(109);
+    expect(reader).toHaveBeenCalledTimes(114);
     for (let i = 0; i < 45; i++) expect(createHash("sha256").update(reader.mock.results[i].value).digest("hex"))
       .toBe(EXPANSION_WORKBOOK_REGISTRY[i].expectedSha256);
   });

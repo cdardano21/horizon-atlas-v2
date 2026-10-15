@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "cf3c7c4b7c41a81711f4e4667efa0f9034c0bfb46d8a3aaae61913d8cd3ae9f0",
-  "digest": "f30c9622ab7f62bdae77f373c55827aaf784b918aec7dcbcba9e2e3827638f3c",
+  "sourceSignature": "c977fad64742458b835c0923250b0f7d04010f38f297f8a4fe7669e77f15e6ad",
+  "digest": "6d5e264c869a04100698caa877d36224a699f8ac62fa446b0648b8a43aba9b7b",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "aveiro-portugal",
+        "name": "Aveiro",
+        "slug": "aveiro-portugal",
+        "country": "Portugal",
+        "countryCode": "PT",
+        "summary": "Aveiro works best when the canals become part of an ordinary week rather than the entire reason for moving.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "zaragoza-spain",
+        "name": "Zaragoza",
+        "slug": "zaragoza-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "Zaragoza is an inland working city whose pleasures fit between ordinary errands: shopping at Mercado Central, an evening in El Tubo, or a walk toward the Ebro after the strongest heat has passed.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "innsbruck-austria",
+        "name": "Innsbruck",
+        "slug": "innsbruck-austria",
+        "country": "Austria",
+        "countryCode": "AT",
+        "summary": "Innsbruck puts a mountain horizon behind a very real housing decision.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "natal-brazil",
+        "name": "Natal",
+        "slug": "natal-brazil",
+        "country": "Brazil",
+        "countryCode": "BR",
+        "summary": "Natal asks a long-stay resident to separate a coastal holiday image from the practical geography of a working city.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "angers-france",
+        "name": "Angers",
+        "slug": "angers-france",
+        "country": "France",
+        "countryCode": "FR",
+        "summary": "Angers makes a long stay feel less like a circuit of châteaux and more like a sequence of manageable city days.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -13329,6 +13479,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "aveiro-portugal",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "zaragoza-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "innsbruck-austria",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "natal-brazil",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "angers-france",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "roanoke-virginia-united-states",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -18897,6 +19132,41 @@
         }
       },
       {
+        "key": "aveiro-portugal",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/21/Canal_in_Aveiro_04.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Canal-side buildings and a moliceiro boat in Aveiro"
+        }
+      },
+      {
+        "key": "zaragoza-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Zaragoza_City_empty_streets.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Street scene in Zaragoza; historical photograph, not current traffic conditions"
+        }
+      },
+      {
+        "key": "innsbruck-austria",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/20/Maria-Theresien-Stra%C3%9Fe_in_Innsbruck_with_Alpine_Backdrop.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Maria-Theresien-Straße with the mountain skyline in Innsbruck"
+        }
+      },
+      {
+        "key": "natal-brazil",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/43/Parque_da_Cidade_Natal_Entrada.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Entrance and city view at Parque da Cidade, Natal"
+        }
+      },
+      {
+        "key": "angers-france",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/c8/00_2539_Angers_%28France%29_-_Old_town.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Maison d’Adam and surrounding square in Angers"
+        }
+      },
+      {
         "key": "roanoke-virginia-united-states",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/3/35/Roanoke_City_%28Virginia%29_from_Mill_Mountain_Star_at_Dusk.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -21202,6 +21472,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "aveiro-portugal",
+        "singleMonthlyUsd": 1875,
+        "coupleMonthlyUsd": 2550,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "zaragoza-spain",
+        "singleMonthlyUsd": 1950,
+        "coupleMonthlyUsd": 2600,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "innsbruck-austria",
+        "singleMonthlyUsd": 2550,
+        "coupleMonthlyUsd": 3450,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "natal-brazil",
+        "singleMonthlyUsd": 1025,
+        "coupleMonthlyUsd": 1450,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "angers-france",
+        "singleMonthlyUsd": 1775,
+        "coupleMonthlyUsd": 2400,
         "estimateYear": 2026
       },
       {

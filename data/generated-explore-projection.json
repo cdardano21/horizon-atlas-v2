@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "8606867439ab8e5975dfe2688ba204359920021b7f0597b895d430a93aa4f6bb",
-  "digest": "44c1ab1b2a37bda06ad3fedf21ab4febc68314875529c3d796aa7eaa2ceb2b23",
+  "sourceSignature": "1820eb945d7fb05ba0e99a7b888b33eadfcda8307959caa32b8bf6e2c51d7e41",
+  "digest": "7009cba13cab8b7cf47da3af821141bbdd9289558ada1387df61d59be7087f67",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "aveiro-portugal",
+        "slug": "aveiro-portugal",
+        "name": "Aveiro",
+        "country": "Portugal",
+        "summary": "Aveiro works best when the canals become part of an ordinary week rather than the entire reason for moving."
+      },
+      {
+        "key": "zaragoza-spain",
+        "slug": "zaragoza-spain",
+        "name": "Zaragoza",
+        "country": "Spain",
+        "summary": "Zaragoza is an inland working city whose pleasures fit between ordinary errands: shopping at Mercado Central, an evening in El Tubo, or a walk toward the Ebro after the strongest heat has passed."
+      },
+      {
+        "key": "innsbruck-austria",
+        "slug": "innsbruck-austria",
+        "name": "Innsbruck",
+        "country": "Austria",
+        "summary": "Innsbruck puts a mountain horizon behind a very real housing decision."
+      },
+      {
+        "key": "natal-brazil",
+        "slug": "natal-brazil",
+        "name": "Natal",
+        "country": "Brazil",
+        "summary": "Natal asks a long-stay resident to separate a coastal holiday image from the practical geography of a working city."
+      },
+      {
+        "key": "angers-france",
+        "slug": "angers-france",
+        "name": "Angers",
+        "country": "France",
+        "summary": "Angers makes a long stay feel less like a circuit of châteaux and more like a sequence of manageable city days."
       },
       {
         "key": "roanoke-virginia-united-states",
@@ -2622,6 +2657,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "aveiro-portugal",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/21/Canal_in_Aveiro_04.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Canal-side buildings and a moliceiro boat in Aveiro"
+        }
+      },
+      {
+        "key": "zaragoza-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Zaragoza_City_empty_streets.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Street scene in Zaragoza; historical photograph, not current traffic conditions"
+        }
+      },
+      {
+        "key": "innsbruck-austria",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/20/Maria-Theresien-Stra%C3%9Fe_in_Innsbruck_with_Alpine_Backdrop.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Maria-Theresien-Straße with the mountain skyline in Innsbruck"
+        }
+      },
+      {
+        "key": "natal-brazil",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/43/Parque_da_Cidade_Natal_Entrada.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Entrance and city view at Parque da Cidade, Natal"
+        }
+      },
+      {
+        "key": "angers-france",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/c8/00_2539_Angers_%28France%29_-_Old_town.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Maison d’Adam and surrounding square in Angers"
         }
       },
       {
