@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "5e9d7424c6e7bfe0843a6b425f03c8d6549cddfb25b3ad7b5ced8f486a6f07f5",
-  "digest": "6082217e1c10fbbf0024d361b30e969894289842b1fac7ca207039e02cf24e90",
+  "sourceSignature": "cf3c7c4b7c41a81711f4e4667efa0f9034c0bfb46d8a3aaae61913d8cd3ae9f0",
+  "digest": "f30c9622ab7f62bdae77f373c55827aaf784b918aec7dcbcba9e2e3827638f3c",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "roanoke-virginia-united-states",
+        "name": "Roanoke",
+        "slug": "roanoke-virginia-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Roanoke offers a useful middle ground between a small mountain town and a larger service center.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "cartago-costa-rica",
+        "name": "Cartago",
+        "slug": "cartago-costa-rica",
+        "country": "Costa Rica",
+        "countryCode": "CR",
+        "summary": "Cartago’s appeal is an everyday highland-city routine rather than a coastal escape.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "volos-greece",
+        "name": "Volos",
+        "slug": "volos-greece",
+        "country": "Greece",
+        "countryCode": "GR",
+        "summary": "Volos is a working waterfront city, not an island holiday stretched into a lease.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "varazdin-croatia",
+        "name": "Varaždin",
+        "slug": "varazdin-croatia",
+        "country": "Croatia",
+        "countryCode": "HR",
+        "summary": "Varaždin offers a northern Croatian routine that is quite different from an Adriatic long stay.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "hsinchu-taiwan",
+        "name": "Hsinchu",
+        "slug": "hsinchu-taiwan",
+        "country": "Taiwan",
+        "countryCode": "TW",
+        "summary": "Hsinchu City is easier to understand as several daily routines than as one technology-city label.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -13179,6 +13329,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "roanoke-virginia-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "cartago-costa-rica",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "volos-greece",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "varazdin-croatia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "hsinchu-taiwan",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "las-tablas-panama",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -18662,6 +18897,41 @@
         }
       },
       {
+        "key": "roanoke-virginia-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/3/35/Roanoke_City_%28Virginia%29_from_Mill_Mountain_Star_at_Dusk.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Roanoke at dusk, viewed from Mill Mountain; historical city panorama."
+        }
+      },
+      {
+        "key": "cartago-costa-rica",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Basilica_Virgen_de_los_Angeles_CRI_07_2018_0316.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Basílica de Nuestra Señora de los Ángeles, Cartago, Costa Rica."
+        }
+      },
+      {
+        "key": "volos-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Volos-bynight.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Volos waterfront buildings and harbor at dusk; historical photograph."
+        }
+      },
+      {
+        "key": "varazdin-croatia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Vara%C5%BEdin_Center_Croatia_2025.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Central Varaždin streetscape and town hall,2025."
+        }
+      },
+      {
+        "key": "hsinchu-taiwan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Bo%27ai_St.%2C_Hsinchu_City%2C_Nov_2024.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Bo’ai Street in Hsinchu City,November2024; a street scene,not a safety assessment."
+        }
+      },
+      {
         "key": "las-tablas-panama",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/8/86/Las_Tablas_Vista_a%C3%A9rea.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -20932,6 +21202,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "roanoke-virginia-united-states",
+        "singleMonthlyUsd": 2300,
+        "coupleMonthlyUsd": 3075,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "cartago-costa-rica",
+        "singleMonthlyUsd": 1425,
+        "coupleMonthlyUsd": 1900,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "volos-greece",
+        "singleMonthlyUsd": 1500,
+        "coupleMonthlyUsd": 2050,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "varazdin-croatia",
+        "singleMonthlyUsd": 1550,
+        "coupleMonthlyUsd": 2100,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "hsinchu-taiwan",
+        "singleMonthlyUsd": 1075,
+        "coupleMonthlyUsd": 1700,
         "estimateYear": 2026
       },
       {

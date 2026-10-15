@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "3ee04dad1a799b315e71f0655c70915d629d3f164c0b765564a7be5fcc138930",
-  "digest": "2f4f276355c20b89c7c89baa636c023c1ce462976157ba4f45c0cf88e3c532b7",
+  "sourceSignature": "8606867439ab8e5975dfe2688ba204359920021b7f0597b895d430a93aa4f6bb",
+  "digest": "44c1ab1b2a37bda06ad3fedf21ab4febc68314875529c3d796aa7eaa2ceb2b23",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "roanoke-virginia-united-states",
+        "slug": "roanoke-virginia-united-states",
+        "name": "Roanoke",
+        "country": "United States",
+        "summary": "Roanoke offers a useful middle ground between a small mountain town and a larger service center."
+      },
+      {
+        "key": "cartago-costa-rica",
+        "slug": "cartago-costa-rica",
+        "name": "Cartago",
+        "country": "Costa Rica",
+        "summary": "Cartago’s appeal is an everyday highland-city routine rather than a coastal escape."
+      },
+      {
+        "key": "volos-greece",
+        "slug": "volos-greece",
+        "name": "Volos",
+        "country": "Greece",
+        "summary": "Volos is a working waterfront city, not an island holiday stretched into a lease."
+      },
+      {
+        "key": "varazdin-croatia",
+        "slug": "varazdin-croatia",
+        "name": "Varaždin",
+        "country": "Croatia",
+        "summary": "Varaždin offers a northern Croatian routine that is quite different from an Adriatic long stay."
+      },
+      {
+        "key": "hsinchu-taiwan",
+        "slug": "hsinchu-taiwan",
+        "name": "Hsinchu",
+        "country": "Taiwan",
+        "summary": "Hsinchu City is easier to understand as several daily routines than as one technology-city label."
       },
       {
         "key": "las-tablas-panama",
@@ -2587,6 +2622,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "roanoke-virginia-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/3/35/Roanoke_City_%28Virginia%29_from_Mill_Mountain_Star_at_Dusk.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Roanoke at dusk, viewed from Mill Mountain; historical city panorama."
+        }
+      },
+      {
+        "key": "cartago-costa-rica",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Basilica_Virgen_de_los_Angeles_CRI_07_2018_0316.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Basílica de Nuestra Señora de los Ángeles, Cartago, Costa Rica."
+        }
+      },
+      {
+        "key": "volos-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Volos-bynight.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Volos waterfront buildings and harbor at dusk; historical photograph."
+        }
+      },
+      {
+        "key": "varazdin-croatia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Vara%C5%BEdin_Center_Croatia_2025.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Central Varaždin streetscape and town hall,2025."
+        }
+      },
+      {
+        "key": "hsinchu-taiwan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Bo%27ai_St.%2C_Hsinchu_City%2C_Nov_2024.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Bo’ai Street in Hsinchu City,November2024; a street scene,not a safety assessment."
         }
       },
       {
