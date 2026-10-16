@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "845df5066e44d18a2bd51aef5e868f3e0bd5398920f2aa9d377f0e59c226b454",
-  "digest": "ca9d41f74d6eab4165c874ad09b0595a93f7224225f859035d8627fba2e8c9b4",
+  "sourceSignature": "9ff5d3046a41a6b695db0fc336f18d60c5d05a81617401fec692092f3f8f8317",
+  "digest": "9ab0914d0f79c5195dfd7c8ab1c74fd52e0e69b136a52e343d5186018df4e370",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "singapore-singapore",
+        "name": "Singapore",
+        "slug": "singapore-singapore",
+        "country": "Singapore",
+        "countryCode": "SG",
+        "summary": "Breakfast can be the best introduction to Singapore: coffee at a neighborhood stall, something freshly cooked at a hawker centre, then a train to almost anywhere you need to be.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "johor-bahru-malaysia",
+        "name": "Johor Bahru",
+        "slug": "johor-bahru-malaysia",
+        "country": "Malaysia",
+        "countryCode": "MY",
+        "summary": "Johor Bahru is easiest to appreciate when you give it a life of its own.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "dijon-france",
+        "name": "Dijon",
+        "slug": "dijon-france",
+        "country": "France",
+        "countryCode": "FR",
+        "summary": "In Dijon, the covered market can give the week its shape.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "joinville-brazil",
+        "name": "Joinville",
+        "slug": "joinville-brazil",
+        "country": "Brazil",
+        "countryCode": "BR",
+        "summary": "Joinville’s pleasures are often found between the headline attractions: coffee and cake, a meal along one of its restaurant streets, or a walk that reveals another piece of the city’s cultural history.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "concepcion-chile",
+        "name": "Concepción",
+        "slug": "concepcion-chile",
+        "country": "Chile",
+        "countryCode": "CL",
+        "summary": "The university campus, Parque Ecuador and the streets around Plaza Perú give Concepción a lively, lived-in character.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -13629,6 +13779,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "singapore-singapore",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "johor-bahru-malaysia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "dijon-france",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "joinville-brazil",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "concepcion-chile",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "nagoya-japan",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -19367,6 +19602,41 @@
         }
       },
       {
+        "key": "singapore-singapore",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Singapore_Marina_Bay_Dusk_2018-02-27.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Marina Bay and the Singapore skyline at dusk, photographed in 2018."
+        }
+      },
+      {
+        "key": "johor-bahru-malaysia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Johor_Bahru_city_in_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Aerial view of central Johor Bahru in 2015; the skyline has since changed."
+        }
+      },
+      {
+        "key": "dijon-france",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Vue_panoramique_de_Dijon_05.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Dijon rooftops and churches seen from the Tour Philippe le Bon in 2005."
+        }
+      },
+      {
+        "key": "joinville-brazil",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/f8/01_JoinvilleCentro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Central Joinville, photographed in 2012."
+        }
+      },
+      {
+        "key": "concepcion-chile",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/0/01/Vista_de_Concepci%C3%B3n.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Concepción viewed from Cerro Caracol, photographed in 2022."
+        }
+      },
+      {
         "key": "nagoya-japan",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Nagoya_city_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -21742,6 +22012,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "singapore-singapore",
+        "singleMonthlyUsd": 4075,
+        "coupleMonthlyUsd": 5050,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "johor-bahru-malaysia",
+        "singleMonthlyUsd": 1125,
+        "coupleMonthlyUsd": 1500,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "dijon-france",
+        "singleMonthlyUsd": 1800,
+        "coupleMonthlyUsd": 2600,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "joinville-brazil",
+        "singleMonthlyUsd": 900,
+        "coupleMonthlyUsd": 1225,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "concepcion-chile",
+        "singleMonthlyUsd": 1175,
+        "coupleMonthlyUsd": 1600,
         "estimateYear": 2026
       },
       {

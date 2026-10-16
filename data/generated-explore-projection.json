@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "64d16c89cea5a9b3f57d6d634f0e225eebc0b75e3cf08bed1245d47f6411f279",
-  "digest": "6545cb7d4c20288dc89690747cf7f433bcee207a91b938917c474b87de40828c",
+  "sourceSignature": "c4797416d4d7ee52ebb13e1ae19e6c812b84a99e8e11628c7e2d124b707a7c8c",
+  "digest": "5d8e7e573326a49ae2b9bf2a72f181ad53160c2bece6a8db9336b97334abcf4f",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "singapore-singapore",
+        "slug": "singapore-singapore",
+        "name": "Singapore",
+        "country": "Singapore",
+        "summary": "Breakfast can be the best introduction to Singapore: coffee at a neighborhood stall, something freshly cooked at a hawker centre, then a train to almost anywhere you need to be."
+      },
+      {
+        "key": "johor-bahru-malaysia",
+        "slug": "johor-bahru-malaysia",
+        "name": "Johor Bahru",
+        "country": "Malaysia",
+        "summary": "Johor Bahru is easiest to appreciate when you give it a life of its own."
+      },
+      {
+        "key": "dijon-france",
+        "slug": "dijon-france",
+        "name": "Dijon",
+        "country": "France",
+        "summary": "In Dijon, the covered market can give the week its shape."
+      },
+      {
+        "key": "joinville-brazil",
+        "slug": "joinville-brazil",
+        "name": "Joinville",
+        "country": "Brazil",
+        "summary": "Joinville’s pleasures are often found between the headline attractions: coffee and cake, a meal along one of its restaurant streets, or a walk that reveals another piece of the city’s cultural history."
+      },
+      {
+        "key": "concepcion-chile",
+        "slug": "concepcion-chile",
+        "name": "Concepción",
+        "country": "Chile",
+        "summary": "The university campus, Parque Ecuador and the streets around Plaza Perú give Concepción a lively, lived-in character."
       },
       {
         "key": "nagoya-japan",
@@ -2692,6 +2727,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "singapore-singapore",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Singapore_Marina_Bay_Dusk_2018-02-27.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Marina Bay and the Singapore skyline at dusk, photographed in 2018."
+        }
+      },
+      {
+        "key": "johor-bahru-malaysia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Johor_Bahru_city_in_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Aerial view of central Johor Bahru in 2015; the skyline has since changed."
+        }
+      },
+      {
+        "key": "dijon-france",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Vue_panoramique_de_Dijon_05.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Dijon rooftops and churches seen from the Tour Philippe le Bon in 2005."
+        }
+      },
+      {
+        "key": "joinville-brazil",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/f8/01_JoinvilleCentro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Central Joinville, photographed in 2012."
+        }
+      },
+      {
+        "key": "concepcion-chile",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/0/01/Vista_de_Concepci%C3%B3n.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Concepción viewed from Cerro Caracol, photographed in 2022."
         }
       },
       {
