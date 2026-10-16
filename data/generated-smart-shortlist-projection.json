@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "c977fad64742458b835c0923250b0f7d04010f38f297f8a4fe7669e77f15e6ad",
-  "digest": "6d5e264c869a04100698caa877d36224a699f8ac62fa446b0648b8a43aba9b7b",
+  "sourceSignature": "bf13d721d7bd37aac58d27cffa8872706b9e48ad414f238df3cc6721666278c9",
+  "digest": "ca9d41f74d6eab4165c874ad09b0595a93f7224225f859035d8627fba2e8c9b4",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "nagoya-japan",
+        "name": "Nagoya",
+        "slug": "nagoya-japan",
+        "country": "Japan",
+        "countryCode": "JP",
+        "summary": "Nagoya becomes more interesting when the question changes from what to photograph to where to spend an ordinary Tuesday.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "udine-italy",
+        "name": "Udine",
+        "slug": "udine-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "Udine’s scale becomes apparent in the space between a café in the center and the quieter streets where the day actually ends.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "san-rafael-argentina",
+        "name": "San Rafael",
+        "slug": "san-rafael-argentina",
+        "country": "Argentina",
+        "countryCode": "AR",
+        "summary": "San Rafael offers a city base for wine country, but the useful long-stay picture begins with the streets around the center rather than a vineyard terrace.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "charlottesville-virginia-united-states",
+        "name": "Charlottesville",
+        "slug": "charlottesville-virginia-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Charlottesville works best when its university-town image is tested against an ordinary week.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "san-isidro-de-el-general-costa-rica",
+        "name": "San Isidro de El General",
+        "slug": "san-isidro-de-el-general-costa-rica",
+        "country": "Costa Rica",
+        "countryCode": "CR",
+        "summary": "San Isidro de El General is a place to understand through errands: the municipal market, a bus connection, a café near a familiar landmark and the conversation needed to arrange a repair.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -13479,6 +13629,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "nagoya-japan",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "udine-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "san-rafael-argentina",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "charlottesville-virginia-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "san-isidro-de-el-general-costa-rica",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "aveiro-portugal",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -19132,6 +19367,41 @@
         }
       },
       {
+        "key": "nagoya-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Nagoya_city_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Nagoya TV tower and central public space on a wet day."
+        }
+      },
+      {
+        "key": "udine-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/0/01/Udine_Altstadt.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Historic streetscape in central Udine."
+        }
+      },
+      {
+        "key": "san-rafael-argentina",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/47/San_Rafael_Foto_Moritz_Kaschewski.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Tree-lined street in central San Rafael, Mendoza."
+        }
+      },
+      {
+        "key": "charlottesville-virginia-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Charlottesville_Downtown_Mall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Charlottesville Downtown Mall looking toward the pavilion."
+        }
+      },
+      {
+        "key": "san-isidro-de-el-general-costa-rica",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a9/San_Jos%C3%A9_Province%2C_San_Isidro_de_El_General%2C_Costa_Rica_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Central park and cathedral in San Isidro de El General."
+        }
+      },
+      {
         "key": "aveiro-portugal",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/2/21/Canal_in_Aveiro_04.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -21472,6 +21742,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "nagoya-japan",
+        "singleMonthlyUsd": 1575,
+        "coupleMonthlyUsd": 2125,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "udine-italy",
+        "singleMonthlyUsd": 1825,
+        "coupleMonthlyUsd": 2525,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "san-rafael-argentina",
+        "singleMonthlyUsd": 1025,
+        "coupleMonthlyUsd": 1500,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "charlottesville-virginia-united-states",
+        "singleMonthlyUsd": 3200,
+        "coupleMonthlyUsd": 4300,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "san-isidro-de-el-general-costa-rica",
+        "singleMonthlyUsd": 1350,
+        "coupleMonthlyUsd": 1950,
         "estimateYear": 2026
       },
       {

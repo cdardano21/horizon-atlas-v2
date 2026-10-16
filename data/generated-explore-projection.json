@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "1820eb945d7fb05ba0e99a7b888b33eadfcda8307959caa32b8bf6e2c51d7e41",
-  "digest": "7009cba13cab8b7cf47da3af821141bbdd9289558ada1387df61d59be7087f67",
+  "sourceSignature": "13052177113348409cf8af50b8700df1385616be6dc5904584b7e77c9f037537",
+  "digest": "6545cb7d4c20288dc89690747cf7f433bcee207a91b938917c474b87de40828c",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "nagoya-japan",
+        "slug": "nagoya-japan",
+        "name": "Nagoya",
+        "country": "Japan",
+        "summary": "Nagoya becomes more interesting when the question changes from what to photograph to where to spend an ordinary Tuesday."
+      },
+      {
+        "key": "udine-italy",
+        "slug": "udine-italy",
+        "name": "Udine",
+        "country": "Italy",
+        "summary": "Udine’s scale becomes apparent in the space between a café in the center and the quieter streets where the day actually ends."
+      },
+      {
+        "key": "san-rafael-argentina",
+        "slug": "san-rafael-argentina",
+        "name": "San Rafael",
+        "country": "Argentina",
+        "summary": "San Rafael offers a city base for wine country, but the useful long-stay picture begins with the streets around the center rather than a vineyard terrace."
+      },
+      {
+        "key": "charlottesville-virginia-united-states",
+        "slug": "charlottesville-virginia-united-states",
+        "name": "Charlottesville",
+        "country": "United States",
+        "summary": "Charlottesville works best when its university-town image is tested against an ordinary week."
+      },
+      {
+        "key": "san-isidro-de-el-general-costa-rica",
+        "slug": "san-isidro-de-el-general-costa-rica",
+        "name": "San Isidro de El General",
+        "country": "Costa Rica",
+        "summary": "San Isidro de El General is a place to understand through errands: the municipal market, a bus connection, a café near a familiar landmark and the conversation needed to arrange a repair."
       },
       {
         "key": "aveiro-portugal",
@@ -2657,6 +2692,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "nagoya-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Nagoya_city_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Nagoya TV tower and central public space on a wet day."
+        }
+      },
+      {
+        "key": "udine-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/0/01/Udine_Altstadt.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Historic streetscape in central Udine."
+        }
+      },
+      {
+        "key": "san-rafael-argentina",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/47/San_Rafael_Foto_Moritz_Kaschewski.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Tree-lined street in central San Rafael, Mendoza."
+        }
+      },
+      {
+        "key": "charlottesville-virginia-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Charlottesville_Downtown_Mall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Charlottesville Downtown Mall looking toward the pavilion."
+        }
+      },
+      {
+        "key": "san-isidro-de-el-general-costa-rica",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a9/San_Jos%C3%A9_Province%2C_San_Isidro_de_El_General%2C_Costa_Rica_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Central park and cathedral in San Isidro de El General."
         }
       },
       {
