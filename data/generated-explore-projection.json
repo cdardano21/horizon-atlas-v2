@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "191c9e50d49aeb239f7af5345961ca4212b173c69618c5c7ac18b16a84e0f78b",
-  "digest": "cac649f0fba7c7474d5a652f90afc02ba6d676f2c86476897d6638aff14980a0",
+  "sourceSignature": "da60bbb34f6660bfb3719545f641c78118c4023c796788145bb5318dcb80705c",
+  "digest": "16559cf184340c6583ab6a20a7fb97a7c67be02b164c6ee203de5b10bbc572eb",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "logrono-spain",
+        "slug": "logrono-spain",
+        "name": "Logroño",
+        "country": "Spain",
+        "summary": "In Logroño, an ordinary evening can begin with a walk past the Espolón and end with a pincho on Calle Laurel."
+      },
+      {
+        "key": "turku-finland",
+        "slug": "turku-finland",
+        "name": "Turku",
+        "country": "Finland",
+        "summary": "The Aura River gives Turku a natural place to begin the day."
+      },
+      {
+        "key": "mar-del-plata-argentina",
+        "slug": "mar-del-plata-argentina",
+        "name": "Mar del Plata",
+        "country": "Argentina",
+        "summary": "Mar del Plata is more interesting as a place to live when the beach is allowed to be part of the day rather than the whole plan."
+      },
+      {
+        "key": "oita-japan",
+        "slug": "oita-japan",
+        "name": "Oita",
+        "country": "Japan",
+        "summary": "Ōita’s appeal is easiest to see in an ordinary day: walking out from the station area, finding lunch in the central streets, and making time for an exhibition at OPAM before heading home."
+      },
+      {
+        "key": "duluth-minnesota-united-states",
+        "slug": "duluth-minnesota-united-states",
+        "name": "Duluth",
+        "country": "United States",
+        "summary": "Lake Superior is difficult to separate from the idea of living in Duluth."
       },
       {
         "key": "olomouc-czechia",
@@ -2762,6 +2797,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "logrono-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/19/Ayuntamiento_de_Logro%C3%B1o.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Logroño Town Hall and its forecourt."
+        }
+      },
+      {
+        "key": "turku-finland",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Aura_River_and_Turku_Cathedral%2C_Turku_%2820110603%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Aura River and Turku Cathedral, photographed in2011."
+        }
+      },
+      {
+        "key": "mar-del-plata-argentina",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/da/Mar_del_Plata_City.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Mar del Plata’s beach and coastal cityscape."
+        }
+      },
+      {
+        "key": "oita-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/52/Funai_Castle02n4272.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Gate at Funai Castle in Oita City."
+        }
+      },
+      {
+        "key": "duluth-minnesota-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/15/Duluth_Skyline.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Duluth’s skyline and hillside, facing northwest."
         }
       },
       {

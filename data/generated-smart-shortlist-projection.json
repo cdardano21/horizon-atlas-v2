@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "dd5dffef8c4433391b73b65713c1504f1f513beefd54ddf2ea56c64913f4e0fe",
-  "digest": "1cfc2e9c8886a895c59cc9b926eecd379d9737a624bd87b1d92072539940f318",
+  "sourceSignature": "c9cb0bea4641484ce97c8d485c20b63c7ede3676962ad80f359f198914bdc5f9",
+  "digest": "589f3784c1d3988ba72892890f10c243ec4d4f341eb5c83346fe64fc415a38a7",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "logrono-spain",
+        "name": "Logroño",
+        "slug": "logrono-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "In Logroño, an ordinary evening can begin with a walk past the Espolón and end with a pincho on Calle Laurel.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "turku-finland",
+        "name": "Turku",
+        "slug": "turku-finland",
+        "country": "Finland",
+        "countryCode": "FI",
+        "summary": "The Aura River gives Turku a natural place to begin the day.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "mar-del-plata-argentina",
+        "name": "Mar del Plata",
+        "slug": "mar-del-plata-argentina",
+        "country": "Argentina",
+        "countryCode": "AR",
+        "summary": "Mar del Plata is more interesting as a place to live when the beach is allowed to be part of the day rather than the whole plan.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "oita-japan",
+        "name": "Oita",
+        "slug": "oita-japan",
+        "country": "Japan",
+        "countryCode": "JP",
+        "summary": "Ōita’s appeal is easiest to see in an ordinary day: walking out from the station area, finding lunch in the central streets, and making time for an exhibition at OPAM before heading home.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "duluth-minnesota-united-states",
+        "name": "Duluth",
+        "slug": "duluth-minnesota-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Lake Superior is difficult to separate from the idea of living in Duluth.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -13929,6 +14079,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "logrono-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "turku-finland",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "mar-del-plata-argentina",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "oita-japan",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "duluth-minnesota-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "olomouc-czechia",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -19837,6 +20072,41 @@
         }
       },
       {
+        "key": "logrono-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/19/Ayuntamiento_de_Logro%C3%B1o.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Logroño Town Hall and its forecourt."
+        }
+      },
+      {
+        "key": "turku-finland",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Aura_River_and_Turku_Cathedral%2C_Turku_%2820110603%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Aura River and Turku Cathedral, photographed in2011."
+        }
+      },
+      {
+        "key": "mar-del-plata-argentina",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/da/Mar_del_Plata_City.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Mar del Plata’s beach and coastal cityscape."
+        }
+      },
+      {
+        "key": "oita-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/52/Funai_Castle02n4272.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Gate at Funai Castle in Oita City."
+        }
+      },
+      {
+        "key": "duluth-minnesota-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/15/Duluth_Skyline.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Duluth’s skyline and hillside, facing northwest."
+        }
+      },
+      {
         "key": "olomouc-czechia",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Olomouc_-_Ztracen%C3%A1_-_View_SW_on_Horn%C3%AD_n%C3%A1m%C4%9Bst%C3%AD_%26_City_Hall_%26_Caesarova_ka%C5%A1na_-_Caesar_Fountain_1725_by_V%C3%A1clav_Render_%26_Jan_Ji%C5%99%C3%AD_Schauberger.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -22282,6 +22552,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "logrono-spain",
+        "singleMonthlyUsd": 2000,
+        "coupleMonthlyUsd": 2750,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "turku-finland",
+        "singleMonthlyUsd": 2075,
+        "coupleMonthlyUsd": 2900,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "mar-del-plata-argentina",
+        "singleMonthlyUsd": 1225,
+        "coupleMonthlyUsd": 1800,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "oita-japan",
+        "singleMonthlyUsd": 1125,
+        "coupleMonthlyUsd": 1650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "duluth-minnesota-united-states",
+        "singleMonthlyUsd": 2725,
+        "coupleMonthlyUsd": 3800,
         "estimateYear": 2026
       },
       {
