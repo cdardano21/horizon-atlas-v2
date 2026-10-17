@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "9ff5d3046a41a6b695db0fc336f18d60c5d05a81617401fec692092f3f8f8317",
-  "digest": "9ab0914d0f79c5195dfd7c8ab1c74fd52e0e69b136a52e343d5186018df4e370",
+  "sourceSignature": "dd5dffef8c4433391b73b65713c1504f1f513beefd54ddf2ea56c64913f4e0fe",
+  "digest": "1cfc2e9c8886a895c59cc9b926eecd379d9737a624bd87b1d92072539940f318",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "olomouc-czechia",
+        "name": "Olomouc",
+        "slug": "olomouc-czechia",
+        "country": "Czechia",
+        "countryCode": "CZ",
+        "summary": "A walk across Olomouc’s old squares can turn a routine errand into the most enjoyable part of the day.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "maringa-brazil",
+        "name": "Maringá",
+        "slug": "maringa-brazil",
+        "country": "Brazil",
+        "countryCode": "BR",
+        "summary": "Maringá makes most sense as a place to build a routine: shopping, stopping for something to eat and finding a green stretch of the city to return to between appointments.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "yokohama-japan",
+        "name": "Yokohama",
+        "slug": "yokohama-japan",
+        "country": "Japan",
+        "countryCode": "JP",
+        "summary": "Yokohama lets a waterfront walk sit comfortably alongside an ordinary working week.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "iowa-city-iowa-united-states",
+        "name": "Iowa City",
+        "slug": "iowa-city-iowa-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "In Iowa City, a bookstore visit, a film and a meal downtown can form an ordinary evening rather than a special itinerary.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "kingston-canada",
+        "name": "Kingston",
+        "slug": "kingston-canada",
+        "country": "Canada",
+        "countryCode": "CA",
+        "summary": "Kingston’s waterfront gives an ordinary day somewhere to go.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -13779,6 +13929,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "olomouc-czechia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "maringa-brazil",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "yokohama-japan",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "YES",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "iowa-city-iowa-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "kingston-canada",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "singapore-singapore",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -19602,6 +19837,41 @@
         }
       },
       {
+        "key": "olomouc-czechia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Olomouc_-_Ztracen%C3%A1_-_View_SW_on_Horn%C3%AD_n%C3%A1m%C4%9Bst%C3%AD_%26_City_Hall_%26_Caesarova_ka%C5%A1na_-_Caesar_Fountain_1725_by_V%C3%A1clav_Render_%26_Jan_Ji%C5%99%C3%AD_Schauberger.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Olomouc town hall and Caesar Fountain on Horní náměstí; historical streetscape."
+        }
+      },
+      {
+        "key": "maringa-brazil",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Maring%C3%A1_City.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Maringá cathedral, surrounding trees and the city skyline."
+        }
+      },
+      {
+        "key": "yokohama-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Yokohama_Yamashita_Park_and_Marine_Tower.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Yamashita Park and Marine Tower on Yokohama’s waterfront."
+        }
+      },
+      {
+        "key": "iowa-city-iowa-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Capitol_Street%2C_Iowa_City%2C_IA.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Capitol Street in central Iowa City with the Old Capitol in the distance."
+        }
+      },
+      {
+        "key": "kingston-canada",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/c0/20181011_-_05_-_Kingston_panorama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Kingston’s waterfront panorama, including City Hall and the harbour, October 2018."
+        }
+      },
+      {
         "key": "singapore-singapore",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Singapore_Marina_Bay_Dusk_2018-02-27.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -22012,6 +22282,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "olomouc-czechia",
+        "singleMonthlyUsd": 1575,
+        "coupleMonthlyUsd": 2125,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "maringa-brazil",
+        "singleMonthlyUsd": 1075,
+        "coupleMonthlyUsd": 1500,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "yokohama-japan",
+        "singleMonthlyUsd": 1650,
+        "coupleMonthlyUsd": 2400,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "iowa-city-iowa-united-states",
+        "singleMonthlyUsd": 2550,
+        "coupleMonthlyUsd": 3550,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "kingston-canada",
+        "singleMonthlyUsd": 2550,
+        "coupleMonthlyUsd": 3375,
         "estimateYear": 2026
       },
       {

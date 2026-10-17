@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "c4797416d4d7ee52ebb13e1ae19e6c812b84a99e8e11628c7e2d124b707a7c8c",
-  "digest": "5d8e7e573326a49ae2b9bf2a72f181ad53160c2bece6a8db9336b97334abcf4f",
+  "sourceSignature": "191c9e50d49aeb239f7af5345961ca4212b173c69618c5c7ac18b16a84e0f78b",
+  "digest": "cac649f0fba7c7474d5a652f90afc02ba6d676f2c86476897d6638aff14980a0",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "olomouc-czechia",
+        "slug": "olomouc-czechia",
+        "name": "Olomouc",
+        "country": "Czechia",
+        "summary": "A walk across Olomouc’s old squares can turn a routine errand into the most enjoyable part of the day."
+      },
+      {
+        "key": "maringa-brazil",
+        "slug": "maringa-brazil",
+        "name": "Maringá",
+        "country": "Brazil",
+        "summary": "Maringá makes most sense as a place to build a routine: shopping, stopping for something to eat and finding a green stretch of the city to return to between appointments."
+      },
+      {
+        "key": "yokohama-japan",
+        "slug": "yokohama-japan",
+        "name": "Yokohama",
+        "country": "Japan",
+        "summary": "Yokohama lets a waterfront walk sit comfortably alongside an ordinary working week."
+      },
+      {
+        "key": "iowa-city-iowa-united-states",
+        "slug": "iowa-city-iowa-united-states",
+        "name": "Iowa City",
+        "country": "United States",
+        "summary": "In Iowa City, a bookstore visit, a film and a meal downtown can form an ordinary evening rather than a special itinerary."
+      },
+      {
+        "key": "kingston-canada",
+        "slug": "kingston-canada",
+        "name": "Kingston",
+        "country": "Canada",
+        "summary": "Kingston’s waterfront gives an ordinary day somewhere to go."
       },
       {
         "key": "singapore-singapore",
@@ -2727,6 +2762,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "olomouc-czechia",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Olomouc_-_Ztracen%C3%A1_-_View_SW_on_Horn%C3%AD_n%C3%A1m%C4%9Bst%C3%AD_%26_City_Hall_%26_Caesarova_ka%C5%A1na_-_Caesar_Fountain_1725_by_V%C3%A1clav_Render_%26_Jan_Ji%C5%99%C3%AD_Schauberger.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Olomouc town hall and Caesar Fountain on Horní náměstí; historical streetscape."
+        }
+      },
+      {
+        "key": "maringa-brazil",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Maring%C3%A1_City.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Maringá cathedral, surrounding trees and the city skyline."
+        }
+      },
+      {
+        "key": "yokohama-japan",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Yokohama_Yamashita_Park_and_Marine_Tower.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Yamashita Park and Marine Tower on Yokohama’s waterfront."
+        }
+      },
+      {
+        "key": "iowa-city-iowa-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Capitol_Street%2C_Iowa_City%2C_IA.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Capitol Street in central Iowa City with the Old Capitol in the distance."
+        }
+      },
+      {
+        "key": "kingston-canada",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/c0/20181011_-_05_-_Kingston_panorama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Kingston’s waterfront panorama, including City Hall and the harbour, October 2018."
         }
       },
       {
