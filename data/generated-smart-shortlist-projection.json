@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "c88465d1da0483a6a59a3386ac1532ec6e7d40f2b61f2250c3b8c6d8655a2ac4",
-  "digest": "589f3784c1d3988ba72892890f10c243ec4d4f341eb5c83346fe64fc415a38a7",
+  "sourceSignature": "b62f8f93238cbbadc4472261e17a15bb6c39df76ef92541cb4df45bc3060ac5c",
+  "digest": "f1a48f09f237a5444656aa8618801611fa9dbc143e3686bf1d2027d04ac0eeb2",
   "data": {
     "candidates": [
       {
@@ -23486,8 +23486,8 @@
       },
       {
         "destinationKey": "kalamata-greece",
-        "singleMonthlyUsd": 1839,
-        "coupleMonthlyUsd": 2595,
+        "singleMonthlyUsd": 1790,
+        "coupleMonthlyUsd": 2640,
         "estimateYear": 2026
       },
       {
@@ -23762,8 +23762,8 @@
       },
       {
         "destinationKey": "cefalu-italy",
-        "singleMonthlyUsd": 1850,
-        "coupleMonthlyUsd": 2650,
+        "singleMonthlyUsd": 1825,
+        "coupleMonthlyUsd": 2415,
         "estimateYear": 2026
       },
       {

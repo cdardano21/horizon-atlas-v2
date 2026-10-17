@@ -515,7 +515,7 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
       "herceg-novi-montenegro", "fethiye-turkiye", "st-george-utah-united-states", "coeur-d-alene-idaho-united-states",
       "san-luis-obispo-california-united-states",
     ],
-    expectedSha256: "d998fe13a7ca982ff0ea4bb89298946ab8e54a7ce7c3d02856230298dba7dcd8",
+    expectedSha256: "3aa14f956b3de871b9da2284be69fe776d0175109db816634bbf6e6cac0a848f",
   },
   {
     registryId: "curated-mixed-batch-20-03",
@@ -574,7 +574,7 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
       "polignano-a-mare-italy", "cefalu-italy", "kalamata-greece", "taormina-italy", "podgorica-montenegro",
       "kotor-montenegro", "bergamo-italy", "pietrasanta-italy", "alicante-spain", "verona-italy",
     ],
-    expectedSha256: "748d56b260c13fc66457255ebde3d255bd128c87e75d648113e65112a33df479",
+    expectedSha256: "79285365a117080197493d409f7738d6397216f8df230430829f69ac3735cc5e",
   },
   {
     registryId: "legacy-carryover-batch-20-02",
