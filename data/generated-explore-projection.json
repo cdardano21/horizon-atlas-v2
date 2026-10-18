@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "8a81e19ddf96fe9809c60c460ad8aaf3722b40d91937ee9b9c03497f3ee2365b",
-  "digest": "8da19a8e5dfdee92f6ec2a680924f59cd736d8f4dea4ad4f24ce8ed84d3a7c68",
+  "sourceSignature": "b7b2d215894e20a5f2431a6214cfb391c283035510c064c478d2beef0eabc3ba",
+  "digest": "7a3bebb47180ee2a2185aa492c2ac27338f8ade02e8f99799a4b25aca8198ece",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,48 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "begur-spain",
+        "slug": "begur-spain",
+        "name": "Begur",
+        "country": "Spain",
+        "summary": "Life in Begur is shaped by a choice: the hilltop village or the coves below it."
+      },
+      {
+        "key": "calpe-spain",
+        "slug": "calpe-spain",
+        "name": "Calpe / Calp",
+        "country": "Spain",
+        "summary": "In Calpe, the sea can fit into an ordinary weekday."
+      },
+      {
+        "key": "syros-greece",
+        "slug": "syros-greece",
+        "name": "Syros",
+        "country": "Greece",
+        "summary": "On Syros, a long stay can begin with the routines of a small city rather than a beach resort."
+      },
+      {
+        "key": "voula-greece",
+        "slug": "voula-greece",
+        "name": "Voula",
+        "country": "Greece",
+        "summary": "Voula makes coastal living feel like a neighbourhood routine."
+      },
+      {
+        "key": "akyaka-turkiye",
+        "slug": "akyaka-turkiye",
+        "name": "Akyaka",
+        "country": "Türkiye",
+        "summary": "Akyaka’s appeal is in the short distance between very different settings: the small coastal centre, the Azmak River and the pine-covered slopes above the Gulf of Gökova."
+      },
+      {
+        "key": "calella-de-palafrugell-spain",
+        "slug": "calella-de-palafrugell-spain",
+        "name": "Calella de Palafrugell",
+        "country": "Spain",
+        "summary": "Calella de Palafrugell is a place where a short walk can be the point of the day."
       },
       {
         "key": "altea-spain",
@@ -2902,6 +2944,48 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "begur-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Begur-Castell-20180719_200758.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Begur town and castle, Catalonia, photographed in 2018."
+        }
+      },
+      {
+        "key": "calpe-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Calpe_Beach.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Beach and Penyal d'Ifach. Beach and Penyal d'Ifach, Calpe, Spain."
+        }
+      },
+      {
+        "key": "syros-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/85/A_street_in_Ermoupoli%2C_Syros.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "A street in Ermoupoli, Syros"
+        }
+      },
+      {
+        "key": "voula-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Voula%2C_Athens%2C_Greece.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "View across Voula toward Vouliagmeni from the Voula cemetery viewpoint; wider surroundings included."
+        }
+      },
+      {
+        "key": "akyaka-turkiye",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/8e/Akyaka_Evleri%2C_Mu%C4%9Fla_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Houses of Akyaka, Muğla 2015"
+        }
+      },
+      {
+        "key": "calella-de-palafrugell-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Calella_de_Palafrugell_-_view.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "View of Calella de Palafrugell"
         }
       },
       {
