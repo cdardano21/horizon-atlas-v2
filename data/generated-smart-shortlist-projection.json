@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "9dfedba5fabd990eee612b9d8781f581b2594ad5773c19484dcfc5de8f11ca58",
-  "digest": "7481d7909607644acb6e11d505dbf44e84805733e57d734ef9a05e1a050b06e2",
+  "sourceSignature": "0e44cf406efdb0cb18057848edc1e318cdb4650077e1bf25bfe4500bf5915f08",
+  "digest": "f629511d3e3a68047c51470943cb25e784c253e68894f38f495b21b6cb33c149",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "palamos-spain",
+        "name": "Palamós",
+        "slug": "palamos-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "In Palamós, the harbour gives the day a purpose beyond the beach.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "tossa-de-mar-spain",
+        "name": "Tossa de Mar",
+        "slug": "tossa-de-mar-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "Tossa de Mar is at its most convincing when you imagine an ordinary day beneath the walls rather than a single photograph of them.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "villajoyosa-spain",
+        "name": "Villajoyosa",
+        "slug": "villajoyosa-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "Villajoyosa makes it easy to picture a day built around small pleasures: shopping at the Mercat, walking down to the coloured houses above the beach, and leaving time for a coffee or something cold before heading home.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "palaio-faliro-greece",
+        "name": "Palaio Faliro",
+        "slug": "palaio-faliro-greece",
+        "country": "Greece",
+        "countryCode": "GR",
+        "summary": "Palaio Faliro offers a coastal version of Athens life: an apartment on a lived-in street, a pastry stop on the way out, and the waterfront close enough to become a regular habit.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "rhodes-town-greece",
+        "name": "Rhodes Town",
+        "slug": "rhodes-town-greece",
+        "country": "Greece",
+        "countryCode": "GR",
+        "summary": "Rhodes Town lets a harbour walk, a medieval lane and an ordinary shopping trip belong to the same day.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -14229,6 +14379,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "palamos-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "tossa-de-mar-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "villajoyosa-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "palaio-faliro-greece",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "rhodes-town-greece",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "castellammare-del-golfo-italy",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -20307,6 +20542,41 @@
         }
       },
       {
+        "key": "palamos-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/81/Palam%C3%B3s_2.jpg",
+          "alt": "Palamós marina and town waterfront, historical photograph."
+        }
+      },
+      {
+        "key": "tossa-de-mar-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Costa_Brava_-_Tossa_de_Mar_-_La_Vila_Vella_-_Old_Town_Fortifications_-_View_NE_towards_Platja_Gran%2C_Riera_de_Tossa_%26_Mediterranean_Sea_01.jpg",
+          "alt": "Platja Gran from the old-town fortifications, Tossa de Mar."
+        }
+      },
+      {
+        "key": "villajoyosa-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Playa_Centro%2C_Villajoyosa%2C_Espa%C3%B1a%2C_2014-07-03%2C_DD_27.JPG",
+          "alt": "Platja Centre and the colourful Villajoyosa waterfront, 2014."
+        }
+      },
+      {
+        "key": "palaio-faliro-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Flisvos_marina_in_Athens%2C_Greece_-_panoramio.jpg",
+          "alt": "Flisvos Marina in Palaio Faliro, historical photograph."
+        }
+      },
+      {
+        "key": "rhodes-town-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Rhodes_Town%2C_Rhodes%2C_Greece_%2822839619255%29.jpg",
+          "alt": "An arch and town buildings in Rhodes Old Town."
+        }
+      },
+      {
         "key": "castellammare-del-golfo-italy",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/3/31/Castellammare_del_Golfo_2.jpg",
@@ -22822,6 +23092,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "palamos-spain",
+        "singleMonthlyUsd": 2050,
+        "coupleMonthlyUsd": 2800,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "tossa-de-mar-spain",
+        "singleMonthlyUsd": 2050,
+        "coupleMonthlyUsd": 2625,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "villajoyosa-spain",
+        "singleMonthlyUsd": 2075,
+        "coupleMonthlyUsd": 2750,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "palaio-faliro-greece",
+        "singleMonthlyUsd": 1850,
+        "coupleMonthlyUsd": 2550,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "rhodes-town-greece",
+        "singleMonthlyUsd": 2025,
+        "coupleMonthlyUsd": 2825,
         "estimateYear": 2026
       },
       {
