@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "836fa2b1dbff0cc23a38e37401ae6e837e03cdfe1ffc75e5196144f75f37eb5c",
-  "digest": "16559cf184340c6583ab6a20a7fb97a7c67be02b164c6ee203de5b10bbc572eb",
+  "sourceSignature": "15db49ada232b90c355693f0869df0ef8a3f7d31765e78bc20c446e9c03caf18",
+  "digest": "2fbd9e192040ed9da1c2bf9e7c79924ce35f096f667f016a905bc2b696449f49",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "castellammare-del-golfo-italy",
+        "slug": "castellammare-del-golfo-italy",
+        "name": "Castellammare del Golfo",
+        "country": "Italy",
+        "summary": "In Castellammare del Golfo, the harbor gives an ordinary walk a destination."
+      },
+      {
+        "key": "pizzo-italy",
+        "slug": "pizzo-italy",
+        "name": "Pizzo",
+        "country": "Italy",
+        "summary": "Pizzo’s appeal comes into focus around Piazza della Repubblica: a gelato, the stone presence of Castello Murat and the sea beyond the rooftops."
+      },
+      {
+        "key": "otranto-italy",
+        "slug": "otranto-italy",
+        "name": "Otranto",
+        "country": "Italy",
+        "summary": "Otranto makes the sea part of a walk through town rather than a separate excursion."
+      },
+      {
+        "key": "gallipoli-italy",
+        "slug": "gallipoli-italy",
+        "name": "Gallipoli",
+        "country": "Italy",
+        "summary": "In Gallipoli, crossing the bridge changes the scale of the day."
+      },
+      {
+        "key": "bosa-italy",
+        "slug": "bosa-italy",
+        "name": "Bosa",
+        "country": "Italy",
+        "summary": "Bosa gives you two landscapes to live with: the Temo winding through town and the sea farther downstream."
       },
       {
         "key": "logrono-spain",
@@ -2797,6 +2832,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "castellammare-del-golfo-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/3/31/Castellammare_del_Golfo_2.jpg",
+          "alt": "Castellammare del Golfo harbor and castle, viewed from above. Historical photograph: 2017-09-05 15:00:44."
+        }
+      },
+      {
+        "key": "pizzo-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/51/Pizzo_-_Vista_da_sud_-_2.jpg",
+          "alt": "Pizzo rooftops, Castello Murat and the sea. Historical photograph: 2026-03-10."
+        }
+      },
+      {
+        "key": "otranto-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/10/Otranto_01.jpg",
+          "alt": "Otranto’s waterfront and bay. Historical photograph: 2022-05-02."
+        }
+      },
+      {
+        "key": "gallipoli-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/7/75/Puglia_Gallipoli1_tango7174.jpg",
+          "alt": "Gallipoli harbor beside the castle, looking toward the mainland. Historical photograph: 2010-09-29."
+        }
+      },
+      {
+        "key": "bosa-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/67/Bosa_looking_towards_the_sea.jpg",
+          "alt": "The Temo and Bosa looking downstream toward Bosa Marina and the sea. Historical photograph: 2006-06."
         }
       },
       {

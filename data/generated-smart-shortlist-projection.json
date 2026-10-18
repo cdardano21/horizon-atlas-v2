@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "b62f8f93238cbbadc4472261e17a15bb6c39df76ef92541cb4df45bc3060ac5c",
-  "digest": "f1a48f09f237a5444656aa8618801611fa9dbc143e3686bf1d2027d04ac0eeb2",
+  "sourceSignature": "9dfedba5fabd990eee612b9d8781f581b2594ad5773c19484dcfc5de8f11ca58",
+  "digest": "7481d7909607644acb6e11d505dbf44e84805733e57d734ef9a05e1a050b06e2",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "castellammare-del-golfo-italy",
+        "name": "Castellammare del Golfo",
+        "slug": "castellammare-del-golfo-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "In Castellammare del Golfo, the harbor gives an ordinary walk a destination.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "pizzo-italy",
+        "name": "Pizzo",
+        "slug": "pizzo-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "Pizzo’s appeal comes into focus around Piazza della Repubblica: a gelato, the stone presence of Castello Murat and the sea beyond the rooftops.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "otranto-italy",
+        "name": "Otranto",
+        "slug": "otranto-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "Otranto makes the sea part of a walk through town rather than a separate excursion.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "gallipoli-italy",
+        "name": "Gallipoli",
+        "slug": "gallipoli-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "In Gallipoli, crossing the bridge changes the scale of the day.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "bosa-italy",
+        "name": "Bosa",
+        "slug": "bosa-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "Bosa gives you two landscapes to live with: the Temo winding through town and the sea farther downstream.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -14079,6 +14229,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "castellammare-del-golfo-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "pizzo-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "otranto-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "gallipoli-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "bosa-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "logrono-spain",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -20072,6 +20307,41 @@
         }
       },
       {
+        "key": "castellammare-del-golfo-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/3/31/Castellammare_del_Golfo_2.jpg",
+          "alt": "Castellammare del Golfo harbor and castle, viewed from above. Historical photograph: 2017-09-05 15:00:44."
+        }
+      },
+      {
+        "key": "pizzo-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/51/Pizzo_-_Vista_da_sud_-_2.jpg",
+          "alt": "Pizzo rooftops, Castello Murat and the sea. Historical photograph: 2026-03-10."
+        }
+      },
+      {
+        "key": "otranto-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/10/Otranto_01.jpg",
+          "alt": "Otranto’s waterfront and bay. Historical photograph: 2022-05-02."
+        }
+      },
+      {
+        "key": "gallipoli-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/7/75/Puglia_Gallipoli1_tango7174.jpg",
+          "alt": "Gallipoli harbor beside the castle, looking toward the mainland. Historical photograph: 2010-09-29."
+        }
+      },
+      {
+        "key": "bosa-italy",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/67/Bosa_looking_towards_the_sea.jpg",
+          "alt": "The Temo and Bosa looking downstream toward Bosa Marina and the sea. Historical photograph: 2006-06."
+        }
+      },
+      {
         "key": "logrono-spain",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/1/19/Ayuntamiento_de_Logro%C3%B1o.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -22552,6 +22822,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "castellammare-del-golfo-italy",
+        "singleMonthlyUsd": 1650,
+        "coupleMonthlyUsd": 2300,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "pizzo-italy",
+        "singleMonthlyUsd": 1650,
+        "coupleMonthlyUsd": 2325,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "otranto-italy",
+        "singleMonthlyUsd": 1800,
+        "coupleMonthlyUsd": 2525,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "gallipoli-italy",
+        "singleMonthlyUsd": 1950,
+        "coupleMonthlyUsd": 2650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "bosa-italy",
+        "singleMonthlyUsd": 1650,
+        "coupleMonthlyUsd": 2325,
         "estimateYear": 2026
       },
       {
