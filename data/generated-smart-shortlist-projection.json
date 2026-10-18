@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "0e44cf406efdb0cb18057848edc1e318cdb4650077e1bf25bfe4500bf5915f08",
-  "digest": "f629511d3e3a68047c51470943cb25e784c253e68894f38f495b21b6cb33c149",
+  "sourceSignature": "bcb996c01000ea260dc50171a32cf61dcafd2b8b114cc41f5396cda3eafc0c8e",
+  "digest": "bd7f90887a8d529332c4c592180305885fe366a935e93a623d11e7fa8e694dc0",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "altea-spain",
+        "name": "Altea",
+        "slug": "altea-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "In Altea, the day can begin on the level seafront and end above the rooftops, beside the blue domes of Nuestra Señora del Consuelo.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "javea-spain",
+        "name": "Jávea / Xàbia",
+        "slug": "javea-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "Jávea, or Xàbia, offers three different versions of a coastal day.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "glyfada-greece",
+        "name": "Glyfada",
+        "slug": "glyfada-greece",
+        "country": "Greece",
+        "countryCode": "GR",
+        "summary": "Glyfada gives daily life on the Athens Riviera an urban rhythm.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "datca-turkiye",
+        "name": "Datça",
+        "slug": "datca-turkiye",
+        "country": "Türkiye",
+        "countryCode": "TR",
+        "summary": "Datça’s harbour gives a long stay a simple daily centre: somewhere to walk, find a meal and return to after the practical business of shopping.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "kas-turkiye",
+        "name": "Kaş",
+        "slug": "kas-turkiye",
+        "country": "Türkiye",
+        "countryCode": "TR",
+        "summary": "In Kaş, the harbour and the lanes of Uzun Çarşı make a compact centre feel full of possibilities.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -14379,6 +14529,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "altea-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "javea-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "glyfada-greece",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "datca-turkiye",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "kas-turkiye",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "palamos-spain",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -20542,6 +20777,41 @@
         }
       },
       {
+        "key": "altea-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Altea_old_town.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "A lane in Altea’s old town"
+        }
+      },
+      {
+        "key": "javea-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Port_de_X%C3%A0bia%2C_escullera.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Breakwater and boats at Xàbia’s port"
+        }
+      },
+      {
+        "key": "glyfada-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/51/Asteras_Beach_Glyfada_Athens%2C_Greece_%2844869108691%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Asteras beach in Glyfada, Athens Riviera"
+        }
+      },
+      {
+        "key": "datca-turkiye",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Dat%C3%A7a.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Datça town waterfront in 2006"
+        }
+      },
+      {
+        "key": "kas-turkiye",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/62/Ka%C5%9F%2C_A%C4%9Fustos_2015_Liman%27dan_bir_g%C3%B6r%C3%BCn%C3%BCm.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Boats and the Kaş waterfront in August 2015"
+        }
+      },
+      {
         "key": "palamos-spain",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/8/81/Palam%C3%B3s_2.jpg",
@@ -23092,6 +23362,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "altea-spain",
+        "singleMonthlyUsd": 2225,
+        "coupleMonthlyUsd": 2900,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "javea-spain",
+        "singleMonthlyUsd": 2450,
+        "coupleMonthlyUsd": 3125,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "glyfada-greece",
+        "singleMonthlyUsd": 2325,
+        "coupleMonthlyUsd": 3150,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "datca-turkiye",
+        "singleMonthlyUsd": 1250,
+        "coupleMonthlyUsd": 1750,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "kas-turkiye",
+        "singleMonthlyUsd": 1225,
+        "coupleMonthlyUsd": 1725,
         "estimateYear": 2026
       },
       {

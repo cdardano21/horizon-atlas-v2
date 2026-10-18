@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "4368b1e5b0f173393002f8d6f99abeb8c197534c3303e9df84269785f1e01a18",
-  "digest": "0a6f7b66b4e06012849ed4533e35163c4f9571b1c2be99c54dafa2391ff5d9a9",
+  "sourceSignature": "8a81e19ddf96fe9809c60c460ad8aaf3722b40d91937ee9b9c03497f3ee2365b",
+  "digest": "8da19a8e5dfdee92f6ec2a680924f59cd736d8f4dea4ad4f24ce8ed84d3a7c68",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "altea-spain",
+        "slug": "altea-spain",
+        "name": "Altea",
+        "country": "Spain",
+        "summary": "In Altea, the day can begin on the level seafront and end above the rooftops, beside the blue domes of Nuestra Señora del Consuelo."
+      },
+      {
+        "key": "javea-spain",
+        "slug": "javea-spain",
+        "name": "Jávea / Xàbia",
+        "country": "Spain",
+        "summary": "Jávea, or Xàbia, offers three different versions of a coastal day."
+      },
+      {
+        "key": "glyfada-greece",
+        "slug": "glyfada-greece",
+        "name": "Glyfada",
+        "country": "Greece",
+        "summary": "Glyfada gives daily life on the Athens Riviera an urban rhythm."
+      },
+      {
+        "key": "datca-turkiye",
+        "slug": "datca-turkiye",
+        "name": "Datça",
+        "country": "Türkiye",
+        "summary": "Datça’s harbour gives a long stay a simple daily centre: somewhere to walk, find a meal and return to after the practical business of shopping."
+      },
+      {
+        "key": "kas-turkiye",
+        "slug": "kas-turkiye",
+        "name": "Kaş",
+        "country": "Türkiye",
+        "summary": "In Kaş, the harbour and the lanes of Uzun Çarşı make a compact centre feel full of possibilities."
       },
       {
         "key": "palamos-spain",
@@ -2867,6 +2902,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "altea-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Altea_old_town.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "A lane in Altea’s old town"
+        }
+      },
+      {
+        "key": "javea-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Port_de_X%C3%A0bia%2C_escullera.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Breakwater and boats at Xàbia’s port"
+        }
+      },
+      {
+        "key": "glyfada-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/51/Asteras_Beach_Glyfada_Athens%2C_Greece_%2844869108691%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Asteras beach in Glyfada, Athens Riviera"
+        }
+      },
+      {
+        "key": "datca-turkiye",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Dat%C3%A7a.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Datça town waterfront in 2006"
+        }
+      },
+      {
+        "key": "kas-turkiye",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/62/Ka%C5%9F%2C_A%C4%9Fustos_2015_Liman%27dan_bir_g%C3%B6r%C3%BCn%C3%BCm.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Boats and the Kaş waterfront in August 2015"
         }
       },
       {
