@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "10d20eca9f27d88766f998064ae5242befc822893c0b5084826b0d93dc1a965d",
-  "digest": "0a225d6eb157fc2201c1cfd05690564b4dac75fd5d8dc7df07431c871040d3e9",
+  "sourceSignature": "e2d6cc36a901d79b25bab89530faef7a7f84f7f3317f74ad8f401d7315455635",
+  "digest": "6be69fae0a7d008ffa6fe4bc2ae197c087a97e3d628a64324d0359371590d74f",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,156 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "cadaques-spain",
+        "name": "Cadaqués",
+        "slug": "cadaques-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "In Cadaqués, an ordinary walk can take you from the small boats along the bay into lanes that climb toward Santa Maria, then back to the water for something to eat.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "vouliagmeni-greece",
+        "name": "Vouliagmeni",
+        "slug": "vouliagmeni-greece",
+        "country": "Greece",
+        "countryCode": "GR",
+        "summary": "A walk beside the bay, coffee near the water and a swim when conditions suit: Vouliagmeni makes those small pleasures feel close to an ordinary weekday.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "naoussa-paros-greece",
+        "name": "Naoussa, Paros",
+        "slug": "naoussa-paros-greece",
+        "country": "Greece",
+        "countryCode": "GR",
+        "summary": "Naoussa’s old harbour puts boats, tables and narrow lanes close together.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "kalkan-turkiye",
+        "name": "Kalkan",
+        "slug": "kalkan-turkiye",
+        "country": "Türkiye",
+        "countryCode": "TR",
+        "summary": "Kalkan is a town you feel in your legs.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "gocek-turkiye",
+        "name": "Göcek",
+        "slug": "gocek-turkiye",
+        "country": "Türkiye",
+        "countryCode": "TR",
+        "summary": "Göcek’s waterfront is a place to watch departures and returns.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -14709,6 +14859,91 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "cadaques-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "vouliagmeni-greece",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "naoussa-paros-greece",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "kalkan-turkiye",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "gocek-turkiye",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "begur-spain",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -21059,6 +21294,41 @@
         }
       },
       {
+        "key": "cadaques-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Cadaqu%C3%A9s_BW_2019-10-08_11-02-53.jpg",
+          "alt": "Plaça de Frederic Rahola, Cadaqués, photographed in2019."
+        }
+      },
+      {
+        "key": "vouliagmeni-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Vouliagmeni_bay%2C_twilight.jpg",
+          "alt": "Vouliagmeni bay at twilight."
+        }
+      },
+      {
+        "key": "naoussa-paros-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/60/Center_of_Naoussa_from_the_fishing_port%2C_Paros%2C_119129.jpg",
+          "alt": "Naoussa town seen from its fishing harbour, Paros."
+        }
+      },
+      {
+        "key": "kalkan-turkiye",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/24/Kalkan_Harbour.JPG",
+          "alt": "Kalkan harbour and the adjacent pebble shore."
+        }
+      },
+      {
+        "key": "gocek-turkiye",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/fb/G%C3%B6cek_harbour_residential_area_%28Turkiye_2017%29.jpg",
+          "alt": "Harbour-side residential setting in Göcek, photographed in2017."
+        }
+      },
+      {
         "key": "begur-spain",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Begur-Castell-20180719_200758.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -23686,6 +23956,36 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "cadaques-spain",
+        "singleMonthlyUsd": 2875,
+        "coupleMonthlyUsd": 3725,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "vouliagmeni-greece",
+        "singleMonthlyUsd": 2475,
+        "coupleMonthlyUsd": 3325,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "naoussa-paros-greece",
+        "singleMonthlyUsd": 2175,
+        "coupleMonthlyUsd": 2950,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "kalkan-turkiye",
+        "singleMonthlyUsd": 1450,
+        "coupleMonthlyUsd": 1775,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "gocek-turkiye",
+        "singleMonthlyUsd": 1675,
+        "coupleMonthlyUsd": 2100,
         "estimateYear": 2026
       },
       {

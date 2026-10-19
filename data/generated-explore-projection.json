@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "b7b2d215894e20a5f2431a6214cfb391c283035510c064c478d2beef0eabc3ba",
-  "digest": "7a3bebb47180ee2a2185aa492c2ac27338f8ade02e8f99799a4b25aca8198ece",
+  "sourceSignature": "1c6de0f5155528de73d2f6f6cbeb7aa9691decd13309c75fc6b61704af445d9b",
+  "digest": "7613a2bcc0fc31656352efe939cb71e621b4a418b8f15cfac2032c556ef679c5",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,41 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "cadaques-spain",
+        "slug": "cadaques-spain",
+        "name": "Cadaqués",
+        "country": "Spain",
+        "summary": "In Cadaqués, an ordinary walk can take you from the small boats along the bay into lanes that climb toward Santa Maria, then back to the water for something to eat."
+      },
+      {
+        "key": "vouliagmeni-greece",
+        "slug": "vouliagmeni-greece",
+        "name": "Vouliagmeni",
+        "country": "Greece",
+        "summary": "A walk beside the bay, coffee near the water and a swim when conditions suit: Vouliagmeni makes those small pleasures feel close to an ordinary weekday."
+      },
+      {
+        "key": "naoussa-paros-greece",
+        "slug": "naoussa-paros-greece",
+        "name": "Naoussa, Paros",
+        "country": "Greece",
+        "summary": "Naoussa’s old harbour puts boats, tables and narrow lanes close together."
+      },
+      {
+        "key": "kalkan-turkiye",
+        "slug": "kalkan-turkiye",
+        "name": "Kalkan",
+        "country": "Türkiye",
+        "summary": "Kalkan is a town you feel in your legs."
+      },
+      {
+        "key": "gocek-turkiye",
+        "slug": "gocek-turkiye",
+        "name": "Göcek",
+        "country": "Türkiye",
+        "summary": "Göcek’s waterfront is a place to watch departures and returns."
       },
       {
         "key": "begur-spain",
@@ -2944,6 +2979,41 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "cadaques-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Cadaqu%C3%A9s_BW_2019-10-08_11-02-53.jpg",
+          "alt": "Plaça de Frederic Rahola, Cadaqués, photographed in2019."
+        }
+      },
+      {
+        "key": "vouliagmeni-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Vouliagmeni_bay%2C_twilight.jpg",
+          "alt": "Vouliagmeni bay at twilight."
+        }
+      },
+      {
+        "key": "naoussa-paros-greece",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/60/Center_of_Naoussa_from_the_fishing_port%2C_Paros%2C_119129.jpg",
+          "alt": "Naoussa town seen from its fishing harbour, Paros."
+        }
+      },
+      {
+        "key": "kalkan-turkiye",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/24/Kalkan_Harbour.JPG",
+          "alt": "Kalkan harbour and the adjacent pebble shore."
+        }
+      },
+      {
+        "key": "gocek-turkiye",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/fb/G%C3%B6cek_harbour_residential_area_%28Turkiye_2017%29.jpg",
+          "alt": "Harbour-side residential setting in Göcek, photographed in2017."
         }
       },
       {
