@@ -40,7 +40,7 @@ describe("complete matching projection", () => {
     const original = await loadSmartShortlistData(EXPANSION_WORKBOOK_REGISTRY, true);
     const expected = createSmartShortlistProjection(original);
     const actual = artifact();
-    expect(actual.data.candidates).toHaveLength(389);
+    expect(actual.data.candidates).toHaveLength(393);
     expect(JSON.stringify(actual)).toBe(JSON.stringify(expected));
     const restored = validateSmartShortlistProjection(actual);
     expect(JSON.stringify(restored)).toBe(JSON.stringify(expected.data));
@@ -108,7 +108,7 @@ describe("complete matching projection", () => {
   it("checks all fifty-nine pinned workbooks on each validation", () => {
     const reader = vi.fn((file: string) => readFileSync(file));
     validateSmartShortlistProjection(artifact(), EXPANSION_WORKBOOK_REGISTRY, reader);
-    expect(reader).toHaveBeenCalledTimes(160);
+    expect(reader).toHaveBeenCalledTimes(164);
   });
   it("rejects corrupted matching evidence", () => {
     const value = artifact(); value.data.intelligence = [];

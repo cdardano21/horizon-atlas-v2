@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "1c6de0f5155528de73d2f6f6cbeb7aa9691decd13309c75fc6b61704af445d9b",
-  "digest": "7613a2bcc0fc31656352efe939cb71e621b4a418b8f15cfac2032c556ef679c5",
+  "sourceSignature": "598d538ae9c6f48ae9a865645fd5e24dfbb955aed129042f49a289ec43bf40bc",
+  "digest": "3720f037fdc1aba6e806c6c8e76309538540d8bc876399413c421b339df7ab1b",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,34 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "sant-feliu-de-guixols-spain",
+        "slug": "sant-feliu-de-guixols-spain",
+        "name": "Sant Feliu de Guíxols",
+        "country": "Spain",
+        "summary": "In Sant Feliu de Guíxols, the sea can be part of an ordinary shopping day."
+      },
+      {
+        "key": "vilanova-i-la-geltru-spain",
+        "slug": "vilanova-i-la-geltru-spain",
+        "name": "Vilanova i la Geltrú",
+        "country": "Spain",
+        "summary": "A walk down Rambla Principal gives Vilanova i la Geltrú its own introduction: shops and everyday errands first, with the sea waiting farther on."
+      },
+      {
+        "key": "lescala-spain",
+        "slug": "lescala-spain",
+        "name": "L’Escala",
+        "country": "Spain",
+        "summary": "L’Escala’s appeal begins with the meeting of a fishing town and an unusually rich stretch of coast."
+      },
+      {
+        "key": "cambrils-spain",
+        "slug": "cambrils-spain",
+        "name": "Cambrils",
+        "country": "Spain",
+        "summary": "Cambrils offers more than one version of a coastal day."
       },
       {
         "key": "cadaques-spain",
@@ -2979,6 +3007,34 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "sant-feliu-de-guixols-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/e2/View_of_Sant_Feliu_de_Gu%C3%ADxols_beach_and_marina.jpg",
+          "alt": "Sant Feliu bay and marina"
+        }
+      },
+      {
+        "key": "vilanova-i-la-geltru-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Vilanova_i_la_Geltru_beach2.jpg",
+          "alt": "Palm-lined seafront promenade in Vilanova i la Geltrú"
+        }
+      },
+      {
+        "key": "lescala-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Emp%C3%BAries_Agost_2008.jpg",
+          "alt": "Archaeological remains at Empúries, L’Escala municipality"
+        }
+      },
+      {
+        "key": "cambrils-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Cambrils%2C_panor%C3%A1mica_del_puerto_deportivo.jpg",
+          "alt": "Cambrils marina behind waterfront trees"
         }
       },
       {

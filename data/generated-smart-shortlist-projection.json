@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "e2d6cc36a901d79b25bab89530faef7a7f84f7f3317f74ad8f401d7315455635",
-  "digest": "6be69fae0a7d008ffa6fe4bc2ae197c087a97e3d628a64324d0359371590d74f",
+  "sourceSignature": "79bc4a80d9a3cf69b22f3b6dad46b77e6e33c4cf2bf81a1ea60b604344f7fb95",
+  "digest": "d9acd1c45f33fb4d864df954701a6f72fba2237c5c8a4617c1ed22d6aef391b3",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,126 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "sant-feliu-de-guixols-spain",
+        "name": "Sant Feliu de Guíxols",
+        "slug": "sant-feliu-de-guixols-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "In Sant Feliu de Guíxols, the sea can be part of an ordinary shopping day.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "vilanova-i-la-geltru-spain",
+        "name": "Vilanova i la Geltrú",
+        "slug": "vilanova-i-la-geltru-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "A walk down Rambla Principal gives Vilanova i la Geltrú its own introduction: shops and everyday errands first, with the sea waiting farther on.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "lescala-spain",
+        "name": "L’Escala",
+        "slug": "lescala-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "L’Escala’s appeal begins with the meeting of a fishing town and an unusually rich stretch of coast.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "cambrils-spain",
+        "name": "Cambrils",
+        "slug": "cambrils-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "Cambrils offers more than one version of a coastal day.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -14859,6 +14979,74 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "sant-feliu-de-guixols-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "vilanova-i-la-geltru-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "lescala-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "cambrils-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "cadaques-spain",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -21294,6 +21482,34 @@
         }
       },
       {
+        "key": "sant-feliu-de-guixols-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/e/e2/View_of_Sant_Feliu_de_Gu%C3%ADxols_beach_and_marina.jpg",
+          "alt": "Sant Feliu bay and marina"
+        }
+      },
+      {
+        "key": "vilanova-i-la-geltru-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Vilanova_i_la_Geltru_beach2.jpg",
+          "alt": "Palm-lined seafront promenade in Vilanova i la Geltrú"
+        }
+      },
+      {
+        "key": "lescala-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Emp%C3%BAries_Agost_2008.jpg",
+          "alt": "Archaeological remains at Empúries, L’Escala municipality"
+        }
+      },
+      {
+        "key": "cambrils-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Cambrils%2C_panor%C3%A1mica_del_puerto_deportivo.jpg",
+          "alt": "Cambrils marina behind waterfront trees"
+        }
+      },
+      {
         "key": "cadaques-spain",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Cadaqu%C3%A9s_BW_2019-10-08_11-02-53.jpg",
@@ -23956,6 +24172,30 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "sant-feliu-de-guixols-spain",
+        "singleMonthlyUsd": 2350,
+        "coupleMonthlyUsd": 3050,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "vilanova-i-la-geltru-spain",
+        "singleMonthlyUsd": 2075,
+        "coupleMonthlyUsd": 2800,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "lescala-spain",
+        "singleMonthlyUsd": 2125,
+        "coupleMonthlyUsd": 2825,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "cambrils-spain",
+        "singleMonthlyUsd": 2000,
+        "coupleMonthlyUsd": 2650,
         "estimateYear": 2026
       },
       {
