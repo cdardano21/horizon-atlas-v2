@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "79bc4a80d9a3cf69b22f3b6dad46b77e6e33c4cf2bf81a1ea60b604344f7fb95",
-  "digest": "d9acd1c45f33fb4d864df954701a6f72fba2237c5c8a4617c1ed22d6aef391b3",
+  "sourceSignature": "bd4b7adbcca991761480b5bb2629968fa59aaa397c3bb9c948c93ff16de35924",
+  "digest": "71c8c5dffab444ff715f546ef7f21f6666aa1c48b45d7f1cdfb81e7224670ecc",
   "data": {
     "candidates": [
       {
@@ -3379,6 +3379,186 @@
             "verifiedAt": "2026-08-31"
           }
         ],
+        "costSources": []
+      },
+      {
+        "key": "marbella-spain",
+        "name": "Marbella",
+        "slug": "marbella-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "A walk from Marbella’s old-town lanes through the Alameda to the sea can make an ordinary morning feel generously unhurried.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "nerja-spain",
+        "name": "Nerja",
+        "slug": "nerja-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "In Nerja, the sea can be the natural endpoint of a small errand.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "conil-de-la-frontera-spain",
+        "name": "Conil de la Frontera",
+        "slug": "conil-de-la-frontera-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "Conil’s white streets meet a broad Atlantic horizon rather than a tightly enclosed resort bay.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "salobrena-spain",
+        "name": "Salobreña",
+        "slug": "salobrena-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "Salobreña presents a choice almost as soon as you arrive: live among the white streets climbing toward the castle, or keep daily life closer to the flatter town and the beach.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "mojacar-spain",
+        "name": "Mojácar",
+        "slug": "mojacar-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "Mojácar offers two markedly different ways to organize the day.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "tarifa-spain",
+        "name": "Tarifa",
+        "slug": "tarifa-spain",
+        "country": "Spain",
+        "countryCode": "ES",
+        "summary": "In Tarifa, the wind helps decide the day.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
         "costSources": []
       },
       {
@@ -14979,6 +15159,108 @@
         "lifestyleDimensions": {}
       },
       {
+        "key": "marbella-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "nerja-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "conil-de-la-frontera-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "salobrena-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "mojacar-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "tarifa-spain",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
         "key": "sant-feliu-de-guixols-spain",
         "beachAccess": "UNKNOWN",
         "mountainAccess": "UNKNOWN",
@@ -21482,6 +21764,48 @@
         }
       },
       {
+        "key": "marbella-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Marbella_from_La_Concha%2C_Andalucia%2C_Spain_-_Sept_2009.jpg",
+          "alt": "Marbella viewed from La Concha; historical city panorama"
+        }
+      },
+      {
+        "key": "nerja-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/3/37/City_of_Nerja_%28cropped%29.jpg",
+          "alt": "Nerja coastline beside the Balcón de Europa"
+        }
+      },
+      {
+        "key": "conil-de-la-frontera-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/49/Vista_de_Conil_de_la_Frontera%2C_Espa%C3%B1a%2C_2015-12-08%2C_DD_02-06_PAN.JPG",
+          "alt": "Conil seen across its broad coastal landscape"
+        }
+      },
+      {
+        "key": "salobrena-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Salobre%C3%B1a%2C_en_Granada_%28Espa%C3%B1a%29.jpg",
+          "alt": "Salobreña and its agricultural foreground"
+        }
+      },
+      {
+        "key": "mojacar-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Moj%C3%A1car%2C_en_Almer%C3%ADa_%28Espa%C3%B1a%29.jpg",
+          "alt": "Mojácar Pueblo on the hillside"
+        }
+      },
+      {
+        "key": "tarifa-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Tarifa_panorama.jpg",
+          "alt": "Tarifa town panorama"
+        }
+      },
+      {
         "key": "sant-feliu-de-guixols-spain",
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/e/e2/View_of_Sant_Feliu_de_Gu%C3%ADxols_beach_and_marina.jpg",
@@ -24172,6 +24496,42 @@
         "destinationKey": "sibenik-croatia",
         "singleMonthlyUsd": 2300,
         "coupleMonthlyUsd": 3650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "marbella-spain",
+        "singleMonthlyUsd": 2575,
+        "coupleMonthlyUsd": 3500,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "nerja-spain",
+        "singleMonthlyUsd": 2125,
+        "coupleMonthlyUsd": 2850,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "conil-de-la-frontera-spain",
+        "singleMonthlyUsd": 1900,
+        "coupleMonthlyUsd": 2575,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "salobrena-spain",
+        "singleMonthlyUsd": 2050,
+        "coupleMonthlyUsd": 2750,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "mojacar-spain",
+        "singleMonthlyUsd": 2000,
+        "coupleMonthlyUsd": 2650,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "tarifa-spain",
+        "singleMonthlyUsd": 2200,
+        "coupleMonthlyUsd": 2925,
         "estimateYear": 2026
       },
       {

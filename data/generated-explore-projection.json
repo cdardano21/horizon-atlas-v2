@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "598d538ae9c6f48ae9a865645fd5e24dfbb955aed129042f49a289ec43bf40bc",
-  "digest": "3720f037fdc1aba6e806c6c8e76309538540d8bc876399413c421b339df7ab1b",
+  "sourceSignature": "117485e37ebc3565a2586743343e60636c805cc7c990ac95e58022bf735756dc",
+  "digest": "6361a268c87eefd047e4dd41d7325634dfff057f0967699b43cc0223ddeccd47",
   "data": {
     "candidates": [
       {
@@ -255,6 +255,48 @@
         "name": "Šibenik",
         "country": "Croatia",
         "summary": "A compact Adriatic city of stone lanes, fortresses, waterfront life, and island access, positioned between the coast and Krka National Park. The difference between summer and winter is substantial."
+      },
+      {
+        "key": "marbella-spain",
+        "slug": "marbella-spain",
+        "name": "Marbella",
+        "country": "Spain",
+        "summary": "A walk from Marbella’s old-town lanes through the Alameda to the sea can make an ordinary morning feel generously unhurried."
+      },
+      {
+        "key": "nerja-spain",
+        "slug": "nerja-spain",
+        "name": "Nerja",
+        "country": "Spain",
+        "summary": "In Nerja, the sea can be the natural endpoint of a small errand."
+      },
+      {
+        "key": "conil-de-la-frontera-spain",
+        "slug": "conil-de-la-frontera-spain",
+        "name": "Conil de la Frontera",
+        "country": "Spain",
+        "summary": "Conil’s white streets meet a broad Atlantic horizon rather than a tightly enclosed resort bay."
+      },
+      {
+        "key": "salobrena-spain",
+        "slug": "salobrena-spain",
+        "name": "Salobreña",
+        "country": "Spain",
+        "summary": "Salobreña presents a choice almost as soon as you arrive: live among the white streets climbing toward the castle, or keep daily life closer to the flatter town and the beach."
+      },
+      {
+        "key": "mojacar-spain",
+        "slug": "mojacar-spain",
+        "name": "Mojácar",
+        "country": "Spain",
+        "summary": "Mojácar offers two markedly different ways to organize the day."
+      },
+      {
+        "key": "tarifa-spain",
+        "slug": "tarifa-spain",
+        "name": "Tarifa",
+        "country": "Spain",
+        "summary": "In Tarifa, the wind helps decide the day."
       },
       {
         "key": "sant-feliu-de-guixols-spain",
@@ -3007,6 +3049,48 @@
         "heroImage": {
           "src": "/images/curated-mixed-batch-20-02/sibenik-croatia-hero.jpg",
           "alt": "Šibenik old town and Adriatic setting"
+        }
+      },
+      {
+        "key": "marbella-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Marbella_from_La_Concha%2C_Andalucia%2C_Spain_-_Sept_2009.jpg",
+          "alt": "Marbella viewed from La Concha; historical city panorama"
+        }
+      },
+      {
+        "key": "nerja-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/3/37/City_of_Nerja_%28cropped%29.jpg",
+          "alt": "Nerja coastline beside the Balcón de Europa"
+        }
+      },
+      {
+        "key": "conil-de-la-frontera-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/4/49/Vista_de_Conil_de_la_Frontera%2C_Espa%C3%B1a%2C_2015-12-08%2C_DD_02-06_PAN.JPG",
+          "alt": "Conil seen across its broad coastal landscape"
+        }
+      },
+      {
+        "key": "salobrena-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Salobre%C3%B1a%2C_en_Granada_%28Espa%C3%B1a%29.jpg",
+          "alt": "Salobreña and its agricultural foreground"
+        }
+      },
+      {
+        "key": "mojacar-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Moj%C3%A1car%2C_en_Almer%C3%ADa_%28Espa%C3%B1a%29.jpg",
+          "alt": "Mojácar Pueblo on the hillside"
+        }
+      },
+      {
+        "key": "tarifa-spain",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Tarifa_panorama.jpg",
+          "alt": "Tarifa town panorama"
         }
       },
       {
