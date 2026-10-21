@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "117485e37ebc3565a2586743343e60636c805cc7c990ac95e58022bf735756dc",
-  "digest": "6361a268c87eefd047e4dd41d7325634dfff057f0967699b43cc0223ddeccd47",
+  "sourceSignature": "279f10d47eda97ad96862954884bf0afffc356871cbb5007b4d1aad2030fe7fd",
+  "digest": "93978c8a5b862fd3e0f134ed9975650a132c741ec7db21af77bfa5f462ec1015",
   "data": {
     "candidates": [
       {
@@ -2796,6 +2796,55 @@
         "name": "Albuquerque",
         "country": "United States",
         "summary": "A high-desert Southwestern city with dramatic Sandia Mountain access, deep Hispanic and Native cultural influence, spacious living and a distinctive Route 66 identity."
+      },
+      {
+        "key": "prescott-arizona-united-states",
+        "slug": "prescott-arizona-united-states",
+        "name": "Prescott",
+        "country": "United States",
+        "summary": "Prescott makes it easy to build a day around its courthouse square: a short walk through the centre, coffee on North Cortez Street, then an afternoon that leaves room for the surrounding hills."
+      },
+      {
+        "key": "beaufort-south-carolina-united-states",
+        "slug": "beaufort-south-carolina-united-states",
+        "name": "Beaufort",
+        "country": "United States",
+        "summary": "In Beaufort, South Carolina, the waterfront can become part of an ordinary day rather than an outing saved for visitors."
+      },
+      {
+        "key": "durango-colorado-united-states",
+        "slug": "durango-colorado-united-states",
+        "name": "Durango",
+        "country": "United States",
+        "summary": "The Animas River gives Durango an everyday route through its mountain setting."
+      },
+      {
+        "key": "vero-beach-florida-united-states",
+        "slug": "vero-beach-florida-united-states",
+        "name": "Vero Beach",
+        "country": "United States",
+        "summary": "Vero Beach offers two quite different starting points for a coastal routine."
+      },
+      {
+        "key": "sedona-arizona-united-states",
+        "slug": "sedona-arizona-united-states",
+        "name": "Sedona",
+        "country": "United States",
+        "summary": "Sedona's red-rock setting is not confined to a scenic outing."
+      },
+      {
+        "key": "fernandina-beach-florida-united-states",
+        "slug": "fernandina-beach-florida-united-states",
+        "name": "Fernandina Beach",
+        "country": "United States",
+        "summary": "Fernandina Beach has two everyday pleasures that need not compete: time around the historic downtown and time beside the Atlantic."
+      },
+      {
+        "key": "bluffton-south-carolina-united-states",
+        "slug": "bluffton-south-carolina-united-states",
+        "name": "Bluffton",
+        "country": "United States",
+        "summary": "Bluffton's Old Town encourages a slower kind of outing: coffee near the centre, a look around the historic streets, then time by the May River."
       }
     ],
     "destinationMedia": [
@@ -5590,6 +5639,55 @@
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Albuquerque%2C_New_Mexico_skyline.jpg/1280px-Albuquerque%2C_New_Mexico_skyline.jpg",
           "alt": "Albuquerque, New Mexico skyline"
+        }
+      },
+      {
+        "key": "prescott-arizona-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Downtown_Prescott%2C_Arizona.jpg",
+          "alt": "Downtown Prescott, Arizona."
+        }
+      },
+      {
+        "key": "beaufort-south-carolina-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/15/Marshlands_along_the_Intracoastal_Waterway_in_city_of_Beaufort%2C_South_Carolina.jpg",
+          "alt": "Marshlands on the Intracoastal Waterway near Marina and Waterfront Park in City of Beaufort, South Carolina."
+        }
+      },
+      {
+        "key": "durango-colorado-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/7/75/Animas_River_just_north_of_downtown_Durango%2C_CO.jpg",
+          "alt": "The Animas River in Durango, CO, just north of downtown,"
+        }
+      },
+      {
+        "key": "vero-beach-florida-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Kite_flying_at_South_beach_in_Vero_Beach%2C_Florida_%282023%29.jpg",
+          "alt": "Kite flying at South beach in Vero Beach, Florida."
+        }
+      },
+      {
+        "key": "sedona-arizona-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Sedona%2C_Arizona%2C_USA.jpg",
+          "alt": "This is an image of the city of Sedona, AZ taken from the Sedona Airport. It features mountains, trees, buildings, and a clear blue sky. The image was taken not long before sunset and the cloud on the left hand side has a yellow glow to it."
+        }
+      },
+      {
+        "key": "fernandina-beach-florida-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a6/FernandinaBeach11.jpg",
+          "alt": "The beach in Fernandina Beach, Florida."
+        }
+      },
+      {
+        "key": "bluffton-south-carolina-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/10/Bluffton_-_Church_of_the_Cross.jpg",
+          "alt": "The Church of the Cross, Bluffton, South Carolina"
         }
       }
     ]

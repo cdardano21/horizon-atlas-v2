@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "bd4b7adbcca991761480b5bb2629968fa59aaa397c3bb9c948c93ff16de35924",
-  "digest": "71c8c5dffab444ff715f546ef7f21f6666aa1c48b45d7f1cdfb81e7224670ecc",
+  "sourceSignature": "af925f8a828c79799e06c7f5c8f54f0330331fdb99cebf8b15d7652452233d83",
+  "digest": "eba741e1ec8ea1144470cf55e3fad783b4429f85e488f26cda5544a65446b4da",
   "data": {
     "candidates": [
       {
@@ -14270,6 +14270,216 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "prescott-arizona-united-states",
+        "name": "Prescott",
+        "slug": "prescott-arizona-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Prescott makes it easy to build a day around its courthouse square: a short walk through the centre, coffee on North Cortez Street, then an afternoon that leaves room for the surrounding hills.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "beaufort-south-carolina-united-states",
+        "name": "Beaufort",
+        "slug": "beaufort-south-carolina-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "In Beaufort, South Carolina, the waterfront can become part of an ordinary day rather than an outing saved for visitors.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "durango-colorado-united-states",
+        "name": "Durango",
+        "slug": "durango-colorado-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "The Animas River gives Durango an everyday route through its mountain setting.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "vero-beach-florida-united-states",
+        "name": "Vero Beach",
+        "slug": "vero-beach-florida-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Vero Beach offers two quite different starting points for a coastal routine.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "sedona-arizona-united-states",
+        "name": "Sedona",
+        "slug": "sedona-arizona-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Sedona's red-rock setting is not confined to a scenic outing.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "fernandina-beach-florida-united-states",
+        "name": "Fernandina Beach",
+        "slug": "fernandina-beach-florida-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Fernandina Beach has two everyday pleasures that need not compete: time around the historic downtown and time beside the Atlantic.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "bluffton-south-carolina-united-states",
+        "name": "Bluffton",
+        "slug": "bluffton-south-carolina-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Bluffton's Old Town encourages a slower kind of outing: coffee near the centre, a look around the historic streets, then time by the May River.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -21508,6 +21718,125 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "prescott-arizona-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "beaufort-south-carolina-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "durango-colorado-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "vero-beach-florida-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "sedona-arizona-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "fernandina-beach-florida-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "bluffton-south-carolina-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -24303,6 +24632,55 @@
           "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Albuquerque%2C_New_Mexico_skyline.jpg/1280px-Albuquerque%2C_New_Mexico_skyline.jpg",
           "alt": "Albuquerque, New Mexico skyline"
         }
+      },
+      {
+        "key": "prescott-arizona-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Downtown_Prescott%2C_Arizona.jpg",
+          "alt": "Downtown Prescott, Arizona."
+        }
+      },
+      {
+        "key": "beaufort-south-carolina-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/15/Marshlands_along_the_Intracoastal_Waterway_in_city_of_Beaufort%2C_South_Carolina.jpg",
+          "alt": "Marshlands on the Intracoastal Waterway near Marina and Waterfront Park in City of Beaufort, South Carolina."
+        }
+      },
+      {
+        "key": "durango-colorado-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/7/75/Animas_River_just_north_of_downtown_Durango%2C_CO.jpg",
+          "alt": "The Animas River in Durango, CO, just north of downtown,"
+        }
+      },
+      {
+        "key": "vero-beach-florida-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Kite_flying_at_South_beach_in_Vero_Beach%2C_Florida_%282023%29.jpg",
+          "alt": "Kite flying at South beach in Vero Beach, Florida."
+        }
+      },
+      {
+        "key": "sedona-arizona-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Sedona%2C_Arizona%2C_USA.jpg",
+          "alt": "This is an image of the city of Sedona, AZ taken from the Sedona Airport. It features mountains, trees, buildings, and a clear blue sky. The image was taken not long before sunset and the cloud on the left hand side has a yellow glow to it."
+        }
+      },
+      {
+        "key": "fernandina-beach-florida-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a6/FernandinaBeach11.jpg",
+          "alt": "The beach in Fernandina Beach, Florida."
+        }
+      },
+      {
+        "key": "bluffton-south-carolina-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/10/Bluffton_-_Church_of_the_Cross.jpg",
+          "alt": "The Church of the Cross, Bluffton, South Carolina"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -26596,6 +26974,48 @@
         "destinationKey": "albuquerque-new-mexico-united-states",
         "singleMonthlyUsd": 2950,
         "coupleMonthlyUsd": 4050,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "prescott-arizona-united-states",
+        "singleMonthlyUsd": 3375,
+        "coupleMonthlyUsd": 4475,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "beaufort-south-carolina-united-states",
+        "singleMonthlyUsd": 3525,
+        "coupleMonthlyUsd": 4625,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "durango-colorado-united-states",
+        "singleMonthlyUsd": 3575,
+        "coupleMonthlyUsd": 4725,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "vero-beach-florida-united-states",
+        "singleMonthlyUsd": 3575,
+        "coupleMonthlyUsd": 4725,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "sedona-arizona-united-states",
+        "singleMonthlyUsd": 4325,
+        "coupleMonthlyUsd": 5575,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "fernandina-beach-florida-united-states",
+        "singleMonthlyUsd": 3475,
+        "coupleMonthlyUsd": 4550,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "bluffton-south-carolina-united-states",
+        "singleMonthlyUsd": 3750,
+        "coupleMonthlyUsd": 4875,
         "estimateYear": 2026
       }
     ]
