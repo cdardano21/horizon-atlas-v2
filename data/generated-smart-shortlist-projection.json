@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "af925f8a828c79799e06c7f5c8f54f0330331fdb99cebf8b15d7652452233d83",
-  "digest": "eba741e1ec8ea1144470cf55e3fad783b4429f85e488f26cda5544a65446b4da",
+  "sourceSignature": "e6490d91f3d5365c19d2a5c87bba1f22b59958dd907f437355b88a601d8af681",
+  "digest": "015649f29ca057a6b37c2a70481902139ddc27fd48b13dc5f2ce740cfad99643",
   "data": {
     "candidates": [
       {
@@ -14480,6 +14480,96 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "puerto-escondido-mexico",
+        "name": "Puerto Escondido",
+        "slug": "puerto-escondido-mexico",
+        "country": "Mexico",
+        "countryCode": "MX",
+        "summary": "In Puerto Escondido, a good day need not revolve around a surfboard.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "la-crucecita-mexico",
+        "name": "La Crucecita (Huatulco)",
+        "slug": "la-crucecita-mexico",
+        "country": "Mexico",
+        "countryCode": "MX",
+        "summary": "La Crucecita offers a different way into Huatulco: a home near the square, coffee around the corner and the market as part of the weekly routine.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "placencia-belize",
+        "name": "Placencia village",
+        "slug": "placencia-belize",
+        "country": "Belize",
+        "countryCode": "BZ",
+        "summary": "In Placencia village, the walk between home, something to eat and the water can be one of the best parts of the day.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -21837,6 +21927,57 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "puerto-escondido-mexico",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "la-crucecita-mexico",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "placencia-belize",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -24681,6 +24822,27 @@
           "src": "https://upload.wikimedia.org/wikipedia/commons/1/10/Bluffton_-_Church_of_the_Cross.jpg",
           "alt": "The Church of the Cross, Bluffton, South Carolina"
         }
+      },
+      {
+        "key": "puerto-escondido-mexico",
+        "heroImage": {
+          "src": "https://live.staticflickr.com/5123/5378862794_e9be416bae_b.jpg",
+          "alt": "Playa Manzanillo, Puerto Escondido — photographed in 2010."
+        }
+      },
+      {
+        "key": "la-crucecita-mexico",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Santa_Mar%C3%ADa_Huatulco_4.jpg/960px-Santa_Mar%C3%ADa_Huatulco_4.jpg",
+          "alt": "La Crucecita central square and Mercado 3 de Mayo — photographed in 2024."
+        }
+      },
+      {
+        "key": "placencia-belize",
+        "heroImage": {
+          "src": "https://live.staticflickr.com/3086/2391487455_f78559fce1_b.jpg",
+          "alt": "Placencia village Sidewalk — photographed in 2007."
+        }
       }
     ],
     "affordabilityRecords": [
@@ -27016,6 +27178,24 @@
         "destinationKey": "bluffton-south-carolina-united-states",
         "singleMonthlyUsd": 3750,
         "coupleMonthlyUsd": 4875,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "puerto-escondido-mexico",
+        "singleMonthlyUsd": 1525,
+        "coupleMonthlyUsd": 2000,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "la-crucecita-mexico",
+        "singleMonthlyUsd": 1350,
+        "coupleMonthlyUsd": 1775,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "placencia-belize",
+        "singleMonthlyUsd": 2225,
+        "coupleMonthlyUsd": 3025,
         "estimateYear": 2026
       }
     ]

@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "279f10d47eda97ad96862954884bf0afffc356871cbb5007b4d1aad2030fe7fd",
-  "digest": "93978c8a5b862fd3e0f134ed9975650a132c741ec7db21af77bfa5f462ec1015",
+  "sourceSignature": "c7e755a7e0df9c69ee15f086b660428d2c514cb8bee8a5a5ba6bbbc94a5bda82",
+  "digest": "e30702dedd64ecbad600fe370adbe89ff13e6c446375302a1d804aae46baa4ac",
   "data": {
     "candidates": [
       {
@@ -2845,6 +2845,27 @@
         "name": "Bluffton",
         "country": "United States",
         "summary": "Bluffton's Old Town encourages a slower kind of outing: coffee near the centre, a look around the historic streets, then time by the May River."
+      },
+      {
+        "key": "puerto-escondido-mexico",
+        "slug": "puerto-escondido-mexico",
+        "name": "Puerto Escondido",
+        "country": "Mexico",
+        "summary": "In Puerto Escondido, a good day need not revolve around a surfboard."
+      },
+      {
+        "key": "la-crucecita-mexico",
+        "slug": "la-crucecita-mexico",
+        "name": "La Crucecita (Huatulco)",
+        "country": "Mexico",
+        "summary": "La Crucecita offers a different way into Huatulco: a home near the square, coffee around the corner and the market as part of the weekly routine."
+      },
+      {
+        "key": "placencia-belize",
+        "slug": "placencia-belize",
+        "name": "Placencia village",
+        "country": "Belize",
+        "summary": "In Placencia village, the walk between home, something to eat and the water can be one of the best parts of the day."
       }
     ],
     "destinationMedia": [
@@ -5688,6 +5709,27 @@
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/1/10/Bluffton_-_Church_of_the_Cross.jpg",
           "alt": "The Church of the Cross, Bluffton, South Carolina"
+        }
+      },
+      {
+        "key": "puerto-escondido-mexico",
+        "heroImage": {
+          "src": "https://live.staticflickr.com/5123/5378862794_e9be416bae_b.jpg",
+          "alt": "Playa Manzanillo, Puerto Escondido — photographed in 2010."
+        }
+      },
+      {
+        "key": "la-crucecita-mexico",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Santa_Mar%C3%ADa_Huatulco_4.jpg/960px-Santa_Mar%C3%ADa_Huatulco_4.jpg",
+          "alt": "La Crucecita central square and Mercado 3 de Mayo — photographed in 2024."
+        }
+      },
+      {
+        "key": "placencia-belize",
+        "heroImage": {
+          "src": "https://live.staticflickr.com/3086/2391487455_f78559fce1_b.jpg",
+          "alt": "Placencia village Sidewalk — photographed in 2007."
         }
       }
     ]
