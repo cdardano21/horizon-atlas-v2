@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "e6490d91f3d5365c19d2a5c87bba1f22b59958dd907f437355b88a601d8af681",
-  "digest": "015649f29ca057a6b37c2a70481902139ddc27fd48b13dc5f2ce740cfad99643",
+  "sourceSignature": "212ccea1d989e8d83aecb30019305bf18b51b3313aedff8672155ae92597fe08",
+  "digest": "6ef6a0d15e0d12f4a72a954df277c6d802613183030ae8686f89158e12171674",
   "data": {
     "candidates": [
       {
@@ -14570,6 +14570,186 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "nardo-italy",
+        "name": "Nardò",
+        "slug": "nardo-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "A coffee on Piazza Salandra puts Nardò’s appeal in plain sight: pale stone, an elaborate column, church façades and a square worth returning to after the sightseeing is done.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "tricase-italy",
+        "name": "Tricase",
+        "slug": "tricase-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "Tricase gives daily life two different backdrops.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "galatina-italy",
+        "name": "Galatina",
+        "slug": "galatina-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "Galatina invites a day built around small distances: a pastry stop at Ascalone, a turn through the courtyards off the old streets, and time inside Santa Caterina d’Alessandria before returning to the squares.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "castro-puglia-italy",
+        "name": "Castro",
+        "slug": "castro-puglia-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "In Castro, the sea is almost always part of the setting, but it does not make every journey easy.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "porto-cesareo-italy",
+        "name": "Porto Cesareo",
+        "slug": "porto-cesareo-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "Porto Cesareo makes the waterfront part of an ordinary day: boats in the harbor, a coffee near Piazza Nazario Sauro, and the possibility of spending a few hours by the sea without turning the outing into a major expedition.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "specchia-italy",
+        "name": "Specchia",
+        "slug": "specchia-italy",
+        "country": "Italy",
+        "countryCode": "IT",
+        "summary": "Specchia’s appeal begins around Piazza del Popolo, where the palace, church and branching stone lanes give a small town a strong center.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -21978,6 +22158,108 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "nardo-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "tricase-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "galatina-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "castro-puglia-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "porto-cesareo-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "specchia-italy",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -24843,6 +25125,48 @@
           "src": "https://live.staticflickr.com/3086/2391487455_f78559fce1_b.jpg",
           "alt": "Placencia village Sidewalk — photographed in 2007."
         }
+      },
+      {
+        "key": "nardo-italy",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/NARDO%27.jpg/1280px-NARDO%27.jpg",
+          "alt": "Piazza Salandra in inland Nardò"
+        }
+      },
+      {
+        "key": "tricase-italy",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/17_Marina_Serra_%28Tricase%29.jpg/1280px-17_Marina_Serra_%28Tricase%29.jpg",
+          "alt": "Rocky Marina Serra coast, Tricase municipality"
+        }
+      },
+      {
+        "key": "galatina-italy",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Galatina_-_Palazzo_Mezio.jpg/1280px-Galatina_-_Palazzo_Mezio.jpg",
+          "alt": "Palazzo Mezio entrance, Galatina"
+        }
+      },
+      {
+        "key": "castro-puglia-italy",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/Castro_%28LE%29.JPG/1280px-Castro_%28LE%29.JPG",
+          "alt": "Castro Marina and rocky coast, Lecce province"
+        }
+      },
+      {
+        "key": "porto-cesareo-italy",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/Chiesa_Porto_Cesareo.jpg/1280px-Chiesa_Porto_Cesareo.jpg",
+          "alt": "Madonna del Perpetuo Soccorso church, Porto Cesareo"
+        }
+      },
+      {
+        "key": "specchia-italy",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/Chiesa_Sant%27Eufemia_Specchia.jpg/1280px-Chiesa_Sant%27Eufemia_Specchia.jpg",
+          "alt": "Sant’Eufemia church, Specchia"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -27196,6 +27520,42 @@
         "destinationKey": "placencia-belize",
         "singleMonthlyUsd": 2225,
         "coupleMonthlyUsd": 3025,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "nardo-italy",
+        "singleMonthlyUsd": 1750,
+        "coupleMonthlyUsd": 2325,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "tricase-italy",
+        "singleMonthlyUsd": 1700,
+        "coupleMonthlyUsd": 2300,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "galatina-italy",
+        "singleMonthlyUsd": 1700,
+        "coupleMonthlyUsd": 2300,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "castro-puglia-italy",
+        "singleMonthlyUsd": 1975,
+        "coupleMonthlyUsd": 2625,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "porto-cesareo-italy",
+        "singleMonthlyUsd": 1900,
+        "coupleMonthlyUsd": 2550,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "specchia-italy",
+        "singleMonthlyUsd": 1650,
+        "coupleMonthlyUsd": 2250,
         "estimateYear": 2026
       }
     ]

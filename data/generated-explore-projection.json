@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "c7e755a7e0df9c69ee15f086b660428d2c514cb8bee8a5a5ba6bbbc94a5bda82",
-  "digest": "e30702dedd64ecbad600fe370adbe89ff13e6c446375302a1d804aae46baa4ac",
+  "sourceSignature": "b3d5396af06c4d6ced3fff82ee94f09c596c6bd313806bd61d5bfc4cb8accf55",
+  "digest": "fee90e96611e57f9667fbca11a8e51e8644d305ecd442b0e9de004f3d297fcf0",
   "data": {
     "candidates": [
       {
@@ -2866,6 +2866,48 @@
         "name": "Placencia village",
         "country": "Belize",
         "summary": "In Placencia village, the walk between home, something to eat and the water can be one of the best parts of the day."
+      },
+      {
+        "key": "nardo-italy",
+        "slug": "nardo-italy",
+        "name": "Nardò",
+        "country": "Italy",
+        "summary": "A coffee on Piazza Salandra puts Nardò’s appeal in plain sight: pale stone, an elaborate column, church façades and a square worth returning to after the sightseeing is done."
+      },
+      {
+        "key": "tricase-italy",
+        "slug": "tricase-italy",
+        "name": "Tricase",
+        "country": "Italy",
+        "summary": "Tricase gives daily life two different backdrops."
+      },
+      {
+        "key": "galatina-italy",
+        "slug": "galatina-italy",
+        "name": "Galatina",
+        "country": "Italy",
+        "summary": "Galatina invites a day built around small distances: a pastry stop at Ascalone, a turn through the courtyards off the old streets, and time inside Santa Caterina d’Alessandria before returning to the squares."
+      },
+      {
+        "key": "castro-puglia-italy",
+        "slug": "castro-puglia-italy",
+        "name": "Castro",
+        "country": "Italy",
+        "summary": "In Castro, the sea is almost always part of the setting, but it does not make every journey easy."
+      },
+      {
+        "key": "porto-cesareo-italy",
+        "slug": "porto-cesareo-italy",
+        "name": "Porto Cesareo",
+        "country": "Italy",
+        "summary": "Porto Cesareo makes the waterfront part of an ordinary day: boats in the harbor, a coffee near Piazza Nazario Sauro, and the possibility of spending a few hours by the sea without turning the outing into a major expedition."
+      },
+      {
+        "key": "specchia-italy",
+        "slug": "specchia-italy",
+        "name": "Specchia",
+        "country": "Italy",
+        "summary": "Specchia’s appeal begins around Piazza del Popolo, where the palace, church and branching stone lanes give a small town a strong center."
       }
     ],
     "destinationMedia": [
@@ -5730,6 +5772,48 @@
         "heroImage": {
           "src": "https://live.staticflickr.com/3086/2391487455_f78559fce1_b.jpg",
           "alt": "Placencia village Sidewalk — photographed in 2007."
+        }
+      },
+      {
+        "key": "nardo-italy",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/NARDO%27.jpg/1280px-NARDO%27.jpg",
+          "alt": "Piazza Salandra in inland Nardò"
+        }
+      },
+      {
+        "key": "tricase-italy",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/17_Marina_Serra_%28Tricase%29.jpg/1280px-17_Marina_Serra_%28Tricase%29.jpg",
+          "alt": "Rocky Marina Serra coast, Tricase municipality"
+        }
+      },
+      {
+        "key": "galatina-italy",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Galatina_-_Palazzo_Mezio.jpg/1280px-Galatina_-_Palazzo_Mezio.jpg",
+          "alt": "Palazzo Mezio entrance, Galatina"
+        }
+      },
+      {
+        "key": "castro-puglia-italy",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/Castro_%28LE%29.JPG/1280px-Castro_%28LE%29.JPG",
+          "alt": "Castro Marina and rocky coast, Lecce province"
+        }
+      },
+      {
+        "key": "porto-cesareo-italy",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/Chiesa_Porto_Cesareo.jpg/1280px-Chiesa_Porto_Cesareo.jpg",
+          "alt": "Madonna del Perpetuo Soccorso church, Porto Cesareo"
+        }
+      },
+      {
+        "key": "specchia-italy",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/Chiesa_Sant%27Eufemia_Specchia.jpg/1280px-Chiesa_Sant%27Eufemia_Specchia.jpg",
+          "alt": "Sant’Eufemia church, Specchia"
         }
       }
     ]
