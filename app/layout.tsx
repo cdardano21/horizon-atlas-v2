@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Script from "next/script";
+import { GOOGLE_ANALYTICS_BOOTSTRAP } from "./lib/google-analytics";
 import GlobalHomeLink from "./components/GlobalHomeLink";
 import { LAUNCH_CATALOG_SIZE } from "./lib/destinations";
 import "./globals.css";
@@ -36,6 +38,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-[var(--atlas-canvas)] text-[var(--atlas-ink)]">
         {children}
         <GlobalHomeLink />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {GOOGLE_ANALYTICS_BOOTSTRAP}
+        </Script>
       </body>
     </html>
   );
