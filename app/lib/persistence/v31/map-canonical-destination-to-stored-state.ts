@@ -60,6 +60,8 @@ export function mapCanonicalDestinationToStoredState(canonicalDestination: Deter
       population: asStoredNullableString(canonicalDestination.identity.population),
       metroPopulation: asStoredNullableString(canonicalDestination.identity.metroPopulation),
       elevation: asStoredNullableString(canonicalDestination.identity.elevationMeters),
+      latitude: asStoredNullableString(canonicalDestination.identity.latitude),
+      longitude: asStoredNullableString(canonicalDestination.identity.longitude),
     },
     editorial: {
       shortDescription: asStoredNullableString(canonicalDestination.editorial.shortDescription),

@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "212ccea1d989e8d83aecb30019305bf18b51b3313aedff8672155ae92597fe08",
-  "digest": "6ef6a0d15e0d12f4a72a954df277c6d802613183030ae8686f89158e12171674",
+  "sourceSignature": "e8ddeae68945f21b594fc99b64a3d5f22cda45b30c2b4a1cf82d8a061b1e405e",
+  "digest": "a05a6b30918a048945a5fcb51af741bf5542c3fb7983c6059a0ecc3954093e0f",
   "data": {
     "candidates": [
       {
@@ -14750,6 +14750,306 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "daejeon-south-korea",
+        "name": "Daejeon",
+        "slug": "daejeon-south-korea",
+        "country": "South Korea",
+        "countryCode": "KR",
+        "summary": "Daejeon is a useful counterpoint to a destination chosen mainly for scenery. Its appeal lies in the possibilities of an ordinary urban week: a familiar market, a bakery stop, a neighborhood park and access to major-city services. For someone considering a longer Korean stay, that practical texture can matter more than a concentrated sightseeing district. The city is large enough that there is no single best base; the right choice depends on where daily errands, appointments and social connections will actually take place.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "gangneung-south-korea",
+        "name": "Gangneung",
+        "slug": "gangneung-south-korea",
+        "country": "South Korea",
+        "countryCode": "KR",
+        "summary": "Gangneung offers the possibility of an ordinary Korean city routine with the coast close enough to remain part of the week. The waterfront coffee scene is an obvious introduction, but the central market, inland residential streets and quieter cultural stops matter just as much to someone staying beyond a holiday. A beach visit and a grocery run are not necessarily the same journey. Choosing a home means deciding which of those routines should be on the doorstep and which can be an outing.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "geelong-victoria-australia",
+        "name": "Geelong",
+        "slug": "geelong-victoria-australia",
+        "country": "Australia",
+        "countryCode": "AU",
+        "summary": "Geelong's waterfront is an easy introduction, but its appeal for a longer stay extends into ordinary residential streets and commercial strips. The bay gives the city an open edge, while museums, gardens and neighborhood cafés provide reasons to spend time inland. It is a place to assess as a city in its own right, rather than simply a cheaper substitute for Melbourne or a staging point for the coast beyond it.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "gyeongju-south-korea",
+        "name": "Gyeongju",
+        "slug": "gyeongju-south-korea",
+        "country": "South Korea",
+        "countryCode": "KR",
+        "summary": "Gyeongju makes history part of the ordinary view. The attraction for a longer stay is not simply the number of monuments, but the possibility of returning to familiar streets and seeing them at quieter times. Around Hwangnam and Hwangnidan-gil, cafes and restaurants share the setting with the city's heritage landscape. A short visit can be organized around sights; living here requires a second map, built around groceries, a suitable apartment, healthcare and dependable trips across town.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "kaohsiung-taiwan",
+        "name": "Kaohsiung",
+        "slug": "kaohsiung-taiwan",
+        "country": "Taiwan",
+        "countryCode": "TW",
+        "summary": "Kaohsiung rewards a different pace from a quick sightseeing stop. Its harbor, old commercial streets and large urban districts give a long-stay visitor several ways to build a routine: a morning around the fine-arts museum, a trip through Yancheng's markets, or an evening beside the water. The appeal is the combination of a substantial working city and places where you can spend time outdoors without making every day an excursion. It is not a small beach town, and the choice of address will shape the experience much more than a citywide label.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "napier-new-zealand",
+        "name": "Napier",
+        "slug": "napier-new-zealand",
+        "country": "New Zealand",
+        "countryCode": "NZ",
+        "summary": "Napier makes a strong first impression through its streets as much as its shoreline. The central city invites a slow look at buildings, shopfronts and the spaces between them, while Marine Parade supplies a long coastal edge. For an extended stay, that compact urban character is more useful than a checklist of regional excursions. There is enough reason to return to familiar places, but choosing the right address still matters more than choosing a photogenic view.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "newcastle-new-south-wales-australia",
+        "name": "Newcastle",
+        "slug": "newcastle-new-south-wales-australia",
+        "country": "Australia",
+        "countryCode": "AU",
+        "summary": "Newcastle puts a working harbour beside an ocean-facing city centre. Ships remain part of the view, rather than a scenic detail left over from another era, and a walk can move from the harbour foreshore to the surf coast without leaving the central city. That combination gives it a different character from a purpose-built holiday resort. The attraction for a longer stay is not a promise of perpetual beach weather; it is the possibility of making the coast part of an ordinary week while living in a city with shops, cultural venues and substantial regional services.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "taiping-malaysia",
+        "name": "Taiping",
+        "slug": "taiping-malaysia",
+        "country": "Malaysia",
+        "countryCode": "MY",
+        "summary": "Taiping's appeal begins with an unhurried relationship between the old town and its green spaces. The Lake Gardens offer a recurring destination rather than a sight to tick off, while the market and heritage streets give a longer stay a different texture from a resort holiday. The place is most interesting when considered as a working town: where to buy food, how to reach appointments, and which streets remain comfortable for an ordinary walk when the weather changes.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "tauranga-new-zealand",
+        "name": "Tauranga",
+        "slug": "tauranga-new-zealand",
+        "country": "New Zealand",
+        "countryCode": "NZ",
+        "summary": "Tauranga offers several coastal lifestyles within one city boundary, and choosing among them is the real starting point for a longer stay. The central waterfront, Mount Maunganui and Papamoa should not be treated as interchangeable addresses. One may suit a routine built around the harbour and city services, another around the ocean, and another around a quieter residential street. A desirable view does not settle the questions of traffic, groceries, healthcare or how often a car will be needed.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "wollongong-new-south-wales-australia",
+        "name": "Wollongong",
+        "slug": "wollongong-new-south-wales-australia",
+        "country": "Australia",
+        "countryCode": "AU",
+        "summary": "Wollongong has a useful tension between scale and setting. It is a substantial city, yet the ocean and the escarpment repeatedly interrupt the urban view. A longer stay can be built around a beach walk, a neighborhood café and ordinary errands rather than a drive to a different attraction every day. It is also more than a convenient extension of Sydney: housing, services and social routines need to work locally if the stay is to feel settled.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -22260,6 +22560,176 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "daejeon-south-korea",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "gangneung-south-korea",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "geelong-victoria-australia",
+        "beachAccess": "DIRECT_ACCESS",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "gyeongju-south-korea",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "kaohsiung-taiwan",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "LEGAL_PROTECTIONS_IN_PLACE",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "napier-new-zealand",
+        "beachAccess": "DIRECT_ACCESS",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "newcastle-new-south-wales-australia",
+        "beachAccess": "DIRECT_ACCESS",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "taiping-malaysia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "CRIMINALIZED",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "tauranga-new-zealand",
+        "beachAccess": "DIRECT_ACCESS",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "wollongong-new-south-wales-australia",
+        "beachAccess": "DIRECT_ACCESS",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -25167,6 +25637,76 @@
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/Chiesa_Sant%27Eufemia_Specchia.jpg/1280px-Chiesa_Sant%27Eufemia_Specchia.jpg",
           "alt": "Sant’Eufemia church, Specchia"
         }
+      },
+      {
+        "key": "daejeon-south-korea",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Hanbat_Aboretum_Garden_under_the_Moon.jpg/1280px-Hanbat_Aboretum_Garden_under_the_Moon.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Hanbat Aboretum Garden under the Moon.jpg"
+        }
+      },
+      {
+        "key": "gangneung-south-korea",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/Ojukheon_20220501_022.jpg/1280px-Ojukheon_20220501_022.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Ojukheon 20220501 022.jpg"
+        }
+      },
+      {
+        "key": "geelong-victoria-australia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/Eastern_Beach_Geelong.jpg/1280px-Eastern_Beach_Geelong.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Eastern Beach Geelong.jpg"
+        }
+      },
+      {
+        "key": "gyeongju-south-korea",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/Cheomseongdae_Observatory_under_blue_sky_in_Gyeongju_South_Korea.jpg/1280px-Cheomseongdae_Observatory_under_blue_sky_in_Gyeongju_South_Korea.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Cheomseongdae Observatory under blue sky in Gyeongju South Korea.jpg"
+        }
+      },
+      {
+        "key": "kaohsiung-taiwan",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4b/Kaohsiung_Skyline_Panorama_20240118.jpg/1280px-Kaohsiung_Skyline_Panorama_20240118.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Kaohsiung Skyline Panorama 20240118.jpg"
+        }
+      },
+      {
+        "key": "napier-new-zealand",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Napier%2C_Part_I-_Architecture_-_Napier9500.jpg/1280px-Napier%2C_Part_I-_Architecture_-_Napier9500.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Napier, Part I- Architecture - Napier9500.jpg"
+        }
+      },
+      {
+        "key": "newcastle-new-south-wales-australia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Aerial_of_Newcastle_Harbour.jpg/1280px-Aerial_of_Newcastle_Harbour.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Aerial of Newcastle Harbour.jpg"
+        }
+      },
+      {
+        "key": "taiping-malaysia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/Taiping_-_Taman_Tasik_sign_blue_hour_with_reflections_-_Jun_2024.jpg/1280px-Taiping_-_Taman_Tasik_sign_blue_hour_with_reflections_-_Jun_2024.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Taiping - Taman Tasik sign blue hour with reflections - Jun 2024.jpg"
+        }
+      },
+      {
+        "key": "tauranga-new-zealand",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/0/05/Tauranga_City_Harbour.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+          "alt": "Tauranga City Harbour.jpg"
+        }
+      },
+      {
+        "key": "wollongong-new-south-wales-australia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/64/Wollongong_Harbour%2C_Cove_Beach_and_Foreshore.jpg/1280px-Wollongong_Harbour%2C_Cove_Beach_and_Foreshore.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Wollongong Harbour, Cove Beach and Foreshore.jpg"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -27556,6 +28096,66 @@
         "destinationKey": "specchia-italy",
         "singleMonthlyUsd": 1650,
         "coupleMonthlyUsd": 2250,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "daejeon-south-korea",
+        "singleMonthlyUsd": 1490,
+        "coupleMonthlyUsd": 2135,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "gangneung-south-korea",
+        "singleMonthlyUsd": 1600,
+        "coupleMonthlyUsd": 2255,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "geelong-victoria-australia",
+        "singleMonthlyUsd": 3060,
+        "coupleMonthlyUsd": 3990,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "gyeongju-south-korea",
+        "singleMonthlyUsd": 1725,
+        "coupleMonthlyUsd": 2350,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "kaohsiung-taiwan",
+        "singleMonthlyUsd": 1195,
+        "coupleMonthlyUsd": 1755,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "napier-new-zealand",
+        "singleMonthlyUsd": 2665,
+        "coupleMonthlyUsd": 3470,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "newcastle-new-south-wales-australia",
+        "singleMonthlyUsd": 3340,
+        "coupleMonthlyUsd": 4325,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "taiping-malaysia",
+        "singleMonthlyUsd": 850,
+        "coupleMonthlyUsd": 1150,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "tauranga-new-zealand",
+        "singleMonthlyUsd": 2540,
+        "coupleMonthlyUsd": 3330,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "wollongong-new-south-wales-australia",
+        "singleMonthlyUsd": 3305,
+        "coupleMonthlyUsd": 4110,
         "estimateYear": 2026
       }
     ]

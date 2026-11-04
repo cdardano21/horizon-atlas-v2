@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "b3d5396af06c4d6ced3fff82ee94f09c596c6bd313806bd61d5bfc4cb8accf55",
-  "digest": "fee90e96611e57f9667fbca11a8e51e8644d305ecd442b0e9de004f3d297fcf0",
+  "sourceSignature": "2731b89c9428d102d58f91879151366e8882ed1444d7754bd4ead5c7d29d83bb",
+  "digest": "d72b35df57b5c3e4e986b94f0010c7952af5da916a4aa7f2ae9d033ca4d18825",
   "data": {
     "candidates": [
       {
@@ -2908,6 +2908,76 @@
         "name": "Specchia",
         "country": "Italy",
         "summary": "Specchia’s appeal begins around Piazza del Popolo, where the palace, church and branching stone lanes give a small town a strong center."
+      },
+      {
+        "key": "daejeon-south-korea",
+        "slug": "daejeon-south-korea",
+        "name": "Daejeon",
+        "country": "South Korea",
+        "summary": "Daejeon is a useful counterpoint to a destination chosen mainly for scenery. Its appeal lies in the possibilities of an ordinary urban week: a familiar market, a bakery stop, a neighborhood park and access to major-city services. For someone considering a longer Korean stay, that practical texture can matter more than a concentrated sightseeing district. The city is large enough that there is no single best base; the right choice depends on where daily errands, appointments and social connections will actually take place."
+      },
+      {
+        "key": "gangneung-south-korea",
+        "slug": "gangneung-south-korea",
+        "name": "Gangneung",
+        "country": "South Korea",
+        "summary": "Gangneung offers the possibility of an ordinary Korean city routine with the coast close enough to remain part of the week. The waterfront coffee scene is an obvious introduction, but the central market, inland residential streets and quieter cultural stops matter just as much to someone staying beyond a holiday. A beach visit and a grocery run are not necessarily the same journey. Choosing a home means deciding which of those routines should be on the doorstep and which can be an outing."
+      },
+      {
+        "key": "geelong-victoria-australia",
+        "slug": "geelong-victoria-australia",
+        "name": "Geelong",
+        "country": "Australia",
+        "summary": "Geelong's waterfront is an easy introduction, but its appeal for a longer stay extends into ordinary residential streets and commercial strips. The bay gives the city an open edge, while museums, gardens and neighborhood cafés provide reasons to spend time inland. It is a place to assess as a city in its own right, rather than simply a cheaper substitute for Melbourne or a staging point for the coast beyond it."
+      },
+      {
+        "key": "gyeongju-south-korea",
+        "slug": "gyeongju-south-korea",
+        "name": "Gyeongju",
+        "country": "South Korea",
+        "summary": "Gyeongju makes history part of the ordinary view. The attraction for a longer stay is not simply the number of monuments, but the possibility of returning to familiar streets and seeing them at quieter times. Around Hwangnam and Hwangnidan-gil, cafes and restaurants share the setting with the city's heritage landscape. A short visit can be organized around sights; living here requires a second map, built around groceries, a suitable apartment, healthcare and dependable trips across town."
+      },
+      {
+        "key": "kaohsiung-taiwan",
+        "slug": "kaohsiung-taiwan",
+        "name": "Kaohsiung",
+        "country": "Taiwan",
+        "summary": "Kaohsiung rewards a different pace from a quick sightseeing stop. Its harbor, old commercial streets and large urban districts give a long-stay visitor several ways to build a routine: a morning around the fine-arts museum, a trip through Yancheng's markets, or an evening beside the water. The appeal is the combination of a substantial working city and places where you can spend time outdoors without making every day an excursion. It is not a small beach town, and the choice of address will shape the experience much more than a citywide label."
+      },
+      {
+        "key": "napier-new-zealand",
+        "slug": "napier-new-zealand",
+        "name": "Napier",
+        "country": "New Zealand",
+        "summary": "Napier makes a strong first impression through its streets as much as its shoreline. The central city invites a slow look at buildings, shopfronts and the spaces between them, while Marine Parade supplies a long coastal edge. For an extended stay, that compact urban character is more useful than a checklist of regional excursions. There is enough reason to return to familiar places, but choosing the right address still matters more than choosing a photogenic view."
+      },
+      {
+        "key": "newcastle-new-south-wales-australia",
+        "slug": "newcastle-new-south-wales-australia",
+        "name": "Newcastle",
+        "country": "Australia",
+        "summary": "Newcastle puts a working harbour beside an ocean-facing city centre. Ships remain part of the view, rather than a scenic detail left over from another era, and a walk can move from the harbour foreshore to the surf coast without leaving the central city. That combination gives it a different character from a purpose-built holiday resort. The attraction for a longer stay is not a promise of perpetual beach weather; it is the possibility of making the coast part of an ordinary week while living in a city with shops, cultural venues and substantial regional services."
+      },
+      {
+        "key": "taiping-malaysia",
+        "slug": "taiping-malaysia",
+        "name": "Taiping",
+        "country": "Malaysia",
+        "summary": "Taiping's appeal begins with an unhurried relationship between the old town and its green spaces. The Lake Gardens offer a recurring destination rather than a sight to tick off, while the market and heritage streets give a longer stay a different texture from a resort holiday. The place is most interesting when considered as a working town: where to buy food, how to reach appointments, and which streets remain comfortable for an ordinary walk when the weather changes."
+      },
+      {
+        "key": "tauranga-new-zealand",
+        "slug": "tauranga-new-zealand",
+        "name": "Tauranga",
+        "country": "New Zealand",
+        "summary": "Tauranga offers several coastal lifestyles within one city boundary, and choosing among them is the real starting point for a longer stay. The central waterfront, Mount Maunganui and Papamoa should not be treated as interchangeable addresses. One may suit a routine built around the harbour and city services, another around the ocean, and another around a quieter residential street. A desirable view does not settle the questions of traffic, groceries, healthcare or how often a car will be needed."
+      },
+      {
+        "key": "wollongong-new-south-wales-australia",
+        "slug": "wollongong-new-south-wales-australia",
+        "name": "Wollongong",
+        "country": "Australia",
+        "summary": "Wollongong has a useful tension between scale and setting. It is a substantial city, yet the ocean and the escarpment repeatedly interrupt the urban view. A longer stay can be built around a beach walk, a neighborhood café and ordinary errands rather than a drive to a different attraction every day. It is also more than a convenient extension of Sydney: housing, services and social routines need to work locally if the stay is to feel settled."
       }
     ],
     "destinationMedia": [
@@ -5814,6 +5884,76 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/Chiesa_Sant%27Eufemia_Specchia.jpg/1280px-Chiesa_Sant%27Eufemia_Specchia.jpg",
           "alt": "Sant’Eufemia church, Specchia"
+        }
+      },
+      {
+        "key": "daejeon-south-korea",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Hanbat_Aboretum_Garden_under_the_Moon.jpg/1280px-Hanbat_Aboretum_Garden_under_the_Moon.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Hanbat Aboretum Garden under the Moon.jpg"
+        }
+      },
+      {
+        "key": "gangneung-south-korea",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/Ojukheon_20220501_022.jpg/1280px-Ojukheon_20220501_022.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Ojukheon 20220501 022.jpg"
+        }
+      },
+      {
+        "key": "geelong-victoria-australia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/Eastern_Beach_Geelong.jpg/1280px-Eastern_Beach_Geelong.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Eastern Beach Geelong.jpg"
+        }
+      },
+      {
+        "key": "gyeongju-south-korea",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/Cheomseongdae_Observatory_under_blue_sky_in_Gyeongju_South_Korea.jpg/1280px-Cheomseongdae_Observatory_under_blue_sky_in_Gyeongju_South_Korea.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Cheomseongdae Observatory under blue sky in Gyeongju South Korea.jpg"
+        }
+      },
+      {
+        "key": "kaohsiung-taiwan",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4b/Kaohsiung_Skyline_Panorama_20240118.jpg/1280px-Kaohsiung_Skyline_Panorama_20240118.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Kaohsiung Skyline Panorama 20240118.jpg"
+        }
+      },
+      {
+        "key": "napier-new-zealand",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Napier%2C_Part_I-_Architecture_-_Napier9500.jpg/1280px-Napier%2C_Part_I-_Architecture_-_Napier9500.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Napier, Part I- Architecture - Napier9500.jpg"
+        }
+      },
+      {
+        "key": "newcastle-new-south-wales-australia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Aerial_of_Newcastle_Harbour.jpg/1280px-Aerial_of_Newcastle_Harbour.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Aerial of Newcastle Harbour.jpg"
+        }
+      },
+      {
+        "key": "taiping-malaysia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/Taiping_-_Taman_Tasik_sign_blue_hour_with_reflections_-_Jun_2024.jpg/1280px-Taiping_-_Taman_Tasik_sign_blue_hour_with_reflections_-_Jun_2024.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Taiping - Taman Tasik sign blue hour with reflections - Jun 2024.jpg"
+        }
+      },
+      {
+        "key": "tauranga-new-zealand",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/0/05/Tauranga_City_Harbour.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+          "alt": "Tauranga City Harbour.jpg"
+        }
+      },
+      {
+        "key": "wollongong-new-south-wales-australia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/64/Wollongong_Harbour%2C_Cove_Beach_and_Foreshore.jpg/1280px-Wollongong_Harbour%2C_Cove_Beach_and_Foreshore.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Wollongong Harbour, Cove Beach and Foreshore.jpg"
         }
       }
     ]

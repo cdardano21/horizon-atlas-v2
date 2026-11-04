@@ -6,7 +6,7 @@
 import type { DeterministicV31CanonicalDestination } from "../../workbook-v31-deterministic-core";
 import type { CanonicalDestinationKey, OperationManifest, ReplaceModuleExecutionModuleKey, StoredDestinationState } from "./types";
 
-// The same 20 modules the write port persists via REPLACE_MODULE (see write-port.ts's
+// The same 21 modules the write port persists via REPLACE_MODULE (see write-port.ts's
 // REPLACE_MODULE_TABLE_CONFIG) - kept as an independent literal list here on purpose so a change
 // to one does not silently change the other without a corresponding code review.
 const REPLACE_MODULE_ELIGIBLE_MODULES: readonly ReplaceModuleExecutionModuleKey[] = [
@@ -30,6 +30,7 @@ const REPLACE_MODULE_ELIGIBLE_MODULES: readonly ReplaceModuleExecutionModuleKey[
   "workBusiness",
   "retirementAging",
   "lifestyleLaws",
+  "lifestyleFeatures",
 ];
 
 /**

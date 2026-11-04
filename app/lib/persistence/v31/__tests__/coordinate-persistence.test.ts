@@ -1,0 +1,26 @@
+import {expect,it} from 'vitest';
+import {loadFrozenWorkbookV31DeterministicImport} from '../../../workbook-v31-deterministic-core';
+import {mapCanonicalDestinationToStoredState} from '../map-canonical-destination-to-stored-state';
+import {buildDestinationPlan} from '../plan-destination';
+import {interpretOperationManifest} from '../manifest';
+import {buildDestinationPlanWriteStatements} from '../write-port';
+import {createSupabasePersistedDestinationReadPort} from '../supabase-persisted-destination-read-port';
+import type {DestinationId} from '../types';
+const workbook='data/east-asia-oceania-daejeon-south-korea-01/DestinationFinderAI-daejeon-south-korea-Premium-Candidate-v3.3.xlsx';
+it.each([['36.35','127.38'],['-38.15','144.35'],['0','0']])('plans and reads back exact coordinates %s %s',async(latitude,longitude)=>{
+ const parsed=await loadFrozenWorkbookV31DeterministicImport(workbook);expect(parsed.validationErrors).toEqual([]);
+ const base=parsed.canonicalDestinations[0];const canonical={...base,identity:{...base.identity,latitude,longitude}};
+ const full=mapCanonicalDestinationToStoredState(canonical);expect(full.identity).toMatchObject({latitude,longitude});
+ const identity={destinationKey:full.identity.destinationKey,destinationId:'00000000-0000-4000-8000-000000000001' as DestinationId};
+ const manifest=interpretOperationManifest({manifest:{entries:[]},canonicalDestinations:[{...canonical,identity:{...canonical.identity,destinationKey:identity.destinationKey}}],approvedScope:[identity]});
+ const plan=buildDestinationPlan({resolvedDestinationIdentity:identity,canonicalDestination:canonical,storedDestinationState:{...full,identity:{...full.identity,latitude:null,longitude:null}},manifestInterpretation:manifest,approvedScope:[identity],diffPolicy:{updateMode:'MERGE_NONBLANK',normalizationVersion:'v31-normalize-1',diffPolicyVersion:'v31-diff-1'}});
+ expect(plan.errors).toEqual([]);
+ const sql=buildDestinationPlanWriteStatements(plan).filter(x=>x.text.startsWith('update public.destinations_catalog'));
+ expect(sql).toHaveLength(1);expect(sql[0].text).toContain('latitude');expect(sql[0].text).toContain('longitude');expect(sql[0].values).toEqual([identity.destinationId,identity.destinationKey,latitude,longitude]);
+ const port=createSupabasePersistedDestinationReadPort({async selectRows(){return [{id:identity.destinationId,destination_key:identity.destinationKey,slug:canonical.identity.slug,city:canonical.identity.city,country:canonical.identity.country,latitude:sql[0].values[2],longitude:sql[0].values[3]}]}});
+ const root=await port.readRoot(identity);expect(root.ok).toBe(true);if(root.ok)expect(root.value).toMatchObject({latitude,longitude});
+ const unchanged=buildDestinationPlan({resolvedDestinationIdentity:identity,canonicalDestination:canonical,storedDestinationState:full,manifestInterpretation:manifest,approvedScope:[identity],diffPolicy:{updateMode:'MERGE_NONBLANK',normalizationVersion:'v31-normalize-1',diffPolicyVersion:'v31-diff-1'}});
+ expect(unchanged.scalarOperations.filter(x=>['latitude','longitude'].includes(x.fieldPath))).toEqual([]);
+ const blank=buildDestinationPlan({resolvedDestinationIdentity:identity,canonicalDestination:{...canonical,identity:{...canonical.identity,latitude:null,longitude:null}},storedDestinationState:full,manifestInterpretation:manifest,approvedScope:[identity],diffPolicy:{updateMode:'MERGE_NONBLANK',normalizationVersion:'v31-normalize-1',diffPolicyVersion:'v31-diff-1'}});
+ expect(buildDestinationPlanWriteStatements(blank).filter(x=>x.text.startsWith('update public.destinations_catalog'))).toEqual([]);
+});

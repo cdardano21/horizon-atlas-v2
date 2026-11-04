@@ -776,6 +776,13 @@ function toCanonicalMoveChecklistState(value: DeterministicV31CanonicalDestinati
   };
 }
 
+// The SQL planner emits no singleton row when both supported fields are blank.
+// Compare that absent row and an all-null projection equally, without hiding any content.
+function projectEnvironmentQuality(summary: ComparableInput, qualityNotes: ComparableInput): ComparableObject | null {
+  const projected = projectComparableObject({ summary, qualityNotes });
+  return projected.summary === null && projected.qualityNotes === null ? null : projected;
+}
+
 function toCanonicalEnvironmentQualityState(value: DeterministicV31CanonicalDestination["environmentQuality"]): ComparableObjectInput {
   return {
     summary: value?.air_quality_summary ?? null,
@@ -874,7 +881,7 @@ export function projectStoredComparable(state: StoredDestinationState): Comparab
     lifestyleLaws: projectOrderedArray(state.lifestyleLaws),
     realityCheck: projectRecordKeyArray(state.realityCheck),
     moveChecklist: projectKeyedChildArray(state.moveChecklist, KEYED_CHILD_MODULES.moveChecklist),
-    environmentQuality: state.environmentQuality === null ? null : projectComparableObject({ summary: state.environmentQuality.summary, qualityNotes: state.environmentQuality.qualityNotes }),
+    environmentQuality: projectEnvironmentQuality(state.environmentQuality?.summary ?? null, state.environmentQuality?.qualityNotes ?? null),
     dailyLifePracticality: state.dailyLifePracticality === null ? null : projectComparableObject({ summary: state.dailyLifePracticality.summary, practicalityNotes: state.dailyLifePracticality.practicalityNotes }),
     eventsSeasonality: projectKeyedChildArray(state.eventsSeasonality, KEYED_CHILD_MODULES.eventsSeasonality),
     sources: projectKeyedChildArray(state.sources.map(row => ({ ...row, notes: row.notes ?? null })), KEYED_CHILD_MODULES.sources),
@@ -930,7 +937,7 @@ export function projectCanonicalComparable(state: DeterministicV31CanonicalDesti
     lifestyleLaws: projectOrderedArray(state.lifestyleLaws.map(toCanonicalLifestyleLawState)),
     realityCheck: projectRecordKeyArray(state.realityCheck.map(toCanonicalRealityCheckEntry)),
     moveChecklist: projectKeyedChildArray(state.moveChecklist.map(toCanonicalMoveChecklistState), KEYED_CHILD_MODULES.moveChecklist),
-    environmentQuality: state.environmentQuality === null ? null : projectComparableValue(toCanonicalEnvironmentQualityState(state.environmentQuality)),
+    environmentQuality: projectEnvironmentQuality(state.environmentQuality?.air_quality_summary ?? null, state.environmentQuality?.water_quality_summary ?? null),
     dailyLifePracticality: state.dailyLifePracticality === null ? null : projectComparableValue(toCanonicalDailyLifePracticalityState(state.dailyLifePracticality)),
     eventsSeasonality: projectKeyedChildArray(state.eventsSeasonality.map(toCanonicalEventsSeasonalityState), KEYED_CHILD_MODULES.eventsSeasonality),
     sources: projectKeyedChildArray(state.sources.map(toCanonicalSource), KEYED_CHILD_MODULES.sources),
