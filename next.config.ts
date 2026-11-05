@@ -18,6 +18,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "thumb.wikimedia.org",
+        port: "",
+        pathname: "/wikipedia/commons/thumb/**",
+      },
+      {
+        protocol: "https",
         hostname: "commons.wikimedia.org",
         pathname: "/**",
       },
