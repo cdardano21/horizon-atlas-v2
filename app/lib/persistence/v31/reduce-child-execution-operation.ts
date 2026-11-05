@@ -1,4 +1,4 @@
-import { projectComparableObject } from "./comparable-projection";
+import { projectComparableObject, projectKeyedChildComparableRow } from "./comparable-projection";
 import type { ComparableValue } from "./comparable-projection";
 import type { ChildOperation, ChildOperationKind, KeyedChildModuleKey, StableChildKey, StoredDestinationState, StoredEventsSeasonalityState, StoredFact, StoredMedia, StoredMoveChecklistState, StoredNeighborhood, StoredPlace, StoredPropertyResource, StoredResource, StoredScore, StoredSource } from "./types";
 import type { ExecutionFailureReason } from "./errors";
@@ -919,7 +919,13 @@ export function reduceChildExecutionOperation(state: StoredDestinationState, ope
     case "resources":
       return reduceResourcesChildOperation(state, operation);
     case "media":
-      return reduceMediaChildOperation(state, operation);
+      // Plans carry canonical snake-case rows; reducers store the normalized shape.
+      // Use the same media projection as planning/readback comparisons.
+      return reduceMediaChildOperation(state, {
+        ...operation,
+        ...("currentChild" in operation ? { currentChild: operation.currentChild === null ? null : projectKeyedChildComparableRow("media", operation.currentChild) } : {}),
+        ...("incomingChild" in operation ? { incomingChild: projectKeyedChildComparableRow("media", operation.incomingChild) } : {}),
+      } as Extract<ChildOperation, { module: "media" }>);
     case "propertyResources":
       return reducePropertyResourcesChildOperation(state, operation);
     case "moveChecklist":

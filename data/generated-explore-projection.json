@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "2731b89c9428d102d58f91879151366e8882ed1444d7754bd4ead5c7d29d83bb",
-  "digest": "d72b35df57b5c3e4e986b94f0010c7952af5da916a4aa7f2ae9d033ca4d18825",
+  "sourceSignature": "99f3fd2f14fb6a072f2ccbfcfcb95d83ae59018a8a9b5c1836e0179897f94622",
+  "digest": "21e1221c6f3f033802048086a5f416e3f456c90849a498f2f69b6b18a3609a71",
   "data": {
     "candidates": [
       {
@@ -2978,6 +2978,76 @@
         "name": "Wollongong",
         "country": "Australia",
         "summary": "Wollongong has a useful tension between scale and setting. It is a substantial city, yet the ocean and the escarpment repeatedly interrupt the urban view. A longer stay can be built around a beach walk, a neighborhood café and ordinary errands rather than a drive to a different attraction every day. It is also more than a convenient extension of Sydney: housing, services and social routines need to work locally if the stay is to feel settled."
+      },
+      {
+        "key": "aarhus-denmark",
+        "slug": "aarhus-denmark",
+        "name": "Aarhus",
+        "country": "Denmark",
+        "summary": "Aarhus combines the scale of a regional capital with the routines of a university city."
+      },
+      {
+        "key": "bergen-other-europe",
+        "slug": "bergen-other-europe",
+        "name": "Bergen",
+        "country": "Norway",
+        "summary": "Bergen makes the water and the weather part of an ordinary day."
+      },
+      {
+        "key": "brno-czechia",
+        "slug": "brno-czechia",
+        "name": "Brno",
+        "country": "Czechia",
+        "summary": "Brno offers the culture and services of a regional capital without feeling like a smaller copy of Prague."
+      },
+      {
+        "key": "dresden-germany",
+        "slug": "dresden-germany",
+        "name": "Dresden",
+        "country": "Germany",
+        "summary": "Dresden's river setting and rebuilt historic centre make a strong first impression, but a longer stay is shaped just as much by its residential districts."
+      },
+      {
+        "key": "gdansk-poland",
+        "slug": "gdansk-poland",
+        "name": "Gdańsk",
+        "country": "Poland",
+        "summary": "Gdańsk combines a maritime setting with the substance of a large Polish city."
+      },
+      {
+        "key": "leipzig-germany",
+        "slug": "leipzig-germany",
+        "name": "Leipzig",
+        "country": "Germany",
+        "summary": "Leipzig is a city for people who want culture to be part of an ordinary week."
+      },
+      {
+        "key": "odense-denmark",
+        "slug": "odense-denmark",
+        "name": "Odense",
+        "country": "Denmark",
+        "summary": "Odense offers a gentler Danish city experience than a capital-city itinerary suggests."
+      },
+      {
+        "key": "poznan-poland",
+        "slug": "poznan-poland",
+        "name": "Poznań",
+        "country": "Poland",
+        "summary": "Poznań is a practical city with a handsome historic centre, rather than a destination that depends entirely on visitors."
+      },
+      {
+        "key": "trondheim-norway",
+        "slug": "trondheim-norway",
+        "name": "Trondheim",
+        "country": "Norway",
+        "summary": "Trondheim's best everyday quality may be the way its river, university life and older streets overlap."
+      },
+      {
+        "key": "uppsala-sweden",
+        "slug": "uppsala-sweden",
+        "name": "Uppsala",
+        "country": "Sweden",
+        "summary": "Uppsala has a university city's rhythm rather than a resort's calendar."
       }
     ],
     "destinationMedia": [
@@ -5954,6 +6024,76 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/64/Wollongong_Harbour%2C_Cove_Beach_and_Foreshore.jpg/1280px-Wollongong_Harbour%2C_Cove_Beach_and_Foreshore.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Wollongong Harbour, Cove Beach and Foreshore.jpg"
+        }
+      },
+      {
+        "key": "aarhus-denmark",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d8/A_tram_approaching_Dokk1%2C_Aarhus.jpg/1280px-A_tram_approaching_Dokk1%2C_Aarhus.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "A tram approaching Dokk1, Aarhus.jpg"
+        }
+      },
+      {
+        "key": "bergen-other-europe",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/Bryggen%2C_Bergen%2C_Noruega%2C_2019-09-08%2C_DD_115-117_PAN.jpg/1280px-Bryggen%2C_Bergen%2C_Noruega%2C_2019-09-08%2C_DD_115-117_PAN.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Bryggen, Bergen, Noruega, 2019-09-08, DD 115-117 PAN.jpg"
+        }
+      },
+      {
+        "key": "brno-czechia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Brno-Freiheitsplatz2.jpg/1280px-Brno-Freiheitsplatz2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Brno-Freiheitsplatz2.jpg"
+        }
+      },
+      {
+        "key": "dresden-germany",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/01067_Dresden%2C_Frauenkirche_Panorama_Norden_2023-06-10.jpg/1280px-01067_Dresden%2C_Frauenkirche_Panorama_Norden_2023-06-10.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "01067 Dresden, Frauenkirche Panorama Norden 2023-06-10.jpg"
+        }
+      },
+      {
+        "key": "gdansk-poland",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ea/02024_0088_Long_Market_Square.jpg/1280px-02024_0088_Long_Market_Square.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "02024 0088 Long Market Square.jpg"
+        }
+      },
+      {
+        "key": "leipzig-germany",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/L01_362_Umleitungshaltestelle_Augustusplatz%2C_ET_1231.jpg/1280px-L01_362_Umleitungshaltestelle_Augustusplatz%2C_ET_1231.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "L01 362 Umleitungshaltestelle Augustusplatz, ET 1231.jpg"
+        }
+      },
+      {
+        "key": "odense-denmark",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/Clock_city_hall_Odense_Denmark.jpg/1280px-Clock_city_hall_Odense_Denmark.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Clock city hall Odense Denmark.jpg"
+        }
+      },
+      {
+        "key": "poznan-poland",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Picturesque_Stary_Rynek%2C_Pozna%C5%84_PL.jpg/1280px-Picturesque_Stary_Rynek%2C_Pozna%C5%84_PL.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Picturesque Stary Rynek, Poznań PL.jpg"
+        }
+      },
+      {
+        "key": "trondheim-norway",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/76/Edificios_a_lo_largo_del_r%C3%ADo_Nidelva%2C_Trondheim%2C_Noruega%2C_2019-09-06%2C_DD_114-118_PAN.jpg/1280px-Edificios_a_lo_largo_del_r%C3%ADo_Nidelva%2C_Trondheim%2C_Noruega%2C_2019-09-06%2C_DD_114-118_PAN.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Edificios a lo largo del río Nidelva, Trondheim, Noruega, 2019-09-06, DD 114-118 PAN.jpg"
+        }
+      },
+      {
+        "key": "uppsala-sweden",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Fyris_river_with_Uppsala_Cathedral_in_background.jpg/1280px-Fyris_river_with_Uppsala_Cathedral_in_background.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Fyris river with Uppsala Cathedral in background.jpg"
         }
       }
     ]
