@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "27db0662a5ed653558e7894e60383f96a136e28fac518c45b9ba12b8bbe0fffb",
-  "digest": "79a813e23f079a63f50712b93c36f4dd5a2a0db37f07ad7447a84fdbeb8ff6a4",
+  "sourceSignature": "919b33208b2570d66aa596f44efd9e508e57df79b5f7b3394b273a4b10ca8263",
+  "digest": "f85e6a2d1968df59e23a5bfe81a2f50529e60f8ca50a3792511c7279f08658f0",
   "data": {
     "candidates": [
       {
@@ -15500,6 +15500,156 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "agadir-morocco",
+        "name": "Agadir",
+        "slug": "agadir-morocco",
+        "country": "Morocco",
+        "countryCode": "MA",
+        "summary": "Agadir's most immediate advantage is space: a long sandy frontage, a promenade and a city that stretches well beyond its hotels.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "george-south-africa",
+        "name": "George",
+        "slug": "george-south-africa",
+        "country": "South Africa",
+        "countryCode": "ZA",
+        "summary": "George is an inland Garden Route city with the Outeniqua Mountains close behind it, rather than a beach town with a few shops.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "grand-baie-mauritius",
+        "name": "Grand Baie",
+        "slug": "grand-baie-mauritius",
+        "country": "Mauritius",
+        "countryCode": "MU",
+        "summary": "Grand Baie gives you a very visible version of northern Mauritius: small boats on the lagoon, shops along Royal Road and enough restaurants to make dinner an easy decision.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "rabat-morocco",
+        "name": "Rabat",
+        "slug": "rabat-morocco",
+        "country": "Morocco",
+        "countryCode": "MA",
+        "summary": "Rabat is a working capital with a coastal edge, where a museum visit, a tram journey and shopping in the medina can belong to the same ordinary afternoon.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "swakopmund-namibia",
+        "name": "Swakopmund",
+        "slug": "swakopmund-namibia",
+        "country": "Namibia",
+        "countryCode": "NA",
+        "summary": "Swakopmund offers an unusual coastal routine: Atlantic air and morning fog on one side, arid landscapes on the other, with a compact centre of cafés, shops and historic buildings between them.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -23435,6 +23585,91 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "agadir-morocco",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "george-south-africa",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "LEGAL_PROTECTIONS_IN_PLACE",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "grand-baie-mauritius",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "CRIMINALIZED",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "YES",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "rabat-morocco",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "swakopmund-namibia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "LEGAL_PROTECTIONS_IN_PLACE",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -26517,6 +26752,41 @@
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Lac_des_Nations%2C_Sherbrooke.jpg/1280px-Lac_des_Nations%2C_Sherbrooke.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Lac des Nations, Sherbrooke.jpg"
         }
+      },
+      {
+        "key": "agadir-morocco",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Agadir_Beach_Sunset_%28Summer_time%29.jpg/1280px-Agadir_Beach_Sunset_%28Summer_time%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Agadir Beach Sunset (Summer time).jpg"
+        }
+      },
+      {
+        "key": "george-south-africa",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Dutch_Reformed_Church%2C_George%2C_South_Africa.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+          "alt": "Dutch Reformed Church, George, South Africa.jpg"
+        }
+      },
+      {
+        "key": "grand-baie-mauritius",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Grand-Baie-banner.jpg/1280px-Grand-Baie-banner.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Grand-Baie-banner.jpg"
+        }
+      },
+      {
+        "key": "rabat-morocco",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Hassan_Tower%2C_Rabat%2C_Marocco_%28%D8%B5%D9%88%D9%85%D8%B9%D8%A9_%D8%AD%D8%B3%D8%A7%D9%86_%29.jpg/1280px-Hassan_Tower%2C_Rabat%2C_Marocco_%28%D8%B5%D9%88%D9%85%D8%B9%D8%A9_%D8%AD%D8%B3%D8%A7%D9%86_%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Hassan Tower, Rabat, Marocco (صومعة حسان ).jpg"
+        }
+      },
+      {
+        "key": "swakopmund-namibia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Jetty%2C_Swakopmund%2C_Namibia%2C_2018-08-04%2C_DD_62.jpg/1280px-Jetty%2C_Swakopmund%2C_Namibia%2C_2018-08-04%2C_DD_62.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Jetty, Swakopmund, Namibia, 2018-08-04, DD 62.jpg"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -29056,6 +29326,36 @@
         "destinationKey": "sherbrooke-canada",
         "singleMonthlyUsd": 1870,
         "coupleMonthlyUsd": 2435,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "agadir-morocco",
+        "singleMonthlyUsd": 925,
+        "coupleMonthlyUsd": 1190,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "george-south-africa",
+        "singleMonthlyUsd": 1290,
+        "coupleMonthlyUsd": 1635,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "grand-baie-mauritius",
+        "singleMonthlyUsd": 1360,
+        "coupleMonthlyUsd": 1710,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "rabat-morocco",
+        "singleMonthlyUsd": 990,
+        "coupleMonthlyUsd": 1255,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "swakopmund-namibia",
+        "singleMonthlyUsd": 1330,
+        "coupleMonthlyUsd": 1645,
         "estimateYear": 2026
       }
     ]
