@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "919b33208b2570d66aa596f44efd9e508e57df79b5f7b3394b273a4b10ca8263",
-  "digest": "f85e6a2d1968df59e23a5bfe81a2f50529e60f8ca50a3792511c7279f08658f0",
+  "sourceSignature": "b622bbd8647108993ad72a379f9fc57c102aaafad6698df884c54d13789789f5",
+  "digest": "f32bb0e8523c295169e19edb96812a2712b68db220228b01b944f231b2eb200f",
   "data": {
     "candidates": [
       {
@@ -15650,6 +15650,126 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "atlantida-uruguay",
+        "name": "Atlántida",
+        "slug": "atlantida-uruguay",
+        "country": "Uruguay",
+        "countryCode": "UY",
+        "summary": "Atlántida offers a small coastal routine within reach of Uruguay's capital: a walk along the rambla, everyday shopping in the center and a beach that can become part of the week rather than the reason for a once-a-year trip.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "niteroi-brazil",
+        "name": "Niterói",
+        "slug": "niteroi-brazil",
+        "country": "Brazil",
+        "countryCode": "BR",
+        "summary": "Niterói gives you Rio's skyline from the other side of the bay, but its appeal for a longer stay is more ordinary than that view suggests.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "san-martin-de-los-andes-argentina",
+        "name": "San Martín de los Andes",
+        "slug": "san-martin-de-los-andes-argentina",
+        "country": "Argentina",
+        "countryCode": "AR",
+        "summary": "San Martín de los Andes begins with a lakefront that is easy to remember: boats on Lácar, wooded slopes beyond the water and a town center close enough for a café after a walk.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "tandil-argentina",
+        "name": "Tandil",
+        "slug": "tandil-argentina",
+        "country": "Argentina",
+        "countryCode": "AR",
+        "summary": "Tandil is an inland city where the hills form the edge of daily life rather than a distant weekend destination.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -23670,6 +23790,74 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "atlantida-uruguay",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "LEGAL_PROTECTIONS_IN_PLACE",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "niteroi-brazil",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "LEGAL_PROTECTIONS_IN_PLACE",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "san-martin-de-los-andes-argentina",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "LEGAL_PROTECTIONS_IN_PLACE",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "tandil-argentina",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "LEGAL_PROTECTIONS_IN_PLACE",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -26787,6 +26975,34 @@
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Jetty%2C_Swakopmund%2C_Namibia%2C_2018-08-04%2C_DD_62.jpg/1280px-Jetty%2C_Swakopmund%2C_Namibia%2C_2018-08-04%2C_DD_62.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Jetty, Swakopmund, Namibia, 2018-08-04, DD 62.jpg"
         }
+      },
+      {
+        "key": "atlantida-uruguay",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Playa_Mansa_from_the_Planeta_Palace_Hotel%2C_Atlantida%2C_Uruguay.jpg/1280px-Playa_Mansa_from_the_Planeta_Palace_Hotel%2C_Atlantida%2C_Uruguay.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Playa Mansa from the Planeta Palace Hotel, Atlantida, Uruguay.jpg"
+        }
+      },
+      {
+        "key": "niteroi-brazil",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Museu_de_Arte_Contempor%C3%A2nea.jpg/1280px-Museu_de_Arte_Contempor%C3%A2nea.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Museu de Arte Contemporânea.jpg"
+        }
+      },
+      {
+        "key": "san-martin-de-los-andes-argentina",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/Lago_Lacar_100_0483.jpg/1280px-Lago_Lacar_100_0483.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Lago Lacar 100 0483.jpg"
+        }
+      },
+      {
+        "key": "tandil-argentina",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b2/Lago_del_Fuerte%2C_Tandil_01.jpg/1280px-Lago_del_Fuerte%2C_Tandil_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Lago del Fuerte, Tandil 01.jpg"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -29356,6 +29572,30 @@
         "destinationKey": "swakopmund-namibia",
         "singleMonthlyUsd": 1330,
         "coupleMonthlyUsd": 1645,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "atlantida-uruguay",
+        "singleMonthlyUsd": 1540,
+        "coupleMonthlyUsd": 2025,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "niteroi-brazil",
+        "singleMonthlyUsd": 1605,
+        "coupleMonthlyUsd": 1935,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "san-martin-de-los-andes-argentina",
+        "singleMonthlyUsd": 1830,
+        "coupleMonthlyUsd": 2205,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "tandil-argentina",
+        "singleMonthlyUsd": 1100,
+        "coupleMonthlyUsd": 1470,
         "estimateYear": 2026
       }
     ]

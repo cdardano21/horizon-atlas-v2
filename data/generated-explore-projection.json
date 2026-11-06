@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "5d3c1d7529e1fec6ab8b592aa1d2bdadba1dbef9e427a722887a296c83d185a5",
-  "digest": "ecfa03b79a8387fb41837262850b8cda80845b958a827e3dd789cff89a2294c4",
+  "sourceSignature": "0b205a9d1f8c7b17dc37579b1952b78880d5820f70a97239fc5194643e81f691",
+  "digest": "86adf0a0bcade089a97937551180f9f13edf4ee803c32e609756f1f7ecc964ef",
   "data": {
     "candidates": [
       {
@@ -3118,6 +3118,34 @@
         "name": "Swakopmund",
         "country": "Namibia",
         "summary": "Swakopmund offers an unusual coastal routine: Atlantic air and morning fog on one side, arid landscapes on the other, with a compact centre of cafés, shops and historic buildings between them."
+      },
+      {
+        "key": "atlantida-uruguay",
+        "slug": "atlantida-uruguay",
+        "name": "Atlántida",
+        "country": "Uruguay",
+        "summary": "Atlántida offers a small coastal routine within reach of Uruguay's capital: a walk along the rambla, everyday shopping in the center and a beach that can become part of the week rather than the reason for a once-a-year trip."
+      },
+      {
+        "key": "niteroi-brazil",
+        "slug": "niteroi-brazil",
+        "name": "Niterói",
+        "country": "Brazil",
+        "summary": "Niterói gives you Rio's skyline from the other side of the bay, but its appeal for a longer stay is more ordinary than that view suggests."
+      },
+      {
+        "key": "san-martin-de-los-andes-argentina",
+        "slug": "san-martin-de-los-andes-argentina",
+        "name": "San Martín de los Andes",
+        "country": "Argentina",
+        "summary": "San Martín de los Andes begins with a lakefront that is easy to remember: boats on Lácar, wooded slopes beyond the water and a town center close enough for a café after a walk."
+      },
+      {
+        "key": "tandil-argentina",
+        "slug": "tandil-argentina",
+        "name": "Tandil",
+        "country": "Argentina",
+        "summary": "Tandil is an inland city where the hills form the edge of daily life rather than a distant weekend destination."
       }
     ],
     "destinationMedia": [
@@ -6234,6 +6262,34 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Jetty%2C_Swakopmund%2C_Namibia%2C_2018-08-04%2C_DD_62.jpg/1280px-Jetty%2C_Swakopmund%2C_Namibia%2C_2018-08-04%2C_DD_62.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Jetty, Swakopmund, Namibia, 2018-08-04, DD 62.jpg"
+        }
+      },
+      {
+        "key": "atlantida-uruguay",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Playa_Mansa_from_the_Planeta_Palace_Hotel%2C_Atlantida%2C_Uruguay.jpg/1280px-Playa_Mansa_from_the_Planeta_Palace_Hotel%2C_Atlantida%2C_Uruguay.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Playa Mansa from the Planeta Palace Hotel, Atlantida, Uruguay.jpg"
+        }
+      },
+      {
+        "key": "niteroi-brazil",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Museu_de_Arte_Contempor%C3%A2nea.jpg/1280px-Museu_de_Arte_Contempor%C3%A2nea.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Museu de Arte Contemporânea.jpg"
+        }
+      },
+      {
+        "key": "san-martin-de-los-andes-argentina",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/Lago_Lacar_100_0483.jpg/1280px-Lago_Lacar_100_0483.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Lago Lacar 100 0483.jpg"
+        }
+      },
+      {
+        "key": "tandil-argentina",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b2/Lago_del_Fuerte%2C_Tandil_01.jpg/1280px-Lago_del_Fuerte%2C_Tandil_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Lago del Fuerte, Tandil 01.jpg"
         }
       }
     ]
