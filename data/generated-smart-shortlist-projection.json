@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "15b234d99b026505fbae4fb22cfa363c32f05c84a2603dbbd1a3b2e69a3c1c4c",
-  "digest": "11bbe99764095c527584574930e594909f3be7c63369d0d5fde7c1896f7d1506",
+  "sourceSignature": "27db0662a5ed653558e7894e60383f96a136e28fac518c45b9ba12b8bbe0fffb",
+  "digest": "79a813e23f079a63f50712b93c36f4dd5a2a0db37f07ad7447a84fdbeb8ff6a4",
   "data": {
     "candidates": [
       {
@@ -15350,6 +15350,156 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "fredericton-canada",
+        "name": "Fredericton",
+        "slug": "fredericton-canada",
+        "country": "Canada",
+        "countryCode": "CA",
+        "summary": "Fredericton has the scale of a city where familiar routines can develop quickly: a river walk, the Boyce market, an evening at a gallery or performance venue, and a small set of streets that become recognisable within days.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "kelowna-canada",
+        "name": "Kelowna",
+        "slug": "kelowna-canada",
+        "country": "Canada",
+        "countryCode": "CA",
+        "summary": "Kelowna’s attraction is the way the lake enters everyday life.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "nanaimo-canada",
+        "name": "Nanaimo",
+        "slug": "nanaimo-canada",
+        "country": "Canada",
+        "countryCode": "CA",
+        "summary": "Nanaimo makes the water part of daily orientation.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "ottawa-canada",
+        "name": "Ottawa",
+        "slug": "ottawa-canada",
+        "country": "Canada",
+        "countryCode": "CA",
+        "summary": "Ottawa is easiest to appreciate when the monuments become part of an ordinary week.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "sherbrooke-canada",
+        "name": "Sherbrooke",
+        "slug": "sherbrooke-canada",
+        "country": "Canada",
+        "countryCode": "CA",
+        "summary": "Sherbrooke offers a French-speaking regional-city experience with universities, hospitals and a cultural life that continues beyond the visitor season.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -23200,6 +23350,91 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "fredericton-canada",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "kelowna-canada",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "nanaimo-canada",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "ottawa-canada",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "sherbrooke-canada",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -26247,6 +26482,41 @@
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Fyris_river_with_Uppsala_Cathedral_in_background.jpg/1280px-Fyris_river_with_Uppsala_Cathedral_in_background.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Fyris river with Uppsala Cathedral in background.jpg"
         }
+      },
+      {
+        "key": "fredericton-canada",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/FrederictonNB_SaintJohnRiver.jpg/1280px-FrederictonNB_SaintJohnRiver.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "FrederictonNB SaintJohnRiver.jpg"
+        }
+      },
+      {
+        "key": "kelowna-canada",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Kasugai_Gardens_Kelowna_July_2016_panarama_02.jpg/1280px-Kasugai_Gardens_Kelowna_July_2016_panarama_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Kasugai Gardens Kelowna July 2016 panarama 02.jpg"
+        }
+      },
+      {
+        "key": "nanaimo-canada",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/Nanaimo_Boat_Basin_%26_Harbour_%2850318199153%29.jpg/1280px-Nanaimo_Boat_Basin_%26_Harbour_%2850318199153%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Nanaimo Boat Basin & Harbour (50318199153).jpg"
+        }
+      },
+      {
+        "key": "ottawa-canada",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/Rideau_Canal%2C_Ottawa_%28492032%29_%289447767529%29.jpg/1280px-Rideau_Canal%2C_Ottawa_%28492032%29_%289447767529%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Rideau Canal, Ottawa (492032) (9447767529).jpg"
+        }
+      },
+      {
+        "key": "sherbrooke-canada",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Lac_des_Nations%2C_Sherbrooke.jpg/1280px-Lac_des_Nations%2C_Sherbrooke.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Lac des Nations, Sherbrooke.jpg"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -28756,6 +29026,36 @@
         "destinationKey": "uppsala-sweden",
         "singleMonthlyUsd": 1965,
         "coupleMonthlyUsd": 2585,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "fredericton-canada",
+        "singleMonthlyUsd": 2160,
+        "coupleMonthlyUsd": 2745,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "kelowna-canada",
+        "singleMonthlyUsd": 2425,
+        "coupleMonthlyUsd": 3015,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "nanaimo-canada",
+        "singleMonthlyUsd": 2425,
+        "coupleMonthlyUsd": 2980,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "ottawa-canada",
+        "singleMonthlyUsd": 2500,
+        "coupleMonthlyUsd": 3130,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "sherbrooke-canada",
+        "singleMonthlyUsd": 1870,
+        "coupleMonthlyUsd": 2435,
         "estimateYear": 2026
       }
     ]

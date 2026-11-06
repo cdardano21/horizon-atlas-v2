@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "99f3fd2f14fb6a072f2ccbfcfcb95d83ae59018a8a9b5c1836e0179897f94622",
-  "digest": "21e1221c6f3f033802048086a5f416e3f456c90849a498f2f69b6b18a3609a71",
+  "sourceSignature": "29ec11a98c33f3f92ea226175b17e2f41486a2e9c3bbf9482c6c713b35f84553",
+  "digest": "21e713c09953319ff7b91fbf2f14366a0b8f1284ad101c972f11c8f2d6325201",
   "data": {
     "candidates": [
       {
@@ -3048,6 +3048,41 @@
         "name": "Uppsala",
         "country": "Sweden",
         "summary": "Uppsala has a university city's rhythm rather than a resort's calendar."
+      },
+      {
+        "key": "fredericton-canada",
+        "slug": "fredericton-canada",
+        "name": "Fredericton",
+        "country": "Canada",
+        "summary": "Fredericton has the scale of a city where familiar routines can develop quickly: a river walk, the Boyce market, an evening at a gallery or performance venue, and a small set of streets that become recognisable within days."
+      },
+      {
+        "key": "kelowna-canada",
+        "slug": "kelowna-canada",
+        "name": "Kelowna",
+        "country": "Canada",
+        "summary": "Kelowna’s attraction is the way the lake enters everyday life."
+      },
+      {
+        "key": "nanaimo-canada",
+        "slug": "nanaimo-canada",
+        "name": "Nanaimo",
+        "country": "Canada",
+        "summary": "Nanaimo makes the water part of daily orientation."
+      },
+      {
+        "key": "ottawa-canada",
+        "slug": "ottawa-canada",
+        "name": "Ottawa",
+        "country": "Canada",
+        "summary": "Ottawa is easiest to appreciate when the monuments become part of an ordinary week."
+      },
+      {
+        "key": "sherbrooke-canada",
+        "slug": "sherbrooke-canada",
+        "name": "Sherbrooke",
+        "country": "Canada",
+        "summary": "Sherbrooke offers a French-speaking regional-city experience with universities, hospitals and a cultural life that continues beyond the visitor season."
       }
     ],
     "destinationMedia": [
@@ -6094,6 +6129,41 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Fyris_river_with_Uppsala_Cathedral_in_background.jpg/1280px-Fyris_river_with_Uppsala_Cathedral_in_background.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Fyris river with Uppsala Cathedral in background.jpg"
+        }
+      },
+      {
+        "key": "fredericton-canada",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/FrederictonNB_SaintJohnRiver.jpg/1280px-FrederictonNB_SaintJohnRiver.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "FrederictonNB SaintJohnRiver.jpg"
+        }
+      },
+      {
+        "key": "kelowna-canada",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Kasugai_Gardens_Kelowna_July_2016_panarama_02.jpg/1280px-Kasugai_Gardens_Kelowna_July_2016_panarama_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Kasugai Gardens Kelowna July 2016 panarama 02.jpg"
+        }
+      },
+      {
+        "key": "nanaimo-canada",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/Nanaimo_Boat_Basin_%26_Harbour_%2850318199153%29.jpg/1280px-Nanaimo_Boat_Basin_%26_Harbour_%2850318199153%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Nanaimo Boat Basin & Harbour (50318199153).jpg"
+        }
+      },
+      {
+        "key": "ottawa-canada",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/Rideau_Canal%2C_Ottawa_%28492032%29_%289447767529%29.jpg/1280px-Rideau_Canal%2C_Ottawa_%28492032%29_%289447767529%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Rideau Canal, Ottawa (492032) (9447767529).jpg"
+        }
+      },
+      {
+        "key": "sherbrooke-canada",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Lac_des_Nations%2C_Sherbrooke.jpg/1280px-Lac_des_Nations%2C_Sherbrooke.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Lac des Nations, Sherbrooke.jpg"
         }
       }
     ]
