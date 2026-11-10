@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "0b205a9d1f8c7b17dc37579b1952b78880d5820f70a97239fc5194643e81f691",
-  "digest": "86adf0a0bcade089a97937551180f9f13edf4ee803c32e609756f1f7ecc964ef",
+  "sourceSignature": "b9ae4795c79d95a8cc192ba301cf388b5cf3d7b81eb5e4fb18f1640816350b04",
+  "digest": "d461b139334c115191ccf13b98a19d40035b7691acbbbc5cdaede4faa966e9b6",
   "data": {
     "candidates": [
       {
@@ -3146,6 +3146,41 @@
         "name": "Tandil",
         "country": "Argentina",
         "summary": "Tandil is an inland city where the hills form the edge of daily life rather than a distant weekend destination."
+      },
+      {
+        "key": "galle-sri-lanka",
+        "slug": "galle-sri-lanka",
+        "name": "Galle",
+        "country": "Sri Lanka",
+        "summary": "Galle’s appeal begins inside the Fort, where a walk can move from a shaded street to a sea-facing rampart in a few minutes."
+      },
+      {
+        "key": "hue-vietnam",
+        "slug": "hue-vietnam",
+        "name": "Huế",
+        "country": "Vietnam",
+        "summary": "Huế is a city to explore at more than one pace."
+      },
+      {
+        "key": "kochi-india",
+        "slug": "kochi-india",
+        "name": "Kochi",
+        "country": "India",
+        "summary": "Kochi offers two everyday experiences within one city."
+      },
+      {
+        "key": "manizales-colombia",
+        "slug": "manizales-colombia",
+        "name": "Manizales",
+        "country": "Colombia",
+        "summary": "Manizales makes its setting felt in ordinary errands."
+      },
+      {
+        "key": "mysuru-india",
+        "slug": "mysuru-india",
+        "name": "Mysuru",
+        "country": "India",
+        "summary": "Mysuru’s palace is the obvious introduction, but an extended stay depends on the city beyond its gates."
       }
     ],
     "destinationMedia": [
@@ -6290,6 +6325,41 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b2/Lago_del_Fuerte%2C_Tandil_01.jpg/1280px-Lago_del_Fuerte%2C_Tandil_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Lago del Fuerte, Tandil 01.jpg"
+        }
+      },
+      {
+        "key": "galle-sri-lanka",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Galle%2C_la_Mosqu%C3%A9e_Meera_.jpg/1280px-Galle%2C_la_Mosqu%C3%A9e_Meera_.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Galle, la Mosquée Meera .jpg"
+        }
+      },
+      {
+        "key": "hue-vietnam",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Gate_in_Imperial_City%2C_Hu%E1%BA%BF_%28III%29.jpg/1280px-Gate_in_Imperial_City%2C_Hu%E1%BA%BF_%28III%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Gate in Imperial City, Huế (III).jpg"
+        }
+      },
+      {
+        "key": "kochi-india",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Chinese_Fishing_Nets_-_2.jpg/1280px-Chinese_Fishing_Nets_-_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Chinese Fishing Nets - 2.jpg"
+        }
+      },
+      {
+        "key": "manizales-colombia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/2007-06-12_catedral_de_manizales-pablo_andres_toro_arias.jpg/1280px-2007-06-12_catedral_de_manizales-pablo_andres_toro_arias.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "2007-06-12 catedral de manizales-pablo andres toro arias.jpg"
+        }
+      },
+      {
+        "key": "mysuru-india",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Mysuru_Palace_-_East_Side.jpg/1280px-Mysuru_Palace_-_East_Side.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Mysuru Palace - East Side.jpg"
         }
       }
     ]

@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "b622bbd8647108993ad72a379f9fc57c102aaafad6698df884c54d13789789f5",
-  "digest": "f32bb0e8523c295169e19edb96812a2712b68db220228b01b944f231b2eb200f",
+  "sourceSignature": "bb9a29faab7fdd52adb373c41ca80dd956c19af56e35fb0905fe9971057980ea",
+  "digest": "4995c672d6bb46402e44c5f940452d6208b9cd8c6b025b90af79884978a2fc81",
   "data": {
     "candidates": [
       {
@@ -15770,6 +15770,156 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "galle-sri-lanka",
+        "name": "Galle",
+        "slug": "galle-sri-lanka",
+        "country": "Sri Lanka",
+        "countryCode": "LK",
+        "summary": "Galle’s appeal begins inside the Fort, where a walk can move from a shaded street to a sea-facing rampart in a few minutes.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "hue-vietnam",
+        "name": "Huế",
+        "slug": "hue-vietnam",
+        "country": "Vietnam",
+        "countryCode": "VN",
+        "summary": "Huế is a city to explore at more than one pace.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "kochi-india",
+        "name": "Kochi",
+        "slug": "kochi-india",
+        "country": "India",
+        "countryCode": "IN",
+        "summary": "Kochi offers two everyday experiences within one city.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "manizales-colombia",
+        "name": "Manizales",
+        "slug": "manizales-colombia",
+        "country": "Colombia",
+        "countryCode": "CO",
+        "summary": "Manizales makes its setting felt in ordinary errands.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "mysuru-india",
+        "name": "Mysuru",
+        "slug": "mysuru-india",
+        "country": "India",
+        "countryCode": "IN",
+        "summary": "Mysuru’s palace is the obvious introduction, but an extended stay depends on the city beyond its gates.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -23858,6 +24008,91 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "galle-sri-lanka",
+        "beachAccess": "DIRECT_ACCESS",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "CRIMINALIZED",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "hue-vietnam",
+        "beachAccess": "NEARBY",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "kochi-india",
+        "beachAccess": "DIRECT_ACCESS",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "manizales-colombia",
+        "beachAccess": "NONE",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "mysuru-india",
+        "beachAccess": "NONE",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -27003,6 +27238,41 @@
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b2/Lago_del_Fuerte%2C_Tandil_01.jpg/1280px-Lago_del_Fuerte%2C_Tandil_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Lago del Fuerte, Tandil 01.jpg"
         }
+      },
+      {
+        "key": "galle-sri-lanka",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Galle%2C_la_Mosqu%C3%A9e_Meera_.jpg/1280px-Galle%2C_la_Mosqu%C3%A9e_Meera_.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Galle, la Mosquée Meera .jpg"
+        }
+      },
+      {
+        "key": "hue-vietnam",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Gate_in_Imperial_City%2C_Hu%E1%BA%BF_%28III%29.jpg/1280px-Gate_in_Imperial_City%2C_Hu%E1%BA%BF_%28III%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Gate in Imperial City, Huế (III).jpg"
+        }
+      },
+      {
+        "key": "kochi-india",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Chinese_Fishing_Nets_-_2.jpg/1280px-Chinese_Fishing_Nets_-_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Chinese Fishing Nets - 2.jpg"
+        }
+      },
+      {
+        "key": "manizales-colombia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/2007-06-12_catedral_de_manizales-pablo_andres_toro_arias.jpg/1280px-2007-06-12_catedral_de_manizales-pablo_andres_toro_arias.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "2007-06-12 catedral de manizales-pablo andres toro arias.jpg"
+        }
+      },
+      {
+        "key": "mysuru-india",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Mysuru_Palace_-_East_Side.jpg/1280px-Mysuru_Palace_-_East_Side.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Mysuru Palace - East Side.jpg"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -29596,6 +29866,36 @@
         "destinationKey": "tandil-argentina",
         "singleMonthlyUsd": 1100,
         "coupleMonthlyUsd": 1470,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "galle-sri-lanka",
+        "singleMonthlyUsd": 755,
+        "coupleMonthlyUsd": 970,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "hue-vietnam",
+        "singleMonthlyUsd": 515,
+        "coupleMonthlyUsd": 735,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "kochi-india",
+        "singleMonthlyUsd": 465,
+        "coupleMonthlyUsd": 690,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "manizales-colombia",
+        "singleMonthlyUsd": 1365,
+        "coupleMonthlyUsd": 1885,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "mysuru-india",
+        "singleMonthlyUsd": 385,
+        "coupleMonthlyUsd": 555,
         "estimateYear": 2026
       }
     ]
