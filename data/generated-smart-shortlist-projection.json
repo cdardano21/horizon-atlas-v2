@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "bb9a29faab7fdd52adb373c41ca80dd956c19af56e35fb0905fe9971057980ea",
-  "digest": "4995c672d6bb46402e44c5f940452d6208b9cd8c6b025b90af79884978a2fc81",
+  "sourceSignature": "b1a7414533da6e1a9a9592848e85ad0337df679bd035a5dcd6f05f5ed0aa17e0",
+  "digest": "2ac513cccd33d3cc91fbf0fe274d51134015838b4af304bcab5da12a31fd939a",
   "data": {
     "candidates": [
       {
@@ -15920,6 +15920,156 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "almaty-kazakhstan",
+        "name": "Almaty",
+        "slug": "almaty-kazakhstan",
+        "country": "Kazakhstan",
+        "countryCode": "KZ",
+        "summary": "Almaty's mountain backdrop is striking, but its everyday appeal lies just as much in markets, cafés and a substantial cultural life.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "groningen-netherlands",
+        "name": "Groningen",
+        "slug": "groningen-netherlands",
+        "country": "Netherlands",
+        "countryCode": "NL",
+        "summary": "Groningen is a city where a bicycle can be part of daily life rather than a holiday accessory.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "timisoara-romania",
+        "name": "Timișoara",
+        "slug": "timisoara-romania",
+        "country": "Romania",
+        "countryCode": "RO",
+        "summary": "Timișoara makes a persuasive case for staying beyond a weekend.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "tunis-tunisia",
+        "name": "Tunis",
+        "slug": "tunis-tunisia",
+        "country": "Tunisia",
+        "countryCode": "TN",
+        "summary": "Tunis offers a capital-city life with a historic core that still shapes the daily experience.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "yogyakarta-indonesia",
+        "name": "Yogyakarta",
+        "slug": "yogyakarta-indonesia",
+        "country": "Indonesia",
+        "countryCode": "ID",
+        "summary": "Yogyakarta is most rewarding when culture becomes part of the week rather than a checklist.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -24093,6 +24243,91 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "almaty-kazakhstan",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "groningen-netherlands",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "timisoara-romania",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "tunis-tunisia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "CRIMINALIZED",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "yogyakarta-indonesia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -27273,6 +27508,41 @@
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Mysuru_Palace_-_East_Side.jpg/1280px-Mysuru_Palace_-_East_Side.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Mysuru Palace - East Side.jpg"
         }
+      },
+      {
+        "key": "almaty-kazakhstan",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/Ascension_Cathedral%2C_Almaty_%28LRM_20240402_221113-RR%29.jpg/1280px-Ascension_Cathedral%2C_Almaty_%28LRM_20240402_221113-RR%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Ascension Cathedral, Almaty (LRM 20240402 221113-RR).jpg"
+        }
+      },
+      {
+        "key": "groningen-netherlands",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Groningen_%28stad%29%2C_Martinitoren_in_Groningen._13-06-2022._%28actm.%29.jpg/1280px-Groningen_%28stad%29%2C_Martinitoren_in_Groningen._13-06-2022._%28actm.%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Groningen (stad), Martinitoren in Groningen. 13-06-2022. (actm.).jpg"
+        }
+      },
+      {
+        "key": "timisoara-romania",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Serbian_Orthodox_cathedral_in_Timisoara_%281%29.jpg/1280px-Serbian_Orthodox_cathedral_in_Timisoara_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Serbian Orthodox cathedral in Timisoara (1).jpg"
+        }
+      },
+      {
+        "key": "tunis-tunisia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Door_in_the_medina_of_Tunis_02.jpg/1280px-Door_in_the_medina_of_Tunis_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Door in the medina of Tunis 02.jpg"
+        }
+      },
+      {
+        "key": "yogyakarta-indonesia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Eastern_face_of_Eastern_Gate%2C_Taman_Sari%2C_Yogyakarta%2C_2014-05-07.jpg/1280px-Eastern_face_of_Eastern_Gate%2C_Taman_Sari%2C_Yogyakarta%2C_2014-05-07.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Eastern face of Eastern Gate, Taman Sari, Yogyakarta, 2014-05-07.jpg"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -29896,6 +30166,36 @@
         "destinationKey": "mysuru-india",
         "singleMonthlyUsd": 385,
         "coupleMonthlyUsd": 555,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "almaty-kazakhstan",
+        "singleMonthlyUsd": 1430,
+        "coupleMonthlyUsd": 2010,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "groningen-netherlands",
+        "singleMonthlyUsd": 2795,
+        "coupleMonthlyUsd": 3865,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "timisoara-romania",
+        "singleMonthlyUsd": 1275,
+        "coupleMonthlyUsd": 1780,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "tunis-tunisia",
+        "singleMonthlyUsd": 780,
+        "coupleMonthlyUsd": 1120,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "yogyakarta-indonesia",
+        "singleMonthlyUsd": 540,
+        "coupleMonthlyUsd": 765,
         "estimateYear": 2026
       }
     ]

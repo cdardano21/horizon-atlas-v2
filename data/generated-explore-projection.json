@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "b9ae4795c79d95a8cc192ba301cf388b5cf3d7b81eb5e4fb18f1640816350b04",
-  "digest": "d461b139334c115191ccf13b98a19d40035b7691acbbbc5cdaede4faa966e9b6",
+  "sourceSignature": "7d122c0f553823313ddeff001ae203eff525ed6f4c3ba529d95165894ad0cd72",
+  "digest": "8ae5532da8ceb24bc98745eeb932e2d857cbd33a712f60765642d8f5e8a24c82",
   "data": {
     "candidates": [
       {
@@ -3181,6 +3181,41 @@
         "name": "Mysuru",
         "country": "India",
         "summary": "Mysuru’s palace is the obvious introduction, but an extended stay depends on the city beyond its gates."
+      },
+      {
+        "key": "almaty-kazakhstan",
+        "slug": "almaty-kazakhstan",
+        "name": "Almaty",
+        "country": "Kazakhstan",
+        "summary": "Almaty's mountain backdrop is striking, but its everyday appeal lies just as much in markets, cafés and a substantial cultural life."
+      },
+      {
+        "key": "groningen-netherlands",
+        "slug": "groningen-netherlands",
+        "name": "Groningen",
+        "country": "Netherlands",
+        "summary": "Groningen is a city where a bicycle can be part of daily life rather than a holiday accessory."
+      },
+      {
+        "key": "timisoara-romania",
+        "slug": "timisoara-romania",
+        "name": "Timișoara",
+        "country": "Romania",
+        "summary": "Timișoara makes a persuasive case for staying beyond a weekend."
+      },
+      {
+        "key": "tunis-tunisia",
+        "slug": "tunis-tunisia",
+        "name": "Tunis",
+        "country": "Tunisia",
+        "summary": "Tunis offers a capital-city life with a historic core that still shapes the daily experience."
+      },
+      {
+        "key": "yogyakarta-indonesia",
+        "slug": "yogyakarta-indonesia",
+        "name": "Yogyakarta",
+        "country": "Indonesia",
+        "summary": "Yogyakarta is most rewarding when culture becomes part of the week rather than a checklist."
       }
     ],
     "destinationMedia": [
@@ -6360,6 +6395,41 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Mysuru_Palace_-_East_Side.jpg/1280px-Mysuru_Palace_-_East_Side.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Mysuru Palace - East Side.jpg"
+        }
+      },
+      {
+        "key": "almaty-kazakhstan",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/Ascension_Cathedral%2C_Almaty_%28LRM_20240402_221113-RR%29.jpg/1280px-Ascension_Cathedral%2C_Almaty_%28LRM_20240402_221113-RR%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Ascension Cathedral, Almaty (LRM 20240402 221113-RR).jpg"
+        }
+      },
+      {
+        "key": "groningen-netherlands",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Groningen_%28stad%29%2C_Martinitoren_in_Groningen._13-06-2022._%28actm.%29.jpg/1280px-Groningen_%28stad%29%2C_Martinitoren_in_Groningen._13-06-2022._%28actm.%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Groningen (stad), Martinitoren in Groningen. 13-06-2022. (actm.).jpg"
+        }
+      },
+      {
+        "key": "timisoara-romania",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Serbian_Orthodox_cathedral_in_Timisoara_%281%29.jpg/1280px-Serbian_Orthodox_cathedral_in_Timisoara_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Serbian Orthodox cathedral in Timisoara (1).jpg"
+        }
+      },
+      {
+        "key": "tunis-tunisia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Door_in_the_medina_of_Tunis_02.jpg/1280px-Door_in_the_medina_of_Tunis_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Door in the medina of Tunis 02.jpg"
+        }
+      },
+      {
+        "key": "yogyakarta-indonesia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Eastern_face_of_Eastern_Gate%2C_Taman_Sari%2C_Yogyakarta%2C_2014-05-07.jpg/1280px-Eastern_face_of_Eastern_Gate%2C_Taman_Sari%2C_Yogyakarta%2C_2014-05-07.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Eastern face of Eastern Gate, Taman Sari, Yogyakarta, 2014-05-07.jpg"
         }
       }
     ]
