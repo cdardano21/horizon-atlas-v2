@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "b1a7414533da6e1a9a9592848e85ad0337df679bd035a5dcd6f05f5ed0aa17e0",
-  "digest": "2ac513cccd33d3cc91fbf0fe274d51134015838b4af304bcab5da12a31fd939a",
+  "sourceSignature": "36f3d61e9005c5ba49b71378857edc589dc9b32e4d46ecc8a7cabeeb58c9e819",
+  "digest": "cbc6195573a308e591ac7693fbaf439ea4515e4d574df1d0120da2734f1000fe",
   "data": {
     "candidates": [
       {
@@ -16070,6 +16070,156 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "beaufort-north-carolina-united-states",
+        "name": "Beaufort",
+        "slug": "beaufort-north-carolina-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Beaufort is a small waterfront town where Front Street and Taylor's Creek set the rhythm.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "davidson-north-carolina-united-states",
+        "name": "Davidson",
+        "slug": "davidson-north-carolina-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Davidson's center is small enough to become familiar quickly.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "dunedin-florida-united-states",
+        "name": "Dunedin",
+        "slug": "dunedin-florida-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Dunedin makes its strongest case at the junction of Main Street and the Pinellas Trail.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "oceanside-california-united-states",
+        "name": "Oceanside",
+        "slug": "oceanside-california-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Oceanside offers a coastal routine with a working regional city behind it.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "safety-harbor-florida-united-states",
+        "name": "Safety Harbor",
+        "slug": "safety-harbor-florida-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Safety Harbor's appeal is concentrated rather than sprawling: Main Street leads toward the bay, with places to eat, small cultural stops and a waterfront park close enough to form a repeatable daily circuit.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -24328,6 +24478,91 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "beaufort-north-carolina-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "davidson-north-carolina-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "dunedin-florida-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "oceanside-california-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "safety-harbor-florida-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -27543,6 +27778,41 @@
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Eastern_face_of_Eastern_Gate%2C_Taman_Sari%2C_Yogyakarta%2C_2014-05-07.jpg/1280px-Eastern_face_of_Eastern_Gate%2C_Taman_Sari%2C_Yogyakarta%2C_2014-05-07.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Eastern face of Eastern Gate, Taman Sari, Yogyakarta, 2014-05-07.jpg"
         }
+      },
+      {
+        "key": "beaufort-north-carolina-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Front_Street_Mansions_in_Beaufort%2C_North_Carolina_%281%29.jpg/1280px-Front_Street_Mansions_in_Beaufort%2C_North_Carolina_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Front Street Mansions in Beaufort, North Carolina (1).jpg"
+        }
+      },
+      {
+        "key": "davidson-north-carolina-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/MainSt.jpg/1280px-MainSt.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "MainSt.jpg"
+        }
+      },
+      {
+        "key": "dunedin-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/65/Honeymoon_Island_State_Park_-_panoramio.jpg/1280px-Honeymoon_Island_State_Park_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Honeymoon Island State Park - panoramio.jpg"
+        }
+      },
+      {
+        "key": "oceanside-california-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/Pier_View_%28Unsplash%29.jpg/1280px-Pier_View_%28Unsplash%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Pier View (Unsplash).jpg"
+        }
+      },
+      {
+        "key": "safety-harbor-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Philippe_Park_Panorama.jpg/1280px-Philippe_Park_Panorama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Philippe Park Panorama.jpg"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -30196,6 +30466,36 @@
         "destinationKey": "yogyakarta-indonesia",
         "singleMonthlyUsd": 540,
         "coupleMonthlyUsd": 765,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "beaufort-north-carolina-united-states",
+        "singleMonthlyUsd": 3760,
+        "coupleMonthlyUsd": 5115,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "davidson-north-carolina-united-states",
+        "singleMonthlyUsd": 3510,
+        "coupleMonthlyUsd": 4865,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "dunedin-florida-united-states",
+        "singleMonthlyUsd": 3460,
+        "coupleMonthlyUsd": 4665,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "oceanside-california-united-states",
+        "singleMonthlyUsd": 4410,
+        "coupleMonthlyUsd": 5915,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "safety-harbor-florida-united-states",
+        "singleMonthlyUsd": 3560,
+        "coupleMonthlyUsd": 4815,
         "estimateYear": 2026
       }
     ]

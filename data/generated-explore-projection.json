@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "7d122c0f553823313ddeff001ae203eff525ed6f4c3ba529d95165894ad0cd72",
-  "digest": "8ae5532da8ceb24bc98745eeb932e2d857cbd33a712f60765642d8f5e8a24c82",
+  "sourceSignature": "37d77e428c980f44171eb250ebbdfc5900c465676c2c6c24ed80a6d5f2ef688e",
+  "digest": "239c55c5321d8dc8241ba6a37680a1eb4ce997d9c1cfe0579142c2e0a40f41f4",
   "data": {
     "candidates": [
       {
@@ -3216,6 +3216,41 @@
         "name": "Yogyakarta",
         "country": "Indonesia",
         "summary": "Yogyakarta is most rewarding when culture becomes part of the week rather than a checklist."
+      },
+      {
+        "key": "beaufort-north-carolina-united-states",
+        "slug": "beaufort-north-carolina-united-states",
+        "name": "Beaufort",
+        "country": "United States",
+        "summary": "Beaufort is a small waterfront town where Front Street and Taylor's Creek set the rhythm."
+      },
+      {
+        "key": "davidson-north-carolina-united-states",
+        "slug": "davidson-north-carolina-united-states",
+        "name": "Davidson",
+        "country": "United States",
+        "summary": "Davidson's center is small enough to become familiar quickly."
+      },
+      {
+        "key": "dunedin-florida-united-states",
+        "slug": "dunedin-florida-united-states",
+        "name": "Dunedin",
+        "country": "United States",
+        "summary": "Dunedin makes its strongest case at the junction of Main Street and the Pinellas Trail."
+      },
+      {
+        "key": "oceanside-california-united-states",
+        "slug": "oceanside-california-united-states",
+        "name": "Oceanside",
+        "country": "United States",
+        "summary": "Oceanside offers a coastal routine with a working regional city behind it."
+      },
+      {
+        "key": "safety-harbor-florida-united-states",
+        "slug": "safety-harbor-florida-united-states",
+        "name": "Safety Harbor",
+        "country": "United States",
+        "summary": "Safety Harbor's appeal is concentrated rather than sprawling: Main Street leads toward the bay, with places to eat, small cultural stops and a waterfront park close enough to form a repeatable daily circuit."
       }
     ],
     "destinationMedia": [
@@ -6430,6 +6465,41 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Eastern_face_of_Eastern_Gate%2C_Taman_Sari%2C_Yogyakarta%2C_2014-05-07.jpg/1280px-Eastern_face_of_Eastern_Gate%2C_Taman_Sari%2C_Yogyakarta%2C_2014-05-07.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Eastern face of Eastern Gate, Taman Sari, Yogyakarta, 2014-05-07.jpg"
+        }
+      },
+      {
+        "key": "beaufort-north-carolina-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Front_Street_Mansions_in_Beaufort%2C_North_Carolina_%281%29.jpg/1280px-Front_Street_Mansions_in_Beaufort%2C_North_Carolina_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Front Street Mansions in Beaufort, North Carolina (1).jpg"
+        }
+      },
+      {
+        "key": "davidson-north-carolina-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/MainSt.jpg/1280px-MainSt.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "MainSt.jpg"
+        }
+      },
+      {
+        "key": "dunedin-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/65/Honeymoon_Island_State_Park_-_panoramio.jpg/1280px-Honeymoon_Island_State_Park_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Honeymoon Island State Park - panoramio.jpg"
+        }
+      },
+      {
+        "key": "oceanside-california-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/Pier_View_%28Unsplash%29.jpg/1280px-Pier_View_%28Unsplash%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Pier View (Unsplash).jpg"
+        }
+      },
+      {
+        "key": "safety-harbor-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Philippe_Park_Panorama.jpg/1280px-Philippe_Park_Panorama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Philippe Park Panorama.jpg"
         }
       }
     ]
