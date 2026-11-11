@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "36f3d61e9005c5ba49b71378857edc589dc9b32e4d46ecc8a7cabeeb58c9e819",
-  "digest": "cbc6195573a308e591ac7693fbaf439ea4515e4d574df1d0120da2734f1000fe",
+  "sourceSignature": "bd2bbb917d2308fe661f3de2bb3e69a4b9091dfa5efe8a53a1854c9367cb0403",
+  "digest": "a8597f7127167cab1ad2dafde7556fa869b8ecc6e6125df87e086f9825a50765",
   "data": {
     "candidates": [
       {
@@ -16220,6 +16220,156 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "gulfport-florida-united-states",
+        "name": "Gulfport",
+        "slug": "gulfport-florida-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Gulfport’s appeal is unusually easy to picture: breakfast on Beach Boulevard, a browse through small shops, then an unhurried walk beside Boca Ciega Bay.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "lake-worth-beach-florida-united-states",
+        "name": "Lake Worth Beach",
+        "slug": "lake-worth-beach-florida-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Lake Worth Beach has two waterfront experiences and a working downtown between them.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "mount-dora-florida-united-states",
+        "name": "Mount Dora",
+        "slug": "mount-dora-florida-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Mount Dora rewards a slower kind of Florida stay.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "sanford-florida-united-states",
+        "name": "Sanford",
+        "slug": "sanford-florida-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Sanford offers a lakefront routine with a substantial town behind it.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "winter-park-florida-united-states",
+        "name": "Winter Park",
+        "slug": "winter-park-florida-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Winter Park’s strongest argument is the quality of an ordinary afternoon around Park Avenue.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -24563,6 +24713,91 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "gulfport-florida-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "lake-worth-beach-florida-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "mount-dora-florida-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "sanford-florida-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "winter-park-florida-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -27813,6 +28048,41 @@
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Philippe_Park_Panorama.jpg/1280px-Philippe_Park_Panorama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Philippe Park Panorama.jpg"
         }
+      },
+      {
+        "key": "gulfport-florida-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Sunset_Gulfport_Florida_2012.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+          "alt": "Sunset Gulfport Florida 2012.jpg"
+        }
+      },
+      {
+        "key": "lake-worth-beach-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Lake_Worth_Florida_Pier.jpg/960px-Lake_Worth_Florida_Pier.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Lake Worth Florida Pier.jpg"
+        }
+      },
+      {
+        "key": "mount-dora-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/Mount_Dora_Lighthouse.jpg/1280px-Mount_Dora_Lighthouse.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Mount Dora Lighthouse.jpg"
+        }
+      },
+      {
+        "key": "sanford-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Sanford_FL_HD_Pico_bldg_pano01.jpg/960px-Sanford_FL_HD_Pico_bldg_pano01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Sanford FL HD Pico bldg pano01.jpg"
+        }
+      },
+      {
+        "key": "winter-park-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Charles_Hosmer_Morse_Museum_of_American_Art_%28Winter_Park%2C_Florida%29_001.jpg/960px-Charles_Hosmer_Morse_Museum_of_American_Art_%28Winter_Park%2C_Florida%29_001.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Charles Hosmer Morse Museum of American Art (Winter Park, Florida) 001.jpg"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -30496,6 +30766,36 @@
         "destinationKey": "safety-harbor-florida-united-states",
         "singleMonthlyUsd": 3560,
         "coupleMonthlyUsd": 4815,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "gulfport-florida-united-states",
+        "singleMonthlyUsd": 3360,
+        "coupleMonthlyUsd": 4565,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "lake-worth-beach-florida-united-states",
+        "singleMonthlyUsd": 3710,
+        "coupleMonthlyUsd": 4965,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "mount-dora-florida-united-states",
+        "singleMonthlyUsd": 3260,
+        "coupleMonthlyUsd": 4415,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "sanford-florida-united-states",
+        "singleMonthlyUsd": 3260,
+        "coupleMonthlyUsd": 4515,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "winter-park-florida-united-states",
+        "singleMonthlyUsd": 3760,
+        "coupleMonthlyUsd": 5115,
         "estimateYear": 2026
       }
     ]

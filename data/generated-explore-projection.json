@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "37d77e428c980f44171eb250ebbdfc5900c465676c2c6c24ed80a6d5f2ef688e",
-  "digest": "239c55c5321d8dc8241ba6a37680a1eb4ce997d9c1cfe0579142c2e0a40f41f4",
+  "sourceSignature": "ba08c9a712b579a974601381ebcb1d4d246bb88502a4649b5fbfa114075e10a0",
+  "digest": "b0d670f3739aacf86f990c657494fce9d7ecb52bfa7229d6ad85be08b8d4c587",
   "data": {
     "candidates": [
       {
@@ -3251,6 +3251,41 @@
         "name": "Safety Harbor",
         "country": "United States",
         "summary": "Safety Harbor's appeal is concentrated rather than sprawling: Main Street leads toward the bay, with places to eat, small cultural stops and a waterfront park close enough to form a repeatable daily circuit."
+      },
+      {
+        "key": "gulfport-florida-united-states",
+        "slug": "gulfport-florida-united-states",
+        "name": "Gulfport",
+        "country": "United States",
+        "summary": "Gulfport’s appeal is unusually easy to picture: breakfast on Beach Boulevard, a browse through small shops, then an unhurried walk beside Boca Ciega Bay."
+      },
+      {
+        "key": "lake-worth-beach-florida-united-states",
+        "slug": "lake-worth-beach-florida-united-states",
+        "name": "Lake Worth Beach",
+        "country": "United States",
+        "summary": "Lake Worth Beach has two waterfront experiences and a working downtown between them."
+      },
+      {
+        "key": "mount-dora-florida-united-states",
+        "slug": "mount-dora-florida-united-states",
+        "name": "Mount Dora",
+        "country": "United States",
+        "summary": "Mount Dora rewards a slower kind of Florida stay."
+      },
+      {
+        "key": "sanford-florida-united-states",
+        "slug": "sanford-florida-united-states",
+        "name": "Sanford",
+        "country": "United States",
+        "summary": "Sanford offers a lakefront routine with a substantial town behind it."
+      },
+      {
+        "key": "winter-park-florida-united-states",
+        "slug": "winter-park-florida-united-states",
+        "name": "Winter Park",
+        "country": "United States",
+        "summary": "Winter Park’s strongest argument is the quality of an ordinary afternoon around Park Avenue."
       }
     ],
     "destinationMedia": [
@@ -6500,6 +6535,41 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Philippe_Park_Panorama.jpg/1280px-Philippe_Park_Panorama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Philippe Park Panorama.jpg"
+        }
+      },
+      {
+        "key": "gulfport-florida-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Sunset_Gulfport_Florida_2012.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+          "alt": "Sunset Gulfport Florida 2012.jpg"
+        }
+      },
+      {
+        "key": "lake-worth-beach-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Lake_Worth_Florida_Pier.jpg/960px-Lake_Worth_Florida_Pier.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Lake Worth Florida Pier.jpg"
+        }
+      },
+      {
+        "key": "mount-dora-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/Mount_Dora_Lighthouse.jpg/1280px-Mount_Dora_Lighthouse.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Mount Dora Lighthouse.jpg"
+        }
+      },
+      {
+        "key": "sanford-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Sanford_FL_HD_Pico_bldg_pano01.jpg/960px-Sanford_FL_HD_Pico_bldg_pano01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Sanford FL HD Pico bldg pano01.jpg"
+        }
+      },
+      {
+        "key": "winter-park-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Charles_Hosmer_Morse_Museum_of_American_Art_%28Winter_Park%2C_Florida%29_001.jpg/960px-Charles_Hosmer_Morse_Museum_of_American_Art_%28Winter_Park%2C_Florida%29_001.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Charles Hosmer Morse Museum of American Art (Winter Park, Florida) 001.jpg"
         }
       }
     ]
