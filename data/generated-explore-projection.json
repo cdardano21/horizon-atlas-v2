@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "ba08c9a712b579a974601381ebcb1d4d246bb88502a4649b5fbfa114075e10a0",
-  "digest": "b0d670f3739aacf86f990c657494fce9d7ecb52bfa7229d6ad85be08b8d4c587",
+  "sourceSignature": "914994738482c0ceeab9e15959a0ec64eef756262e73f192b847dd7b8363cd08",
+  "digest": "fbff0d58a42411a922d00b1fa53822571647d932df1e60e9a47d57ae4d978de7",
   "data": {
     "candidates": [
       {
@@ -3286,6 +3286,41 @@
         "name": "Winter Park",
         "country": "United States",
         "summary": "Winter Park’s strongest argument is the quality of an ordinary afternoon around Park Avenue."
+      },
+      {
+        "key": "fountain-hills-arizona-united-states",
+        "slug": "fountain-hills-arizona-united-states",
+        "name": "Fountain Hills",
+        "country": "United States",
+        "summary": "Fountain Hills has a clear visual center: the lake, fountain and park, with businesses along nearby streets and the Avenue of the Fountains."
+      },
+      {
+        "key": "fredericksburg-texas-united-states",
+        "slug": "fredericksburg-texas-united-states",
+        "name": "Fredericksburg",
+        "country": "United States",
+        "summary": "Fredericksburg gives Hill Country living a compact center: Main Street shops, German-influenced dining, museums and places to pause over coffee."
+      },
+      {
+        "key": "oro-valley-arizona-united-states",
+        "slug": "oro-valley-arizona-united-states",
+        "name": "Oro Valley",
+        "country": "United States",
+        "summary": "Oro Valley is a desert residential base with the Catalina Mountains close to the daily view."
+      },
+      {
+        "key": "vancouver-washington-united-states",
+        "slug": "vancouver-washington-united-states",
+        "name": "Vancouver",
+        "country": "United States",
+        "summary": "Vancouver, Washington pairs a newly developed riverfront with older residential streets and a historic center."
+      },
+      {
+        "key": "ventura-california-united-states",
+        "slug": "ventura-california-united-states",
+        "name": "Ventura",
+        "country": "United States",
+        "summary": "Ventura offers a coastal daily routine with a proper downtown behind it."
       }
     ],
     "destinationMedia": [
@@ -6570,6 +6605,41 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Charles_Hosmer_Morse_Museum_of_American_Art_%28Winter_Park%2C_Florida%29_001.jpg/960px-Charles_Hosmer_Morse_Museum_of_American_Art_%28Winter_Park%2C_Florida%29_001.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Charles Hosmer Morse Museum of American Art (Winter Park, Florida) 001.jpg"
+        }
+      },
+      {
+        "key": "fountain-hills-arizona-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Fountain_hills-199.jpg/960px-Fountain_hills-199.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Fountain hills-199.jpg"
+        }
+      },
+      {
+        "key": "fredericksburg-texas-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/3/32/230_E._Main_in_Fredericksburg%2C_Texas.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+          "alt": "230 E. Main in Fredericksburg, Texas.png"
+        }
+      },
+      {
+        "key": "oro-valley-arizona-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Pusch_Ridge_from_Oro_Valley.jpg/960px-Pusch_Ridge_from_Oro_Valley.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Pusch Ridge from Oro Valley.jpg"
+        }
+      },
+      {
+        "key": "vancouver-washington-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Vancouver_Waterfront_and_Interstate_Bridge_from_Grant_Street_Pier%2C_2020.jpg/960px-Vancouver_Waterfront_and_Interstate_Bridge_from_Grant_Street_Pier%2C_2020.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Vancouver Waterfront and Interstate Bridge from Grant Street Pier, 2020.jpg"
+        }
+      },
+      {
+        "key": "ventura-california-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Ventura_Pier_%28March_13%2C_2026%29.jpg/1280px-Ventura_Pier_%28March_13%2C_2026%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Ventura Pier (March 13, 2026).jpg"
         }
       }
     ]

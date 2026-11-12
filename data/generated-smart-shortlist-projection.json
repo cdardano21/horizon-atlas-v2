@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "bd2bbb917d2308fe661f3de2bb3e69a4b9091dfa5efe8a53a1854c9367cb0403",
-  "digest": "a8597f7127167cab1ad2dafde7556fa869b8ecc6e6125df87e086f9825a50765",
+  "sourceSignature": "9c7ef4e9d24127d3d70acae16b523243120808a828d1616ce366950e921cfacc",
+  "digest": "f9567b15f0e36ba93ec3287e0a23ec9596c2036ba1f34299a34a2d095c12853d",
   "data": {
     "candidates": [
       {
@@ -16370,6 +16370,156 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "fountain-hills-arizona-united-states",
+        "name": "Fountain Hills",
+        "slug": "fountain-hills-arizona-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Fountain Hills has a clear visual center: the lake, fountain and park, with businesses along nearby streets and the Avenue of the Fountains.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "fredericksburg-texas-united-states",
+        "name": "Fredericksburg",
+        "slug": "fredericksburg-texas-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Fredericksburg gives Hill Country living a compact center: Main Street shops, German-influenced dining, museums and places to pause over coffee.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "oro-valley-arizona-united-states",
+        "name": "Oro Valley",
+        "slug": "oro-valley-arizona-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Oro Valley is a desert residential base with the Catalina Mountains close to the daily view.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "vancouver-washington-united-states",
+        "name": "Vancouver",
+        "slug": "vancouver-washington-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Vancouver, Washington pairs a newly developed riverfront with older residential streets and a historic center.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "ventura-california-united-states",
+        "name": "Ventura",
+        "slug": "ventura-california-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Ventura offers a coastal daily routine with a proper downtown behind it.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -24798,6 +24948,91 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "fountain-hills-arizona-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "fredericksburg-texas-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "oro-valley-arizona-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "vancouver-washington-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "ventura-california-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -28083,6 +28318,41 @@
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Charles_Hosmer_Morse_Museum_of_American_Art_%28Winter_Park%2C_Florida%29_001.jpg/960px-Charles_Hosmer_Morse_Museum_of_American_Art_%28Winter_Park%2C_Florida%29_001.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Charles Hosmer Morse Museum of American Art (Winter Park, Florida) 001.jpg"
         }
+      },
+      {
+        "key": "fountain-hills-arizona-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Fountain_hills-199.jpg/960px-Fountain_hills-199.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Fountain hills-199.jpg"
+        }
+      },
+      {
+        "key": "fredericksburg-texas-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/3/32/230_E._Main_in_Fredericksburg%2C_Texas.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+          "alt": "230 E. Main in Fredericksburg, Texas.png"
+        }
+      },
+      {
+        "key": "oro-valley-arizona-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Pusch_Ridge_from_Oro_Valley.jpg/960px-Pusch_Ridge_from_Oro_Valley.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Pusch Ridge from Oro Valley.jpg"
+        }
+      },
+      {
+        "key": "vancouver-washington-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Vancouver_Waterfront_and_Interstate_Bridge_from_Grant_Street_Pier%2C_2020.jpg/960px-Vancouver_Waterfront_and_Interstate_Bridge_from_Grant_Street_Pier%2C_2020.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Vancouver Waterfront and Interstate Bridge from Grant Street Pier, 2020.jpg"
+        }
+      },
+      {
+        "key": "ventura-california-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Ventura_Pier_%28March_13%2C_2026%29.jpg/1280px-Ventura_Pier_%28March_13%2C_2026%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Ventura Pier (March 13, 2026).jpg"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -30796,6 +31066,36 @@
         "destinationKey": "winter-park-florida-united-states",
         "singleMonthlyUsd": 3760,
         "coupleMonthlyUsd": 5115,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "fountain-hills-arizona-united-states",
+        "singleMonthlyUsd": 3660,
+        "coupleMonthlyUsd": 5115,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "fredericksburg-texas-united-states",
+        "singleMonthlyUsd": 3260,
+        "coupleMonthlyUsd": 4565,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "oro-valley-arizona-united-states",
+        "singleMonthlyUsd": 3110,
+        "coupleMonthlyUsd": 4365,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "vancouver-washington-united-states",
+        "singleMonthlyUsd": 3710,
+        "coupleMonthlyUsd": 5115,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "ventura-california-united-states",
+        "singleMonthlyUsd": 4260,
+        "coupleMonthlyUsd": 5715,
         "estimateYear": 2026
       }
     ]
