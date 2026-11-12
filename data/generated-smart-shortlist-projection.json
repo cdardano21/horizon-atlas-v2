@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "f60d3e47a7802eec58c226205a254a5e99941db49d0a568c5daccd12d0fae08f",
-  "digest": "59b65419af01bb7afaa86d15c36c16daf7b5e311f4d93727d458cd8699b494b4",
+  "sourceSignature": "e1129fef2fe95fb0436ddf94e5558498dd89191824a2f714f42f2cc1ce8d3342",
+  "digest": "ad23d2820f7555256bd8b20dcd12ff83e7d34fdf7b5cb875c4aab3354ba9188d",
   "data": {
     "candidates": [
       {
@@ -16670,6 +16670,156 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "alexandria-virginia-united-states",
+        "name": "Alexandria",
+        "slug": "alexandria-virginia-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Alexandria combines historic streets and Potomac River scenery with access to the Washington region.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "cincinnati-ohio-united-states",
+        "name": "Cincinnati",
+        "slug": "cincinnati-ohio-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Cincinnati combines a compact central cultural area with residential districts shaped by hills and the Ohio River.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "louisville-kentucky-united-states",
+        "name": "Louisville",
+        "slug": "louisville-kentucky-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Louisville’s strongest residential appeal is found at neighborhood scale: a daily coffee stop, a park route and a useful dining corridor.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "richmond-virginia-united-states",
+        "name": "Richmond",
+        "slug": "richmond-virginia-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Richmond offers a city-scale combination of residential streets, museums and river recreation.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "san-antonio-texas-united-states",
+        "name": "San Antonio",
+        "slug": "san-antonio-texas-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "San Antonio offers several distinct ways to build an extended-stay routine around culture, food and river paths.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -25268,6 +25418,91 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "alexandria-virginia-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "cincinnati-ohio-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "louisville-kentucky-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "richmond-virginia-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "san-antonio-texas-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -28623,6 +28858,41 @@
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Swamp_Rabbit_Trail%2C_Travelers_Rest%2C_SC_June_2019.jpg/1280px-Swamp_Rabbit_Trail%2C_Travelers_Rest%2C_SC_June_2019.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Swamp Rabbit Trail, Travelers Rest, SC June 2019.jpg"
         }
+      },
+      {
+        "key": "alexandria-virginia-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Waterfront_Park%2C_Alexandria_%28September_2023%29_01.jpg/1280px-Waterfront_Park%2C_Alexandria_%28September_2023%29_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Waterfront Park, Alexandria (September 2023) 01.jpg"
+        }
+      },
+      {
+        "key": "cincinnati-ohio-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/Cincinnati_Skyline_from_Devou_Park.jpg/1280px-Cincinnati_Skyline_from_Devou_Park.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Cincinnati Skyline from Devou Park.jpg"
+        }
+      },
+      {
+        "key": "louisville-kentucky-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/de/WaterfrontPkDwnt.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+          "alt": "WaterfrontPkDwnt.jpg"
+        }
+      },
+      {
+        "key": "richmond-virginia-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Richmond%2C_Virginia_Skyline_March_2025.jpg/1280px-Richmond%2C_Virginia_Skyline_March_2025.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Richmond, Virginia Skyline March 2025.jpg"
+        }
+      },
+      {
+        "key": "san-antonio-texas-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/San_Antonio_riverwalk.jpg/1280px-San_Antonio_riverwalk.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "San Antonio riverwalk.jpg"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -31396,6 +31666,36 @@
         "destinationKey": "travelers-rest-south-carolina-united-states",
         "singleMonthlyUsd": 3360,
         "coupleMonthlyUsd": 4565,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "alexandria-virginia-united-states",
+        "singleMonthlyUsd": 4110,
+        "coupleMonthlyUsd": 5565,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "cincinnati-ohio-united-states",
+        "singleMonthlyUsd": 3110,
+        "coupleMonthlyUsd": 4315,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "louisville-kentucky-united-states",
+        "singleMonthlyUsd": 2960,
+        "coupleMonthlyUsd": 4115,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "richmond-virginia-united-states",
+        "singleMonthlyUsd": 3310,
+        "coupleMonthlyUsd": 4515,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "san-antonio-texas-united-states",
+        "singleMonthlyUsd": 3010,
+        "coupleMonthlyUsd": 4215,
         "estimateYear": 2026
       }
     ]

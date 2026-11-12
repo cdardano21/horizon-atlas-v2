@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "c03bb2e68ca8dda2d6402434f59826072334ad08cb6e12129b9cef72fd1cdcf2",
-  "digest": "93ea6d228b98056615cfc60ea297e54735b7c274b0aeb1158358fdc8cb5b3024",
+  "sourceSignature": "c958e5bb7400c444cc36ea3454292ee62c31d42bad553e15de0d6510f54c314c",
+  "digest": "8fb2eb4f4c9b9707bacfe05d2413d4b6bac3ad9a46777a475512c8080723fbea",
   "data": {
     "candidates": [
       {
@@ -3356,6 +3356,41 @@
         "name": "Travelers Rest",
         "country": "United States",
         "summary": "Travelers Rest offers a small-city daily rhythm built around Main Street and the Swamp Rabbit Trail."
+      },
+      {
+        "key": "alexandria-virginia-united-states",
+        "slug": "alexandria-virginia-united-states",
+        "name": "Alexandria",
+        "country": "United States",
+        "summary": "Alexandria combines historic streets and Potomac River scenery with access to the Washington region."
+      },
+      {
+        "key": "cincinnati-ohio-united-states",
+        "slug": "cincinnati-ohio-united-states",
+        "name": "Cincinnati",
+        "country": "United States",
+        "summary": "Cincinnati combines a compact central cultural area with residential districts shaped by hills and the Ohio River."
+      },
+      {
+        "key": "louisville-kentucky-united-states",
+        "slug": "louisville-kentucky-united-states",
+        "name": "Louisville",
+        "country": "United States",
+        "summary": "Louisville’s strongest residential appeal is found at neighborhood scale: a daily coffee stop, a park route and a useful dining corridor."
+      },
+      {
+        "key": "richmond-virginia-united-states",
+        "slug": "richmond-virginia-united-states",
+        "name": "Richmond",
+        "country": "United States",
+        "summary": "Richmond offers a city-scale combination of residential streets, museums and river recreation."
+      },
+      {
+        "key": "san-antonio-texas-united-states",
+        "slug": "san-antonio-texas-united-states",
+        "name": "San Antonio",
+        "country": "United States",
+        "summary": "San Antonio offers several distinct ways to build an extended-stay routine around culture, food and river paths."
       }
     ],
     "destinationMedia": [
@@ -6710,6 +6745,41 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Swamp_Rabbit_Trail%2C_Travelers_Rest%2C_SC_June_2019.jpg/1280px-Swamp_Rabbit_Trail%2C_Travelers_Rest%2C_SC_June_2019.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Swamp Rabbit Trail, Travelers Rest, SC June 2019.jpg"
+        }
+      },
+      {
+        "key": "alexandria-virginia-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Waterfront_Park%2C_Alexandria_%28September_2023%29_01.jpg/1280px-Waterfront_Park%2C_Alexandria_%28September_2023%29_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Waterfront Park, Alexandria (September 2023) 01.jpg"
+        }
+      },
+      {
+        "key": "cincinnati-ohio-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/Cincinnati_Skyline_from_Devou_Park.jpg/1280px-Cincinnati_Skyline_from_Devou_Park.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Cincinnati Skyline from Devou Park.jpg"
+        }
+      },
+      {
+        "key": "louisville-kentucky-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/d/de/WaterfrontPkDwnt.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+          "alt": "WaterfrontPkDwnt.jpg"
+        }
+      },
+      {
+        "key": "richmond-virginia-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Richmond%2C_Virginia_Skyline_March_2025.jpg/1280px-Richmond%2C_Virginia_Skyline_March_2025.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Richmond, Virginia Skyline March 2025.jpg"
+        }
+      },
+      {
+        "key": "san-antonio-texas-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/San_Antonio_riverwalk.jpg/1280px-San_Antonio_riverwalk.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "San Antonio riverwalk.jpg"
         }
       }
     ]
