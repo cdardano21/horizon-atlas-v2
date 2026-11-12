@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "9c7ef4e9d24127d3d70acae16b523243120808a828d1616ce366950e921cfacc",
-  "digest": "f9567b15f0e36ba93ec3287e0a23ec9596c2036ba1f34299a34a2d095c12853d",
+  "sourceSignature": "f60d3e47a7802eec58c226205a254a5e99941db49d0a568c5daccd12d0fae08f",
+  "digest": "59b65419af01bb7afaa86d15c36c16daf7b5e311f4d93727d458cd8699b494b4",
   "data": {
     "candidates": [
       {
@@ -16520,6 +16520,156 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "covington-louisiana-united-states",
+        "name": "Covington",
+        "slug": "covington-louisiana-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Covington’s appeal starts with a compact historic downtown rather than a big-city skyline.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "mount-pleasant-sc-usa",
+        "name": "Mount Pleasant",
+        "slug": "mount-pleasant-sc-usa",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Mount Pleasant combines a waterfront small-town core with a much larger suburban footprint.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "north-charleston-south-carolina-united-states",
+        "name": "North Charleston",
+        "slug": "north-charleston-south-carolina-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "North Charleston is a broad working city with one especially appealing compact center around Park Circle.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "roswell-georgia-united-states",
+        "name": "Roswell",
+        "slug": "roswell-georgia-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Roswell gives an Atlanta-area stay a historic center and a substantial outdoor component.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "travelers-rest-south-carolina-united-states",
+        "name": "Travelers Rest",
+        "slug": "travelers-rest-south-carolina-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Travelers Rest offers a small-city daily rhythm built around Main Street and the Swamp Rabbit Trail.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -25033,6 +25183,91 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "covington-louisiana-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "mount-pleasant-sc-usa",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "north-charleston-south-carolina-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "roswell-georgia-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "travelers-rest-south-carolina-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -28353,6 +28588,41 @@
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Ventura_Pier_%28March_13%2C_2026%29.jpg/1280px-Ventura_Pier_%28March_13%2C_2026%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Ventura Pier (March 13, 2026).jpg"
         }
+      },
+      {
+        "key": "covington-louisiana-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Covington_Louisiana_17_June_2017_Southern_Hotel_Courtyard_Fountain.jpg/1280px-Covington_Louisiana_17_June_2017_Southern_Hotel_Courtyard_Fountain.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Covington Louisiana 17 June 2017 Southern Hotel Courtyard Fountain.jpg"
+        }
+      },
+      {
+        "key": "mount-pleasant-sc-usa",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Shem_Creek%2C_Mount_Pleasant%2C_SC.jpg/1280px-Shem_Creek%2C_Mount_Pleasant%2C_SC.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Shem Creek, Mount Pleasant, SC.jpg"
+        }
+      },
+      {
+        "key": "north-charleston-south-carolina-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/North_Charleston%27s_4th_of_July_Festival_%2814441263638%29.jpg/1280px-North_Charleston%27s_4th_of_July_Festival_%2814441263638%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "North Charleston's 4th of July Festival (14441263638).jpg"
+        }
+      },
+      {
+        "key": "roswell-georgia-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/Roswell_Mill_covered_bridge%2C_Sept_2017.jpg/1280px-Roswell_Mill_covered_bridge%2C_Sept_2017.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Roswell Mill covered bridge, Sept 2017.jpg"
+        }
+      },
+      {
+        "key": "travelers-rest-south-carolina-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Swamp_Rabbit_Trail%2C_Travelers_Rest%2C_SC_June_2019.jpg/1280px-Swamp_Rabbit_Trail%2C_Travelers_Rest%2C_SC_June_2019.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Swamp Rabbit Trail, Travelers Rest, SC June 2019.jpg"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -31096,6 +31366,36 @@
         "destinationKey": "ventura-california-united-states",
         "singleMonthlyUsd": 4260,
         "coupleMonthlyUsd": 5715,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "covington-louisiana-united-states",
+        "singleMonthlyUsd": 3460,
+        "coupleMonthlyUsd": 4815,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "mount-pleasant-sc-usa",
+        "singleMonthlyUsd": 3760,
+        "coupleMonthlyUsd": 5165,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "north-charleston-south-carolina-united-states",
+        "singleMonthlyUsd": 3660,
+        "coupleMonthlyUsd": 5065,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "roswell-georgia-united-states",
+        "singleMonthlyUsd": 3410,
+        "coupleMonthlyUsd": 4765,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "travelers-rest-south-carolina-united-states",
+        "singleMonthlyUsd": 3360,
+        "coupleMonthlyUsd": 4565,
         "estimateYear": 2026
       }
     ]

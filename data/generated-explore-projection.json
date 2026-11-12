@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "914994738482c0ceeab9e15959a0ec64eef756262e73f192b847dd7b8363cd08",
-  "digest": "fbff0d58a42411a922d00b1fa53822571647d932df1e60e9a47d57ae4d978de7",
+  "sourceSignature": "c03bb2e68ca8dda2d6402434f59826072334ad08cb6e12129b9cef72fd1cdcf2",
+  "digest": "93ea6d228b98056615cfc60ea297e54735b7c274b0aeb1158358fdc8cb5b3024",
   "data": {
     "candidates": [
       {
@@ -3321,6 +3321,41 @@
         "name": "Ventura",
         "country": "United States",
         "summary": "Ventura offers a coastal daily routine with a proper downtown behind it."
+      },
+      {
+        "key": "covington-louisiana-united-states",
+        "slug": "covington-louisiana-united-states",
+        "name": "Covington",
+        "country": "United States",
+        "summary": "Covington’s appeal starts with a compact historic downtown rather than a big-city skyline."
+      },
+      {
+        "key": "mount-pleasant-sc-usa",
+        "slug": "mount-pleasant-sc-usa",
+        "name": "Mount Pleasant",
+        "country": "United States",
+        "summary": "Mount Pleasant combines a waterfront small-town core with a much larger suburban footprint."
+      },
+      {
+        "key": "north-charleston-south-carolina-united-states",
+        "slug": "north-charleston-south-carolina-united-states",
+        "name": "North Charleston",
+        "country": "United States",
+        "summary": "North Charleston is a broad working city with one especially appealing compact center around Park Circle."
+      },
+      {
+        "key": "roswell-georgia-united-states",
+        "slug": "roswell-georgia-united-states",
+        "name": "Roswell",
+        "country": "United States",
+        "summary": "Roswell gives an Atlanta-area stay a historic center and a substantial outdoor component."
+      },
+      {
+        "key": "travelers-rest-south-carolina-united-states",
+        "slug": "travelers-rest-south-carolina-united-states",
+        "name": "Travelers Rest",
+        "country": "United States",
+        "summary": "Travelers Rest offers a small-city daily rhythm built around Main Street and the Swamp Rabbit Trail."
       }
     ],
     "destinationMedia": [
@@ -6640,6 +6675,41 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Ventura_Pier_%28March_13%2C_2026%29.jpg/1280px-Ventura_Pier_%28March_13%2C_2026%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Ventura Pier (March 13, 2026).jpg"
+        }
+      },
+      {
+        "key": "covington-louisiana-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Covington_Louisiana_17_June_2017_Southern_Hotel_Courtyard_Fountain.jpg/1280px-Covington_Louisiana_17_June_2017_Southern_Hotel_Courtyard_Fountain.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Covington Louisiana 17 June 2017 Southern Hotel Courtyard Fountain.jpg"
+        }
+      },
+      {
+        "key": "mount-pleasant-sc-usa",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Shem_Creek%2C_Mount_Pleasant%2C_SC.jpg/1280px-Shem_Creek%2C_Mount_Pleasant%2C_SC.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Shem Creek, Mount Pleasant, SC.jpg"
+        }
+      },
+      {
+        "key": "north-charleston-south-carolina-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/North_Charleston%27s_4th_of_July_Festival_%2814441263638%29.jpg/1280px-North_Charleston%27s_4th_of_July_Festival_%2814441263638%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "North Charleston's 4th of July Festival (14441263638).jpg"
+        }
+      },
+      {
+        "key": "roswell-georgia-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/Roswell_Mill_covered_bridge%2C_Sept_2017.jpg/1280px-Roswell_Mill_covered_bridge%2C_Sept_2017.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Roswell Mill covered bridge, Sept 2017.jpg"
+        }
+      },
+      {
+        "key": "travelers-rest-south-carolina-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Swamp_Rabbit_Trail%2C_Travelers_Rest%2C_SC_June_2019.jpg/1280px-Swamp_Rabbit_Trail%2C_Travelers_Rest%2C_SC_June_2019.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Swamp Rabbit Trail, Travelers Rest, SC June 2019.jpg"
         }
       }
     ]
