@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "6f56accf60e0cdaa16f8b71c83286695bd82f5602bb2c5441cac11bece2c2b32",
-  "digest": "91d946c70a7d5d6a84fad26b99842d88e456d2dac032a788373e7d45aea1b974",
+  "sourceSignature": "5329fcc2f3af5110623468e47753f7f4adf4a6ffa55d6667408201d649b9fe8a",
+  "digest": "e809d793cbc4667e615ce87a6b36c30e70d5dcc9d15fc21f5f7114b19e37819a",
   "data": {
     "candidates": [
       {
@@ -17120,6 +17120,36 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "summerlin-nv-us",
+        "name": "Summerlin",
+        "slug": "summerlin-nv-usa",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Large master-planned Las Vegas community beside Red Rock Canyon with extensive parks, trails, golf, newer housing and a polished suburban lifestyle.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "INSUFFICIENT_FOR_AFFORDABILITY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -25973,6 +26003,25 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "summerlin-nv-us",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "GOOD_PRIVATE_AVAILABLE",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {
+          "walkability": 55
+        }
       }
     ],
     "destinationMedia": [
@@ -29432,6 +29481,13 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Main_Street%2C_Northampton_MA.jpg/1280px-Main_Street%2C_Northampton_MA.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Main Street, Northampton MA.jpg"
+        }
+      },
+      {
+        "key": "summerlin-nv-us",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Overlooking_Downtown_Summerlin,_2015.jpg",
+          "alt": "Downtown Summerlin"
         }
       }
     ],

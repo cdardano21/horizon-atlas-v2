@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "1addaa911d159b989ba3e7315bff47247346c75f570c21ebc385b01e003727b4",
-  "digest": "7494de851d1b4e82316a51acb15821dbaa40d8b451914402fdc17bd26e0068a5",
+  "sourceSignature": "462df5de0ad2c2913d70c47ddd1c448b21c9887ca6af370bb89ab0fc8a8fb737",
+  "digest": "d91133c2d8499eee90d171d1d5e18de25782d297543e010275cc4e1aa6dd8182",
   "data": {
     "candidates": [
       {
@@ -3461,6 +3461,13 @@
         "name": "Northampton",
         "country": "United States",
         "summary": "Northampton offers a small-city base with independent businesses, arts venues and the influence of Smith College."
+      },
+      {
+        "key": "summerlin-nv-us",
+        "slug": "summerlin-nv-usa",
+        "name": "Summerlin",
+        "country": "United States",
+        "summary": "Large master-planned Las Vegas community beside Red Rock Canyon with extensive parks, trails, golf, newer housing and a polished suburban lifestyle."
       }
     ],
     "destinationMedia": [
@@ -6920,6 +6927,13 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Main_Street%2C_Northampton_MA.jpg/1280px-Main_Street%2C_Northampton_MA.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Main Street, Northampton MA.jpg"
+        }
+      },
+      {
+        "key": "summerlin-nv-us",
+        "heroImage": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Overlooking_Downtown_Summerlin,_2015.jpg",
+          "alt": "Downtown Summerlin"
         }
       }
     ]
