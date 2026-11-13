@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "dfa6dfb4cdef04e5cfc00b233efa0c16efe16ff0c3dbe98761479fa2dd7240ec",
-  "digest": "bcf86f3456843d1c7b8126c940101b9f9b2fd0c349db2e74b9b1c87df4f08119",
+  "sourceSignature": "1addaa911d159b989ba3e7315bff47247346c75f570c21ebc385b01e003727b4",
+  "digest": "7494de851d1b4e82316a51acb15821dbaa40d8b451914402fdc17bd26e0068a5",
   "data": {
     "candidates": [
       {
@@ -3426,6 +3426,41 @@
         "name": "Stuart",
         "country": "United States",
         "summary": "Stuart offers a compact riverfront center rather than a beach-resort city identity."
+      },
+      {
+        "key": "bellingham-washington-united-states",
+        "slug": "bellingham-washington-united-states",
+        "name": "Bellingham",
+        "country": "United States",
+        "summary": "Bellingham combines a working city, university influence and bayfront recreation near the northern end of Washington's coastal urban corridor."
+      },
+      {
+        "key": "ivins-utah-united-states",
+        "slug": "ivins-utah-united-states",
+        "name": "Ivins",
+        "country": "United States",
+        "summary": "Ivins is a separate Utah municipality with a residential identity shaped by red-rock surroundings, arts venues and access to desert recreation."
+      },
+      {
+        "key": "lakeland-florida-united-states",
+        "slug": "lakeland-florida-united-states",
+        "name": "Lakeland",
+        "country": "United States",
+        "summary": "Lakeland offers an inland Florida routine built around lakes, older residential streets and a compact downtown rather than beach access."
+      },
+      {
+        "key": "marquette-michigan-united-states",
+        "slug": "marquette-michigan-united-states",
+        "name": "Marquette",
+        "country": "United States",
+        "summary": "Marquette is a Lake Superior city whose waterfront and outdoor appeal come with a demanding winter setting."
+      },
+      {
+        "key": "northampton-massachusetts-united-states",
+        "slug": "northampton-massachusetts-united-states",
+        "name": "Northampton",
+        "country": "United States",
+        "summary": "Northampton offers a small-city base with independent businesses, arts venues and the influence of Smith College."
       }
     ],
     "destinationMedia": [
@@ -6850,6 +6885,41 @@
         "heroImage": {
           "src": "https://upload.wikimedia.org/wikipedia/commons/0/02/Downtown_Stuart%2C_Florida_006.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
           "alt": "Downtown Stuart, Florida 006.JPG"
+        }
+      },
+      {
+        "key": "bellingham-washington-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/Bellingham%2C_WA_-_Fairhaven_-_Nelson_Block_%26_eastward_-_January_2020.jpg/1280px-Bellingham%2C_WA_-_Fairhaven_-_Nelson_Block_%26_eastward_-_January_2020.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Bellingham, WA - Fairhaven - Nelson Block & eastward - January 2020.jpg"
+        }
+      },
+      {
+        "key": "ivins-utah-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/Ivins_UT.JPG/1280px-Ivins_UT.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Ivins UT.JPG"
+        }
+      },
+      {
+        "key": "lakeland-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cd/Lake_Morton_in_Lakeland%2C_Florida_02.jpg/1280px-Lake_Morton_in_Lakeland%2C_Florida_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Lake Morton in Lakeland, Florida 02.jpg"
+        }
+      },
+      {
+        "key": "marquette-michigan-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Lower_Harbor_Ore_Dock%2C_2025.jpg/1280px-Lower_Harbor_Ore_Dock%2C_2025.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Lower Harbor Ore Dock, 2025.jpg"
+        }
+      },
+      {
+        "key": "northampton-massachusetts-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Main_Street%2C_Northampton_MA.jpg/1280px-Main_Street%2C_Northampton_MA.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Main Street, Northampton MA.jpg"
         }
       }
     ]

@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "1f7f790d00dc06d36465bfad8ecef572d2f2d5656159c964743913e9b4f39edf",
-  "digest": "ede824a21a633660da6b58d047dcd425757b9e8d9ff72e20ea705fbde82e8916",
+  "sourceSignature": "6f56accf60e0cdaa16f8b71c83286695bd82f5602bb2c5441cac11bece2c2b32",
+  "digest": "91d946c70a7d5d6a84fad26b99842d88e456d2dac032a788373e7d45aea1b974",
   "data": {
     "candidates": [
       {
@@ -16970,6 +16970,156 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "bellingham-washington-united-states",
+        "name": "Bellingham",
+        "slug": "bellingham-washington-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Bellingham combines a working city, university influence and bayfront recreation near the northern end of Washington's coastal urban corridor.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "ivins-utah-united-states",
+        "name": "Ivins",
+        "slug": "ivins-utah-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Ivins is a separate Utah municipality with a residential identity shaped by red-rock surroundings, arts venues and access to desert recreation.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "lakeland-florida-united-states",
+        "name": "Lakeland",
+        "slug": "lakeland-florida-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Lakeland offers an inland Florida routine built around lakes, older residential streets and a compact downtown rather than beach access.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "marquette-michigan-united-states",
+        "name": "Marquette",
+        "slug": "marquette-michigan-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Marquette is a Lake Superior city whose waterfront and outdoor appeal come with a demanding winter setting.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "northampton-massachusetts-united-states",
+        "name": "Northampton",
+        "slug": "northampton-massachusetts-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Northampton offers a small-city base with independent businesses, arts venues and the influence of Smith College.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -25738,6 +25888,91 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "bellingham-washington-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "ivins-utah-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "lakeland-florida-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "marquette-michigan-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "northampton-massachusetts-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -29163,6 +29398,41 @@
           "src": "https://upload.wikimedia.org/wikipedia/commons/0/02/Downtown_Stuart%2C_Florida_006.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
           "alt": "Downtown Stuart, Florida 006.JPG"
         }
+      },
+      {
+        "key": "bellingham-washington-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/Bellingham%2C_WA_-_Fairhaven_-_Nelson_Block_%26_eastward_-_January_2020.jpg/1280px-Bellingham%2C_WA_-_Fairhaven_-_Nelson_Block_%26_eastward_-_January_2020.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Bellingham, WA - Fairhaven - Nelson Block & eastward - January 2020.jpg"
+        }
+      },
+      {
+        "key": "ivins-utah-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/Ivins_UT.JPG/1280px-Ivins_UT.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Ivins UT.JPG"
+        }
+      },
+      {
+        "key": "lakeland-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cd/Lake_Morton_in_Lakeland%2C_Florida_02.jpg/1280px-Lake_Morton_in_Lakeland%2C_Florida_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Lake Morton in Lakeland, Florida 02.jpg"
+        }
+      },
+      {
+        "key": "marquette-michigan-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Lower_Harbor_Ore_Dock%2C_2025.jpg/1280px-Lower_Harbor_Ore_Dock%2C_2025.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Lower Harbor Ore Dock, 2025.jpg"
+        }
+      },
+      {
+        "key": "northampton-massachusetts-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Main_Street%2C_Northampton_MA.jpg/1280px-Main_Street%2C_Northampton_MA.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Main Street, Northampton MA.jpg"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -31996,6 +32266,36 @@
         "destinationKey": "stuart-florida-united-states",
         "singleMonthlyUsd": 3710,
         "coupleMonthlyUsd": 5015,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "bellingham-washington-united-states",
+        "singleMonthlyUsd": 3560,
+        "coupleMonthlyUsd": 4865,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "ivins-utah-united-states",
+        "singleMonthlyUsd": 3610,
+        "coupleMonthlyUsd": 4865,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "lakeland-florida-united-states",
+        "singleMonthlyUsd": 3210,
+        "coupleMonthlyUsd": 4365,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "marquette-michigan-united-states",
+        "singleMonthlyUsd": 3210,
+        "coupleMonthlyUsd": 4415,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "northampton-massachusetts-united-states",
+        "singleMonthlyUsd": 3560,
+        "coupleMonthlyUsd": 4915,
         "estimateYear": 2026
       }
     ]
