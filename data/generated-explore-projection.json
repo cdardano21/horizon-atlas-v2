@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "c958e5bb7400c444cc36ea3454292ee62c31d42bad553e15de0d6510f54c314c",
-  "digest": "8fb2eb4f4c9b9707bacfe05d2413d4b6bac3ad9a46777a475512c8080723fbea",
+  "sourceSignature": "dfa6dfb4cdef04e5cfc00b233efa0c16efe16ff0c3dbe98761479fa2dd7240ec",
+  "digest": "bcf86f3456843d1c7b8126c940101b9f9b2fd0c349db2e74b9b1c87df4f08119",
   "data": {
     "candidates": [
       {
@@ -3391,6 +3391,41 @@
         "name": "San Antonio",
         "country": "United States",
         "summary": "San Antonio offers several distinct ways to build an extended-stay routine around culture, food and river paths."
+      },
+      {
+        "key": "decatur-georgia-united-states",
+        "slug": "decatur-georgia-united-states",
+        "name": "Decatur",
+        "country": "United States",
+        "summary": "Decatur is an incorporated city with a recognizable center, local dining and a MARTA station, rather than a shorthand for every address carrying the Decatur postal name."
+      },
+      {
+        "key": "jacksonville-florida-united-states",
+        "slug": "jacksonville-florida-united-states",
+        "name": "Jacksonville",
+        "country": "United States",
+        "summary": "Jacksonville is a large city in which the choice of neighborhood matters more than a single citywide label."
+      },
+      {
+        "key": "kirkland-washington-united-states",
+        "slug": "kirkland-washington-united-states",
+        "name": "Kirkland",
+        "country": "United States",
+        "summary": "Kirkland offers a Lake Washington lifestyle with a useful distinction: the waterfront center can feel compact, but the city as a whole is not a small pedestrian village."
+      },
+      {
+        "key": "orlando-florida-united-states",
+        "slug": "orlando-florida-united-states",
+        "name": "Orlando",
+        "country": "United States",
+        "summary": "Orlando has a resident-oriented life that is easy to miss when a visit is organized around theme parks."
+      },
+      {
+        "key": "stuart-florida-united-states",
+        "slug": "stuart-florida-united-states",
+        "name": "Stuart",
+        "country": "United States",
+        "summary": "Stuart offers a compact riverfront center rather than a beach-resort city identity."
       }
     ],
     "destinationMedia": [
@@ -6780,6 +6815,41 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/San_Antonio_riverwalk.jpg/1280px-San_Antonio_riverwalk.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "San Antonio riverwalk.jpg"
+        }
+      },
+      {
+        "key": "decatur-georgia-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Street_scene_including_Brick_Store_Pub_and_Sweet_Melissa%27s_on_Decatur_Square_in_Decatur%2C_Georgia.jpg/960px-Street_scene_including_Brick_Store_Pub_and_Sweet_Melissa%27s_on_Decatur_Square_in_Decatur%2C_Georgia.jpg",
+          "alt": "Street scene including Brick Store Pub and Sweet Melissa's on Decatur Square in Decatur, Georgia.jpg"
+        }
+      },
+      {
+        "key": "jacksonville-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Jacksonville_Skyline_Night_Panorama_Digon3.jpg/1280px-Jacksonville_Skyline_Night_Panorama_Digon3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Jacksonville Skyline Night Panorama Digon3.jpg"
+        }
+      },
+      {
+        "key": "kirkland-washington-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Kirkland_Marina_Park_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Kirkland Marina Park 02.jpg"
+        }
+      },
+      {
+        "key": "orlando-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/High-rises_in_Orlando_from_Lake_Eola_Park_%28May_2023%29_-_5_%28cropped%29.JPG/960px-High-rises_in_Orlando_from_Lake_Eola_Park_%28May_2023%29_-_5_%28cropped%29.JPG",
+          "alt": "High-rises in Orlando from Lake Eola Park (May 2023) - 5 (cropped).JPG"
+        }
+      },
+      {
+        "key": "stuart-florida-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/0/02/Downtown_Stuart%2C_Florida_006.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+          "alt": "Downtown Stuart, Florida 006.JPG"
         }
       }
     ]

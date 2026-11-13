@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "e1129fef2fe95fb0436ddf94e5558498dd89191824a2f714f42f2cc1ce8d3342",
-  "digest": "ad23d2820f7555256bd8b20dcd12ff83e7d34fdf7b5cb875c4aab3354ba9188d",
+  "sourceSignature": "1f7f790d00dc06d36465bfad8ecef572d2f2d5656159c964743913e9b4f39edf",
+  "digest": "ede824a21a633660da6b58d047dcd425757b9e8d9ff72e20ea705fbde82e8916",
   "data": {
     "candidates": [
       {
@@ -16820,6 +16820,156 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "decatur-georgia-united-states",
+        "name": "Decatur",
+        "slug": "decatur-georgia-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Decatur is an incorporated city with a recognizable center, local dining and a MARTA station, rather than a shorthand for every address carrying the Decatur postal name.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "jacksonville-florida-united-states",
+        "name": "Jacksonville",
+        "slug": "jacksonville-florida-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Jacksonville is a large city in which the choice of neighborhood matters more than a single citywide label.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "kirkland-washington-united-states",
+        "name": "Kirkland",
+        "slug": "kirkland-washington-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Kirkland offers a Lake Washington lifestyle with a useful distinction: the waterfront center can feel compact, but the city as a whole is not a small pedestrian village.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "orlando-florida-united-states",
+        "name": "Orlando",
+        "slug": "orlando-florida-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Orlando has a resident-oriented life that is easy to miss when a visit is organized around theme parks.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "stuart-florida-united-states",
+        "name": "Stuart",
+        "slug": "stuart-florida-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Stuart offers a compact riverfront center rather than a beach-resort city identity.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -25503,6 +25653,91 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "decatur-georgia-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "jacksonville-florida-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "kirkland-washington-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "orlando-florida-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "stuart-florida-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -28893,6 +29128,41 @@
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/San_Antonio_riverwalk.jpg/1280px-San_Antonio_riverwalk.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "San Antonio riverwalk.jpg"
         }
+      },
+      {
+        "key": "decatur-georgia-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Street_scene_including_Brick_Store_Pub_and_Sweet_Melissa%27s_on_Decatur_Square_in_Decatur%2C_Georgia.jpg/960px-Street_scene_including_Brick_Store_Pub_and_Sweet_Melissa%27s_on_Decatur_Square_in_Decatur%2C_Georgia.jpg",
+          "alt": "Street scene including Brick Store Pub and Sweet Melissa's on Decatur Square in Decatur, Georgia.jpg"
+        }
+      },
+      {
+        "key": "jacksonville-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Jacksonville_Skyline_Night_Panorama_Digon3.jpg/1280px-Jacksonville_Skyline_Night_Panorama_Digon3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Jacksonville Skyline Night Panorama Digon3.jpg"
+        }
+      },
+      {
+        "key": "kirkland-washington-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Kirkland_Marina_Park_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "alt": "Kirkland Marina Park 02.jpg"
+        }
+      },
+      {
+        "key": "orlando-florida-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/High-rises_in_Orlando_from_Lake_Eola_Park_%28May_2023%29_-_5_%28cropped%29.JPG/960px-High-rises_in_Orlando_from_Lake_Eola_Park_%28May_2023%29_-_5_%28cropped%29.JPG",
+          "alt": "High-rises in Orlando from Lake Eola Park (May 2023) - 5 (cropped).JPG"
+        }
+      },
+      {
+        "key": "stuart-florida-united-states",
+        "heroImage": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/0/02/Downtown_Stuart%2C_Florida_006.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+          "alt": "Downtown Stuart, Florida 006.JPG"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -31696,6 +31966,36 @@
         "destinationKey": "san-antonio-texas-united-states",
         "singleMonthlyUsd": 3010,
         "coupleMonthlyUsd": 4215,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "decatur-georgia-united-states",
+        "singleMonthlyUsd": 3810,
+        "coupleMonthlyUsd": 5115,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "jacksonville-florida-united-states",
+        "singleMonthlyUsd": 3260,
+        "coupleMonthlyUsd": 4465,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "kirkland-washington-united-states",
+        "singleMonthlyUsd": 4160,
+        "coupleMonthlyUsd": 5565,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "orlando-florida-united-states",
+        "singleMonthlyUsd": 3610,
+        "coupleMonthlyUsd": 4915,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "stuart-florida-united-states",
+        "singleMonthlyUsd": 3710,
+        "coupleMonthlyUsd": 5015,
         "estimateYear": 2026
       }
     ]
