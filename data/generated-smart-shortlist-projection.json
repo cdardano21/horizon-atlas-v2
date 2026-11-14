@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "cd3f01e8ef8957f398700a5e70306cb4c11125dbe6bb163504b7a751c293e44a",
-  "digest": "918eb5102ed9d371f32b198e901ab746dec37a9ecea28d7cbf01d760a80bfa1a",
+  "sourceSignature": "01f3fdd112267d38886c03e212c980b1927a9367f0b974cb80278bd36edac9f1",
+  "digest": "4b89ee94d596c791a811631bd7c72c663ee180376ca840731502e11c0cbe928e",
   "data": {
     "candidates": [
       {
@@ -17330,6 +17330,156 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "bucaramanga-colombia",
+        "name": "Bucaramanga",
+        "slug": "bucaramanga-colombia",
+        "country": "Colombia",
+        "countryCode": "CO",
+        "summary": "Bucaramanga offers an urban Santander base where a longer stay can revolve around a familiar café, neighborhood errands and small parks rather than a resort itinerary.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "kigali-rwanda",
+        "name": "Kigali",
+        "slug": "kigali-rwanda",
+        "country": "Rwanda",
+        "countryCode": "RW",
+        "summary": "Kigali's residential appeal is best assessed one hill and one daily route at a time.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "leuven-belgium",
+        "name": "Leuven",
+        "slug": "leuven-belgium",
+        "country": "Belgium",
+        "countryCode": "BE",
+        "summary": "Leuven combines a compact historic centre with a university city's cafés, cultural institutions and everyday services.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "santiago-de-los-caballeros-dominican-republic",
+        "name": "Santiago de los Caballeros",
+        "slug": "santiago-de-los-caballeros-dominican-republic",
+        "country": "Dominican Republic",
+        "countryCode": "DO",
+        "summary": "Santiago de los Caballeros is an inland Dominican city for people interested in everyday urban life, culture and regional services rather than a beach-resort routine.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "yerevan-armenia",
+        "name": "Yerevan",
+        "slug": "yerevan-armenia",
+        "country": "Armenia",
+        "countryCode": "AM",
+        "summary": "Yerevan offers a capital-city stay built around cafés, museums and neighborhood routines, with the most obvious visitor circuit in Kentron.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -26304,6 +26454,91 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "bucaramanga-colombia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "kigali-rwanda",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "leuven-belgium",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "santiago-de-los-caballeros-dominican-republic",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "yerevan-armenia",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -29813,6 +30048,41 @@
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Duke_of_Gloucester_Street%2C_Colonial_Williamsburg%2C_Virginia_-_panoramio.jpg/1280px-Duke_of_Gloucester_Street%2C_Colonial_Williamsburg%2C_Virginia_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Duke of Gloucester Street, Colonial Williamsburg, Virginia - panoramio.jpg"
         }
+      },
+      {
+        "key": "bucaramanga-colombia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Parque_Garcia_Rovira_Bucaramanga.jpg/1280px-Parque_Garcia_Rovira_Bucaramanga.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Parque Garcia Rovira Bucaramanga.jpg"
+        }
+      },
+      {
+        "key": "kigali-rwanda",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Buildings_in_Kigali_CBD%2C_Rwanda.jpg/1280px-Buildings_in_Kigali_CBD%2C_Rwanda.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Buildings in Kigali CBD, Rwanda.jpg"
+        }
+      },
+      {
+        "key": "leuven-belgium",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Town_hall_of_Leuven_%287%29.jpg/1280px-Town_hall_of_Leuven_%287%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Town hall of Leuven (7).jpg"
+        }
+      },
+      {
+        "key": "santiago-de-los-caballeros-dominican-republic",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Monumento_de_Santiago_%28Buen_Angulo%29.jpg/1280px-Monumento_de_Santiago_%28Buen_Angulo%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Monumento de Santiago (Buen Angulo).jpg"
+        }
+      },
+      {
+        "key": "yerevan-armenia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/Yerevan%2C_Cascade_of_Yerevan%2C_Armenia.jpg/1280px-Yerevan%2C_Cascade_of_Yerevan%2C_Armenia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Yerevan, Cascade of Yerevan, Armenia.jpg"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -32712,6 +32982,36 @@
         "destinationKey": "williamsburg-virginia-united-states",
         "singleMonthlyUsd": 3710,
         "coupleMonthlyUsd": 5115,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "bucaramanga-colombia",
+        "singleMonthlyUsd": 1620,
+        "coupleMonthlyUsd": 2170,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "kigali-rwanda",
+        "singleMonthlyUsd": 1220,
+        "coupleMonthlyUsd": 1780,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "leuven-belgium",
+        "singleMonthlyUsd": 2550,
+        "coupleMonthlyUsd": 3405,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "santiago-de-los-caballeros-dominican-republic",
+        "singleMonthlyUsd": 1525,
+        "coupleMonthlyUsd": 2165,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "yerevan-armenia",
+        "singleMonthlyUsd": 2045,
+        "coupleMonthlyUsd": 2815,
         "estimateYear": 2026
       }
     ]

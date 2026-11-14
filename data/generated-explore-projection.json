@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "c451f43acebcd6a09eba3c41d0139605c43336b03b8cea6ca6a9d84de285f539",
-  "digest": "d470da4ad6788b0b3c9e42e85ab7b01f590a007946c3a3bf6d4d19e8f347018f",
+  "sourceSignature": "efa9477c7d1bbd945376e5611fb6baeb04621253e960cfcc78c3cdc0ccf9a2ae",
+  "digest": "ae388be22cf269932194ab341dcb9901d4dd4b57e0e59a1133c18ee0f9b7434d",
   "data": {
     "candidates": [
       {
@@ -3510,6 +3510,41 @@
         "name": "Williamsburg",
         "country": "United States",
         "summary": "Williamsburg is easy to enjoy as a visitor, but choosing it as a residential base requires a more exact map."
+      },
+      {
+        "key": "bucaramanga-colombia",
+        "slug": "bucaramanga-colombia",
+        "name": "Bucaramanga",
+        "country": "Colombia",
+        "summary": "Bucaramanga offers an urban Santander base where a longer stay can revolve around a familiar café, neighborhood errands and small parks rather than a resort itinerary."
+      },
+      {
+        "key": "kigali-rwanda",
+        "slug": "kigali-rwanda",
+        "name": "Kigali",
+        "country": "Rwanda",
+        "summary": "Kigali's residential appeal is best assessed one hill and one daily route at a time."
+      },
+      {
+        "key": "leuven-belgium",
+        "slug": "leuven-belgium",
+        "name": "Leuven",
+        "country": "Belgium",
+        "summary": "Leuven combines a compact historic centre with a university city's cafés, cultural institutions and everyday services."
+      },
+      {
+        "key": "santiago-de-los-caballeros-dominican-republic",
+        "slug": "santiago-de-los-caballeros-dominican-republic",
+        "name": "Santiago de los Caballeros",
+        "country": "Dominican Republic",
+        "summary": "Santiago de los Caballeros is an inland Dominican city for people interested in everyday urban life, culture and regional services rather than a beach-resort routine."
+      },
+      {
+        "key": "yerevan-armenia",
+        "slug": "yerevan-armenia",
+        "name": "Yerevan",
+        "country": "Armenia",
+        "summary": "Yerevan offers a capital-city stay built around cafés, museums and neighborhood routines, with the most obvious visitor circuit in Kentron."
       }
     ],
     "destinationMedia": [
@@ -7018,6 +7053,41 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Duke_of_Gloucester_Street%2C_Colonial_Williamsburg%2C_Virginia_-_panoramio.jpg/1280px-Duke_of_Gloucester_Street%2C_Colonial_Williamsburg%2C_Virginia_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
           "alt": "Duke of Gloucester Street, Colonial Williamsburg, Virginia - panoramio.jpg"
+        }
+      },
+      {
+        "key": "bucaramanga-colombia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Parque_Garcia_Rovira_Bucaramanga.jpg/1280px-Parque_Garcia_Rovira_Bucaramanga.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Parque Garcia Rovira Bucaramanga.jpg"
+        }
+      },
+      {
+        "key": "kigali-rwanda",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Buildings_in_Kigali_CBD%2C_Rwanda.jpg/1280px-Buildings_in_Kigali_CBD%2C_Rwanda.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Buildings in Kigali CBD, Rwanda.jpg"
+        }
+      },
+      {
+        "key": "leuven-belgium",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Town_hall_of_Leuven_%287%29.jpg/1280px-Town_hall_of_Leuven_%287%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Town hall of Leuven (7).jpg"
+        }
+      },
+      {
+        "key": "santiago-de-los-caballeros-dominican-republic",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Monumento_de_Santiago_%28Buen_Angulo%29.jpg/1280px-Monumento_de_Santiago_%28Buen_Angulo%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Monumento de Santiago (Buen Angulo).jpg"
+        }
+      },
+      {
+        "key": "yerevan-armenia",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/Yerevan%2C_Cascade_of_Yerevan%2C_Armenia.jpg/1280px-Yerevan%2C_Cascade_of_Yerevan%2C_Armenia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Yerevan, Cascade of Yerevan, Armenia.jpg"
         }
       }
     ]
