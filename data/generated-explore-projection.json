@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "462df5de0ad2c2913d70c47ddd1c448b21c9887ca6af370bb89ab0fc8a8fb737",
-  "digest": "d91133c2d8499eee90d171d1d5e18de25782d297543e010275cc4e1aa6dd8182",
+  "sourceSignature": "e5a9b0daffedd4d3844f6460726135a71da33a251ad50b75914042ca3266fb46",
+  "digest": "008fb2b92dfd80867a62d93db8e6eba3e6087b257451440dc0a2bc6454b399d6",
   "data": {
     "candidates": [
       {
@@ -3468,6 +3468,13 @@
         "name": "Summerlin",
         "country": "United States",
         "summary": "Large master-planned Las Vegas community beside Red Rock Canyon with extensive parks, trails, golf, newer housing and a polished suburban lifestyle."
+      },
+      {
+        "key": "long-beach-california-united-states",
+        "slug": "long-beach-california-united-states",
+        "name": "Long Beach",
+        "country": "United States",
+        "summary": "Long Beach offers a coastal city stay with a real urban context: the waterfront and residential beach districts sit alongside a major working port, substantial roads and a much larger Southern California region."
       }
     ],
     "destinationMedia": [
@@ -6934,6 +6941,13 @@
         "heroImage": {
           "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Overlooking_Downtown_Summerlin,_2015.jpg",
           "alt": "Downtown Summerlin"
+        }
+      },
+      {
+        "key": "long-beach-california-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/E9198-Long-Beach-lighthouse.jpg/1280px-E9198-Long-Beach-lighthouse.jpg",
+          "alt": "E9198-Long-Beach-lighthouse.jpg"
         }
       }
     ]

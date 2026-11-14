@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "5329fcc2f3af5110623468e47753f7f4adf4a6ffa55d6667408201d649b9fe8a",
-  "digest": "e809d793cbc4667e615ce87a6b36c30e70d5dcc9d15fc21f5f7114b19e37819a",
+  "sourceSignature": "5ae3e77c663e6c113c7efd01e9dd284d5ef14b20802dd8fea7a883b6daa507d0",
+  "digest": "9d03141323c5d17404c2dfb8c0f6b3867075e50ae29dd08d43126fa68a7cccc7",
   "data": {
     "candidates": [
       {
@@ -17150,6 +17150,36 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "long-beach-california-united-states",
+        "name": "Long Beach",
+        "slug": "long-beach-california-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Long Beach offers a coastal city stay with a real urban context: the waterfront and residential beach districts sit alongside a major working port, substantial roads and a much larger Southern California region.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -26022,6 +26052,23 @@
         "lifestyleDimensions": {
           "walkability": 55
         }
+      },
+      {
+        "key": "long-beach-california-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -29489,6 +29536,13 @@
           "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Overlooking_Downtown_Summerlin,_2015.jpg",
           "alt": "Downtown Summerlin"
         }
+      },
+      {
+        "key": "long-beach-california-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/E9198-Long-Beach-lighthouse.jpg/1280px-E9198-Long-Beach-lighthouse.jpg",
+          "alt": "E9198-Long-Beach-lighthouse.jpg"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -32352,6 +32406,12 @@
         "destinationKey": "northampton-massachusetts-united-states",
         "singleMonthlyUsd": 3560,
         "coupleMonthlyUsd": 4915,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "long-beach-california-united-states",
+        "singleMonthlyUsd": 4160,
+        "coupleMonthlyUsd": 5415,
         "estimateYear": 2026
       }
     ]

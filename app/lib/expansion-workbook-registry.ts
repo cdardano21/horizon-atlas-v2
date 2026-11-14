@@ -856,6 +856,7 @@ export const EXPANSION_WORKBOOK_REGISTRY: readonly ExpansionWorkbookRegistryEntr
 {"registryId": "us-lifestyle-batch-7-northampton-massachusetts-united-states-01", "workbookPath": "data/us-lifestyle-batch-7-northampton-massachusetts-united-states-01/DestinationFinderAI-northampton-massachusetts-united-states-Premium-Candidate-v3.3.xlsx", "expectedSha256": "4a9685e55f3fccf47631b1edc147762f0d0bbd377304e4166ecb61859aab5ddf", "expectedDestinationKeys": ["northampton-massachusetts-united-states"], "environment": "production", "candidateDiscovery": "published-catalog"},
 
 {"registryId": "summerlin-existing-pilot-01", "workbookPath": "data/summerlin-existing-pilot-01/DestinationFinderAI-Summerlin-Ownership-Candidate-revision-2-v3.1.xlsx", "environment": "production", "candidateDiscovery": "published-catalog", "expectedDestinationKeys": ["summerlin-nv-us"], "expectedSha256": "e63f8052b978a52aec71d2949edb246e20981c8e7ea22b2c43eafaedd757103f"},
+{"registryId": "long-beach-existing-id-01", "workbookPath": "data/long-beach-existing-id-01/DestinationFinderAI-long-beach-california-united-states-Premium-Candidate-v3.3.xlsx", "expectedSha256": "9255953fa96c506e631f339f351b8c69a004a9a90a60544775d2e527038aa8bf", "expectedDestinationKeys": ["long-beach-california-united-states"], "environment": "production", "candidateDiscovery": "published-catalog"},
 ];
 
 const previewEntries = (registry: readonly ExpansionWorkbookRegistryEntry[]) => registry.filter((entry) => entry.environment === "preview");
