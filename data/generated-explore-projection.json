@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "e5a9b0daffedd4d3844f6460726135a71da33a251ad50b75914042ca3266fb46",
-  "digest": "008fb2b92dfd80867a62d93db8e6eba3e6087b257451440dc0a2bc6454b399d6",
+  "sourceSignature": "c451f43acebcd6a09eba3c41d0139605c43336b03b8cea6ca6a9d84de285f539",
+  "digest": "d470da4ad6788b0b3c9e42e85ab7b01f590a007946c3a3bf6d4d19e8f347018f",
   "data": {
     "candidates": [
       {
@@ -3475,6 +3475,41 @@
         "name": "Long Beach",
         "country": "United States",
         "summary": "Long Beach offers a coastal city stay with a real urban context: the waterfront and residential beach districts sit alongside a major working port, substantial roads and a much larger Southern California region."
+      },
+      {
+        "key": "corvallis-oregon-united-states",
+        "slug": "corvallis-oregon-united-states",
+        "name": "Corvallis",
+        "country": "United States",
+        "summary": "Corvallis combines a university-town rhythm with a downtown riverfront and residential neighborhoods that offer quite different daily routines."
+      },
+      {
+        "key": "eau-claire-wisconsin-united-states",
+        "slug": "eau-claire-wisconsin-united-states",
+        "name": "Eau Claire",
+        "country": "United States",
+        "summary": "Eau Claire’s appeal for a longer stay lies in the relationship between its rivers, central neighborhoods and cultural activity."
+      },
+      {
+        "key": "lawrence-kansas-united-states",
+        "slug": "lawrence-kansas-united-states",
+        "name": "Lawrence",
+        "country": "United States",
+        "summary": "Lawrence adds a university-city rhythm to a historic downtown and established residential neighborhoods."
+      },
+      {
+        "key": "portsmouth-new-hampshire-united-states",
+        "slug": "portsmouth-new-hampshire-united-states",
+        "name": "Portsmouth",
+        "country": "United States",
+        "summary": "Portsmouth offers a compact historic center and a working waterfront rather than a beach-resort living pattern."
+      },
+      {
+        "key": "williamsburg-virginia-united-states",
+        "slug": "williamsburg-virginia-united-states",
+        "name": "Williamsburg",
+        "country": "United States",
+        "summary": "Williamsburg is easy to enjoy as a visitor, but choosing it as a residential base requires a more exact map."
       }
     ],
     "destinationMedia": [
@@ -6948,6 +6983,41 @@
         "heroImage": {
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/E9198-Long-Beach-lighthouse.jpg/1280px-E9198-Long-Beach-lighthouse.jpg",
           "alt": "E9198-Long-Beach-lighthouse.jpg"
+        }
+      },
+      {
+        "key": "corvallis-oregon-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Corvallis%2C_Oregon_-_Benton_County_Courthouse_01.jpg/1280px-Corvallis%2C_Oregon_-_Benton_County_Courthouse_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Corvallis, Oregon - Benton County Courthouse 01.jpg"
+        }
+      },
+      {
+        "key": "eau-claire-wisconsin-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Eau_Claire%2C_Wisconsin_downtown.jpg/1280px-Eau_Claire%2C_Wisconsin_downtown.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Eau Claire, Wisconsin downtown.jpg"
+        }
+      },
+      {
+        "key": "lawrence-kansas-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/Massachusetts_Street_in_downtown_Lawrence%2C_Kansas.jpg/1280px-Massachusetts_Street_in_downtown_Lawrence%2C_Kansas.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Massachusetts Street in downtown Lawrence, Kansas.jpg"
+        }
+      },
+      {
+        "key": "portsmouth-new-hampshire-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Prescott_Park.jpg/1280px-Prescott_Park.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Prescott Park.jpg"
+        }
+      },
+      {
+        "key": "williamsburg-virginia-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Duke_of_Gloucester_Street%2C_Colonial_Williamsburg%2C_Virginia_-_panoramio.jpg/1280px-Duke_of_Gloucester_Street%2C_Colonial_Williamsburg%2C_Virginia_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Duke of Gloucester Street, Colonial Williamsburg, Virginia - panoramio.jpg"
         }
       }
     ]

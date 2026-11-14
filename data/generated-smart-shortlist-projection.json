@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceSignature": "5ae3e77c663e6c113c7efd01e9dd284d5ef14b20802dd8fea7a883b6daa507d0",
-  "digest": "9d03141323c5d17404c2dfb8c0f6b3867075e50ae29dd08d43126fa68a7cccc7",
+  "sourceSignature": "cd3f01e8ef8957f398700a5e70306cb4c11125dbe6bb163504b7a751c293e44a",
+  "digest": "918eb5102ed9d371f32b198e901ab746dec37a9ecea28d7cbf01d760a80bfa1a",
   "data": {
     "candidates": [
       {
@@ -17180,6 +17180,156 @@
         "localTotals": {},
         "costRows": [],
         "costSources": []
+      },
+      {
+        "key": "corvallis-oregon-united-states",
+        "name": "Corvallis",
+        "slug": "corvallis-oregon-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Corvallis combines a university-town rhythm with a downtown riverfront and residential neighborhoods that offer quite different daily routines.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "eau-claire-wisconsin-united-states",
+        "name": "Eau Claire",
+        "slug": "eau-claire-wisconsin-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Eau Claire’s appeal for a longer stay lies in the relationship between its rivers, central neighborhoods and cultural activity.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "lawrence-kansas-united-states",
+        "name": "Lawrence",
+        "slug": "lawrence-kansas-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Lawrence adds a university-city rhythm to a historic downtown and established residential neighborhoods.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "portsmouth-new-hampshire-united-states",
+        "name": "Portsmouth",
+        "slug": "portsmouth-new-hampshire-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Portsmouth offers a compact historic center and a working waterfront rather than a beach-resort living pattern.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
+      },
+      {
+        "key": "williamsburg-virginia-united-states",
+        "name": "Williamsburg",
+        "slug": "williamsburg-virginia-united-states",
+        "country": "United States",
+        "countryCode": "US",
+        "summary": "Williamsburg is easy to enjoy as a visitor, but choosing it as a residential base requires a more exact map.",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "safetyStandard": "UNKNOWN",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "UNKNOWN",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "affordability": {},
+        "affordabilityReadiness": "LOCAL_EVIDENCE_READY",
+        "normalizedAffordability": {
+          "providerId": null,
+          "index": null,
+          "band": null
+        },
+        "localTotals": {},
+        "costRows": [],
+        "costSources": []
       }
     ],
     "intelligence": [
@@ -26069,6 +26219,91 @@
           "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
         },
         "lifestyleDimensions": {}
+      },
+      {
+        "key": "corvallis-oregon-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "eau-claire-wisconsin-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "lawrence-kansas-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "portsmouth-new-hampshire-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
+      },
+      {
+        "key": "williamsburg-virginia-united-states",
+        "beachAccess": "UNKNOWN",
+        "mountainAccess": "UNKNOWN",
+        "oceanAccess": "UNKNOWN",
+        "healthcareStandard": "UNKNOWN",
+        "healthcareEvidenceScope": "PRIVATE_CARE_AVAILABILITY_ONLY",
+        "safetyStandard": "MODERATE_OR_BETTER",
+        "lgbtqLegalProtectionStatus": "UNKNOWN",
+        "entryAndStay": {
+          "extendedStayOrLongStayVisaAvailable": "YES",
+          "permanentResidencyPathAvailable": "UNKNOWN",
+          "retirementVisaProgramAvailable": "UNKNOWN",
+          "remoteWorkOrDigitalNomadVisaAvailable": "UNKNOWN"
+        },
+        "lifestyleDimensions": {}
       }
     ],
     "destinationMedia": [
@@ -29543,6 +29778,41 @@
           "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/E9198-Long-Beach-lighthouse.jpg/1280px-E9198-Long-Beach-lighthouse.jpg",
           "alt": "E9198-Long-Beach-lighthouse.jpg"
         }
+      },
+      {
+        "key": "corvallis-oregon-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Corvallis%2C_Oregon_-_Benton_County_Courthouse_01.jpg/1280px-Corvallis%2C_Oregon_-_Benton_County_Courthouse_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Corvallis, Oregon - Benton County Courthouse 01.jpg"
+        }
+      },
+      {
+        "key": "eau-claire-wisconsin-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Eau_Claire%2C_Wisconsin_downtown.jpg/1280px-Eau_Claire%2C_Wisconsin_downtown.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Eau Claire, Wisconsin downtown.jpg"
+        }
+      },
+      {
+        "key": "lawrence-kansas-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/Massachusetts_Street_in_downtown_Lawrence%2C_Kansas.jpg/1280px-Massachusetts_Street_in_downtown_Lawrence%2C_Kansas.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Massachusetts Street in downtown Lawrence, Kansas.jpg"
+        }
+      },
+      {
+        "key": "portsmouth-new-hampshire-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Prescott_Park.jpg/1280px-Prescott_Park.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Prescott Park.jpg"
+        }
+      },
+      {
+        "key": "williamsburg-virginia-united-states",
+        "heroImage": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Duke_of_Gloucester_Street%2C_Colonial_Williamsburg%2C_Virginia_-_panoramio.jpg/1280px-Duke_of_Gloucester_Street%2C_Colonial_Williamsburg%2C_Virginia_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "alt": "Duke of Gloucester Street, Colonial Williamsburg, Virginia - panoramio.jpg"
+        }
       }
     ],
     "affordabilityRecords": [
@@ -32412,6 +32682,36 @@
         "destinationKey": "long-beach-california-united-states",
         "singleMonthlyUsd": 4160,
         "coupleMonthlyUsd": 5415,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "corvallis-oregon-united-states",
+        "singleMonthlyUsd": 3510,
+        "coupleMonthlyUsd": 4765,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "eau-claire-wisconsin-united-states",
+        "singleMonthlyUsd": 3035,
+        "coupleMonthlyUsd": 4265,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "lawrence-kansas-united-states",
+        "singleMonthlyUsd": 2860,
+        "coupleMonthlyUsd": 4065,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "portsmouth-new-hampshire-united-states",
+        "singleMonthlyUsd": 4460,
+        "coupleMonthlyUsd": 5865,
+        "estimateYear": 2026
+      },
+      {
+        "destinationKey": "williamsburg-virginia-united-states",
+        "singleMonthlyUsd": 3710,
+        "coupleMonthlyUsd": 5115,
         "estimateYear": 2026
       }
     ]
